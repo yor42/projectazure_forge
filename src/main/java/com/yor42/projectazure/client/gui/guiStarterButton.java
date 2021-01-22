@@ -20,13 +20,17 @@ import java.util.Map;
 public class guiStarterButton extends ImageButton {
     private final ResourceLocation resourceLocation;
     private final EntityType entityType;
+    private final int x, y;
     private final int xTexStart;
     private final int yTexStart;
     private final int xDiffText;
     private final int index;
 
+
     public guiStarterButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int xDiffTextIn, ResourceLocation resourceLocationIn, int idx ,EntityType type , IPressable onPressIn) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, xDiffTextIn, resourceLocationIn, onPressIn);
+        this.x = xIn;
+        this.y = yIn;
         this.width = widthIn;
         this.height = heightIn;
         this.xTexStart = xTexStartIn;
@@ -74,29 +78,30 @@ public class guiStarterButton extends ImageButton {
 
         blit(matrixStack, this.x+2, this.y+2, logox, logoy, 53, 53, 256, 256);
 
-        if (entityType != null) {
+        if (this.entityType != null) {
             World world = Minecraft.getInstance().world;
                 if (world != null){
                     Entity entity;
 
-                    entity = ENTITY_MAP.computeIfAbsent(entityType, t -> t.create(world));
+                    entity = ENTITY_MAP.computeIfAbsent(this.entityType, t -> t.create(world));
 
                     if (entity instanceof LivingEntity) {
                         LivingEntity livingEntity = (LivingEntity) entity;
 
-                        int height = (int) entity.getHeight();
-                        int width = (int) entity.getWidth();
+                        int entityHeight = (int) entity.getHeight();
+                        int entityWidth = (int) entity.getWidth();
                         try {
-                            InventoryScreen.drawEntityOnScreen(x + width / 2, y + height, 1, 0, 10, livingEntity);
+                            InventoryScreen.drawEntityOnScreen(this.x+(this.width/2)-(entityWidth/2), this.y+this.height-5, 40, (float)(this.x + 51) - mouseX, (float)(this.y + 75 - 50) - mouseY, livingEntity);
                             return;
                         } catch (Exception e) {
                             Main.LOGGER.error("Failed to render Entity!");
-                            ENTITY_MAP.remove(entityType);
+                            ENTITY_MAP.remove(this.entityType);
                         }
 
                     }
             }
         }
+
 
         if (this.isHovered()) {
             this.renderToolTip(matrixStack, mouseX, mouseY);

@@ -4,7 +4,10 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.network.packets.selectedStarterPacket;
 import com.yor42.projectazure.setup.register.registerEntity;
+import com.yor42.projectazure.setup.register.registerManager;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -32,7 +35,7 @@ public class guiStarterSpawn extends Screen {
     private final int buttonWidth = 59;
     private final int buttonHeight = 127;
 
-    private final EntityType[] entityList = {registerEntity.AYANAMI.get()};
+    private final EntityType[] entityList = {registerManager.AYANAMI.get()};
 
     public guiStarterSpawn(ITextComponent titleIn) {
         super(titleIn);
@@ -45,19 +48,25 @@ public class guiStarterSpawn extends Screen {
         this.y = (this.height - backgroundHeight) / 2;
         this.minecraft = minecraft;
         this.scrollBarFarLeft = this.x+13;
-        for(int index = 0; index < entityList.length; index++) {
+        for(int index = 0; index < 1; index++) {
             if (this.notYetPopulated) {
-                Button button = createButton(this.x+9 + (index * buttonHeight), this.y+26, buttonWidth, buttonHeight, index, this.entityList[index], action -> Main.LOGGER.info("TEST"));
+                int finalIndex = index;
+                Button button = createButton(this.x+9 + (index * buttonHeight), this.y+26, buttonWidth, buttonHeight, index, this.entityList[index], action -> Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex)));
                 this.addButton(button);
                         //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslationTextComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
             } else {
-                Button button = (Button) this.buttons.get(++index);
+                Button button = (Button) this.buttons.get(index);
                 //button.setMessage(getSkillEntryFormattedText(skill, entry.getValue()));
-                button.x = this.scrollBarFarLeft + (++index * buttonHeight);
+                button.x = this.scrollBarFarLeft + (index * buttonHeight);
                 button.y = this.y+26;
             }
         }
         this.notYetPopulated = false;
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
     }
 
     @Override

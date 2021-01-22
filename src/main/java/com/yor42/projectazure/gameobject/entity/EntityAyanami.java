@@ -34,6 +34,8 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(4.0F);
     }
 
+
+
     public boolean isWalking(AnimationEvent event){
         return !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F);
     }
@@ -44,23 +46,21 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+        animationData.addAnimationController(new AnimationController(this, "controller", 10, this::predicate));
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.breath", true));
-        if (this.isWalking(event)) {
-            if(isSailing()){
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.sail", true));
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.sail_hand", true));
-            }
-            else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.walk", true));
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.walk_arm", true));
-            }
+        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.walk", true));
+            return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
+    }
+
+    @Override
+    public float getRenderScale() {
+        return 0.5F;
     }
 
     @Override
@@ -72,9 +72,10 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3F)
                 .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 4.0F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0F)
                 ;
     }
 

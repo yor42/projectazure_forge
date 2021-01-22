@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity;
 
-import com.sun.javafx.geom.Vec3d;
+//import com.sun.javafx.geom.Vec3d;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -73,11 +73,11 @@ public class EntityKansenBase extends TameableEntity {
 
     @Override
     public void tick() {
-        super.tick();
-
-        if(this.isInWater() && this.func_233571_b_(FluidTags.WATER) > floatWaterLevel){
-            kansenFloat();
+        float f = this.getEyeHeight() - 20F;
+        if (this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f) {
+            this.kansenFloat();
         }
+        super.tick();
     }
 
     private void kansenFloat() {

@@ -20,11 +20,10 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class registerEntity {
 
     //kansen
-    public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.<EntityAyanami>create(EntityAyanami::new, EntityClassification.CREATURE).size(0.5f, 0.5f).build(new ResourceLocation(defined.MODID, "entityayanami").toString());
-    public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = registerManager.ENTITIES.register("entityayanami", () -> ENTITYAYANAMI);
+
 
     public static void RegisterAttributes(){
-        GlobalEntityTypeAttributes.put(ENTITYAYANAMI, EntityAyanami.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYAYANAMI, EntityAyanami.MutableAttribute().create());
 
     }
 

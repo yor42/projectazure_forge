@@ -20,7 +20,8 @@ public class itemRainbowWisdomCube extends Item {
         if(worldIn.isRemote){
             //openGui
             Minecraft.getInstance().displayGuiScreen(new guiStarterSpawn(new TranslationTextComponent("gui.StarterSelection")));
+            return ActionResult.resultConsume(playerIn.getHeldItem(handIn));
         }
-        return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+        return ActionResult.resultPass(playerIn.getHeldItem(handIn));
     }
 }

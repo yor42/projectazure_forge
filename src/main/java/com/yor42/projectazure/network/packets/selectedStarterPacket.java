@@ -10,8 +10,8 @@ import java.util.function.Supplier;
 public class selectedStarterPacket {
     private final int starterID;
 
-    public selectedStarterPacket(int valid) {
-        this.starterID = valid;
+    public selectedStarterPacket(int id) {
+        this.starterID = id;
     }
 
     public static selectedStarterPacket decode (final PacketBuffer buffer){
