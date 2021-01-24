@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.libs.defined;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -23,8 +24,13 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     public guiShipInventory(ContainerKansenInventory container, PlayerInventory playerinventory, ITextComponent titleIn) {
         super(container, playerinventory, titleIn);
+    }
+
+    @Override
+    public void init(Minecraft minecraft, int width, int height) {
+        super.init(minecraft, width, height);
         this.x = (this.width - backgroundWidth) / 2;
-        this.y = (this.height - backgroundHeight) / 2;
+        this.y = (this.height - backgroundHeight) / 2+14;
     }
 
     @Override

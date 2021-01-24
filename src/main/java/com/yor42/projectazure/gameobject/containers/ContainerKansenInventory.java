@@ -11,8 +11,10 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -23,10 +25,36 @@ public class ContainerKansenInventory extends Container implements INamedContain
 
     private static final EquipmentSlotType[] EQUIPMENT = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
 
-    //constructor for registry
+    //client
     public ContainerKansenInventory(int id, PlayerInventory playerInventory){
         super(registerManager.SHIP_CONTAINER.get(), id);
 
+        ItemStackHandler dummyStackHandler = new ItemStackHandler(19);
+
+        //rigging
+        this.addSlot(new SlotItemHandler(dummyStackHandler, 0,152,35));
+
+        //Offhands
+        this.addSlot(new SlotItemHandler(dummyStackHandler, 1,134,89));
+        //mainhand
+        this.addSlot(new SlotItemHandler(dummyStackHandler, 2,152,89));
+
+        //armor(head/chest/legging/boots)
+        for(int l = 0; l<4; l++){
+            int finalL = l;
+            this.addSlot(new SlotItemHandler(dummyStackHandler, 3+ finalL,75,35+ finalL * 18){
+                public int getSlotStackLimit()
+                {
+                    return 1;
+                }
+            });
+        }
+
+        for(int m=0;m<4;m++){
+            for(int n=0; n<3;n++){
+                this.addSlot(new SlotItemHandler(dummyStackHandler, 7 + n + 3*m,11 + n * 18, 19 + m * 18));
+            }
+        }
 
         for(int i = 0; i < 3; ++i) {
             for(int j = 0; j < 9; ++j) {
@@ -91,17 +119,17 @@ public class ContainerKansenInventory extends Container implements INamedContain
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return false;
+        return true;
     }
 
     @Override
     public ITextComponent getDisplayName() {
-        return null;
+        return new TranslationTextComponent("gui.shipinventory");
     }
 
     @Nullable
     @Override
     public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-        return null;
+        return this;
     }
 }
