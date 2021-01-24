@@ -38,13 +38,16 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
-
         body.setScaleX(0.4F);
         body.setScaleY(0.4F);
         body.setScaleZ(0.4F);
-        body.setPositionY(-19F);
+        if(entity.isSitting()){
+            body.setPositionY(-27F);
+        }
+        else {
+            body.setPositionY(-19F);
+        }
 
-        LivingEntity entityIn = (LivingEntity) entity;
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         head.setRotationX(extraData.headPitch * ((float)Math.PI / 180F));
         head.setRotationY(extraData.netHeadYaw * ((float)Math.PI / 180F));

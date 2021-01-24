@@ -1,15 +1,15 @@
 package com.yor42.projectazure.gameobject.entity;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -46,7 +46,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 10, this::predicate));
+        animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
@@ -55,12 +55,12 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.walk", true));
             return PlayState.CONTINUE;
         }
-        return PlayState.STOP;
-    }
-
-    @Override
-    public float getRenderScale() {
-        return 0.5F;
+        if(this.isSitting()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.sit1", true));
+            return PlayState.CONTINUE;
+        }
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.idle", true));
+        return PlayState.CONTINUE;
     }
 
     @Override
@@ -77,18 +77,5 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0F)
                 ;
-    }
-
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
     }
 }

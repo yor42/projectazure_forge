@@ -88,7 +88,6 @@ public class guiStarterButton extends ImageButton {
                     if (entity instanceof LivingEntity) {
                         LivingEntity livingEntity = (LivingEntity) entity;
 
-                        int entityHeight = (int) entity.getHeight();
                         int entityWidth = (int) entity.getWidth();
                         try {
                             InventoryScreen.drawEntityOnScreen(this.x+(this.width/2)-(entityWidth/2), this.y+this.height-5, 40, (float)(this.x + 51) - mouseX, (float)(this.y + 75 - 50) - mouseY, livingEntity);

@@ -1,5 +1,6 @@
 package com.yor42.projectazure;
 
+import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.entityAyanamiRenderer;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.setup.register.registerEntity;
@@ -40,11 +41,6 @@ public class Main
 
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-        // Register the doClientStuff method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         
         registerManager.register();
@@ -62,7 +58,8 @@ public class Main
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
-    	RenderingRegistry.registerEntityRenderingHandler(registerManager.AYANAMI.get(), manager -> new entityAyanamiRenderer(manager));
+    	RenderingRegistry.registerEntityRenderingHandler(registerManager.AYANAMI.get(), entityAyanamiRenderer::new);
+        ClientRegisterManager.registerScreen();
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
     }
 

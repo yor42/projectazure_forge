@@ -6,6 +6,7 @@ import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -36,13 +37,15 @@ public class serverAction {
                 player.sendMessage(new TranslationTextComponent("message.invalidstarter"), player.getUniqueID());
             }
             else{
-                if(entitytype.spawn((ServerWorld)world, player.getActiveItemStack(), player, player.getPosition(), SpawnReason.SPAWN_EGG, false, false) != null){
+                EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerWorld)world, player.getActiveItemStack(), player, player.getPosition(), SpawnReason.SPAWN_EGG, false, false);
+                if (entity != null){
                     if(!player.isCreative()) {
                         if(player.getHeldItem(Hand.MAIN_HAND).getItem() == registerItems.Rainbow_Wisdom_Cube.get())
                             player.getHeldItem(Hand.MAIN_HAND).shrink(1);
                         else
                             player.getHeldItem(Hand.OFF_HAND).shrink(1);
                     }
+                    entity.setTamedBy(player);
                 }
                 player.closeScreen();
             }

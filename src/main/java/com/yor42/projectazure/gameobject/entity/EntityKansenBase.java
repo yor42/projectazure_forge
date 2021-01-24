@@ -1,14 +1,46 @@
 package com.yor42.projectazure.gameobject.entity;
 
 //import com.sun.javafx.geom.Vec3d;
+import com.yor42.projectazure.client.gui.guiShipInventory;
+import com.yor42.projectazure.client.gui.guiStarterSpawn;
+import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.TurtleEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.passive.horse.AbstractChestedHorseEntity;
+import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import net.minecraft.entity.passive.horse.LlamaEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.IInventoryChangedListener;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -21,6 +53,13 @@ import javax.annotation.Nullable;
 
 public class EntityKansenBase extends TameableEntity {
 
+    private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
+    private static final DataParameter<Byte> STATUS = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BYTE);
+
+    public ItemStackHandler ShipStorage = new ItemStackHandler(19);
+    private net.minecraftforge.common.util.LazyOptional<?> itemHandler = null;
+
     /*
    1 = Level
    2 = Morale
@@ -32,6 +71,29 @@ public class EntityKansenBase extends TameableEntity {
 
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(STORAGE, new CompoundNBT());
+        this.dataManager.register(DATA_ID_RIGGING, false);
+    }
+
+    public void setRigging(boolean hasrigging){
+        this.hasRigging = hasrigging;
+    }
+
+    @Override
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putBoolean("HasRigging", this.Hasrigging());
+        compound.put("inventory",this.ShipStorage.serializeNBT());
+    }
+
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.setRigging(compound.getBoolean("HasRigging"));
+        this.ShipStorage.deserializeNBT((CompoundNBT) compound.get("inventory"));
     }
 
     public void setShipClass(shipClass setclass){
@@ -71,9 +133,48 @@ public class EntityKansenBase extends TameableEntity {
         stat[id] = value;
     }
 
+    public boolean Hasrigging(){
+        return this.hasRigging;
+    }
+
+    @Override
+    public void setTamedBy(PlayerEntity player) {
+        this.setTamed(true);
+        this.setOwnerId(player.getUniqueID());
+    }
+    @Override
+    public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
+        if(this.isOwner(player)){
+            if(player.isSneaking()){
+                if(!world.isRemote) {
+                    NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerKansenInventory(this.getEntityId(), player.inventory, this));
+                }
+            }
+            else{
+                this.func_233687_w_(!this.isSitting());
+            }
+        }
+        return super.applyPlayerInteraction(player, vec, hand);
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new SitGoal(this));
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(7, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractSkeletonEntity.class, false));
+    }
+
     @Override
     public void tick() {
-        float f = this.getEyeHeight() - 20F;
+        float f = this.getEyeHeight() - 1F;
         if (this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f) {
             this.kansenFloat();
         }
@@ -84,6 +185,7 @@ public class EntityKansenBase extends TameableEntity {
         Vector3d vec3d = this.getMotion();
         this.setVelocity(vec3d.x * 0.9900000095367432D, vec3d.y + (double)(vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.9900000095367432D);
     }
+
 
     public enum shipClass {
         Destroyer,

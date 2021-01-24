@@ -75,7 +75,6 @@ public class guiStarterSpawn extends Screen {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.drawBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
         this.drawForegroundLayer(matrixStack, mouseX, mouseY, partialTicks);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     private void drawBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
