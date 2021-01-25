@@ -458,57 +458,6 @@
 				}
 			}
 		},
-		"animation.ayanami.sit1": {
-			"animation_length": 3.964,
-			"bones": {
-				"Body": {
-					"rotation": {
-						"vector": [-10, 0, 0]
-					},
-					"position": {
-						"vector": [0, -23, 0],
-						"easing": "easeOutElastic"
-					}
-				},
-				"waist": {
-					"rotation": {
-						"vector": [-25, 0, 0],
-						"easing": "easeOutQuint"
-					}
-				},
-				"RightLeg": {
-					"rotation": {
-						"vector": [-55, 0, 0]
-					}
-				},
-				"RightLowerLeg": {
-					"rotation": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"LeftLeg": {
-					"rotation": {
-						"vector": [-82.5, 0, 0]
-					}
-				},
-				"LeftLowerLeg": {
-					"rotation": {
-						"vector": [60, 0, 0],
-						"easing": "easeOutCubic"
-					}
-				},
-				"RightArm": {
-					"rotation": {
-						"vector": [10, 0, 0]
-					}
-				},
-				"LeftArm": {
-					"rotation": {
-						"vector": [10, 0, 0]
-					}
-				}
-			}
-		},
 		"animation.ayanami.new": {
 			"loop": true
 		},
@@ -574,6 +523,54 @@
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
+					}
+				}
+			}
+		},
+		"animation.ayanami.sit1": {
+			"animation_length": 3.964,
+			"bones": {
+				"Body": {
+					"rotation": {
+						"vector": [-10, 0, 0]
+					},
+					"position": {
+						"vector": [0, -23, 0]
+					}
+				},
+				"waist": {
+					"rotation": {
+						"vector": [-25, 0, 0]
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"vector": [-57.5, 0, 0]
+					}
+				},
+				"RightLowerLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [-82.5, 0, 0]
+					}
+				},
+				"LeftLowerLeg": {
+					"rotation": {
+						"vector": [60, 0, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [10, 0, 0]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [10, 0, 0]
 					}
 				}
 			}

@@ -18,6 +18,7 @@ public class itemModelProvider extends ItemModelProvider {
 
         buildModel("rainbow_wisdomcube");
         buildModel("wisdomcube");
+        buildModel("disc_fridaynight");
     }
 
     private ItemModelBuilder buildModel(String name){

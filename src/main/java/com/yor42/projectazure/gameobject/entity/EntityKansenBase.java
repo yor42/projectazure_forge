@@ -4,6 +4,7 @@ package com.yor42.projectazure.gameobject.entity;
 import com.yor42.projectazure.client.gui.guiShipInventory;
 import com.yor42.projectazure.client.gui.guiStarterSpawn;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.entity.ai.KansenSwimGoal;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.AgeableEntity;
@@ -59,16 +60,10 @@ public class EntityKansenBase extends TameableEntity {
 
     private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
-    private static final DataParameter<Byte> STATUS = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BYTE);
 
     public ItemStackHandler ShipStorage = new ItemStackHandler(19);
-    private net.minecraftforge.common.util.LazyOptional<?> itemHandler = null;
 
-    /*
-   1 = Level
-   2 = Morale
-    */
-    protected int[] stat;
+    public int level, exp;
     public boolean hasRigging;
     protected double floatWaterLevel = (this.getPosY() + 0.25F);
     public shipClass shipclass;
@@ -129,16 +124,14 @@ public class EntityKansenBase extends TameableEntity {
         return false;
     }
 
-    public int getStat(byte id) {
-        return stat[id];
-    }
-
-    public void setStat(byte id, int value) {
-        stat[id] = value;
-    }
-
     public boolean Hasrigging(){
         return this.hasRigging;
+    }
+
+    public boolean isSailing(){
+        float f = this.getEyeHeight() - 1F;
+        return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f;
+        //return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
     }
 
     @Override
@@ -152,10 +145,12 @@ public class EntityKansenBase extends TameableEntity {
             if(player.isSneaking()){
                 if(!world.isRemote) {
                     NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerKansenInventory.Supplier(this));
+                    return ActionResultType.SUCCESS;
                 }
             }
             else{
                 this.func_233687_w_(!this.isSitting());
+                return ActionResultType.SUCCESS;
             }
         }
         return super.applyPlayerInteraction(player, vec, hand);
@@ -163,7 +158,7 @@ public class EntityKansenBase extends TameableEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new KansenSwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new OpenDoorGoal(this, true));
@@ -178,8 +173,9 @@ public class EntityKansenBase extends TameableEntity {
 
     @Override
     public void tick() {
-        float f = this.getEyeHeight() - 1F;
-        if (this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f) {
+        this.navigator.getNodeProcessor().setCanEnterDoors(true);
+        this.navigator.getNodeProcessor().setCanOpenDoors(true);
+        if (isSailing()) {
             this.kansenFloat();
         }
         super.tick();

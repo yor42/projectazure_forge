@@ -31,6 +31,11 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         super.init(minecraft, width, height);
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2+14;
+        this.playerInventoryTitleX = 9;
+        this.playerInventoryTitleY = 100;
+        this.titleX = 11;
+        this.titleY=9;
+
     }
 
     @Override
@@ -50,5 +55,10 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+    }
+
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 14085119);
+        this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 14085119);
     }
 }

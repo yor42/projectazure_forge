@@ -3,12 +3,12 @@ package com.yor42.projectazure;
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.entityAyanamiRenderer;
 import com.yor42.projectazure.libs.defined;
-import com.yor42.projectazure.setup.register.registerEntity;
-import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerManager;
-import com.yor42.projectazure.setup.register.registerNetwork;
+import com.yor42.projectazure.setup.register.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -29,20 +29,30 @@ import software.bernie.geckolib3.GeckoLib;
 import net.minecraftforge.api.distmarker.Dist;
 import java.util.stream.Collectors;
 
+import static com.yor42.projectazure.libs.defined.MODID;
+
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod(defined.MODID)
+@Mod(MODID)
 public class Main
 {
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final SimpleChannel NETWORK = registerNetwork.getNetworkChannel();
 
+    public static ItemGroup PA_GROUP = new ItemGroup(MODID) {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
+        }
+    };
+
     public Main() {
 
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-        
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(SoundEvent.class, registerSounds::register);
+
         registerManager.register();
 
         GeckoLib.initialize();

@@ -1,0 +1,10 @@
+{
+  "disc_fridaynight": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/fridaynight",
+        "stream": true
+      }
+    ]
+  }
+}

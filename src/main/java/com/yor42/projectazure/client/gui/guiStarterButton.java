@@ -20,7 +20,8 @@ import java.util.Map;
 public class guiStarterButton extends ImageButton {
     private final ResourceLocation resourceLocation;
     private final EntityType entityType;
-    private final int x, y;
+    private int x;
+    private final int y;
     private final int xTexStart;
     private final int yTexStart;
     private final int xDiffText;
@@ -39,6 +40,10 @@ public class guiStarterButton extends ImageButton {
         this.resourceLocation = resourceLocationIn;
         this.entityType = type;
         this.index = idx;
+    }
+
+    public void setx(int x){
+        this.x = x;
     }
 
     @Override

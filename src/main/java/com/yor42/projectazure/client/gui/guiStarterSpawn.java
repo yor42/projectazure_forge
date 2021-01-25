@@ -11,6 +11,7 @@ import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -48,6 +49,9 @@ public class guiStarterSpawn extends Screen {
         this.y = (this.height - backgroundHeight) / 2;
         this.minecraft = minecraft;
         this.scrollBarFarLeft = this.x+13;
+        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        //this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         for(int index = 0; index < 1; index++) {
             if (this.notYetPopulated) {
                 int finalIndex = index;
@@ -75,6 +79,29 @@ public class guiStarterSpawn extends Screen {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.drawBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
         this.drawForegroundLayer(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderButtons(matrixStack,mouseX, mouseY, partialTicks);
+    }
+
+    private void renderButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        guiStarterButton button = (guiStarterButton) this.buttons.get(0);
+        button.render(matrixStack, mouseX, mouseY, partialTicks);
+        //will be implemented when screen actually needs to be scrolled
+        /*
+        int position = Math.floorDiv(this.lastScrollX - this.scrollBarFarLeft, 20); // CORRECT - GETS THE 'INDEX"
+        for (int i = 0; i < this.buttons.size(); i++) {
+            guiStarterButton button = (guiStarterButton) this.buttons.get(i);
+            if (i < position || i > position + 3) {
+                button.visible = false;
+                button.active = false;
+            } else {
+                button.visible = true;
+                button.active = true;
+                button.setx(this.scrollBarFarLeft + ((i - position) * buttonWidth));
+                button.render(matrixStack, mouseX, mouseY, partialTicks);
+            }
+        }
+
+         */
     }
 
     private void drawBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
@@ -85,7 +112,6 @@ public class guiStarterSpawn extends Screen {
 
     private void drawForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         drawString(matrixStack, this.font, new TranslationTextComponent("gui.selectstarter.title"), this.x+18, this.y+10, 14085119);
-
     }
 
     public int getBackgroundLeft(){
@@ -100,24 +126,8 @@ public class guiStarterSpawn extends Screen {
         return "Hello World";
     }
 
-    private Button createButton(EntityType entity, int x, int y, int width, int height, ITextComponent message, Button.IPressable onPress) {
-        ResourceLocation TEXTURE = new ResourceLocation(defined.MODID, "textures/gui/rainbow_cube_gui.png");
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
-        return new Button(x, y, width, height, message, onPress) {
-
-            @Override
-            public void renderButton(MatrixStack matrix, int mouseX, int mouseY, float delta) {
-                super.renderButton(matrix, mouseX, mouseY, delta);
-                int buttonHeight = 126;
-                int buttonWidth = 59;
-                this.blit(matrix, 195, 2, 0, 0, buttonWidth, buttonHeight);
-                //InventoryScreen.drawEntityOnScreen(x+30, y+54, 64,mouseX,mouseY, entity);
-            }
-        };
-    }
-
     private guiStarterButton createButton(int x, int y, int width, int height, int idx, EntityType type, Button.IPressable onPress) {
-        ResourceLocation TEXTURE = new ResourceLocation(defined.MODID, "textures/gui/rainbow_cube_overlay.png");
-        return new guiStarterButton(x, y, width, height, 0, 0, this.buttonWidth , TEXTURE, idx, type, onPress);
+        ResourceLocation TEXTURE1 = new ResourceLocation(defined.MODID, "textures/gui/rainbow_cube_overlay.png");
+        return new guiStarterButton(x, y, width, height, 0, 0, this.buttonWidth , TEXTURE1, idx, type, onPress);
     }
 }

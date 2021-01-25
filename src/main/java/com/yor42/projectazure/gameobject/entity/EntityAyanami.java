@@ -40,10 +40,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         return !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F);
     }
 
-    public boolean isSailing(){
-        return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > floatWaterLevel;
-    }
-
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
@@ -51,15 +47,22 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
+        AnimationBuilder builder = new AnimationBuilder();
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.walk", true));
+            if(this.isSailing()){
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_hand", true));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk", true));
+            }
             return PlayState.CONTINUE;
         }
         if(this.isSitting()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.sit1", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ayanami.idle", true));
+        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
         return PlayState.CONTINUE;
     }
 

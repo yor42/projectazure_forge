@@ -1,5 +1,12 @@
 {
+  "itemGroup.projectazure": "Project: Azure",
+
   "item.projectazure.rainbow_wisdomcube": "Rainbow Wisdom Cube",
+  "item.projectazure.wisdomcube": "Wisdom Cube",
+  "item.projectazure.disc_fridaynight": "Music Disc",
+  "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
+
+  "item.projectazure.wisdomcube.tooltip": "Mysterious Glowing Cube. Used to Build KANSEN.",
 
   "gui.selectstarter.title": "Select Starter Ship"
 }

@@ -17,8 +17,17 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
     public entityAyanamiRenderer(EntityRendererManager renderManager/*, AnimatedGeoModel<EntityAyanami> modelProvider*/) {
         super(renderManager, new ayanamiModel());
         this.shadowSize = 0.3F; //change 0.7 to the desired shadow size.
-
     }
 
+    @Override
+    public void render(EntityAyanami entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        stack.scale(0.4F, 0.4F, 0.4F);
+        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+    }
+
+    @Override
+    protected void applyRotations(EntityAyanami entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+    }
 }
 

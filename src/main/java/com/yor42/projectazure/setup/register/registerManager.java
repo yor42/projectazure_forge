@@ -4,16 +4,20 @@ import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.block.Block;
+import net.minecraft.client.audio.Sound;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import static com.yor42.projectazure.libs.defined.MODID;
 
 public class registerManager {
 
@@ -21,10 +25,13 @@ public class registerManager {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, defined.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, defined.MODID);
 
+
+    //container
     public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, defined.MODID);
     private static final ContainerType<ContainerKansenInventory> INVENTORY = new ContainerType<ContainerKansenInventory>(ContainerKansenInventory::new);
     public static final RegistryObject<ContainerType<ContainerKansenInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> INVENTORY);
 
+    //entity
     public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.<EntityAyanami>create(EntityAyanami::new, EntityClassification.CREATURE).size(0.572F, 1.5F).build(new ResourceLocation(defined.MODID, "entityayanami").toString());
     public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> ENTITYAYANAMI);
 
@@ -37,5 +44,6 @@ public class registerManager {
         registerBlocks.register();
         registerItems.register();
     }
+
 
 }
