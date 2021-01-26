@@ -51,26 +51,26 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
             RightArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 0.8F * entity.limbSwingAmount);
         }
 
-        if(this.blinkinterval == 0){
+        if(this.blinkinterval <= 5){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(false);
-            this.blinkinterval = random.nextInt(9);
+            if(this.blinkinterval ==0) {
+                this.blinkinterval = 20 * (random.nextInt(9) + 2);
+            }
+            this.blinkinterval--;
         }
         else{
-            --this.blinkinterval;
-            NormalFace.setHidden(true);
+            this.blinkinterval--;
+            NormalFace.setHidden(false);
             ExcitedFace.setHidden(true);
-            EyeclosedFace.setHidden(false);
+            EyeclosedFace.setHidden(true);
         }
 
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         head.setRotationX(extraData.headPitch * ((float)Math.PI / 180F));
         head.setRotationY(extraData.netHeadYaw * ((float)Math.PI / 180F));
-        NormalFace.setHidden(false);
-        ExcitedFace.setHidden(true);
-        EyeclosedFace.setHidden(true);
 
     }
 }

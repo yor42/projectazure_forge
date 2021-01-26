@@ -4,6 +4,7 @@ package com.yor42.projectazure.gameobject.entity;
 import com.yor42.projectazure.client.gui.guiShipInventory;
 import com.yor42.projectazure.client.gui.guiStarterSpawn;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.entity.ai.KansenSitGoal;
 import com.yor42.projectazure.gameobject.entity.ai.KansenSwimGoal;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.Minecraft;
@@ -159,7 +160,7 @@ public class EntityKansenBase extends TameableEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
-        this.goalSelector.addGoal(2, new SitGoal(this));
+        this.goalSelector.addGoal(2, new KansenSitGoal(this));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
@@ -173,8 +174,10 @@ public class EntityKansenBase extends TameableEntity {
 
     @Override
     public void tick() {
-        this.navigator.getNodeProcessor().setCanEnterDoors(true);
-        this.navigator.getNodeProcessor().setCanOpenDoors(true);
+        if(!this.isInWater() && !this.isSitting() && !this.isSleeping()) {
+            this.navigator.getNodeProcessor().setCanEnterDoors(true);
+            this.navigator.getNodeProcessor().setCanOpenDoors(true);
+        }
         if (isSailing()) {
             this.kansenFloat();
         }
