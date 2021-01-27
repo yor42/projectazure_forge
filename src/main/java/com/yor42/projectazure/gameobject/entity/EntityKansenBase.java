@@ -1,73 +1,58 @@
 package com.yor42.projectazure.gameobject.entity;
 
-//import com.sun.javafx.geom.Vec3d;
-import com.yor42.projectazure.client.gui.guiShipInventory;
-import com.yor42.projectazure.client.gui.guiStarterSpawn;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
-import com.yor42.projectazure.gameobject.entity.ai.KansenSitGoal;
 import com.yor42.projectazure.gameobject.entity.ai.KansenSwimGoal;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.passive.horse.AbstractChestedHorseEntity;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
-import net.minecraft.entity.passive.horse.LlamaEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public abstract class EntityKansenBase extends TameableEntity  implements IAnimatable {
+public abstract class EntityKansenBase extends TameableEntity implements IAnimatable {
+
+    private static final int SLOT_OFFHAND = 1;
+    private static final int SLOT_MAINHAND = 2;
+
 
     private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     public static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
     private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
+
     public static final DataParameter<ItemStack> ITEM_MAINHAND = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
 
 
-    public ItemStackHandler ShipStorage = new ItemStackHandler(19){
+    public ItemStackHandler ShipStorage = new ItemStackHandler(19) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            switch (slot)
+            {
+                case SLOT_MAINHAND:
+                    EntityKansenBase.this.dataManager.set(ITEM_MAINHAND, this.getStackInSlot(slot));
+                    break;
+            }
+        }
     };
 
     public int level, exp;
@@ -80,7 +65,7 @@ public abstract class EntityKansenBase extends TameableEntity  implements IAnima
 
     @Override
     public ItemStack getHeldItemMainhand() {
-        return this.ShipStorage.getStackInSlot(2);
+        return this.dataManager.get(ITEM_MAINHAND);
     }
 
     @Override
