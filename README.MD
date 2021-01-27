@@ -7,7 +7,9 @@ Introduction(소개)
 -
 Project: Azure is **FREE, NON COMMERCIAL** Mod for Minecraft Forge Based on Mobile Game Azur lane.<br />
 프로젝트 애저는 모바일 게임 벽람항로를 기반으로 하는 마인크래프트 포지용 **무료, 비영리 모드**입니다.<br />
-######~~한섭 운영을 보고 너무나 빡친 나머지 만든 거라는건 공공연한 비밀입니다.~~<br />~~Its Secret that I made this because i was super pissed as linus at AL KR~~
+<br />
+~~한섭 운영을 보고 너무나 빡친 나머지 만든 거라는건 공공연한 비밀입니다.~~<br />~~Its Secret that I made this because i was super pissed as linus at AL KR~~
+<br />
 <br />
 This Is not yet functional. If you are interested for help, contact Discord yor42#0420<br />
 이 모드는 현재로써는 개발중으로 정상적인 플레이가 불가능합니다. 개발 참여 문의는 디스코드 yor42#0420에게 문의해주세요.
