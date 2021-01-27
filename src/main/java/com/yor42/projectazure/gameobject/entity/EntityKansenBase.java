@@ -12,8 +12,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -24,11 +27,14 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class EntityKansenBase extends TameableEntity implements IAnimatable {
@@ -42,6 +48,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
 
     public static final DataParameter<ItemStack> ITEM_MAINHAND = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
+    public static final DataParameter<ItemStack> ITEM_OFFHAND = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
 
 
     public ItemStackHandler ShipStorage = new ItemStackHandler(19) {
@@ -51,6 +58,169 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 case SLOT_MAINHAND:
                     EntityKansenBase.this.dataManager.set(ITEM_MAINHAND, this.getStackInSlot(slot));
                     break;
+                case SLOT_OFFHAND:
+                    EntityKansenBase.this.dataManager.set(ITEM_OFFHAND, this.getStackInSlot(slot));
+                    break;
+            }
+        }
+    };
+
+    public final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
+
+        private final EquipmentSlotType[] EQUIPMENTSLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
+
+
+        @Override
+        public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+            EquipmentSlotType slottype;
+
+            switch (slot) {
+                case 1:
+                    slottype = EquipmentSlotType.OFFHAND;
+                    break;
+                case 2:
+                    slottype = EquipmentSlotType.HEAD;
+                    break;
+                case 3:
+                    slottype = EquipmentSlotType.CHEST;
+                    break;
+                case 4:
+                    slottype = EquipmentSlotType.LEGS;
+                    break;
+                case 5:
+                    slottype = EquipmentSlotType.FEET;
+                    break;
+                default:
+                    slottype = EquipmentSlotType.MAINHAND;
+            }
+            EntityKansenBase.this.setItemStackToSlot(slottype, stack);
+        }
+
+        @Override
+        public int getSlots() {
+            return 6;
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack getStackInSlot(int slot) {
+            EquipmentSlotType slottype;
+
+            switch (slot) {
+                case 1:
+                    slottype = EquipmentSlotType.OFFHAND;
+                    break;
+                case 2:
+                    slottype = EquipmentSlotType.HEAD;
+                    break;
+                case 3:
+                    slottype = EquipmentSlotType.CHEST;
+                    break;
+                case 4:
+                    slottype = EquipmentSlotType.LEGS;
+                    break;
+                case 5:
+                    slottype = EquipmentSlotType.FEET;
+                    break;
+                default:
+                    slottype = EquipmentSlotType.MAINHAND;
+            }
+            return EntityKansenBase.this.getItemStackFromSlot(slottype);
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+
+            if(!isItemValid(slot, stack)){
+                return stack;
+            }
+            ItemStack existingstack = getStackInSlot(slot);
+            int limit = this.getSlotLimit(slot);
+
+            if(!existingstack.isEmpty()){
+                if (!ItemHandlerHelper.canItemStacksStack(stack, existingstack)) {
+                    return stack;
+                }
+                limit -= existingstack.getCount();
+            }
+
+            if (limit <= 0)
+                return stack;
+
+            boolean reachedLimit = stack.getCount() > limit;
+
+            if (!simulate)
+            {
+                if (existingstack.isEmpty()) {
+                    setStackInSlot(slot, stack);
+                }
+                else {
+                        existingstack.grow(reachedLimit ? limit : stack.getCount());
+                    setStackInSlot(slot, existingstack);
+                    }
+            }
+            return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            if (amount == 0)
+                return ItemStack.EMPTY;
+
+            ItemStack existing = getStackInSlot(slot);
+
+            if (existing.isEmpty())
+                return ItemStack.EMPTY;
+
+            int toExtract = Math.min(amount, existing.getMaxStackSize());
+
+            if (existing.getCount() <= toExtract)
+            {
+                if (!simulate)
+                {
+                    setStackInSlot(slot, ItemStack.EMPTY);
+                    return existing;
+                }
+                else
+                {
+                    return existing.copy();
+                }
+            }
+            else
+            {
+                if (!simulate)
+                {
+                    setStackInSlot(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract));
+                }
+
+                return ItemHandlerHelper.copyStackWithSize(existing, toExtract);
+            }
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            switch (slot){
+                case 0:
+                case 1:
+                    return 64;
+                default:
+                    return 1;
+            }
+        }
+
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            switch(slot){
+                case 0:
+                case 1:
+                    return true;
+                default:
+                    if(stack.getItem() instanceof ArmorItem) {
+                        return stack.canEquip(EQUIPMENTSLOTS[slot-2], EntityKansenBase.this);
+                    }
+                    else return false;
             }
         }
     };
@@ -79,6 +249,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.dataManager.register(DATA_ID_RIGGING, this.hasRigging);
         this.dataManager.register(SITTING, this.isSitting());
         this.dataManager.register(ITEM_MAINHAND,ItemStack.EMPTY);
+        this.dataManager.register(ITEM_OFFHAND, ItemStack.EMPTY);
     }
 
     public void setRigging(boolean hasrigging){
@@ -181,34 +352,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.hasHelmet()||this.haschestplate()||this.hasleggings()||this.hasboots();
     }
 
-
-    @Override
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
-        switch(slotIn)
-        {
-            case HEAD:
-                return this.ShipStorage.getStackInSlot(3);
-
-            case CHEST:
-                return this.ShipStorage.getStackInSlot(4);
-
-            case LEGS:
-                return this.ShipStorage.getStackInSlot(5);
-
-            case FEET:
-                return this.ShipStorage.getStackInSlot(6);
-
-            case MAINHAND:
-                return this.ShipStorage.getStackInSlot(2);
-
-            case OFFHAND:
-                return this.ShipStorage.getStackInSlot(1);
-
-            default:
-                return ItemStack.EMPTY;
-        }
-    }
-
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
@@ -234,14 +377,8 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             this.kansenFloat();
         }
 
-        this.updateStorage();
-
         super.tick();
     }
-
-    protected void updateStorage(){
-
-    };
 
     public ItemStack getStackinMainHand(){
         return this.dataManager.get(ITEM_MAINHAND);
@@ -254,6 +391,13 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     private void kansenFloat() {
         Vector3d vec3d = this.getMotion();
         this.setVelocity(vec3d.x * 0.9900000095367432D, vec3d.y + (double)(vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.9900000095367432D);
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        EntityKansenBase.this.dataManager.set(ITEM_MAINHAND, this.getShipStorage().getStackInSlot(SLOT_MAINHAND));
+        EntityKansenBase.this.dataManager.set(ITEM_OFFHAND, this.getShipStorage().getStackInSlot(SLOT_OFFHAND));
+        return super.createSpawnPacket();
     }
 
     @Override
