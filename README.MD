@@ -19,4 +19,5 @@ License(라이센스)
 [Project Azure](https://github.com/yor42/projectazure_forge) by [yor42](https://github.com/yor42) is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1)
 <br />Intellectual Property "Azur lane" is Owned by Sanghai Manjuu.Ltd, and Project: Azure has no rights on it.
 <br />
+<br />
 [yor42](https://github.com/yor42) 의 [프로젝트 애저](https://github.com/yor42/projectazure_forge) 는 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1) 라이센스 하에 사용이 허가됩니다
