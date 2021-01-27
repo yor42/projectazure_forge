@@ -11,6 +11,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -46,8 +47,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     public ItemStackHandler ShipStorage = new ItemStackHandler(19) {
         @Override
         protected void onContentsChanged(int slot) {
-            switch (slot)
-            {
+            switch (slot) {
                 case SLOT_MAINHAND:
                     EntityKansenBase.this.dataManager.set(ITEM_MAINHAND, this.getStackInSlot(slot));
                     break;
@@ -240,8 +240,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     protected void updateStorage(){
-        this.dataManager.set(STORAGE, this.ShipStorage.serializeNBT());
-        this.dataManager.set(ITEM_MAINHAND, this.ShipStorage.getStackInSlot(2));
+
     };
 
     public ItemStack getStackinMainHand(){
