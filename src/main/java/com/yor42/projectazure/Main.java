@@ -25,6 +25,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
 import net.minecraftforge.api.distmarker.Dist;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class Main
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(SoundEvent.class, registerSounds::register);
 
         registerManager.register();
-
+        GeckoLibMod.DISABLE_IN_DEV = true;
         GeckoLib.initialize();
 
         // Register ourselves for server and other game events we are interested in

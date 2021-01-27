@@ -1,8 +1,12 @@
 package com.yor42.projectazure.client.model;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.libs.defined;
+import net.minecraft.client.renderer.entity.model.IHasArm;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -18,7 +22,6 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
 
     private int blinkinterval = 0;
     private Random random = new Random();
-
 
     @Override
     public ResourceLocation getModelLocation(EntityAyanami entityAyanami) {
@@ -39,13 +42,14 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
     public void setLivingAnimations(EntityAyanami entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
     {
 
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
+
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
         if(!entity.isSailing()){
             LeftArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F) * 0.8F * entity.limbSwingAmount);
             RightArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 0.8F * entity.limbSwingAmount);
@@ -72,5 +76,9 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
         head.setRotationX(extraData.headPitch * ((float)Math.PI / 180F));
         head.setRotationY(extraData.netHeadYaw * ((float)Math.PI / 180F));
 
+    }
+
+    protected IBone getArmForSide(HandSide side) {
+        return side == HandSide.LEFT ? this.getAnimationProcessor().getBone("LeftArm") : this.getAnimationProcessor().getBone("RightArm");
     }
 }

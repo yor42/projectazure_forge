@@ -21,6 +21,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import javax.annotation.Nullable;
 
@@ -58,11 +59,12 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
             }
             return PlayState.CONTINUE;
         }
-        if(this.isSitting()){
+        if(this.isEntitySleeping()){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
-            return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+        else {
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+        }
         return PlayState.CONTINUE;
     }
 

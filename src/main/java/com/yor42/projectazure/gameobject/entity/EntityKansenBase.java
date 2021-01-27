@@ -22,6 +22,7 @@ import net.minecraft.entity.passive.horse.LlamaEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.Inventory;
@@ -47,6 +48,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -57,26 +59,41 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class EntityKansenBase extends TameableEntity {
+public abstract class EntityKansenBase extends TameableEntity  implements IAnimatable {
 
     private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
+    public static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
+    private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<ItemStack> ITEM_MAINHAND = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
 
-    public ItemStackHandler ShipStorage = new ItemStackHandler(19);
+
+    public ItemStackHandler ShipStorage = new ItemStackHandler(19){
+    };
 
     public int level, exp;
     public boolean hasRigging;
-    protected double floatWaterLevel = (this.getPosY() + 0.25F);
     public shipClass shipclass;
 
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
+    @Override
+    public ItemStack getHeldItemMainhand() {
+        return this.ShipStorage.getStackInSlot(2);
+    }
+
+    @Override
+    public ItemStack getHeldItemOffhand() {
+        return this.ShipStorage.getStackInSlot(1);
+    }
+
     protected void registerData() {
         super.registerData();
         this.dataManager.register(STORAGE, new CompoundNBT());
-        this.dataManager.register(DATA_ID_RIGGING, false);
+        this.dataManager.register(DATA_ID_RIGGING, this.hasRigging);
+        this.dataManager.register(SITTING, this.isSitting());
+        this.dataManager.register(ITEM_MAINHAND,ItemStack.EMPTY);
     }
 
     public void setRigging(boolean hasrigging){
@@ -140,6 +157,8 @@ public class EntityKansenBase extends TameableEntity {
         this.setTamed(true);
         this.setOwnerId(player.getUniqueID());
     }
+
+
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
         if(this.isOwner(player)){
@@ -157,10 +176,58 @@ public class EntityKansenBase extends TameableEntity {
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
+    public boolean hasHelmet(){
+        return this.ShipStorage.getStackInSlot(3).isEmpty();
+    }
+
+    public boolean haschestplate(){
+        return this.ShipStorage.getStackInSlot(4).isEmpty();
+    }
+
+    public boolean hasleggings(){
+        return this.ShipStorage.getStackInSlot(5).isEmpty();
+    }
+
+    public boolean hasboots(){
+        return this.ShipStorage.getStackInSlot(6).isEmpty();
+    }
+
+    public boolean hasarmor(){
+        return this.hasHelmet()||this.haschestplate()||this.hasleggings()||this.hasboots();
+    }
+
+
+    @Override
+    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+        switch(slotIn)
+        {
+            case HEAD:
+                return this.ShipStorage.getStackInSlot(3);
+
+            case CHEST:
+                return this.ShipStorage.getStackInSlot(4);
+
+            case LEGS:
+                return this.ShipStorage.getStackInSlot(5);
+
+            case FEET:
+                return this.ShipStorage.getStackInSlot(6);
+
+            case MAINHAND:
+                return this.ShipStorage.getStackInSlot(2);
+
+            case OFFHAND:
+                return this.ShipStorage.getStackInSlot(1);
+
+            default:
+                return ItemStack.EMPTY;
+        }
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
-        this.goalSelector.addGoal(2, new KansenSitGoal(this));
+        this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
@@ -181,12 +248,38 @@ public class EntityKansenBase extends TameableEntity {
         if (isSailing()) {
             this.kansenFloat();
         }
+
+        this.updateStorage();
+
         super.tick();
+    }
+
+    protected void updateStorage(){
+        this.dataManager.set(STORAGE, this.ShipStorage.serializeNBT());
+        this.dataManager.set(ITEM_MAINHAND, this.ShipStorage.getStackInSlot(2));
+    };
+
+    public ItemStack getStackinMainHand(){
+        return this.dataManager.get(ITEM_MAINHAND);
+    }
+
+    public ItemStackHandler getShipStorage() {
+        return ShipStorage;
     }
 
     private void kansenFloat() {
         Vector3d vec3d = this.getMotion();
         this.setVelocity(vec3d.x * 0.9900000095367432D, vec3d.y + (double)(vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.9900000095367432D);
+    }
+
+    @Override
+    public void registerControllers(AnimationData animationData) {
+
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return null;
     }
 
 

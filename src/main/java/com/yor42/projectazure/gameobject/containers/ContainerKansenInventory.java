@@ -22,8 +22,8 @@ import javax.annotation.Nullable;
 public class ContainerKansenInventory extends Container {
 
     private static final EquipmentSlotType[] EQUIPMENT = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-    private ItemStackHandler inventory;
     private EntityKansenBase host;
+    private ItemStackHandler Stack;
 
     //client
     public ContainerKansenInventory(int id, PlayerInventory playerInventory) {
@@ -32,7 +32,17 @@ public class ContainerKansenInventory extends Container {
         ItemStackHandler dummyStackHandler = new ItemStackHandler(19);
 
         //rigging
-        this.addSlot(new SlotItemHandler(dummyStackHandler, 0, 152, 35));
+        this.addSlot(new SlotItemHandler(dummyStackHandler, 0, 152, 35){
+            @Override
+            public int getSlotStackLimit() {
+                return 1;
+            }
+
+            @Override
+            public boolean isItemValid(@Nonnull ItemStack stack) {
+                return stack.getItem() instanceof ItemRiggingBase;
+            }
+        });
 
         //Offhands
         this.addSlot(new SlotItemHandler(dummyStackHandler, 1, 134, 89));
@@ -75,20 +85,20 @@ public class ContainerKansenInventory extends Container {
     public ContainerKansenInventory(int id, PlayerInventory playerInventory, EntityKansenBase entity) {
         super(registerManager.SHIP_CONTAINER.get(), id);
         this.host = entity;
-        this.inventory = entity.ShipStorage;
+        this.Stack = entity.getShipStorage();
 
         //rigging
-        this.addSlot(new SlotItemHandler(this.inventory, 0, 152, 35));
+        this.addSlot(new SlotItemHandler(this.Stack, 0, 152, 35));
 
         //Offhand
-        this.addSlot(new SlotItemHandler(this.inventory, 1, 134, 89));
+        this.addSlot(new SlotItemHandler(this.Stack, 1, 134, 89));
         //mainhand
-        this.addSlot(new SlotItemHandler(this.inventory, 2, 152, 89));
+        this.addSlot(new SlotItemHandler(this.Stack, 2, 152, 89));
 
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {
             int finalL = l;
-            this.addSlot(new SlotItemHandler(this.inventory, 3 + finalL, 75, 35 + finalL * 18) {
+            this.addSlot(new SlotItemHandler(this.Stack, 3 + finalL, 75, 35 + finalL * 18) {
                 public int getSlotStackLimit() {
                     return 1;
                 }
@@ -102,7 +112,7 @@ public class ContainerKansenInventory extends Container {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(inventory, 7 + n + 3 * m, 11 + n * 18, 19 + m * 18));
+                this.addSlot(new SlotItemHandler(this.Stack, 7 + n + 3 * m, 11 + n * 18, 19 + m * 18));
             }
         }
 
