@@ -68,7 +68,7 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
         if (bone.getName().equals("itemMainHand")){
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getDataManager().get(EntityKansenBase.ITEM_MAINHAND);
+            ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
             stack.translate(0.6F, 0.1, 1.35F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
@@ -79,8 +79,8 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
         else if (bone.getName().equals("itemOffHand")){
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getDataManager().get(EntityKansenBase.ITEM_OFFHAND);
-            stack.translate(0.6F, 0.1, 1.35F);
+            ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
+            stack.translate(-0.6F, 0.1, 1.35F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);

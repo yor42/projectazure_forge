@@ -22,11 +22,15 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -51,14 +55,14 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     public static final DataParameter<ItemStack> ITEM_OFFHAND = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
 
 
-    public ItemStackHandler ShipStorage = new ItemStackHandler(19) {
+    public ItemStackHandler ShipStorage = new ItemStackHandler(13) {
         @Override
         protected void onContentsChanged(int slot) {
             switch (slot) {
-                case SLOT_MAINHAND:
+                case 0:
                     EntityKansenBase.this.dataManager.set(ITEM_MAINHAND, this.getStackInSlot(slot));
                     break;
-                case SLOT_OFFHAND:
+                case 1:
                     EntityKansenBase.this.dataManager.set(ITEM_OFFHAND, this.getStackInSlot(slot));
                     break;
             }
@@ -234,13 +238,8 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     @Override
-    public ItemStack getHeldItemMainhand() {
-        return this.dataManager.get(ITEM_MAINHAND);
-    }
-
-    @Override
-    public ItemStack getHeldItemOffhand() {
-        return this.ShipStorage.getStackInSlot(1);
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        return super.getCapability(capability, facing);
     }
 
     protected void registerData() {
@@ -252,8 +251,8 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.dataManager.register(ITEM_OFFHAND, ItemStack.EMPTY);
     }
 
-    public void setRigging(boolean hasrigging){
-        this.hasRigging = hasrigging;
+    public void setRigging(boolean hasRigging){
+        this.hasRigging = hasRigging;
     }
 
     @Override
@@ -380,12 +379,12 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         super.tick();
     }
 
-    public ItemStack getStackinMainHand(){
-        return this.dataManager.get(ITEM_MAINHAND);
-    }
-
     public ItemStackHandler getShipStorage() {
         return ShipStorage;
+    }
+
+    public IItemHandlerModifiable getEquipment(){
+        return this.EQUIPMENT;
     }
 
     private void kansenFloat() {

@@ -25,12 +25,6 @@ public class registerNetwork {
                 .consumer(selectedStarterPacket::handle)
                 .add();
 
-        channel.messageBuilder(syncEntityInventoryPacket.class, 1)
-                .decoder(syncEntityInventoryPacket::decode)
-                .encoder(syncEntityInventoryPacket::encode)
-                .consumer(syncEntityInventoryPacket::handle)
-                .add();
-
         return channel;
     }
 
