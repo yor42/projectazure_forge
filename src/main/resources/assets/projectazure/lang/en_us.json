@@ -4,9 +4,15 @@
   "item.projectazure.rainbow_wisdomcube": "Rainbow Wisdom Cube",
   "item.projectazure.wisdomcube": "Wisdom Cube",
   "item.projectazure.disc_fridaynight": "Music Disc",
+  "item.projectazure.dd_default_rigging": "Basic Rigging",
+
   "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
-
   "item.projectazure.wisdomcube.tooltip": "Mysterious Glowing Cube. Used to Build KANSEN.",
+  "rigging_valid_on.tooltip": "Useable On:",
 
-  "gui.selectstarter.title": "Select Starter Ship"
+  "gui.selectstarter.title": "Select Starter Ship",
+  "gui.shipinventory": "KANSEN Inv.",
+
+  "destroyer": "Destroyer",
+  "light_cruiser": "Light Cruiser"
 }

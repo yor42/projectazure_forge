@@ -2,6 +2,8 @@ package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.ai.KansenSwimGoal;
+import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
@@ -11,9 +13,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -22,6 +22,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
@@ -30,7 +31,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -40,31 +40,24 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public abstract class EntityKansenBase extends TameableEntity implements IAnimatable {
 
-    private static final int SLOT_OFFHAND = 1;
-    private static final int SLOT_MAINHAND = 2;
-
+    Random rand = new Random();
 
     private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     public static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
     private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
 
-    public static final DataParameter<ItemStack> ITEM_MAINHAND = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
-    public static final DataParameter<ItemStack> ITEM_OFFHAND = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
+    public static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
 
 
     public ItemStackHandler ShipStorage = new ItemStackHandler(13) {
         @Override
         protected void onContentsChanged(int slot) {
-            switch (slot) {
-                case 0:
-                    EntityKansenBase.this.dataManager.set(ITEM_MAINHAND, this.getStackInSlot(slot));
-                    break;
-                case 1:
-                    EntityKansenBase.this.dataManager.set(ITEM_OFFHAND, this.getStackInSlot(slot));
-                    break;
+            if (slot == 0) {
+                EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(slot));
             }
         }
     };
@@ -231,7 +224,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     public int level, exp;
     public boolean hasRigging;
-    public shipClass shipclass;
+    public enums.shipClass shipclass;
 
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -247,32 +240,25 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.dataManager.register(STORAGE, new CompoundNBT());
         this.dataManager.register(DATA_ID_RIGGING, this.hasRigging);
         this.dataManager.register(SITTING, this.isSitting());
-        this.dataManager.register(ITEM_MAINHAND,ItemStack.EMPTY);
-        this.dataManager.register(ITEM_OFFHAND, ItemStack.EMPTY);
-    }
-
-    public void setRigging(boolean hasRigging){
-        this.hasRigging = hasRigging;
+        this.dataManager.register(ITEM_RIGGING,ItemStack.EMPTY);
     }
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putBoolean("HasRigging", this.Hasrigging());
         compound.put("inventory",this.ShipStorage.serializeNBT());
     }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        this.setRigging(compound.getBoolean("HasRigging"));
         this.ShipStorage.deserializeNBT((CompoundNBT) compound.get("inventory"));
     }
 
-    public void setShipClass(shipClass setclass){
+    public void setShipClass(enums.shipClass setclass){
         this.shipclass = setclass;
     }
 
-    public shipClass getShipClass(){
+    public enums.shipClass getShipClass(){
         return this.shipclass;
     }
 
@@ -298,12 +284,12 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     public boolean Hasrigging(){
-        return this.hasRigging;
+        return this.getRigging() != ItemStack.EMPTY;
     }
 
-    public boolean isSailing(){
+    public boolean canSail(){
         float f = this.getEyeHeight() - 1F;
-        return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f;
+        return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
         //return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
     }
 
@@ -311,6 +297,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     public void setTamedBy(PlayerEntity player) {
         this.setTamed(true);
         this.setOwnerId(player.getUniqueID());
+    }
+
+    public ItemStack getRigging(){
+        return this.dataManager.get(ITEM_RIGGING);
     }
 
 
@@ -329,6 +319,16 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             }
         }
         return super.applyPlayerInteraction(player, vec, hand);
+    }
+
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        ItemRiggingBase riggingitem = (ItemRiggingBase) this.getRigging().getItem();
+        if(this.rand.nextInt(100)<=75) {
+            riggingitem.damageRigging((int) amount);
+            return true;
+        }
+        else
+            return super.attackEntityFrom(source, amount);
     }
 
     public boolean hasHelmet(){
@@ -372,7 +372,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             this.navigator.getNodeProcessor().setCanEnterDoors(true);
             this.navigator.getNodeProcessor().setCanOpenDoors(true);
         }
-        if (isSailing()) {
+        if (canSail()) {
             this.kansenFloat();
         }
 
@@ -394,8 +394,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     @Override
     public IPacket<?> createSpawnPacket() {
-        EntityKansenBase.this.dataManager.set(ITEM_MAINHAND, this.getShipStorage().getStackInSlot(SLOT_MAINHAND));
-        EntityKansenBase.this.dataManager.set(ITEM_OFFHAND, this.getShipStorage().getStackInSlot(SLOT_OFFHAND));
+        EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getShipStorage().getStackInSlot(0));
         return super.createSpawnPacket();
     }
 
@@ -407,21 +406,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     @Override
     public AnimationFactory getFactory() {
         return null;
-    }
-
-
-    public enum shipClass {
-        Destroyer,
-        LightCruiser,
-        HeavyCruiser,
-        LargeCruiser,
-        Battleship,
-        AircraftCarrier,
-        LightAircraftCarrier,
-        Submarine,
-        SubmarineCarrier,
-        MonitorShip,
-        Repair
     }
 
 }

@@ -1,15 +1,10 @@
-package com.yor42.projectazure.client.model;
+package com.yor42.projectazure.client.model.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.libs.defined;
-import net.minecraft.client.renderer.entity.model.IHasArm;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -50,7 +45,7 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
 
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-        if(!entity.isSailing()){
+        if(!entity.canSail()){
             LeftArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F) * 0.8F * entity.limbSwingAmount);
             RightArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 0.8F * entity.limbSwingAmount);
         }

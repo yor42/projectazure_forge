@@ -1,0 +1,76 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"gunFire_Right": {
+			"animation_length": 1.04,
+			"bones": {
+				"canonR": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.08": {
+							"vector": [0, 22.5, 0],
+							"easing": "easeInSine"
+						},
+						"1.04": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutQuad"
+						}
+					}
+				},
+				"cannonR2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.08": {
+							"vector": [0, -20, 0],
+							"easing": "easeInSine"
+						},
+						"1.04": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutSine"
+						}
+					}
+				}
+			}
+		},
+		"ginFire_Left": {
+			"animation_length": 1.04,
+			"bones": {
+				"canonL": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.08": {
+							"vector": [0, -22.5, 0],
+							"easing": "easeInSine"
+						},
+						"1.04": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"cannonL2": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, "-", 0]
+						},
+						"0.08": {
+							"vector": [0, 20, 0],
+							"easing": "easeInSine"
+						},
+						"1.04": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutSine"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

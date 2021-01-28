@@ -1,32 +1,23 @@
-package com.yor42.projectazure.client.renderer;
+package com.yor42.projectazure.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.client.layer.KansenItemLayer;
-import com.yor42.projectazure.client.model.ayanamiModel;
+import com.yor42.projectazure.client.model.entity.ayanamiModel;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
-import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
-import net.minecraft.client.renderer.entity.model.ArmorStandArmorModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
-
-import static com.yor42.projectazure.gameobject.entity.EntityKansenBase.STORAGE;
 
 public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
 
@@ -84,6 +75,15 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
+            }
+            stack.pop();
+        }
+
+        else if (bone.getName().equals("Body")){
+            stack.push();
+            ItemStack mainHandStack = this.entity.getRigging();
+            if(!mainHandStack.isEmpty()){
+                Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.NONE, packedLightIn, packedOverlayIn, stack, this.rtb);
             }
             stack.pop();
         }

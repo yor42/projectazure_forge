@@ -1,7 +1,9 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.gameobject.items.itemBaseTooltip;
 import com.yor42.projectazure.gameobject.items.itemRainbowWisdomCube;
+import com.yor42.projectazure.gameobject.items.itemRiggingDDDefault;
 import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -24,6 +26,10 @@ public class registerItems {
             return 1;
         }
     });
+
+    public static final RegistryObject<Item> DD_DEFAULT_RIGGING = registerManager.ITEMS.register("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
+    .setISTER(() -> DDDefaultRiggingRenderer::new)
+    .group(PA_GROUP)));
 
 
     public static void register(){};

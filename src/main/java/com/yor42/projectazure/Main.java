@@ -1,15 +1,12 @@
 package com.yor42.projectazure;
 
 import com.yor42.projectazure.client.ClientRegisterManager;
-import com.yor42.projectazure.client.renderer.entityAyanamiRenderer;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.client.renderer.entity.entityAyanamiRenderer;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,7 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
-import net.minecraftforge.api.distmarker.Dist;
+
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.defined.MODID;
