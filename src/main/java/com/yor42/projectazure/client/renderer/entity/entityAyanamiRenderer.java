@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -81,9 +82,10 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
 
         else if (bone.getName().equals("Body")){
             stack.push();
-            ItemStack mainHandStack = this.entity.getRigging();
-            if(!mainHandStack.isEmpty()){
-                Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.NONE, packedLightIn, packedOverlayIn, stack, this.rtb);
+            ItemStack rigging = this.entity.getRigging();
+            stack.translate(bone.getPositionX()/16, bone.getPositionY()/16, bone.getPositionZ()/16);
+            if(!rigging.isEmpty()){
+                Minecraft.getInstance().getItemRenderer().renderItem(rigging, ItemCameraTransforms.TransformType.NONE, packedLightIn, packedOverlayIn, stack, this.rtb);
             }
             stack.pop();
         }

@@ -14,8 +14,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable {
 
-    private final AnimationFactory factory = new AnimationFactory(this);
-
     public EntityAyanami(EntityType<? extends EntityAyanami> type, World worldIn) {
         super(type, worldIn);
         this.setTamed(false);
@@ -28,12 +26,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         return !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F);
     }
 
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
-    }
-
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
+    protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         AnimationBuilder builder = new AnimationBuilder();
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
@@ -53,11 +46,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
         }
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

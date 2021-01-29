@@ -35,6 +35,10 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
@@ -45,6 +49,8 @@ import java.util.Random;
 public abstract class EntityKansenBase extends TameableEntity implements IAnimatable {
 
     Random rand = new Random();
+
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     public static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
@@ -400,12 +406,17 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     @Override
     public void registerControllers(AnimationData animationData) {
+        animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+    }
 
+    protected  <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
+    {
+        return null;
     }
 
     @Override
     public AnimationFactory getFactory() {
-        return null;
+        return factory;
     }
 
 }
