@@ -20,12 +20,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(4.0F);
     }
 
-
-
-    public boolean isWalking(AnimationEvent event){
-        return !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F);
-    }
-
     protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         AnimationBuilder builder = new AnimationBuilder();

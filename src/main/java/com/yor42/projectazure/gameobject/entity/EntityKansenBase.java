@@ -330,31 +330,16 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     public boolean attackEntityFrom(DamageSource source, float amount) {
         ItemRiggingBase riggingitem = (ItemRiggingBase) this.getRigging().getItem();
         if(this.rand.nextInt(100)<=75) {
-            riggingitem.damageRigging((int) amount);
-            return true;
+            int finaldamage = riggingitem.damageRigging(this.getRigging(),(int) amount);
+            if(finaldamage!=0){
+                return super.attackEntityFrom(source, finaldamage);
+            }
+            else{
+                return true;
+            }
         }
         else
             return super.attackEntityFrom(source, amount);
-    }
-
-    public boolean hasHelmet(){
-        return this.ShipStorage.getStackInSlot(3).isEmpty();
-    }
-
-    public boolean haschestplate(){
-        return this.ShipStorage.getStackInSlot(4).isEmpty();
-    }
-
-    public boolean hasleggings(){
-        return this.ShipStorage.getStackInSlot(5).isEmpty();
-    }
-
-    public boolean hasboots(){
-        return this.ShipStorage.getStackInSlot(6).isEmpty();
-    }
-
-    public boolean hasarmor(){
-        return this.hasHelmet()||this.haschestplate()||this.hasleggings()||this.hasboots();
     }
 
     @Override

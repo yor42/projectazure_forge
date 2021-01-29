@@ -22,10 +22,6 @@ public abstract class ItemEquipmentBase extends Item {
         super(properties);
     }
 
-    public void damageRigging(int amount){
-        this.durability = this.durability-amount;
-    }
-
     public boolean isBroken(){
         return this.durability == 0;
     }
@@ -38,5 +34,8 @@ public abstract class ItemEquipmentBase extends Item {
         return slot;
     }
 
-
+    @Override
+    public boolean shouldSyncTag() {
+        return true;
+    }
 }
