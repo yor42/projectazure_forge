@@ -444,12 +444,9 @@
 				}
 			}
 		},
-		"animation.ayanami.new": {
-			"loop": true
-		},
 		"animation.ayanami.idle": {
 			"loop": true,
-			"animation_length": 5.3,
+			"animation_length": 5.2,
 			"bones": {
 				"Chest2": {
 					"rotation": {
@@ -457,7 +454,8 @@
 							"vector": [0, 0, 0]
 						},
 						"2.6": {
-							"vector": ["- 2.5", 0, 0]
+							"vector": ["- 2.5", 0, 0],
+							"easing": "easeInOutSine"
 						},
 						"5.2": {
 							"vector": [0, 0, 0],

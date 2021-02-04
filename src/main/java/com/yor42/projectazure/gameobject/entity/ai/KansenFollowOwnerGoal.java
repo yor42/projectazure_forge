@@ -16,41 +16,30 @@ import net.minecraft.world.IWorldReader;
 import java.util.EnumSet;
 
 public class KansenFollowOwnerGoal extends FollowOwnerGoal {
-    private final TameableEntity tameable;
-    private LivingEntity owner;
-    private final IWorldReader world;
-    private final double followSpeed;
-    private final PathNavigator navigator;
-    private int timeToRecalcPath;
-    private final float maxDist;
-    private final float minDist;
-    private final boolean teleportToLeaves;
 
-    public KansenFollowOwnerGoal(TameableEntity tameable, double speed, float minDist, float maxDist, boolean teleportToLeaves) {
+    private EntityKansenBase host;
+    private LivingEntity owner;
+
+    private final float mindist;
+
+    private int pathRefreshTick;
+
+    public KansenFollowOwnerGoal(EntityKansenBase tameable, double speed, float minDist, float maxDist, boolean teleportToLeaves) {
         super(tameable, speed, minDist, maxDist, teleportToLeaves);
-        this.tameable = tameable;
-        this.world = tameable.world;
-        this.followSpeed = speed;
-        this.navigator = tameable.getNavigator();
-        this.minDist = minDist;
-        this.maxDist = maxDist;
-        this.teleportToLeaves = teleportToLeaves;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-        if (!(tameable.getNavigator() instanceof GroundPathNavigator) && !(tameable.getNavigator() instanceof FlyingPathNavigator)) {
-            throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
-        }
+        this.host = tameable;
+        this.mindist = minDist;
     }
 
-    @Override
     public boolean shouldExecute() {
-        LivingEntity livingentity = this.tameable.getOwner();
+        super.shouldExecute();
+        LivingEntity livingentity = this.host.getOwner();
         if (livingentity == null) {
             return false;
         } else if (livingentity.isSpectator()) {
             return false;
-        } else if (this.tameable.isSitting()) {
+        } else if (this.host.isSitting()) {
             return false;
-        } else if (this.tameable.getDistanceSq(livingentity) < (double)(this.minDist * this.minDist)) {
+        } else if (this.host.getDistanceSq(livingentity) < (double)(this.mindist * this.mindist)) {
             return false;
         } else {
             this.owner = livingentity;
@@ -60,66 +49,12 @@ public class KansenFollowOwnerGoal extends FollowOwnerGoal {
 
     @Override
     public void tick() {
-        this.tameable.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float)this.tameable.getVerticalFaceSpeed());
-        if (--this.timeToRecalcPath <= 0) {
-            this.timeToRecalcPath = 10;
-            if (!this.tameable.getLeashed() && !this.tameable.isPassenger()) {
-
-                this.tameable.setSprinting(this.tameable.getDistanceSq(this.owner) >= 54);
-
-                if (this.tameable.getDistanceSq(this.owner) >= 192.0D) {
-                    this.tryToTeleportNearEntity();
-                } else {
-                    this.navigator.tryMoveToEntityLiving(this.owner, this.followSpeed);
-                }
-
+        if(--this.pathRefreshTick <= 0) {
+            this.pathRefreshTick = 10;
+            if(!this.host.Sailing()) {
+                this.host.setSprinting(this.host.getDistanceSq(this.owner) >= 64);
             }
         }
-    }
-
-    private void tryToTeleportNearEntity() {
-        BlockPos blockpos = this.owner.getPosition();
-
-        for(int i = 0; i < 10; ++i) {
-            int j = this.getRandomNumber(-3, 3);
-            int k = this.getRandomNumber(-1, 1);
-            int l = this.getRandomNumber(-3, 3);
-            boolean flag = this.tryToTeleportToLocation(blockpos.getX() + j, blockpos.getY() + k, blockpos.getZ() + l);
-            if (flag) {
-                return;
-            }
-        }
-
-    }
-
-    private boolean tryToTeleportToLocation(int x, int y, int z) {
-        if (Math.abs((double)x - this.owner.getPosX()) < 2.0D && Math.abs((double)z - this.owner.getPosZ()) < 2.0D) {
-            return false;
-        } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
-            return false;
-        } else {
-            this.tameable.setLocationAndAngles((double)x + 0.5D, (double)y, (double)z + 0.5D, this.tameable.rotationYaw, this.tameable.rotationPitch);
-            this.navigator.clearPath();
-            return true;
-        }
-    }
-
-    private boolean isTeleportFriendlyBlock(BlockPos pos) {
-        PathNodeType pathnodetype = WalkNodeProcessor.func_237231_a_(this.world, pos.toMutable());
-        if (pathnodetype != PathNodeType.WALKABLE) {
-            return false;
-        } else {
-            BlockState blockstate = this.world.getBlockState(pos.down());
-            if (!this.teleportToLeaves && blockstate.getBlock() instanceof LeavesBlock) {
-                return false;
-            } else {
-                BlockPos blockpos = pos.subtract(this.tameable.getPosition());
-                return this.world.hasNoCollisions(this.tameable, this.tameable.getBoundingBox().offset(blockpos));
-            }
-        }
-    }
-
-    private int getRandomNumber(int min, int max) {
-        return this.tameable.getRNG().nextInt(max - min + 1) + min;
+        super.tick();
     }
 }

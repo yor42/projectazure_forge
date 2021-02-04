@@ -45,10 +45,11 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
 
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-        if(!entity.canSail()){
+        if(!entity.Sailing()){
             LeftArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F) * 0.8F * entity.limbSwingAmount);
             RightArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 0.8F * entity.limbSwingAmount);
         }
+
         if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(false);

@@ -329,7 +329,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.getRigging() != ItemStack.EMPTY;
     }
 
-    public boolean canSail(){
+    public boolean Sailing(){
         float f = this.getEyeHeight() - 1F;
         return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
         //return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
@@ -403,6 +403,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new KansenOpenDoorGoal(this, true));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        //this.goalSelector.addGoal(9, new KansenWorkGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
@@ -461,7 +462,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             this.navigator.getNodeProcessor().setCanEnterDoors(true);
             this.navigator.getNodeProcessor().setCanOpenDoors(true);
         }
-        if (canSail()) {
+        if (this.Sailing()) {
             this.kansenFloat();
         }
 
