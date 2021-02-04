@@ -408,8 +408,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
-        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractSkeletonEntity.class, false));
     }
 
     @Override
