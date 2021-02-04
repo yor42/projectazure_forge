@@ -93,7 +93,7 @@
 				{
 					"name": "torpedomountR",
 					"parent": "torpedoR",
-					"pivot": [-10.5, 21.5, 11.5],
+					"pivot": [-11.5, 21.5, 11.5],
 					"cubes": [
 						{"origin": [-11.5, 18, 8], "size": [2, 7, 7], "uv": [95, 64]}
 					]
@@ -110,7 +110,7 @@
 				{
 					"name": "torpedomountC",
 					"parent": "torpedoC",
-					"pivot": [-6, 24.5, 18.75],
+					"pivot": [-7, 24.5, 18.75],
 					"cubes": [
 						{"origin": [-7, 21, 15.25], "size": [2, 7, 7], "uv": [48, 52]}
 					]
@@ -126,7 +126,7 @@
 				{
 					"name": "torpedomountL",
 					"parent": "torpedoL",
-					"pivot": [10.5, 21.5, 11.5],
+					"pivot": [11.5, 21.5, 11.5],
 					"cubes": [
 						{"origin": [9.5, 18, 8], "size": [2, 7, 7], "uv": [1, 65], "mirror": true}
 					]

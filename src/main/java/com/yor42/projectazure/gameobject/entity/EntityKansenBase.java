@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
-import com.yor42.projectazure.gameobject.entity.ai.KansenSwimGoal;
+import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.AgeableEntity;
@@ -20,6 +20,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
@@ -36,7 +37,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -55,8 +55,12 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     public static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
     private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
-
+    private static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     public static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
+    public static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
+    public static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
+    public static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
 
 
     public ItemStackHandler ShipStorage = new ItemStackHandler(13) {
@@ -228,8 +232,9 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
     };
 
-    public int level, exp;
-    public boolean hasRigging;
+    public int level, exp,  patAnimationTime, patEffectCounter, patTimer;
+    public double affection;
+    public boolean isMeleeing, isOpeningDoor, isBeingPatted;
     public enums.shipClass shipclass;
 
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -244,19 +249,46 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     protected void registerData() {
         super.registerData();
         this.dataManager.register(STORAGE, new CompoundNBT());
-        this.dataManager.register(DATA_ID_RIGGING, this.hasRigging);
         this.dataManager.register(SITTING, this.isSitting());
         this.dataManager.register(ITEM_RIGGING,ItemStack.EMPTY);
+        this.dataManager.register(OPENINGDOOR, false);
+        this.dataManager.register(MELEEATTACKING, false);
+        this.dataManager.register(MAXPATEFFECTCOUNT, 0);
+        this.dataManager.register(PATEFFECTCOUNT, 0);
+        this.dataManager.register(PATCOOLDOWN, 0);
+    }
+
+    public void setOpeningdoor(boolean openingdoor){
+        this.isOpeningDoor = openingdoor;
+        this.dataManager.set(OPENINGDOOR, this.isOpeningDoor);
+    }
+
+    public boolean isOpeningDoor() {
+        return this.dataManager.get(OPENINGDOOR);
+    }
+
+    public void setMeleeing(boolean attacking){
+        this.isMeleeing = attacking;
+        this.dataManager.set(MELEEATTACKING, this.isMeleeing);
+
+    }
+
+    public boolean isMeleeing(){
+        return this.dataManager.get(MELEEATTACKING);
     }
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
+        compound.putDouble("affection", this.affection);
+        compound.putInt("patcoolDown", this.dataManager.get(PATCOOLDOWN));
         compound.put("inventory",this.ShipStorage.serializeNBT());
     }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
+        this.affection = compound.getFloat("affection");
+        this.dataManager.set(PATCOOLDOWN, this.dataManager.get(PATCOOLDOWN));
         this.ShipStorage.deserializeNBT((CompoundNBT) compound.get("inventory"));
     }
 
@@ -266,6 +298,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     public enums.shipClass getShipClass(){
         return this.shipclass;
+    }
+
+    public boolean canUseRigging(){
+        return this.getRigging().getItem() instanceof ItemRiggingBase; //&& !this.getRigging.isDestroyed
     }
 
     @Override
@@ -320,34 +356,52 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 }
             }
             else{
-                this.func_233687_w_(!this.isSitting());
+                if(player.getHeldItemMainhand() == ItemStack.EMPTY) {
+                    this.beingpatted();
+                }
+                else{
+                    this.func_233687_w_(!this.isSitting());
+                }
                 return ActionResultType.SUCCESS;
             }
         }
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
+    protected void beingpatted(){
+        if(this.patAnimationTime == 0 || this.dataManager.get(MAXPATEFFECTCOUNT) == 0){
+            this.dataManager.set(MAXPATEFFECTCOUNT, 5+this.rand.nextInt(3));
+        }
+        this.patAnimationTime = 20;
+    };
+
+    public boolean isBeingPatted() {
+        return this.patAnimationTime !=0;
+    }
+
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        ItemRiggingBase riggingitem = (ItemRiggingBase) this.getRigging().getItem();
-        if(this.rand.nextInt(100)<=75) {
-            int finaldamage = riggingitem.damageRigging(this.getRigging(),(int) amount);
-            if(finaldamage!=0){
-                return super.attackEntityFrom(source, finaldamage);
-            }
-            else{
-                return true;
+        if(this.getRigging() != ItemStack.EMPTY) {
+            if (this.rand.nextInt(100) <= 75) {
+                ItemRiggingBase riggingitem = (ItemRiggingBase) this.getRigging().getItem();
+                int finaldamage = riggingitem.damageRigging(this.getRigging(), (int) amount);
+                if (finaldamage != 0) {
+                    return super.attackEntityFrom(source, finaldamage);
+                } else {
+                    return true;
+                }
             }
         }
-        else
-            return super.attackEntityFrom(source, amount);
+        return super.attackEntityFrom(source, amount);
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(7, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(5, new KansenMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(7, new KansenOpenDoorGoal(this, true));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
@@ -358,7 +412,51 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     @Override
-    public void tick() {
+    public void livingTick() {
+
+        if(this.patAnimationTime >0){
+
+            this.navigator.clearPath();
+
+            this.patAnimationTime--;
+            this.patTimer++;
+
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            if (this.patTimer%20 == 0) {
+                if (this.dataManager.get(PATEFFECTCOUNT) < this.dataManager.get(MAXPATEFFECTCOUNT)) {
+                    this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(PATEFFECTCOUNT)+1);
+                    this.affection += 0.1;
+                    this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+
+                } else {
+                    this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(MAXPATEFFECTCOUNT));
+                    this.affection -= 0.2;
+                    if(this.dataManager.get(PATCOOLDOWN) == 0){
+                        this.dataManager.set(PATCOOLDOWN, (7+this.rand.nextInt(5))*1200);
+                    }
+                    this.world.addParticle(ParticleTypes.SMOKE, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+                }
+            }
+        }
+        else{
+
+            this.patTimer = 0;
+
+            if(this.dataManager.get(PATCOOLDOWN) > 0){
+                this.dataManager.set(PATCOOLDOWN, this.dataManager.get(PATCOOLDOWN) -1);
+            }
+            else{
+                this.dataManager.set(MAXPATEFFECTCOUNT,0);
+                this.dataManager.set(PATEFFECTCOUNT,0);
+            }
+
+            if(this.affection <0)
+                this.affection = 0;
+
+        }
+
         if(!this.isInWater() && !this.isSitting() && !this.isSleeping()) {
             this.navigator.getNodeProcessor().setCanEnterDoors(true);
             this.navigator.getNodeProcessor().setCanOpenDoors(true);
@@ -367,7 +465,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             this.kansenFloat();
         }
 
-        super.tick();
+        super.livingTick();
     }
 
     public ItemStackHandler getShipStorage() {

@@ -14,7 +14,7 @@ public class modelDDRiggingDefault extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getTextureLocation(Object o) {
-        return new ResourceLocation(defined.MODID,"textures/item/rigging_dd_default.png");
+        return new ResourceLocation(defined.MODID,"textures/rigging/rigging_dd_default.png");
     }
 
     @Override

@@ -3,10 +3,18 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 
-public abstract class ItemEquipmentBase extends Item {
+public abstract class ItemEquipmentBase extends Item implements IAnimatable {
 
+
+    public AnimationFactory factory = new AnimationFactory(this);
 
     protected enums.SLOTTYPE slot;
     //remaining ammo
@@ -38,4 +46,21 @@ public abstract class ItemEquipmentBase extends Item {
     public boolean shouldSyncTag() {
         return true;
     }
+
+    @Override
+    public void registerControllers(AnimationData data)
+    {
+        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+    }
+
+    protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        return PlayState.STOP;
+    }
+
+    @Override
+    public AnimationFactory getFactory()
+    {
+        return this.factory;
+    }
+
 }

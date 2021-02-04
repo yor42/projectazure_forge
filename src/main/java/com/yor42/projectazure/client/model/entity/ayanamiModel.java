@@ -49,21 +49,26 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
             LeftArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F) * 0.8F * entity.limbSwingAmount);
             RightArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 0.8F * entity.limbSwingAmount);
         }
-
-        if(this.blinkinterval <= 5){
+        if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
-            ExcitedFace.setHidden(true);
-            EyeclosedFace.setHidden(false);
-            if(this.blinkinterval ==0) {
-                this.blinkinterval = 20 * (random.nextInt(9) + 2);
-            }
-            this.blinkinterval--;
-        }
-        else{
-            this.blinkinterval--;
-            NormalFace.setHidden(false);
-            ExcitedFace.setHidden(true);
+            ExcitedFace.setHidden(false);
             EyeclosedFace.setHidden(true);
+        }
+        else {
+            if (this.blinkinterval <= 5) {
+                NormalFace.setHidden(true);
+                ExcitedFace.setHidden(true);
+                EyeclosedFace.setHidden(false);
+                if (this.blinkinterval == 0) {
+                    this.blinkinterval = 20 * (random.nextInt(9) + 2);
+                }
+                this.blinkinterval--;
+            } else {
+                this.blinkinterval--;
+                NormalFace.setHidden(false);
+                ExcitedFace.setHidden(true);
+                EyeclosedFace.setHidden(true);
+            }
         }
 
 

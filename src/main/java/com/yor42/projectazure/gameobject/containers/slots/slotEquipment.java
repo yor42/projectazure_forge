@@ -1,23 +1,31 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.items.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
+import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
 public class slotEquipment extends SlotItemHandler {
 
-    private enums.SLOTTYPE slottype;
+    private final enums.SLOTTYPE slottype;
+    private final ItemStackHandler handler;
+    private ItemStack stack;
+    private LivingEntity host;
 
-    public slotEquipment(IItemHandler itemHandler, int index, int xPosition, int yPosition, enums.SLOTTYPE type) {
+    //clientDummy
+    public slotEquipment(ItemStackHandler itemHandler, int index, int xPosition, int yPosition, enums.SLOTTYPE type) {
         super(itemHandler, index, xPosition, yPosition);
         this.slottype = type;
+        this.handler = itemHandler;
     }
+
 
     @Override
     public int getSlotStackLimit() {
@@ -26,10 +34,7 @@ public class slotEquipment extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(@Nonnull ItemStack stack) {
-        if(stack.getItem() instanceof ItemEquipmentBase) {
-            return ((ItemEquipmentBase) stack.getItem()).getSlot() == this.slottype;
-        }
-        else
-            return false;
+        return stack.getItem() instanceof ItemEquipmentBase && ((ItemEquipmentBase) stack.getItem()).getSlot() == this.slottype;
     }
+
 }

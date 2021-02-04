@@ -1,7 +1,11 @@
 package com.yor42.projectazure.gameobject.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.*;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -22,23 +26,59 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
 
     protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
+        if(Minecraft.getInstance().isGamePaused()){
+            return PlayState.STOP;
+        }
         AnimationBuilder builder = new AnimationBuilder();
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
-            if(this.canSail()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_hand", true));
+
+        if(this.isOpeningDoor() || this.isOpeningDoor){
+            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorL", false));
             }
-            else {
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk", true));
+            else{
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorR", false));
             }
             return PlayState.CONTINUE;
         }
-        if(this.isEntitySleeping()){
+
+        if(this.isMeleeing()){
+            if(this.swingingHand == Hand.MAIN_HAND){
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.melee1", false));
+            }
+            return PlayState.CONTINUE;
+        }
+
+        else if(this.isBeingPatted()){
+            if(this.isEntitySleeping())
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat_sit", true));
+            else
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
+            return PlayState.CONTINUE;
         }
         else {
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+            if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+                if(this.canSail()){
+                    event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
+                    event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_hand", true));
+                }
+                else {
+                    if(this.isSprinting()){
+                        event.getController().setAnimation(builder.addAnimation("animation.ayanami.run", true));
+                    }
+                    else {
+                        event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk", true));
+                    }
+                }
+                return PlayState.CONTINUE;
+            }
         }
+
         return PlayState.CONTINUE;
     }
 

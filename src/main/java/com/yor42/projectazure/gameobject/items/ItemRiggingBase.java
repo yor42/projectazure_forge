@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.items;
 
+import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.util.ITooltipFlag;
@@ -21,6 +22,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
@@ -35,7 +37,6 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
 
     private int totalHP;
 
-    public static final ItemStackHandler equipments = new ItemStackHandler();
     protected enums.shipClass validclass;
 
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
@@ -61,11 +62,6 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
         return 1.0-(double)this.getCurrentHP(stack) / (double)this.getTotalHP(stack);
-    }
-
-    public void InitHP(ItemStack stack, int value){
-        this.setTotalHP(stack, value);
-        this.setCurrentHP(stack, value);
     }
 
     public void setTotalHP(ItemStack stack, int value) {
@@ -114,13 +110,8 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
         return this.factory;
     }
 
-    public IAnimatableModel getModel(){
-        GeoItemRenderer provider =  (GeoItemRenderer) this.getItemStackTileEntityRenderer();
-        return provider.getGeoModelProvider();
-    };
-
-    public ItemStackHandler getEquipments(){
-        return equipments;
+    public AnimatedGeoModel getModel(){
+        return null;
     }
 
     public int damageRigging(ItemStack stack, int amount){
@@ -154,6 +145,7 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
         }
         return amount;
     }
+
 
     protected boolean canDamageRigging(ItemStack stack){
         int oldHP = stack.getTag().getInt("currentHP");

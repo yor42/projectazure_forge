@@ -10,5 +10,4 @@ public class ItemEquipmentTorpedo extends ItemEquipmentBase {
         super(properties);
         this.slot = enums.SLOTTYPE.TORPEDO;
     }
-
 }

@@ -29,7 +29,7 @@ public class registerManager {
     public static final RegistryObject<ContainerType<ContainerKansenInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> SHIP_INVENTORY);
 
     private static final ContainerType<RiggingContainerDDDefault> RIGGING_INVENTORY_DD_DEFAULT = new ContainerType<RiggingContainerDDDefault>(RiggingContainerDDDefault::new);
-    public static final RegistryObject<ContainerType<RiggingContainerDDDefault>> DD_DEFAULT_RIGGING_INVENTORY = CONTAINER.register("defaultDD_Rigging_inventory", () -> RIGGING_INVENTORY_DD_DEFAULT);
+    public static final RegistryObject<ContainerType<RiggingContainerDDDefault>> DD_DEFAULT_RIGGING_INVENTORY = CONTAINER.register("default_dd_rigging_inventory", () -> RIGGING_INVENTORY_DD_DEFAULT);
 
     //entity
     public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.<EntityAyanami>create(EntityAyanami::new, EntityClassification.CREATURE).size(0.572F, 1.5F).build(new ResourceLocation(defined.MODID, "entityayanami").toString());

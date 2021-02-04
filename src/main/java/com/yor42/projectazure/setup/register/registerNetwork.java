@@ -2,7 +2,7 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
-import com.yor42.projectazure.network.packets.syncEntityInventoryPacket;
+import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -23,6 +23,12 @@ public class registerNetwork {
                 .decoder(selectedStarterPacket::decode)
                 .encoder(selectedStarterPacket::encode)
                 .consumer(selectedStarterPacket::handle)
+                .add();
+
+        channel.messageBuilder(syncRiggingInventoryPacket.class, 2)
+                .decoder(syncRiggingInventoryPacket::decode)
+                .encoder(syncRiggingInventoryPacket::encode)
+                .consumer(syncRiggingInventoryPacket::handle)
                 .add();
 
         return channel;
