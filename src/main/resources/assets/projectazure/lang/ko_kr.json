@@ -12,7 +12,16 @@
 
   "gui.selectstarter.title": "초기함을 선택해주세요",
   "gui.shipinventory": "함선 보관함",
+  "gui.current_affection_level": "현재 호감도",
+  "gui.current_affection_value": "호감도",
 
   "destroyer": "구축함",
-  "light_cruiser": "경순양함"
+  "light_cruiser": "경순양함",
+
+  "disappointed": "실망",
+  "stranger": "낯섦",
+  "friendly": "친근",
+  "crush": "호감",
+  "love": "사랑",
+  "oath": "서약"
 }

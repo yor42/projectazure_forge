@@ -74,9 +74,10 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
 
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        head.setRotationX(extraData.headPitch * ((float)Math.PI / 180F));
-        head.setRotationY(extraData.netHeadYaw * ((float)Math.PI / 180F));
-
+        if(!entity.isBeingPatted()) {
+            head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+        }
     }
 
     protected IBone getArmForSide(HandSide side) {

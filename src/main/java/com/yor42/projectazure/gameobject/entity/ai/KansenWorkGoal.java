@@ -74,7 +74,7 @@ public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
                 {
                     if(mainHandItem instanceof PickaxeItem)
                     {
-                        return block instanceof OreBlock && block != Blocks.BEDROCK;
+                        return block instanceof OreBlock;
                     }
                 }
 
@@ -82,12 +82,6 @@ public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
 
         }
         return false;
-    }
-
-    public void startExecuting()
-    {
-        super.startExecuting();
-        this.breakingTime = 0;
     }
 
     @Override
@@ -118,6 +112,8 @@ public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
 
             else if(BlockAboveDestinationState.getMaterial() == Material.AIR&&blockAboveDestination.getDefaultState().getBlock() == Blocks.FARMLAND)
             {
+
+
                 if(mainHandStack.getItem() == Items.WHEAT_SEEDS)
                 {
                     this.host.world.setBlockState(blockpos, Blocks.WHEAT.getDefaultState(), 3);
@@ -139,8 +135,8 @@ public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
                     mainHandStack.shrink(1);
                 }
             }
-            this.breakingTime = (int)((this.breakingTime + mainHandStack.getDestroySpeed(BlockAboveDestinationState)));
-            int i = (int)((float)this.breakingTime / 60.0F * 10.0F);
+            this.breakingTime = (int)(this.breakingTime + mainHandStack.getDestroySpeed(BlockAboveDestinationState));
+            int i = (int)((float)(this.breakingTime)/60.0F*10);
             if(this.breakingTime % 2 == 0)
             {
                 if(blockAboveDestination.getDefaultState().getMaterial() == Material.ORGANIC)
@@ -157,19 +153,19 @@ public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
                 }
                 if(blockAboveDestination.getDefaultState().getMaterial() == Material.SAND)
                 {
-                    this.host.world.playSound((PlayerEntity)null, blockpos.getX(), blockpos.getY(), blockpos.getZ(), SoundEvents.BLOCK_SAND_HIT, this.host.getSoundCategory(), 1F, 1F);
+                    this.host.world.playSound(null, blockpos.getX(), blockpos.getY(), blockpos.getZ(), SoundEvents.BLOCK_SAND_HIT, this.host.getSoundCategory(), 1F, 1F);
                 }
                 if(blockAboveDestination.getDefaultState().getMaterial() == Material.ROCK || blockAboveDestination.getDefaultState().getMaterial() == Material.ICE || blockAboveDestination.getDefaultState().getMaterial() == Material.PACKED_ICE)
                 {
-                    this.host.world.playSound((PlayerEntity)null, blockpos.getX(), blockpos.getY(), blockpos.getZ(), SoundEvents.BLOCK_STONE_HIT, this.host.getSoundCategory(), 1F, 1F);
+                    this.host.world.playSound(null, blockpos.getX(), blockpos.getY(), blockpos.getZ(), SoundEvents.BLOCK_STONE_HIT, this.host.getSoundCategory(), 1F, 1F);
                 }
                 if(blockAboveDestination.getDefaultState().getMaterial() == Material.WOOD)
                 {
-                    this.host.world.playSound((PlayerEntity)null, blockpos.getX(), blockpos.getY(), blockpos.getZ(), SoundEvents.BLOCK_WOOD_HIT, this.host.getSoundCategory(), 1F, 1F);
+                    this.host.world.playSound(null, blockpos.getX(), blockpos.getY(), blockpos.getZ(), SoundEvents.BLOCK_WOOD_HIT, this.host.getSoundCategory(), 1F, 1F);
                 }
                 if(blockAboveDestination.getDefaultState().getMaterial() == Material.WOOL)
                 {
-                    this.host.world.playSound((PlayerEntity)null, blockpos.getX(), blockpos.getY(), blockpos.getZ(), SoundEvents.BLOCK_WOOL_HIT, this.host.getSoundCategory(), 1F, 1F);
+                    this.host.world.playSound(null, blockpos.getX(), blockpos.getY(), blockpos.getZ(), SoundEvents.BLOCK_WOOL_HIT, this.host.getSoundCategory(), 1F, 1F);
                 }
             }
             if(i != this.previousBreakProgress)
@@ -179,17 +175,9 @@ public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
             }
             if(this.breakingTime > 60.0F)
             {
-                if(mainHandStack.getItem() instanceof PickaxeItem)
-                {
-                    this.host.world.playEvent(2001, blockpos, Block.getStateId(BlockAboveDestinationState));
-                    this.BlockDropItem(item, 1);
-                    this.host.world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
-                }
-                else
-                {
-                    this.host.world.destroyBlock(blockpos, true);
-                }
-                    mainHandStack.damageItem(1, this.host, b -> b.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+                this.host.world.destroyBlock(blockpos, true);
+                mainHandStack.damageItem(1, this.host, b -> b.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+                this.breakingTime = 0;
             }
         }
     }

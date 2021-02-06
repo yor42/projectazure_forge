@@ -78,7 +78,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
                 .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 4.0F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0F)

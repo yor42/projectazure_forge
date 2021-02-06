@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
@@ -61,6 +62,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     public static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
     public static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
 
 
     public ItemStackHandler ShipStorage = new ItemStackHandler(13) {
@@ -241,9 +243,41 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         super(type, worldIn);
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        return super.getCapability(capability, facing);
+    public void setOathed(boolean bool){
+        this.dataManager.set(OATHED, bool);
+    }
+
+    public boolean isOathed(){
+        return this.dataManager.get(OATHED);
+    }
+
+    public double getAffection() {
+        return this.affection;
+        /*
+        if(this.affection>100.0D){
+            if(this.isOathed())
+                return enums.Affection.OATH;
+            else
+                return enums.Affection.LOVE;
+        }
+        else if(this.affection>80 && this.affection<100){
+            return enums.Affection.CRUSH;
+        }
+        else if(this.affection>60 && this.affection<=80){
+            return enums.Affection.FRIENDLY;
+        }
+        else if(this.affection>30 && this.affection<=60){
+            return enums.Affection.STRANGER;
+        }
+        else{
+            return enums.Affection.DISAPPOINTED;
+        }
+
+         */
+    }
+
+    public void setAffection(float affection){
+        this.affection = affection;
     }
 
     protected void registerData() {
@@ -256,6 +290,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.dataManager.register(MAXPATEFFECTCOUNT, 0);
         this.dataManager.register(PATEFFECTCOUNT, 0);
         this.dataManager.register(PATCOOLDOWN, 0);
+        this.dataManager.register(OATHED, false);
     }
 
     public void setOpeningdoor(boolean openingdoor){
@@ -281,14 +316,16 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putDouble("affection", this.affection);
-        compound.putInt("patcoolDown", this.dataManager.get(PATCOOLDOWN));
+        compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.put("inventory",this.ShipStorage.serializeNBT());
+        compound.putBoolean("oathed", this.dataManager.get(OATHED));
     }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         this.affection = compound.getFloat("affection");
-        this.dataManager.set(PATCOOLDOWN, this.dataManager.get(PATCOOLDOWN));
+        this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
+        this.dataManager.set(OATHED, compound.getBoolean("oathed"));
         this.ShipStorage.deserializeNBT((CompoundNBT) compound.get("inventory"));
     }
 
@@ -351,7 +388,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         if(this.isOwner(player)){
             if(player.isSneaking()){
                 if(!world.isRemote) {
-                    NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerKansenInventory.Supplier(this));
+                    openGUI(player);
                     return ActionResultType.SUCCESS;
                 }
             }
@@ -366,6 +403,11 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             }
         }
         return super.applyPlayerInteraction(player, vec, hand);
+    }
+
+    private void openGUI(PlayerEntity player){
+        NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerKansenInventory.Supplier(this));
+        Main.PROXY.setSharedMob(this);
     }
 
     protected void beingpatted(){
@@ -401,13 +443,13 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
         this.goalSelector.addGoal(5, new KansenMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(7, new KansenOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        //this.goalSelector.addGoal(9, new KansenWorkGoal(this, 1.0D));
+        this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
+        this.goalSelector.addGoal(8, new KansenOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(10, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(12, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(13, new OwnerHurtTargetGoal(this));
     }
 
     @Override
@@ -440,7 +482,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             }
         }
         else{
-
             this.patTimer = 0;
 
             if(this.dataManager.get(PATCOOLDOWN) > 0){
@@ -450,10 +491,16 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 this.dataManager.set(MAXPATEFFECTCOUNT,0);
                 this.dataManager.set(PATEFFECTCOUNT,0);
             }
+        }
 
-            if(this.affection <0)
-                this.affection = 0;
-
+        if(this.affection <0)
+            this.affection = 0;
+        else if(this.affection>100){
+            if(!this.isOathed())
+                this.affection=100;
+            else if(this.affection > 200){
+                this.affection = 200;
+            }
         }
 
         if(!this.isInWater() && !this.isSitting() && !this.isSleeping()) {

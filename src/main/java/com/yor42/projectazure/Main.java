@@ -2,6 +2,8 @@ package com.yor42.projectazure;
 
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.entity.entityAyanamiRenderer;
+import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemGroup;
@@ -10,6 +12,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -36,6 +39,7 @@ public class Main
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final SimpleChannel NETWORK = registerNetwork.getNetworkChannel();
+    public static CommonProxy PROXY = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public static ItemGroup PA_GROUP = new ItemGroup(MODID) {
         @Override

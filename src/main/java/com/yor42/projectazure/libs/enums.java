@@ -32,4 +32,23 @@ public class enums {
         }
     }
 
+    public enum Affection{
+        DISAPPOINTED("disappointed"),
+        STRANGER("stranger"),
+        FRIENDLY("friendly"),
+        CRUSH("crush"),
+        LOVE("love"),
+        OATH("oath");
+
+        private final String name;
+        Affection(String name) {
+            this.name = name;
+        }
+
+        public String getName(){
+            return this.name;
+        }
+
+    }
+
 }

@@ -46,6 +46,7 @@ public class serverAction {
                             player.getHeldItem(Hand.OFF_HAND).shrink(1);
                     }
                     entity.setTamedBy(player);
+                    entity.setAffection(40.0F);
                 }
                 player.closeScreen();
             }

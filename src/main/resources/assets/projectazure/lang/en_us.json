@@ -12,7 +12,18 @@
 
   "gui.selectstarter.title": "Select Starter Ship",
   "gui.shipinventory": "KANSEN Inv.",
+  "gui.current_affection_level": "Current Affection",
+  "gui.current_affection_value": "Affection",
 
   "destroyer": "Destroyer",
-  "light_cruiser": "Light Cruiser"
+  "light_cruiser": "Light Cruiser",
+
+  "disappointed":"Disappointed",
+  "stranger": "Stranger",
+  "friendly": "Friendly",
+  "crush": "Crush",
+  "love": "Love",
+  "oath": "Oath",
+
+  "entity.projectazure.entityayanami": "IJN Ayanami"
 }
