@@ -8,6 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
@@ -110,9 +111,7 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
         return this.factory;
     }
 
-    public AnimatedGeoModel getModel(){
-        return null;
-    }
+    public abstract AnimatedGeoModel getModel();
 
     public int damageRigging(ItemStack stack, int amount){
 
@@ -150,5 +149,9 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
     protected boolean canDamageRigging(ItemStack stack){
         int oldHP = stack.getTag().getInt("currentHP");
         return oldHP>0;
+    };
+
+    public ResourceLocation getTexture(){
+            return this.getModel().getTextureLocation(null);
     };
 }

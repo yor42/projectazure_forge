@@ -102,7 +102,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         if (entity != null) {
             int entityWidth = (int) entity.getWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(113+(entityWidth/2), 105, 40, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
+                InventoryScreen.drawEntityOnScreen(113+(entityWidth/2), 105, 35, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }

@@ -1,4 +1,4 @@
-package com.yor42.projectazure.client.layer;
+package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 @OnlyIn(Dist.CLIENT)
 public class KansenArmorLayer extends LayerRenderer<EntityKansenBase, EntityModel<EntityKansenBase>> {
