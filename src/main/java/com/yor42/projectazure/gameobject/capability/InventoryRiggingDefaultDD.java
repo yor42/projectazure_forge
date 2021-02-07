@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.capability;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.IRiggingContainerSupplier;
@@ -26,7 +26,7 @@ public class InventoryRiggingDefaultDD implements INamedContainerProvider, IRigg
     private final LivingEntity entity;
     private final ItemStack stack;
 
-    private final LazyOptional<ItemStackHandler> riggingItemCap = LazyOptional.of(() -> this.equipments);
+    private final LazyOptional<ItemStackHandler> riggingItemCapability = LazyOptional.of(() -> this.equipments);
 
     private final ItemStackHandler equipments = new ItemStackHandler(6){
         @Override

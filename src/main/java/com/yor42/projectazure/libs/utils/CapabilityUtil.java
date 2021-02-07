@@ -1,12 +1,10 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.yor42.projectazure.gameobject.containers.riggingcontainer.IRiggingContainerSupplier;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
-import com.yor42.projectazure.gameobject.items.InventoryRiggingDefaultDD;
+import com.yor42.projectazure.gameobject.capability.InventoryRiggingDefaultDD;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class CapabilityUtil {
 

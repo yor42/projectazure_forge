@@ -382,7 +382,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.dataManager.get(ITEM_RIGGING);
     }
 
-
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
         if(this.isOwner(player)){

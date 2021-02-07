@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.enums;
 
-public class ItemEquipmentTorpedo extends ItemEquipmentBase {
+public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase {
 
     protected boolean isreloadable;
 
