@@ -1,11 +1,9 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
-import com.yor42.projectazure.gameobject.items.ItemEquipmentTorpedo533mm;
-import com.yor42.projectazure.gameobject.items.itemBaseTooltip;
-import com.yor42.projectazure.gameobject.items.itemRainbowWisdomCube;
-import com.yor42.projectazure.gameobject.items.itemRiggingDDDefault;
+import com.yor42.projectazure.gameobject.items.*;
 import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -35,6 +33,10 @@ public class registerItems {
 
     public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = registerManager.ITEMS.register("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533mm(new Item.Properties()
             .setISTER(() -> equipment533mmTorpedoRenderer::new)
+            .group(PA_GROUP).maxStackSize(1)));
+
+    public static final RegistryObject<Item> EQUIPMENT_GUN_127MM = registerManager.ITEMS.register("equipment_gun_127mm", () -> new ItemEquipmentGun127mm(new Item.Properties()
+            .setISTER(() -> Equipment127mmGunRenderer::new)
             .group(PA_GROUP).maxStackSize(1)));
 
 

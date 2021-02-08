@@ -19,25 +19,10 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
     public AnimationFactory factory = new AnimationFactory(this);
 
     protected enums.SLOTTYPE slot;
-    //remaining ammo
-    protected int ammo;
-    //ammo capacity
-    protected int maxAmmo;
-    protected int reloadTime;
-    protected int remainingReloadTime;
-
-    protected int durability;
+    protected int firedelay;
 
     public ItemEquipmentBase(Properties properties) {
         super(properties);
-    }
-
-    public boolean isBroken(){
-        return this.durability == 0;
-    }
-
-    public boolean canfire(){
-        return this.ammo != 0 && !this.isBroken();
     }
 
     public enums.SLOTTYPE getSlot() {
@@ -56,6 +41,24 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
     {
         data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
     }
+
+    public int getFiredelay() {
+        return this.firedelay;
+    }
+
+    public abstract void onUpdate(ItemStack stack);
+
+    public abstract boolean canUseCanon(ItemStack stack);
+    public abstract boolean canUseTorpedo(ItemStack stack);
+
+    public void checkSlotAndFire(ItemStack equipmentStack, enums.SLOTTYPE slot){
+        ItemEquipmentBase equipment = (ItemEquipmentBase) equipmentStack.getItem();
+        if(slot == equipment.getSlot()){
+            onFire(equipmentStack);
+        }
+    }
+
+    public abstract void onFire(ItemStack equipmentStack);
 
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         return PlayState.STOP;

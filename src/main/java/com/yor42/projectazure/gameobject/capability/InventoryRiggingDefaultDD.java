@@ -37,6 +37,12 @@ public class InventoryRiggingDefaultDD implements INamedContainerProvider, IRigg
         }
     };
 
+    public InventoryRiggingDefaultDD(ItemStack stack){
+        this.entity = null;
+        this.stack = stack;
+        this.loadEquipments(this.getNBT(stack));
+    }
+
     public InventoryRiggingDefaultDD(ItemStack stack, LivingEntity entity){
         this.stack = stack;
         this.entity = entity;

@@ -145,11 +145,25 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
         return amount;
     }
 
+    public abstract int getGunCount();
+    public abstract int getAACount();
+    public abstract int getTorpedoCount();
+    public abstract int getUtilityCount();
 
     protected boolean canDamageRigging(ItemStack stack){
         int oldHP = stack.getTag().getInt("currentHP");
         return oldHP>0;
     };
+
+    public abstract void onCanonFire(ItemStack stack);
+
+    public abstract boolean canUseCanon(ItemStack stack);
+
+    public abstract void onTorpedoFire(ItemStack stack);
+
+    public abstract boolean canUseTorpedo(ItemStack stack);
+
+    public abstract void onUpdate(ItemStack stack);
 
     public ResourceLocation getTexture(){
             return this.getModel().getTextureLocation(null);

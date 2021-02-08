@@ -51,34 +51,85 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
             matrixStackIn.push();
             this.modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();
-
+            IBone hostbone = getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").get();
             if(getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").isPresent()){
-                IBone hostbone = getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").get();
-                matrixStackIn.translate(hostbone.getPositionX()/16, hostbone.getPositionY()/16, hostbone.getRotationZ()/16);
+                matrixStackIn.translate(hostbone.getPositionX()/16, hostbone.getPositionY()/16, hostbone.getPositionZ()/16);
             }
             RenderType type = RenderType.getEntitySmoothCutout(((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getTexture());
             render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
 
             if(entitylivingbaseIn.getRigging().getTag() != null) {
-                matrixStackIn.push();
                 GeoModel riggingmodel = this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider));
                 ItemStackHandler Equipments = new ItemStackHandler();
                 Equipments.deserializeNBT(entitylivingbaseIn.getRigging().getTag().getCompound("Inventory"));
 
                 if (entitylivingbaseIn.getRigging().getItem() == registerItems.DD_DEFAULT_RIGGING.get()){
+                    //gun Renderer
+                    if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
+
+                        matrixStackIn.push();
+                        RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem()).getTexture());
+                        matrixStackIn.translate((21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY())/16, -(4+hostbone.getPositionZ())/16);
+                        matrixStackIn.rotate(new Quaternion(0, 0, -90, true));
+
+                        GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(0).getItem()).getEquipmentModel().getModelLocation(null));
+                        EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
+                        EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead()+entitylivingbaseIn.prevRotationYaw, 7.5F, -12.5F, false, true));
+                        render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                        matrixStackIn.pop();
+                    }
+
+                    if(Equipments.getStackInSlot(1) != ItemStack.EMPTY){
+
+                        matrixStackIn.push();
+                        RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem()).getTexture());
+                        matrixStackIn.translate(-(21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY())/16, -(4+hostbone.getPositionZ())/16);
+                        matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
+                        GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(1).getItem()).getEquipmentModel().getModelLocation(null));
+                        EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
+                        EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead()+entitylivingbaseIn.prevRotationYaw, 7.5F, -12.5F, false, true));
+                        render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                        matrixStackIn.pop();
+                    }
+
+                    //Torpedo Renderer
                     if(Equipments.getStackInSlot(3) != ItemStack.EMPTY){
 
+                        matrixStackIn.push();
                         RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem()).getTexture());
-                        matrixStackIn.translate(11.5/16, 21.5/16, 11.5/16);
+                        matrixStackIn.translate((11.5+hostbone.getPositionX())/16, (24.5+hostbone.getPositionY())/16, (11.5+hostbone.getPositionZ())/16);
                         matrixStackIn.rotate(new Quaternion(0, 0, -90, true));
                         GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getEquipmentModel().getModelLocation(null));
                         EquipmentModel.getBone("MountX").get().setRotationY(-0.75F-MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
                         render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                        matrixStackIn.pop();
+                    }
+                    if(Equipments.getStackInSlot(4) != ItemStack.EMPTY){
+
+                        matrixStackIn.push();
+                        RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem()).getTexture());
+                        matrixStackIn.translate((0+hostbone.getPositionX())/16, (25.75+hostbone.getPositionY())/16, (25.75+hostbone.getPositionZ())/16);
+                        matrixStackIn.rotate(new Quaternion(90, 180, 0, true));
+                        GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModelLocation(null));
+                        EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead()+entitylivingbaseIn.prevRotationYaw, 45F, -45F, false, true)));
+                        render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                        matrixStackIn.pop();
+                    }
+
+                    if(Equipments.getStackInSlot(5) != ItemStack.EMPTY){
+
+                        matrixStackIn.push();
+                        RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem()).getTexture());
+                        matrixStackIn.translate(-(11.5+hostbone.getPositionX())/16, (24.5+hostbone.getPositionY())/16, (11.5+hostbone.getPositionZ())/16);
+                        matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
+                        GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(5).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(5).getItem()).getEquipmentModel().getModelLocation(null));
+                        EquipmentModel.getBone("MountX").get().setRotationY(0.75F+MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
+                        render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                        matrixStackIn.pop();
                     }
                 }
 
-                matrixStackIn.pop();
             }
         }
     }

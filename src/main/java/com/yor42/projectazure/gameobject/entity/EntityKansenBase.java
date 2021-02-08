@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -378,6 +379,23 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.setOwnerId(player.getUniqueID());
     }
 
+    public boolean canUseCanon() {
+
+        if(this.getRigging().getItem() instanceof ItemRiggingBase){
+            ItemRiggingBase RiggingItem = (ItemRiggingBase) this.getRigging().getItem();
+            return RiggingItem.canUseCanon(this.getRigging());
+        }
+        else return false;
+    }
+
+    public boolean canUseTorpedo() {
+        if(this.getRigging().getItem() instanceof ItemRiggingBase){
+            ItemRiggingBase RiggingItem = (ItemRiggingBase) this.getRigging().getItem();
+            return RiggingItem.canUseTorpedo(this.getRigging());
+        }
+        else return false;
+    }
+
     public ItemStack getRigging(){
         return this.dataManager.get(ITEM_RIGGING);
     }
@@ -421,7 +439,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if(this.getRigging() != ItemStack.EMPTY) {
+        if(this.getRigging().getItem() instanceof ItemRiggingBase) {
             if (this.rand.nextInt(100) <= 75) {
                 ItemRiggingBase riggingitem = (ItemRiggingBase) this.getRigging().getItem();
                 int finaldamage = riggingitem.damageRigging(this.getRigging(), (int) amount);
@@ -508,6 +526,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
         if (this.Sailing()) {
             this.kansenFloat();
+        }
+
+        if(this.getRigging().getItem() instanceof ItemRiggingBase){
+            ((ItemRiggingBase) this.getRigging().getItem()).onUpdate(this.getRigging());
         }
 
         super.livingTick();

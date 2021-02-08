@@ -1,0 +1,47 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 5.5,
+				"visible_bounds_offset": [0, 2.25, 0]
+			},
+			"bones": [
+				{
+					"name": "Equipment",
+					"pivot": [0, 0, 0],
+					"rotation": [0, 180, 0],
+					"cubes": [
+						{"origin": [-3.5, 0, -3.5], "size": [7, 1, 7], "uv": [52, 65]}
+					]
+				},
+				{
+					"name": "MountX",
+					"parent": "Equipment",
+					"pivot": [0, 2, 0],
+					"cubes": [
+						{"origin": [-5.5, 1, -7.5], "size": [11, 1, 15], "uv": [40, 47]},
+						{"origin": [-5.5, 2, -7.5], "size": [11, 8, 14], "uv": [40, 24]},
+						{"origin": [-4.5, 1, -8.5], "size": [9, 9, 1], "uv": [40, 24]},
+						{"origin": [-4.5, 9.75, -7.5], "size": [9, 1.25, 14], "pivot": [0, 11, 6.5], "rotation": [-2.5, 0, 0], "uv": [41, 8]},
+						{"origin": [-4.5, 9.75, -7.5], "size": [9, 1, 12], "uv": [45, 74]},
+						{"origin": [-3.5, 11, 0.5], "size": [7, 1, 4], "pivot": [0, 11.5, 2.5], "rotation": [-2.5, 0, 0], "uv": [53, 2]},
+						{"origin": [-5.5, 1.1, 5.25], "size": [11, 8.9, 1.25], "pivot": [0, 10, 6.5], "rotation": [7.5, 0, 0], "uv": [8, 19]}
+					]
+				},
+				{
+					"name": "Barrel",
+					"parent": "MountX",
+					"pivot": [0, 6.75, -2],
+					"cubes": [
+						{"origin": [-1, 5.73895, 6.23289], "size": [2, 2, 15.25], "uv": [4, 30]}
+					]
+				}
+			]
+		}
+	]
+}
