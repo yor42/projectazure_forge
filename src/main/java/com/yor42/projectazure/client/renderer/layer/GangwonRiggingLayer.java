@@ -1,8 +1,9 @@
-package com.yor42.projectazure.client.renderer;
+package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
+import com.yor42.projectazure.gameobject.capability.InventoryRiggingDefaultDD;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
+import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.gameobject.items.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.ItemRiggingDD;
@@ -13,7 +14,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -25,7 +25,7 @@ import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
-public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implements IGeoRenderer {
+public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> implements IGeoRenderer {
 
     private AnimatedGeoModel modelRiggingProvider;
 
@@ -40,37 +40,38 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
         });
     }
 
-    public KansenRiggingLayer(IGeoRenderer<EntityAyanami> entityRendererIn) {
+    public GangwonRiggingLayer(IGeoRenderer<EntityGangwon> entityRendererIn) {
         super(entityRendererIn);
     }
 
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityAyanami entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityGangwon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (entitylivingbaseIn.getRigging() != ItemStack.EMPTY) {
 
             matrixStackIn.push();
             this.modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();
+            int riggingoffset = entitylivingbaseIn.getRiggingOffset();
             IBone hostbone = getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").get();
             if(getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").isPresent()){
-                matrixStackIn.translate(hostbone.getPositionX()/16, hostbone.getPositionY()/16, hostbone.getPositionZ()/16);
+                matrixStackIn.translate(hostbone.getPositionX()/16, (hostbone.getPositionY()+riggingoffset)/16, hostbone.getPositionZ()/16);
             }
             RenderType type = RenderType.getEntitySmoothCutout(((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getTexture());
             render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
 
             if(entitylivingbaseIn.getRigging().getTag() != null) {
-                GeoModel riggingmodel = this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider));
-                ItemStackHandler Equipments = new ItemStackHandler();
-                Equipments.deserializeNBT(entitylivingbaseIn.getRigging().getTag().getCompound("Inventory"));
+                ItemStackHandler Equipments = new ItemStackHandler(6);
 
                 if (entitylivingbaseIn.getRigging().getItem() == registerItems.DD_DEFAULT_RIGGING.get()){
+
+                    Equipments = new InventoryRiggingDefaultDD(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
                     //gun Renderer
                     if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
 
                         matrixStackIn.push();
                         RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem()).getTexture());
-                        matrixStackIn.translate((21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY())/16, -(4+hostbone.getPositionZ())/16);
+                        matrixStackIn.translate((21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY()+riggingoffset)/16, -(4+hostbone.getPositionZ())/16);
                         matrixStackIn.rotate(new Quaternion(0, 0, -90, true));
 
                         GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(0).getItem()).getEquipmentModel().getModelLocation(null));
@@ -84,7 +85,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
                         matrixStackIn.push();
                         RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem()).getTexture());
-                        matrixStackIn.translate(-(21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY())/16, -(4+hostbone.getPositionZ())/16);
+                        matrixStackIn.translate(-(21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY()+riggingoffset)/16, -(4+hostbone.getPositionZ())/16);
                         matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
                         GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(1).getItem()).getEquipmentModel().getModelLocation(null));
                         EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
@@ -98,7 +99,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
                         matrixStackIn.push();
                         RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem()).getTexture());
-                        matrixStackIn.translate((11.5+hostbone.getPositionX())/16, (24.5+hostbone.getPositionY())/16, (11.5+hostbone.getPositionZ())/16);
+                        matrixStackIn.translate((11.5+hostbone.getPositionX())/16, (23.5+hostbone.getPositionY()+riggingoffset)/16, (11.5+hostbone.getPositionZ())/16);
                         matrixStackIn.rotate(new Quaternion(0, 0, -90, true));
                         GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getEquipmentModel().getModelLocation(null));
                         EquipmentModel.getBone("MountX").get().setRotationY(-0.75F-MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
@@ -109,7 +110,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
                         matrixStackIn.push();
                         RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem()).getTexture());
-                        matrixStackIn.translate((0+hostbone.getPositionX())/16, (25.75+hostbone.getPositionY())/16, (25.75+hostbone.getPositionZ())/16);
+                        matrixStackIn.translate((0+hostbone.getPositionX())/16, (24.5+hostbone.getPositionY()+riggingoffset)/16, (25.75+hostbone.getPositionZ())/16);
                         matrixStackIn.rotate(new Quaternion(90, 180, 0, true));
                         GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModelLocation(null));
                         EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead()+entitylivingbaseIn.prevRotationYaw, 45F, -45F, false, true)));
@@ -121,7 +122,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
                         matrixStackIn.push();
                         RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem()).getTexture());
-                        matrixStackIn.translate(-(11.5+hostbone.getPositionX())/16, (24.5+hostbone.getPositionY())/16, (11.5+hostbone.getPositionZ())/16);
+                        matrixStackIn.translate(-(11.5+hostbone.getPositionX())/16, (23.5+hostbone.getPositionY()+riggingoffset)/16, (11.5+hostbone.getPositionZ())/16);
                         matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
                         GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(5).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(5).getItem()).getEquipmentModel().getModelLocation(null));
                         EquipmentModel.getBone("MountX").get().setRotationY(0.75F+MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));

@@ -4,16 +4,23 @@
   "item.projectazure.rainbow_wisdomcube": "빛나는 성정큐브",
   "item.projectazure.wisdomcube": "성정큐브",
   "item.projectazure.disc_fridaynight": "음반",
-  "item.projectazure.dd_default_rigging": "기본 장비",
+  "item.projectazure.dd_default_rigging": "구축함 기본 장비",
 
   "item.projectazure.disc_fridaynight.desc": "템페스트 스튜디오 - Friday Night (Astrophysics 리믹스)",
   "item.projectazure.wisdomcube.tooltip": "의미심장한 빛을 내뿜는 큐브입니다.",
+  "item.projectazure.oath_ring": "서약 반지",
+
+  "item.projectazure.equipment_torpedo_533mm": "533mm 4연장 어뢰",
+  "item.projectazure.equipment_gun_127mm": "127mm 단장포",
+
+  "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
   "rigging_valid_on.tooltip": "사용 가능 함급:",
 
   "gui.selectstarter.title": "초기함을 선택해주세요",
   "gui.shipinventory": "함선 보관함",
   "gui.current_affection_level": "현재 호감도",
   "gui.current_affection_value": "호감도",
+  "gui.entity.level": "레벨",
 
   "destroyer": "구축함",
   "light_cruiser": "경순양함",
@@ -23,5 +30,8 @@
   "friendly": "친근",
   "crush": "호감",
   "love": "사랑",
-  "oath": "서약"
+  "oath": "서약",
+
+  "entity.projectazure.entityayanami": "IJN 아야나미",
+  "entity.projectazure.entitygangwon": "ROKS 강원"
 }

@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 
+import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         super(container, playerinventory, titleIn);
         this.host = (EntityKansenBase) Main.PROXY.getSharedMob();
         this.affection = this.host.getAffection();
-        this.affectionLevel = this.affectionValuetoLevel(this.affection);
+        this.affectionLevel = this.affectionValuetoLevel();
     }
 
     @Override
@@ -49,8 +50,8 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         this.titleY=9;
     }
 
-    private enums.Affection affectionValuetoLevel(double affection){
-        if(this.affection>100.0D){
+    private enums.Affection affectionValuetoLevel(){
+        if(this.affection>=100.0D){
             if(this.host.isOathed())
                 return enums.Affection.OATH;
             else
@@ -69,6 +70,8 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
             return enums.Affection.DISAPPOINTED;
         }
     }
+
+
 
     @Override
     public boolean isPauseScreen() {
@@ -91,6 +94,9 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mousex, int mousey) {
         this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 14085119);
+        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (float)76, (float)25, 14085119);
+        IFormattableTextComponent leveltext = new StringTextComponent("Lv.").appendString(Integer.toString(this.host.getLevel()));
+        this.font.func_243248_b(matrixStack, leveltext, (float)168-this.font.getStringPropertyWidth(leveltext), (float)81, 14085119);
         this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 14085119);
 
         this.renderAffection(matrixStack, mousex, mousey);
@@ -102,7 +108,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         if (entity != null) {
             int entityWidth = (int) entity.getWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(113+(entityWidth/2), 105, 35, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
+                InventoryScreen.drawEntityOnScreen(113+(entityWidth/2), 90, 25, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }

@@ -115,8 +115,10 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
             ItemStackHandler equipment = new InventoryRiggingDefaultDD(stack).getEquipments();
 
             for(int j = 0; j<equipment.getSlots(); j++){
-                ItemEquipmentBase item = (ItemEquipmentBase) equipment.getStackInSlot(j).getItem();
-                item.onUpdate(equipment.getStackInSlot(j));
+                if(equipment.getStackInSlot(j).getItem() instanceof ItemEquipmentBase) {
+                    ItemEquipmentBase item = (ItemEquipmentBase) equipment.getStackInSlot(j).getItem();
+                    item.onUpdate(equipment.getStackInSlot(j));
+                }
             }
         }
     }
@@ -148,7 +150,7 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
                     tooltip.add(new StringTextComponent("===").append(new TranslationTextComponent("main_gun").append(new StringTextComponent("==="))));
                 if(i == 2)
                     tooltip.add(new StringTextComponent("===").append(new TranslationTextComponent("anti_air").append(new StringTextComponent("==="))));
-                if(i == 2)
+                if(i == 3)
                     tooltip.add(new StringTextComponent("===").append(new TranslationTextComponent("torpedo").append(new StringTextComponent("==="))));
                 if(Equipments.getStackInSlot(i) != ItemStack.EMPTY)
                     tooltip.add(Equipments.getStackInSlot(i).getDisplayName());

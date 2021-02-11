@@ -4,16 +4,23 @@
   "item.projectazure.rainbow_wisdomcube": "Rainbow Wisdom Cube",
   "item.projectazure.wisdomcube": "Wisdom Cube",
   "item.projectazure.disc_fridaynight": "Music Disc",
-  "item.projectazure.dd_default_rigging": "Basic Rigging",
+  "item.projectazure.dd_default_rigging": "Destroyer Basic Rigging",
 
   "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
   "item.projectazure.wisdomcube.tooltip": "Mysterious Glowing Cube. Used to Build KANSEN.",
+  "item.projectazure.oath_ring": "Promise Ring",
+
+  "item.projectazure.equipment_torpedo_533mm": "533mm Quadruple Torpedo Mount",
+  "item.projectazure.equipment_gun_127mm": "Single 127mm (SK C/34)",
+
+  "item.projectazure.dd_default_rigging.tooltip": "Basic Rigging for destroyer KANSEN.",
   "rigging_valid_on.tooltip": "Useable On:",
 
   "gui.selectstarter.title": "Select Starter Ship",
   "gui.shipinventory": "KANSEN Inv.",
   "gui.current_affection_level": "Current Affection",
   "gui.current_affection_value": "Affection",
+  "gui.entity.level": "Lv",
 
   "destroyer": "Destroyer",
   "light_cruiser": "Light Cruiser",
@@ -25,5 +32,6 @@
   "love": "Love",
   "oath": "Oath",
 
-  "entity.projectazure.entityayanami": "IJN Ayanami"
+  "entity.projectazure.entityayanami": "IJN Ayanami",
+  "entity.projectazure.entitygangwon": "ROKS Gangwon"
 }

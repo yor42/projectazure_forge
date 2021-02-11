@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
@@ -24,11 +25,9 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
@@ -51,8 +50,6 @@ import java.util.Random;
 public abstract class EntityKansenBase extends TameableEntity implements IAnimatable {
 
     Random rand = new Random();
-
-    private final AnimationFactory factory = new AnimationFactory(this);
 
     private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     public static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
@@ -92,6 +89,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                     slottype = EquipmentSlotType.HEAD;
                     break;
                 case 3:
+
                     slottype = EquipmentSlotType.CHEST;
                     break;
                 case 4:
@@ -235,13 +233,16 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
     };
 
-    public int level, exp,  patAnimationTime, patEffectCounter, patTimer;
-    public double affection;
-    public boolean isMeleeing, isOpeningDoor, isBeingPatted;
+    public int level,  patAnimationTime, LimitBreakLv, patTimer;
+    public double affection, exp;
+    public boolean isMeleeing, isOpeningDoor, isAwaken;
     public enums.shipClass shipclass;
 
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+        this.setAffection(40F);
+        this.setLevel(0);
+        this.setExp(0);
     }
 
     public void setOathed(boolean bool){
@@ -252,33 +253,97 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.dataManager.get(OATHED);
     }
 
-    public double getAffection() {
-        return this.affection;
-        /*
-        if(this.affection>100.0D){
-            if(this.isOathed())
-                return enums.Affection.OATH;
-            else
-                return enums.Affection.LOVE;
-        }
-        else if(this.affection>80 && this.affection<100){
-            return enums.Affection.CRUSH;
-        }
-        else if(this.affection>60 && this.affection<=80){
-            return enums.Affection.FRIENDLY;
-        }
-        else if(this.affection>30 && this.affection<=60){
-            return enums.Affection.STRANGER;
-        }
-        else{
-            return enums.Affection.DISAPPOINTED;
-        }
+    public abstract int getRiggingOffset();
 
-         */
+    public int getLevel() {
+        return this.level;
     }
 
-    public void setAffection(float affection){
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public boolean addLevel(int deltaLevel){
+        if(this.getLevel()+deltaLevel > this.getMaxLevel()){
+            return false;
+        }
+        this.setLevel(this.level += deltaLevel);
+        return true;
+    }
+
+    public int getMaxLevel(){
+        if(this.isAwaken && this.LimitBreakLv == 3){
+            return 120;
+        }
+        else {
+            switch (this.LimitBreakLv) {
+                default:
+                    return 70;
+                case 1:
+                    return 80;
+                case 2:
+                    return 90;
+                case 3:
+                    return 100;
+            }
+        }
+    }
+
+    public void setExp(double exp) {
+        this.exp = exp;
+    }
+
+    public double getExp() {
+        return this.exp;
+    }
+
+    public double addExp(double deltaExp){
+        if(this.getExp()+deltaExp >= this.getMaxExp()) {
+            this.exp = this.getExp()+deltaExp;
+            this.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+            while(this.exp>this.getMaxExp() && this.getLevel() <= this.getMaxLevel()){
+                this.addLevel(1);
+                this.exp-=this.getMaxExp();
+            }
+        }
+        this.exp+=deltaExp;
+        return this.exp;
+    }
+
+    public double getMaxExp(){
+        return 10+(5*this.getLevel());
+    }
+
+    public int getLimitBreakLv() {
+        return this.LimitBreakLv;
+    }
+
+    public void setLimitBreakLv(int value) {
+        this.LimitBreakLv = value;
+    }
+
+    public void addLimitBreak(int delta){
+        this.LimitBreakLv += delta;
+    }
+
+    public void doLimitBreak(){
+        this.addLimitBreak(1);
+    }
+
+    public double getAffection() {
+        return this.affection;
+    }
+
+    public void setAffection(double affection){
         this.affection = affection;
+    }
+
+    public double getmaxAffextion(){
+        return this.isOathed()? 200:100;
+    };
+
+    public void addAffection(double Delta){
+        this.setAffection(Math.min(this.getAffection() + Delta, this.getmaxAffextion()));
     }
 
     protected void registerData() {
@@ -320,6 +385,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.put("inventory",this.ShipStorage.serializeNBT());
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
+        compound.putDouble("exp", this.exp);
+        compound.putInt("level", this.level);
+        compound.putInt("limitbreaklv", this.LimitBreakLv);
+        compound.putBoolean("awaken", this.isAwaken);
     }
 
     public void readAdditional(CompoundNBT compound) {
@@ -327,7 +396,12 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.affection = compound.getFloat("affection");
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
-        this.ShipStorage.deserializeNBT((CompoundNBT) compound.get("inventory"));
+        if(compound.contains("inventory"))
+            this.ShipStorage.deserializeNBT((CompoundNBT) compound.get("inventory"));
+        this.level = compound.getInt("level");
+        this.exp = compound.getFloat("exp");
+        this.LimitBreakLv = compound.getInt("limitbreaklv");
+        this.isAwaken = compound.getBoolean("awaken");
     }
 
     public void setShipClass(enums.shipClass setclass){
@@ -413,10 +487,36 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 if(player.getHeldItemMainhand() == ItemStack.EMPTY) {
                     this.beingpatted();
                 }
-                else{
-                    this.func_233687_w_(!this.isSitting());
+                else if(player.getHeldItemMainhand() != ItemStack.EMPTY) {
+
+                    if (player.getHeldItem(hand).getItem() == registerItems.OATHRING.get()) {
+                        if (this.getAffection() < 100 && !player.isCreative()) {
+                            player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUniqueID());
+                            return ActionResultType.FAIL;
+                        } else {
+                            if (!this.isOathed()) {
+                                this.setOathed(true);
+                                if (player.isCreative()) {
+                                    this.setAffection(100);
+                                } else {
+                                    player.getHeldItem(hand).shrink(1);
+                                }
+                                return ActionResultType.CONSUME;
+                            }
+                        }
+                    }
+                    else {
+                        this.func_233687_w_(!this.isSitting());
+                    }
                 }
                 return ActionResultType.SUCCESS;
+            }
+        }
+        else{
+            if(player.getHeldItemMainhand().getItem() == registerItems.Rainbow_Wisdom_Cube.get()&&!this.isTamed()){
+                this.setTamedBy(player);
+                player.getHeldItem(hand).shrink(1);
+                return ActionResultType.CONSUME;
             }
         }
         return super.applyPlayerInteraction(player, vec, hand);
@@ -439,14 +539,16 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if(this.getRigging().getItem() instanceof ItemRiggingBase) {
-            if (this.rand.nextInt(100) <= 75) {
-                ItemRiggingBase riggingitem = (ItemRiggingBase) this.getRigging().getItem();
-                int finaldamage = riggingitem.damageRigging(this.getRigging(), (int) amount);
-                if (finaldamage != 0) {
-                    return super.attackEntityFrom(source, finaldamage);
-                } else {
-                    return true;
+        if (source != DamageSource.OUT_OF_WORLD) {
+            if (this.getRigging().getItem() instanceof ItemRiggingBase) {
+                if (this.rand.nextInt(100) <= 75) {
+                    ItemRiggingBase riggingitem = (ItemRiggingBase) this.getRigging().getItem();
+                    int finaldamage = riggingitem.damageRigging(this.getRigging(), (int) amount);
+                    if (finaldamage != 0) {
+                        return super.attackEntityFrom(source, finaldamage);
+                    } else {
+                        return true;
+                    }
                 }
             }
         }
@@ -462,7 +564,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new KansenOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(12, new OwnerHurtByTargetGoal(this));
@@ -485,12 +587,12 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             if (this.patTimer%20 == 0) {
                 if (this.dataManager.get(PATEFFECTCOUNT) < this.dataManager.get(MAXPATEFFECTCOUNT)) {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(PATEFFECTCOUNT)+1);
-                    this.affection += 0.1;
+                    this.addAffection(0.1);
                     this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
 
                 } else {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(MAXPATEFFECTCOUNT));
-                    this.affection -= 0.2;
+                    this.addAffection(-0.15);
                     if(this.dataManager.get(PATCOOLDOWN) == 0){
                         this.dataManager.set(PATCOOLDOWN, (7+this.rand.nextInt(5))*1200);
                     }
@@ -499,6 +601,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             }
         }
         else{
+
             this.patTimer = 0;
 
             if(this.dataManager.get(PATCOOLDOWN) > 0){
@@ -552,21 +655,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     public IPacket<?> createSpawnPacket() {
         EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getShipStorage().getStackInSlot(0));
         return super.createSpawnPacket();
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
-    }
-
-    protected  <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
-    {
-        return null;
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
     }
 
 }

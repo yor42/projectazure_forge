@@ -79,8 +79,4 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
         }
     }
-
-    protected IBone getArmForSide(HandSide side) {
-        return side == HandSide.LEFT ? this.getAnimationProcessor().getBone("LeftArm") : this.getAnimationProcessor().getBone("RightArm");
-    }
 }

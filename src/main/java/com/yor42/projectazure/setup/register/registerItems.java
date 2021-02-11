@@ -8,6 +8,7 @@ import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 
 import static com.yor42.projectazure.Main.PA_GROUP;
+import static com.yor42.projectazure.Main.PA_SHIPS;
 
 public class registerItems {
 
@@ -19,6 +20,11 @@ public class registerItems {
             .group(PA_GROUP)
             .rarity(Rarity.UNCOMMON)));
 
+    public static final RegistryObject<Item> OATHRING = registerManager.ITEMS.register("oath_ring", () -> new itemRainbowWisdomCube(new Item.Properties()
+            .group(PA_GROUP)
+            .rarity(Rarity.EPIC)));
+
+    //I'M READY TO GO TONIIIIGHT YEAH THERES PARTY ALRIGHTTTTTTT WE DON'T NEED REASON FOR JOY OH YEAHHHHH
     public static final RegistryObject<Item> DISC_FRIDAYNIGHT = registerManager.ITEMS.register("disc_fridaynight", () -> new MusicDiscItem(15, registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
             .group(PA_GROUP).maxStackSize(1)){
         @Override
@@ -38,6 +44,14 @@ public class registerItems {
     public static final RegistryObject<Item> EQUIPMENT_GUN_127MM = registerManager.ITEMS.register("equipment_gun_127mm", () -> new ItemEquipmentGun127mm(new Item.Properties()
             .setISTER(() -> Equipment127mmGunRenderer::new)
             .group(PA_GROUP).maxStackSize(1)));
+    /*
+    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(registerManager.AYANAMI.get(), new Item.Properties()
+            .group(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(registerManager.GANGWON.get(), new Item.Properties()
+            .group(PA_SHIPS)));
+
+     */
 
 
     public static void register(){};

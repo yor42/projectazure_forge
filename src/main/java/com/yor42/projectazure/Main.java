@@ -2,6 +2,7 @@ package com.yor42.projectazure;
 
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.entity.entityAyanamiRenderer;
+import com.yor42.projectazure.client.renderer.entity.entityGangwonRenderer;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.register.*;
@@ -48,6 +49,13 @@ public class Main
         }
     };
 
+    public static ItemGroup PA_SHIPS = new ItemGroup("PA_SHIP") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(registerItems.WISDOM_CUBE.get());
+        }
+    };
+
     public Main() {
 
         // Register the setup method for modloading
@@ -71,6 +79,7 @@ public class Main
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.AYANAMI.get(), entityAyanamiRenderer::new);
+    	RenderingRegistry.registerEntityRenderingHandler(registerManager.GANGWON.get(), entityGangwonRenderer::new);
         ClientRegisterManager.registerScreen();
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
     }
@@ -102,7 +111,34 @@ public class Main
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
             // register a new block here
-            LOGGER.info("HELLO from Register Block");
+            // no.
         }
     }
 }
+
+/*
+-----------------------------------------------
+PROJECT: AZURE
+CREDIT
+-----------------------------------------------
+
+Original Game by
+Kadokawa games, Moe Fantasy, Shanghai Manjuu
+
+Original Concept by
+Waisse, yor42, guri, necrom, Aoichi
+
+Developed by
+yor42
+
+Modeling by
+yor42
+
+Texture by
+yor42
+
+Thanks to
+Domi, Rongmario, Nali_, Alex the 666, Tiviacz1337, Mojang studio, Gecko#5075, Pinkalulan, Dane Kenect
+
+and YOU <3
+ */

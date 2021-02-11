@@ -1,6 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
+import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -24,7 +25,7 @@ public class registerEntity {
 
     public static void RegisterAttributes(){
         GlobalEntityTypeAttributes.put(registerManager.ENTITYAYANAMI, EntityAyanami.MutableAttribute().create());
-
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYGANGWON, EntityGangwon.MutableAttribute().create());
     }
 
 /*

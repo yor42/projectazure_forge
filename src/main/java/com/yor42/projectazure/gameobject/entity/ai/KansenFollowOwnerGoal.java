@@ -48,6 +48,12 @@ public class KansenFollowOwnerGoal extends FollowOwnerGoal {
     }
 
     @Override
+    public void resetTask() {
+        this.host.setSprinting(false);
+        super.resetTask();
+    }
+
+    @Override
     public void tick() {
         if(--this.pathRefreshTick <= 0) {
             this.pathRefreshTick = 10;

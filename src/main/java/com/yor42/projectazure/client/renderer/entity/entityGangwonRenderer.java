@@ -2,9 +2,9 @@ package com.yor42.projectazure.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.client.model.entity.ayanamiModel;
-import com.yor42.projectazure.client.renderer.layer.KansenRiggingLayer;
-import com.yor42.projectazure.gameobject.entity.EntityAyanami;
+import com.yor42.projectazure.client.model.entity.gangwonModel;
+import com.yor42.projectazure.client.renderer.layer.GangwonRiggingLayer;
+import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -20,39 +20,33 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
 
-public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
+public class entityGangwonRenderer extends GeoEntityRenderer<EntityGangwon> {
 
     private EntityKansenBase entity;
     private IRenderTypeBuffer rtb;
     private ResourceLocation texture;
 
+    public entityGangwonRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new gangwonModel());
+        this.addLayer(new GangwonRiggingLayer(this));
+    }
+
     @Override
-    public void renderEarly(EntityAyanami animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+    public void renderEarly(EntityGangwon animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         this.rtb = renderTypeBuffer;
         this.entity = animatable;
         this.texture = this.getTextureLocation(animatable);
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
     }
 
-    public entityAyanamiRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new ayanamiModel());
-        this.addLayer(new KansenRiggingLayer(this));
-        this.shadowSize = 0.7F; //change 0.7 to the desired shadow size.
-    }
-
     @Override
-    public void render(EntityAyanami entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(EntityGangwon entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
     }
 
     @Override
-    protected void applyRotations(EntityAyanami entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
-        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
-    }
-
-    @Override
-    public RenderType getRenderType(EntityAyanami animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+    public RenderType getRenderType(EntityGangwon animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
         return RenderType.getEntitySmoothCutout(textureLocation);
     }
 
@@ -97,4 +91,3 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 }
-
