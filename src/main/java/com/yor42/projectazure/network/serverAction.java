@@ -1,5 +1,6 @@
 package com.yor42.projectazure.network;
 
+import com.yor42.projectazure.gameobject.containers.riggingcontainer.IRiggingContainerSupplier;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.setup.register.registerEntity;
@@ -9,6 +10,8 @@ import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.TranslationTextComponent;

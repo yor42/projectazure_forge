@@ -14,7 +14,16 @@
   "item.projectazure.equipment_gun_127mm": "127mm 단장포",
 
   "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
+
+  "item.projectazure.ammo_generic": "통상탄",
+
+
   "rigging_valid_on.tooltip": "사용 가능 함급:",
+
+  "rigging.main_gun": "주포",
+  "rigging.anti_air": "대공병기",
+  "rigging.torpedo": "어뢰",
+  "rigging.empty": "비어있음",
 
   "gui.selectstarter.title": "초기함을 선택해주세요",
   "gui.shipinventory": "함선 보관함",

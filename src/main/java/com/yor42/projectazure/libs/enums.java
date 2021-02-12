@@ -32,6 +32,31 @@ public class enums {
         }
     }
 
+    public enum AmmoTypes {
+        GENERIC(0),
+        AP(1),
+        HE(2),
+        INCENDIARY(3),
+        API(4),
+        APHEI(5);
+
+        private final int index;
+
+        AmmoTypes(int index) {
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return this.index;
+        }
+    }
+
+    public static int getAmmotypeCount(){
+
+        int i = AmmoTypes.values().length;
+        return i;
+    }
+
     public enum Affection{
         DISAPPOINTED("disappointed"),
         STRANGER("stranger"),

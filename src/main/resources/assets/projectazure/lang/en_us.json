@@ -14,13 +14,31 @@
   "item.projectazure.equipment_gun_127mm": "Single 127mm (SK C/34)",
 
   "item.projectazure.dd_default_rigging.tooltip": "Basic Rigging for destroyer KANSEN.",
+
+  "item.projectazure.ammo_generic": "Generic Shell",
+
+
   "rigging_valid_on.tooltip": "Useable On:",
+
+  "rigging.main_gun": "Main Gun",
+  "rigging.anti_air": "Anti Air",
+  "rigging.torpedo": "Torpedo",
+  "rigging.empty": "Empty",
 
   "gui.selectstarter.title": "Select Starter Ship",
   "gui.shipinventory": "KANSEN Inv.",
   "gui.current_affection_level": "Current Affection",
   "gui.current_affection_value": "Affection",
   "gui.entity.level": "Lv",
+
+  "gui.ammotype0.desc": "Generic Shells",
+  "gui.ammotype1.desc": "Armor piercing Shells",
+  "gui.ammotype2.desc": "High Explosive Shells",
+  "gui.ammotype3.desc": "Incendiary Shells",
+  "gui.ammotype4.desc": "AP/I Shells",
+  "gui.ammotype5.desc": "AP/HE/I Shells",
+
+  "gui.kansen_ammostorage_usage": "Ammo Storage Usage",
 
   "destroyer": "Destroyer",
   "light_cruiser": "Light Cruiser",

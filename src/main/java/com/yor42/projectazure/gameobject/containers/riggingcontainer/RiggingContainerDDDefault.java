@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.containers.riggingcontainer;
 
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.slots.slotEquipment;
+import com.yor42.projectazure.gameobject.containers.slots.slotInventory;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.ItemRiggingDD;
@@ -43,12 +44,12 @@ public class RiggingContainerDDDefault extends Container {
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerinv, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
+                this.addSlot(new slotInventory(playerinv, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(playerinv, k, 8 + k * 18, 168));
+            this.addSlot(new slotInventory(playerinv, k, 8 + k * 18, 168));
         }
     }
 
@@ -68,12 +69,12 @@ public class RiggingContainerDDDefault extends Container {
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerinv, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
+                this.addSlot(new slotInventory(playerinv, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(playerinv, k, 8 + k * 18, 168));
+            this.addSlot(new slotInventory(playerinv, k, 8 + k * 18, 168));
         }
     }
 

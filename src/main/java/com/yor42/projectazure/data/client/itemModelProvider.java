@@ -20,6 +20,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("wisdomcube");
         buildModel("disc_fridaynight");
         buildModel("oath_ring");
+        buildModel("ammo_generic");
     }
 
     private ItemModelBuilder buildModel(String name){

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.riggingcontainer;
 
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.ItemStackHandler;
@@ -14,5 +15,8 @@ public interface IRiggingContainerSupplier {
     ItemStackHandler getEquipments();
 
     CompoundNBT getNBT(ItemStack stack);
+
+    static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack) {
+    }
 
 }

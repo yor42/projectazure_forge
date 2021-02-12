@@ -1,4 +1,4 @@
-package com.yor42.projectazure.client.gui;
+package com.yor42.projectazure.client.gui.buttons;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
-public class guiStarterButton extends ImageButton {
+public class buttonStarterSelect extends ImageButton {
     private final ResourceLocation resourceLocation;
     private final EntityType entityType;
     private int x;
@@ -28,7 +28,7 @@ public class guiStarterButton extends ImageButton {
     private final int index;
 
 
-    public guiStarterButton(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int xDiffTextIn, ResourceLocation resourceLocationIn, int idx ,EntityType type , IPressable onPressIn) {
+    public buttonStarterSelect(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int xDiffTextIn, ResourceLocation resourceLocationIn, int idx , EntityType type , IPressable onPressIn) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, xDiffTextIn, resourceLocationIn, onPressIn);
         this.x = xIn;
         this.y = yIn;

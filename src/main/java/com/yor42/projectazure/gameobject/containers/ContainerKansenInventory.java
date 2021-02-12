@@ -32,6 +32,7 @@ public class ContainerKansenInventory extends Container {
         super(registerManager.SHIP_CONTAINER.get(), id);
 
         ItemStackHandler dummyStackHandler = new ItemStackHandler(19);
+        ItemStackHandler dummyEquipmentHandler = new ItemStackHandler(19);
 
         //rigging
         this.addSlot(new SlotItemHandler(dummyStackHandler, 0, 152, 35){
@@ -47,14 +48,14 @@ public class ContainerKansenInventory extends Container {
         });
 
         //Offhands
-        this.addSlot(new SlotItemHandler(dummyStackHandler, 1, 134, 89));
+        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 0, 134, 89));
         //mainhand
-        this.addSlot(new SlotItemHandler(dummyStackHandler, 2, 152, 89));
+        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 1, 152, 89));
 
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {
             int finalL = l;
-            this.addSlot(new SlotItemHandler(dummyStackHandler, 3 + finalL, 75, 35 + finalL * 18) {
+            this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 3 + finalL, 75, 35 + finalL * 18) {
                 public int getSlotStackLimit() {
                     return 1;
                 }
@@ -68,7 +69,7 @@ public class ContainerKansenInventory extends Container {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(dummyStackHandler, 7 + n + 3 * m, 11 + n * 18, 19 + m * 18));
+                this.addSlot(new SlotItemHandler(dummyStackHandler, 1 + n + 3 * m, 11 + n * 18, 19 + m * 18));
             }
         }
 
@@ -88,15 +89,25 @@ public class ContainerKansenInventory extends Container {
         super(registerManager.SHIP_CONTAINER.get(), id);
         this.host = entity;
         this.Stack = entity.getShipStorage();
-        this.equipment = entity.getEquipment();
+        this.equipment = this.host.getEquipment();
 
         //rigging
-        this.addSlot(new SlotItemHandler(this.Stack, 0, 152, 35));
+        this.addSlot(new SlotItemHandler(this.Stack, 0, 152, 35){
+            @Override
+            public int getSlotStackLimit() {
+                return 1;
+            }
+
+            @Override
+            public boolean isItemValid(@Nonnull ItemStack stack) {
+                return stack.getItem() instanceof ItemRiggingBase;
+            }
+        });
 
         //Offhand
-        this.addSlot(new SlotItemHandler(this.equipment, 1, 134, 89));
+        this.addSlot(new SlotItemHandler(this.equipment, 0, 134, 89));
         //mainhand
-        this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));
+        this.addSlot(new SlotItemHandler(this.equipment, 1, 152, 89));
 
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {

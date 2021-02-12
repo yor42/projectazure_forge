@@ -3,7 +3,9 @@ package com.yor42.projectazure.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.capability.InventoryRiggingDefaultDD;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.containers.riggingcontainer.IRiggingContainerSupplier;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
@@ -11,10 +13,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.xml.soap.Text;
 import java.util.ArrayList;
@@ -29,6 +34,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
     private double affection;
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;
+    private PlayerInventory inventory;
 
     private int x, y;
 
@@ -37,6 +43,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         this.host = (EntityKansenBase) Main.PROXY.getSharedMob();
         this.affection = this.host.getAffection();
         this.affectionLevel = this.affectionValuetoLevel();
+        this.inventory = playerinventory;
     }
 
     @Override
@@ -98,9 +105,56 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         IFormattableTextComponent leveltext = new StringTextComponent("Lv.").appendString(Integer.toString(this.host.getLevel()));
         this.font.func_243248_b(matrixStack, leveltext, (float)168-this.font.getStringPropertyWidth(leveltext), (float)81, 14085119);
         this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 14085119);
-
+        this.renderAmmo(matrixStack, mousex, mousey);
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderEntity(mousex, mousey);
+        //this.renderButton(matrixStack);
+    }
+
+    private void renderAmmo(MatrixStack matrixStack, int mousex, int mousey) {
+        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        this.blit(matrixStack, 160,53, 176,25,8,8);
+        if(this.isPointInRegion(160,53,8,8,mousex,mousey)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            for (int i=0; i<enums.getAmmotypeCount(); i++){
+                int Ammostorage = this.host.getAmmoStorage()[i];
+                String color;
+                if(Ammostorage<=5)
+                    color = "e71f19";
+                else if(Ammostorage<=15)
+                    color = "fff100";
+                else
+                    color = "69b82d";
+
+                tooltips.add(new StringTextComponent("---").append(new TranslationTextComponent("gui.ammotype"+i+".desc")).appendString("---").setStyle(Style.EMPTY.setColor(Color.fromHex("#"+color))));
+                tooltips.add(new StringTextComponent(Integer.toString(Ammostorage)).setStyle(Style.EMPTY.setColor(Color.fromHex("#"+color))));
+            }
+            int totalAmmostorageUsage = this.host.getAmmoStorageUsage();
+            int maxAmmo = this.host.getMaxAmmoCount();
+            String Color;
+            if(totalAmmostorageUsage<=((float)0.9*maxAmmo))
+                Color = "69b82d";
+            else if(totalAmmostorageUsage<=((float)0.75*maxAmmo))
+                Color = "fff100";
+            else
+                Color = "e71f19";
+            tooltips.add(new StringTextComponent(""));
+            tooltips.add(new TranslationTextComponent("gui.kansen_ammostorage_usage").appendString(": "+totalAmmostorageUsage+"/"+this.host.getMaxAmmoCount()).setStyle(Style.EMPTY.setColor(net.minecraft.util.text.Color.fromHex("#"+Color))));
+            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
+        }
+    }
+
+    private void renderButton(MatrixStack matrixStack) {
+        for (int i = 0; i < 5; i++){
+            if(i==0)
+                continue;
+            int finalI = i;
+            new ImageButton(81+(12*i)+8,6,12,12,1,193,0,TEXTURE, action -> moveTab(finalI));
+        }
+    }
+
+    private void moveTab(int finalI) {
+        inventory.player.closeScreen();
     }
 
     private void renderEntity(int mousex, int mousey){
@@ -112,7 +166,6 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }
-
         }
     }
 

@@ -25,6 +25,7 @@ public class InventoryRiggingDefaultDD implements INamedContainerProvider, IRigg
 
     private final LivingEntity entity;
     private final ItemStack stack;
+    private boolean isEquippedonShip;
 
     private final LazyOptional<ItemStackHandler> riggingItemCapability = LazyOptional.of(() -> this.equipments);
 
@@ -44,8 +45,13 @@ public class InventoryRiggingDefaultDD implements INamedContainerProvider, IRigg
     }
 
     public InventoryRiggingDefaultDD(ItemStack stack, LivingEntity entity){
+        this(stack, entity, true);
+    }
+
+    public InventoryRiggingDefaultDD(ItemStack stack, LivingEntity entity, boolean isEquippedonShip){
         this.stack = stack;
         this.entity = entity;
+        this.isEquippedonShip = isEquippedonShip;
         this.loadEquipments(this.getNBT(stack));
     }
 
@@ -72,11 +78,15 @@ public class InventoryRiggingDefaultDD implements INamedContainerProvider, IRigg
         this.equipments.deserializeNBT(nbt.getCompound("Inventory"));
     }
 
-    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack)
+    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack){
+        openGUI(serverPlayerEntity, stack, false);
+    }
+
+    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack, boolean isEquippedonShip)
     {
         if(!serverPlayerEntity.world.isRemote)
         {
-            NetworkHooks.openGui(serverPlayerEntity, new InventoryRiggingDefaultDD(stack, serverPlayerEntity));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
+            NetworkHooks.openGui(serverPlayerEntity, new InventoryRiggingDefaultDD(stack, serverPlayerEntity, isEquippedonShip));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
         }
     }
 

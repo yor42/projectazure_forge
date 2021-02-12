@@ -48,7 +48,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityAyanami entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entitylivingbaseIn.getRigging() != ItemStack.EMPTY) {
+        if (entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingBase) {
 
             matrixStackIn.push();
             this.modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();

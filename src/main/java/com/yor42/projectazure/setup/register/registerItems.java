@@ -4,6 +4,7 @@ import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRendere
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.gameobject.items.*;
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.*;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -22,7 +23,11 @@ public class registerItems {
 
     public static final RegistryObject<Item> OATHRING = registerManager.ITEMS.register("oath_ring", () -> new itemRainbowWisdomCube(new Item.Properties()
             .group(PA_GROUP)
-            .rarity(Rarity.EPIC)));
+            .rarity(Rarity.EPIC)
+            .maxStackSize(1)));
+
+    public static final RegistryObject<Item> AMMO_GENERIC = registerManager.ITEMS.register("ammo_generic", () -> new ItemAmmo(new Item.Properties()
+            .group(PA_GROUP), enums.AmmoTypes.GENERIC));
 
     //I'M READY TO GO TONIIIIGHT YEAH THERES PARTY ALRIGHTTTTTTT WE DON'T NEED REASON FOR JOY OH YEAHHHHH
     public static final RegistryObject<Item> DISC_FRIDAYNIGHT = registerManager.ITEMS.register("disc_fridaynight", () -> new MusicDiscItem(15, registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()

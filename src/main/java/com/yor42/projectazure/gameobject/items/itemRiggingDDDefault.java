@@ -3,6 +3,8 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
 import com.yor42.projectazure.gameobject.capability.InventoryRiggingDefaultDD;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.client.gui.widget.list.KeyBindingList;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -11,10 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -145,17 +144,20 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         ItemStackHandler Equipments = new InventoryRiggingDefaultDD(stack).getEquipments();
-        for(int i = 0; 0>Equipments.getSlots(); i++){
+        Color CategoryColor = Color.fromHex("#6bb82d");
+        tooltip.add(new StringTextComponent(""));
+        for(int i = 0; i<Equipments.getSlots(); i++){
                 if(i == 0)
-                    tooltip.add(new StringTextComponent("===").append(new TranslationTextComponent("main_gun").append(new StringTextComponent("==="))));
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
                 if(i == 2)
-                    tooltip.add(new StringTextComponent("===").append(new TranslationTextComponent("anti_air").append(new StringTextComponent("==="))));
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
                 if(i == 3)
-                    tooltip.add(new StringTextComponent("===").append(new TranslationTextComponent("torpedo").append(new StringTextComponent("==="))));
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+
                 if(Equipments.getStackInSlot(i) != ItemStack.EMPTY)
                     tooltip.add(Equipments.getStackInSlot(i).getDisplayName());
                 else {
-                    tooltip.add(new TranslationTextComponent("empty").setStyle(Style.EMPTY.setItalic(true)));
+                    tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("rigging.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
                 }
         }
     }

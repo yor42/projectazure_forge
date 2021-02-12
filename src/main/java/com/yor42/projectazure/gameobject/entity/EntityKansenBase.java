@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.ai.*;
+import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -51,15 +52,14 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     Random rand = new Random();
 
-    private static final DataParameter<Boolean> DATA_ID_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
+    private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
     private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
-    public static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
-    public static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
-    public static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
+    private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
+    private static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
 
 
@@ -233,16 +233,28 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
     };
 
-    public int level,  patAnimationTime, LimitBreakLv, patTimer;
-    public double affection, exp;
-    public boolean isMeleeing, isOpeningDoor, isAwaken;
-    public enums.shipClass shipclass;
+    protected int level,  patAnimationTime, LimitBreakLv, patTimer;
+    protected double affection, exp;
+    protected boolean isMeleeing, isOpeningDoor, isAwaken;
+    protected int[] AmmoStorage;
+    protected int MaxAmmoCount;
+    protected enums.shipClass shipclass;
 
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+        this.AmmoStorage = new int[enums.getAmmotypeCount()];
         this.setAffection(40F);
         this.setLevel(0);
         this.setExp(0);
+        this.setMaxAmmoCount(350);
+    }
+
+    public int getMaxAmmoCount() {
+        return this.MaxAmmoCount;
+    }
+
+    public void setMaxAmmoCount(int maxAmmoCount) {
+        this.MaxAmmoCount = maxAmmoCount;
     }
 
     public void setOathed(boolean bool){
@@ -389,6 +401,13 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         compound.putInt("level", this.level);
         compound.putInt("limitbreaklv", this.LimitBreakLv);
         compound.putBoolean("awaken", this.isAwaken);
+
+        compound.putInt("maxammocount", this.getMaxAmmoCount());
+
+
+        for(int i = 0; i<enums.getAmmotypeCount(); i++){
+            compound.putInt("ammostorage"+i, this.AmmoStorage[i]);
+        }
     }
 
     public void readAdditional(CompoundNBT compound) {
@@ -402,6 +421,11 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.exp = compound.getFloat("exp");
         this.LimitBreakLv = compound.getInt("limitbreaklv");
         this.isAwaken = compound.getBoolean("awaken");
+        this.setMaxAmmoCount(compound.getInt("maxammocount"));
+
+        for(int i = 0; i<enums.getAmmotypeCount(); i++){
+            this.AmmoStorage[i] = compound.getInt("AmmoStorage"+i);
+        }
     }
 
     public void setShipClass(enums.shipClass setclass){
@@ -410,6 +434,18 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     public enums.shipClass getShipClass(){
         return this.shipclass;
+    }
+
+    public int[] getAmmoStorage() {
+        return this.AmmoStorage;
+    }
+
+    public int getAmmoStorageUsage(){
+        int Ammocount=0;
+        for(int k = 0; k < enums.getAmmotypeCount();k++){
+            Ammocount+=this.getAmmoStorage()[k];
+        }
+        return Ammocount;
     }
 
     public boolean canUseRigging(){
@@ -573,6 +609,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     @Override
     public void livingTick() {
+        
+        if(this.ticksExisted%5 == 0){
+            this.tryAddBulletToAmmoStorage();
+        }
 
         if(this.patAnimationTime >0){
 
@@ -637,6 +677,34 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
         super.livingTick();
     }
+
+    protected void tryAddBulletToAmmoStorage(){
+        ItemStack AmmoStack = ItemStack.EMPTY;
+        if(this.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof ItemAmmo) {
+            AmmoStack = this.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+        }
+        else if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem() instanceof ItemAmmo) {
+            AmmoStack = this.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
+        }
+        else {
+            for (int i = 1; i < 13; i++) {
+                if (this.getShipStorage().getStackInSlot(i).getItem() instanceof ItemAmmo) {
+                    AmmoStack = this.getShipStorage().getStackInSlot(i);
+                    break;
+                }
+            }
+        }
+
+        if(AmmoStack.getItem() instanceof ItemAmmo){
+
+            if(this.getAmmoStorageUsage()<this.getMaxAmmoCount()) {
+                ItemAmmo Ammo = (ItemAmmo) AmmoStack.getItem();
+                enums.AmmoTypes types = Ammo.getAmmoType();
+                this.AmmoStorage[types.getIndex()] += 1;
+                AmmoStack.shrink(1);
+            }
+        }
+    };
 
     public ItemStackHandler getShipStorage() {
         return ShipStorage;

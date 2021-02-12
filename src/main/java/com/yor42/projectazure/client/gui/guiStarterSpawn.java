@@ -3,15 +3,14 @@ package com.yor42.projectazure.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.client.gui.buttons.buttonStarterSelect;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
-import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerManager;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -83,7 +82,7 @@ public class guiStarterSpawn extends Screen {
     }
 
     private void renderButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        guiStarterButton button = (guiStarterButton) this.buttons.get(0);
+        buttonStarterSelect button = (buttonStarterSelect) this.buttons.get(0);
         button.render(matrixStack, mouseX, mouseY, partialTicks);
         //will be implemented when screen actually needs to be scrolled
         /*
@@ -126,8 +125,8 @@ public class guiStarterSpawn extends Screen {
         return "Hello World";
     }
 
-    private guiStarterButton createButton(int x, int y, int width, int height, int idx, EntityType type, Button.IPressable onPress) {
+    private buttonStarterSelect createButton(int x, int y, int width, int height, int idx, EntityType type, Button.IPressable onPress) {
         ResourceLocation TEXTURE1 = new ResourceLocation(defined.MODID, "textures/gui/rainbow_cube_overlay.png");
-        return new guiStarterButton(x, y, width, height, 0, 0, this.buttonWidth , TEXTURE1, idx, type, onPress);
+        return new buttonStarterSelect(x, y, width, height, 0, 0, this.buttonWidth , TEXTURE1, idx, type, onPress);
     }
 }
