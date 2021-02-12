@@ -9,7 +9,7 @@ Project: Azure is **FREE, NON COMMERCIAL** Mod for Minecraft Forge.<br />
 프로젝트 애저는 마인크래프트 포지용 **무료, 비영리 모드**입니다.<br />
 <br />
 <br />
-This Is not yet functional.<br />
+This mod is currently under development and not yet functional.<br />
 이 모드는 현재로써는 개발중으로 정상적인 플레이가 불가능합니다.
 
 License(라이센스)
