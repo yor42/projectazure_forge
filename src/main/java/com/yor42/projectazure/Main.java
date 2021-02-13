@@ -3,6 +3,7 @@ package com.yor42.projectazure;
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.entity.entityAyanamiRenderer;
 import com.yor42.projectazure.client.renderer.entity.entityGangwonRenderer;
+import com.yor42.projectazure.network.EventHandler;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.register.*;
@@ -58,6 +59,7 @@ public class Main
 
     public Main() {
 
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);

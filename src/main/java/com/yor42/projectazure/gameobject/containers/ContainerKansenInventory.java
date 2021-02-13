@@ -47,10 +47,11 @@ public class ContainerKansenInventory extends Container {
             }
         });
 
-        //Offhands
-        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 0, 134, 89));
         //mainhand
-        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 1, 152, 89));
+        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 0, 152, 89));
+
+        //Offhands
+        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 1, 134, 89));
 
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {
@@ -104,10 +105,10 @@ public class ContainerKansenInventory extends Container {
             }
         });
 
-        //Offhand
-        this.addSlot(new SlotItemHandler(this.equipment, 0, 134, 89));
         //mainhand
-        this.addSlot(new SlotItemHandler(this.equipment, 1, 152, 89));
+        this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));
+        //Offhand
+        this.addSlot(new SlotItemHandler(this.equipment, 1, 134, 89));
 
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {

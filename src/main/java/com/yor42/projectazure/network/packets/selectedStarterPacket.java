@@ -1,6 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
-import com.yor42.projectazure.network.serverAction;
+import com.yor42.projectazure.network.serverEvents;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -29,7 +29,7 @@ public class selectedStarterPacket {
             final ServerPlayerEntity playerEntity = ctx.get().getSender();
 
             if (playerEntity != null) {
-                serverAction.spawnStarter(playerEntity, msg.starterID);
+                serverEvents.spawnStarter(playerEntity, msg.starterID);
             }
         });
         ctx.get().setPacketHandled(true);

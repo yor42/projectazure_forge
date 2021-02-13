@@ -4,6 +4,7 @@ import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
 
 public class KansenMeleeGoal extends MeleeAttackGoal {
@@ -17,7 +18,12 @@ public class KansenMeleeGoal extends MeleeAttackGoal {
     @Override
     public boolean shouldExecute() {
         //TODO: check if they can attack with gun first
-        if(this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof SwordItem) {
+
+        Item item = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem();
+
+        boolean isEquippingsword = item instanceof SwordItem;
+
+        if(isEquippingsword) {
             return super.shouldExecute();
         }
         else{
