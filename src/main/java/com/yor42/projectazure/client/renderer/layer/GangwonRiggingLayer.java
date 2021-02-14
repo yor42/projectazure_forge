@@ -1,8 +1,7 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.capability.InventoryRiggingDefaultDD;
-import com.yor42.projectazure.gameobject.entity.EntityAyanami;
+import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
 import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.gameobject.items.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
@@ -65,7 +64,7 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
 
                 if (entitylivingbaseIn.getRigging().getItem() == registerItems.DD_DEFAULT_RIGGING.get()){
 
-                    Equipments = new InventoryRiggingDefaultDD(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
+                    Equipments = new RiggingDefaultDDEquipmentCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
                     //gun Renderer
                     if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
 

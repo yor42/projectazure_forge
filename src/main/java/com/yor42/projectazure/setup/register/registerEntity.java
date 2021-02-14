@@ -21,8 +21,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class registerEntity {
 
     //kansen
-
-
     public static void RegisterAttributes(){
         GlobalEntityTypeAttributes.put(registerManager.ENTITYAYANAMI, EntityAyanami.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYGANGWON, EntityGangwon.MutableAttribute().create());

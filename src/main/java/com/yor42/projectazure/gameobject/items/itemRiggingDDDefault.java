@@ -1,10 +1,8 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
-import com.yor42.projectazure.gameobject.capability.InventoryRiggingDefaultDD;
+import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.client.gui.widget.list.KeyBindingList;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -15,22 +13,19 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
 
-    public itemRiggingDDDefault(Properties properties) {
-        super(properties);
+    public itemRiggingDDDefault(Properties properties, int HP) {
+        super(properties, HP);
     }
 
 
@@ -40,28 +35,18 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     }
 
     @Override
-    public int getGunCount() {
-        return 2;
+    public ItemStackHandler getEquipments(ItemStack riggingStack) {
+        return new RiggingDefaultDDEquipmentCapability(riggingStack).getEquipments();
     }
 
     @Override
-    public int getAACount() {
-        return 1;
-    }
-
-    @Override
-    public int getTorpedoCount() {
-        return 3;
-    }
-
-    @Override
-    public int getUtilityCount() {
-        return 0;
+    public int getEquipmentCount(ItemStack riggingStack) {
+        return new RiggingDefaultDDEquipmentCapability(riggingStack).getEquipments().getSlots();
     }
 
     @Override
     public void onTorpedoFire(ItemStack stack) {
-        ItemStackHandler equipment = new InventoryRiggingDefaultDD(stack).getEquipments();
+        ItemStackHandler equipment = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
         for (int i = 3; i<6; i++){
             ItemStack TorpedoStack = equipment.getStackInSlot(i);
             ItemEquipmentBase torpedoItem = (ItemEquipmentBase) TorpedoStack.getItem();
@@ -73,7 +58,7 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
 
     @Override
     public boolean canUseTorpedo(ItemStack stack) {
-        ItemStackHandler equipments = new InventoryRiggingDefaultDD(stack).getEquipments();
+        ItemStackHandler equipments = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
         for (int i = 3; i<6; i++){
             ItemEquipmentBase equipment = (ItemEquipmentBase) equipments.getStackInSlot(i).getItem();
             if(equipment.canUseTorpedo(equipments.getStackInSlot(i))){
@@ -85,7 +70,7 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
 
     @Override
     public boolean canUseCanon(ItemStack stack) {
-        ItemStackHandler equipments = new InventoryRiggingDefaultDD(stack).getEquipments();
+        ItemStackHandler equipments = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
         for(int k = 0; k<2; k++){
             ItemEquipmentBase equipment = (ItemEquipmentBase) equipments.getStackInSlot(k).getItem();
             if(equipment.canUseCanon(equipments.getStackInSlot(k))){
@@ -97,7 +82,7 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
 
     @Override
     public void onCanonFire(ItemStack stack) {
-        ItemStackHandler equipment = new InventoryRiggingDefaultDD(stack).getEquipments();
+        ItemStackHandler equipment = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
         for(int j = 0; j<2; j++){
             ItemStack CanonStack = equipment.getStackInSlot(j);
             ItemEquipmentBase CanonItem = (ItemEquipmentBase) CanonStack.getItem();
@@ -111,7 +96,7 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     @Override
     public void onUpdate(ItemStack stack) {
         if(stack.getItem() instanceof ItemRiggingDD){
-            ItemStackHandler equipment = new InventoryRiggingDefaultDD(stack).getEquipments();
+            ItemStackHandler equipment = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
 
             for(int j = 0; j<equipment.getSlots(); j++){
                 if(equipment.getStackInSlot(j).getItem() instanceof ItemEquipmentBase) {
@@ -133,7 +118,7 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         if(!worldIn.isRemote()) {
             if (playerIn.isSneaking()) {
-                InventoryRiggingDefaultDD.openGUI((ServerPlayerEntity)playerIn, playerIn.inventory.getCurrentItem());
+                RiggingDefaultDDEquipmentCapability.openGUI((ServerPlayerEntity)playerIn, playerIn.inventory.getCurrentItem());
                 return ActionResult.resultSuccess(itemstack);
             }
         }
@@ -143,7 +128,7 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        ItemStackHandler Equipments = new InventoryRiggingDefaultDD(stack).getEquipments();
+        ItemStackHandler Equipments = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
         Color CategoryColor = Color.fromHex("#6bb82d");
         tooltip.add(new StringTextComponent(""));
         for(int i = 0; i<Equipments.getSlots(); i++){

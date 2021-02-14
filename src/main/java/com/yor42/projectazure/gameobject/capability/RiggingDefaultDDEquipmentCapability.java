@@ -21,7 +21,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class InventoryRiggingDefaultDD implements INamedContainerProvider, IRiggingContainerSupplier {
+public class RiggingDefaultDDEquipmentCapability implements INamedContainerProvider, IRiggingContainerSupplier {
 
     private final LivingEntity entity;
     private final ItemStack stack;
@@ -33,22 +33,22 @@ public class InventoryRiggingDefaultDD implements INamedContainerProvider, IRigg
         @Override
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
-            InventoryRiggingDefaultDD.this.saveAll();
+            RiggingDefaultDDEquipmentCapability.this.saveAll();
 
         }
     };
 
-    public InventoryRiggingDefaultDD(ItemStack stack){
+    public RiggingDefaultDDEquipmentCapability(ItemStack stack){
         this.entity = null;
         this.stack = stack;
         this.loadEquipments(this.getNBT(stack));
     }
 
-    public InventoryRiggingDefaultDD(ItemStack stack, LivingEntity entity){
+    public RiggingDefaultDDEquipmentCapability(ItemStack stack, LivingEntity entity){
         this(stack, entity, true);
     }
 
-    public InventoryRiggingDefaultDD(ItemStack stack, LivingEntity entity, boolean isEquippedonShip){
+    public RiggingDefaultDDEquipmentCapability(ItemStack stack, LivingEntity entity, boolean isEquippedonShip){
         this.stack = stack;
         this.entity = entity;
         this.isEquippedonShip = isEquippedonShip;
@@ -86,7 +86,7 @@ public class InventoryRiggingDefaultDD implements INamedContainerProvider, IRigg
     {
         if(!serverPlayerEntity.world.isRemote)
         {
-            NetworkHooks.openGui(serverPlayerEntity, new InventoryRiggingDefaultDD(stack, serverPlayerEntity, isEquippedonShip));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
+            NetworkHooks.openGui(serverPlayerEntity, new RiggingDefaultDDEquipmentCapability(stack, serverPlayerEntity, isEquippedonShip));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
         }
     }
 

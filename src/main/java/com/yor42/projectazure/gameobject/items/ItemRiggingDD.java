@@ -5,8 +5,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 
 public abstract class ItemRiggingDD extends ItemRiggingBase implements IAnimatable {
 
-    public ItemRiggingDD(Properties properties) {
-        super(properties);
+    public ItemRiggingDD(Properties properties, int HP) {
+        super(properties, HP);
         this.validclass = enums.shipClass.Destroyer;
     }
 }

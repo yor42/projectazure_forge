@@ -1,8 +1,7 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
-import com.yor42.projectazure.gameobject.capability.InventoryRiggingDefaultDD;
+import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.gameobject.items.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
@@ -14,7 +13,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -66,7 +64,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
                 if (entitylivingbaseIn.getRigging().getItem() == registerItems.DD_DEFAULT_RIGGING.get()){
 
-                    Equipments = new InventoryRiggingDefaultDD(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
+                    Equipments = new RiggingDefaultDDEquipmentCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
 
                     //gun Renderer
                     if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){

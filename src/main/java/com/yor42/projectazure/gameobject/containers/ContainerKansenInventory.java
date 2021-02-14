@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.containers;
 
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
+import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,7 +25,7 @@ public class ContainerKansenInventory extends Container {
 
     private static final EquipmentSlotType[] EQUIPMENT = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private EntityKansenBase host;
-    private ItemStackHandler Stack;
+    private ItemStackHandler Stack, AmmoStack;
     private IItemHandlerModifiable equipment;
 
     //client
@@ -33,6 +34,7 @@ public class ContainerKansenInventory extends Container {
 
         ItemStackHandler dummyStackHandler = new ItemStackHandler(19);
         ItemStackHandler dummyEquipmentHandler = new ItemStackHandler(19);
+        ItemStackHandler dummyAmmoHandler = new ItemStackHandler(8);
 
         //rigging
         this.addSlot(new SlotItemHandler(dummyStackHandler, 0, 152, 35){
@@ -74,6 +76,17 @@ public class ContainerKansenInventory extends Container {
             }
         }
 
+        for (int m = 0; m < 4; m++) {
+            for (int n = 0; n < 2; n++) {
+                this.addSlot(new SlotItemHandler(dummyAmmoHandler, n + 2 * m, 180 + n * 18, 15 + m * 18){
+                    @Override
+                    public boolean isItemValid(@Nonnull ItemStack stack) {
+                        return stack.getItem() instanceof ItemAmmo;
+                    }
+                });
+            }
+        }
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
@@ -91,6 +104,8 @@ public class ContainerKansenInventory extends Container {
         this.host = entity;
         this.Stack = entity.getShipStorage();
         this.equipment = this.host.getEquipment();
+        this.AmmoStack = this.host.getAmmoStorage();
+
 
         //rigging
         this.addSlot(new SlotItemHandler(this.Stack, 0, 152, 35){
@@ -128,6 +143,17 @@ public class ContainerKansenInventory extends Container {
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
                 this.addSlot(new SlotItemHandler(this.Stack, 1 + n + 3 * m, 11 + n * 18, 19 + m * 18));
+            }
+        }
+
+        for (int m = 0; m < 4; m++) {
+            for (int n = 0; n < 2; n++) {
+                this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
+                    @Override
+                    public boolean isItemValid(@Nonnull ItemStack stack) {
+                        return stack.getItem() instanceof ItemAmmo;
+                    }
+                });
             }
         }
 

@@ -1,5 +1,9 @@
 package com.yor42.projectazure.libs;
 
+import org.lwjgl.system.CallbackI;
+
+import static com.yor42.projectazure.libs.utils.MathUtil.rollBooleanRNG;
+
 public class enums {
 
     public enum SLOTTYPE{
@@ -32,22 +36,56 @@ public class enums {
         }
     }
 
+    public enum ShipRarity{
+        NORMAL,
+        RARE,
+        ELITE,
+        SUPER_RARE,
+        ULTRA_RARE
+    }
+
     public enum AmmoTypes {
-        GENERIC(0),
-        AP(1),
-        HE(2),
-        INCENDIARY(3),
-        API(4),
-        APHEI(5);
+        //AP: Higher damage on kansen, lower chance to damage rigging
+        //HE: Lower Damage on Kansen, higher chance to damage rigging
+        //INC: mmmph mmph!
+        //APHE:Bigger Damage on Kansen
 
-        private final int index;
+        //Big Lead boi
+        GENERIC(0.75F, 5, 0.4F, false, false),
+        //What are you doing, step-shell?
+        AP(0.9F,6, 0.3F, false, false),
+        //haha Shell goes AW MAN
+        HE(0.65F,10, 0.75F, true, false),
+        //Ah thats hot
+        INCENDIARY(0.73F, 7, 0.45F, false, true),
+        //digs deep, and goes boom. does not do splash damage cuz it blows up inside of ship
+        APHE(0.8F, 9, 0.5F, false, false),
+        API(0.83F, 6, 0.15F, false, true),
+        //HEI(0.68F, ),
+        APHEI(0.78F, 8, 0.45F, false, true);
 
-        AmmoTypes(int index) {
-            this.index = index;
+        private final float hitChance, damage, damagerigging;
+        private boolean shouldDamageMultipleComponant, isIncendiary;
+        AmmoTypes(float HitChance, float damage, float chanceRiggingDamage, boolean splashDamage, boolean incendiary) {
+            this.hitChance = HitChance;
+            this.damage = damage;
+            this.damagerigging = chanceRiggingDamage;
         }
 
-        public int getIndex() {
-            return this.index;
+        public float getDamage() {
+            return this.damage;
+        }
+
+        public float getHitchance(){
+            return this.hitChance;
+        }
+
+        public boolean isHit(){
+            return rollBooleanRNG(this.hitChance);
+        }
+
+        public boolean shouldDamageRigging(){
+            return rollBooleanRNG(this.damagerigging);
         }
     }
 

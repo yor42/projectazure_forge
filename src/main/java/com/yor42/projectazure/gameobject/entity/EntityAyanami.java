@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity;
 
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.*;
@@ -103,5 +104,10 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
     @Override
     public int getRiggingOffset() {
         return 0;
+    }
+
+    @Override
+    public enums.ShipRarity getRarity() {
+        return enums.ShipRarity.ELITE;
     }
 }

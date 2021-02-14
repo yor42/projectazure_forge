@@ -11,6 +11,7 @@ import static com.yor42.projectazure.libs.defined.MODID;
 public final class registerSounds {
 
     public static final SoundEvent DISC_FRIDAY_NIGHT = registerSoundEvent("disc_fridaynight");
+    public static final SoundEvent DISC_BRAINPOWER = registerSoundEvent("disc_brainpower");
 
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);
@@ -20,5 +21,6 @@ public final class registerSounds {
     public static void register(RegistryEvent.Register<SoundEvent> evt) {
         IForgeRegistry<SoundEvent> registry = evt.getRegistry();
         registry.register(DISC_FRIDAY_NIGHT);
+        registry.register(DISC_BRAINPOWER);
     }
 }

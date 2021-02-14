@@ -29,14 +29,21 @@ import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
+
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageRiggingorEquipment;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
+import static com.yor42.projectazure.libs.utils.MathUtil.generateRandomInt;
+import static com.yor42.projectazure.libs.utils.MathUtil.rollDamagingRiggingCount;
 
 public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimatable {
 
     public AnimationFactory factory = new AnimationFactory(this);
 
-    private int totalHP;
+    protected int MaxHP;
 
     protected enums.shipClass validclass;
 
@@ -50,8 +57,9 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
         data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
     }
 
-    public ItemRiggingBase(Properties properties) {
+    public ItemRiggingBase(Properties properties, int HP) {
         super(properties);
+        this.MaxHP = HP;
     }
 
     @Override
@@ -62,44 +70,9 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        return 1.0-(double)this.getCurrentHP(stack) / (double)this.getTotalHP(stack);
+        return 1.0-getCurrentHP(stack) / (double)this.MaxHP;
     }
 
-    public void setTotalHP(ItemStack stack, int value) {
-        if (!stack.hasTag()) {
-            stack.setTag(new CompoundNBT());
-        }
-        if(stack.getTag() != null){
-            stack.getTag().putInt("maxHP", value);
-        }
-    }
-
-    public int getTotalHP(ItemStack stack) {
-        if(stack.getTag() == null || !stack.hasTag() || stack.getTag().contains("maxHP")){
-            return 0;
-        }
-        else {
-            return stack.getTag().getInt("maxHP");
-        }
-    }
-
-    public void setCurrentHP(ItemStack stack, int value) {
-        if (!stack.hasTag()) {
-            stack.setTag(new CompoundNBT());
-        }
-        if(stack.getTag() != null){
-            stack.getTag().putInt("currentHP", value);
-        }
-    }
-
-    public int getCurrentHP(ItemStack stack) {
-        if(stack.getTag() == null || !stack.hasTag() || stack.getTag().contains("currentHP")){
-            return 0;
-        }
-        else {
-            return stack.getTag().getInt("currentHP");
-        }
-    }
 
     public enums.shipClass getValidclass() {
         return validclass;
@@ -113,47 +86,16 @@ public abstract class ItemRiggingBase extends itemBaseTooltip implements IAnimat
 
     public abstract AnimatedGeoModel getModel();
 
-    public int damageRigging(ItemStack stack, int amount){
 
-        if(stack.getTag() != null) {
-            int oldHP = stack.getTag().getInt("currentHP");
-            if (stack.getTag().contains("currentHP")) {
-                int overdamage = oldHP - amount;
-                if (overdamage <= 0) {
-                    stack.getTag().putInt("currentHP", oldHP - amount);
-                    return 0;
-                } else {
-                    stack.getTag().putInt("currentHP", 0);
-                    return Math.abs(overdamage);
-                }
-            } else {
-                stack.getTag().putInt("currentHP", this.totalHP - amount);
-                return 0;
-            }
-        }
-        else {
-            stack.setTag(new CompoundNBT());
-            int finalHP = this.totalHP-amount;
-            if(finalHP >= 0){
-                stack.getTag().putInt("currentHP", finalHP);
-            }
-            else {
-                stack.getTag().putInt("currentHP", 0);
-                return Math.abs(finalHP);
-            }
-        }
-        return amount;
-    }
-
-    public abstract int getGunCount();
-    public abstract int getAACount();
-    public abstract int getTorpedoCount();
-    public abstract int getUtilityCount();
 
     protected boolean canDamageRigging(ItemStack stack){
         int oldHP = stack.getTag().getInt("currentHP");
         return oldHP>0;
     };
+
+    public abstract ItemStackHandler getEquipments(ItemStack riggingStack);
+
+    public abstract int getEquipmentCount(ItemStack riggingStack);
 
     public abstract void onCanonFire(ItemStack stack);
 

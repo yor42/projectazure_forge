@@ -5,8 +5,17 @@ import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRen
 import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
+import net.minecraft.util.text.Color;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.RegistryObject;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 import static com.yor42.projectazure.Main.PA_GROUP;
 import static com.yor42.projectazure.Main.PA_SHIPS;
@@ -33,14 +42,31 @@ public class registerItems {
     public static final RegistryObject<Item> DISC_FRIDAYNIGHT = registerManager.ITEMS.register("disc_fridaynight", () -> new MusicDiscItem(15, registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
             .group(PA_GROUP).maxStackSize(1)){
         @Override
-        public int getItemStackLimit(ItemStack stack) {
-            return 1;
+        public ITextComponent getDisplayName(ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
+    //LET THE BASS KICK O-oooooooooo AAAA E A A I A U
+    //I'M READY TO GO TONIIIIGHT YEAH THERES PARTY ALRIGHTTTTTTT WE DON'T NEED REASON FOR JOY OH YEAHHHHH
+    public static final RegistryObject<Item> DISC_BRAINPOWER = registerManager.ITEMS.register("disc_brainpower", () -> new MusicDiscItem(15, registerSounds.DISC_BRAINPOWER, new Item.Properties()
+            .group(PA_GROUP).maxStackSize(1))
+    {
+        @Override
+        public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+            super.addInformation(stack, worldIn, tooltip, flagIn);
+            tooltip.add(new TranslationTextComponent("disc.brainpower.desc1").setStyle(Style.EMPTY.setColor(Color.fromInt(7829367))));
+        }
+
+        @Override
+        public ITextComponent getDisplayName(ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
         }
     });
 
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = registerManager.ITEMS.register("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
     .setISTER(() -> DDDefaultRiggingRenderer::new)
-    .group(PA_GROUP).maxStackSize(1)));
+    .group(PA_GROUP).maxStackSize(1), 500));
 
     public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = registerManager.ITEMS.register("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533mm(new Item.Properties()
             .setISTER(() -> equipment533mmTorpedoRenderer::new)

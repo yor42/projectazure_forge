@@ -3,10 +3,13 @@
 
   "item.projectazure.rainbow_wisdomcube": "Rainbow Wisdom Cube",
   "item.projectazure.wisdomcube": "Wisdom Cube",
-  "item.projectazure.disc_fridaynight": "Music Disc",
   "item.projectazure.dd_default_rigging": "Destroyer Basic Rigging",
 
+  "item.projectazure.music_disc": "Music Disc",
+
   "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
+  "disc.brainpower.desc1": "LET THE BASS KICK O-oooooooooo AAAA E A A I A U",
+  "item.projectazure.disc_brainpower.desc": "Noma - Brain Power (Long Version)",
   "item.projectazure.wisdomcube.tooltip": "Mysterious Glowing Cube. Used to Build KANSEN.",
   "item.projectazure.oath_ring": "Promise Ring",
 
@@ -16,7 +19,6 @@
   "item.projectazure.dd_default_rigging.tooltip": "Basic Rigging for destroyer KANSEN.",
 
   "item.projectazure.ammo_generic": "Generic Shell",
-
 
   "rigging_valid_on.tooltip": "Useable On:",
 
@@ -31,12 +33,7 @@
   "gui.current_affection_value": "Affection",
   "gui.entity.level": "Lv",
 
-  "gui.ammotype0.desc": "Generic Shells",
-  "gui.ammotype1.desc": "Armor piercing Shells",
-  "gui.ammotype2.desc": "High Explosive Shells",
-  "gui.ammotype3.desc": "Incendiary Shells",
-  "gui.ammotype4.desc": "AP/I Shells",
-  "gui.ammotype5.desc": "AP/HE/I Shells",
+  "gui.ammostorage.title": "Ammo.",
 
   "gui.kansen_ammostorage_usage": "Ammo Storage Usage",
 

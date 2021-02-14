@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -20,6 +21,7 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
 
     protected enums.SLOTTYPE slot;
     protected int firedelay;
+    protected int MaxHP;
 
     public ItemEquipmentBase(Properties properties) {
         super(properties);
@@ -48,6 +50,14 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
 
     public abstract void onUpdate(ItemStack stack);
 
+    public void setMaxHP(int maxHP) {
+        this.MaxHP = maxHP;
+    }
+
+    public int getMaxHP() {
+        return this.MaxHP;
+    }
+
     public abstract boolean canUseCanon(ItemStack stack);
     public abstract boolean canUseTorpedo(ItemStack stack);
 
@@ -73,4 +83,14 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
     public ResourceLocation getTexture(){
         return this.getEquipmentModel().getTextureLocation(null);
     };
+
+    public void DamageEquipment(double damage, ItemStack equipmentStack){
+        CompoundNBT compound = equipmentStack.getOrCreateTag();
+        int currentHP = compound.getInt("HP");
+        if(currentHP-damage >= 0){
+            compound.putInt("HP", (int) (currentHP-damage));
+        }
+        else
+            compound.putInt("HP", 0);
+    }
 }

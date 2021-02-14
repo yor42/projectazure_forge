@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.DamageSources;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
@@ -47,6 +48,8 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageComponent;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageRiggingorEquipment;
 
 public abstract class EntityKansenBase extends TameableEntity implements IAnimatable {
 
@@ -71,6 +74,8 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             }
         }
     };
+
+    public ItemStackHandler AmmoStorage = new ItemStackHandler(8);
 
     public final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
 
@@ -235,14 +240,12 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer;
     protected double affection, exp;
-    protected boolean isMeleeing, isOpeningDoor, isAwaken;
-    protected int[] AmmoStorage;
-    protected int MaxAmmoCount;
+    protected boolean isMeleeing, isOpeningDoor;
+    protected int MaxAmmoCount, awakeningLevel;
     protected enums.shipClass shipclass;
 
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
-        this.AmmoStorage = new int[enums.getAmmotypeCount()];
         this.setAffection(40F);
         this.setLevel(0);
         this.setExp(0);
@@ -284,10 +287,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     public int getMaxLevel(){
-        if(this.isAwaken && this.LimitBreakLv == 3){
-            return 120;
-        }
-        else {
             switch (this.LimitBreakLv) {
                 default:
                     return 70;
@@ -296,9 +295,19 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 case 2:
                     return 90;
                 case 3:
-                    return 100;
+                    switch (this.getAwakeningLevel()){
+                        default:
+                            return 100;
+                        case 1:
+                            return 110;
+                        case 2:
+                            return 120;
+                    }
             }
-        }
+    }
+
+    protected int getAwakeningLevel(){
+        return this.awakeningLevel;
     }
 
     public void setExp(double exp) {
@@ -358,6 +367,8 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.setAffection(Math.min(this.getAffection() + Delta, this.getmaxAffextion()));
     }
 
+    public abstract enums.ShipRarity getRarity();
+
     protected void registerData() {
         super.registerData();
         this.dataManager.register(STORAGE, new CompoundNBT());
@@ -396,18 +407,13 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         compound.putDouble("affection", this.affection);
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.put("inventory",this.ShipStorage.serializeNBT());
+        compound.put("ammoStorage", this.AmmoStorage.serializeNBT());
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
         compound.putDouble("exp", this.exp);
         compound.putInt("level", this.level);
         compound.putInt("limitbreaklv", this.LimitBreakLv);
-        compound.putBoolean("awaken", this.isAwaken);
-
+        compound.putInt("awaken", this.awakeningLevel);
         compound.putInt("maxammocount", this.getMaxAmmoCount());
-
-
-        for(int i = 0; i<enums.getAmmotypeCount(); i++){
-            compound.putInt("ammostorage"+i, this.AmmoStorage[i]);
-        }
     }
 
     public void readAdditional(CompoundNBT compound) {
@@ -417,15 +423,14 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
         if(compound.contains("inventory"))
             this.ShipStorage.deserializeNBT((CompoundNBT) compound.get("inventory"));
+        if(compound.contains("ammoStorage"))
+            this.AmmoStorage.deserializeNBT((CompoundNBT) compound.get("ammoStorage"));
         this.level = compound.getInt("level");
         this.exp = compound.getFloat("exp");
         this.LimitBreakLv = compound.getInt("limitbreaklv");
-        this.isAwaken = compound.getBoolean("awaken");
+        this.awakeningLevel = compound.getInt("awaken");
         this.setMaxAmmoCount(compound.getInt("maxammocount"));
 
-        for(int i = 0; i<enums.getAmmotypeCount(); i++){
-            this.AmmoStorage[i] = compound.getInt("AmmoStorage"+i);
-        }
     }
 
     public void setShipClass(enums.shipClass setclass){
@@ -434,18 +439,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     public enums.shipClass getShipClass(){
         return this.shipclass;
-    }
-
-    public int[] getAmmoStorage() {
-        return this.AmmoStorage;
-    }
-
-    public int getAmmoStorageUsage(){
-        int Ammocount=0;
-        for(int k = 0; k < enums.getAmmotypeCount();k++){
-            Ammocount+=this.getAmmoStorage()[k];
-        }
-        return Ammocount;
     }
 
     public boolean canUseRigging(){
@@ -474,7 +467,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     public boolean Hasrigging(){
-        return this.getRigging() != ItemStack.EMPTY;
+        return this.getRigging().getItem() instanceof ItemRiggingBase;
     }
 
     public boolean Sailing(){
@@ -574,20 +567,24 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.patAnimationTime !=0;
     }
 
-    public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source != DamageSource.OUT_OF_WORLD) {
-            if (this.getRigging().getItem() instanceof ItemRiggingBase) {
-                if (this.rand.nextInt(100) <= 75) {
-                    ItemRiggingBase riggingitem = (ItemRiggingBase) this.getRigging().getItem();
-                    int finaldamage = riggingitem.damageRigging(this.getRigging(), (int) amount);
-                    if (finaldamage != 0) {
-                        return super.attackEntityFrom(source, finaldamage);
-                    } else {
-                        return true;
-                    }
-                }
-            }
+    /*
+    public boolean attackEntityCannon(DamageSources sources, float amount, enums.AmmoTypes type){
+        if(this.hasRigging()){
+            DamageRiggingorEquipment(amount, this.getRigging());
+
+            DamageComponent(amount, this.getRigging(), type == enums.AmmoTypes.HE);
         }
+    }
+
+     */
+
+    public boolean hasRigging(){
+        return this.getRigging().getItem() instanceof ItemRiggingBase;
+    }
+
+
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+
         return super.attackEntityFrom(source, amount);
     }
 
@@ -609,10 +606,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     @Override
     public void livingTick() {
-        
-        if(this.ticksExisted%5 == 0){
-            this.tryAddBulletToAmmoStorage();
-        }
 
         if(this.patAnimationTime >0){
 
@@ -678,33 +671,29 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         super.livingTick();
     }
 
-    protected void tryAddBulletToAmmoStorage(){
-        ItemStack AmmoStack = ItemStack.EMPTY;
-        if(this.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof ItemAmmo) {
-            AmmoStack = this.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-        }
-        else if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem() instanceof ItemAmmo) {
-            AmmoStack = this.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
-        }
-        else {
-            for (int i = 1; i < 13; i++) {
-                if (this.getShipStorage().getStackInSlot(i).getItem() instanceof ItemAmmo) {
-                    AmmoStack = this.getShipStorage().getStackInSlot(i);
-                    break;
-                }
+    public ItemStack findAmmo(enums.AmmoTypes types){
+        for (int i=0; i<this.AmmoStorage.getSlots();i++){
+            Item AmmoItem = this.AmmoStorage.getStackInSlot(i).getItem();
+            if(AmmoItem instanceof ItemAmmo){
+                if(types == ((ItemAmmo) AmmoItem).getAmmoType()){
+                    return this.AmmoStorage.getStackInSlot(i);
+                };
             }
         }
+        return ItemStack.EMPTY;
+    }
 
-        if(AmmoStack.getItem() instanceof ItemAmmo){
+    public ItemStackHandler getAmmoStorage() {
+        return this.AmmoStorage;
+    }
 
-            if(this.getAmmoStorageUsage()<this.getMaxAmmoCount()) {
-                ItemAmmo Ammo = (ItemAmmo) AmmoStack.getItem();
-                enums.AmmoTypes types = Ammo.getAmmoType();
-                this.AmmoStorage[types.getIndex()] += 1;
-                AmmoStack.shrink(1);
-            }
-        }
-    };
+    public boolean canUseAmmo(enums.AmmoTypes types){
+        return findAmmo(types) != ItemStack.EMPTY;
+    }
+
+    public void useAmmo(enums.AmmoTypes type){
+        this.findAmmo(type).shrink(1);
+    }
 
     public ItemStackHandler getShipStorage() {
         return ShipStorage;

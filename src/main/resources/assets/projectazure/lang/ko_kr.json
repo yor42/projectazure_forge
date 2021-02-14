@@ -3,10 +3,13 @@
 
   "item.projectazure.rainbow_wisdomcube": "빛나는 성정큐브",
   "item.projectazure.wisdomcube": "성정큐브",
-  "item.projectazure.disc_fridaynight": "음반",
   "item.projectazure.dd_default_rigging": "구축함 기본 장비",
 
+  "item.projectazure.music_disc": "음반",
+
   "item.projectazure.disc_fridaynight.desc": "템페스트 스튜디오 - Friday Night (Astrophysics 리믹스)",
+  "disc.brainpower.desc1": "렛 더 베이스 킥 오오오오오오ㅗㅗ오오오-",
+  "item.projectazure.disc_brainpower.desc": "Noma - 브레인 파워 (롱 버전)",
   "item.projectazure.wisdomcube.tooltip": "의미심장한 빛을 내뿜는 큐브입니다.",
   "item.projectazure.oath_ring": "서약 반지",
 
@@ -16,7 +19,6 @@
   "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
 
   "item.projectazure.ammo_generic": "통상탄",
-
 
   "rigging_valid_on.tooltip": "사용 가능 함급:",
 
@@ -30,6 +32,10 @@
   "gui.current_affection_level": "현재 호감도",
   "gui.current_affection_value": "호감도",
   "gui.entity.level": "레벨",
+
+  "gui.ammostorage.title": "탄약고",
+
+  "gui.kansen_ammostorage_usage": "탄약고 사용량",
 
   "destroyer": "구축함",
   "light_cruiser": "경순양함",

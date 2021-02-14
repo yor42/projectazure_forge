@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity;
 
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -42,6 +43,11 @@ public class EntityGangwon extends EntityKansenDestroyer{
     @Override
     public int getRiggingOffset() {
         return -7;
+    }
+
+    @Override
+    public enums.ShipRarity getRarity() {
+        return enums.ShipRarity.ELITE;
     }
 
     protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)

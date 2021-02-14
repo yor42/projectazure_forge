@@ -6,5 +6,13 @@
         "stream": true
       }
     ]
+  },
+  "disc_brainpower": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/brainpower",
+        "stream": true
+      }
+    ]
   }
 }
