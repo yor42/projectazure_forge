@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.containers;
 
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
-import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

@@ -1,7 +1,7 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.yor42.projectazure.gameobject.items.ItemEquipmentBase;
-import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import net.minecraft.item.ItemStack;
 
 import java.util.LinkedHashSet;
@@ -20,6 +20,10 @@ public class ItemStackUtils {
         else{
             setCurrentHP(stack, 0);
         }
+    }
+
+    public boolean isRiggingDestroyed(ItemStack stack){
+        return getCurrentHP(stack) > 0;
     }
 
     public static void setCurrentHP(ItemStack stack, int value){

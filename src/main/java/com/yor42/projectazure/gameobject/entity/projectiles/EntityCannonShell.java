@@ -1,7 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.gameobject.DamageSources;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.block.AbstractFireBlock;
@@ -29,22 +31,25 @@ import static com.yor42.projectazure.gameobject.DamageSources.DAMAGE_GUN;
 
 public class EntityCannonShell extends DamagingProjectileEntity {
 
-    enums.AmmoTypes ammotype;
+    AmmoProperties properties;
+    BlockPos originPos;
 
-    public EntityCannonShell(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn, enums.AmmoTypes ammotype){
+    public EntityCannonShell(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn, AmmoProperties ammotype){
         super(entityType,worldIn);
-        this.ammotype = ammotype;
+        this.properties = ammotype;
     }
 
-    public EntityCannonShell(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, enums.AmmoTypes ammotype){
+    public EntityCannonShell(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
         super(registerManager.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
-        this.ammotype = ammotype;
+        this.properties = properties;
+        this.originPos = new BlockPos(shooter.getPosX(), shooter.getPosY(), shooter.getPosZ());
     }
 
     @OnlyIn(Dist.CLIENT)
-    public EntityCannonShell(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ, enums.AmmoTypes ammotype) {
+    public EntityCannonShell(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ, AmmoProperties properties) {
         super(registerManager.PROJECTILECANNONSHELL, x, y, z, accelX, accelY, accelZ, worldIn);
-        this.ammotype = ammotype;
+        this.properties = properties;
+        this.originPos = new BlockPos(x,y,z);
     }
 
     public EntityCannonShell(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
@@ -71,21 +76,13 @@ public class EntityCannonShell extends DamagingProjectileEntity {
 
     }
 
-    private boolean isExplosive(){
-        return this.ammotype == enums.AmmoTypes.APHE||this.ammotype == enums.AmmoTypes.HE || this.ammotype == enums.AmmoTypes.APHEI;
-    }
-
-    private boolean isFiery(){
-        return this.ammotype == enums.AmmoTypes.INCENDIARY||this.ammotype == enums.AmmoTypes.APHEI||this.ammotype == enums.AmmoTypes.API;
-    }
-
     @Override
     protected void onImpact(RayTraceResult result) {
         super.onImpact(result);
         if(!this.world.isRemote()){
-            if(this.isExplosive()){
+            if(this.properties.ShouldDamageMultipleComponent()){
                 boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.func_234616_v_());
-                this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float)1, this.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+                this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float)1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
             }
             else{
                 BlockPos hitblockPos = new BlockPos(result.getHitVec().x,result.getHitVec().y,result.getHitVec().z);
@@ -96,26 +93,12 @@ public class EntityCannonShell extends DamagingProjectileEntity {
 
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
-        super.onEntityHit(result);
-        if(!this.world.isRemote){
-            Entity target = result.getEntity();
-            boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.func_234616_v_());
-            if(target instanceof EntityKansenBase){
-                //taking consideration of ricochets/penetration angle
-                float damage = this.ammotype.isHit()? this.ammotype.getDamage():1;
-                target.attackEntityFrom(DAMAGE_GUN, damage);
-                if(this.isExplosive()){
-                    this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float)1, this.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
-                }
-                else if (this.isFiery()){
-                    target.setFire(8);
-                }
-            }
-            else{
-                //for Other mob? hah! theres no savior for you!
-                target.attackEntityFrom(DAMAGE_GUN, this.ammotype.getDamage());
-            }
+        Entity target = result.getEntity();
+        double DistanceMultiplier = Math.min(20/getDistanceSq(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
+        if(target instanceof EntityKansenBase){
+            ((EntityKansenBase) target).attackEntityFromCannon(DAMAGE_GUN, this.properties, DistanceMultiplier);
         }
+        else target.attackEntityFrom(DAMAGE_GUN, (float) (this.properties.getMaxDamage()*1.2));
     }
 
     @Override

@@ -1,17 +1,16 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.DamageSources;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
-import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,24 +31,19 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
+
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageComponent;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageRiggingorEquipment;
+import static com.yor42.projectazure.libs.utils.MathUtil.*;
 
 public abstract class EntityKansenBase extends TameableEntity implements IAnimatable {
 
@@ -582,10 +576,31 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.getRigging().getItem() instanceof ItemRiggingBase;
     }
 
+    public boolean attackEntityFromCannon(DamageSource source, AmmoProperties property, double distanceMultiplier) {
+        if(rollBooleanRNG((float) (property.getRawhitChance()*distanceMultiplier))) {
+            if (this.hasRigging()) {
+                DamageRiggingorEquipment(property.getDamage(enums.DamageType.RIGGING), this.getRigging());
+                DamageComponent(property.getDamage(enums.DamageType.COMPONENT), this.getRigging(), property.ShouldDamageMultipleComponent());
+            }
+            return super.attackEntityFrom(source, property.getDamage(enums.DamageType.ENTITY));
+        }
+        return true;
+    }
+
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
 
-        return super.attackEntityFrom(source, amount);
+        float DamageMultiplier = getRiggingedDamageModifier(); //source == DamageSource.FALL? 1.0F: source == DamageSource.GENERIC? rollBooleanRNG(RangedFloatRandom(0.05F, 0.1F))? 1.0F : getRiggingedDamageModifier();
+
+        if(source == DamageSource.FALL)
+            DamageMultiplier = 1.0F;
+        float ignoreArmorChance = RangedFloatRandom(0.05F, 0.1F);
+        if(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance)){
+            DamageMultiplier = 1.0F;
+        }
+        if(!this.hasRigging())
+            DamageMultiplier = 1.0F;
+        return super.attackEntityFrom(source, amount*DamageMultiplier);
     }
 
     @Override
@@ -671,11 +686,11 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         super.livingTick();
     }
 
-    public ItemStack findAmmo(enums.AmmoTypes types){
+    public ItemStack findAmmo(enums.AmmoCategory category){
         for (int i=0; i<this.AmmoStorage.getSlots();i++){
             Item AmmoItem = this.AmmoStorage.getStackInSlot(i).getItem();
             if(AmmoItem instanceof ItemAmmo){
-                if(types == ((ItemAmmo) AmmoItem).getAmmoType()){
+                if(category == ((ItemAmmo) AmmoItem).getAmmoProperty().getCategory()){
                     return this.AmmoStorage.getStackInSlot(i);
                 };
             }
@@ -687,11 +702,11 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.AmmoStorage;
     }
 
-    public boolean canUseAmmo(enums.AmmoTypes types){
+    public boolean canUseAmmo(enums.AmmoCategory types){
         return findAmmo(types) != ItemStack.EMPTY;
     }
 
-    public void useAmmo(enums.AmmoTypes type){
+    public void useAmmo(enums.AmmoCategory type){
         this.findAmmo(type).shrink(1);
     }
 

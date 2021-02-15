@@ -1,7 +1,6 @@
 package com.yor42.projectazure.libs;
 
-import org.lwjgl.system.CallbackI;
-
+import static com.yor42.projectazure.libs.utils.MathUtil.rand;
 import static com.yor42.projectazure.libs.utils.MathUtil.rollBooleanRNG;
 
 public class enums {
@@ -44,36 +43,52 @@ public class enums {
         ULTRA_RARE
     }
 
-    public enum AmmoTypes {
+    public enum AmmoCategory {
+        //.... and fallback values
         //AP: Higher damage on kansen, lower chance to damage rigging
         //HE: Lower Damage on Kansen, higher chance to damage rigging
-        //INC: mmmph mmph!
+        //INC: *pyro noise*
         //APHE:Bigger Damage on Kansen
 
         //Big Lead boi
-        GENERIC(0.75F, 5, 0.4F, false, false),
+        GENERIC(0.75F, 5, 1, 1, 0.8F, false, false),
         //What are you doing, step-shell?
-        AP(0.9F,6, 0.3F, false, false),
+        AP(0.9F,7, 2,4, 0.3F,false, false),
         //haha Shell goes AW MAN
-        HE(0.65F,10, 0.75F, true, false),
+        HE(0.65F,2, 1, 6, 0.8F, false, true),
         //Ah thats hot
-        INCENDIARY(0.73F, 7, 0.45F, false, true),
+        INCENDIARY(0.73F, 6, 3F,2, 0.8F, true, false),
         //digs deep, and goes boom. does not do splash damage cuz it blows up inside of ship
-        APHE(0.8F, 9, 0.5F, false, false),
-        API(0.83F, 6, 0.15F, false, true),
+        SAP(0.78F, 9, 4, 2,0.8F, false, false),
+        API(0.8F, 6, 3, 3,0.6F, false, true),
         //HEI(0.68F, ),
-        APHEI(0.78F, 8, 0.45F, false, true);
+        HEIAP(0.78F, 8, 4F, 4F, 0.6F, false,true);
 
-        private final float hitChance, damage, damagerigging;
+        private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
         private boolean shouldDamageMultipleComponant, isIncendiary;
-        AmmoTypes(float HitChance, float damage, float chanceRiggingDamage, boolean splashDamage, boolean incendiary) {
+        AmmoCategory(float HitChance, float riggingDamage, float entityDamage, float componentDamage, float MinimumDamageModifier, boolean isFiery, boolean splashDamage) {
             this.hitChance = HitChance;
-            this.damage = damage;
-            this.damagerigging = chanceRiggingDamage;
+            this.damage_rigging = riggingDamage;
+            this.damage_entity = entityDamage;
+            this.damage_component = componentDamage;
+            this.minimum_damage_modifier = MinimumDamageModifier;
+            this.isIncendiary = isFiery;
+            this.shouldDamageMultipleComponant = splashDamage;
         }
 
-        public float getDamage() {
-            return this.damage;
+        public float getDamage(DamageType type) {
+            switch (type){
+                default:
+                    return this.damage_rigging*getDamageVariation();
+                case ENTITY:
+                    return this.damage_entity*getDamageVariation();
+                case COMPONENT:
+                    return this.damage_component*getDamageVariation();
+            }
+        }
+
+        private float getDamageVariation(){
+            return (rand.nextFloat()*(1-this.minimum_damage_modifier)+this.minimum_damage_modifier);
         }
 
         public float getHitchance(){
@@ -84,15 +99,40 @@ public class enums {
             return rollBooleanRNG(this.hitChance);
         }
 
-        public boolean shouldDamageRigging(){
-            return rollBooleanRNG(this.damagerigging);
+        public boolean ShouldDamageMultipleComponent(){
+            return this.shouldDamageMultipleComponant;
         }
+
+        public boolean isFiery(){
+            return this.isIncendiary;
+        }
+
+        public float getRawComponentDamage() {
+            return damage_component;
+        }
+
+        public float getRawEntityDamage() {
+            return damage_entity;
+        }
+
+        public float getRawRiggingDamage() {
+            return damage_rigging;
+        }
+
+        public float getRawhitChance() {
+            return hitChance;
+        }
+
+        public float getRawDamageModifer() {
+            return minimum_damage_modifier;
+        }
+
     }
 
-    public static int getAmmotypeCount(){
-
-        int i = AmmoTypes.values().length;
-        return i;
+    public enum DamageType{
+        RIGGING,
+        ENTITY,
+        COMPONENT;
     }
 
     public enum Affection{

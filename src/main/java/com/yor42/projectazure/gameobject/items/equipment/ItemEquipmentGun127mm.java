@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.equipment;
 
 import com.yor42.projectazure.client.model.ModelMaingun127mm;
 import net.minecraft.item.ItemStack;
@@ -6,8 +6,8 @@ import net.minecraft.nbt.CompoundNBT;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class ItemEquipmentGun127mm extends ItemEquipmentGun{
-    public ItemEquipmentGun127mm(Properties properties) {
-        super(properties);
+    public ItemEquipmentGun127mm(Properties properties,int maxHP) {
+        super(properties, maxHP);
         this.firedelay = 60;
     }
 

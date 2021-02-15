@@ -1,13 +1,12 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.equipment;
 
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.ItemStack;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public abstract class ItemEquipmentGun extends ItemEquipmentBase{
 
-    public ItemEquipmentGun(Properties properties) {
-        super(properties);
+    public ItemEquipmentGun(Properties properties, int maxHP) {
+        super(properties, maxHP);
         this.slot = enums.SLOTTYPE.GUN;
     }
 

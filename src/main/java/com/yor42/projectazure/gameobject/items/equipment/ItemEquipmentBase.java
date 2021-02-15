@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.equipment;
 
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.Item;
@@ -12,7 +12,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.GeoModelProvider;
+
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 
 public abstract class ItemEquipmentBase extends Item implements IAnimatable {
 
@@ -23,8 +24,9 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
     protected int firedelay;
     protected int MaxHP;
 
-    public ItemEquipmentBase(Properties properties) {
+    public ItemEquipmentBase(Properties properties, int maxHP) {
         super(properties);
+        this.setMaxHP(maxHP);
     }
 
     public enums.SLOTTYPE getSlot() {
@@ -49,6 +51,11 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
     }
 
     public abstract void onUpdate(ItemStack stack);
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return 1.0 - (double) getCurrentHP(stack)/getMaxHP();
+    }
 
     public void setMaxHP(int maxHP) {
         this.MaxHP = maxHP;
@@ -83,14 +90,4 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
     public ResourceLocation getTexture(){
         return this.getEquipmentModel().getTextureLocation(null);
     };
-
-    public void DamageEquipment(double damage, ItemStack equipmentStack){
-        CompoundNBT compound = equipmentStack.getOrCreateTag();
-        int currentHP = compound.getInt("HP");
-        if(currentHP-damage >= 0){
-            compound.putInt("HP", (int) (currentHP-damage));
-        }
-        else
-            compound.putInt("HP", 0);
-    }
 }

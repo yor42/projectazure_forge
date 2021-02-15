@@ -1,18 +1,11 @@
 package com.yor42.projectazure.network.packets;
 
-import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
-import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.function.Supplier;
 

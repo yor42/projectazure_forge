@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
-import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;

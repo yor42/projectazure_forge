@@ -1,6 +1,5 @@
 package com.yor42.projectazure.client.model.rigging;
 
-import com.yor42.projectazure.gameobject.items.ItemRiggingDD;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;

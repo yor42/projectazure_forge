@@ -3,17 +3,10 @@ package com.yor42.projectazure.client.renderer.items;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
-import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
-import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
-import com.yor42.projectazure.gameobject.items.itemRiggingDDDefault;
-import net.minecraft.client.Minecraft;
+import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 

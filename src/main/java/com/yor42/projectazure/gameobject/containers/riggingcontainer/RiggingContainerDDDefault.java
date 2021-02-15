@@ -1,26 +1,13 @@
 package com.yor42.projectazure.gameobject.containers.riggingcontainer;
 
 
-import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.slots.slotEquipment;
 import com.yor42.projectazure.gameobject.containers.slots.slotInventory;
-import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
-import com.yor42.projectazure.gameobject.items.ItemRiggingBase;
-import com.yor42.projectazure.gameobject.items.ItemRiggingDD;
-import com.yor42.projectazure.gameobject.items.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.ItemStackHandler;
-
-import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.setup.register.registerManager.DD_DEFAULT_RIGGING_INVENTORY;
 

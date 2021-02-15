@@ -1,14 +1,14 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
 import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;

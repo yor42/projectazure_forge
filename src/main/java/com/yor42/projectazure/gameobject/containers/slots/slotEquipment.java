@@ -1,12 +1,9 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
-import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.items.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 

@@ -33,6 +33,10 @@ public class MathUtil {
             return Result;
     }
 
+    public static float getRiggingedDamageModifier(){
+        return (float) (rand.nextBoolean()? 0.01:0.02);
+    }
+
     public static boolean rollBooleanRNG(float chance){
         return rand.nextFloat()<=chance;
     }
@@ -60,9 +64,16 @@ public class MathUtil {
 
     }
 
-    public float CalculateDamageVariation(float BaseDamage, boolean isDamageCascade){
-        float multiplier = (float)(0.8+(0.2*rand.nextFloat()));
-        return isDamageCascade? (float) (BaseDamage * multiplier * 0.4) :BaseDamage*multiplier;
+    public static float RangedFloatRandom(float min, float max){
+        return  (min+(max-min*rand.nextFloat()));
+    }
+
+
+    //happy valentine day i guess
+    public boolean Valentine(){
+        int you = 2;
+        int me = 2;
+        return you + me <3;
     }
 
 }

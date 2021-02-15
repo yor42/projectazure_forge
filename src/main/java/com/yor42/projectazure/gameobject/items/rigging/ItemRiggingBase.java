@@ -1,6 +1,7 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
+import com.yor42.projectazure.gameobject.items.itemBaseTooltip;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.util.ITooltipFlag;
