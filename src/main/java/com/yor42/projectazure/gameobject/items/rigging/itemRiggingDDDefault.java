@@ -45,55 +45,6 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     }
 
     @Override
-    public void onTorpedoFire(ItemStack stack) {
-        ItemStackHandler equipment = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
-        for (int i = 3; i<6; i++){
-            ItemStack TorpedoStack = equipment.getStackInSlot(i);
-            ItemEquipmentBase torpedoItem = (ItemEquipmentBase) TorpedoStack.getItem();
-            if(torpedoItem.canUseTorpedo(TorpedoStack)) {
-                torpedoItem.checkSlotAndFire(TorpedoStack, enums.SLOTTYPE.TORPEDO);
-            }
-        }
-    }
-
-    @Override
-    public boolean canUseTorpedo(ItemStack stack) {
-        ItemStackHandler equipments = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
-        for (int i = 3; i<6; i++){
-            ItemEquipmentBase equipment = (ItemEquipmentBase) equipments.getStackInSlot(i).getItem();
-            if(equipment.canUseTorpedo(equipments.getStackInSlot(i))){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean canUseCanon(ItemStack stack) {
-        ItemStackHandler equipments = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
-        for(int k = 0; k<2; k++){
-            ItemEquipmentBase equipment = (ItemEquipmentBase) equipments.getStackInSlot(k).getItem();
-            if(equipment.canUseCanon(equipments.getStackInSlot(k))){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void onCanonFire(ItemStack stack) {
-        ItemStackHandler equipment = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
-        for(int j = 0; j<2; j++){
-            ItemStack CanonStack = equipment.getStackInSlot(j);
-            ItemEquipmentBase CanonItem = (ItemEquipmentBase) CanonStack.getItem();
-            if(CanonItem.canUseCanon(CanonStack)){
-                CanonItem.checkSlotAndFire(CanonStack, enums.SLOTTYPE.GUN);
-            }
-
-        }
-    }
-
-    @Override
     public void onUpdate(ItemStack stack) {
         if(stack.getItem() instanceof ItemRiggingDD){
             ItemStackHandler equipment = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();

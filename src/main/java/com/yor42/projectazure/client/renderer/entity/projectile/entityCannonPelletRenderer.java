@@ -15,12 +15,12 @@ import net.minecraft.util.math.vector.Vector3f;
 
 import static com.yor42.projectazure.libs.utils.MinecraftUtils.ModResourceLocation;
 
-public class CannonPelletRenderer extends EntityRenderer<EntityCannonPelllet> {
+public class entityCannonPelletRenderer extends EntityRenderer<EntityCannonPelllet> {
 
     private static final ResourceLocation TEXTURE = ModResourceLocation("textures/entity/projectile/shell_generic.png");
     private static final RenderType field_229044_e_ = RenderType.getEntityCutoutNoCull(TEXTURE);
 
-    protected CannonPelletRenderer(EntityRendererManager renderManager) {
+    public entityCannonPelletRenderer(EntityRendererManager renderManager) {
         super(renderManager);
     }
 

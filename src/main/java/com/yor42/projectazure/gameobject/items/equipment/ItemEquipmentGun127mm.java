@@ -24,17 +24,4 @@ public class ItemEquipmentGun127mm extends ItemEquipmentGun{
             delay--;
         tags.putInt("delay", delay);
     }
-
-    @Override
-    public boolean canUseCanon(ItemStack stack) {
-        CompoundNBT tags = stack.getOrCreateTag();
-        return tags.getInt("delay")<=0;
-    }
-
-    @Override
-    public void onFire(ItemStack equipmentStack) {
-        CompoundNBT tags = equipmentStack.getOrCreateTag();
-        ItemEquipmentBase equipmentItem = (ItemEquipmentBase) equipmentStack.getItem();
-        tags.putInt("delay", equipmentItem.getFiredelay());
-    }
 }

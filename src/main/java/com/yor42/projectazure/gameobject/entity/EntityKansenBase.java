@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.ai.*;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
@@ -10,6 +11,7 @@ import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -41,11 +43,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageComponent;
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageRiggingorEquipment;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.*;
 
-public abstract class EntityKansenBase extends TameableEntity implements IAnimatable {
+public abstract class EntityKansenBase extends TameableEntity implements IAnimatable, IShipRangedAttack {
 
     Random rand = new Random();
 
@@ -436,7 +437,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     public boolean canUseRigging(){
-        return this.getRigging().getItem() instanceof ItemRiggingBase; //&& !this.getRigging.isDestroyed
+        if(this.getRigging().getItem() instanceof ItemRiggingBase)
+            return !isDestroyed(this.getRigging());
+        else
+            return false;
     }
 
     @Override
@@ -474,23 +478,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     public void setTamedBy(PlayerEntity player) {
         this.setTamed(true);
         this.setOwnerId(player.getUniqueID());
-    }
-
-    public boolean canUseCanon() {
-
-        if(this.getRigging().getItem() instanceof ItemRiggingBase){
-            ItemRiggingBase RiggingItem = (ItemRiggingBase) this.getRigging().getItem();
-            return RiggingItem.canUseCanon(this.getRigging());
-        }
-        else return false;
-    }
-
-    public boolean canUseTorpedo() {
-        if(this.getRigging().getItem() instanceof ItemRiggingBase){
-            ItemRiggingBase RiggingItem = (ItemRiggingBase) this.getRigging().getItem();
-            return RiggingItem.canUseTorpedo(this.getRigging());
-        }
-        else return false;
     }
 
     public ItemStack getRigging(){
@@ -702,6 +689,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.AmmoStorage;
     }
 
+    @Override
     public boolean canUseAmmo(enums.AmmoCategory types){
         return findAmmo(types) != ItemStack.EMPTY;
     }
@@ -712,6 +700,28 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     public ItemStackHandler getShipStorage() {
         return ShipStorage;
+    }
+
+    @Override
+    public void AttackUsingCannon(LivingEntity target, float distanceFactor){
+        if(this.canUseAmmo(enums.AmmoCategory.GENERIC) && this.canUseRigging() && canUseCannon(this.getRigging())) {
+            ItemStack Ammostack = this.findAmmo(enums.AmmoCategory.GENERIC);
+            if (Ammostack.getItem() instanceof ItemAmmo && this.hasRigging()) {
+                double d1 = 4.0D;
+                Vector3d vector3d = this.getLook(1.0F);
+                double d2 = target.getPosX() - (this.getPosX() + vector3d.x * 4.0D);
+                double d3 = target.getPosYHeight(0.5D) - (0.5D + this.getPosYHeight(0.5D));
+                double d4 = target.getPosZ() - (this.getPosZ() + vector3d.z * 4.0D);
+
+                EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, d2, d3, d4, ((ItemAmmo) Ammostack.getItem()).getAmmoProperty());
+
+                shell.setPosition(this.getPosX() + vector3d.x, this.getPosYHeight(0.5D) + 0.5D, shell.getPosZ() + vector3d.z);
+                this.world.addEntity(shell);
+                Ammostack.shrink(1);
+                ItemStack FiringCannon = getPreparedCannon(this.getRigging());
+                setEquipmentDelay(FiringCannon);
+            }
+        }
     }
 
     public IItemHandlerModifiable getEquipment(){

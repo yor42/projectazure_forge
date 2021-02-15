@@ -26,21 +26,4 @@ public class ItemEquipmentTorpedo533mm extends ItemEquipmentTorpedo implements I
             delay--;
         tags.putInt("delay", delay);
     }
-
-    @Override
-    public boolean canUseTorpedo(ItemStack stack) {
-        CompoundNBT tags = stack.getOrCreateTag();
-        int delay = tags.getInt("delay");
-        int ammo = tags.getInt("ammo");
-        return delay<=0;
-        //return delay <= 0 && ammo>0;
-    }
-
-    @Override
-    public void onFire(ItemStack equipmentStack) {
-        CompoundNBT tags = equipmentStack.getOrCreateTag();
-        ItemEquipmentBase equipmentItem = (ItemEquipmentBase) equipmentStack.getItem();
-        tags.putInt("delay", equipmentItem.getFiredelay());
-        //tags.putInt("ammo", tags.getInt("ammo")-1);
-    }
 }

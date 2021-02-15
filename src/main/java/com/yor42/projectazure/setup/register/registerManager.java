@@ -42,7 +42,7 @@ public class registerManager {
 
     //projectile
     public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.CREATURE).size(1F, 1.5F).build(new ResourceLocation(defined.MODID, "projectilecannonshell").toString());
-
+    public static final RegistryObject<EntityType<EntityCannonPelllet>> CANNONSHELL = ENTITIES.register("entitycannonshell", () -> PROJECTILECANNONSHELL);
 
     public static void register() {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();

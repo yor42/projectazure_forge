@@ -3,6 +3,7 @@ package com.yor42.projectazure;
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.entity.entityAyanamiRenderer;
 import com.yor42.projectazure.client.renderer.entity.entityGangwonRenderer;
+import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
 import com.yor42.projectazure.network.EventHandler;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
@@ -82,6 +83,7 @@ public class Main
         // do something that can only be done on the client
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.AYANAMI.get(), entityAyanamiRenderer::new);
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.GANGWON.get(), entityGangwonRenderer::new);
+    	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
         ClientRegisterManager.registerScreen();
         LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
     }

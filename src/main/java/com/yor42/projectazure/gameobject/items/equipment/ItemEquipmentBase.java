@@ -1,10 +1,15 @@
 package com.yor42.projectazure.gameobject.items.equipment;
 
+import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -13,20 +18,21 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 
-public abstract class ItemEquipmentBase extends Item implements IAnimatable {
+public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnimatable {
 
 
     public AnimationFactory factory = new AnimationFactory(this);
 
     protected enums.SLOTTYPE slot;
     protected int firedelay;
-    protected int MaxHP;
 
     public ItemEquipmentBase(Properties properties, int maxHP) {
-        super(properties);
-        this.setMaxHP(maxHP);
+        super(properties, maxHP);
     }
 
     public enums.SLOTTYPE getSlot() {
@@ -52,31 +58,6 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
 
     public abstract void onUpdate(ItemStack stack);
 
-    @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        return 1.0 - (double) getCurrentHP(stack)/getMaxHP();
-    }
-
-    public void setMaxHP(int maxHP) {
-        this.MaxHP = maxHP;
-    }
-
-    public int getMaxHP() {
-        return this.MaxHP;
-    }
-
-    public abstract boolean canUseCanon(ItemStack stack);
-    public abstract boolean canUseTorpedo(ItemStack stack);
-
-    public void checkSlotAndFire(ItemStack equipmentStack, enums.SLOTTYPE slot){
-        ItemEquipmentBase equipment = (ItemEquipmentBase) equipmentStack.getItem();
-        if(slot == equipment.getSlot()){
-            onFire(equipmentStack);
-        }
-    }
-
-    public abstract void onFire(ItemStack equipmentStack);
-
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         return PlayState.STOP;
     }
@@ -85,6 +66,13 @@ public abstract class ItemEquipmentBase extends Item implements IAnimatable {
     public AnimationFactory getFactory()
     {
         return this.factory;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()));
+        tooltip.add(new TranslationTextComponent("item.tooltip.firerate").appendString(": ").append(new StringTextComponent(String.format("%.2f",((float)1/this.firedelay)*20)+"R/s")));
     }
 
     public ResourceLocation getTexture(){

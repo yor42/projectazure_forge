@@ -6,17 +6,19 @@
   "item.projectazure.dd_default_rigging": "구축함 기본 장비",
 
   "item.projectazure.music_disc": "음반",
+  "item.projectazure.oath_ring": "서약 반지",
 
   "item.projectazure.disc_fridaynight.desc": "템페스트 스튜디오 - Friday Night (Astrophysics 리믹스)",
   "disc.brainpower.desc1": "렛 더 베이스 킥 오오오오오오ㅗㅗ오오오-",
   "item.projectazure.disc_brainpower.desc": "Noma - 브레인 파워 (롱 버전)",
   "item.projectazure.wisdomcube.tooltip": "의미심장한 빛을 내뿜는 큐브입니다.",
-  "item.projectazure.oath_ring": "서약 반지",
 
   "item.projectazure.equipment_torpedo_533mm": "533mm 4연장 어뢰",
   "item.projectazure.equipment_gun_127mm": "127mm 단장포",
 
   "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
+
+  "item.tooltip.firerate": "발사 속도",
 
   "item.projectazure.ammo_generic": "통상탄",
 

@@ -9,9 +9,4 @@ public abstract class ItemEquipmentGun extends ItemEquipmentBase{
         super(properties, maxHP);
         this.slot = enums.SLOTTYPE.GUN;
     }
-
-    @Override
-    public boolean canUseTorpedo(ItemStack stack) {
-        return false;
-    }
 }

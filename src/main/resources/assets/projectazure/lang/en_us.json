@@ -6,17 +6,19 @@
   "item.projectazure.dd_default_rigging": "Destroyer Basic Rigging",
 
   "item.projectazure.music_disc": "Music Disc",
+  "item.projectazure.oath_ring": "Promise Ring",
 
   "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
   "disc.brainpower.desc1": "LET THE BASS KICK O-oooooooooo AAAA E A A I A U",
   "item.projectazure.disc_brainpower.desc": "Noma - Brain Power (Long Version)",
   "item.projectazure.wisdomcube.tooltip": "Mysterious Glowing Cube. Used to Build KANSEN.",
-  "item.projectazure.oath_ring": "Promise Ring",
 
   "item.projectazure.equipment_torpedo_533mm": "533mm Quadruple Torpedo Mount",
   "item.projectazure.equipment_gun_127mm": "Single 127mm (SK C/34)",
 
   "item.projectazure.dd_default_rigging.tooltip": "Basic Rigging for destroyer KANSEN.",
+
+  "item.tooltip.firerate": "Fire Rate",
 
   "item.projectazure.ammo_generic": "Generic Shell",
 

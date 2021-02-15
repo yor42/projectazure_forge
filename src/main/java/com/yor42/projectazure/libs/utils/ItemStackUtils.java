@@ -1,8 +1,13 @@
 package com.yor42.projectazure.libs.utils;
 
+import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -13,25 +18,46 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rollDamagingRiggingCoun
 public class ItemStackUtils {
 
     public static void DamageRiggingorEquipment(float amount, ItemStack stack){
-        int hp = getCurrentHP(stack);
-        if(hp-amount>=0){
-            setCurrentHP(stack, (int) (hp-amount));
+        if(stack.getItem() instanceof ItemDestroyable) {
+            int damage = getCurrentDamage(stack);
+            int maxDamage = ((ItemDestroyable) stack.getItem()).getMaxHP();
+            if (damage + amount <= maxDamage) {
+                setCurrentDamage(stack, (int) (damage + amount));
+            } else {
+                setCurrentDamage(stack, maxDamage);
+            }
         }
         else{
-            setCurrentHP(stack, 0);
+            Main.LOGGER.warn("Item that isn't Rigging or Equipment Tried to run Damage Code.\n" +
+                    "well its not a big problem(shouldn't break anything) but it won't do anything either.\n" +
+                    "but whoever you are here's some pesky rickroll to encourage you to fix this\n\n" +
+                    "We are no strangers to love, You know the rules, and so do i.\n" +
+                    "A full commitment's what I'm thinking of\n" +
+                    "You wouldn't get this from any other guy");
         }
+
     }
 
-    public boolean isRiggingDestroyed(ItemStack stack){
-        return getCurrentHP(stack) > 0;
-    }
-
-    public static void setCurrentHP(ItemStack stack, int value){
-        stack.getOrCreateTag().putInt("HP", value);
+    public static boolean isDestroyed(ItemStack stack){
+        if(stack.getItem() instanceof ItemDestroyable) {
+            return getCurrentDamage(stack) <= ((ItemDestroyable)stack.getItem()).getMaxHP();
+        }
+        return true;
     }
 
     public static int getCurrentHP(ItemStack stack){
-        return stack.getOrCreateTag().getInt("HP");
+        if(stack.getItem() instanceof ItemDestroyable){
+            return ((ItemDestroyable) stack.getItem()).getMaxHP()-getCurrentDamage(stack);
+        }
+        else return 0;
+    }
+
+    public static void setCurrentDamage(ItemStack stack, int value){
+        stack.getOrCreateTag().putInt("currentdamage", value);
+    }
+
+    public static int getCurrentDamage(ItemStack stack){
+        return stack.getOrCreateTag().getInt("currentdamage");
     }
 
     public static boolean DamageComponent(float damage, ItemStack riggingStack, boolean shouldDamageMultiple){
@@ -71,6 +97,40 @@ public class ItemStackUtils {
         }
         else {
             return false;
+        }
+    }
+
+    public static ItemStack getPreparedCannon(ItemStack rigging){
+        if(rigging.getItem() instanceof ItemRiggingBase){
+            ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
+            ItemStackHandler equipments = riggingItem.getEquipments(rigging);
+            for(int i = 0; i<equipments.getSlots(); i++){
+                if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
+                    if (((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.GUN) {
+                        if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0) {
+                            return equipments.getStackInSlot(i);
+                        }
+                    }
+                }
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public static boolean canUseCannon(ItemStack riggingStack){
+        return getPreparedCannon(riggingStack) != ItemStack.EMPTY;
+    }
+
+    public static int getDelayofEquipment(ItemStack Equipment){
+        CompoundNBT tags = Equipment.getOrCreateTag();
+        return tags.getInt("delay");
+    }
+
+    public static void setEquipmentDelay (ItemStack equipment){
+        if(equipment.getItem() instanceof ItemEquipmentBase){
+            CompoundNBT tags = equipment.getOrCreateTag();
+            ItemEquipmentBase equipmentItem = (ItemEquipmentBase)(equipment.getItem());
+            tags.putInt("delay", equipmentItem.getFiredelay());
         }
     }
 
