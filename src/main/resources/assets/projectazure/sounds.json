@@ -14,5 +14,13 @@
         "stream": true
       }
     ]
+  },
+  "bonk": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/misc/bonk",
+        "stream": true
+      }
+    ]
   }
 }

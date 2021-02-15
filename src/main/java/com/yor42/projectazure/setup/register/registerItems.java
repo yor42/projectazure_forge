@@ -65,6 +65,11 @@ public class registerItems {
         }
     });
 
+    public static final RegistryObject<Item> BONKBAT = registerManager.ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
+            .group(PA_GROUP)
+            .rarity(Rarity.EPIC)
+            .maxStackSize(1)));
+
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = registerManager.ITEMS.register("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
     .setISTER(() -> DDDefaultRiggingRenderer::new)
     .group(PA_GROUP).maxStackSize(1), 500));

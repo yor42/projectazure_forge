@@ -22,6 +22,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("oath_ring");
         buildModel("ammo_generic");
         buildModel("disc_brainpower");
+        buildModel("bonk_bat");
     }
 
     private ItemModelBuilder buildModel(String name){

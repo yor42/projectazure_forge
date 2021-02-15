@@ -13,6 +13,8 @@ public final class registerSounds {
     public static final SoundEvent DISC_FRIDAY_NIGHT = registerSoundEvent("disc_fridaynight");
     public static final SoundEvent DISC_BRAINPOWER = registerSoundEvent("disc_brainpower");
 
+    public static final SoundEvent WEAPON_BONK = registerSoundEvent("bonk");
+
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);
         return new SoundEvent(soundID).setRegistryName(soundID);
@@ -22,5 +24,6 @@ public final class registerSounds {
         IForgeRegistry<SoundEvent> registry = evt.getRegistry();
         registry.register(DISC_FRIDAY_NIGHT);
         registry.register(DISC_BRAINPOWER);
+        registry.register(WEAPON_BONK);
     }
 }

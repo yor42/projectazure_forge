@@ -8,16 +8,20 @@
   "item.projectazure.music_disc": "음반",
   "item.projectazure.oath_ring": "서약 반지",
 
+  "item.projectazure.bonk_bat": "The Bonk™ 방망이",
+
+
   "item.projectazure.disc_fridaynight.desc": "템페스트 스튜디오 - Friday Night (Astrophysics 리믹스)",
   "disc.brainpower.desc1": "렛 더 베이스 킥 오오오오오오ㅗㅗ오오오-",
   "item.projectazure.disc_brainpower.desc": "Noma - 브레인 파워 (롱 버전)",
-  "item.projectazure.wisdomcube.tooltip": "의미심장한 빛을 내뿜는 큐브입니다.",
 
   "item.projectazure.equipment_torpedo_533mm": "533mm 4연장 어뢰",
   "item.projectazure.equipment_gun_127mm": "127mm 단장포",
 
   "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
   "item.projectazure.ammo_generic.tooltip": "가장 기본적인 함선소녀용 탄약입니다. 약하지만, 그만큼 저렴합니다.",
+  "item.projectazure.wisdomcube.tooltip": "의미심장한 빛을 내뿜는 큐브입니다.",
+  "item.projectazure.bonk_bat.tooltip": "감히 이 성스런 방망이의 길을 막는 이 세상 모든 존재를 \"예외 없이\" Horny jail로 보냅니다.",
 
   "item.tooltip.firerate": "발사 속도",
 
@@ -51,5 +55,8 @@
   "oath": "서약",
 
   "entity.projectazure.entityayanami": "IJN 아야나미",
-  "entity.projectazure.entitygangwon": "ROKS 강원"
+  "entity.projectazure.entitygangwon": "ROKS 강원",
+
+  "death.attack.bonk": "%1$s이 %2$s에 의해 Horny Jail로 보내졌습니다.",
+  "death.attack.bonk.item": "%1$s이 %2$s의 %3$s로 인해 Horny Jail로 보내졌습니다."
 }
