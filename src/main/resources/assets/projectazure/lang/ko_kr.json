@@ -17,6 +17,7 @@
   "item.projectazure.equipment_gun_127mm": "127mm 단장포",
 
   "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
+  "item.projectazure.ammo_generic.tooltip": "가장 기본적인 함선소녀용 탄약입니다. 약하지만, 그만큼 저렴합니다.",
 
   "item.tooltip.firerate": "발사 속도",
 
