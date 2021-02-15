@@ -88,10 +88,6 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
                 boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.func_234616_v_());
                 this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float)1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
             }
-            else{
-                BlockPos hitblockPos = new BlockPos(result.getHitVec().x,result.getHitVec().y,result.getHitVec().z);
-                this.world.setBlockState(hitblockPos, AbstractFireBlock.getFireForPlacement(this.world, hitblockPos));
-            }
         }
     }
 

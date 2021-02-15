@@ -41,7 +41,7 @@ public class ItemStackUtils {
 
     public static boolean isDestroyed(ItemStack stack){
         if(stack.getItem() instanceof ItemDestroyable) {
-            return getCurrentDamage(stack) <= ((ItemDestroyable)stack.getItem()).getMaxHP();
+            return getCurrentDamage(stack) >= ((ItemDestroyable)stack.getItem()).getMaxHP();
         }
         return true;
     }
@@ -108,7 +108,7 @@ public class ItemStackUtils {
             for(int i = 0; i<equipments.getSlots(); i++){
                 if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
                     if (((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.GUN) {
-                        if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0) {
+                        if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0 && !isDestroyed(equipments.getStackInSlot(i))) {
                             return equipments.getStackInSlot(i);
                         }
                     }
@@ -119,7 +119,10 @@ public class ItemStackUtils {
     }
 
     public static boolean canUseCannon(ItemStack riggingStack){
-        return getPreparedCannon(riggingStack) != ItemStack.EMPTY;
+        if(riggingStack.getItem() instanceof ItemRiggingBase) {
+            return getPreparedCannon(riggingStack) != ItemStack.EMPTY;
+        }
+        else return false;
     }
 
     public static int getDelayofEquipment(ItemStack Equipment){

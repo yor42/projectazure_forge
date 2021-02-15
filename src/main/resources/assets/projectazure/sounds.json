@@ -22,5 +22,13 @@
         "stream": true
       }
     ]
+  },
+  "gun_fire_medium": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/gun/gun_fire_medium",
+        "stream": true
+      }
+    ]
   }
 }

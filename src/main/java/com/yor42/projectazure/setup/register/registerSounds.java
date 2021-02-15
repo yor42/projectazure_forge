@@ -10,6 +10,8 @@ import static com.yor42.projectazure.libs.defined.MODID;
 
 public final class registerSounds {
 
+    public static final SoundEvent CANON_FIRE_MEDIUM = registerSoundEvent("gun_fire_medium");
+
     public static final SoundEvent DISC_FRIDAY_NIGHT = registerSoundEvent("disc_fridaynight");
     public static final SoundEvent DISC_BRAINPOWER = registerSoundEvent("disc_brainpower");
 
@@ -25,5 +27,6 @@ public final class registerSounds {
         registry.register(DISC_FRIDAY_NIGHT);
         registry.register(DISC_BRAINPOWER);
         registry.register(WEAPON_BONK);
+        registry.register(CANON_FIRE_MEDIUM);
     }
 }

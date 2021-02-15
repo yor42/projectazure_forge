@@ -7,6 +7,7 @@ public interface IShipRangedAttack {
 
     void AttackUsingCannon(LivingEntity target, float distanceFactor);
     boolean canUseAmmo(enums.AmmoCategory types);
+    boolean isCanonReady();
     //void AttackUsingTorpedo(LivingEntity target, float distanceFactor);
 
 }

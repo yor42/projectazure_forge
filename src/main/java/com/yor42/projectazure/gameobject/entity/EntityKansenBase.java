@@ -9,6 +9,7 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -584,6 +585,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(4, new KansenRangedAttackGoal(this, 1.0F, 10, 10F));
         this.goalSelector.addGoal(5, new KansenMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
@@ -683,6 +685,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return findAmmo(types) != ItemStack.EMPTY;
     }
 
+    public boolean isCanonReady(){
+        return canUseCannon(this.getRigging());
+    }
+
     public void useAmmo(enums.AmmoCategory type){
         this.findAmmo(type).shrink(1);
     }
@@ -693,7 +699,8 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     @Override
     public void AttackUsingCannon(LivingEntity target, float distanceFactor){
-        if(this.canUseAmmo(enums.AmmoCategory.GENERIC) && this.canUseRigging() && canUseCannon(this.getRigging())) {
+        boolean shouldFire = this.canUseAmmo(enums.AmmoCategory.GENERIC) && this.canUseRigging() && canUseCannon(this.getRigging());
+        if(shouldFire) {
             ItemStack Ammostack = this.findAmmo(enums.AmmoCategory.GENERIC);
             if (Ammostack.getItem() instanceof ItemAmmo && this.hasRigging()) {
                 double d1 = 4.0D;
@@ -703,7 +710,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 double d4 = target.getPosZ() - (this.getPosZ() + vector3d.z * 4.0D);
 
                 EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, d2, d3, d4, ((ItemAmmo) Ammostack.getItem()).getAmmoProperty());
-
+                this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, 1.0F);
                 shell.setPosition(this.getPosX() + vector3d.x, this.getPosYHeight(0.5D) + 0.5D, shell.getPosZ() + vector3d.z);
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);

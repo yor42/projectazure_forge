@@ -91,14 +91,6 @@ public class enums {
             return (rand.nextFloat()*(1-this.minimum_damage_modifier)+this.minimum_damage_modifier);
         }
 
-        public float getHitchance(){
-            return this.hitChance;
-        }
-
-        public boolean isHit(){
-            return rollBooleanRNG(this.hitChance);
-        }
-
         public boolean ShouldDamageMultipleComponent(){
             return this.shouldDamageMultipleComponant;
         }
@@ -127,6 +119,12 @@ public class enums {
             return minimum_damage_modifier;
         }
 
+    }
+
+    public enum CanonSize{
+        LARGE,
+        MEDIUM,
+        SMALL
     }
 
     public enum DamageType{
