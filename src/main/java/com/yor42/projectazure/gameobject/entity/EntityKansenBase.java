@@ -44,6 +44,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageRiggingorEquipment;
 import static com.yor42.projectazure.libs.utils.MathUtil.*;
 
 public abstract class EntityKansenBase extends TameableEntity implements IAnimatable, IShipRangedAttack {
@@ -587,6 +588,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
         if(!this.hasRigging())
             DamageMultiplier = 1.0F;
+        if(DamageMultiplier <= 1.0F){
+            DamageRiggingorEquipment(amount, this.getRigging());
+            this.playSound(SoundEvents.ENTITY_IRON_GOLEM_HURT, 1.0F, 1.0f);
+        }
         return super.attackEntityFrom(source, amount*DamageMultiplier);
     }
 

@@ -22,8 +22,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentDamage;
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 
 public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable {
 
@@ -50,7 +49,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack,worldIn,tooltip,flagIn);
-        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()));
+        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331)).setItalic(true)));
     }
 

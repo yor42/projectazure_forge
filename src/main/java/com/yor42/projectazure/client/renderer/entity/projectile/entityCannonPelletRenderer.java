@@ -13,7 +13,7 @@ import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 
-import static com.yor42.projectazure.libs.utils.MinecraftUtils.ModResourceLocation;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class entityCannonPelletRenderer extends EntityRenderer<EntityCannonPelllet> {
 

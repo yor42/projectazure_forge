@@ -1,11 +1,8 @@
 package com.yor42.projectazure.client.model.entity;
 
-import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.libs.defined;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -15,7 +12,7 @@ import javax.annotation.Nullable;
 
 import java.util.Random;
 
-import static com.yor42.projectazure.libs.utils.MinecraftUtils.*;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.*;
 
 public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
 

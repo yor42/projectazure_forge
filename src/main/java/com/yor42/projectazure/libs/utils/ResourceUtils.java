@@ -11,7 +11,7 @@ import net.minecraftforge.client.settings.KeyModifier;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.CallbackI;
 
-public class MinecraftUtils {
+public class ResourceUtils {
 
     public static ResourceLocation ModResourceLocation(String Location){
         return new ResourceLocation(defined.MODID, Location);

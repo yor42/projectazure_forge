@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.Color;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.LinkedHashSet;
@@ -132,6 +133,23 @@ public class ItemStackUtils {
             ItemEquipmentBase equipmentItem = (ItemEquipmentBase)(equipment.getItem());
             tags.putInt("delay", equipmentItem.getFiredelay());
         }
+    }
+
+    public static Color getHPColor(ItemStack stack){
+        float HP_Percent = 0;
+        String ColorHex = "69b82d";
+        if(stack.getItem() instanceof ItemDestroyable){
+            HP_Percent = 1.0F-((float)getCurrentDamage(stack)/ ((ItemDestroyable) stack.getItem()).getMaxHP());
+        }
+
+        if(HP_Percent<=0.1){
+            ColorHex = "e71f19";
+        }
+        else if(HP_Percent <= 0.4){
+            ColorHex = "fff209";
+        }
+
+        return Color.fromHex("#"+ColorHex);
     }
 
 }

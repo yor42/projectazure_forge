@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -22,6 +23,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
 public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnimatable {
 
@@ -71,7 +73,7 @@ public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnim
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()));
+        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
         tooltip.add(new TranslationTextComponent("item.tooltip.firerate").appendString(": ").append(new StringTextComponent(String.format("%.2f",((float)1/this.firedelay)*20)+"R/s")));
     }
 
