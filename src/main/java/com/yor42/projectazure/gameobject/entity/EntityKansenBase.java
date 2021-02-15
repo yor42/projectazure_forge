@@ -549,16 +549,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.patAnimationTime !=0;
     }
 
-    /*
-    public boolean attackEntityCannon(DamageSources sources, float amount, enums.AmmoTypes type){
-        if(this.hasRigging()){
-            DamageRiggingorEquipment(amount, this.getRigging());
-
-            DamageComponent(amount, this.getRigging(), type == enums.AmmoTypes.HE);
-        }
-    }
-
-     */
 
     public boolean hasRigging(){
         return this.getRigging().getItem() instanceof ItemRiggingBase;
@@ -578,18 +568,10 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
 
-        float DamageMultiplier = getRiggingedDamageModifier(); //source == DamageSource.FALL? 1.0F: source == DamageSource.GENERIC? rollBooleanRNG(RangedFloatRandom(0.05F, 0.1F))? 1.0F : getRiggingedDamageModifier();
-
-        if(source == DamageSource.FALL)
-            DamageMultiplier = 1.0F;
+        float DamageMultiplier = 1.0F;
         float ignoreArmorChance = RangedFloatRandom(0.05F, 0.1F);
-        if(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance)){
-            DamageMultiplier = 1.0F;
-        }
-        if(!this.hasRigging())
-            DamageMultiplier = 1.0F;
-        if(DamageMultiplier <= 1.0F){
-            DamageRiggingorEquipment(amount, this.getRigging());
+        if((this.hasRigging()&&source!=DamageSource.FALL)||!(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance))){
+            DamageMultiplier = getRiggingedDamageModifier();
             this.playSound(SoundEvents.ENTITY_IRON_GOLEM_HURT, 1.0F, 1.0f);
         }
         return super.attackEntityFrom(source, amount*DamageMultiplier);
