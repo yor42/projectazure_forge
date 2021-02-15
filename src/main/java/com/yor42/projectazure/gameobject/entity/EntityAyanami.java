@@ -76,7 +76,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
             if(this.Sailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_hand", true));
             }
             else if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.run", true));

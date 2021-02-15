@@ -57,6 +57,5 @@
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entitygangwon": "ROKS Gangwon",
 
-  "death.attack.bonk": "%1$s was sent to horny jail by %2$s",
-  "death.attack.bonk.item": "%1$s was sent to horny jail by %2$s using %3$s"
+  "death.attack.bonk": "%1$s was sent to horny jail"
 }

@@ -471,7 +471,8 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     public boolean Sailing(){
         float f = this.getEyeHeight() - 1F;
-        return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
+        boolean flag = this.isInWater() && this.Hasrigging();
+        return flag;
         //return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
     }
 
@@ -572,6 +573,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         float ignoreArmorChance = RangedFloatRandom(0.05F, 0.1F);
         if((this.hasRigging()&&source!=DamageSource.FALL)||!(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance))){
             DamageMultiplier = getRiggingedDamageModifier();
+            DamageRiggingorEquipment(amount, this.getRigging());
             this.playSound(SoundEvents.ENTITY_IRON_GOLEM_HURT, 1.0F, 1.0f);
         }
         return super.attackEntityFrom(source, amount*DamageMultiplier);
