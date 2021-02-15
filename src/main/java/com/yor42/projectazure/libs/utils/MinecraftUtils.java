@@ -13,8 +13,8 @@ import org.lwjgl.system.CallbackI;
 
 public class MinecraftUtils {
 
-    public static ResourceLocation ModResourceLocation(String ID){
-        return new ResourceLocation(defined.MODID, ID);
+    public static ResourceLocation ModResourceLocation(String Location){
+        return new ResourceLocation(defined.MODID, Location);
     }
 
     public static ResourceLocation GeoModelEntityLocation(String FileName){

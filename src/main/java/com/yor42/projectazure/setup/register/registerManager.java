@@ -4,7 +4,7 @@ import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainerDDDefault;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.EntityGangwon;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonShell;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -41,7 +41,7 @@ public class registerManager {
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYGANGWON);
 
     //projectile
-    public static final EntityType<EntityCannonShell> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonShell>create(EntityCannonShell::new, EntityClassification.CREATURE).size(1F, 1.5F).build(new ResourceLocation(defined.MODID, "projectilecannonshell").toString());
+    public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.CREATURE).size(1F, 1.5F).build(new ResourceLocation(defined.MODID, "projectilecannonshell").toString());
 
 
     public static void register() {

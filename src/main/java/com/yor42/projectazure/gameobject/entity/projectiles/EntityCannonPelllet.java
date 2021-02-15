@@ -29,30 +29,30 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.yor42.projectazure.gameobject.DamageSources.DAMAGE_GUN;
 
-public class EntityCannonShell extends DamagingProjectileEntity {
+public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     AmmoProperties properties;
     BlockPos originPos;
 
-    public EntityCannonShell(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn, AmmoProperties ammotype){
+    public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn, AmmoProperties ammotype){
         super(entityType,worldIn);
         this.properties = ammotype;
     }
 
-    public EntityCannonShell(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
+    public EntityCannonPelllet(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
         super(registerManager.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
         this.originPos = new BlockPos(shooter.getPosX(), shooter.getPosY(), shooter.getPosZ());
     }
 
     @OnlyIn(Dist.CLIENT)
-    public EntityCannonShell(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ, AmmoProperties properties) {
+    public EntityCannonPelllet(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ, AmmoProperties properties) {
         super(registerManager.PROJECTILECANNONSHELL, x, y, z, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
         this.originPos = new BlockPos(x,y,z);
     }
 
-    public EntityCannonShell(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
+    public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
         super(entityType,worldIn);
     }
 
@@ -74,6 +74,10 @@ public class EntityCannonShell extends DamagingProjectileEntity {
     @Override
     protected void registerData() {
 
+    }
+
+    public AmmoProperties getProperties() {
+        return this.properties;
     }
 
     @Override
