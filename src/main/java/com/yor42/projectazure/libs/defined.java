@@ -13,6 +13,9 @@ public class defined {
     public static final int STARTER_VICHYA = 5;
     public static final int STARTER_SARDEGNA = 6;
 
+    //ParticleID
+    //Yeah I really Don't want to do this but MC doesn't allow me to.
+    public static final int PARTICLE_CANNON_FIRE_ID = 0;
 
 
 }

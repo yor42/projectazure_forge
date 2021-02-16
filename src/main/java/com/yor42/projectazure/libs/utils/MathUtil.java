@@ -1,11 +1,19 @@
 package com.yor42.projectazure.libs.utils;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector4f;
 import software.bernie.shadowed.fasterxml.jackson.databind.ser.Serializers;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.Random;
 
 public class MathUtil {
     public static Random rand = new Random();
+
+    public static Random getRand() {
+        return rand;
+    }
 
     //Oh yeah its Big brain time
     public static float DegreeToRadian(float degree){
@@ -74,6 +82,25 @@ public class MathUtil {
         int you = 2;
         int me = 2;
         return you + me <3;
+    }
+
+    public static Vector4f getNormalizedLookVector(LivingEntity entity1, LivingEntity entity2){
+        if(entity1 != null && entity2 != null){
+            double x = entity1.getPosX() - entity2.getPosX();
+            double y = entity1.getPosY() - entity2.getPosY();
+            double z = entity1.getPosY() - entity2.getPosY();
+            double dist = MathHelper.sqrt(x * x + y * y + z * z);
+
+            if (dist > 1.0E-4D)
+            {
+                x = x / dist;
+                y = y / dist;
+                z = z / dist;
+
+                return new Vector4f(((float) x), ((float)y), ((float)z), ((float)dist));
+            }
+        }
+        return new Vector4f(0,0,0,0);
     }
 
 }

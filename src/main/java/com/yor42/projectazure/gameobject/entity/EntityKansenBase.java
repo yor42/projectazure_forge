@@ -6,16 +6,20 @@ import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
+import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -31,10 +35,12 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -497,7 +503,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 }
             }
             else{
-                if(player.getHeldItemMainhand() == ItemStack.EMPTY) {
+                if(player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player)<4.0F) {
                     this.beingpatted();
                 }
                 else if(player.getHeldItemMainhand() != ItemStack.EMPTY) {
@@ -585,16 +591,17 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(4, new KansenRangedAttackGoal(this, 1.0F, 10, 10F));
+        this.goalSelector.addGoal(4, new KansenRangedAttackGoal(this, 1.0F, 10,20, 10F));
         this.goalSelector.addGoal(5, new KansenMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new KansenOpenDoorGoal(this, true));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(12, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(13, new OwnerHurtTargetGoal(this));
     }
 
     @Override
@@ -714,6 +721,9 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 shell.setPosition(this.getPosX() + vector3d.x, this.getPosYHeight(0.5D) + 0.5D, shell.getPosZ() + vector3d.z);
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);
+                Vector4f LookVec = getNormalizedLookVector(this, target);
+                Main.NETWORK.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getPosX(), this.getPosY(), this.getPosZ(), 50, this.getEntityWorld().getDimensionKey())), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, LookVec.getX(), LookVec.getY(), LookVec.getZ()));
+
                 ItemStack FiringCannon = getPreparedCannon(this.getRigging());
                 setEquipmentDelay(FiringCannon);
             }

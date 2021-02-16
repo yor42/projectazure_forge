@@ -37,11 +37,11 @@ public class registerManager {
     public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(1F, 1.5F).build(new ResourceLocation(defined.MODID, "entityayanami").toString());
     public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> ENTITYAYANAMI);
 
-    public static final EntityType<EntityGangwon> ENTITYGANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1F).build(new ResourceLocation(defined.MODID, "entitygangwon").toString());
+    public static final EntityType<EntityGangwon> ENTITYGANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.5F).build(new ResourceLocation(defined.MODID, "entitygangwon").toString());
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYGANGWON);
 
     //projectile
-    public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.CREATURE).size(1F, 1.5F).build(new ResourceLocation(defined.MODID, "projectilecannonshell").toString());
+    public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.CREATURE).size(0.5F, 0.5F).build(new ResourceLocation(defined.MODID, "projectilecannonshell").toString());
     public static final RegistryObject<EntityType<EntityCannonPelllet>> CANNONSHELL = ENTITIES.register("entitycannonshell", () -> PROJECTILECANNONSHELL);
 
     public static void register() {

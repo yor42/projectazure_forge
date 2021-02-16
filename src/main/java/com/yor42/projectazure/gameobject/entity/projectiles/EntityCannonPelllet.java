@@ -63,7 +63,7 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     @Override
     protected boolean isFireballFiery() {
-        return false;
+        return true;
     }
 
     @Override
@@ -73,7 +73,6 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     @Override
     protected void registerData() {
-
     }
 
     public AmmoProperties getProperties() {
@@ -82,23 +81,28 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     @Override
     protected void onImpact(RayTraceResult result) {
-        super.onImpact(result);
-        if(!this.world.isRemote()){
-            if(this.properties.ShouldDamageMultipleComponent()){
-                boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.func_234616_v_());
-                this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float)1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+        if(this.properties != null) {
+            super.onImpact(result);
+            if (!this.world.isRemote()) {
+                if (this.properties.ShouldDamageMultipleComponent()) {
+                    boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.func_234616_v_());
+                    this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float) 1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+                }
             }
         }
+        this.remove();
     }
 
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity target = result.getEntity();
         double DistanceMultiplier = Math.min(20/getDistanceSq(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
-        if(target instanceof EntityKansenBase){
-            ((EntityKansenBase) target).attackEntityFromCannon(DAMAGE_GUN, this.properties, DistanceMultiplier);
+        if(this.properties != null) {
+            if (target instanceof EntityKansenBase) {
+                ((EntityKansenBase) target).attackEntityFromCannon(DAMAGE_GUN, this.properties, DistanceMultiplier);
+            } else target.attackEntityFrom(DAMAGE_GUN, (float) (this.properties.getMaxDamage() * 1.2));
         }
-        else target.attackEntityFrom(DAMAGE_GUN, (float) (this.properties.getMaxDamage()*1.2));
+        this.remove();
     }
 
     @Override
