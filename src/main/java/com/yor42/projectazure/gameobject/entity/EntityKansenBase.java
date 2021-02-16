@@ -722,7 +722,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);
                 Vector4f LookVec = getNormalizedLookVector(this, target);
-                Main.NETWORK.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getPosX(), this.getPosY(), this.getPosZ(), 50, this.getEntityWorld().getDimensionKey())), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, LookVec.getX(), LookVec.getY(), LookVec.getZ()));
+                Main.NETWORK.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getPosX(), this.getPosY(), this.getPosZ(), 50, this.getEntityWorld().getDimensionKey())), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, vector3d.x, vector3d.y, vector3d.z));
 
                 ItemStack FiringCannon = getPreparedCannon(this.getRigging());
                 setEquipmentDelay(FiringCannon);

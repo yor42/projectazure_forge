@@ -68,7 +68,7 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     @Override
     public boolean isBurning() {
-        return false;
+        return true;
     }
 
     @Override
