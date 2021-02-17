@@ -1,6 +1,6 @@
 package com.yor42.projectazure.client.renderer.equipment;
 
-import com.yor42.projectazure.client.model.ModelMaingun127mm;
+import com.yor42.projectazure.client.model.equipments.ModelMaingun127mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127mm;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 

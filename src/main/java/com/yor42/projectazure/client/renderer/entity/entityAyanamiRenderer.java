@@ -2,7 +2,7 @@ package com.yor42.projectazure.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.client.model.entity.ayanamiModel;
+import com.yor42.projectazure.client.model.entity.kansen.ayanamiModel;
 import com.yor42.projectazure.client.renderer.layer.KansenRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;

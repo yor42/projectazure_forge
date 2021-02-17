@@ -1,9 +1,13 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.DamageSources;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
+import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
+import com.yor42.projectazure.network.packets.SyncProjectilePacket;
+import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.block.AbstractFireBlock;
@@ -26,6 +30,8 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import static com.yor42.projectazure.gameobject.DamageSources.DAMAGE_GUN;
 
@@ -63,12 +69,12 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     @Override
     protected boolean isFireballFiery() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isBurning() {
-        return true;
+        return false;
     }
 
     @Override
@@ -107,9 +113,7 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     @Override
     public IPacket<?> createSpawnPacket() {
-        Entity entity = this.func_234616_v_();
-        int i = entity == null ? 0 : entity.getEntityId();
-        return new SSpawnObjectPacket(this.getEntityId(), this.getUniqueID(), this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationPitch, this.rotationYaw, this.getType(), i, new Vector3d(this.accelerationX, this.accelerationY, this.accelerationZ));
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override

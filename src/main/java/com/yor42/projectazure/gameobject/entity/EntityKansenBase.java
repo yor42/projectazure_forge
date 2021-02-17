@@ -717,7 +717,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 double d4 = target.getPosZ() - (this.getPosZ() + vector3d.z * 4.0D);
 
                 EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, d2, d3, d4, ((ItemAmmo) Ammostack.getItem()).getAmmoProperty());
-                this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, 1.0F);
+                this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                 shell.setPosition(this.getPosX() + vector3d.x, this.getPosYHeight(0.5D) + 0.5D, shell.getPosZ() + vector3d.z);
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);

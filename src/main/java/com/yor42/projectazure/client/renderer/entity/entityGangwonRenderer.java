@@ -2,7 +2,7 @@ package com.yor42.projectazure.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.client.model.entity.gangwonModel;
+import com.yor42.projectazure.client.model.entity.kansen.gangwonModel;
 import com.yor42.projectazure.client.renderer.layer.GangwonRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;

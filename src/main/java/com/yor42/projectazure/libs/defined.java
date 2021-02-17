@@ -18,4 +18,8 @@ public class defined {
     public static final int PARTICLE_CANNON_FIRE_ID = 0;
 
 
+    //ProjectileID
+    //Why i have to sync everything
+    public static final int PROJECTILETYPE_CANNON = 0;
+
 }

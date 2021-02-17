@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.items.equipment;
 
-import com.yor42.projectazure.client.model.ModelMaingun127mm;
+import com.yor42.projectazure.client.model.equipments.ModelMaingun127mm;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;

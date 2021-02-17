@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingCont
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -41,8 +42,11 @@ public class registerManager {
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYGANGWON);
 
     //projectile
-    public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.CREATURE).size(0.5F, 0.5F).build(new ResourceLocation(defined.MODID, "projectilecannonshell").toString());
+    public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.MISC).size(0.5F, 0.5F).build(new ResourceLocation(defined.MODID, "projectilecannonshell").toString());
     public static final RegistryObject<EntityType<EntityCannonPelllet>> CANNONSHELL = ENTITIES.register("entitycannonshell", () -> PROJECTILECANNONSHELL);
+
+    public static final EntityType<EntityProjectileTorpedo> PROJECTILETORPEDO = EntityType.Builder.<EntityProjectileTorpedo>create(EntityProjectileTorpedo::new, EntityClassification.MISC).size(0.5F, 0.5F).build(new ResourceLocation(defined.MODID, "projectiletorpedo").toString());
+    public static final RegistryObject<EntityType<EntityProjectileTorpedo>> TORPEDO = ENTITIES.register("entitytorpedo", () -> PROJECTILETORPEDO);
 
     public static void register() {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();

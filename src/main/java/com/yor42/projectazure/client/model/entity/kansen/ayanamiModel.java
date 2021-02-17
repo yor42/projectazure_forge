@@ -1,4 +1,4 @@
-package com.yor42.projectazure.client.model.entity;
+package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.libs.defined;
