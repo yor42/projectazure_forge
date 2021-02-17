@@ -16,6 +16,22 @@
 					}
 				}
 			}
+		},
+		"animation.torpedo.screwrotation": {
+			"loop": true,
+			"animation_length": 0.36,
+			"bones": {
+				"propeller": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [0, 0, -360]
+						}
+					}
+				}
+			}
 		}
 	}
 }

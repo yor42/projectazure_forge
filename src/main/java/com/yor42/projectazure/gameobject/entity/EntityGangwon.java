@@ -26,7 +26,7 @@ public class EntityGangwon extends EntityKansenDestroyer{
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+        animationData.addAnimationController(new AnimationController(this, "controller_gangwon", 5, this::predicate));
     }
 
     @Override

@@ -26,6 +26,8 @@ public class ResourceUtils {
             return ModResourceLocation("geo/entity/"+FileName);
     }
 
+
+
     public static ResourceLocation TextureEntityLocation(String Filename){
         if(!Filename.contains(".png"))
             return ModResourceLocation("textures/entity/"+Filename+".png");
@@ -34,7 +36,6 @@ public class ResourceUtils {
     }
 
     public static ResourceLocation AnimationEntityKansenLocation(String FileName){
-        //lazy-ass
         if (!FileName.contains(".animation.json"))
             return ModResourceLocation("animations/entity/kansen/"+FileName+".animation.json");
         else if (!FileName.contains(".json"))
@@ -43,6 +44,27 @@ public class ResourceUtils {
             return ModResourceLocation("animations/entity/kansen/"+FileName);
     }
 
+    public static ResourceLocation TextureLocation(String Filename) {
+        return ModResourceLocation("textures/"+Filename+".png");
+    }
+
+    public static ResourceLocation ModelLocation(String Filename) {
+        if (!Filename.contains(".geo.json"))
+            return ModResourceLocation("geo/"+Filename+".geo.json");
+        else if (!Filename.contains(".json"))
+            return ModResourceLocation("geo/"+Filename+".json");
+        else
+        return ModResourceLocation("geo/"+Filename);
+    }
+
+    public static ResourceLocation AnimationLocation(String Filename) {
+        if (!Filename.contains(".animation.json"))
+            return ModResourceLocation("animations/"+Filename+".animation.json");
+        else if (!Filename.contains(".json"))
+            return ModResourceLocation("animations/"+Filename+".json");
+        else
+            return ModResourceLocation("animations/"+Filename);
+    }
 
     //From Mekanism
     public boolean isKeyPressed(KeyBinding key){

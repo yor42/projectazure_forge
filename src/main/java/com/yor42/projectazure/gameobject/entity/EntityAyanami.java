@@ -29,7 +29,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+        animationData.addAnimationController(new AnimationController(this, "controller_ayanami", 5, this::predicate));
     }
 
     @Override
