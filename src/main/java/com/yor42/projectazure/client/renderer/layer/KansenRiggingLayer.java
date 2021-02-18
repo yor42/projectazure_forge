@@ -125,7 +125,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
                             GeoModel EquipmentModel = ((ItemEquipmentBase) Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModelLocation(null));
                             EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead() + entitylivingbaseIn.prevRotationYaw, 45F, -45F, false, true)));
 
-                            int AmmoCount = getRemainingAmmo(Equipments.getStackInSlot(3));
+                            int AmmoCount = getRemainingAmmo(Equipments.getStackInSlot(4));
                             EquipmentModel.getBone("torpedo4").get().setHidden(AmmoCount<4);
                             EquipmentModel.getBone("torpedo3").get().setHidden(AmmoCount<3);
                             EquipmentModel.getBone("torpedo2").get().setHidden(AmmoCount<2);
@@ -145,7 +145,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
                             GeoModel EquipmentModel = ((ItemEquipmentBase) Equipments.getStackInSlot(5).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(5).getItem()).getEquipmentModel().getModelLocation(null));
                             EquipmentModel.getBone("MountX").get().setRotationY(0.75F + MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
 
-                            int AmmoCount = getRemainingAmmo(Equipments.getStackInSlot(3));
+                            int AmmoCount = getRemainingAmmo(Equipments.getStackInSlot(5));
                             EquipmentModel.getBone("torpedo4").get().setHidden(AmmoCount<4);
                             EquipmentModel.getBone("torpedo3").get().setHidden(AmmoCount<3);
                             EquipmentModel.getBone("torpedo2").get().setHidden(AmmoCount<2);
