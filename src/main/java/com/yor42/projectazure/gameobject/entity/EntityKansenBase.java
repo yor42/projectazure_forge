@@ -588,7 +588,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(4, new KansenRangedAttackGoal(this, 1.0F, 10,20, 10F, 16F));
+        this.goalSelector.addGoal(4, new KansenRangedAttackGoal(this, 1.0F, 10,20, 100F, 160F));
         this.goalSelector.addGoal(5, new KansenMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
@@ -704,13 +704,13 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             ItemStack Ammostack = this.findAmmo(enums.AmmoCategory.GENERIC);
             if (Ammostack.getItem() instanceof ItemAmmo) {
                 Vector3d vector3d = this.getLook(1.0F);
-                double d2 = target.getPosX() - (this.getPosX() + vector3d.x * 4.0D);
-                double d3 = target.getPosYHeight(0.5D) - (0.5D + this.getPosYHeight(0.5D));
-                double d4 = target.getPosZ() - (this.getPosZ() + vector3d.z * 4.0D);
+                double d2 = target.getPosX() - this.getPosX();
+                double d3 = target.getPosY() - this.getPosY()+0.5F;
+                double d4 = target.getPosZ() - this.getPosZ();
 
                 EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, d2, d3, d4, ((ItemAmmo) Ammostack.getItem()).getAmmoProperty());
                 this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                shell.setPosition(this.getPosX() + vector3d.x, this.getPosYHeight(0.5D) + 0.5D, shell.getPosZ() + vector3d.z);
+                shell.setPosition(this.getPosX() + vector3d.x, this.getPosY()+0.5F, shell.getPosZ() + vector3d.z);
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);
                 Main.NETWORK.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getPosX(), this.getPosY(), this.getPosZ(), 50, this.getEntityWorld().getDimensionKey())), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, vector3d.x, vector3d.y, vector3d.z));

@@ -79,7 +79,7 @@ public class KansenRangedAttackGoal extends Goal {
             this.seeTime = 0;
         }
 
-        if (!(distance > (double)this.maxCannonAttackDistance) && this.seeTime >= 5) {
+        if (distance <= (double)this.maxCannonAttackDistance && this.seeTime >= 5) {
             this.entityHost.getNavigator().clearPath();
         } else {
             this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
@@ -106,7 +106,7 @@ public class KansenRangedAttackGoal extends Goal {
             this.torpedoAttackDelay = (int) (300+(getRand().nextFloat()*140));
         }
         else if(this.torpedoAttackDelay <0){
-            this.torpedoAttackDelay = (int) (60+(getRand().nextFloat()*140));
+            this.torpedoAttackDelay = (int) (20+(getRand().nextFloat()*10));
         }
 
     }
