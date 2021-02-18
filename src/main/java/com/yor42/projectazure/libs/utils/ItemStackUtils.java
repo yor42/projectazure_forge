@@ -71,7 +71,7 @@ public class ItemStackUtils {
             if(shouldDamageMultiple)
                 DamageRiggingCount = rollDamagingRiggingCount(EquipmentCount);
 
-            int MainDamageIndex = generateRandomInt(EquipmentCount);
+            int MainDamageIndex = generateRandomInt(EquipmentCount-1);
 
             ItemStack MainStack = riggingItem.getEquipments(riggingStack).getStackInSlot(MainDamageIndex);
             if (MainStack.getItem() instanceof ItemEquipmentBase) {

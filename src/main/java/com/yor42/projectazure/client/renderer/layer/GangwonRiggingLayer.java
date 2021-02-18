@@ -61,12 +61,26 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
             render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
 
-            if(entitylivingbaseIn.getRigging().getTag() != null) {
+            if(entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingBase) {
                 ItemStackHandler Equipments = new ItemStackHandler(6);
+                Equipments = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getEquipments(entitylivingbaseIn.getRigging());
+
+                //TODO: Clean this shit up with loop
+                /*
+                for(int i = 0; i<Equipments.getSlots(); i++){
+                    matrixStackIn.push();
+                    RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(i).getItem()).getTexture());
+                    matrixStackIn.translate((21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY()+riggingoffset)/16, -(4+hostbone.getPositionZ())/16);
+                    matrixStackIn.rotate(((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getEquipmentRotation()[i]);
+
+                    GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(i).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(i).getItem()).getEquipmentModel().getModelLocation(null));
+                }
+                 */
+
+
 
                 if (entitylivingbaseIn.getRigging().getItem() == registerItems.DD_DEFAULT_RIGGING.get()){
 
-                    Equipments = new RiggingDefaultDDEquipmentCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
                     //gun Renderer
                     if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
 

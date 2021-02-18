@@ -31,6 +31,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector4f;
@@ -659,6 +660,13 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
         if (this.Sailing()) {
             this.kansenFloat();
+            Vector3d vector3d = this.getMotion();
+            double d0 = this.getPosX() + vector3d.x;
+            double d1 = this.getPosY() + vector3d.y;
+            double d2 = this.getPosZ() + vector3d.z;
+            if(!(vector3d.x == 0 || vector3d.z == 0)) {
+                this.world.addParticle(ParticleTypes.CLOUD, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+            }
         }
 
         if(this.getRigging().getItem() instanceof ItemRiggingBase){
@@ -666,6 +674,11 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
 
         super.livingTick();
+    }
+
+    @Override
+    public boolean hasNoGravity() {
+        return this.isInWater();
     }
 
     public ItemStack findAmmo(enums.AmmoCategory category){
@@ -745,7 +758,12 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     private void kansenFloat() {
         Vector3d vec3d = this.getMotion();
-        this.setVelocity(vec3d.x * 0.9900000095367432D, vec3d.y + (double)(vec3d.y < 0.05999999865889549D ? 5.0E-4F : 0.0F), vec3d.z * 0.9900000095367432D);
+        float f = this.getEyeHeight() - 1.25F;
+        if(this.func_233571_b_(FluidTags.WATER)>f)
+            this.setMotion(vec3d.x * (double)0.99F, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-4F : 0.0F), vec3d.z * (double)0.99F);
+        else if (vec3d.y>0){
+            this.setVelocity(vec3d.x, vec3d.y - 0.10, vec3d.z);
+        }
     }
 
     @Override

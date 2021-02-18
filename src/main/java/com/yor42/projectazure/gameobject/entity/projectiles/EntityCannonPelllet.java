@@ -118,9 +118,13 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     @Override
     public void tick() {
-        if(this.ticksExisted == 600){
+        if(this.ticksExisted == 600 || this.isInWater()){
             this.remove();
         }
+        Vector3d vector3d = this.getMotion();
+        //disables constant acceleration;
+        //this.setMotion(vector3d.add(-this.accelerationX, -this.accelerationY, -this.accelerationZ).scale(this.getMotionFactor()));
+
         super.tick();
     }
 }

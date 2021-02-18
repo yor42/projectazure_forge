@@ -7,6 +7,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.text.*;
 import net.minecraft.util.text.Color;
 import net.minecraft.world.World;
@@ -29,6 +30,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public AnimationFactory factory = new AnimationFactory(this);
 
     protected int MaxHP;
+
+    protected Quaternion[] EquipmentRotation;
 
     protected enums.shipClass validclass;
 
@@ -53,6 +56,9 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331)).setItalic(true)));
     }
 
+    public Quaternion[] getEquipmentRotation() {
+        return this.EquipmentRotation;
+    }
 
     public enums.shipClass getValidclass() {
         return validclass;

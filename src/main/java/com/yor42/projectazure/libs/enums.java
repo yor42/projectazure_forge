@@ -121,6 +121,12 @@ public class enums {
 
     }
 
+    public enum MOTIONTOTRACK{
+        YAW,
+        PITCH,
+        NONE
+    }
+
     public enum CanonSize{
         LARGE,
         MEDIUM,
