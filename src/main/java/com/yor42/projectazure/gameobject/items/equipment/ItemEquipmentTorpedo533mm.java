@@ -10,7 +10,8 @@ public class ItemEquipmentTorpedo533mm extends ItemEquipmentTorpedo implements I
     public ItemEquipmentTorpedo533mm(Properties properties, int maxHP) {
         super(properties, maxHP);
         this.isreloadable = false;
-        this.firedelay = 27;
+        this.MaxAmmoCap = 4;
+        this.firedelay = 639;
     }
 
     @Override

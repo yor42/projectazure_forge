@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
+import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.IShipRangedAttack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -7,6 +8,9 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.EnumSet;
+
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasGunOrTorpedo;
+import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public class KansenRangedAttackGoal extends Goal {
 
@@ -16,12 +20,14 @@ public class KansenRangedAttackGoal extends Goal {
     private final double entityMoveSpeed;
     private int seeTime;
     private int AttackIntervalMax;
-    private int AttackDelay;
-    private final float attackRadius;
-    private final float maxAttackDistance;
+    private int CannonAttackDelay;
+    private final float CannonattackRadius, TorpedoAttackRadius;
+    private final float maxCannonAttackDistance;
+    private final float maxTorpedoAttackDistance;
     private int minAttackInterval;
+    int torpedoAttackDelay;
 
-    public KansenRangedAttackGoal(IShipRangedAttack entity, double movespeed, int MinAttackInterval , int MaxAttackInterval, float maxAttackDistanceIn){
+    public KansenRangedAttackGoal(IShipRangedAttack entity, double movespeed, int MinAttackInterval , int MaxAttackInterval, float maxCannonAttackDistanceIn, float MaxTorpedoAttackDistance){
         if (!(entity instanceof LivingEntity)) {
             throw new IllegalArgumentException("KansenRangedAttackGoal used here doesn't extend living entity. well what do you want me to do, dead bush shooting cannon and torpedo?");
         }
@@ -29,21 +35,27 @@ public class KansenRangedAttackGoal extends Goal {
         this.host = entity;
         this.entityHost = (MobEntity) entity;
         this.entityMoveSpeed = movespeed;
-        this.attackRadius = maxAttackDistanceIn;
-        this.maxAttackDistance = maxAttackDistanceIn*maxAttackDistanceIn;
+        this.maxCannonAttackDistance = maxCannonAttackDistanceIn;
+        this.CannonattackRadius = maxCannonAttackDistanceIn*maxCannonAttackDistanceIn;
         this.AttackIntervalMax = MaxAttackInterval;
         this.minAttackInterval = MinAttackInterval;
-
+        this.maxTorpedoAttackDistance = MaxTorpedoAttackDistance;
+        this.TorpedoAttackRadius = MaxTorpedoAttackDistance*MaxTorpedoAttackDistance;
     }
 
     @Override
     public boolean shouldExecute() {
         LivingEntity target = this.entityHost.getAttackTarget();
-        if(target != null && target.isAlive()){
-            this.attackTarget = target;
-            return true;
+
+        if(this.entityHost instanceof EntityKansenBase) {
+            if (target != null && target.isAlive() && ((EntityKansenBase) this.entityHost).hasRigging()) {
+                if(hasGunOrTorpedo(((EntityKansenBase) this.entityHost).getRigging())) {
+                    this.attackTarget = target;
+                    return true;
+                }
+            }
         }
-        else return false;
+        return false;
     }
 
     public boolean shouldContinueExecuting() {
@@ -53,7 +65,8 @@ public class KansenRangedAttackGoal extends Goal {
     @Override
     public void resetTask() {
         this.attackTarget = null;
-        this.AttackDelay = -1;
+        this.CannonAttackDelay = -1;
+        this.torpedoAttackDelay = -1;
     }
 
     @Override
@@ -66,7 +79,7 @@ public class KansenRangedAttackGoal extends Goal {
             this.seeTime = 0;
         }
 
-        if (!(distance > (double)this.maxAttackDistance) && this.seeTime >= 5) {
+        if (!(distance > (double)this.maxCannonAttackDistance) && this.seeTime >= 5) {
             this.entityHost.getNavigator().clearPath();
         } else {
             this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
@@ -74,15 +87,26 @@ public class KansenRangedAttackGoal extends Goal {
 
         this.entityHost.getLookController().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
 
-        float f = MathHelper.sqrt(distance) / this.attackRadius;
+        float f = MathHelper.sqrt(distance) / this.CannonattackRadius;
 
-        if(--this.AttackDelay == 0 && canSee) {
+        if(--this.CannonAttackDelay == 0 && canSee && distance<=this.maxCannonAttackDistance) {
             float lvt_5_1_ = MathHelper.clamp(f, 0.1F, 1.0F);
             this.host.AttackUsingCannon(this.attackTarget, lvt_5_1_);
-            this.AttackDelay = MathHelper.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
+            this.CannonAttackDelay = MathHelper.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
         }
-        else if(this.AttackDelay <0){
-            this.AttackDelay = MathHelper.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
+        else if(this.CannonAttackDelay <0){
+            this.CannonAttackDelay = MathHelper.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
+        }
+
+        float f2 = MathHelper.sqrt(distance) / this.TorpedoAttackRadius;
+
+        if(--this.torpedoAttackDelay == 0 && canSee && distance<=this.maxTorpedoAttackDistance) {
+            float lvt_5_1_ = MathHelper.clamp(f2, 0.1F, 1.0F);
+            this.host.AttackUsingTorpedo(this.attackTarget, lvt_5_1_);
+            this.torpedoAttackDelay = (int) (300+(getRand().nextFloat()*140));
+        }
+        else if(this.torpedoAttackDelay <0){
+            this.torpedoAttackDelay = (int) (60+(getRand().nextFloat()*140));
         }
 
     }

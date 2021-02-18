@@ -1,5 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.gameobject.DamageSources;
+import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -10,9 +12,13 @@ import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -26,6 +32,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class EntityProjectileTorpedo extends DamagingProjectileEntity implements IAnimatable {
+
+    private float existingtime;
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
@@ -77,8 +85,11 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     @Override
     public void tick() {
         super.tick();
-
-
+        if(this.existingtime >=600){
+            selfDestruct();
+        }
+        else
+            this.existingtime++;
         //1.25 is to compensate valilla slowdown in water.
         float multiplier = this.isInWater()? 1.25F:0.8F;
         this.setMotion(this.getMotion().add(this.accelerationX, this.accelerationY, this.accelerationZ).scale((double)multiplier));
@@ -125,12 +136,33 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
         }
     }
 
-    public boolean getNoClip() {
-        if (!this.world.isRemote) {
-            return this.noClip;
-        }
-        else
-            return false;
+    @Override
+    protected void onImpact(RayTraceResult result) {
+        explode();
+        this.remove();
+    }
+
+    @Override
+    protected void onEntityHit(EntityRayTraceResult result) {
+        Entity entity = result.getEntity();
+        entity.attackEntityFrom(DamageSources.TORPEDO, 10F);
+        explode();
+        super.onEntityHit(result);
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        selfDestruct();
+        return true;
+    }
+
+    private void explode(){
+        this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), 3.5F, Explosion.Mode.BREAK);
+    }
+
+    private void selfDestruct(){
+        this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), 2.0F, Explosion.Mode.BREAK);
+        this.remove();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.defined;
@@ -16,10 +17,8 @@ import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -32,7 +31,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector4f;
@@ -477,7 +475,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     }
 
     public boolean Sailing(){
-        float f = this.getEyeHeight() - 1F;
         boolean flag = this.isInWater() && this.Hasrigging();
         return flag;
         //return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
@@ -591,7 +588,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(4, new KansenRangedAttackGoal(this, 1.0F, 10,20, 10F));
+        this.goalSelector.addGoal(4, new KansenRangedAttackGoal(this, 1.0F, 10,20, 10F, 16F));
         this.goalSelector.addGoal(5, new KansenMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
@@ -696,10 +693,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return canUseCannon(this.getRigging());
     }
 
-    public void useAmmo(enums.AmmoCategory type){
-        this.findAmmo(type).shrink(1);
-    }
-
     public ItemStackHandler getShipStorage() {
         return ShipStorage;
     }
@@ -709,8 +702,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         boolean shouldFire = this.canUseAmmo(enums.AmmoCategory.GENERIC) && this.canUseRigging() && canUseCannon(this.getRigging());
         if(shouldFire) {
             ItemStack Ammostack = this.findAmmo(enums.AmmoCategory.GENERIC);
-            if (Ammostack.getItem() instanceof ItemAmmo && this.hasRigging()) {
-                double d1 = 4.0D;
+            if (Ammostack.getItem() instanceof ItemAmmo) {
                 Vector3d vector3d = this.getLook(1.0F);
                 double d2 = target.getPosX() - (this.getPosX() + vector3d.x * 4.0D);
                 double d3 = target.getPosYHeight(0.5D) - (0.5D + this.getPosYHeight(0.5D));
@@ -721,12 +713,29 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 shell.setPosition(this.getPosX() + vector3d.x, this.getPosYHeight(0.5D) + 0.5D, shell.getPosZ() + vector3d.z);
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);
-                Vector4f LookVec = getNormalizedLookVector(this, target);
                 Main.NETWORK.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getPosX(), this.getPosY(), this.getPosZ(), 50, this.getEntityWorld().getDimensionKey())), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, vector3d.x, vector3d.y, vector3d.z));
 
-                ItemStack FiringCannon = getPreparedCannon(this.getRigging());
+                ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.GUN);
                 setEquipmentDelay(FiringCannon);
             }
+        }
+    }
+
+    @Override
+    public void AttackUsingTorpedo(LivingEntity target, float distanceFactor){
+        boolean shouldFire = this.Sailing() && canUseTorpedo(this.getRigging());
+        if(shouldFire){
+            Vector3d vector3d = this.getLook(1.0F);
+            double d2 = target.getPosX() - (this.getPosX() + vector3d.x * 4.0D);
+            double d3 = target.getPosYHeight(0.5D) - this.getPosY() - 0.5D;
+            double d4 = target.getPosZ() - (this.getPosZ() + vector3d.z * 4.0D);
+
+            EntityProjectileTorpedo torpedo = new EntityProjectileTorpedo(this, d2, d3, d4, this.world);
+            torpedo.setPosition(this.getPosX() + vector3d.x, this.getPosY() - 0.5D, torpedo.getPosZ() + vector3d.z);
+            this.world.addEntity(torpedo);
+            ItemStack FiringTorpedo = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.TORPEDO);
+            useTorpedoAmmo(FiringTorpedo);
+            setEquipmentDelay(FiringTorpedo);
         }
     }
 

@@ -3,6 +3,7 @@ package com.yor42.projectazure.libs.utils;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.ItemStack;
@@ -101,15 +102,22 @@ public class ItemStackUtils {
         }
     }
 
-    public static ItemStack getPreparedCannon(ItemStack rigging){
+    public static ItemStack getPreparedWeapon(ItemStack rigging, enums.SLOTTYPE slottype){
         if(rigging.getItem() instanceof ItemRiggingBase){
             ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
             ItemStackHandler equipments = riggingItem.getEquipments(rigging);
             for(int i = 0; i<equipments.getSlots(); i++){
                 if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
-                    if (((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.GUN) {
+                    if (((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == slottype) {
                         if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0 && !isDestroyed(equipments.getStackInSlot(i))) {
-                            return equipments.getStackInSlot(i);
+                            if(slottype == enums.SLOTTYPE.TORPEDO){
+                                if (!isOutOfAmmo(equipments.getStackInSlot(i))){
+                                    return equipments.getStackInSlot(i);
+                                }
+                            }
+                            else {
+                                return equipments.getStackInSlot(i);
+                            }
                         }
                     }
                 }
@@ -118,11 +126,54 @@ public class ItemStackUtils {
         return ItemStack.EMPTY;
     }
 
-    public static boolean canUseCannon(ItemStack riggingStack){
+    public static boolean hasGunOrTorpedo(ItemStack riggingStack){
         if(riggingStack.getItem() instanceof ItemRiggingBase) {
-            return getPreparedCannon(riggingStack) != ItemStack.EMPTY;
+            ItemStackHandler equipments = ((ItemRiggingBase) riggingStack.getItem()).getEquipments(riggingStack);
+            for(int i = 0; i<equipments.getSlots(); i++){
+                if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase){
+                    if(((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.TORPEDO || ((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.GUN){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean canUseTorpedo(ItemStack riggingStack){
+        if(riggingStack.getItem() instanceof ItemRiggingBase) {
+            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.TORPEDO) != ItemStack.EMPTY;
         }
         else return false;
+    }
+
+    public static boolean canUseCannon(ItemStack riggingStack){
+        if(riggingStack.getItem() instanceof ItemRiggingBase) {
+            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.GUN) != ItemStack.EMPTY;
+        }
+        else return false;
+    }
+
+    public static boolean isOutOfAmmo(ItemStack equipment){
+        CompoundNBT compoundNBT = equipment.getOrCreateTag();
+        if(equipment.getItem() instanceof ItemEquipmentTorpedo){
+            return compoundNBT.getInt("UsedAmmo")>= ((ItemEquipmentTorpedo) equipment.getItem()).getMaxAmmoCap();
+        }
+        return true;
+    }
+
+    public static void useTorpedoAmmo(ItemStack torpedo){
+        CompoundNBT compoundNBT = torpedo.getOrCreateTag();
+        int prevammo =  compoundNBT.getInt("UsedAmmo");
+        compoundNBT.putInt("UsedAmmo", prevammo+1);
+    }
+
+    public static int getRemainingAmmo(ItemStack equipment){
+        CompoundNBT compoundNBT = equipment.getOrCreateTag();
+        if(equipment.getItem() instanceof ItemEquipmentTorpedo){
+            return ((ItemEquipmentTorpedo) equipment.getItem()).getMaxAmmoCap() - compoundNBT.getInt("UsedAmmo");
+        }
+        return 0;
     }
 
     public static int getDelayofEquipment(ItemStack Equipment){
