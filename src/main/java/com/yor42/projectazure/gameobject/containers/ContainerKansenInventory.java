@@ -1,5 +1,7 @@
 package com.yor42.projectazure.gameobject.containers;
 
+import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.containers.slots.SlotRigging;
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -37,17 +39,7 @@ public class ContainerKansenInventory extends Container {
         ItemStackHandler dummyAmmoHandler = new ItemStackHandler(8);
 
         //rigging
-        this.addSlot(new SlotItemHandler(dummyStackHandler, 0, 152, 35){
-            @Override
-            public int getSlotStackLimit() {
-                return 1;
-            }
-
-            @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
-                return stack.getItem() instanceof ItemRiggingBase;
-            }
-        });
+        this.addSlot(new SlotRigging(dummyStackHandler, 0, 152, 35, (EntityKansenBase) Main.PROXY.getSharedMob()));
 
         //mainhand
         this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 0, 152, 89));
@@ -108,17 +100,7 @@ public class ContainerKansenInventory extends Container {
 
 
         //rigging
-        this.addSlot(new SlotItemHandler(this.Stack, 0, 152, 35){
-            @Override
-            public int getSlotStackLimit() {
-                return 1;
-            }
-
-            @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
-                return stack.getItem() instanceof ItemRiggingBase;
-            }
-        });
+        this.addSlot(new SlotRigging(this.Stack, 0, 152, 35, (EntityKansenBase) Main.PROXY.getSharedMob()));
 
         //mainhand
         this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));

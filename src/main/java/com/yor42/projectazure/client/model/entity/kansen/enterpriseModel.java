@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
-import com.yor42.projectazure.gameobject.entity.EntityAyanami;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.gameobject.entity.EntityEnterprise;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -10,38 +9,39 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
-public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
+import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.*;
+
+public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
 
     private int blinkinterval = 0;
-    private Random random = new Random();
 
     @Override
-    public ResourceLocation getModelLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "geo/entity/modelayanami.geo.json");
+    public ResourceLocation getModelLocation(EntityEnterprise entityEnterprise) {
+        return GeoModelEntityLocation("modelenterprise");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "textures/entity/modelayanami.png");
+    public ResourceLocation getTextureLocation(EntityEnterprise entityEnterprise) {
+        return TextureEntityLocation("modelenterprise");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "animations/entity/kansen/ayanami.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntityEnterprise entityEnterprise) {
+        return AnimationEntityKansenLocation("enterprise");
     }
 
     @Override
-    public void setLivingAnimations(EntityAyanami entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
-    {
-
+    public void setLivingAnimations(EntityEnterprise entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
-        IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
+        IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
+        IBone PatFace = this.getAnimationProcessor().getBone("Pat");
 
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         if(!entity.isSailing()){
@@ -51,16 +51,18 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
 
         if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
-            ExcitedFace.setHidden(false);
+            ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
+            PatFace.setHidden(false);
         }
         else {
             if (this.blinkinterval <= 5) {
                 NormalFace.setHidden(true);
                 ExcitedFace.setHidden(true);
                 EyeclosedFace.setHidden(false);
+                PatFace.setHidden(true);
                 if (this.blinkinterval == 0) {
-                    this.blinkinterval = 20 * (random.nextInt(9) + 2);
+                    this.blinkinterval = 20 * (getRand().nextInt(9) + 2);
                 }
                 this.blinkinterval--;
             } else {
@@ -68,6 +70,7 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
                 NormalFace.setHidden(false);
                 ExcitedFace.setHidden(true);
                 EyeclosedFace.setHidden(true);
+                PatFace.setHidden(true);
             }
         }
 

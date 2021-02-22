@@ -22,19 +22,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
     public EntityAyanami(EntityType<? extends EntityAyanami> type, World worldIn) {
         super(type, worldIn);
         this.setTamed(false);
-        this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(4.0F);
-    }
-
-    private final AnimationFactory factory = new AnimationFactory(this);
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller_ayanami", 5, this::predicate));
-    }
-
-    @Override
-    public AnimationFactory getFactory() {
-        return factory;
     }
 
     protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
@@ -74,7 +61,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
-            if(this.Sailing()){
+            if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
             }
             else if(this.isSprinting()){
@@ -94,9 +81,9 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         return MobEntity.func_233666_p_()
                 //Attribute
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 4.0F)
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.0F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0F)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;
     }
 

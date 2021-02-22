@@ -2,6 +2,7 @@ package com.yor42.projectazure;
 
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.entity.entityAyanamiRenderer;
+import com.yor42.projectazure.client.renderer.entity.entityEnterpriseRenderer;
 import com.yor42.projectazure.client.renderer.entity.entityGangwonRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectileTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
@@ -84,6 +85,7 @@ public class Main
         // do something that can only be done on the client
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.AYANAMI.get(), entityAyanamiRenderer::new);
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.GANGWON.get(), entityGangwonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.ENTERPRISE.get(), entityEnterpriseRenderer::new);
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
         ClientRegisterManager.registerScreen();

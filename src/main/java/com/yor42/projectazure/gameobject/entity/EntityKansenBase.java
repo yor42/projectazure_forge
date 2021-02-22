@@ -16,6 +16,9 @@ import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -34,20 +37,26 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.UUID;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageRiggingorEquipment;
@@ -56,6 +65,8 @@ import static com.yor42.projectazure.libs.utils.MathUtil.*;
 public abstract class EntityKansenBase extends TameableEntity implements IAnimatable, IShipRangedAttack {
 
     Random rand = new Random();
+    private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
+    private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",1F, AttributeModifier.Operation.ADDITION);
 
     private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
     private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
@@ -243,23 +254,27 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     protected int level,  patAnimationTime, LimitBreakLv, patTimer;
     protected double affection, exp;
     protected boolean isMeleeing, isOpeningDoor;
-    protected int MaxAmmoCount, awakeningLevel;
+    protected int awakeningLevel;
     protected enums.shipClass shipclass;
+
+    protected final AnimationFactory factory = new AnimationFactory(this);
+
+    @Override
+    public void registerControllers(AnimationData animationData) {
+        animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+    }
+
+    protected abstract <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event);
+
+    @Override
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
 
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
-        this.setLevel(0);
-        this.setExp(0);
-        this.setMaxAmmoCount(350);
-    }
-
-    public int getMaxAmmoCount() {
-        return this.MaxAmmoCount;
-    }
-
-    public void setMaxAmmoCount(int maxAmmoCount) {
-        this.MaxAmmoCount = maxAmmoCount;
+        this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
     }
 
     public void setOathed(boolean bool){
@@ -415,7 +430,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         compound.putInt("level", this.level);
         compound.putInt("limitbreaklv", this.LimitBreakLv);
         compound.putInt("awaken", this.awakeningLevel);
-        compound.putInt("maxammocount", this.getMaxAmmoCount());
     }
 
     public void readAdditional(CompoundNBT compound) {
@@ -431,8 +445,6 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.exp = compound.getFloat("exp");
         this.LimitBreakLv = compound.getInt("limitbreaklv");
         this.awakeningLevel = compound.getInt("awaken");
-        this.setMaxAmmoCount(compound.getInt("maxammocount"));
-
     }
 
     public void setShipClass(enums.shipClass setclass){
@@ -475,7 +487,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         return this.getRigging().getItem() instanceof ItemRiggingBase;
     }
 
-    public boolean Sailing(){
+    public boolean isSailing(){
         boolean flag = this.isInWater() && this.Hasrigging();
         return flag;
         //return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
@@ -602,6 +614,8 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
     }
 
+
+
     @Override
     public void livingTick() {
 
@@ -658,8 +672,9 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             this.navigator.getNodeProcessor().setCanEnterDoors(true);
             this.navigator.getNodeProcessor().setCanOpenDoors(true);
         }
-        if (this.Sailing()) {
+        if (this.isSailing()) {
             this.kansenFloat();
+            this.setSailingSpeedBonus();
             Vector3d vector3d = this.getMotion();
             double d0 = this.getPosX() + vector3d.x;
             double d1 = this.getPosY() + vector3d.y;
@@ -674,6 +689,17 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
 
         super.livingTick();
+    }
+
+    protected void setSailingSpeedBonus(){
+        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
+        if (modifiableattributeinstance.getModifier(SAILING_SPEED_MODIFIER) != null) {
+            modifiableattributeinstance.removeModifier(SAILING_SPEED_MODIFIER);
+        }
+
+        if (this.isSailing()) {
+            modifiableattributeinstance.applyNonPersistentModifier(SAILING_SPEED_BOOST);
+        }
     }
 
     @Override
@@ -728,6 +754,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 Ammostack.shrink(1);
                 Main.NETWORK.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getPosX(), this.getPosY(), this.getPosZ(), 50, this.getEntityWorld().getDimensionKey())), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, vector3d.x, vector3d.y, vector3d.z));
 
+                this.addExp(1.0F);
                 ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.GUN);
                 setEquipmentDelay(FiringCannon);
             }
@@ -736,7 +763,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     @Override
     public void AttackUsingTorpedo(LivingEntity target, float distanceFactor){
-        boolean shouldFire = this.Sailing() && canUseTorpedo(this.getRigging());
+        boolean shouldFire = this.isSailing() && canUseTorpedo(this.getRigging());
         if(shouldFire){
             Vector3d vector3d = this.getLook(1.0F);
             double d2 = target.getPosX() - (this.getPosX() + vector3d.x * 4.0D);
@@ -746,6 +773,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
             EntityProjectileTorpedo torpedo = new EntityProjectileTorpedo(this, d2, d3, d4, this.world);
             torpedo.setPosition(this.getPosX() + vector3d.x, this.getPosY() - 0.5D, torpedo.getPosZ() + vector3d.z);
             this.world.addEntity(torpedo);
+            this.addExp(1.0F);
             ItemStack FiringTorpedo = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.TORPEDO);
             useTorpedoAmmo(FiringTorpedo);
             setEquipmentDelay(FiringTorpedo);

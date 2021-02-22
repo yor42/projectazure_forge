@@ -1,6 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
+import com.yor42.projectazure.gameobject.entity.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.entity.Entity;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 
 @Mod.EventBusSubscriber(modid = defined.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class registerEntity {
@@ -24,6 +26,7 @@ public class registerEntity {
     public static void RegisterAttributes(){
         GlobalEntityTypeAttributes.put(registerManager.ENTITYAYANAMI, EntityAyanami.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYGANGWON, EntityGangwon.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.ENTERPRISE_ENTITY_TYPE, EntityEnterprise.MutableAttribute().create());
     }
 
 /*

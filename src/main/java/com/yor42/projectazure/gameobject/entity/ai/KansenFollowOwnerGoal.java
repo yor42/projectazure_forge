@@ -1,19 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
 import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-
-import java.util.EnumSet;
 
 public class KansenFollowOwnerGoal extends FollowOwnerGoal {
 
@@ -57,7 +46,7 @@ public class KansenFollowOwnerGoal extends FollowOwnerGoal {
     public void tick() {
         if(--this.pathRefreshTick <= 0) {
             this.pathRefreshTick = 10;
-            if(!this.host.Sailing()) {
+            if(!this.host.isSailing()) {
                 this.host.setSprinting(this.host.getDistanceSq(this.owner) >= 64);
             }
         }

@@ -3,6 +3,7 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainerDDDefault;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
+import com.yor42.projectazure.gameobject.entity.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.EntityGangwon;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
@@ -18,6 +19,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class registerManager {
 
@@ -35,17 +38,20 @@ public class registerManager {
     public static final RegistryObject<ContainerType<RiggingContainerDDDefault>> DD_DEFAULT_RIGGING_INVENTORY = CONTAINER.register("default_dd_rigging_inventory", () -> RIGGING_INVENTORY_DD_DEFAULT);
 
     //entity
-    public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(1F, 1.5F).build(new ResourceLocation(defined.MODID, "entityayanami").toString());
+    public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(1F, 1.5F).build(ModResourceLocation("entityayanami").toString());
     public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> ENTITYAYANAMI);
 
-    public static final EntityType<EntityGangwon> ENTITYGANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.5F).build(new ResourceLocation(defined.MODID, "entitygangwon").toString());
+    public static final EntityType<EntityGangwon> ENTITYGANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.5F).build(ModResourceLocation("entitygandwon").toString());
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYGANGWON);
 
+    public static final EntityType<EntityEnterprise> ENTERPRISE_ENTITY_TYPE = EntityType.Builder.create(EntityEnterprise::new, EntityClassification.CREATURE).size(1F, 1.8F).build(ModResourceLocation("entityenterprise").toString());
+    public static final RegistryObject<EntityType<EntityEnterprise>> ENTERPRISE = ENTITIES.register("entityenterprise", () -> ENTERPRISE_ENTITY_TYPE);
+
     //projectile
-    public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.MISC).size(0.5F, 0.5F).build(new ResourceLocation(defined.MODID, "projectilecannonshell").toString());
+    public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString());
     public static final RegistryObject<EntityType<EntityCannonPelllet>> CANNONSHELL = ENTITIES.register("entitycannonshell", () -> PROJECTILECANNONSHELL);
 
-    public static final EntityType<EntityProjectileTorpedo> PROJECTILETORPEDO = EntityType.Builder.<EntityProjectileTorpedo>create(EntityProjectileTorpedo::new, EntityClassification.MISC).size(0.5F, 0.5F).build(new ResourceLocation(defined.MODID, "projectiletorpedo").toString());
+    public static final EntityType<EntityProjectileTorpedo> PROJECTILETORPEDO = EntityType.Builder.<EntityProjectileTorpedo>create(EntityProjectileTorpedo::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectiletorpedo").toString());
     public static final RegistryObject<EntityType<EntityProjectileTorpedo>> TORPEDO = ENTITIES.register("entitytorpedo", () -> PROJECTILETORPEDO);
 
     public static void register() {

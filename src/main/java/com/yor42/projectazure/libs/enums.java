@@ -9,7 +9,10 @@ public class enums {
         GUN,
         TORPEDO,
         UTILITY,
-        AA
+        AA,
+        FIGHTER,
+        DIVE_BOMBER,
+        Torpedo_Bomber
     }
 
     public enum shipClass {
