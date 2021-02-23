@@ -21,71 +21,41 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class RiggingDefaultDDEquipmentCapability implements INamedContainerProvider, IRiggingContainerSupplier {
+public class RiggingDefaultDDEquipmentCapability extends RiggingEquipmentCapability {
 
-    private final LivingEntity entity;
-    private final ItemStack stack;
-    private boolean isEquippedonShip;
-
-    private final LazyOptional<ItemStackHandler> riggingItemCapability = LazyOptional.of(() -> this.equipments);
-
-    private final ItemStackHandler equipments = new ItemStackHandler(6){
-        @Override
-        protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
-            RiggingDefaultDDEquipmentCapability.this.saveAll();
-
-        }
-    };
-
-    public RiggingDefaultDDEquipmentCapability(ItemStack stack){
-        this.entity = null;
-        this.stack = stack;
-        this.loadEquipments(this.getNBT(stack));
+    public RiggingDefaultDDEquipmentCapability(ItemStack stack) {
+        super(stack);
     }
 
-    public RiggingDefaultDDEquipmentCapability(ItemStack stack, LivingEntity entity){
-        this(stack, entity, true);
+    public RiggingDefaultDDEquipmentCapability(ItemStack stack, LivingEntity entity) {
+        super(stack, entity);
     }
 
-    public RiggingDefaultDDEquipmentCapability(ItemStack stack, LivingEntity entity, boolean isEquippedonShip){
-        this.stack = stack;
-        this.entity = entity;
-        this.isEquippedonShip = isEquippedonShip;
-        this.loadEquipments(this.getNBT(stack));
+    public RiggingDefaultDDEquipmentCapability(ItemStack stack, LivingEntity entity, boolean isEquippedonShip) {
+        super(stack, entity, isEquippedonShip);
     }
 
-    public void saveAll(){
-        this.saveEquipments(this.getNBT(this.stack));
-        this.sendpacket();
+    @Override
+    public int getAAslotCount() {
+        return 1;
     }
 
-    private void sendpacket() {
-        if(this.entity instanceof PlayerEntity){
-            Main.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) entity), new syncRiggingInventoryPacket(this.getEquipments().serializeNBT(), this.stack));
-        }
+    @Override
+    public int getGunSlotCount() {
+        return 2;
     }
 
-    public void saveEquipments(CompoundNBT nbt) {
-        nbt.put("Inventory" ,this.equipments.serializeNBT());
+    @Override
+    public int getTorpedoSlotCount() {
+        return 3;
     }
 
-    public CompoundNBT getNBT(ItemStack stack) {
-        return stack.getOrCreateTag();
-    }
-
-    public void loadEquipments(CompoundNBT nbt){
-        this.equipments.deserializeNBT(nbt.getCompound("Inventory"));
-    }
-
-    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack){
+    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack) {
         openGUI(serverPlayerEntity, stack, false);
     }
 
-    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack, boolean isEquippedonShip)
-    {
-        if(!serverPlayerEntity.world.isRemote)
-        {
+    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack, boolean isEquippedonShip) {
+        if (!serverPlayerEntity.world.isRemote) {
             NetworkHooks.openGui(serverPlayerEntity, new RiggingDefaultDDEquipmentCapability(stack, serverPlayerEntity, isEquippedonShip));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
         }
     }
@@ -96,13 +66,7 @@ public class RiggingDefaultDDEquipmentCapability implements INamedContainerProvi
 
     @Nullable
     @Override
-    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity playerEntity)
-    {
+    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity playerEntity) {
         return new RiggingContainerDDDefault(windowID, playerInventory, this);
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("gui.rigginginventory");
     }
 }

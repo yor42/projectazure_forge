@@ -65,7 +65,7 @@ public class ItemStackUtils {
     public static boolean DamageComponent(float damage, ItemStack riggingStack, boolean shouldDamageMultiple){
         if(riggingStack.getItem() instanceof ItemRiggingBase){
             ItemRiggingBase riggingItem = (ItemRiggingBase) riggingStack.getItem();
-            int EquipmentCount = riggingItem.getEquipmentCount(riggingStack);
+            int EquipmentCount = riggingItem.getEquipments(riggingStack).getSlots();
             int DamageRiggingCount = 1;
 
             if(shouldDamageMultiple)

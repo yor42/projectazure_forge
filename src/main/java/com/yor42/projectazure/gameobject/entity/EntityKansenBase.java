@@ -24,10 +24,10 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -36,6 +36,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -72,6 +73,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> USINGBOW = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
     private static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
@@ -397,6 +399,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         this.dataManager.register(PATEFFECTCOUNT, 0);
         this.dataManager.register(PATCOOLDOWN, 0);
         this.dataManager.register(OATHED, false);
+        this.dataManager.register(USINGBOW, false);
     }
 
     public void setOpeningdoor(boolean openingdoor){
@@ -406,6 +409,14 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     public boolean isOpeningDoor() {
         return this.dataManager.get(OPENINGDOOR);
+    }
+
+    public void setUsingbow(boolean usingbow){
+        this.dataManager.set(USINGBOW, usingbow);
+    }
+
+    public boolean isUsingBow() {
+        return this.dataManager.get(USINGBOW);
     }
 
     public void setMeleeing(boolean attacking){
@@ -780,6 +791,35 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
         }
     }
 
+    public void ShootArrow(LivingEntity target, float distanceFactor) {
+        ItemStack itemstack = this.findArrow();
+        AbstractArrowEntity abstractarrowentity = this.fireArrow(itemstack, distanceFactor, this.getItemStackFromSlot(EquipmentSlotType.MAINHAND));
+        if (this.getHeldItemMainhand().getItem() instanceof net.minecraft.item.BowItem)
+            abstractarrowentity = ((net.minecraft.item.BowItem)this.getHeldItemMainhand().getItem()).customArrow(abstractarrowentity);
+        double d0 = target.getPosX() - this.getPosX();
+        double d1 = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getPosY();
+        double d2 = target.getPosZ() - this.getPosZ();
+        double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, 3);
+        this.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.world.addEntity(abstractarrowentity);
+    }
+
+    protected AbstractArrowEntity fireArrow(ItemStack arrowStack, float distanceFactor, ItemStack ItemInHand) {
+
+
+        return ProjectileHelper.fireArrow(this, arrowStack, distanceFactor);
+    }
+
+    protected ItemStack findArrow(){
+        for(int i = 0; i<this.getEquipment().getSlots(); i++){
+            if(this.getEquipment().getStackInSlot(i).getItem() instanceof ArrowItem){
+                return this.getEquipment().getStackInSlot(i);
+            }
+        }
+        return ItemStack.EMPTY;
+    };
+
     public IItemHandlerModifiable getEquipment(){
         return this.EQUIPMENT;
     }
@@ -796,7 +836,7 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
 
     @Override
     public IPacket<?> createSpawnPacket() {
-        EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getShipStorage().getStackInSlot(0));
+        NetworkHooks.getEntitySpawningPacket(this);
         return super.createSpawnPacket();
     }
 

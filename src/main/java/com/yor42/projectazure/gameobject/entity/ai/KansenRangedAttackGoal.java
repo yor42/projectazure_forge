@@ -67,6 +67,13 @@ public class KansenRangedAttackGoal extends Goal {
         this.attackTarget = null;
         this.CannonAttackDelay = -1;
         this.torpedoAttackDelay = -1;
+        this.entityHost.setAggroed(false);
+    }
+
+    @Override
+    public void startExecuting() {
+        super.startExecuting();
+        this.entityHost.setAggroed(true);
     }
 
     @Override

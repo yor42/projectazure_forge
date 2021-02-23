@@ -1,6 +1,9 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
+import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
+import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.itemBaseTooltip;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
@@ -54,6 +57,25 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         super.addInformation(stack,worldIn,tooltip,flagIn);
         tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331)).setItalic(true)));
+        tooltip.add(new StringTextComponent(""));
+
+        ItemStackHandler Equipments = new RiggingInventoryCapability(stack).getEquipments();
+        Color CategoryColor = Color.fromHex("#6bb82d");
+        tooltip.add(new StringTextComponent(""));
+        for(int i = 0; i<Equipments.getSlots(); i++){
+            if(i == 0)
+                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            if(i == this.getGunSlotCount())
+                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            if(i == this.getGunSlotCount()+this.getAASlotCount())
+                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            ItemStack currentstack = Equipments.getStackInSlot(i);
+            if(currentstack != ItemStack.EMPTY && currentstack.getItem() instanceof ItemEquipmentBase)
+                tooltip.add(currentstack.getDisplayName().copyRaw().appendString("("+getCurrentHP(currentstack)+"/"+((ItemEquipmentBase)currentstack.getItem()).getMaxHP()+"").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
+            else {
+                tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("rigging.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
+            }
+        }
     }
 
     public Quaternion[] getEquipmentRotation() {
@@ -70,11 +92,13 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         return this.factory;
     }
 
+    public abstract int getGunSlotCount();
+    public abstract int getAASlotCount();
+    public abstract int getTorpedoSlotCount();
+
     public abstract AnimatedGeoModel getModel();
 
     public abstract ItemStackHandler getEquipments(ItemStack riggingStack);
-
-    public abstract int getEquipmentCount(ItemStack riggingStack);
 
     public abstract void onUpdate(ItemStack stack);
 

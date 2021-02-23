@@ -40,11 +40,6 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     }
 
     @Override
-    public int getEquipmentCount(ItemStack riggingStack) {
-        return new RiggingDefaultDDEquipmentCapability(riggingStack).getEquipments().getSlots();
-    }
-
-    @Override
     public void onUpdate(ItemStack stack) {
         if(stack.getItem() instanceof ItemRiggingDD){
             ItemStackHandler equipment = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
@@ -77,24 +72,17 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        ItemStackHandler Equipments = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
-        Color CategoryColor = Color.fromHex("#6bb82d");
-        tooltip.add(new StringTextComponent(""));
-        for(int i = 0; i<Equipments.getSlots(); i++){
-                if(i == 0)
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-                if(i == 2)
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-                if(i == 3)
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+    public int getGunSlotCount() {
+        return 2;
+    }
 
-                if(Equipments.getStackInSlot(i) != ItemStack.EMPTY)
-                    tooltip.add(Equipments.getStackInSlot(i).getDisplayName());
-                else {
-                    tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("rigging.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
-                }
-        }
+    @Override
+    public int getAASlotCount() {
+        return 1;
+    }
+
+    @Override
+    public int getTorpedoSlotCount() {
+        return 3;
     }
 }

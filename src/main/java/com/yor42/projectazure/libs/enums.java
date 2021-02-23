@@ -10,9 +10,13 @@ public class enums {
         TORPEDO,
         UTILITY,
         AA,
+        PLANE,
+    }
+
+    public enum PLANE_TYPE{
         FIGHTER,
-        DIVE_BOMBER,
-        Torpedo_Bomber
+        TORPEDO_BOMBER,
+        DIVE_BOMBER
     }
 
     public enum shipClass {
