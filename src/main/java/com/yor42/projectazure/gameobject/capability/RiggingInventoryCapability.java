@@ -2,6 +2,8 @@ package com.yor42.projectazure.gameobject.capability;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.IRiggingContainerSupplier;
+import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainerDDDefault;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
@@ -16,6 +18,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -49,20 +52,13 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     public RiggingInventoryCapability(ItemStack stack, LivingEntity entity, boolean isEquippedonShip){
         this.stack = stack;
         this.entity = entity;
+        int slotCount = ((ItemRiggingBase) stack.getItem()).getTotalSlotCount();
+        this.getEquipments().setSize(slotCount);
         this.loadEquipments(this.getNBT(stack));
-        this.equipments.setSize(getSlotCounts());
     }
 
-    public int getSlotCounts(){
-
-
-        if(this.stack!= null) {
-            if (this.stack.getItem() instanceof ItemRiggingBase) {
-                ItemRiggingBase item = (ItemRiggingBase) this.stack.getItem();
-                return item.getAASlotCount() + item.getGunSlotCount() + item.getTorpedoSlotCount();
-            }
-        }
-        return 1;
+    public static void openGUI(ServerPlayerEntity playerIn, ItemStack currentItem) {
+        openGUI(playerIn, currentItem, false);
     }
 
     public void saveAll(){
@@ -84,6 +80,13 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         return stack.getOrCreateTag();
     }
 
+    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack, boolean isEquippedonShip) {
+        if (!serverPlayerEntity.world.isRemote) {
+            NetworkHooks.openGui(serverPlayerEntity, new RiggingInventoryCapability(stack, serverPlayerEntity, isEquippedonShip));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
+        }
+        Main.PROXY.setSharedStack(stack);
+    }
+
     public void loadEquipments(CompoundNBT nbt){
         this.equipments.deserializeNBT(nbt.getCompound("Inventory"));
     }
@@ -94,13 +97,18 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     }
 
     @Override
+    public ItemStack getRigging() {
+        return this.stack;
+    }
+
+    @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.rigginginventory");
     }
     //null for now.
-    @Nullable
+    //not anymore mofo
     @Override
-    public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-        return null;
+    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity entity) {
+        return new RiggingContainer(windowID, playerInventory, this);
     }
 }

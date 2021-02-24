@@ -1,7 +1,9 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
 import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
+import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
@@ -36,13 +38,13 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
 
     @Override
     public ItemStackHandler getEquipments(ItemStack riggingStack) {
-        return new RiggingDefaultDDEquipmentCapability(riggingStack).getEquipments();
+        return new RiggingInventoryCapability(riggingStack).getEquipments();
     }
 
     @Override
     public void onUpdate(ItemStack stack) {
         if(stack.getItem() instanceof ItemRiggingDD){
-            ItemStackHandler equipment = new RiggingDefaultDDEquipmentCapability(stack).getEquipments();
+            ItemStackHandler equipment = new RiggingInventoryCapability(stack).getEquipments();
 
             for(int j = 0; j<equipment.getSlots(); j++){
                 if(equipment.getStackInSlot(j).getItem() instanceof ItemEquipmentBase) {
@@ -64,7 +66,7 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         if(!worldIn.isRemote()) {
             if (playerIn.isSneaking()) {
-                RiggingDefaultDDEquipmentCapability.openGUI((ServerPlayerEntity)playerIn, playerIn.inventory.getCurrentItem());
+                RiggingInventoryCapability.openGUI((ServerPlayerEntity)playerIn, playerIn.inventory.getCurrentItem());
                 return ActionResult.resultSuccess(itemstack);
             }
         }

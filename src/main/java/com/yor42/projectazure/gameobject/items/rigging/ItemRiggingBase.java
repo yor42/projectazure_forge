@@ -32,8 +32,6 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public AnimationFactory factory = new AnimationFactory(this);
 
-    protected int MaxHP;
-
     protected Quaternion[] EquipmentRotation;
 
     protected enums.shipClass validclass;
@@ -63,15 +61,21 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         Color CategoryColor = Color.fromHex("#6bb82d");
         tooltip.add(new StringTextComponent(""));
         for(int i = 0; i<Equipments.getSlots(); i++){
-            if(i == 0)
-                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-            if(i == this.getGunSlotCount())
-                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-            if(i == this.getGunSlotCount()+this.getAASlotCount())
-                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            if(this.getGunSlotCount()>0) {
+                if (i == 0)
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            }
+            if(this.getAASlotCount()>0) {
+                if (i == this.getGunSlotCount())
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            }
+            if(this.getTorpedoSlotCount()>0) {
+                if (i == this.getGunSlotCount() + this.getAASlotCount())
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            }
             ItemStack currentstack = Equipments.getStackInSlot(i);
             if(currentstack != ItemStack.EMPTY && currentstack.getItem() instanceof ItemEquipmentBase)
-                tooltip.add(currentstack.getDisplayName().copyRaw().appendString("("+getCurrentHP(currentstack)+"/"+((ItemEquipmentBase)currentstack.getItem()).getMaxHP()+"").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
+                tooltip.add(currentstack.getDisplayName().copyRaw().appendString("("+getCurrentHP(currentstack)+"/"+((ItemEquipmentBase)currentstack.getItem()).getMaxHP()+")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
             else {
                 tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("rigging.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
             }
@@ -95,6 +99,10 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public abstract int getGunSlotCount();
     public abstract int getAASlotCount();
     public abstract int getTorpedoSlotCount();
+
+    public int getTotalSlotCount(){
+        return this.getAASlotCount()+getGunSlotCount()+this.getTorpedoSlotCount();
+    }
 
     public abstract AnimatedGeoModel getModel();
 

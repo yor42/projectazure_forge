@@ -9,7 +9,7 @@ public class ClientRegisterManager {
 
     public static void registerScreen(){
         ScreenManager.registerFactory(registerManager.SHIP_CONTAINER.get(), guiShipInventory::new);
-        ScreenManager.registerFactory(registerManager.DD_DEFAULT_RIGGING_INVENTORY.get(), guiRiggingInventory::new);
+        ScreenManager.registerFactory(registerManager.RIGGING_INVENTORY.get(), guiRiggingInventory::new);
     }
 
 }

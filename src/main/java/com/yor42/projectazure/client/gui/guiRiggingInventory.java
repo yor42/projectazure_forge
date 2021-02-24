@@ -3,6 +3,7 @@ package com.yor42.projectazure.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainerDDDefault;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.client.Minecraft;
@@ -12,7 +13,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
-public class guiRiggingInventory extends ContainerScreen<RiggingContainerDDDefault> implements IHasContainer<RiggingContainerDDDefault> {
+public class guiRiggingInventory extends ContainerScreen<RiggingContainer> implements IHasContainer<RiggingContainer> {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(defined.MODID, "textures/gui/rigging_dd_default_inventory.png");
 
@@ -21,7 +22,7 @@ public class guiRiggingInventory extends ContainerScreen<RiggingContainerDDDefau
 
     private int x, y;
 
-    public guiRiggingInventory(RiggingContainerDDDefault screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public guiRiggingInventory(RiggingContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
     }
 

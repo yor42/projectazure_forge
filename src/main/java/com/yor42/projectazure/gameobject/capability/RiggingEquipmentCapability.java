@@ -65,6 +65,11 @@ public abstract class RiggingEquipmentCapability implements INamedContainerProvi
         }
     }
 
+    @Override
+    public ItemStack getRigging() {
+        return this.stack;
+    }
+
     public void saveEquipments(CompoundNBT nbt) {
         nbt.put("Inventory" ,this.equipments.serializeNBT());
     }
