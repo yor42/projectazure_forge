@@ -17,6 +17,9 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.setup.register.registerManager.RIGGING_INVENTORY;
 
 public class RiggingContainer extends Container {
+
+    private ItemStack riggingStack;
+
     public RiggingContainer(int id, PlayerInventory playerinv) {
         super(RIGGING_INVENTORY.get(), id);
         ItemStack riggingStack = Main.PROXY.getSharedStack();
@@ -28,13 +31,13 @@ public class RiggingContainer extends Container {
 
         if(riggingStack.getItem() instanceof ItemRiggingBase){
             for(int i = 0; i<((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount(); i++){
-                this.addSlot(new slotEquipment(dummystack, i, 14+i*18, 42, enums.SLOTTYPE.GUN));
+                this.addSlot(new slotEquipment(dummystack, i, 7, 34+18*i, enums.SLOTTYPE.GUN));
             }
             for(int j = 0; j<((ItemRiggingBase) riggingStack.getItem()).getAASlotCount(); j++){
-                this.addSlot(new slotEquipment(dummystack, j+((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount(), 138+j*18, 72, enums.SLOTTYPE.AA));
+                this.addSlot(new slotEquipment(dummystack, j+((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount(), 151, 34+18*j, enums.SLOTTYPE.AA));
             }
             for(int k = 0; k<((ItemRiggingBase) riggingStack.getItem()).getTorpedoSlotCount(); k++){
-                this.addSlot(new slotEquipment(dummystack, k+((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount()+((ItemRiggingBase) riggingStack.getItem()).getAASlotCount(), 54+k*18, 72, enums.SLOTTYPE.TORPEDO));
+                this.addSlot(new slotEquipment(dummystack, k+((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount()+((ItemRiggingBase) riggingStack.getItem()).getAASlotCount(), 30 + k * 18, 77, enums.SLOTTYPE.TORPEDO));
             }
 
             for (int i = 0; i < 3; ++i) {
@@ -51,28 +54,28 @@ public class RiggingContainer extends Container {
 
     public RiggingContainer(int id, PlayerInventory playerinv, IRiggingContainerSupplier supplier) {
         super(RIGGING_INVENTORY.get(), id);
-        ItemStack riggingStack = supplier.getRigging();
+        this.riggingStack = supplier.getRigging();
         ItemStackHandler equipmentstack = supplier.getEquipments();
 
-        if(riggingStack.getItem() instanceof ItemRiggingBase) {
+        if(this.riggingStack.getItem() instanceof ItemRiggingBase) {
 
-            if(((ItemRiggingBase) riggingStack.getItem()).getTorpedoSlotCount()<0|| ((ItemRiggingBase) riggingStack.getItem()).getAASlotCount()<0|| ((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount()<0){
+            if(((ItemRiggingBase) this.riggingStack.getItem()).getTorpedoSlotCount()<0|| ((ItemRiggingBase) riggingStack.getItem()).getAASlotCount()<0|| ((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount()<0){
                 throw new IllegalArgumentException("All Rigging Slot count must NOT be negative! or it will cause infinite loop!");
             }
 
-            if (((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount() > 0) {
-                for (int i = 0; i < ((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount(); i++) {
-                    this.addSlot(new slotEquipment(equipmentstack, i, 12 + i * 18, 42, enums.SLOTTYPE.GUN));
+            if (((ItemRiggingBase) this.riggingStack.getItem()).getGunSlotCount() > 0) {
+                for (int i = 0; i < ((ItemRiggingBase) this.riggingStack.getItem()).getGunSlotCount(); i++) {
+                    this.addSlot(new slotEquipment(equipmentstack, i, 7, 34+18*i, enums.SLOTTYPE.GUN));
                 }
             }
-            if (((ItemRiggingBase) riggingStack.getItem()).getAASlotCount() > 0) {
-                for (int j = 0; j < ((ItemRiggingBase) riggingStack.getItem()).getAASlotCount(); j++) {
-                    this.addSlot(new slotEquipment(equipmentstack, j + ((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount(), 138 + j * 18, 72, enums.SLOTTYPE.AA));
+            if (((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount() > 0) {
+                for (int j = 0; j < ((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount(); j++) {
+                    this.addSlot(new slotEquipment(equipmentstack, j + ((ItemRiggingBase) this.riggingStack.getItem()).getGunSlotCount(), 151, 34+18*j, enums.SLOTTYPE.AA));
                 }
             }
-            if (((ItemRiggingBase) riggingStack.getItem()).getTorpedoSlotCount() > 0){
-                for (int k = 0; k < ((ItemRiggingBase) riggingStack.getItem()).getTorpedoSlotCount(); k++) {
-                    this.addSlot(new slotEquipment(equipmentstack, k + ((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount() + ((ItemRiggingBase) riggingStack.getItem()).getAASlotCount(), 54 + k * 18, 72, enums.SLOTTYPE.TORPEDO));
+            if (((ItemRiggingBase) this.riggingStack.getItem()).getTorpedoSlotCount() > 0){
+                for (int k = 0; k < ((ItemRiggingBase) this.riggingStack.getItem()).getTorpedoSlotCount(); k++) {
+                    this.addSlot(new slotEquipment(equipmentstack, k + ((ItemRiggingBase) this.riggingStack.getItem()).getGunSlotCount() + ((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount(), 30 + k * 18, 77, enums.SLOTTYPE.TORPEDO));
                 }
             }
             for (int i = 0; i < 3; ++i) {
@@ -85,6 +88,10 @@ public class RiggingContainer extends Container {
                 this.addSlot(new slotInventory(playerinv, k, 8 + k * 18, 168));
             }
         }
+    }
+
+    public ItemStack getRiggingStack() {
+        return this.riggingStack;
     }
 
     @Override

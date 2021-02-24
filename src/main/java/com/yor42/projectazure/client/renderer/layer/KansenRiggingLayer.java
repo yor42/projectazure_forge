@@ -2,6 +2,7 @@ package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
+import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -66,7 +67,7 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
                 if (entitylivingbaseIn.getRigging().getItem() == registerItems.DD_DEFAULT_RIGGING.get()){
 
-                    Equipments = new RiggingDefaultDDEquipmentCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
+                    Equipments = new RiggingInventoryCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
 
                     //gun Renderer
                     if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){

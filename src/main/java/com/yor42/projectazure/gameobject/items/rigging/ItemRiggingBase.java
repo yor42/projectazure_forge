@@ -7,8 +7,12 @@ import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.itemBaseTooltip;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.text.*;
@@ -82,6 +86,18 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         }
     }
 
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack itemstack = playerIn.getHeldItem(handIn);
+        if(!worldIn.isRemote()) {
+            if (playerIn.isSneaking()) {
+                RiggingInventoryCapability.openGUI((ServerPlayerEntity)playerIn, playerIn.inventory.getCurrentItem());
+                return ActionResult.resultSuccess(itemstack);
+            }
+        }
+        return super.onItemRightClick(worldIn, playerIn, handIn);
+    }
+
     public Quaternion[] getEquipmentRotation() {
         return this.EquipmentRotation;
     }
@@ -106,7 +122,9 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public abstract AnimatedGeoModel getModel();
 
-    public abstract ItemStackHandler getEquipments(ItemStack riggingStack);
+    public ItemStackHandler getEquipments(ItemStack riggingStack){
+        return new RiggingInventoryCapability(riggingStack).getEquipments();
+    };
 
     public abstract void onUpdate(ItemStack stack);
 

@@ -2,10 +2,12 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
+import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
 import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533mm;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
@@ -73,6 +75,10 @@ public class registerItems {
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = registerManager.ITEMS.register("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
     .setISTER(() -> DDDefaultRiggingRenderer::new)
     .group(PA_GROUP).maxStackSize(1), 500));
+
+    public static final RegistryObject<Item> CV_DEFAULT_RIGGING = registerManager.ITEMS.register("cv_default_rigging", () -> new ItemRiggingCVDefault(new Item.Properties()
+            .setISTER(() -> CVDefaultRiggingRenderer::new)
+            .group(PA_GROUP).maxStackSize(1), 1000));
 
     public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = registerManager.ITEMS.register("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533mm(new Item.Properties()
             .setISTER(() -> equipment533mmTorpedoRenderer::new)

@@ -37,11 +37,6 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     }
 
     @Override
-    public ItemStackHandler getEquipments(ItemStack riggingStack) {
-        return new RiggingInventoryCapability(riggingStack).getEquipments();
-    }
-
-    @Override
     public void onUpdate(ItemStack stack) {
         if(stack.getItem() instanceof ItemRiggingDD){
             ItemStackHandler equipment = new RiggingInventoryCapability(stack).getEquipments();
@@ -59,18 +54,6 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
         return PlayState.STOP;
-    }
-
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        if(!worldIn.isRemote()) {
-            if (playerIn.isSneaking()) {
-                RiggingInventoryCapability.openGUI((ServerPlayerEntity)playerIn, playerIn.inventory.getCurrentItem());
-                return ActionResult.resultSuccess(itemstack);
-            }
-        }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 
     @Override

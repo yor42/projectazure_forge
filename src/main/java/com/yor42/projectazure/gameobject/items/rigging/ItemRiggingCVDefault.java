@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.client.model.rigging.modelCVRiggingDefault;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class ItemRiggingCVDefault extends ItemRiggingCV{
@@ -29,11 +28,6 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
     @Override
     public AnimatedGeoModel getModel() {
         return new modelCVRiggingDefault();
-    }
-
-    @Override
-    public ItemStackHandler getEquipments(ItemStack riggingStack) {
-        return null;
     }
 
     @Override
