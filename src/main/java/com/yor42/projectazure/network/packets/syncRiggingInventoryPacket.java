@@ -36,7 +36,8 @@ public class syncRiggingInventoryPacket {
     public static void handle(final syncRiggingInventoryPacket message, final Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
 
-            message.itemStack.getTag().put("Inventory", message.compound);        }));
+            message.itemStack.getOrCreateTag().put("Inventory", message.compound);
+        }));
 
         ctx.get().setPacketHandled(true);
     }

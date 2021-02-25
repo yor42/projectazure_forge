@@ -1,28 +1,15 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
-import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
-import com.yor42.projectazure.libs.enums;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.*;
-import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
 

@@ -66,7 +66,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         this.sendpacket();
     }
 
-    private void sendpacket() {
+    public void sendpacket() {
         if(this.entity instanceof PlayerEntity){
             Main.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) entity), new syncRiggingInventoryPacket(this.getEquipments().serializeNBT(), this.stack));
         }

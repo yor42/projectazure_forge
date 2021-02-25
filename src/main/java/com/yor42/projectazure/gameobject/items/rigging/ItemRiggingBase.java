@@ -1,10 +1,8 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
-import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
-import com.yor42.projectazure.gameobject.items.itemBaseTooltip;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;

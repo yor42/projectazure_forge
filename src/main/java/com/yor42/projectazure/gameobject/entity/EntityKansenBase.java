@@ -1,7 +1,9 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
@@ -837,6 +839,9 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
     @Override
     public IPacket<?> createSpawnPacket() {
         NetworkHooks.getEntitySpawningPacket(this);
+        if(this.getRigging().getItem() instanceof ItemRiggingBase) {
+            new RiggingInventoryCapability(this.getRigging()).sendpacket();
+        }
         return super.createSpawnPacket();
     }
 

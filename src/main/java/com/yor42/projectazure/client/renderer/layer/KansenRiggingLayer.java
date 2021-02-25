@@ -1,12 +1,12 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.capability.RiggingDefaultDDEquipmentCapability;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.entity.EntityAyanami;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingDD;
+import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -61,13 +61,10 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
             render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
 
-            if(entitylivingbaseIn.getRigging().getTag() != null) {
                 GeoModel riggingmodel = this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider));
-                ItemStackHandler Equipments = new ItemStackHandler();
+                ItemStackHandler Equipments = new RiggingInventoryCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
 
-                if (entitylivingbaseIn.getRigging().getItem() == registerItems.DD_DEFAULT_RIGGING.get()){
-
-                    Equipments = new RiggingInventoryCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
+                if (entitylivingbaseIn.getRigging().getItem() instanceof itemRiggingDDDefault){
 
                     //gun Renderer
                     if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
@@ -157,8 +154,6 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
                         }
                     }
                 }
-
-            }
         }
     }
 

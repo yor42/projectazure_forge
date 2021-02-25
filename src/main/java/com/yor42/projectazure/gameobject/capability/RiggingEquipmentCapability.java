@@ -27,23 +27,18 @@ public abstract class RiggingEquipmentCapability implements INamedContainerProvi
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             RiggingEquipmentCapability.this.saveAll();
-
         }
     };
 
     public RiggingEquipmentCapability(ItemStack stack){
-        this(stack, null, false);
+        this(stack, null);
     }
 
     public RiggingEquipmentCapability(ItemStack stack, LivingEntity entity){
-        this(stack, entity, true);
-    }
-
-    public RiggingEquipmentCapability(ItemStack stack, LivingEntity entity, boolean isEquippedonShip){
         this.stack = stack;
         this.entity = entity;
-        this.loadEquipments(this.getNBT(stack));
         this.equipments.setSize(this.getSlotCounts());
+        this.loadEquipments(this.getNBT(stack));
     }
 
     public int getSlotCounts(){
@@ -60,9 +55,7 @@ public abstract class RiggingEquipmentCapability implements INamedContainerProvi
     }
 
     private void sendpacket() {
-        if(this.entity instanceof PlayerEntity){
-            Main.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) entity), new syncRiggingInventoryPacket(this.getEquipments().serializeNBT(), this.stack));
-        }
+            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new syncRiggingInventoryPacket(this.getEquipments().serializeNBT(), this.stack));
     }
 
     @Override
@@ -80,6 +73,7 @@ public abstract class RiggingEquipmentCapability implements INamedContainerProvi
 
     public void loadEquipments(CompoundNBT nbt){
         this.equipments.deserializeNBT(nbt.getCompound("Inventory"));
+        this.sendpacket();
     }
 
     @Override
