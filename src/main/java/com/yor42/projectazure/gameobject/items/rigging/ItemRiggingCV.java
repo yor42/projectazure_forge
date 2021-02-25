@@ -8,4 +8,10 @@ public abstract class ItemRiggingCV extends ItemRiggingBase implements IAnimatab
         super(properties, HP);
         this.validclass = enums.shipClass.AircraftCarrier;
     }
+
+    @Override
+    public int getHangerSlots() {
+        //minimum size
+        return 45;
+    }
 }

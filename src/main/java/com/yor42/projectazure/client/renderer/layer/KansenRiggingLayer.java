@@ -12,6 +12,7 @@ import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
@@ -49,7 +50,11 @@ public class KansenRiggingLayer extends GeoLayerRenderer<EntityAyanami> implemen
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityAyanami entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingBase) {
+
+        Item item = entitylivingbaseIn.getRigging().getItem();
+
+        boolean flag = item instanceof ItemRiggingBase;
+        if (flag) {
 
             matrixStackIn.push();
             this.modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();

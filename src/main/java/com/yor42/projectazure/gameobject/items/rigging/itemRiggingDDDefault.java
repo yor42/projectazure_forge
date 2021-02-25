@@ -24,20 +24,6 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     }
 
     @Override
-    public void onUpdate(ItemStack stack) {
-        if(stack.getItem() instanceof ItemRiggingDD){
-            ItemStackHandler equipment = new RiggingInventoryCapability(stack).getEquipments();
-
-            for(int j = 0; j<equipment.getSlots(); j++){
-                if(equipment.getStackInSlot(j).getItem() instanceof ItemEquipmentBase) {
-                    ItemEquipmentBase item = (ItemEquipmentBase) equipment.getStackInSlot(j).getItem();
-                    item.onUpdate(equipment.getStackInSlot(j));
-                }
-            }
-        }
-    }
-
-    @Override
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
         return PlayState.STOP;

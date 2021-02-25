@@ -73,7 +73,6 @@ public abstract class RiggingEquipmentCapability implements INamedContainerProvi
 
     public void loadEquipments(CompoundNBT nbt){
         this.equipments.deserializeNBT(nbt.getCompound("Inventory"));
-        this.sendpacket();
     }
 
     @Override

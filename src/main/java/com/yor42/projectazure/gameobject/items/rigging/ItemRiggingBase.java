@@ -114,6 +114,10 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public abstract int getAASlotCount();
     public abstract int getTorpedoSlotCount();
 
+    public int getHangerSlots(){
+        return 0;
+    }
+
     public int getTotalSlotCount(){
         return this.getAASlotCount()+getGunSlotCount()+this.getTorpedoSlotCount();
     }
@@ -124,7 +128,18 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         return new RiggingInventoryCapability(riggingStack).getEquipments();
     };
 
-    public abstract void onUpdate(ItemStack stack);
+    public void onUpdate(ItemStack stack) {
+        if(stack.getItem() instanceof ItemRiggingBase){
+            ItemStackHandler equipment = new RiggingInventoryCapability(stack).getEquipments();
+
+            for(int j = 0; j<equipment.getSlots(); j++){
+                if(equipment.getStackInSlot(j).getItem() instanceof ItemEquipmentBase) {
+                    ItemEquipmentBase item = (ItemEquipmentBase) equipment.getStackInSlot(j).getItem();
+                    item.onUpdate(equipment.getStackInSlot(j));
+                }
+            }
+        }
+    }
 
     public ResourceLocation getTexture(){
             return this.getModel().getTextureLocation(null);

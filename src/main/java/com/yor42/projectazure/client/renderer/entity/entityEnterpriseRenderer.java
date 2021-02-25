@@ -55,7 +55,7 @@ public class entityEnterpriseRenderer extends GeoEntityRenderer<EntityEnterprise
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
             ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-            stack.translate(0.6F, 0.1, 1.35F);
+            stack.translate(0.7F, 0.1, 1.6F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
@@ -66,7 +66,7 @@ public class entityEnterpriseRenderer extends GeoEntityRenderer<EntityEnterprise
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
             ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
-            stack.translate(-0.6F, 0.1, 1.35F);
+            stack.translate(-0.7F, 0.1, 1.6F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);

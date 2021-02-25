@@ -90,6 +90,11 @@ public abstract class EntityKansenBase extends TameableEntity implements IAnimat
                 EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(slot));
             }
         }
+
+        @Override
+        protected void onLoad() {
+            EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(0));
+        }
     };
 
     public ItemStackHandler AmmoStorage = new ItemStackHandler(8);

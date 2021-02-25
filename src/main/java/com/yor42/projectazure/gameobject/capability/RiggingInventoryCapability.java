@@ -39,26 +39,39 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
             RiggingInventoryCapability.this.saveAll();
 
         }
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
+        }
+    };
+
+    protected final ItemStackHandler hangar = new ItemStackHandler(){
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            RiggingInventoryCapability.this.saveAll();
+
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return 1;
+        }
     };
 
     public RiggingInventoryCapability(ItemStack stack){
-        this(stack, null, false);
+        this(stack, null);
     }
-
     public RiggingInventoryCapability(ItemStack stack, LivingEntity entity){
-        this(stack, entity, true);
-    }
-
-    public RiggingInventoryCapability(ItemStack stack, LivingEntity entity, boolean isEquippedonShip){
         this.stack = stack;
         this.entity = entity;
         int slotCount = ((ItemRiggingBase) stack.getItem()).getTotalSlotCount();
         this.getEquipments().setSize(slotCount);
-        this.loadEquipments(this.getNBT(stack));
-    }
 
-    public static void openGUI(ServerPlayerEntity playerIn, ItemStack currentItem) {
-        openGUI(playerIn, currentItem, false);
+        int HangerSlots = ((ItemRiggingBase) stack.getItem()).getHangerSlots();
+        this.getHangar().setSize(HangerSlots);
+
+        this.loadEquipments(this.getNBT(stack));
     }
 
     public void saveAll(){
@@ -68,8 +81,12 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
 
     public void sendpacket() {
         if(this.entity instanceof PlayerEntity){
-            Main.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) entity), new syncRiggingInventoryPacket(this.getEquipments().serializeNBT(), this.stack));
+            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new syncRiggingInventoryPacket(this.getEquipments().serializeNBT(), this.stack));
         }
+    }
+
+    public ItemStackHandler getHangar(){
+        return this.hangar;
     }
 
     public void saveEquipments(CompoundNBT nbt) {
@@ -80,9 +97,9 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         return stack.getOrCreateTag();
     }
 
-    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack, boolean isEquippedonShip) {
+    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack) {
         if (!serverPlayerEntity.world.isRemote) {
-            NetworkHooks.openGui(serverPlayerEntity, new RiggingInventoryCapability(stack, serverPlayerEntity, isEquippedonShip));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
+            NetworkHooks.openGui(serverPlayerEntity, new RiggingInventoryCapability(stack, serverPlayerEntity));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
         }
         Main.PROXY.setSharedStack(stack);
     }
@@ -105,8 +122,6 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("gui.rigginginventory");
     }
-    //null for now.
-    //not anymore mofo
     @Override
     public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity entity) {
         return new RiggingContainer(windowID, playerInventory, this);

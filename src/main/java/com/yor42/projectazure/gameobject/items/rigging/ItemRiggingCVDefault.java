@@ -26,12 +26,12 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
     }
 
     @Override
-    public AnimatedGeoModel getModel() {
-        return new modelCVRiggingDefault();
+    public int getHangerSlots() {
+        return 45;
     }
 
     @Override
-    public void onUpdate(ItemStack stack) {
-
+    public AnimatedGeoModel getModel() {
+        return new modelCVRiggingDefault();
     }
 }
