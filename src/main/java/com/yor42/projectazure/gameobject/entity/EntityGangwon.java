@@ -22,11 +22,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class EntityGangwon extends EntityKansenDestroyer{
 
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller_gangwon", 5, this::predicate));
-    }
-
     public EntityGangwon(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setTamed(false);

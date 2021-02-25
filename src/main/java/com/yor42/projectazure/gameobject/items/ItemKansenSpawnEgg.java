@@ -18,9 +18,9 @@ import java.util.Objects;
 
 public class ItemKansenSpawnEgg extends itemBaseTooltip {
 
-    EntityType<?> Entity;
+    LivingEntity Entity;
 
-    public ItemKansenSpawnEgg(EntityType<?> Entity, Properties properties) {
+    public ItemKansenSpawnEgg(LivingEntity Entity, Properties properties) {
         super(properties);
         this.Entity = Entity;
     }
@@ -45,9 +45,12 @@ public class ItemKansenSpawnEgg extends itemBaseTooltip {
         } else {
             blockpos1 = blockpos.offset(direction);
         }
-        EntityKansenBase spawnedEntity = (EntityKansenBase) this.Entity.spawn((ServerWorld) context.getWorld(), itemstack, context.getPlayer(), blockpos1, SpawnReason.SPAWN_EGG, true, !Objects.equals(blockpos, blockpos1) && direction == Direction.UP);
-        if(spawnedEntity!=null) {
-            spawnedEntity.setTamedBy(context.getPlayer());
+        if(this.Entity!=null) {
+            this.Entity.setPosition(context.getPos().getX(), context.getPos().getY()+0.1, context.getPos().getZ());
+            if(this.Entity instanceof EntityKansenBase) {
+                ((EntityKansenBase) this.Entity).setTamedBy(context.getPlayer());
+            }
+            context.getWorld().addEntity(this.Entity);
             if(!context.getPlayer().isCreative())
                 itemstack.shrink(1);
         }
