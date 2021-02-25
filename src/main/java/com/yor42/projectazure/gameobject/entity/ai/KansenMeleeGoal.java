@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
-import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
-import net.minecraft.entity.CreatureEntity;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;

@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity;
+package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
@@ -16,8 +16,6 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import static com.yor42.projectazure.libs.enums.ShipRarity.SUPER_RARE;
 

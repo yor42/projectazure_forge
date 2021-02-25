@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
-import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
-import com.yor42.projectazure.gameobject.entity.IShipRangedAttack;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.IShipRangedAttack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;

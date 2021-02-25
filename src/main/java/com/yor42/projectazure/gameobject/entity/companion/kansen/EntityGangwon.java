@@ -1,9 +1,12 @@
-package com.yor42.projectazure.gameobject.entity;
+package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -12,16 +15,23 @@ import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable {
+public class EntityGangwon extends EntityKansenDestroyer{
 
-    public EntityAyanami(EntityType<? extends EntityAyanami> type, World worldIn) {
+    public EntityGangwon(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setTamed(false);
+    }
+
+    @Override
+    public int getRiggingOffset() {
+        return -7;
+    }
+
+    @Override
+    public enums.ShipRarity getRarity() {
+        return enums.ShipRarity.ELITE;
     }
 
     protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
@@ -32,43 +42,43 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        //event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
         if(this.isBeingPatted()){
             if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat_sit", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));
             else
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", true));
             return PlayState.CONTINUE;
         }
 
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit", true));
             return PlayState.CONTINUE;
         }
 
         if(this.isOpeningDoor()){
             if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorL", false));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorL", false));
             }
             else{
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorR", false));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorR", false));
             }
         }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.melee1", false));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.melee", false));
             }
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_hand", true));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.run", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk", true));
             }
             return PlayState.CONTINUE;
         }
@@ -85,15 +95,5 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;
-    }
-
-    @Override
-    public int getRiggingOffset() {
-        return 0;
-    }
-
-    @Override
-    public enums.ShipRarity getRarity() {
-        return enums.ShipRarity.ELITE;
     }
 }

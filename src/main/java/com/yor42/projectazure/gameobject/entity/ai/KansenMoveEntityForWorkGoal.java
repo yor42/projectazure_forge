@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
-import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -13,11 +13,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.IFluidBlock;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Map;
 
 abstract class KansenMoveEntityForWorkGoal extends Goal {
 

@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity;
+package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.EntityType;

@@ -1,23 +1,11 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.entity.EntityAyanami;
-import com.yor42.projectazure.gameobject.entity.EntityEnterprise;
-import com.yor42.projectazure.gameobject.entity.EntityGangwon;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
 import com.yor42.projectazure.libs.defined;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
 
 @Mod.EventBusSubscriber(modid = defined.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class registerEntity {

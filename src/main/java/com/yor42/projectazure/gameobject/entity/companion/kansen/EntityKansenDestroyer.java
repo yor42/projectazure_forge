@@ -1,11 +1,9 @@
-package com.yor42.projectazure.gameobject.entity;
+package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
 
 public abstract class EntityKansenDestroyer extends EntityKansenBase {
     protected EntityKansenDestroyer(EntityType<? extends TameableEntity> type, World worldIn) {

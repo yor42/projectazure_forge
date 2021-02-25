@@ -1,6 +1,6 @@
-package com.yor42.projectazure.gameobject.entity;
+package com.yor42.projectazure.gameobject.entity.companion;
 
-import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
@@ -11,6 +11,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -23,6 +24,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -34,8 +36,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.isDestroyed;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
@@ -547,4 +547,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         this.patAnimationTime = 20;
     };
+
+    public IItemHandlerModifiable getEquipment(){
+        return this.EQUIPMENT;
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        NetworkHooks.getEntitySpawningPacket(this);
+        return super.createSpawnPacket();
+    }
 }

@@ -1,9 +1,9 @@
-package com.yor42.projectazure.gameobject.entity;
+package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
-import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
@@ -13,16 +13,12 @@ import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -40,24 +36,16 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.UUID;
 
@@ -89,167 +77,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
     };
 
     public ItemStackHandler AmmoStorage = new ItemStackHandler(8);
-
-    public final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
-
-        private final EquipmentSlotType[] EQUIPMENTSLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-
-
-        @Override
-        public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-            EquipmentSlotType slottype;
-
-            switch (slot) {
-                case 1:
-                    slottype = EquipmentSlotType.OFFHAND;
-                    break;
-                case 2:
-                    slottype = EquipmentSlotType.HEAD;
-                    break;
-                case 3:
-
-                    slottype = EquipmentSlotType.CHEST;
-                    break;
-                case 4:
-                    slottype = EquipmentSlotType.LEGS;
-                    break;
-                case 5:
-                    slottype = EquipmentSlotType.FEET;
-                    break;
-                default:
-                    slottype = EquipmentSlotType.MAINHAND;
-            }
-            EntityKansenBase.this.setItemStackToSlot(slottype, stack);
-        }
-
-        @Override
-        public int getSlots() {
-            return 6;
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            EquipmentSlotType slottype;
-
-            switch (slot) {
-                case 1:
-                    slottype = EquipmentSlotType.OFFHAND;
-                    break;
-                case 2:
-                    slottype = EquipmentSlotType.HEAD;
-                    break;
-                case 3:
-                    slottype = EquipmentSlotType.CHEST;
-                    break;
-                case 4:
-                    slottype = EquipmentSlotType.LEGS;
-                    break;
-                case 5:
-                    slottype = EquipmentSlotType.FEET;
-                    break;
-                default:
-                    slottype = EquipmentSlotType.MAINHAND;
-            }
-            return EntityKansenBase.this.getItemStackFromSlot(slottype);
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-
-            if(!isItemValid(slot, stack)){
-                return stack;
-            }
-            ItemStack existingstack = getStackInSlot(slot);
-            int limit = this.getSlotLimit(slot);
-
-            if(!existingstack.isEmpty()){
-                if (!ItemHandlerHelper.canItemStacksStack(stack, existingstack)) {
-                    return stack;
-                }
-                limit -= existingstack.getCount();
-            }
-
-            if (limit <= 0)
-                return stack;
-
-            boolean reachedLimit = stack.getCount() > limit;
-
-            if (!simulate)
-            {
-                if (existingstack.isEmpty()) {
-                    setStackInSlot(slot, stack);
-                }
-                else {
-                        existingstack.grow(reachedLimit ? limit : stack.getCount());
-                    setStackInSlot(slot, existingstack);
-                    }
-            }
-            return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount()- limit) : ItemStack.EMPTY;
-        }
-
-        @Nonnull
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (amount == 0)
-                return ItemStack.EMPTY;
-
-            ItemStack existing = getStackInSlot(slot);
-
-            if (existing.isEmpty())
-                return ItemStack.EMPTY;
-
-            int toExtract = Math.min(amount, existing.getMaxStackSize());
-
-            if (existing.getCount() <= toExtract)
-            {
-                if (!simulate)
-                {
-                    setStackInSlot(slot, ItemStack.EMPTY);
-                    return existing;
-                }
-                else
-                {
-                    return existing.copy();
-                }
-            }
-            else
-            {
-                if (!simulate)
-                {
-                    setStackInSlot(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract));
-                }
-
-                return ItemHandlerHelper.copyStackWithSize(existing, toExtract);
-            }
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            switch (slot){
-                case 0:
-                case 1:
-                    return 64;
-                default:
-                    return 1;
-            }
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            switch(slot){
-                case 0:
-                case 1:
-                    return true;
-                default:
-                    if(stack.getItem() instanceof ArmorItem) {
-                        return stack.canEquip(EQUIPMENTSLOTS[slot-2], EntityKansenBase.this);
-                    }
-                    else return false;
-            }
-        }
-    };
 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer;
     protected double affection, exp;
@@ -512,17 +339,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
     }
 
     protected ItemStack findArrow(){
-        for(int i = 0; i<this.getEquipment().getSlots(); i++){
-            if(this.getEquipment().getStackInSlot(i).getItem() instanceof ArrowItem){
-                return this.getEquipment().getStackInSlot(i);
+        for(int i = 0; i<this.getShipStorage().getSlots(); i++){
+            if(this.getShipStorage().getStackInSlot(i).getItem() instanceof ArrowItem){
+                return this.getShipStorage().getStackInSlot(i);
             }
         }
         return ItemStack.EMPTY;
     };
-
-    public IItemHandlerModifiable getEquipment(){
-        return this.EQUIPMENT;
-    }
 
     private void kansenFloat() {
         Vector3d vec3d = this.getMotion();
@@ -532,15 +355,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         else if (vec3d.y>0){
             this.setVelocity(vec3d.x, vec3d.y - 0.10, vec3d.z);
         }
-    }
-
-    @Override
-    public IPacket<?> createSpawnPacket() {
-        NetworkHooks.getEntitySpawningPacket(this);
-        if(this.getRigging().getItem() instanceof ItemRiggingBase) {
-            new RiggingInventoryCapability(this.getRigging()).sendpacket();
-        }
-        return super.createSpawnPacket();
     }
 
 }

@@ -1,27 +1,13 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
-import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.DamageSources;
-import com.yor42.projectazure.gameobject.entity.EntityKansenBase;
-import com.yor42.projectazure.libs.defined;
-import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
-import com.yor42.projectazure.network.packets.SyncProjectilePacket;
-import com.yor42.projectazure.network.packets.spawnParticlePacket;
-import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.network.play.server.SSpawnObjectPacket;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -31,7 +17,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import static com.yor42.projectazure.gameobject.DamageSources.DAMAGE_GUN;
 

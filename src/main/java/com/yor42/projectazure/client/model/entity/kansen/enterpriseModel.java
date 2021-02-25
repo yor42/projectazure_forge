@@ -1,6 +1,6 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
-import com.yor42.projectazure.gameobject.entity.EntityEnterprise;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

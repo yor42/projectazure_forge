@@ -5,9 +5,11 @@ import com.yor42.projectazure.libs.enums;
 public abstract class ItemEquipmentPlane extends ItemEquipmentBase{
 
     private enums.PLANE_TYPE type;
+    private int MaxOperativeTime;
 
     public ItemEquipmentPlane(Properties properties, int maxHP) {
         super(properties, maxHP);
+        this.slot = enums.SLOTTYPE.PLANE;
     }
 
     public void setType(enums.PLANE_TYPE type) {
@@ -17,4 +19,9 @@ public abstract class ItemEquipmentPlane extends ItemEquipmentBase{
     public enums.PLANE_TYPE getType() {
         return this.type;
     }
+
+    public void setMaxOperativeTick(int value){
+        this.MaxOperativeTime = value;
+    }
+
 }
