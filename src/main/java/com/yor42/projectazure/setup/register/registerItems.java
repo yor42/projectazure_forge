@@ -4,6 +4,7 @@ import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRendere
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
 import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533mm;
@@ -88,13 +89,14 @@ public class registerItems {
             .setISTER(() -> Equipment127mmGunRenderer::new)
             .group(PA_GROUP).maxStackSize(1), 40));
     /*
-    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(registerManager.AYANAMI.get(), new Item.Properties()
+    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(EntityAyanami.getType(), new Item.Properties()
             .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(registerManager.GANGWON.get(), new Item.Properties()
             .group(PA_SHIPS)));
 
      */
+
 
 
     public static void register(){};

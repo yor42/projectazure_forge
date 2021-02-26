@@ -6,6 +6,9 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
 
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.canUseCannon;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
+
 public class KansenMeleeGoal extends MeleeAttackGoal {
     private EntityKansenBase entity;
 
@@ -26,7 +29,7 @@ public class KansenMeleeGoal extends MeleeAttackGoal {
             return super.shouldExecute();
         }
         else{
-            return false;
+            return !hasAttackableCannon(this.entity.getRigging()) && !this.entity.canUseAmmo(this.entity.getActiveAmmoCategory());
         }
     }
 

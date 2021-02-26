@@ -1,23 +1,55 @@
 package com.yor42.projectazure.gameobject.items.equipment;
 
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 
 public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
 
-    private int maxFuel;
-    private enums.PLANE_TYPE type;
     public ItemEquipmentPlaneBase(Properties properties, int maxHP) {
         super(properties, maxHP);
         this.slot = enums.SLOTTYPE.PLANE;
     }
 
-    public void setType(enums.PLANE_TYPE type) {
-        this.type = type;
+    @Override
+    public void onUpdate(ItemStack stack) {
+        CompoundNBT compound = stack.getOrCreateTag();
+        int currentFuel = compound.getInt("fuel");
+        if (currentFuel+FuelPerTick()<=this.getMaxOperativeTime()){
+            currentFuel+=FuelPerTick();
+        }
+        else if(currentFuel+FuelPerTick()>this.getMaxOperativeTime()){
+            currentFuel = this.getMaxOperativeTime();
+        }
+
+        compound.putInt("fuel", currentFuel);
+
+        if(!compound.getBoolean("isArmed")){
+            int Armdelay = compound.getInt("armDelay");
+            if(Armdelay > 0){
+                Armdelay--;
+            }
+            compound.putInt("armDelay", Armdelay);
+        }
+
     }
 
-    public enums.PLANE_TYPE getType() {
-        return this.type;
+    public abstract AbstractEntityPlanes getEntity();
+    public float getMovementSpeed(){
+        return (float) this.getEntity().getAttribute(Attributes.MOVEMENT_SPEED).getValue();
     }
 
+    public abstract int getreloadTime();
+
+    public int FuelPerTick(){
+        return 2;
+    }
+
+    public abstract enums.PLANE_TYPE getType();
+
+    public abstract int getMaxOperativeTime();
 
 }

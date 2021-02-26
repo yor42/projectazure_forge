@@ -20,7 +20,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         super(type, worldIn);
         this.setTamed(false);
     }
-
     protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
 

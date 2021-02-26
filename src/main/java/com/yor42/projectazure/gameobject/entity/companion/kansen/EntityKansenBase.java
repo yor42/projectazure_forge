@@ -11,6 +11,7 @@ import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.enums.AmmoCategory;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerSounds;
@@ -46,6 +47,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.UUID;
 
@@ -157,6 +159,21 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
 
     public boolean hasRigging(){
         return this.getRigging().getItem() instanceof ItemRiggingBase;
+    }
+
+    @Nullable
+    public ItemStackHandler getRiggingInventory(){
+        if(this.getRigging().getItem() instanceof ItemRiggingBase) {
+            return new RiggingInventoryCapability(this.getRigging()).getEquipments();
+        }
+        else return null;
+    }
+
+    @Nullable
+    public ItemStackHandler getHanger(){
+        if (((ItemRiggingBase)this.getRigging().getItem()).getHangerSlots()>1)
+            return new RiggingInventoryCapability(this.getRigging(), this).getHangar();
+        return null;
     }
 
     public boolean attackEntityFromCannon(DamageSource source, AmmoProperties property, double distanceMultiplier) {
@@ -274,9 +291,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         return ShipStorage;
     }
 
+    public AmmoCategory getActiveAmmoCategory(){
+        return AmmoCategory.GENERIC;
+    }
+
     @Override
     public void AttackUsingCannon(LivingEntity target, float distanceFactor){
-        boolean shouldFire = this.canUseAmmo(enums.AmmoCategory.GENERIC) && this.canUseRigging() && canUseCannon(this.getRigging());
+        boolean shouldFire = this.canUseAmmo(getActiveAmmoCategory()) && this.canUseRigging() && canUseCannon(this.getRigging());
         if(shouldFire) {
             ItemStack Ammostack = this.findAmmo(enums.AmmoCategory.GENERIC);
             if (Ammostack.getItem() instanceof ItemAmmo) {
@@ -293,7 +314,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
                 Main.NETWORK.send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getPosX(), this.getPosY(), this.getPosZ(), 50, this.getEntityWorld().getDimensionKey())), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, vector3d.x, vector3d.y, vector3d.z));
 
                 this.addExp(1.0F);
-                ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.GUN);
+                ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.GUN, this);
                 setEquipmentDelay(FiringCannon);
             }
         }
@@ -312,7 +333,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
             torpedo.setPosition(this.getPosX() + vector3d.x, this.getPosY() - 0.5D, torpedo.getPosZ() + vector3d.z);
             this.world.addEntity(torpedo);
             this.addExp(1.0F);
-            ItemStack FiringTorpedo = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.TORPEDO);
+            ItemStack FiringTorpedo = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.TORPEDO, this);
             useTorpedoAmmo(FiringTorpedo);
             setEquipmentDelay(FiringTorpedo);
         }

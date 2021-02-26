@@ -1,11 +1,18 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.Color;
@@ -102,14 +109,37 @@ public class ItemStackUtils {
         }
     }
 
-    public static ItemStack getPreparedWeapon(ItemStack rigging, enums.SLOTTYPE slottype){
+    public static ItemStack serializePlane(AbstractEntityPlanes plane) {
+        ItemStack planeStack = new ItemStack(plane.getPlaneItem());
+        setCurrentDamage(planeStack, (int) (plane.getMaxHealth()-plane.getHealth()));
+        CompoundNBT nbt = planeStack.getOrCreateTag();
+
+        if(!plane.hasPayload()){
+            nbt.putInt("armDelay", plane.getPlaneItem().getreloadTime());
+        }
+
+        nbt.putInt("fuel", ((ItemEquipmentPlaneBase)plane.getPlaneItem()).getMaxOperativeTime()-plane.ticksExisted);
+        return planeStack;
+    }
+
+
+    public static ItemStack getPreparedWeapon(ItemStack rigging, enums.SLOTTYPE slottype, MobEntity Shooter){
         if(rigging.getItem() instanceof ItemRiggingBase){
             ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
             ItemStackHandler equipments = riggingItem.getEquipments(rigging);
             for(int i = 0; i<equipments.getSlots(); i++){
                 if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
                     if (((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == slottype) {
-                        if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0 && !isDestroyed(equipments.getStackInSlot(i))) {
+
+                        if(slottype== enums.SLOTTYPE.PLANE && equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase && Shooter != null){
+                            if(getCurrentHP(equipments.getStackInSlot(i))>((ItemEquipmentPlaneBase) equipments.getStackInSlot(i).getItem()).getMaxHP()*0.6){
+                                if(equipments.getStackInSlot(i).getOrCreateTag().getInt("armDelay")<=0){
+                                    if(isPlaneFuelReady(Shooter, equipments.getStackInSlot(i)))
+                                        return equipments.getStackInSlot(i);
+                                }
+                            }
+                        }
+                        else if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0 && !isDestroyed(equipments.getStackInSlot(i))) {
                             if(slottype == enums.SLOTTYPE.TORPEDO){
                                 if (!isOutOfAmmo(equipments.getStackInSlot(i))){
                                     return equipments.getStackInSlot(i);
@@ -124,6 +154,40 @@ public class ItemStackUtils {
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    public static boolean isPlaneFuelReady(MobEntity entity, ItemStack planeStack){
+        if(planeStack.getItem() instanceof ItemEquipmentPlaneBase) {
+            return planeStack.getOrCreateTag().getFloat("fuel") >= getRequiredMinimumFuel(entity, (ItemEquipmentPlaneBase) planeStack.getItem());
+        }
+        return false;
+    }
+
+    public static float getRequiredMinimumFuel(MobEntity Shooter, ItemEquipmentPlaneBase planeItem){
+        //Movement speed 0.1 = roughly 0.2 block/tick
+        if(Shooter.getAttackTarget() != null && Shooter.getAttackTarget().isAlive()) {
+            double distance = Shooter.getDistance(Shooter.getAttackTarget())*2.5;//2 way trip+ another 0.5X of fuel because minecraft entity are stupid
+            double speed = planeItem.getMovementSpeed();
+            return (int)Math.ceil(Math.abs(distance/speed));
+        }
+        return 0;
+    }
+
+
+
+    public static boolean hasAttackableCannon(ItemStack rigging){
+        if(rigging.getItem() instanceof ItemRiggingBase){
+            ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
+            ItemStackHandler equipments = riggingItem.getEquipments(rigging);
+            for(int i = 0; i<equipments.getSlots(); i++){
+                if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
+                    if(((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.GUN){
+                        return !isDestroyed(equipments.getStackInSlot(i));
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public static boolean hasGunOrTorpedo(ItemStack riggingStack){
@@ -142,14 +206,14 @@ public class ItemStackUtils {
 
     public static boolean canUseTorpedo(ItemStack riggingStack){
         if(riggingStack.getItem() instanceof ItemRiggingBase) {
-            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.TORPEDO) != ItemStack.EMPTY;
+            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.TORPEDO, null) != ItemStack.EMPTY;
         }
         else return false;
     }
 
     public static boolean canUseCannon(ItemStack riggingStack){
         if(riggingStack.getItem() instanceof ItemRiggingBase) {
-            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.GUN) != ItemStack.EMPTY;
+            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.GUN, null) != ItemStack.EMPTY;
         }
         else return false;
     }
