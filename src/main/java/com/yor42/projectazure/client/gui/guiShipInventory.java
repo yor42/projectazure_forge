@@ -125,6 +125,8 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     private void renderEntity(int mousex, int mousey){
         EntityKansenBase entity = this.host;
+
+        //FIXME: MatrixStack Overflow when it tries to render EntityGangwon
         if (entity != null && !(entity instanceof EntityGangwon)) {
             int entityWidth = (int) entity.getWidth();
             try {
