@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
@@ -88,13 +89,16 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+        matrixStack.push();
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         this.blit(matrixStack, this.x+backgroundWidth, this.y, 176, 104, 43, 90);
+        matrixStack.pop();
     }
 
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mousex, int mousey) {
+        matrixStack.push();
         this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 14085119);
         this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (float)76, (float)25, 14085119);
         IFormattableTextComponent leveltext = new StringTextComponent("Lv.").appendString(Integer.toString(this.host.getLevel()));
@@ -102,6 +106,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5, 5, 14085119);
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderEntity(mousex, mousey);
+        matrixStack.pop();
         //this.renderButton(matrixStack);
     }
 
@@ -120,7 +125,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     private void renderEntity(int mousex, int mousey){
         EntityKansenBase entity = this.host;
-        if (entity != null) {
+        if (entity != null && !(entity instanceof EntityGangwon)) {
             int entityWidth = (int) entity.getWidth();
             try {
                 InventoryScreen.drawEntityOnScreen(113+(entityWidth/2), 90, 25, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
@@ -131,6 +136,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
     }
 
     private void renderAffection(MatrixStack matrixStack, int mousex, int mousey) {
+        matrixStack.push();
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         int textureY = 1;
         int textureX = 176;
@@ -175,5 +181,6 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
             tooltips.add(new TranslationTextComponent("gui.current_affection_value").appendString(": ").appendString(String.format("%.2f",this.affection)+"/"+AffectionLimit).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
             this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
         }
+        matrixStack.pop();
     }
 }

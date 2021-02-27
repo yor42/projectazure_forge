@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.Items;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -49,6 +50,9 @@ public class ItemKansenSpawnEgg extends itemBaseTooltip {
             spawnedEntity.setPosition(context.getPos().getX(), context.getPos().getY() + 1.1F, context.getPos().getZ());
             context.getWorld().addEntity(spawnedEntity);
             spawnedEntity.setTamedBy(context.getPlayer());
+
+
+
             if (!context.getPlayer().isCreative())
                 itemstack.shrink(1);
 
@@ -59,4 +63,13 @@ public class ItemKansenSpawnEgg extends itemBaseTooltip {
 
     }
 
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return true;
+    }
 }

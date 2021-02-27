@@ -3,6 +3,8 @@ package com.yor42.projectazure.client.renderer.entity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.kansen.enterpriseModel;
+import com.yor42.projectazure.client.renderer.layer.AyanamiRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.EnterpriseRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.client.Minecraft;
@@ -26,6 +28,8 @@ public class entityEnterpriseRenderer extends GeoEntityRenderer<EntityEnterprise
 
     public entityEnterpriseRenderer(EntityRendererManager renderManager) {
         super(renderManager, new enterpriseModel());
+        this.addLayer(new EnterpriseRiggingLayer(this));
+        this.shadowSize = 0.7F; //change 0.7 to the desired shadow size.
     }
 
     @Override
@@ -38,8 +42,10 @@ public class entityEnterpriseRenderer extends GeoEntityRenderer<EntityEnterprise
 
     @Override
     public void render(EntityEnterprise entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        stack.push();
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+        stack.pop();
     }
 
     @Override

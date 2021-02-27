@@ -27,8 +27,7 @@ import java.util.List;
 
 import static com.yor42.projectazure.Main.PA_GROUP;
 import static com.yor42.projectazure.Main.PA_SHIPS;
-import static com.yor42.projectazure.setup.register.registerManager.ENTITYAYANAMI;
-import static com.yor42.projectazure.setup.register.registerManager.ENTITYGANGWON;
+import static com.yor42.projectazure.setup.register.registerManager.*;
 
 public class registerItems {
 
@@ -106,6 +105,8 @@ public class registerItems {
 
     public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(ENTITYGANGWON, new Item.Properties()
             .group(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWM_ENTERPRISE = registerManager.ITEMS.register("spawnenterprise", ()-> new ItemKansenSpawnEgg(ENTERPRISE_ENTITY_TYPE, new Item.Properties().group(PA_SHIPS)));
 
 
 

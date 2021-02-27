@@ -29,6 +29,7 @@ public class entityGangwonRenderer extends GeoEntityRenderer<EntityGangwon> {
     public entityGangwonRenderer(EntityRendererManager renderManager) {
         super(renderManager, new gangwonModel());
         this.addLayer(new GangwonRiggingLayer(this));
+        this.shadowSize = 0.7F; //change 0.7 to the desired shadow size.
     }
 
     @Override
@@ -41,8 +42,11 @@ public class entityGangwonRenderer extends GeoEntityRenderer<EntityGangwon> {
 
     @Override
     public void render(EntityGangwon entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+
+        stack.push();
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+        stack.pop();
     }
 
     @Override

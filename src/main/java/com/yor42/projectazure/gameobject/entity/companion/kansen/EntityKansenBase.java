@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.companion.kansen;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.entity.ai.targetAI.CompanionOwnerHurtTarget;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
@@ -144,6 +145,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
     }
 
     public ItemStack getRigging(){
+        if(this.dataManager.get(ITEM_RIGGING) == ItemStack.EMPTY)
+            this.dataManager.set(ITEM_RIGGING, this.getEquipment().getStackInSlot(0));
         return this.dataManager.get(ITEM_RIGGING);
     }
 
@@ -188,7 +191,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
 
         float DamageMultiplier = 1.0F;
         float ignoreArmorChance = RangedFloatRandom(0.05F, 0.1F);
-        if((this.hasRigging()&&source!=DamageSource.FALL)||!(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance))){
+        if(this.hasRigging()&& (!(source==DamageSource.FALL)||!(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance)))){
             DamageMultiplier = getRiggingedDamageModifier();
             DamageRiggingorEquipment(amount, this.getRigging());
             this.playSound(SoundEvents.ENTITY_IRON_GOLEM_HURT, 1.0F, 1.0f);
@@ -208,7 +211,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         this.goalSelector.addGoal(8, new KansenOpenDoorGoal(this, true));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(2, new CompanionOwnerHurtTarget(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
         this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(11, new LookRandomlyGoal(this));

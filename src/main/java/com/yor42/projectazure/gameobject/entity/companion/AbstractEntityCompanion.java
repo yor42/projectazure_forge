@@ -249,6 +249,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return true;
     }
 
+    public boolean isPVPenabled(){
+        return false;
+    }
+
     protected int getAwakeningLevel(){
         return this.awakeningLevel;
     }

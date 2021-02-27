@@ -3,7 +3,7 @@ package com.yor42.projectazure.client.renderer.entity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.kansen.ayanamiModel;
-import com.yor42.projectazure.client.renderer.layer.KansenRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.AyanamiRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.client.Minecraft;
@@ -36,14 +36,16 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
 
     public entityAyanamiRenderer(EntityRendererManager renderManager) {
         super(renderManager, new ayanamiModel());
-        this.addLayer(new KansenRiggingLayer(this));
+        this.addLayer(new AyanamiRiggingLayer(this));
         this.shadowSize = 0.7F; //change 0.7 to the desired shadow size.
     }
 
     @Override
     public void render(EntityAyanami entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        stack.push();
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+        stack.pop();
     }
 
     @Override

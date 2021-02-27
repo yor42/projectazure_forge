@@ -61,8 +61,7 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
             matrixStackIn.pop();
 
             if(entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingBase) {
-                ItemStackHandler Equipments = new ItemStackHandler(6);
-                Equipments = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getEquipments(entitylivingbaseIn.getRigging());
+                ItemStackHandler Equipments = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getEquipments(entitylivingbaseIn.getRigging());
 
                 //TODO: Clean this shit up with loop
                 /*

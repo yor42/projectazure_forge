@@ -1,8 +1,10 @@
 package com.yor42.projectazure.gameobject.items.equipment;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.ai.attributes.Attribute;
+import com.yor42.projectazure.network.proxy.ClientProxy;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -37,9 +39,10 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
 
     }
 
-    public abstract AbstractEntityPlanes getEntity();
+    public abstract EntityType<? extends AbstractEntityPlanes> getEntityType();
+
     public float getMovementSpeed(){
-        return (float) this.getEntity().getAttribute(Attributes.MOVEMENT_SPEED).getValue();
+        return (float) this.getEntityType().create(ClientProxy.getClientWorld()).getAttribute(Attributes.MOVEMENT_SPEED).getValue();
     }
 
     public abstract int getreloadTime();

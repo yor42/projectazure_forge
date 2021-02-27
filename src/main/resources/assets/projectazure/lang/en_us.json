@@ -57,6 +57,7 @@
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entitygangwon": "ROKS Gangwon",
+  "entity.projectazure.entityenterprise": "USS Enterprise",
 
   "death.attack.bonk": "%1$s was sent to horny jail"
 }

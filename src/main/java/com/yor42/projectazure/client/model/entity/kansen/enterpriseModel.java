@@ -42,6 +42,7 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
+        IBone Backhair = this.getAnimationProcessor().getBone("bone24");
 
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         if(!entity.isSailing()){
@@ -79,6 +80,7 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
         if(!entity.isBeingPatted()) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+            Backhair.setRotationX(-extraData.headPitch * ((float) Math.PI / 180F));
         }
     }
 }
