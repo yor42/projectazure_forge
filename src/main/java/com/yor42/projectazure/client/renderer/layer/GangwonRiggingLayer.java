@@ -51,10 +51,10 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
 
             matrixStackIn.push();
             this.modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();
-            int riggingoffset = entitylivingbaseIn.getRiggingOffset();
+            int riggingoffset = 28;
             IBone hostbone = getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").get();
             if(getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").isPresent()){
-                matrixStackIn.translate(hostbone.getPositionX()/16, (hostbone.getPositionY()+riggingoffset)/16, hostbone.getPositionZ()/16);
+                matrixStackIn.translate(hostbone.getPositionX()/16, (hostbone.getPositionY()+riggingoffset)/16, (hostbone.getPositionZ()-1)/16);
             }
             RenderType type = RenderType.getEntitySmoothCutout(((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getTexture());
             render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
@@ -84,12 +84,12 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
 
                         matrixStackIn.push();
                         RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem()).getTexture());
-                        matrixStackIn.translate((21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY()+riggingoffset)/16, -(4+hostbone.getPositionZ())/16);
+                        matrixStackIn.translate((21.5+hostbone.getPositionX())/16, (-2+hostbone.getPositionY()+riggingoffset)/16, -(5+hostbone.getPositionZ())/16);
                         matrixStackIn.rotate(new Quaternion(0, 0, -90, true));
 
                         GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(0).getItem()).getEquipmentModel().getModelLocation(null));
                         EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
-                        EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead()+entitylivingbaseIn.prevRotationYaw, 7.5F, -12.5F, false, true));
+                        EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead()-entitylivingbaseIn.renderYawOffset, 7.5F, -12.5F, false, true));
                         render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
                         matrixStackIn.pop();
                     }
@@ -98,11 +98,11 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
 
                         matrixStackIn.push();
                         RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem()).getTexture());
-                        matrixStackIn.translate(-(21.25+hostbone.getPositionX())/16, (32.5+hostbone.getPositionY()+riggingoffset)/16, -(4+hostbone.getPositionZ())/16);
+                        matrixStackIn.translate(-(21.5+hostbone.getPositionX())/16, (-2+hostbone.getPositionY()+riggingoffset)/16, -(5+hostbone.getPositionZ())/16);
                         matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
                         GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(1).getItem()).getEquipmentModel().getModelLocation(null));
                         EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
-                        EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead()+entitylivingbaseIn.prevRotationYaw, 7.5F, -12.5F, false, true));
+                        EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead()-entitylivingbaseIn.renderYawOffset, 7.5F, -12.5F, false, true));
                         render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
                         matrixStackIn.pop();
                     }
@@ -112,7 +112,7 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
                         if(Equipments.getStackInSlot(3).getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
                             matrixStackIn.push();
                             RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getTexture());
-                            matrixStackIn.translate((11.5 + hostbone.getPositionX()) / 16, (23.5 + hostbone.getPositionY() + riggingoffset) / 16, (11.5 + hostbone.getPositionZ()) / 16);
+                            matrixStackIn.translate((11.5 + hostbone.getPositionX()) / 16, (-13 + hostbone.getPositionY() + riggingoffset) / 16, (12.5 + hostbone.getPositionZ()) / 16);
                             matrixStackIn.rotate(new Quaternion(0, 0, -90, true));
                             GeoModel EquipmentModel = ((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getEquipmentModel().getModelLocation(null));
                             EquipmentModel.getBone("MountX").get().setRotationY(-0.75F - MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
@@ -131,7 +131,7 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
                         if(Equipments.getStackInSlot(4).getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
                             matrixStackIn.push();
                             RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getTexture());
-                            matrixStackIn.translate((0 + hostbone.getPositionX()) / 16, (24.5 + hostbone.getPositionY() + riggingoffset) / 16, (25.75 + hostbone.getPositionZ()) / 16);
+                            matrixStackIn.translate((0 + hostbone.getPositionX()) / 16, (-10 + hostbone.getPositionY() + riggingoffset) / 16, (26.75 + hostbone.getPositionZ()) / 16);
                             matrixStackIn.rotate(new Quaternion(90, 180, 0, true));
                             GeoModel EquipmentModel = ((ItemEquipmentBase) Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModelLocation(null));
                             EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead() + entitylivingbaseIn.prevRotationYaw, 45F, -45F, false, true)));
@@ -150,7 +150,7 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
                         if(Equipments.getStackInSlot(5).getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
                             matrixStackIn.push();
                             RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getTexture());
-                            matrixStackIn.translate(-(11.5 + hostbone.getPositionX()) / 16, (23.5 + hostbone.getPositionY() + riggingoffset) / 16, (11.5 + hostbone.getPositionZ()) / 16);
+                            matrixStackIn.translate(-(11.5 + hostbone.getPositionX()) / 16, (-13 + hostbone.getPositionY() + riggingoffset) / 16, (12.5 + hostbone.getPositionZ()) / 16);
                             matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
                             GeoModel EquipmentModel = ((ItemEquipmentBase) Equipments.getStackInSlot(5).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(5).getItem()).getEquipmentModel().getModelLocation(null));
                             EquipmentModel.getBone("MountX").get().setRotationY(0.75F + MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));

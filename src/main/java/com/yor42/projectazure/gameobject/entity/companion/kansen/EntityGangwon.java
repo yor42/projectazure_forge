@@ -89,7 +89,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
 
     @Override
     public int getRiggingOffset() {
-        return -7;
+        return 28;
     }
 
     @Override
