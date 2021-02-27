@@ -1,12 +1,13 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.entity.ai.goal.OpenDoorGoal;
 
 public class KansenOpenDoorGoal extends OpenDoorGoal {
-    private EntityKansenBase entityin;
+    private AbstractEntityCompanion entityin;
     private int animatingtimer;
-    public KansenOpenDoorGoal(EntityKansenBase entitylivingIn, boolean shouldClose) {
+    public KansenOpenDoorGoal(AbstractEntityCompanion entitylivingIn, boolean shouldClose) {
         super(entitylivingIn, shouldClose);
         this.entityin = entitylivingIn;
     }

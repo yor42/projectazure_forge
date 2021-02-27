@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -9,10 +10,10 @@ import net.minecraft.item.SwordItem;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.canUseCannon;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
 
-public class KansenMeleeGoal extends MeleeAttackGoal {
-    private EntityKansenBase entity;
+public class CompanionMeleeGoal extends MeleeAttackGoal {
+    private AbstractEntityCompanion entity;
 
-    public KansenMeleeGoal(EntityKansenBase creature, double speedIn, boolean useLongMemory) {
+    public CompanionMeleeGoal(EntityKansenBase creature, double speedIn, boolean useLongMemory) {
         super(creature, speedIn, useLongMemory);
         this.entity = creature;
     }
@@ -29,8 +30,12 @@ public class KansenMeleeGoal extends MeleeAttackGoal {
             return super.shouldExecute();
         }
         else{
-            return !hasAttackableCannon(this.entity.getRigging()) && !this.entity.canUseAmmo(this.entity.getActiveAmmoCategory());
+            if(this.entity instanceof EntityKansenBase) {
+                boolean flag = !hasAttackableCannon(((EntityKansenBase) this.entity).getRigging()) && !((EntityKansenBase) this.entity).canUseAmmo(((EntityKansenBase) this.entity).getActiveAmmoCategory());
+                return flag && super.shouldExecute();
+            }
         }
+        return false;
     }
 
     @Override

@@ -17,21 +17,11 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-public class EntityGangwon extends EntityKansenDestroyer{
+public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
 
     public EntityGangwon(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setTamed(false);
-    }
-
-    @Override
-    public int getRiggingOffset() {
-        return -7;
-    }
-
-    @Override
-    public enums.ShipRarity getRarity() {
-        return enums.ShipRarity.ELITE;
     }
 
     protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
@@ -95,5 +85,15 @@ public class EntityGangwon extends EntityKansenDestroyer{
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;
+    }
+
+    @Override
+    public int getRiggingOffset() {
+        return -7;
+    }
+
+    @Override
+    public enums.ShipRarity getRarity() {
+        return enums.ShipRarity.ELITE;
     }
 }

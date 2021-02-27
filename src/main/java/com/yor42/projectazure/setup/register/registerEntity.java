@@ -3,6 +3,7 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
+import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraftforge.fml.common.Mod;
@@ -15,6 +16,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.ENTITYAYANAMI, EntityAyanami.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYGANGWON, EntityGangwon.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTERPRISE_ENTITY_TYPE, EntityEnterprise.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.PLANEF4FWildCat, EntityF4fWildcat.MutableAttribute().create());
     }
 
 /*

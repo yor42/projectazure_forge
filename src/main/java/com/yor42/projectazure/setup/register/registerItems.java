@@ -4,10 +4,12 @@ import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRendere
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
 import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
+import com.yor42.projectazure.client.renderer.items.ItemPlanef4fWildcatRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533mm;
+import com.yor42.projectazure.gameobject.items.equipment.ItemPlanef4fwildcat;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.enums;
@@ -24,6 +26,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.yor42.projectazure.Main.PA_GROUP;
+import static com.yor42.projectazure.Main.PA_SHIPS;
+import static com.yor42.projectazure.setup.register.registerManager.ENTITYAYANAMI;
+import static com.yor42.projectazure.setup.register.registerManager.ENTITYGANGWON;
 
 public class registerItems {
 
@@ -88,14 +93,21 @@ public class registerItems {
     public static final RegistryObject<Item> EQUIPMENT_GUN_127MM = registerManager.ITEMS.register("equipment_gun_127mm", () -> new ItemEquipmentGun127mm(new Item.Properties()
             .setISTER(() -> Equipment127mmGunRenderer::new)
             .group(PA_GROUP).maxStackSize(1), 40));
-    /*
-    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(EntityAyanami.getType(), new Item.Properties()
+
+    public static float WildcatHP = 30;
+
+    public static final RegistryObject<Item> EQUIPMENT_PLANE_F4FWildcat = registerManager.ITEMS.register("equipment_plane_f4fwildcat", () -> new ItemPlanef4fwildcat(new Item.Properties()
+            .setISTER(() -> ItemPlanef4fWildcatRenderer::new)
+            .group(PA_GROUP).maxStackSize(1), (int) WildcatHP));
+
+
+    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(ENTITYAYANAMI, new Item.Properties()
             .group(PA_SHIPS)));
 
-    public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(registerManager.GANGWON.get(), new Item.Properties()
+    public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(ENTITYGANGWON, new Item.Properties()
             .group(PA_SHIPS)));
 
-     */
+
 
 
 

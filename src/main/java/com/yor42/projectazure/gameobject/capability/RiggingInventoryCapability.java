@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.capability;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.IRiggingContainerSupplier;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
-import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainerDDDefault;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;

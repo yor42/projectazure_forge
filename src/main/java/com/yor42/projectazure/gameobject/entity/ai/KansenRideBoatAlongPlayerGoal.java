@@ -1,15 +1,15 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.BoatEntity;
 public class KansenRideBoatAlongPlayerGoal extends Goal {
 
-    private final EntityKansenBase entity;
+    private final AbstractEntityCompanion entity;
     private final double movespeed;
 
-    public KansenRideBoatAlongPlayerGoal(EntityKansenBase entity, double speed){
+    public KansenRideBoatAlongPlayerGoal(AbstractEntityCompanion entity, double speed){
         this.entity = entity;
         this.movespeed = speed;
     }

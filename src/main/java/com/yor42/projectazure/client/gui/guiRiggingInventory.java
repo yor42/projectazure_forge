@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
-import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainerDDDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.client.Minecraft;

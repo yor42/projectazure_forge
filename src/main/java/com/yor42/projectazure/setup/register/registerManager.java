@@ -2,10 +2,10 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
-import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainerDDDefault;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
+import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import com.yor42.projectazure.libs.defined;
@@ -34,9 +34,6 @@ public class registerManager {
     private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<ContainerKansenInventory>(ContainerKansenInventory::new);
     public static final RegistryObject<ContainerType<ContainerKansenInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> SHIP_INVENTORY);
 
-    private static final ContainerType<RiggingContainerDDDefault> RIGGING_INVENTORY_DD_DEFAULT = new ContainerType<RiggingContainerDDDefault>(RiggingContainerDDDefault::new);
-    public static final RegistryObject<ContainerType<RiggingContainerDDDefault>> DD_DEFAULT_RIGGING_INVENTORY = CONTAINER.register("default_dd_rigging_inventory", () -> RIGGING_INVENTORY_DD_DEFAULT);
-
     private static final ContainerType<RiggingContainer> RIGGING_INVENTORY_TYPE = new ContainerType<RiggingContainer>(RiggingContainer::new);
     public static final RegistryObject<ContainerType<RiggingContainer>> RIGGING_INVENTORY = CONTAINER.register("rigging_inventory", () -> RIGGING_INVENTORY_TYPE);
 
@@ -56,6 +53,10 @@ public class registerManager {
 
     public static final EntityType<EntityProjectileTorpedo> PROJECTILETORPEDO = EntityType.Builder.<EntityProjectileTorpedo>create(EntityProjectileTorpedo::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectiletorpedo").toString());
     public static final RegistryObject<EntityType<EntityProjectileTorpedo>> TORPEDO = ENTITIES.register("entitytorpedo", () -> PROJECTILETORPEDO);
+
+    //Planes
+    public static final EntityType<EntityF4fWildcat> PLANEF4FWildCat = EntityType.Builder.<EntityF4fWildcat>create(EntityF4fWildcat::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString());
+    public static final RegistryObject<EntityType<EntityF4fWildcat>> F4FWildCat = ENTITIES.register("planef4fwildcat", () -> PLANEF4FWildCat);
 
     public static void register() {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();

@@ -1,7 +1,9 @@
 package com.yor42.projectazure.gameobject.items;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -13,9 +15,9 @@ import net.minecraft.world.server.ServerWorld;
 
 public class ItemKansenSpawnEgg extends itemBaseTooltip {
 
-    LivingEntity Entity;
+    EntityType<? extends AbstractEntityCompanion> Entity;
 
-    public ItemKansenSpawnEgg(LivingEntity Entity, Properties properties) {
+    public ItemKansenSpawnEgg(EntityType<? extends AbstractEntityCompanion> Entity, Properties properties) {
         super(properties);
         this.Entity = Entity;
     }
@@ -40,18 +42,21 @@ public class ItemKansenSpawnEgg extends itemBaseTooltip {
         } else {
             blockpos1 = blockpos.offset(direction);
         }
-        if(this.Entity!=null) {
-            this.Entity.setPosition(context.getPos().getX(), context.getPos().getY()+0.1, context.getPos().getZ());
-            if(this.Entity instanceof EntityKansenBase) {
-                ((EntityKansenBase) this.Entity).setTamedBy(context.getPlayer());
-            }
-            context.getWorld().addEntity(this.Entity);
-            if(!context.getPlayer().isCreative())
+
+        AbstractEntityCompanion spawnedEntity = this.Entity.create(context.getWorld());
+
+        if(spawnedEntity!=null) {
+            spawnedEntity.setPosition(context.getPos().getX(), context.getPos().getY() + 1.1F, context.getPos().getZ());
+            context.getWorld().addEntity(spawnedEntity);
+            spawnedEntity.setTamedBy(context.getPlayer());
+            if (!context.getPlayer().isCreative())
                 itemstack.shrink(1);
+
+            return ActionResultType.CONSUME;
         }
 
         return ActionResultType.CONSUME;
+
     }
 
-    //tbh its cube. not egg :omegalul:
 }

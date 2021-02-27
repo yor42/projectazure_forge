@@ -1,12 +1,16 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
+import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.setup.register.registerItems;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -432,6 +436,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
+    public boolean canFallInLove() {
+        return false;
+    }
+
+    @Override
+    public boolean isInLove() {
+        return false;
+    }
+
+    @Override
     public void livingTick() {
         super.livingTick();
         if(this.patAnimationTime >0){
@@ -487,8 +501,26 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.navigator.getNodeProcessor().setCanOpenDoors(this.canOpenDoor());
     }
 
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(2, new SitGoal(this));
+       this.goalSelector.addGoal(8, new KansenOpenDoorGoal(this, true));
+        //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
+        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
+    }
+
     protected boolean canOpenDoor() {
         return true;
+    }
+
+    public void setTamedBy(PlayerEntity player) {
+        this.setTamed(true);
+        this.setOwnerId(player.getUniqueID());
+        //Triggering Tame Animal goal at the beginning of the world doesn't feel right.
     }
 
     @Override
