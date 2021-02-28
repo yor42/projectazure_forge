@@ -43,8 +43,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.libs.utils.EntityUtils.getHitPointFromEntity;
-
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
@@ -578,7 +576,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     return ActionResultType.SUCCESS;
                 }
                 else if(LegCheckFinal > 1.0D - 0.015D / LegDeltaLength){
-                    Main.LOGGER.debug("LegCheck Triggered");
                     this.func_233687_w_(!this.isSitting());
                     return ActionResultType.SUCCESS;
                 }
