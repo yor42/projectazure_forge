@@ -50,6 +50,47 @@ public class enums {
         ULTRA_RARE
     }
 
+    public enum BodyHeight {
+        TOP,
+        HEAD,
+        NECK,
+        CHEST,
+        BELLY,
+        UBELLY,
+        LEG
+    }
+
+    public enum BodySide{
+        FRONT,
+        RIGHT,
+        LEFT,
+        BACK;
+    }
+
+    public enum InteractionPoint{
+        UBELLY("underbelly"),
+        CHEST("chest"),
+        BUTT("butt"),
+        NECK("nech"),
+        FACE("face"),
+        BACK("back"),
+        BELLY("belly"),
+        TOP("top"),
+        HEAD("head"),
+        LEG("head"),
+        ARM("arm");
+
+        private String name;
+
+        InteractionPoint(String name){
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+    }
+
     public enum AmmoCategory {
         //.... and fallback values
         //AP: Higher damage on kansen, lower chance to damage rigging
@@ -59,7 +100,7 @@ public class enums {
 
         //Big Lead boi
         GENERIC(0.75F, 5, 1, 1, 0.8F, false, false),
-        //What are you doing, step-shell?
+        //What are you doing, step-shell? ~~I'm sorry~~
         AP(0.9F,7, 2,4, 0.3F,false, false),
         //haha Shell goes AW MAN
         HE(0.65F,2, 1, 6, 0.8F, false, true),

@@ -1,7 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
@@ -40,6 +42,8 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static com.yor42.projectazure.libs.utils.EntityUtils.getHitPointFromEntity;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
@@ -223,6 +227,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         super(type, worldIn);
         this.setAffection(40F);
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
+
+        this.BodyHeightStand = new byte[] {92, 78, 73, 58, 47, 37};
+        this.BodyHeightSit = new byte[] {64, 49, 44, 29, 23, 12};
+    }
+
+    public byte[] getBodyHeightStand()
+    {
+        return this.BodyHeightStand;
+    }
+
+    public byte[] getBodyHeightSit()
+    {
+        return this.BodyHeightSit;
     }
 
     public void setOathed(boolean bool){
@@ -248,6 +265,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setLevel(this.level += deltaLevel);
         return true;
     }
+
+    protected byte[] BodyHeightStand;
+    protected byte[] BodyHeightSit;
 
     public boolean isPVPenabled(){
         return false;
@@ -537,8 +557,30 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             }
             else{
-                if(player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player)<4.0F) {
+                //check is player is looking at Head
+                Vector3d PlayerLook = player.getLook(1.0F).normalize();
+                float eyeHeight = (float) (this.isEntitySleeping()? this.getPosYEye()-0.575: this.getPosYEye());
+
+
+                Vector3d EyeDelta = new Vector3d(this.getPosX() - player.getPosX(), eyeHeight - player.getPosYEye(), this.getPosZ() - player.getPosZ());
+                double EyeDeltaLength = EyeDelta.length();
+                EyeDelta = EyeDelta.normalize();
+                double EyeCheckFinal = PlayerLook.dotProduct(EyeDelta);
+
+                //check is player is looking at leg
+                Vector3d LegDelta = new Vector3d(this.getPosX() - player.getPosX(), this.getPosY()+0.3 - player.getPosYEye(), this.getPosZ() - player.getPosZ());
+                double LegDeltaLength = LegDelta.length();
+                LegDelta = LegDelta.normalize();
+                double LegCheckFinal = PlayerLook.dotProduct(LegDelta);
+
+                if(EyeCheckFinal > 1.0D - 0.025D / EyeDeltaLength && player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player)<4.0F){
                     this.beingpatted();
+                    return ActionResultType.SUCCESS;
+                }
+                else if(LegCheckFinal > 1.0D - 0.015D / LegDeltaLength){
+                    Main.LOGGER.debug("LegCheck Triggered");
+                    this.func_233687_w_(!this.isSitting());
+                    return ActionResultType.SUCCESS;
                 }
                 else if(player.getHeldItemMainhand() != ItemStack.EMPTY) {
 
@@ -558,11 +600,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             }
                         }
                     }
-                    else {
-                        this.func_233687_w_(!this.isSitting());
-                    }
                 }
-                return ActionResultType.SUCCESS;
+                return ActionResultType.FAIL;
             }
         }
         else{
