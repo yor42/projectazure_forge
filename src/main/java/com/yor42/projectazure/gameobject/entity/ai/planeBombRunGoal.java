@@ -30,18 +30,12 @@ public class planeBombRunGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-
-        if(this.entity.getAttackTarget() == null || !this.entity.getAttackTarget().isAlive() || !this.entity.hasPayload() || this.entity.getMoveHelper().isUpdating() || this.entity.getPlaneType() == enums.PLANE_TYPE.FIGHTER){
-            return false;
-        }
-        else{
-            return this.entity.getNavigator().getPathToEntity(this.entity.getAttackTarget(), 0) != null;
-        }
+        return this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && this.entity.hasPayload() && !this.entity.getMoveHelper().isUpdating() && this.entity.getPlaneType() != enums.PLANE_TYPE.FIGHTER;
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return this.entity.getMoveHelper().isUpdating() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && this.entity.hasPayload();
+        return this.entity.getMoveHelper().isUpdating() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && this.entity.hasPayload() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
     }
 
     @Override

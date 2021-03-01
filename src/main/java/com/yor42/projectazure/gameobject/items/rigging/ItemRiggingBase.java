@@ -128,14 +128,31 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         return new RiggingInventoryCapability(riggingStack).getEquipments();
     };
 
+    @Nullable
+    public ItemStackHandler getHangers(ItemStack riggingStack){
+        return this.getHangerSlots()==0? null:new RiggingInventoryCapability(riggingStack).getHangar();
+    }
+
     public void onUpdate(ItemStack stack) {
         if(stack.getItem() instanceof ItemRiggingBase){
-            ItemStackHandler equipment = new RiggingInventoryCapability(stack).getEquipments();
+
+            RiggingInventoryCapability rigginginv = new RiggingInventoryCapability(stack);
+
+            ItemStackHandler equipment = rigginginv.getEquipments();
+            ItemStackHandler hanger = rigginginv.getHangar();
 
             for(int j = 0; j<equipment.getSlots(); j++){
                 if(equipment.getStackInSlot(j).getItem() instanceof ItemEquipmentBase) {
                     ItemEquipmentBase item = (ItemEquipmentBase) equipment.getStackInSlot(j).getItem();
                     item.onUpdate(equipment.getStackInSlot(j));
+                }
+            }
+            if(hanger!=null){
+                for(int i = 0; i<hanger.getSlots(); i++) {
+                    if (hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
+                        ItemEquipmentBase item = (ItemEquipmentBase) hanger.getStackInSlot(i).getItem();
+                        item.onUpdate(hanger.getStackInSlot(i));
+                    }
                 }
             }
         }

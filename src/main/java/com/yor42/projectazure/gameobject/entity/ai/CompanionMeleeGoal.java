@@ -26,13 +26,13 @@ public class CompanionMeleeGoal extends MeleeAttackGoal {
 
         boolean isEquippingsword = item instanceof SwordItem;
 
-        if(isEquippingsword) {
-            return super.shouldExecute();
+        if(!isEquippingsword) {
+            return false;
         }
         else{
             if(this.entity instanceof EntityKansenBase) {
                 boolean flag = !hasAttackableCannon(((EntityKansenBase) this.entity).getRigging()) && !((EntityKansenBase) this.entity).canUseAmmo(((EntityKansenBase) this.entity).getActiveAmmoCategory());
-                return flag && super.shouldExecute();
+                return flag && super.shouldExecute() && isEquippingsword;
             }
         }
         return false;

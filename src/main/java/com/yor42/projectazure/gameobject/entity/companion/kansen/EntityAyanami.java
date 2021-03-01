@@ -68,8 +68,8 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
             }
             return PlayState.CONTINUE;
         }
-
-        return PlayState.STOP;
+        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+        return PlayState.CONTINUE;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

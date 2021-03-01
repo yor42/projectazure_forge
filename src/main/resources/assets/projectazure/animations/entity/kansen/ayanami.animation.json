@@ -964,6 +964,21 @@
 						}
 					}
 				},
+				"Backhair2": {
+					"rotation": {
+						"vector": [-5, 0, 0]
+					}
+				},
+				"bone38": {
+					"rotation": {
+						"vector": [-5, 0, 0]
+					}
+				},
+				"bone39": {
+					"rotation": {
+						"vector": [-2.5, 0, 0]
+					}
+				},
 				"RightArm": {
 					"rotation": {
 						"vector": [-30, -27.5, 0]

@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.containers.riggingcontainer;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.containers.slots.slotEquipment;
 import com.yor42.projectazure.gameobject.containers.slots.slotInventory;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -28,6 +29,7 @@ public class RiggingContainer extends Container {
             slotcount = ((ItemRiggingBase) riggingStack.getItem()).getTotalSlotCount();
         }
         ItemStackHandler dummystack = new ItemStackHandler(30);
+        ItemStackHandler dummyHanger = new ItemStackHandler(45);
 
         if(riggingStack.getItem() instanceof ItemRiggingBase){
             for(int i = 0; i<((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount(); i++){
@@ -38,6 +40,11 @@ public class RiggingContainer extends Container {
             }
             for(int k = 0; k<((ItemRiggingBase) riggingStack.getItem()).getTorpedoSlotCount(); k++){
                 this.addSlot(new slotEquipment(dummystack, k+((ItemRiggingBase) riggingStack.getItem()).getGunSlotCount()+((ItemRiggingBase) riggingStack.getItem()).getAASlotCount(), 30 + k * 18, 77, enums.SLOTTYPE.TORPEDO));
+            }
+
+            int hangercount = Math.min(((ItemRiggingBase) riggingStack.getItem()).getHangerSlots(), 3);
+            for(int k = 0; k<hangercount; k++){
+                this.addSlot(new slotEquipment(dummyHanger, k, 30 + k * 18, 30, enums.SLOTTYPE.PLANE));
             }
 
             for (int i = 0; i < 3; ++i) {
@@ -52,10 +59,11 @@ public class RiggingContainer extends Container {
         }
     }
 
-    public RiggingContainer(int id, PlayerInventory playerinv, IRiggingContainerSupplier supplier) {
+    public RiggingContainer(int id, PlayerInventory playerinv, RiggingInventoryCapability supplier) {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = supplier.getRigging();
         ItemStackHandler equipmentstack = supplier.getEquipments();
+        ItemStackHandler hanger = ((ItemRiggingBase) riggingStack.getItem()).getHangers(riggingStack);
 
         if(this.riggingStack.getItem() instanceof ItemRiggingBase) {
 
@@ -78,6 +86,13 @@ public class RiggingContainer extends Container {
                     this.addSlot(new slotEquipment(equipmentstack, k + ((ItemRiggingBase) this.riggingStack.getItem()).getGunSlotCount() + ((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount(), 30 + k * 18, 77, enums.SLOTTYPE.TORPEDO));
                 }
             }
+            if(hanger != null) {
+                int hangercount = Math.min(hanger.getSlots(), 3);
+                for (int k = 0; k < hangercount; k++) {
+                    this.addSlot(new slotEquipment(hanger, k, 30 + k * 18, 30, enums.SLOTTYPE.PLANE));
+                }
+            }
+
             for (int i = 0; i < 3; ++i) {
                 for (int j = 0; j < 9; ++j) {
                     this.addSlot(new slotInventory(playerinv, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));

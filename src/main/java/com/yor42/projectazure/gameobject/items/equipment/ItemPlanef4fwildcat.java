@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.equipment;
 
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,7 @@ public class ItemPlanef4fwildcat extends ItemEquipmentPlaneBase{
 
     @Override
     public EntityType<? extends AbstractEntityPlanes> getEntityType() {
-        return null;
+        return registerManager.PLANEF4FWildCat;
     }
 
     @Override

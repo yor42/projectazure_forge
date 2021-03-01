@@ -25,45 +25,43 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
         }
-        AnimationBuilder builder = new AnimationBuilder();
 
-        //event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
         if(this.isBeingPatted()){
             if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.pat_sit", true));
             else
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.pat", true));
             return PlayState.CONTINUE;
         }
 
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.enterprise.sit", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.sit", true));
             return PlayState.CONTINUE;
         }
 
         if(this.isOpeningDoor()){
             if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorL", false));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.doorL", false));
             }
             else{
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorR", false));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.doorR", false));
             }
         }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.melee", false));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.melee", false));
             }
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.sail", true));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.run", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.run", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.walk", true));
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.enterprise.walk", true));
             }
             return PlayState.CONTINUE;
         }

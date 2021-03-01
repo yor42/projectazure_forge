@@ -35,7 +35,7 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
     @Override
     public void setLivingAnimations(EntityAyanami entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
     {
-
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
@@ -43,7 +43,6 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
 
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
         if(!entity.isSailing()){
             LeftArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F) * 0.8F * entity.limbSwingAmount);
             RightArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 0.8F * entity.limbSwingAmount);

@@ -170,9 +170,15 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
 
     @Nullable
     public ItemStackHandler getHanger(){
-        if (((ItemRiggingBase)this.getRigging().getItem()).getHangerSlots()>1)
-            return new RiggingInventoryCapability(this.getRigging(), this).getHangar();
+        if(this.hasRigging()) {
+            if (((ItemRiggingBase) this.getRigging().getItem()).getHangerSlots() > 0)
+                return new RiggingInventoryCapability(this.getRigging(), this).getHangar();
+        }
         return null;
+    }
+
+    public int getPlanetoLaunch(){
+        return 1;
     }
 
     public boolean attackEntityFromCannon(DamageSource source, AmmoProperties property, double distanceMultiplier) {
@@ -204,11 +210,12 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         this.goalSelector.addGoal(1, new KansenSwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(4, new KansenRangedAttackGoal(this, 1.0F, 10,20, 100F, 160F));
-        this.goalSelector.addGoal(5, new CompanionMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(6, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
-        this.goalSelector.addGoal(8, new KansenOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(4, new KansenLaunchPlaneGoal(this, 20, 40, 50));
+        this.goalSelector.addGoal(5, new KansenRangedAttackGoal(this, 1.0F, 10,20, 100F, 160F));
+        this.goalSelector.addGoal(6, new CompanionMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(7, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(8, new KansenWorkGoal(this, 1.0D));
+        this.goalSelector.addGoal(9, new KansenOpenDoorGoal(this, true));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new CompanionOwnerHurtTarget(this));

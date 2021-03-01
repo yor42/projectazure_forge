@@ -18,7 +18,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.setup.register.registerItems.WildcatHP;
 
-public class EntityF4fWildcat extends AbstractEntityPlanes{
+public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatable{
 
     public EntityF4fWildcat(EntityType<? extends AbstractEntityPlanes> type, World worldIn) {
         super(type, worldIn);

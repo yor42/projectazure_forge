@@ -74,7 +74,6 @@ public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnim
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.firerate").appendString(": ").append(new StringTextComponent(String.format("%.2f",((float)1/this.firedelay)*20)+"R/s")));
     }
 
     public ResourceLocation getTexture(){

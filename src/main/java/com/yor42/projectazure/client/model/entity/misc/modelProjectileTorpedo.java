@@ -26,11 +26,4 @@ public class modelProjectileTorpedo extends AnimatedGeoModel<EntityProjectileTor
     public ResourceLocation getAnimationFileLocation(EntityProjectileTorpedo entityProjectileTorpedo) {
         return ModResourceLocation("animations/entity/misc/projectiletorpedo.animation.json");
     }
-
-    @Override
-    public void setLivingAnimations(EntityProjectileTorpedo entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        IBone propeller = this.getAnimationProcessor().getBone("propeller");
-        float f = (float) (entity.ticksExisted + 2F%2*Math.PI);
-        propeller.setRotationZ(f);
-    }
 }

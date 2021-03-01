@@ -75,7 +75,15 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
 
     public void saveAll(){
         this.saveEquipments(this.getNBT(this.stack));
+
+        this.saveHanger(this.getNBT(this.stack));
+
         this.sendpacket();
+    }
+
+    private void saveHanger(CompoundNBT nbt) {
+
+        nbt.put("hanger", this.hangar.serializeNBT());
     }
 
     public void sendpacket() {
@@ -84,8 +92,12 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         }
     }
 
+    @Nullable
     public ItemStackHandler getHangar(){
-        return this.hangar;
+        if(this.hangar.getSlots()>0) {
+            return this.hangar;
+        }
+        return null;
     }
 
     public void saveEquipments(CompoundNBT nbt) {
@@ -105,6 +117,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
 
     public void loadEquipments(CompoundNBT nbt){
         this.equipments.deserializeNBT(nbt.getCompound("Inventory"));
+        this.hangar.deserializeNBT(nbt.getCompound("hanger"));
     }
 
     @Override

@@ -21,10 +21,13 @@
   "item.projectazure.dd_default_rigging.tooltip": "Basic Rigging for destroyer KANSEN.",
   "item.projectazure.ammo_generic.tooltip": "Most basic ammunition for KANSEN. weak, but cheap.",
   "item.projectazure.wisdomcube.tooltip": "Mysterious Glowing Cube. Used to Build KANSEN.",
+
+
   "item.projectazure.bonk_bat.tooltip": "Sends every being in existence who dares to cross this bat's path to horny jail. AND THERES NO EXCEPTION.",
 
   "item.tooltip.firerate": "Fire Rate",
   "item.tooltip.remainingammo" : "Remaining Ammo",
+  "item.tooltip.hanger_slot_usage": "Hanger Usage",
 
   "item.projectazure.ammo_generic": "Generic Shell",
 

@@ -19,7 +19,7 @@ public class PlaneWanderAroundCarrierGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        return this.plane.getAttackTarget() == null && this.plane.hasPayload()&& !this.plane.isOnBombRun() && this.plane.getOwner() != null;
+        return (this.plane.getAttackTarget() == null || !this.plane.getEntitySenses().canSee(this.plane.getAttackTarget())) && this.plane.hasPayload()&& !this.plane.isOnBombRun() && this.plane.getOwner() != null;
     }
 
     @Override

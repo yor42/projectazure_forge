@@ -32,9 +32,12 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     private AbstractEntityCompanion owner;
     private boolean hasPayloads;
     private boolean isOnBombRun;
+    private int maxOperativetime;
+    private boolean isLifeLimited;
 
     protected AbstractEntityPlanes(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
+        this.isLifeLimited = false;
     }
 
     protected final AnimationFactory factory = new AnimationFactory(this);
@@ -61,14 +64,13 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
     @Override
     public void livingTick() {
-        super.tick();
+        super.livingTick();
         this.setNoGravity(true);
         //in water = crash
         if(this.isInWater()){
             this.world.createExplosion(this, this.getPosX(), getPosY(), getPosZ(), 0.5F, Explosion.Mode.DESTROY);
             this.remove();
         }
-
         if(this.isLimitedLifespan()) {
             if (this.ticksExisted >= this.getMaxOperativeTick()) {
                 this.setDead();
@@ -88,16 +90,25 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         return this.owner;
     }
 
-    public void setPayloads() {
-        this.hasPayloads = true;
+    public void setPayloads(boolean payload) {
+        this.hasPayloads = payload;
+    }
+
+    public void setMaxOperativetime(int maxOperativetime) {
+        this.setLimitedLifespan(true);
+        this.maxOperativetime = maxOperativetime;
     }
 
     public int getMaxOperativeTick(){
-        return this.getPlaneItem().getMaxOperativeTime();
+        return this.maxOperativetime;
     };
 
+    public void setLimitedLifespan(boolean value){
+        this.isLifeLimited = value;
+    }
+
     public boolean isLimitedLifespan() {
-        return getMaxOperativeTick()>0;
+        return this.isLifeLimited;
     }
 
     public void usePayload(){
@@ -119,18 +130,18 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
     @Override
     protected void onDeathUpdate() {
-        super.onDeathUpdate();
         Vector3d movement = this.getMotion();
         double d0 = this.getPosX() + movement.x;
         double d1 = this.getPosY() + movement.y;
         double d2 = this.getPosZ() + movement.z;
-        this.setMotion(movement.getX(), movement.getY()-0.2F, movement.getZ());
+        this.setMotion(movement.getX(), movement.getY()-0.1F, movement.getZ());
         this.world.addParticle(ParticleTypes.SMOKE, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
 
-        if(!this.isNotColliding(this.world)){
-            world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), 1.0F, Explosion.Mode.DESTROY);
+        if(this.isOnGround() || isInWater()) {
+            this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), 1.0F, Explosion.Mode.DESTROY);
             this.remove();
         }
+
     }
 
     public void onDeath(DamageSource cause) {
@@ -148,7 +159,7 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
             if(this.getAttackTarget()!= null){
                 if(this.getDistanceSq(this.getAttackTarget())<20F && this.getAttackTarget().getPosY()<this.getPosY()){
-                    this.getNavigator().tryMoveToEntityLiving(this.getAttackTarget(), 1.5F);
+                    this.getMoveHelper().setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), 1.0F);
                 }
             }
 

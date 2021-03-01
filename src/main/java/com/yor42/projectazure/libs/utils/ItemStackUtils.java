@@ -1,6 +1,7 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
@@ -13,6 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.Color;
@@ -123,6 +125,66 @@ public class ItemStackUtils {
     }
 
 
+
+    public static ItemStack getPreparedPlane(EntityKansenBase entity, ItemStackHandler hanger){
+        if(entity.getRigging().getItem() instanceof ItemRiggingBase) {
+            ItemRiggingBase riggingItem = (ItemRiggingBase) entity.getRigging().getItem();
+
+            if(hanger != null) {
+                for (int i = 0; i < hanger.getSlots(); i++) {
+                    if(hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase) {
+                        if (getCurrentHP(hanger.getStackInSlot(i)) > ((ItemEquipmentPlaneBase) hanger.getStackInSlot(i).getItem()).getMaxHP() * 0.6) {
+                            if (hanger.getStackInSlot(i).getOrCreateTag().getInt("armDelay") <= 0 && hanger.getStackInSlot(i).getOrCreateTag().getInt("fuel") >= getRequiredMinimumFuel(entity, (ItemEquipmentPlaneBase) hanger.getStackInSlot(i).getItem())) {
+                                return hanger.getStackInSlot(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public static void usePlane(EntityKansenBase entity, ItemStack plane, ItemStackHandler hanger){
+        if(entity.getRigging().getItem() instanceof ItemRiggingBase) {
+            ItemRiggingBase riggingItem = (ItemRiggingBase) entity.getRigging().getItem();
+
+            if(hanger != null) {
+                for (int i = 0; i < hanger.getSlots(); i++) {
+                    if(hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase) {
+                        if (hanger.getStackInSlot(i) == plane) {
+                            hanger.getStackInSlot(i).setCount(0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    public static boolean hasPlanes(ItemStack rigging){
+        if(rigging.getItem() instanceof ItemRiggingBase) {
+            ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
+            ItemStackHandler hanger = new RiggingInventoryCapability(rigging).getHangar();
+            if(hanger != null) {
+                if (hanger.getSlots() > 0) {
+                    for (int i = 0; i < hanger.getSlots(); i++) {
+                        boolean flag = hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentBase;
+
+                        if(flag) {
+                            ItemEquipmentBase item = (ItemEquipmentBase) hanger.getStackInSlot(i).getItem();
+                            if (item.getSlot() == enums.SLOTTYPE.PLANE) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
     public static ItemStack getPreparedWeapon(ItemStack rigging, enums.SLOTTYPE slottype, MobEntity Shooter){
         if(rigging.getItem() instanceof ItemRiggingBase){
             ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
@@ -130,16 +192,7 @@ public class ItemStackUtils {
             for(int i = 0; i<equipments.getSlots(); i++){
                 if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
                     if (((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == slottype) {
-
-                        if(slottype== enums.SLOTTYPE.PLANE && equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase && Shooter != null){
-                            if(getCurrentHP(equipments.getStackInSlot(i))>((ItemEquipmentPlaneBase) equipments.getStackInSlot(i).getItem()).getMaxHP()*0.6){
-                                if(equipments.getStackInSlot(i).getOrCreateTag().getInt("armDelay")<=0){
-                                    if(isPlaneFuelReady(Shooter, equipments.getStackInSlot(i)))
-                                        return equipments.getStackInSlot(i);
-                                }
-                            }
-                        }
-                        else if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0 && !isDestroyed(equipments.getStackInSlot(i))) {
+                        if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0 && !isDestroyed(equipments.getStackInSlot(i))) {
                             if(slottype == enums.SLOTTYPE.TORPEDO){
                                 if (!isOutOfAmmo(equipments.getStackInSlot(i))){
                                     return equipments.getStackInSlot(i);
@@ -158,9 +211,16 @@ public class ItemStackUtils {
 
     public static boolean isPlaneFuelReady(MobEntity entity, ItemStack planeStack){
         if(planeStack.getItem() instanceof ItemEquipmentPlaneBase) {
-            return planeStack.getOrCreateTag().getFloat("fuel") >= getRequiredMinimumFuel(entity, (ItemEquipmentPlaneBase) planeStack.getItem());
+            return planeStack.getOrCreateTag().getInt("fuel") >= getRequiredMinimumFuel(entity, (ItemEquipmentPlaneBase) planeStack.getItem());
         }
         return false;
+    }
+
+    public static int getPlaneFuel(ItemStack planeStack){
+        if(planeStack.getItem() instanceof ItemEquipmentPlaneBase) {
+            return planeStack.getOrCreateTag().getInt("fuel");
+        }
+        return 0;
     }
 
     public static float getRequiredMinimumFuel(MobEntity Shooter, ItemEquipmentPlaneBase planeItem){
