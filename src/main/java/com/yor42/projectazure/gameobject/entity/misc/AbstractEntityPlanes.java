@@ -8,6 +8,7 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBas
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import net.minecraft.item.Item;
@@ -37,6 +38,7 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
     protected AbstractEntityPlanes(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
+        this.moveController = new FlyingMovementController(this, 20, true);
         this.isLifeLimited = false;
     }
 
@@ -134,7 +136,6 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         double d0 = this.getPosX() + movement.x;
         double d1 = this.getPosY() + movement.y;
         double d2 = this.getPosZ() + movement.z;
-        this.setMotion(movement.getX(), movement.getY()-0.1F, movement.getZ());
         this.world.addParticle(ParticleTypes.SMOKE, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
 
         if(this.isOnGround() || isInWater()) {
@@ -176,17 +177,40 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     }
 
     @Override
+    public boolean hasNoGravity() {
+        return this.isAlive();
+    }
+
+    @Override
+    public void travel(Vector3d travelVector) {
+
+        if (this.isOnGround())
+        {
+            this.setMotion(this.getMotion().getX(), this.getMotion().getY()+0.2, this.getMotion().getZ());
+        }
+
+        super.travel(travelVector);
+    }
+
+    @Override
     public boolean isOnLadder() {
         return false;
     }
 
-
-
+    @Override
+    public void move(MoverType typeIn, Vector3d pos) {
+        super.move(typeIn, pos);
+    }
 
     @Override
     public IPacket<?> createSpawnPacket() {
         NetworkHooks.getEntitySpawningPacket(this);
         return super.createSpawnPacket();
+    }
+
+    @Override
+    protected int calculateFallDamage(float distance, float damageMultiplier) {
+        return 0;
     }
 
     @Override

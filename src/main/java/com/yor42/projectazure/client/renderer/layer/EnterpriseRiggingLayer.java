@@ -69,7 +69,7 @@ public class EnterpriseRiggingLayer extends GeoLayerRenderer<EntityEnterprise> i
             if (entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingCVDefault){
 
                 //gun Renderer
-                if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
+                if(Equipments.getStackInSlot(0).getItem() instanceof ItemEquipmentBase){
 
                     matrixStackIn.push();
                     RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem()).getTexture());
@@ -81,7 +81,7 @@ public class EnterpriseRiggingLayer extends GeoLayerRenderer<EntityEnterprise> i
                     matrixStackIn.pop();
                 }
 
-                if(Equipments.getStackInSlot(1) != ItemStack.EMPTY){
+                if(Equipments.getStackInSlot(1).getItem() instanceof ItemEquipmentBase){
 
                     matrixStackIn.push();
                     RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem()).getTexture());

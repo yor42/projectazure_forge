@@ -22,6 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
+
 public class registerManager {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, defined.MODID);

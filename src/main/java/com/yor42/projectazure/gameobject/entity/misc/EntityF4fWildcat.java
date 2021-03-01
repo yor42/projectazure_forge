@@ -61,6 +61,7 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F)
                 .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 0.0F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, WildcatHP)
+                .createMutableAttribute(Attributes.FLYING_SPEED, 0.4F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;
     }

@@ -20,6 +20,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.Color;
 import net.minecraftforge.items.ItemStackHandler;
 
+import java.lang.annotation.Target;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -128,12 +129,14 @@ public class ItemStackUtils {
 
     public static ItemStack getPreparedPlane(EntityKansenBase entity, ItemStackHandler hanger){
         if(entity.getRigging().getItem() instanceof ItemRiggingBase) {
-            ItemRiggingBase riggingItem = (ItemRiggingBase) entity.getRigging().getItem();
 
             if(hanger != null) {
                 for (int i = 0; i < hanger.getSlots(); i++) {
                     if(hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase) {
                         if (getCurrentHP(hanger.getStackInSlot(i)) > ((ItemEquipmentPlaneBase) hanger.getStackInSlot(i).getItem()).getMaxHP() * 0.6) {
+
+
+                            //check if its ready to go out, etc... yada yada
                             if (hanger.getStackInSlot(i).getOrCreateTag().getInt("armDelay") <= 0 && hanger.getStackInSlot(i).getOrCreateTag().getInt("fuel") >= getRequiredMinimumFuel(entity, (ItemEquipmentPlaneBase) hanger.getStackInSlot(i).getItem())) {
                                 return hanger.getStackInSlot(i);
                             }
@@ -153,7 +156,7 @@ public class ItemStackUtils {
                 for (int i = 0; i < hanger.getSlots(); i++) {
                     if(hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase) {
                         if (hanger.getStackInSlot(i) == plane) {
-                            hanger.getStackInSlot(i).setCount(0);
+                            hanger.setStackInSlot(i, ItemStack.EMPTY);
                         }
                     }
                 }
@@ -182,6 +185,10 @@ public class ItemStackUtils {
             }
         }
         return false;
+    }
+
+    public static void serializeInventory(ItemStack TargetStack, ItemStackHandler inventory){
+        TargetStack.getOrCreateTag().put("Inventory", inventory.serializeNBT());
     }
 
 

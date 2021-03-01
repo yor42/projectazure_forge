@@ -92,36 +92,40 @@ public class KansenLaunchPlaneGoal extends Goal {
         if(entity.getRigging().getItem() instanceof ItemRiggingBase) {
             ItemStackHandler hanger = ((ItemRiggingBase) this.entity.getRigging().getItem()).getHangers(this.entity.getRigging());
 
-            ItemStack planestack = getPreparedPlane(this.entity, hanger);
+            if(hanger!= null) {
+                ItemStack planestack = getPreparedPlane(this.entity, hanger);
 
-            this.entity.getLookController().setLookPositionWithEntity(this.targetEntity, 30.0F, 30.0F);
+                this.entity.getLookController().setLookPositionWithEntity(this.targetEntity, 30.0F, 30.0F);
 
-            boolean flag3 = --this.PlaneDelay == 0 && planestack.getItem() instanceof ItemEquipmentPlaneBase;
-            if (flag3) {
-                if (!flag) {
-                    return;
+                boolean flag3 = --this.PlaneDelay == 0 && planestack.getItem() instanceof ItemEquipmentPlaneBase;
+                if (flag3) {
+                    if (!flag) {
+                        return;
+                    }
+                    EntityType<? extends AbstractEntityPlanes> planetype = ((ItemEquipmentPlaneBase) planestack.getItem()).getEntityType();
+
+                    AbstractEntityPlanes planeEntity = planetype.create(this.entity.getEntityWorld());
+                    if (planeEntity != null) {
+                        planeEntity.setPosition(this.entity.getPosX(), this.entity.getPosY() + 2, this.entity.getPosZ());
+                        planeEntity.setOwner(this.entity);
+                        planeEntity.setHealth(getCurrentHP(planestack));
+                        planeEntity.setPayloads(planestack.getOrCreateTag().getInt("armDelay") <= 0);
+                        planeEntity.setMaxOperativetime(getPlaneFuel(planestack));
+                        planeEntity.setAttackTarget(this.targetEntity);
+                        this.entity.getEntityWorld().addEntity(planeEntity);
+                        usePlane(this.entity, planestack, hanger);
+                    }
+                    float f = MathHelper.sqrt(d0) / this.attackRadius;
+                    this.PlaneDelay = MathHelper.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
+                } else if (this.PlaneDelay < 0) {
+                    float f2 = MathHelper.sqrt(d0) / this.attackRadius;
+                    this.PlaneDelay = MathHelper.floor(f2 * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
                 }
-                EntityType<? extends AbstractEntityPlanes> planetype = ((ItemEquipmentPlaneBase) planestack.getItem()).getEntityType();
-
-                AbstractEntityPlanes planeEntity = planetype.create(this.entity.getEntityWorld());
-                if (planeEntity != null) {
-                    planeEntity.setPosition(this.entity.getPosX(), this.entity.getPosY() + 2, this.entity.getPosZ());
-                    planeEntity.setOwner(this.entity);
-                    planeEntity.setHealth(getCurrentHP(planestack));
-                    planeEntity.setPayloads(planestack.getOrCreateTag().getInt("armDelay") <= 0);
-                    planeEntity.setMaxOperativetime(getPlaneFuel(planestack));
-                    planeEntity.setAttackTarget(this.targetEntity);
-                    this.entity.getEntityWorld().addEntity(planeEntity);
-                    planestack.shrink(1);
-                }
-                float f = MathHelper.sqrt(d0) / this.attackRadius;
-                this.PlaneDelay = MathHelper.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
-            } else if (this.PlaneDelay < 0) {
-                float f2 = MathHelper.sqrt(d0) / this.attackRadius;
-                this.PlaneDelay = MathHelper.floor(f2 * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
             }
         }
 
     }
+
+
 
 }
