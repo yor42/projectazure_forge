@@ -33,7 +33,7 @@ public class PlaneReturntoOwnerGoal extends Goal {
     public void tick() {
         super.tick();
         if(this.entity.getOwner() instanceof EntityKansenAircraftCarrier) {
-            this.entity.getMoveHelper().setMoveTo(this.entity.getOwner().getPosX(), this.entity.getOwner().getPosYEye(), this.entity.getOwner().getPosZ(), 2.0F);
+            this.entity.getMoveHelper().setMoveTo(this.entity.getOwner().getPosX(), this.entity.getOwner().getPosYEye(), this.entity.getOwner().getPosZ(), 1.2F);
             if(this.entity.getDistanceSq(this.entity.getOwner())<4F) {
                 if (((EntityKansenAircraftCarrier) this.entity.getOwner()).hasRigging()) {
                     ItemStackHandler Hanger = ((EntityKansenAircraftCarrier) this.entity.getOwner()).getHanger();
