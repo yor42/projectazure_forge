@@ -1,11 +1,14 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -16,6 +19,7 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
+import static com.yor42.projectazure.gameobject.DamageSources.PLANE_GUN;
 import static com.yor42.projectazure.setup.register.registerItems.WildcatHP;
 
 public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatable{
@@ -45,8 +49,20 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
     }
 
     @Override
-    protected void doAttack() {
+    protected void doAttack(LivingEntity entity) {
 
+        float damage = this.getPlaneItem().getAttackDamage();
+
+        if(entity instanceof EntityKansenBase){
+            if (((EntityKansenBase) entity).getOwner() == this.getOwner().getOwner()){
+                damage = 0;
+            }
+        }
+
+        boolean isAttackSuccessful = entity.attackEntityFrom(PLANE_GUN, damage);
+        if(isAttackSuccessful){
+            this.playSound(registerSounds.PLANE_GUN, this.getSoundVolume(), this.getSoundPitch());
+        }
     }
 
     @Override

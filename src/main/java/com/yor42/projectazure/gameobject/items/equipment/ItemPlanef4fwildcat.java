@@ -14,6 +14,11 @@ public class ItemPlanef4fwildcat extends ItemEquipmentPlaneBase{
     }
 
     @Override
+    public float getAttackDamage() {
+        return 15;
+    }
+
+    @Override
     public EntityType<? extends AbstractEntityPlanes> getEntityType() {
         return registerManager.PLANEF4FWildCat;
     }
@@ -30,8 +35,7 @@ public class ItemPlanef4fwildcat extends ItemEquipmentPlaneBase{
 
     @Override
     public enums.PLANE_TYPE getType() {
-        //I know that this is fighter plane. this is for debugging
-        return enums.PLANE_TYPE.TORPEDO_BOMBER;
+        return enums.PLANE_TYPE.FIGHTER;
     }
 
     @Override

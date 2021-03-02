@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.items.ItemStackHandler;
@@ -30,7 +31,7 @@ public class planeBombRunGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        return this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && this.entity.hasPayload() && !this.entity.getMoveHelper().isUpdating() && this.entity.getPlaneType() != enums.PLANE_TYPE.FIGHTER;
+        return this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && this.entity.hasPayload() && !this.entity.getMoveHelper().isUpdating();
     }
 
     @Override
@@ -48,7 +49,7 @@ public class planeBombRunGoal extends Goal {
     public void startExecuting() {
         LivingEntity target = this.entity.getAttackTarget();
         if(target!= null) {
-            this.entity.getMoveHelper().setMoveTo(target.getPosX(), target.getPosY()+target.getEyeHeight()+2F, target.getPosZ(), 1.0);
+            this.entity.getMoveHelper().setMoveTo(target.getPosX(),target.getPosYEye(),target.getPosZ(), 2);
             this.entity.setOnBombRun(true);
         }
     }
@@ -59,8 +60,11 @@ public class planeBombRunGoal extends Goal {
         LivingEntity target = this.entity.getAttackTarget();
         if(this.entity.getOwner() != null) {
                 if (target != null) {
+
+                    float bombHeightOffset = this.entity.getPlaneItem().getType() == enums.PLANE_TYPE.FIGHTER? 0:2;
+
                     if (this.entity.ticksExisted % 2 == 0) {
-                        this.entity.getMoveHelper().setMoveTo(target.getPosX(), target.getPosY() + target.getEyeHeight() + 2F, target.getPosZ(), 1.0);
+                        this.entity.getNavigator().tryMoveToXYZ(target.getPosX(), target.getPosYEye()+bombHeightOffset, target.getPosZ(), 1.0);
                     }
 
                     boolean ShouldDropPayloads;
@@ -69,14 +73,16 @@ public class planeBombRunGoal extends Goal {
                             ShouldDropPayloads = false;
                             break;
                         case DIVE_BOMBER:
+                        case FIGHTER:
                             ShouldDropPayloads = target.getPosX() - 1 < this.entity.getPosX() && this.entity.getPosX() < target.getPosX() + 1 && target.getPosZ() - 1 < this.entity.getPosZ() && this.entity.getPosZ() < target.getPosZ() + 1;
                             break;
                         case TORPEDO_BOMBER:
                             ShouldDropPayloads = this.entity.getDistanceSq(target) < 10F;
+                            break;
                     }
 
                     if (ShouldDropPayloads && this.entity.hasPayload()) {
-                        this.entity.usePayload();
+                        this.entity.usePayload(target);
                     }
 
                 }

@@ -39,6 +39,8 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
 
     }
 
+    public abstract float getAttackDamage();
+
     public abstract EntityType<? extends AbstractEntityPlanes> getEntityType();
 
     public float getMovementSpeed(){

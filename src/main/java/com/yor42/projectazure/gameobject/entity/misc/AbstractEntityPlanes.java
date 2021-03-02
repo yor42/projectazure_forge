@@ -113,16 +113,16 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         return this.isLifeLimited;
     }
 
-    public void usePayload(){
+    public void usePayload(LivingEntity entity){
+        this.doAttack(entity);
         this.hasPayloads = false;
-        this.doAttack();
     }
 
     public boolean hasPayload(){
         return this.hasPayloads;
     }
 
-    protected abstract void doAttack();
+    protected abstract void doAttack(LivingEntity entity);
 
     public abstract ItemEquipmentPlaneBase getPlaneItem();
 

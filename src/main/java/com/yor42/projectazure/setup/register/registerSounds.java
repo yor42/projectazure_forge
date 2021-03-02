@@ -17,6 +17,8 @@ public final class registerSounds {
 
     public static final SoundEvent WEAPON_BONK = registerSoundEvent("bonk");
 
+    public static final SoundEvent PLANE_GUN = registerSoundEvent("plane_gun");
+
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);
         return new SoundEvent(soundID).setRegistryName(soundID);
@@ -28,5 +30,6 @@ public final class registerSounds {
         registry.register(DISC_BRAINPOWER);
         registry.register(WEAPON_BONK);
         registry.register(CANON_FIRE_MEDIUM);
+        registry.register(PLANE_GUN);
     }
 }

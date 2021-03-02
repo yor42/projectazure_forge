@@ -30,5 +30,13 @@
         "stream": true
       }
     ]
+  },
+  "plane_gun": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/aircraft/aircraft_machinegun_fire",
+        "stream": true
+      }
+    ]
   }
 }

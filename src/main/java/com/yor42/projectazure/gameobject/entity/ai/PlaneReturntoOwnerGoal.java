@@ -21,7 +21,7 @@ public class PlaneReturntoOwnerGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        return (!this.entity.hasPayload() || this.entity.getAttackTarget() == null || this.entity.getMaxOperativeTick() - this.entity.ticksExisted <200) && this.entity.getOwner() != null;
+        return (!this.entity.hasPayload() || this.entity.getAttackTarget() == null || this.entity.getMaxOperativeTick() - this.entity.ticksExisted <200 || !this.entity.getAttackTarget().isAlive()) && this.entity.getOwner() != null;
     }
 
     @Override
@@ -33,8 +33,8 @@ public class PlaneReturntoOwnerGoal extends Goal {
     public void tick() {
         super.tick();
         if(this.entity.getOwner() instanceof EntityKansenAircraftCarrier) {
-            this.entity.getMoveHelper().setMoveTo(this.entity.getOwner().getPosX(), this.entity.getOwner().getPosY()+(this.entity.getOwner().getHeight()*0.5), this.entity.getOwner().getPosZ(), 1.0F);
-            if(this.entity.getDistanceSq(this.entity.getOwner())<1.5F) {
+            this.entity.getMoveHelper().setMoveTo(this.entity.getOwner().getPosX(), this.entity.getOwner().getPosYEye(), this.entity.getOwner().getPosZ(), 2.0F);
+            if(this.entity.getDistanceSq(this.entity.getOwner())<4F) {
                 if (((EntityKansenAircraftCarrier) this.entity.getOwner()).hasRigging()) {
                     ItemStackHandler Hanger = ((EntityKansenAircraftCarrier) this.entity.getOwner()).getHanger();
                     if(Hanger != null){
