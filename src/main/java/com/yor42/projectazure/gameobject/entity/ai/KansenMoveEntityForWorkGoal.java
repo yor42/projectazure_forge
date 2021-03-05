@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,14 +19,14 @@ import java.util.EnumSet;
 
 abstract class KansenMoveEntityForWorkGoal extends Goal {
 
-    protected EntityKansenBase host;
+    protected AbstractEntityCompanion host;
     private final double speed;
     protected BlockPos targetBlockPos;
     protected boolean work;
     private int UpdateTimer;
     private ArrayList<BlockPos> BlockList = new ArrayList<>();
 
-    protected KansenMoveEntityForWorkGoal(EntityKansenBase entity, double speed) {
+    protected KansenMoveEntityForWorkGoal(AbstractEntityCompanion entity, double speed) {
         this.host = entity;
         this.speed = speed;
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP));

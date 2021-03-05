@@ -4,10 +4,10 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.entity.ai.goal.OpenDoorGoal;
 
-public class KansenOpenDoorGoal extends OpenDoorGoal {
+public class CompanionOpenDoorGoal extends OpenDoorGoal {
     private AbstractEntityCompanion entityin;
     private int animatingtimer;
-    public KansenOpenDoorGoal(AbstractEntityCompanion entitylivingIn, boolean shouldClose) {
+    public CompanionOpenDoorGoal(AbstractEntityCompanion entitylivingIn, boolean shouldClose) {
         super(entitylivingIn, shouldClose);
         this.entityin = entitylivingIn;
     }

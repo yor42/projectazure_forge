@@ -1,5 +1,6 @@
 package com.yor42.projectazure.network.proxy;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,7 +9,7 @@ import net.minecraft.world.World;
 
 public class ClientProxy extends CommonProxy {
 
-    private Entity SharedMob = null;
+    private AbstractEntityCompanion SharedMob = null;
     private ItemStack SharedStack = ItemStack.EMPTY;
 
     public static World getClientWorld()
@@ -22,11 +23,11 @@ public class ClientProxy extends CommonProxy {
         return Minecraft.getInstance().player;
     }
 
-    public void setSharedMob(Entity mob){
+    public void setSharedMob(AbstractEntityCompanion mob){
         this.SharedMob = mob;
     }
 
-    public Entity getSharedMob(){
+    public AbstractEntityCompanion getSharedMob(){
         return this.SharedMob;
     }
 

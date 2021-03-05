@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.entity.companion.kansen;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
-import com.yor42.projectazure.gameobject.entity.ai.targetAI.CompanionOwnerHurtTarget;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
@@ -20,7 +19,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -52,7 +50,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.DamageRiggingorEquipment;
 import static com.yor42.projectazure.libs.utils.MathUtil.*;
 
-public abstract class EntityKansenBase extends AbstractEntityCompanion implements IShipRangedAttack {
+public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     Random rand = new Random();
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
@@ -65,7 +63,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         @Override
         protected void onContentsChanged(int slot) {
             if (slot == 0) {
-                EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(slot));
+                EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(0));
             }
         }
 
@@ -94,15 +92,14 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
     }
 
-    public abstract int getRiggingOffset();
-
-    public abstract enums.ShipRarity getRarity();
+    public abstract enums.CompanionRarity getRarity();
 
     protected void registerData() {
         super.registerData();
         this.dataManager.register(STORAGE, new CompoundNBT());
         this.dataManager.register(ITEM_RIGGING,ItemStack.EMPTY);
     }
+    public abstract int getRiggingOffset();
 
     @Override
     public void writeAdditional(CompoundNBT compound) {
@@ -145,18 +142,21 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
     }
 
     public ItemStack getRigging(){
-        if(this.dataManager.get(ITEM_RIGGING) == ItemStack.EMPTY)
-            this.dataManager.set(ITEM_RIGGING, this.getEquipment().getStackInSlot(0));
-        return this.dataManager.get(ITEM_RIGGING);
+        if(ITEM_RIGGING != null) {
+            return this.dataManager.get(ITEM_RIGGING);
+        }
+        else{
+            return this.getShipStorage().getStackInSlot(0);
+        }
     }
 
     protected void openGUI(PlayerEntity player){
         NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerKansenInventory.Supplier(this));
-        Main.PROXY.setSharedMob(this);
     }
 
 
     public boolean hasRigging(){
+
         return this.getRigging().getItem() instanceof ItemRiggingBase;
     }
 
@@ -207,21 +207,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new KansenSwimGoal(this));
-        this.goalSelector.addGoal(2, new SitGoal(this));
-        this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        super.registerGoals();
         this.goalSelector.addGoal(4, new KansenLaunchPlaneGoal(this, 20, 40, 50));
         this.goalSelector.addGoal(5, new KansenRangedAttackGoal(this, 1.0F, 10,20, 100F, 160F));
-        this.goalSelector.addGoal(6, new CompanionMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(7, new KansenFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
-        this.goalSelector.addGoal(8, new KansenWorkGoal(this, 1.0D));
-        this.goalSelector.addGoal(9, new KansenOpenDoorGoal(this, true));
-        //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new CompanionOwnerHurtTarget(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
-        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(7, new CompanionFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+
     }
 
 
@@ -284,7 +274,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         return this.AmmoStorage;
     }
 
-    @Override
     public boolean canUseAmmo(enums.AmmoCategory types){
         return findAmmo(types) != ItemStack.EMPTY;
     }
@@ -301,7 +290,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         return AmmoCategory.GENERIC;
     }
 
-    @Override
     public void AttackUsingCannon(LivingEntity target, float distanceFactor){
         boolean shouldFire = this.canUseAmmo(getActiveAmmoCategory()) && this.canUseRigging() && canUseCannon(this.getRigging());
         if(shouldFire) {
@@ -326,7 +314,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion implement
         }
     }
 
-    @Override
     public void AttackUsingTorpedo(LivingEntity target, float distanceFactor){
         boolean shouldFire = this.isSailing() && canUseTorpedo(this.getRigging());
         if(shouldFire){

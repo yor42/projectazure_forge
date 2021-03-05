@@ -1,7 +1,9 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.gameobject.containers.ContainerBAInventory;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
@@ -32,11 +34,15 @@ public class registerManager {
 
     //container
     public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, defined.MODID);
+
     private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<ContainerKansenInventory>(ContainerKansenInventory::new);
     public static final RegistryObject<ContainerType<ContainerKansenInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> SHIP_INVENTORY);
 
     private static final ContainerType<RiggingContainer> RIGGING_INVENTORY_TYPE = new ContainerType<RiggingContainer>(RiggingContainer::new);
     public static final RegistryObject<ContainerType<RiggingContainer>> RIGGING_INVENTORY = CONTAINER.register("rigging_inventory", () -> RIGGING_INVENTORY_TYPE);
+
+    public static final ContainerType<ContainerBAInventory> BA_INVENTORY_TYPE = new ContainerType<ContainerBAInventory>(ContainerBAInventory::new);
+    public static final RegistryObject<ContainerType<ContainerBAInventory>> BA_CONTAINER = CONTAINER.register("bluearchive_inventory", () -> BA_INVENTORY_TYPE);
 
     //entity
     public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(1F, 1.5F).build(ModResourceLocation("entityayanami").toString());
@@ -47,6 +53,9 @@ public class registerManager {
 
     public static final EntityType<EntityEnterprise> ENTERPRISE_ENTITY_TYPE = EntityType.Builder.create(EntityEnterprise::new, EntityClassification.CREATURE).size(1F, 1.8F).build(ModResourceLocation("entityenterprise").toString());
     public static final RegistryObject<EntityType<EntityEnterprise>> ENTERPRISE = ENTITIES.register("entityenterprise", () -> ENTERPRISE_ENTITY_TYPE);
+
+    public static final EntityType<EntityShiroko> SHIROKO_ENTITY_TYPE = EntityType.Builder.create(EntityShiroko::new, EntityClassification.CREATURE).size(1F, 1.8F).build(ModResourceLocation("entityshiroko").toString());
+    public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> SHIROKO_ENTITY_TYPE);
 
     //projectile
     public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString());

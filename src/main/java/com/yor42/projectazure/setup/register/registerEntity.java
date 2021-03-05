@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
@@ -17,6 +18,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.ENTITYGANGWON, EntityGangwon.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTERPRISE_ENTITY_TYPE, EntityEnterprise.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.PLANEF4FWildCat, EntityF4fWildcat.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.SHIROKO_ENTITY_TYPE, EntityShiroko.MutableAttribute().create());
     }
 
 /*

@@ -1,9 +1,13 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.gunusers;
 
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -14,40 +18,38 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable {
+import static com.yor42.projectazure.libs.enums.CompanionRarity.ELITE;
 
-    public EntityAyanami(EntityType<? extends EntityAyanami> type, World worldIn) {
+public class EntityShiroko extends EntityGunUserBase {
+    public EntityShiroko(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setTamed(false);
     }
-    protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
-    {
 
+    @Override
+    protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        AnimationBuilder builder = new AnimationBuilder();
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
         }
-        AnimationBuilder builder = new AnimationBuilder();
-
-        //event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
         if(this.isBeingPatted()){
             if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat_sit", true));
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat_sit", true));
             else
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat", true));
             return PlayState.CONTINUE;
         }
 
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit", true));
             return PlayState.CONTINUE;
         }
 
         if(this.isOpeningDoor()){
             if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorL", false));
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.openDoorL", false));
             }
             else{
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorR", false));
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.openDoorR", false));
             }
         }
         else if(this.isMeleeing()){
@@ -57,18 +59,15 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
-            if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
-            }
-            else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run", true));
+            if(this.isSprinting()){
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.run", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk", true));
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.walk", true));
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+        event.getController().setAnimation(builder.addAnimation("animation.shiroko.idle", true));
         return PlayState.CONTINUE;
     }
 
@@ -76,20 +75,11 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F)
                 .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.0F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;
     }
 
-    @Override
-    public int getRiggingOffset() {
-        return 0;
-    }
-
-    @Override
-    public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.ELITE;
-    }
 }

@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.IShipRangedAttack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -14,8 +13,7 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public class KansenRangedAttackGoal extends Goal {
 
-    private IShipRangedAttack host;
-    private MobEntity entityHost;
+    private EntityKansenBase entityHost;
     private LivingEntity attackTarget;
     private final double entityMoveSpeed;
     private int seeTime;
@@ -27,13 +25,12 @@ public class KansenRangedAttackGoal extends Goal {
     private int minAttackInterval;
     int torpedoAttackDelay;
 
-    public KansenRangedAttackGoal(IShipRangedAttack entity, double movespeed, int MinAttackInterval , int MaxAttackInterval, float maxCannonAttackDistanceIn, float MaxTorpedoAttackDistance){
+    public KansenRangedAttackGoal(EntityKansenBase entity, double movespeed, int MinAttackInterval , int MaxAttackInterval, float maxCannonAttackDistanceIn, float MaxTorpedoAttackDistance){
         if (!(entity instanceof LivingEntity)) {
             throw new IllegalArgumentException("KansenRangedAttackGoal used here doesn't extend living entity. well what do you want me to do, dead bush shooting cannon and torpedo?");
         }
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-        this.host = entity;
-        this.entityHost = (MobEntity) entity;
+        this.entityHost = entity;
         this.entityMoveSpeed = movespeed;
         this.maxCannonAttackDistance = maxCannonAttackDistanceIn;
         this.CannonattackRadius = maxCannonAttackDistanceIn*maxCannonAttackDistanceIn;
@@ -98,7 +95,7 @@ public class KansenRangedAttackGoal extends Goal {
 
         if(--this.CannonAttackDelay == 0 && canSee && distance<=this.maxCannonAttackDistance) {
             float lvt_5_1_ = MathHelper.clamp(f, 0.1F, 1.0F);
-            this.host.AttackUsingCannon(this.attackTarget, lvt_5_1_);
+            this.entityHost.AttackUsingCannon(this.attackTarget, lvt_5_1_);
             this.CannonAttackDelay = MathHelper.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
         }
         else if(this.CannonAttackDelay <0){
@@ -109,7 +106,7 @@ public class KansenRangedAttackGoal extends Goal {
 
         if(--this.torpedoAttackDelay == 0 && canSee && distance<=this.maxTorpedoAttackDistance) {
             float lvt_5_1_ = MathHelper.clamp(f2, 0.1F, 1.0F);
-            this.host.AttackUsingTorpedo(this.attackTarget, lvt_5_1_);
+            this.entityHost.AttackUsingTorpedo(this.attackTarget, lvt_5_1_);
             this.torpedoAttackDelay = (int) (300+(getRand().nextFloat()*140));
         }
         else if(this.torpedoAttackDelay <0){

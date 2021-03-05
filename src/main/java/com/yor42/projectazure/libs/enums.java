@@ -42,7 +42,7 @@ public class enums {
         }
     }
 
-    public enum ShipRarity{
+    public enum CompanionRarity {
         NORMAL,
         RARE,
         ELITE,

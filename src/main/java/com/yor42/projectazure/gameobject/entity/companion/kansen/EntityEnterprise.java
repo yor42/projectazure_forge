@@ -17,7 +17,7 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-import static com.yor42.projectazure.libs.enums.ShipRarity.SUPER_RARE;
+import static com.yor42.projectazure.libs.enums.CompanionRarity.SUPER_RARE;
 
 public class EntityEnterprise extends EntityKansenAircraftCarrier{
     @Override
@@ -79,7 +79,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
     }
 
     @Override
-    public enums.ShipRarity getRarity() {
+    public enums.CompanionRarity getRarity() {
         return SUPER_RARE;
     }
 

@@ -93,7 +93,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
     }
 
     @Override
-    public enums.ShipRarity getRarity() {
-        return enums.ShipRarity.ELITE;
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.ELITE;
     }
 }

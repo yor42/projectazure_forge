@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -24,7 +25,7 @@ public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
     private int breakingTime;
     private int previousBreakProgress = -1;
 
-    public KansenWorkGoal(EntityKansenBase entity, double speed){
+    public KansenWorkGoal(AbstractEntityCompanion entity, double speed){
         super(entity, speed);
     }
 

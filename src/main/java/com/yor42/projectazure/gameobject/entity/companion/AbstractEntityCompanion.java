@@ -3,16 +3,13 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -525,14 +522,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(1, new CompanionSwimGoal(this));
         this.goalSelector.addGoal(2, new SitGoal(this));
-       this.goalSelector.addGoal(8, new KansenOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(6, new CompanionMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(7, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(8, new KansenWorkGoal(this, 1.0D));
+       this.goalSelector.addGoal(9, new CompanionOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
-        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
     }
 
     protected boolean canOpenDoor() {
@@ -551,6 +553,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             if(player.isSneaking()){
                 if(!world.isRemote) {
                     this.openGUI(player);
+                    Main.PROXY.setSharedMob(this);
                     return ActionResultType.SUCCESS;
                 }
             }

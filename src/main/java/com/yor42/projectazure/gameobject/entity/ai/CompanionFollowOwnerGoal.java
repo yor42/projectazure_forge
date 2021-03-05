@@ -1,19 +1,20 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 
-public class KansenFollowOwnerGoal extends FollowOwnerGoal {
+public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
 
-    private EntityKansenBase host;
+    private AbstractEntityCompanion host;
     private LivingEntity owner;
 
     private final float mindist;
 
     private int pathRefreshTick;
 
-    public KansenFollowOwnerGoal(EntityKansenBase tameable, double speed, float minDist, float maxDist, boolean teleportToLeaves) {
+    public CompanionFollowOwnerGoal(AbstractEntityCompanion tameable, double speed, float minDist, float maxDist, boolean teleportToLeaves) {
         super(tameable, speed, minDist, maxDist, teleportToLeaves);
         this.host = tameable;
         this.mindist = minDist;
@@ -46,9 +47,8 @@ public class KansenFollowOwnerGoal extends FollowOwnerGoal {
     public void tick() {
         if(--this.pathRefreshTick <= 0) {
             this.pathRefreshTick = 10;
-            if(!this.host.isSailing()) {
-                this.host.setSprinting(this.host.getDistanceSq(this.owner) >= 64);
-            }
+            boolean canRun = !(this.host instanceof EntityKansenBase && ((EntityKansenBase) this.host).isSailing()) && this.host.isOnGround();
+            this.host.setSprinting(this.host.getDistance(this.owner) >= 6 && canRun);
         }
         super.tick();
     }

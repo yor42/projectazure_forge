@@ -1,5 +1,6 @@
 package com.yor42.projectazure.network;
 
+import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -39,7 +40,7 @@ public class EventHandler {
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_GANGWON.get()));
                 }
             }
-            data.putBoolean("PRJA:gotStarterCube", true);
+            data.putBoolean(defined.MODID+":gotStarterCube", true);
             playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
         }
 

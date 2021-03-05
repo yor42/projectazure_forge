@@ -13,7 +13,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCann
 public class CompanionMeleeGoal extends MeleeAttackGoal {
     private AbstractEntityCompanion entity;
 
-    public CompanionMeleeGoal(EntityKansenBase creature, double speedIn, boolean useLongMemory) {
+    public CompanionMeleeGoal(AbstractEntityCompanion creature, double speedIn, boolean useLongMemory) {
         super(creature, speedIn, useLongMemory);
         this.entity = creature;
     }
@@ -32,10 +32,12 @@ public class CompanionMeleeGoal extends MeleeAttackGoal {
         else{
             if(this.entity instanceof EntityKansenBase) {
                 boolean flag = !hasAttackableCannon(((EntityKansenBase) this.entity).getRigging()) && !((EntityKansenBase) this.entity).canUseAmmo(((EntityKansenBase) this.entity).getActiveAmmoCategory());
-                return flag && super.shouldExecute() && isEquippingsword;
+                return flag && super.shouldExecute();
+            }
+            else{
+                return super.shouldExecute();
             }
         }
-        return false;
     }
 
     @Override
