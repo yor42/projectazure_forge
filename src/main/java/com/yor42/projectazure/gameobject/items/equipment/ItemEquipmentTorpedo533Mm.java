@@ -6,8 +6,8 @@ import net.minecraft.nbt.CompoundNBT;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class ItemEquipmentTorpedo533mm extends ItemEquipmentTorpedo implements IAnimatable {
-    public ItemEquipmentTorpedo533mm(Properties properties, int maxHP) {
+public class ItemEquipmentTorpedo533Mm extends ItemEquipmentTorpedo implements IAnimatable {
+    public ItemEquipmentTorpedo533Mm(Properties properties, int maxHP) {
         super(properties, maxHP);
         this.isreloadable = false;
         this.MaxAmmoCap = 4;

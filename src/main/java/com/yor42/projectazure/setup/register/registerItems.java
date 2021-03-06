@@ -5,11 +5,10 @@ import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRen
 import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
 import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.client.renderer.items.ItemPlanef4fWildcatRenderer;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.items.*;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127mm;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533mm;
-import com.yor42.projectazure.gameobject.items.equipment.ItemPlanef4fwildcat;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127Mm;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533Mm;
+import com.yor42.projectazure.gameobject.items.equipment.ItemPlanef4Fwildcat;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.enums;
@@ -35,11 +34,11 @@ public class registerItems {
             .group(PA_GROUP)
             .rarity(Rarity.EPIC)));
 
-    public static final RegistryObject<Item> WISDOM_CUBE = registerManager.ITEMS.register("wisdomcube", () -> new itemBaseTooltip(new Item.Properties()
+    public static final RegistryObject<Item> WISDOM_CUBE = registerManager.ITEMS.register("wisdomcube", () -> new ItemBaseTooltip(new Item.Properties()
             .group(PA_GROUP)
             .rarity(Rarity.UNCOMMON)));
 
-    public static final RegistryObject<Item> OATHRING = registerManager.ITEMS.register("oath_ring", () -> new itemRainbowWisdomCube(new Item.Properties()
+    public static final RegistryObject<Item> OATHRING = registerManager.ITEMS.register("oath_ring", () -> new ItemBaseTooltip(new Item.Properties()
             .group(PA_GROUP)
             .rarity(Rarity.EPIC)
             .maxStackSize(1)));
@@ -85,17 +84,17 @@ public class registerItems {
             .setISTER(() -> CVDefaultRiggingRenderer::new)
             .group(PA_GROUP).maxStackSize(1), 1000));
 
-    public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = registerManager.ITEMS.register("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533mm(new Item.Properties()
+    public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = registerManager.ITEMS.register("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533Mm(new Item.Properties()
             .setISTER(() -> equipment533mmTorpedoRenderer::new)
             .group(PA_GROUP).maxStackSize(1), 40));
 
-    public static final RegistryObject<Item> EQUIPMENT_GUN_127MM = registerManager.ITEMS.register("equipment_gun_127mm", () -> new ItemEquipmentGun127mm(new Item.Properties()
+    public static final RegistryObject<Item> EQUIPMENT_GUN_127MM = registerManager.ITEMS.register("equipment_gun_127mm", () -> new ItemEquipmentGun127Mm(new Item.Properties()
             .setISTER(() -> Equipment127mmGunRenderer::new)
             .group(PA_GROUP).maxStackSize(1), 40));
 
     public static float WildcatHP = 30;
 
-    public static final RegistryObject<Item> EQUIPMENT_PLANE_F4FWildcat = registerManager.ITEMS.register("equipment_plane_f4fwildcat", () -> new ItemPlanef4fwildcat(new Item.Properties()
+    public static final RegistryObject<Item> EQUIPMENT_PLANE_F4FWildcat = registerManager.ITEMS.register("equipment_plane_f4fwildcat", () -> new ItemPlanef4Fwildcat(new Item.Properties()
             .setISTER(() -> ItemPlanef4fWildcatRenderer::new)
             .group(PA_GROUP).maxStackSize(1), (int) WildcatHP));
 
@@ -106,10 +105,17 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(ENTITYGANGWON, new Item.Properties()
             .group(PA_SHIPS)));
 
+    public static final RegistryObject<Item> SPAWM_ENTERPRISE = registerManager.ITEMS.register("spawnenterprise", ()-> new ItemKansenSpawnEgg(ENTERPRISE_ENTITY_TYPE, new Item.Properties().group(PA_SHIPS)));
+
+
+
     public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(SHIROKO_ENTITY_TYPE, new Item.Properties()
             .group(PA_SHIPS)));
 
-    public static final RegistryObject<Item> SPAWM_ENTERPRISE = registerManager.ITEMS.register("spawnenterprise", ()-> new ItemKansenSpawnEgg(ENTERPRISE_ENTITY_TYPE, new Item.Properties().group(PA_SHIPS)));
+    public static final RegistryObject<Item> BANDAGE_ROLL = registerManager.ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()
+            .group(PA_GROUP)
+    .maxStackSize(1)
+    .maxDamage(7)));
 
 
 

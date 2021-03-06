@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentDamage;
 
-public class ItemDestroyable extends itemBaseTooltip{
+public class ItemDestroyable extends ItemBaseTooltip {
 
     protected int MaxHP;
 

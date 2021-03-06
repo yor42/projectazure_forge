@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class itemBaseTooltip extends Item {
-    public itemBaseTooltip(Properties properties) {
+public class ItemBaseTooltip extends Item {
+    public ItemBaseTooltip(Properties properties) {
         super(properties);
     }
 

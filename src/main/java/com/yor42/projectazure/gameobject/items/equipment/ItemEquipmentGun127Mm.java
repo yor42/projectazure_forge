@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class ItemEquipmentGun127mm extends ItemEquipmentGun{
-    public ItemEquipmentGun127mm(Properties properties,int maxHP) {
+public class ItemEquipmentGun127Mm extends ItemEquipmentGun{
+    public ItemEquipmentGun127Mm(Properties properties, int maxHP) {
         super(properties, maxHP);
         this.firedelay = 60;
         this.size = enums.CanonSize.MEDIUM;

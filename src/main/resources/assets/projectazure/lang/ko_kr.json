@@ -8,7 +8,9 @@
   "item.projectazure.music_disc": "음반",
   "item.projectazure.oath_ring": "서약 반지",
 
-  "item.projectazure.bonk_bat": "The Bonk™ 방망이",
+  "item.projectazure.bonk_bat": "[검열됨] 메이커 곤봉",
+
+  "item.projectazure.bandage_roll": "붕대",
 
 
   "item.projectazure.disc_fridaynight.desc": "템페스트 스튜디오 - Friday Night (Astrophysics 리믹스)",
@@ -21,9 +23,14 @@
   "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
   "item.projectazure.ammo_generic.tooltip": "가장 기본적인 함선소녀용 탄약입니다. 약하지만, 그만큼 저렴합니다.",
   "item.projectazure.wisdomcube.tooltip": "의미심장한 빛을 내뿜는 큐브입니다.",
-  "item.projectazure.bonk_bat.tooltip": "감히 이 성스런 방망이의 길을 막는 이 세상 모든 존재를 \"예외 없이\" Horny jail로 보냅니다.",
+  "item.projectazure.bandage_roll.tooltip": "응금처치용 간단한 붕대입니다. ...화장지가 아닙니다.",
+
+
+  "item.projectazure.bonk_bat.tooltip": "???: Aㅏ. [검열됨]을 만들어 주마.",
 
   "item.tooltip.firerate": "발사 속도",
+  "item.tooltip.remainingammo": "남은 탄환",
+  "item.tooltip.hanger_slot_usage": "격납고 사용량",
 
   "item.projectazure.ammo_generic": "통상탄",
 
@@ -36,6 +43,8 @@
 
   "gui.selectstarter.title": "초기함을 선택해주세요",
   "gui.shipinventory": "함선 보관함",
+  "gui.bainventory": "Inventory",
+
   "gui.current_affection_level": "현재 호감도",
   "gui.current_affection_value": "호감도",
   "gui.entity.level": "레벨",
@@ -56,6 +65,9 @@
 
   "entity.projectazure.entityayanami": "IJN 아야나미",
   "entity.projectazure.entitygangwon": "ROKS 강원",
+  "entity.projectazure.entityenterprise": "USS 엔터프라이즈",
+
+  "entity.projectazure.entityshiroko": "시로코",
 
   "death.attack.bonk": "%1$s이 %2$s에 의해 Horny Jail로 보내졌습니다."
 }

@@ -45,12 +45,21 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
+        IBone HealFace = this.getAnimationProcessor().getBone("Heal");
 
         if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             PatFace.setHidden(false);
             EyeclosedFace.setHidden(true);
+            HealFace.setHidden(true);
+        }
+        else if(entity.isGettingHealed()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            HealFace.setHidden(false);
         }
         else {
             if (this.blinkinterval <= 5) {
@@ -58,6 +67,7 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
                 ExcitedFace.setHidden(true);
                 PatFace.setHidden(true);
                 EyeclosedFace.setHidden(false);
+                HealFace.setHidden(true);
                 if (this.blinkinterval == 0) {
                     this.blinkinterval = 20 * (random.nextInt(9) + 2);
                 }
@@ -68,6 +78,7 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
                 PatFace.setHidden(true);
                 ExcitedFace.setHidden(true);
                 EyeclosedFace.setHidden(true);
+                HealFace.setHidden(true);
             }
         }
 

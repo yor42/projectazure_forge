@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 
-public class ItemAmmo extends itemBaseTooltip{
+public class ItemAmmo extends ItemBaseTooltip {
     enums.AmmoCategory ammoCategory;
     private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
     private boolean shouldDamageMultipleComponant, isIncendiary;

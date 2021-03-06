@@ -395,6 +395,14 @@
 					]
 				},
 				{
+					"name": "Heal",
+					"parent": "Faces",
+					"pivot": [-3, 49.75, -2.65],
+					"cubes": [
+						{"origin": [-6.25, 48.75, -6.75], "size": [12.5, 12.5, 1], "uv": [1, 228]}
+					]
+				},
+				{
 					"name": "Normal",
 					"parent": "Faces",
 					"pivot": [-3, 48.75, -2.65],

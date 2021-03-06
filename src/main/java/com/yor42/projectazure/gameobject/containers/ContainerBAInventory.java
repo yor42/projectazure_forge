@@ -22,14 +22,14 @@ import static com.yor42.projectazure.setup.register.registerManager.BA_CONTAINER
 
 public class ContainerBAInventory extends Container {
 
-    private ItemStackHandler Stack, AmmoStack;
+    private ItemStackHandler AmmoStack;
     private IItemHandlerModifiable equipment;
 
     private EntityGunUserBase host;
 
     public ContainerBAInventory(int ID, PlayerInventory inventory) {
         super(BA_CONTAINER.get(), ID);
-        ItemStackHandler dummyStackHandler = new ItemStackHandler(19);
+        ItemStackHandler dummyStackHandler = new ItemStackHandler(12);
         ItemStackHandler dummyEquipmentHandler = new ItemStackHandler(19);
         ItemStackHandler dummyAmmoHandler = new ItemStackHandler(8);
 
@@ -56,7 +56,7 @@ public class ContainerBAInventory extends Container {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(dummyStackHandler, 1 + n + 3 * m, 11 + n * 18, 19 + m * 18));
+                this.addSlot(new SlotItemHandler(dummyStackHandler, n + 3 * m, 113 + n * 18, 27 + m * 18));
             }
         }
 
@@ -84,9 +84,9 @@ public class ContainerBAInventory extends Container {
 
     public ContainerBAInventory(int ID, PlayerInventory inventory, EntityGunUserBase companion) {
         super(BA_CONTAINER.get(), ID);
-        this.Stack = companion.getInventory();
-        this.equipment = this.host.getEquipment();
-        this.AmmoStack = this.host.getAmmoStorage();
+        ItemStackHandler stack = companion.getInventory();
+        this.equipment = companion.getEquipment();
+        this.AmmoStack = companion.getAmmoStorage();
         this.host = companion;
 
         //mainhand
@@ -112,7 +112,7 @@ public class ContainerBAInventory extends Container {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(this.Stack, 1 + n + 3 * m, 11 + n * 18, 19 + m * 18));
+                this.addSlot(new SlotItemHandler(stack, n + 3 * m, 113 + n * 18, 27 + m * 18));
             }
         }
 

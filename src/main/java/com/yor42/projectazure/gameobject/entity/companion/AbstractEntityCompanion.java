@@ -1,17 +1,21 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
+import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -22,6 +26,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -203,7 +208,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected int level,  patAnimationTime, LimitBreakLv, patTimer;
+    protected int level,  patAnimationTime, LimitBreakLv, patTimer, healAnimationTime;
     protected double affection, exp;
     protected boolean isMeleeing, isOpeningDoor;
     protected int awakeningLevel;
@@ -217,6 +222,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
 
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.PATH, MemoryModuleType.OPENED_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
 
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -467,6 +473,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void livingTick() {
         super.livingTick();
+
+        if(this.healAnimationTime>0){
+            this.healAnimationTime--;
+        }
+
         if(this.patAnimationTime >0){
 
             this.navigator.clearPath();
@@ -574,17 +585,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 LegDelta = LegDelta.normalize();
                 double LegCheckFinal = PlayerLook.dotProduct(LegDelta);
 
-                if(EyeCheckFinal > 1.0D - 0.025D / EyeDeltaLength && player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player)<4.0F){
-                    this.beingpatted();
-                    return ActionResultType.SUCCESS;
-                }
-                else if(LegCheckFinal > 1.0D - 0.015D / LegDeltaLength){
-                    this.func_233687_w_(!this.isSitting());
-                    return ActionResultType.SUCCESS;
+                ItemStack heldstacks = player.getHeldItemMainhand();
+
+
+                if(!(heldstacks.getItem() instanceof ItemBandage)) {
+                    if (EyeCheckFinal > 1.0D - 0.025D / EyeDeltaLength && player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player) < 4.0F) {
+                        this.beingpatted();
+                        return ActionResultType.SUCCESS;
+                    } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
+                        this.func_233687_w_(!this.isSitting());
+                        return ActionResultType.SUCCESS;
+                    }
                 }
                 else if(player.getHeldItemMainhand() != ItemStack.EMPTY) {
-
-                    if (player.getHeldItem(hand).getItem() == registerItems.OATHRING.get()) {
+                    if (heldstacks.getItem() == registerItems.OATHRING.get()) {
                         if (this.getAffection() < 100 && !player.isCreative()) {
                             player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUniqueID());
                             return ActionResultType.FAIL;
@@ -598,6 +612,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                 }
                                 return ActionResultType.CONSUME;
                             }
+                        }
+                    }
+                    else if(heldstacks.getItem() instanceof ItemBandage){
+                        if(this.getHealth()<this.getMaxHealth()){
+                            if(this.ticksExisted %20 == 0) {
+                                this.heal(1.0f);
+                                heldstacks.damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(player.getActiveHand()));
+                                player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f, 1.0f);
+                                this.healAnimationTime = 20;
+                            }
+                            return ActionResultType.SUCCESS;
                         }
                     }
                 }
@@ -621,7 +646,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.dataManager.set(MAXPATEFFECTCOUNT, 5+this.rand.nextInt(3));
         }
         this.patAnimationTime = 20;
-    };
+    }
+
+    public boolean isGettingHealed(){
+        return this.healAnimationTime>0;
+    }
 
     public IItemHandlerModifiable getEquipment(){
         return this.EQUIPMENT;

@@ -39,6 +39,14 @@ public class EntityShiroko extends EntityGunUserBase {
             return PlayState.CONTINUE;
         }
 
+        if(this.isGettingHealed()){
+            if(this.isEntitySleeping())
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal_sit", true));
+            else
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal", true));
+            return PlayState.CONTINUE;
+        }
+
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit", true));
             return PlayState.CONTINUE;
@@ -54,7 +62,7 @@ public class EntityShiroko extends EntityGunUserBase {
         }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.melee1", false));
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.melee1", false));
             }
         }
 

@@ -8,8 +8,8 @@ import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class ItemPlanef4fwildcat extends ItemEquipmentPlaneBase{
-    public ItemPlanef4fwildcat(Properties properties, int maxHP) {
+public class ItemPlanef4Fwildcat extends ItemEquipmentPlaneBase{
+    public ItemPlanef4Fwildcat(Properties properties, int maxHP) {
         super(properties, maxHP);
     }
 

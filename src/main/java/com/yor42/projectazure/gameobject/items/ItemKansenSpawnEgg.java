@@ -1,20 +1,19 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public class ItemKansenSpawnEgg extends itemBaseTooltip {
+public class ItemKansenSpawnEgg extends ItemBaseTooltip {
 
     EntityType<? extends AbstractEntityCompanion> Entity;
 
@@ -61,6 +60,11 @@ public class ItemKansenSpawnEgg extends itemBaseTooltip {
 
         return ActionResultType.CONSUME;
 
+    }
+
+    @Override
+    public ITextComponent getDisplayName(ItemStack stack) {
+        return new TranslationTextComponent("item.projectazure.spawnegg.spawn").append(this.Entity.getName());
     }
 
     @Override

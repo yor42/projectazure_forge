@@ -23,6 +23,15 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("ammo_generic");
         buildModel("disc_brainpower");
         buildModel("bonk_bat");
+
+        buildModel("bandage_roll");
+
+        buildModelWisdomCube("spawnayanami");
+        buildModelWisdomCube("spawngangwon");
+        buildModelWisdomCube("spawnenterprise");
+
+        buildModelBlueArchive("spawnshiroko");
+
     }
 
     private ItemModelBuilder buildModel(String name){
@@ -32,5 +41,22 @@ public class itemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder buildModel(ModelFile model, String name){
         return getBuilder(name).parent(model).texture("layer0", "item/"+name);
+    }
+
+    private ItemModelBuilder buildModelWithSingleTex(String ItemName, String Texturename){
+        ModelFile itemGenerated = getExistingFile(mcLoc("item/generated"));
+        return buildModelWithSingleTex(itemGenerated, ItemName, Texturename);
+    }
+
+    private ItemModelBuilder buildModelWithSingleTex(ModelFile model, String name, String Texturename){
+        return getBuilder(name).parent(model).texture("layer0", "item/"+Texturename);
+    }
+
+    private ItemModelBuilder buildModelWisdomCube(String ItemName){
+        return buildModelWithSingleTex(ItemName, "wisdomcube");
+    }
+
+    private ItemModelBuilder buildModelBlueArchive(String ItemName){
+        return buildModelWithSingleTex(ItemName, "spawn_bluearchive");
     }
 }
