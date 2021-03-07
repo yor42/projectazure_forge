@@ -26,6 +26,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -44,6 +45,8 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.crypto.Data;
+import java.util.Date;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
@@ -210,17 +213,21 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer, healAnimationTime;
     protected double affection, exp;
+    protected boolean isFreeRoaming;
     protected boolean isMeleeing, isOpeningDoor;
     protected int awakeningLevel;
 
-    protected static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> USINGBOW = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
-    protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.BOOLEAN);
+    private BlockPos StayCenterPos;
+
+    protected static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> USINGBOW = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
+    protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<BlockPos> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.PATH, MemoryModuleType.OPENED_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
 
@@ -228,19 +235,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         super(type, worldIn);
         this.setAffection(40F);
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
-
-        this.BodyHeightStand = new byte[] {92, 78, 73, 58, 47, 37};
-        this.BodyHeightSit = new byte[] {64, 49, 44, 29, 23, 12};
-    }
-
-    public byte[] getBodyHeightStand()
-    {
-        return this.BodyHeightStand;
-    }
-
-    public byte[] getBodyHeightSit()
-    {
-        return this.BodyHeightSit;
+        this.setFreeRoaming(false);
     }
 
     public void setOathed(boolean bool){
@@ -288,6 +283,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("level", this.level);
         compound.putInt("limitbreaklv", this.LimitBreakLv);
         compound.putInt("awaken", this.awakeningLevel);
+        compound.putBoolean("freeroaming", this.isFreeRoaming());
     }
 
     public void readAdditional(CompoundNBT compound) {
@@ -299,6 +295,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.exp = compound.getFloat("exp");
         this.LimitBreakLv = compound.getInt("limitbreaklv");
         this.awakeningLevel = compound.getInt("awaken");
+        this.setFreeRoaming(compound.getBoolean("freeroaming"));
+    }
+
+    public boolean isFreeRoaming() {
+        return this.isFreeRoaming;
+    }
+
+    public void setFreeRoaming(boolean freeRoaming) {
+        this.isFreeRoaming = freeRoaming;
     }
 
     @Nullable
@@ -354,6 +359,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(PATCOOLDOWN, 0);
         this.dataManager.register(OATHED, false);
         this.dataManager.register(USINGBOW, false);
+        this.dataManager.register(STAYPOINT, BlockPos.ZERO);
     }
 
     public void setOpeningdoor(boolean openingdoor){
@@ -540,8 +546,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(7, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
         this.goalSelector.addGoal(8, new KansenWorkGoal(this, 1.0D));
        this.goalSelector.addGoal(9, new CompanionOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(10, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(11, new LookRandomlyGoal(this));
+       this.goalSelector.addGoal(10, new CompanionFreeroamGoal(this, 60, true));
+        this.goalSelector.addGoal(11, new CompanionFindBedGoal(this));
+        this.goalSelector.addGoal(12, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(13, new LookRandomlyGoal(this));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -639,6 +647,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
+    public boolean isNearHome(){
+        return this.getBrain().hasMemory(MemoryModuleType.HOME) && this.getBrain().getMemory(MemoryModuleType.HOME).get().getDimension() == this.world.getDimensionKey() && this.getPosition().withinDistance(this.getBrain().getMemory(MemoryModuleType.HOME).get().getPos(), 64);
+    }
+
     protected abstract void openGUI(PlayerEntity player);
 
     protected void beingpatted(){
@@ -660,5 +672,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public IPacket<?> createSpawnPacket() {
         NetworkHooks.getEntitySpawningPacket(this);
         return super.createSpawnPacket();
+    }
+
+    public void SwitchFreeRoamingStatus() {
+        this.setStayCenterPos(this.getPosition());
+        this.setFreeRoaming(!this.isFreeRoaming());
+    }
+
+    public BlockPos getStayCenterPos() {
+        return this.getDataManager().get(STAYPOINT);
+    }
+
+    public void setStayCenterPos(BlockPos stayCenterPos) {
+        this.getDataManager().set(STAYPOINT,stayCenterPos);
     }
 }

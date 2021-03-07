@@ -24,9 +24,9 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(defined.MODID, "textures/gui/ship_inventory.png");
 
-    private EntityKansenBase host;
-    private enums.Affection affectionLevel;
-    private double affection;
+    private final EntityKansenBase host;
+    private final enums.Affection affectionLevel;
+    private final double affection;
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;
     private PlayerInventory inventory;
@@ -106,8 +106,21 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5, 5, 14085119);
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderEntity(mousex, mousey);
+        this.drawButtons();
         matrixStack.pop();
         //this.renderButton(matrixStack);
+    }
+
+    private void drawButtons() {
+
+        int x = this.host.isFreeRoaming()? 185:176;
+
+        ImageButton button = new ImageButton(this.x+159,this.y+52,9,9,x,25,9,TEXTURE,action->switchBehavior());
+        this.addButton(button);
+    }
+
+    private void switchBehavior() {
+        this.host.SwitchFreeRoamingStatus();
     }
 
     private void renderButton(MatrixStack matrixStack) {

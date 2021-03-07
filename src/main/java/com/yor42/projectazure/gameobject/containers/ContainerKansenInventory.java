@@ -152,6 +152,11 @@ public class ContainerKansenInventory extends Container {
         }
     }
 
+    @Override
+    public void onContainerClosed(PlayerEntity playerIn) {
+        Main.PROXY.setSharedMob(null);
+        super.onContainerClosed(playerIn);
+    }
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {

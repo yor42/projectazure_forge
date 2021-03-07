@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
@@ -96,7 +97,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         if (entity != null) {
             int entityWidth = (int) entity.getWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(57+(entityWidth/2), 15, 25, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
+                InventoryScreen.drawEntityOnScreen(57+(entityWidth/2), (int) (15+this.host.getHeight()), 25, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }
@@ -155,6 +156,18 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         matrixStack.pop();
     }
 
+    private void drawButtons() {
+
+        int x = this.host.isFreeRoaming()? 185:176;
+
+        ImageButton button = new ImageButton(this.x+10,this.y+63,9,9,x,25,9,TEXTURE, action->switchBehavior());
+        this.addButton(button);
+    }
+
+    private void switchBehavior() {
+        this.host.SwitchFreeRoamingStatus();
+    }
+
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mousex, int mousey) {
         matrixStack.push();
         this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 16777215);
@@ -163,6 +176,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         this.font.func_243248_b(matrixStack, leveltext, 12, (float)84, 16777215);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5, 5, 16777215);
         this.renderAffection(matrixStack, mousex, mousey);
+        this.drawButtons();
         this.renderEntity(mousex, mousey);
         matrixStack.pop();
         //this.renderButton(matrixStack);

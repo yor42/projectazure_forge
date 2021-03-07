@@ -51,12 +51,6 @@ public abstract class EntityGunUserBase extends AbstractEntityCompanion {
     }
 
     @Override
-    protected void registerGoals() {
-        super.registerGoals();
-
-    }
-
-    @Override
     public boolean canUseRigging() {
         return false;
     }

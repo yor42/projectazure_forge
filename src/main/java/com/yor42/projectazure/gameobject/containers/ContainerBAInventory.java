@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.containers;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
 import net.minecraft.entity.player.PlayerEntity;
@@ -136,6 +137,12 @@ public class ContainerBAInventory extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 168));
         }
+    }
+
+    @Override
+    public void onContainerClosed(PlayerEntity playerIn) {
+        Main.PROXY.setSharedMob(null);
+        super.onContainerClosed(playerIn);
     }
 
     @Override

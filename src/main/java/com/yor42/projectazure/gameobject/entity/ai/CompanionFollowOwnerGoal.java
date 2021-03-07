@@ -23,15 +23,11 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
     public boolean shouldExecute() {
         super.shouldExecute();
         LivingEntity livingentity = this.host.getOwner();
-        if (livingentity == null) {
+
+        if(livingentity == null||livingentity.isSpectator()||this.host.isSitting()||this.host.getDistanceSq(livingentity) < (double)(this.mindist * this.mindist)||this.host.isFreeRoaming()){
             return false;
-        } else if (livingentity.isSpectator()) {
-            return false;
-        } else if (this.host.isSitting()) {
-            return false;
-        } else if (this.host.getDistanceSq(livingentity) < (double)(this.mindist * this.mindist)) {
-            return false;
-        } else {
+        }
+        else{
             this.owner = livingentity;
             return true;
         }
