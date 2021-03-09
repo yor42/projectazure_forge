@@ -26,7 +26,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     private final EntityKansenBase host;
     private final enums.Affection affectionLevel;
-    private final double affection;
+    private final double affection, morale;
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;
     private PlayerInventory inventory;
@@ -37,6 +37,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         super(container, playerinventory, titleIn);
         this.host = (EntityKansenBase) Main.PROXY.getSharedMob();
         this.affection = this.host.getAffection();
+        this.morale = this.host.getMorale();
         this.affectionLevel = this.affectionValuetoLevel();
         this.inventory = playerinventory;
     }
@@ -73,6 +74,24 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         }
     }
 
+    private enums.Morale moraleValuetoLevel(){
+        if(this.morale>=120.0D){
+            return enums.Morale.REALLY_HAPPY;
+        }
+        else if(this.affection>=70 && this.affection<120){
+            return enums.Morale.HAPPY;
+        }
+        else if(this.affection>=30 && this.affection<70){
+            return enums.Morale.NEUTRAL;
+        }
+        else if(this.affection>10 && this.affection<=30){
+            return enums.Morale.SAD;
+        }
+        else{
+            return enums.Morale.EXHAUSTED;
+        }
+    }
+
 
 
     @Override
@@ -105,6 +124,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         this.font.func_243248_b(matrixStack, leveltext, (float)168-this.font.getStringPropertyWidth(leveltext), (float)81, 14085119);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5, 5, 14085119);
         this.renderAffection(matrixStack, mousex, mousey);
+        this.renderMorale(matrixStack, mousex, mousey);
         this.renderEntity(mousex, mousey);
         this.drawButtons();
         matrixStack.pop();
@@ -194,6 +214,52 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
             double AffectionLimit = this.host.isOathed()? 200:100;
             tooltips.add(new TranslationTextComponent("gui.current_affection_level").appendString(": ").append(new TranslationTextComponent(this.affectionLevel.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
             tooltips.add(new TranslationTextComponent("gui.current_affection_value").appendString(": ").appendString(String.format("%.2f",this.affection)+"/"+AffectionLimit).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
+            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
+        }
+        matrixStack.pop();
+    }
+
+    private void renderMorale(MatrixStack matrixStack, int mousex, int mousey) {
+        matrixStack.push();
+        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        int textureY = 13;
+        int textureX = 176;
+
+        enums.Morale morale = this.moraleValuetoLevel();
+
+        int color=16777215;
+        switch (morale){
+            case EXHAUSTED:{
+                color = 7829367;
+                break;
+            }
+            case SAD:{
+                color = 16481134;
+                textureX = 188;
+                break;
+            }
+            case NEUTRAL:{
+                color = 16695668;
+                textureX = 200;
+                break;
+            }
+            case HAPPY:{
+                color = 9824105;
+                textureX = 212;
+                break;
+            }
+            case REALLY_HAPPY:{
+                color = 11925139;
+                textureX = 224;
+                break;
+            }
+        }
+        this.blit(matrixStack, 126, 35, textureX, textureY, 12, 12);
+        if (isPointInRegion(126, 35, 12,12,mousex,mousey)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            double AffectionLimit = this.host.isOathed()? 200:100;
+            tooltips.add(new TranslationTextComponent("gui.current_morale_level").appendString(": ").append(new TranslationTextComponent(morale.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
+            tooltips.add(new TranslationTextComponent("gui.current_morale_value").appendString(": ").appendString(String.format("%.2f",this.affection)+"/150").setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
             this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
         }
         matrixStack.pop();

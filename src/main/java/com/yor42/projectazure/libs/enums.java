@@ -206,4 +206,22 @@ public class enums {
 
     }
 
+    public enum Morale{
+        REALLY_HAPPY("really_happy"),
+        HAPPY("happy"),
+        NEUTRAL("neutral"),
+        SAD("sad"),
+        EXHAUSTED("exhausted");
+
+        private final String name;
+
+        Morale(String nameKey){
+            this.name = nameKey;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+    }
+
 }
