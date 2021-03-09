@@ -591,6 +591,11 @@
 							"easing": "easeOutSine"
 						}
 					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
 				}
 			}
 		},
@@ -1712,6 +1717,52 @@
 				"LeftHand": {
 					"rotation": {
 						"vector": [-27.5, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.enterprise.sleep": {
+			"animation_length": 0.249,
+			"bones": {
+				"Body": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, -4]
+					}
+				},
+				"bone5": {
+					"rotation": {
+						"vector": [0, -15, 0]
+					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": [0, -42.5, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-27.5, 0, 0]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -65]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [0, -80, -15]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [-95, 0, 0]
+					},
+					"position": {
+						"vector": [0, -3, -2]
 					}
 				}
 			}

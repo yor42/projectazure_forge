@@ -42,7 +42,10 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
+        IBone SleepFace = this.getAnimationProcessor().getBone("Sleeping");
         IBone Backhair = this.getAnimationProcessor().getBone("bone24");
+
+        IBone body = this.getAnimationProcessor().getBone("Body");
 
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         if(!entity.isSailing()){
@@ -55,6 +58,17 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(false);
+            SleepFace.setHidden(true);
+        }
+        if(entity.isSleeping()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(false);
+
+            body.setPositionY(-45);
+            body.setPositionZ(-5);
         }
         else {
             if (this.blinkinterval <= 5) {
@@ -62,6 +76,7 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
                 ExcitedFace.setHidden(true);
                 EyeclosedFace.setHidden(false);
                 PatFace.setHidden(true);
+                SleepFace.setHidden(true);
                 if (this.blinkinterval == 0) {
                     this.blinkinterval = 20 * (getRand().nextInt(9) + 2);
                 }
@@ -72,12 +87,13 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
                 ExcitedFace.setHidden(true);
                 EyeclosedFace.setHidden(true);
                 PatFace.setHidden(true);
+                SleepFace.setHidden(true);
             }
         }
 
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if(!entity.isBeingPatted()) {
+        if(!(entity.isBeingPatted()||entity.isSleeping())) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
             Backhair.setRotationX(-extraData.headPitch * ((float) Math.PI / 180F));

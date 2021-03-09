@@ -28,6 +28,11 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         }
         AnimationBuilder builder = new AnimationBuilder();
 
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep", true));
+            return PlayState.CONTINUE;
+        }
+
         //event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
         if(this.isBeingPatted()){
             if(this.isEntitySleeping())

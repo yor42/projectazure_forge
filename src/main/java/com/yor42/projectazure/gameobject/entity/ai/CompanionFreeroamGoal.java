@@ -30,7 +30,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
         if(this.entityCompanion.isBeingPatted()||!this.entityCompanion.isFreeRoaming()){
             return false;
         }
-        return super.shouldExecute();
+        return super.shouldExecute() && !this.entityCompanion.isSleeping();
     }
 
     @Nullable

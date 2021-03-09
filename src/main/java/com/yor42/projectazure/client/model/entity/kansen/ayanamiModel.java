@@ -36,22 +36,26 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
     public void setLivingAnimations(EntityAyanami entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
     {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
         IBone head = this.getAnimationProcessor().getBone("Head");
-        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
 
-        if(!entity.isSailing()){
-            LeftArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F) * 0.8F * entity.limbSwingAmount);
-            RightArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 0.8F * entity.limbSwingAmount);
-        }
+        IBone body = this.getAnimationProcessor().getBone("Body");
+
 
         if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(false);
             EyeclosedFace.setHidden(true);
+        }
+        else if(entity.isSleeping()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(false);
+
+            body.setPositionY(-45);
+            body.setPositionZ(-10);
         }
         else {
             if (this.blinkinterval <= 5) {
@@ -72,7 +76,7 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
 
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if(!entity.isBeingPatted()) {
+        if(!(entity.isBeingPatted()||entity.isSleeping())) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
         }

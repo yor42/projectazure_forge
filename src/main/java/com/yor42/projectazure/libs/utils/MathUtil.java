@@ -8,6 +8,8 @@ import software.bernie.shadowed.fasterxml.jackson.databind.ser.Serializers;
 import javax.swing.text.html.parser.Entity;
 import java.util.Random;
 
+import static net.minecraft.util.math.MathHelper.clamp;
+
 public class MathUtil {
     public static Random rand = new Random();
 
@@ -16,6 +18,10 @@ public class MathUtil {
     }
 
     //Oh yeah its Big brain time
+
+    /*
+    Basic Degree-Radian Converters
+     */
     public static float DegreeToRadian(float degree){
         return (float) (degree*(Math.PI/180));
     }
@@ -30,9 +36,7 @@ public class MathUtil {
         if(!isValueDegree){
             Value = RadianRoDegree(value);
         }
-        if(Value>maxDegree)
-            Result = maxDegree;
-        else Result = Math.max(Value, minDegree);
+        Result=clamp(Value,minDegree, maxDegree);
 
         if(ShouldReturnRadian){
             return DegreeToRadian(Result);

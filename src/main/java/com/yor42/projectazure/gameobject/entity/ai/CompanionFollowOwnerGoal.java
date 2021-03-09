@@ -24,7 +24,7 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
         super.shouldExecute();
         LivingEntity livingentity = this.host.getOwner();
 
-        if(livingentity == null||livingentity.isSpectator()||this.host.isSitting()||this.host.getDistanceSq(livingentity) < (double)(this.mindist * this.mindist)||this.host.isFreeRoaming()){
+        if(livingentity == null||livingentity.isSpectator()||this.host.isSitting()||this.host.getDistanceSq(livingentity) < (double)(this.mindist * this.mindist)||this.host.isFreeRoaming() || this.host.isSleeping()){
             return false;
         }
         else{

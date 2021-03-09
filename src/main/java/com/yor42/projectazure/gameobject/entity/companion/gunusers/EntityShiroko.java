@@ -31,6 +31,12 @@ public class EntityShiroko extends EntityGunUserBase {
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
         }
+
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sleep", true));
+            return PlayState.CONTINUE;
+        }
+
         if(this.isBeingPatted()){
             if(this.isEntitySleeping())
                 event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat_sit", true));

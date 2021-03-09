@@ -32,6 +32,11 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
         }
         AnimationBuilder builder = new AnimationBuilder();
 
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep", true));
+            return PlayState.CONTINUE;
+        }
+
         if(this.isBeingPatted()){
             if(this.isEntitySleeping())
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));

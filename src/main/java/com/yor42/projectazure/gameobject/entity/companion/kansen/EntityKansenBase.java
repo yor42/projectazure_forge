@@ -54,7 +54,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     Random rand = new Random();
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
-    private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",1F, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",5F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
     private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
     private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
@@ -220,9 +220,12 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public void livingTick() {
         super.livingTick();
 
+        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
         if (this.isSailing()) {
             this.kansenFloat();
-            this.setSailingSpeedBonus();
+            if (modifiableattributeinstance.getModifier(SAILING_SPEED_MODIFIER) == null) {
+                modifiableattributeinstance.applyNonPersistentModifier(SAILING_SPEED_BOOST);
+            }
             Vector3d vector3d = this.getMotion();
             double d0 = this.getPosX() + vector3d.x;
             double d1 = this.getPosY() + vector3d.y;
@@ -230,6 +233,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             if(!(vector3d.x == 0 || vector3d.z == 0)) {
                 this.world.addParticle(ParticleTypes.CLOUD, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             }
+        }
+        else{
+            modifiableattributeinstance.removeModifier(SAILING_SPEED_BOOST);
         }
 
         if(this.getRigging().getItem() instanceof ItemRiggingBase){
@@ -240,17 +246,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     @Override
     protected boolean canOpenDoor() {
         return !this.isInWater() && !this.isSitting() && !this.isSleeping();
-    }
-
-    protected void setSailingSpeedBonus(){
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
-        if (modifiableattributeinstance.getModifier(SAILING_SPEED_MODIFIER) != null) {
-            modifiableattributeinstance.removeModifier(SAILING_SPEED_MODIFIER);
-        }
-
-        if (this.isSailing()) {
-            modifiableattributeinstance.applyNonPersistentModifier(SAILING_SPEED_BOOST);
-        }
     }
 
     @Override
@@ -310,6 +305,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 this.addExp(1.0F);
                 ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.GUN, this);
                 setEquipmentDelay(FiringCannon);
+                this.addMorale(-0.1);
             }
         }
     }
@@ -329,6 +325,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             ItemStack FiringTorpedo = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.TORPEDO, this);
             useTorpedoAmmo(FiringTorpedo);
             setEquipmentDelay(FiringTorpedo);
+            this.addMorale(-0.15);
         }
     }
 

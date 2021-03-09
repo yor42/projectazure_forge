@@ -45,6 +45,7 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
+        IBone body = this.getAnimationProcessor().getBone("Body");
         IBone HealFace = this.getAnimationProcessor().getBone("Heal");
 
         if(entity.isBeingPatted()){
@@ -53,6 +54,7 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
             PatFace.setHidden(false);
             EyeclosedFace.setHidden(true);
             HealFace.setHidden(true);
+
         }
         else if(entity.isGettingHealed()){
             NormalFace.setHidden(true);
@@ -60,6 +62,16 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             HealFace.setHidden(false);
+        }
+        else if(entity.isSleeping()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(false);
+            HealFace.setHidden(true);
+
+            body.setPositionY(-45);
+            body.setPositionZ(-5);
         }
         else {
             if (this.blinkinterval <= 5) {
@@ -81,11 +93,11 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
                 HealFace.setHidden(true);
             }
         }
-
+        Halo.setHidden(entity.isSleeping());
         Halo.setPositionY((float) (Math.sin(2*Math.PI*0.0125*entity.ticksExisted)*1.0F)%80);
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if(!entity.isBeingPatted()) {
+        if(!(entity.isBeingPatted()||entity.isSleeping())) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
         }

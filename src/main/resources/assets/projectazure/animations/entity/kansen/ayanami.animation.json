@@ -7,10 +7,10 @@
 			"bones": {
 				"Body": {
 					"rotation": {
-						"vector": [-90, 0, 87.5]
+						"vector": [-90, -90, 87.5]
 					},
 					"position": {
-						"vector": [-3, -21.25, 0]
+						"vector": [0, 0, 0]
 					}
 				},
 				"waist": {
@@ -375,6 +375,64 @@
 						"1.04": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-27.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [27.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [-27.5, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"0.0": {
+							"vector": [-10, 0, 0]
+						},
+						"0.52": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [-10, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [27.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [-27.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.04": {
+							"vector": [27.5, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [-10, 0, 0]
+						},
+						"1.04": {
+							"vector": [0, 0, 0]
 						}
 					}
 				}
@@ -962,6 +1020,21 @@
 							"vector": [22.5, 0, 0],
 							"easing": "easeInSine"
 						}
+					}
+				},
+				"Backhair2": {
+					"rotation": {
+						"vector": [-5, 0, 0]
+					}
+				},
+				"bone38": {
+					"rotation": {
+						"vector": [-5, 0, 0]
+					}
+				},
+				"bone39": {
+					"rotation": {
+						"vector": [-2.5, 0, 0]
 					}
 				},
 				"RightArm": {

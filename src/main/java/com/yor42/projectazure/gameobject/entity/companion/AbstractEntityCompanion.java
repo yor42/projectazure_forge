@@ -6,8 +6,10 @@ import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.setup.register.registerItems;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -33,6 +35,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -212,12 +217,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     };
 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer, healAnimationTime;
-    protected double affection, exp;
+    protected double affection, exp, morale;
     protected boolean isFreeRoaming;
     protected boolean isMeleeing, isOpeningDoor;
     protected int awakeningLevel;
 
-    private BlockPos StayCenterPos;
+    protected long lastSlept, lastWokenup;
+
+    private int forcewakeupExpireTimer, forceWakeupCounter;
 
     protected static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -228,6 +235,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<BlockPos> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
+    protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.PATH, MemoryModuleType.OPENED_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
 
@@ -262,9 +270,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return true;
     }
 
-    protected byte[] BodyHeightStand;
-    protected byte[] BodyHeightSit;
-
     public boolean isPVPenabled(){
         return false;
     }
@@ -284,6 +289,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("limitbreaklv", this.LimitBreakLv);
         compound.putInt("awaken", this.awakeningLevel);
         compound.putBoolean("freeroaming", this.isFreeRoaming());
+        compound.putDouble("morale", this.morale);
+
+        compound.putLong("lastslept", this.lastSlept);
+        compound.putLong("lastwoken", this.lastWokenup);
     }
 
     public void readAdditional(CompoundNBT compound) {
@@ -296,6 +305,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.LimitBreakLv = compound.getInt("limitbreaklv");
         this.awakeningLevel = compound.getInt("awaken");
         this.setFreeRoaming(compound.getBoolean("freeroaming"));
+        this.morale = compound.getDouble("morale");
+
+        this.lastSlept = compound.getLong("lastslept");
+        this.lastWokenup = compound.getLong("lastwoken");
     }
 
     public boolean isFreeRoaming() {
@@ -360,6 +373,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(OATHED, false);
         this.dataManager.register(USINGBOW, false);
         this.dataManager.register(STAYPOINT, BlockPos.ZERO);
+        this.dataManager.register(ISFORCEWOKENUP, false);
     }
 
     public void setOpeningdoor(boolean openingdoor){
@@ -497,12 +511,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             if (this.patTimer%20 == 0) {
                 if (this.dataManager.get(PATEFFECTCOUNT) < this.dataManager.get(MAXPATEFFECTCOUNT)) {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(PATEFFECTCOUNT)+1);
-                    this.addAffection(0.1);
+                    this.addAffection(0.01);
                     this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
 
                 } else {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(MAXPATEFFECTCOUNT));
-                    this.addAffection(-0.15);
+                    this.addAffection(-0.015);
                     if(this.dataManager.get(PATCOOLDOWN) == 0){
                         this.dataManager.set(PATCOOLDOWN, (7+this.rand.nextInt(5))*1200);
                     }
@@ -523,6 +537,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
 
+        if(this.isSleeping()){
+            this.getNavigator().clearPath();
+        }
+
+        if (this.forcewakeupExpireTimer>0){
+            this.forcewakeupExpireTimer--;
+        }
+        else if(this.forcewakeupExpireTimer==0 || !this.isSleeping()){
+            this.forceWakeupCounter=0;
+        }
+
         if(this.affection <0)
             this.affection = 0;
         else if(this.affection>100){
@@ -532,24 +557,42 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.affection = 200;
             }
         }
-
+        if(this.isSleeping() && this.getNavigator().hasPath()){
+            this.getNavigator().clearPath();
+        }
         this.navigator.getNodeProcessor().setCanEnterDoors(this.canOpenDoor());
         this.navigator.getNodeProcessor().setCanOpenDoors(this.canOpenDoor());
+
+        if(this.isForceWaken() && this.getEntityWorld().isDaytime()){
+            this.setForceWaken(false);
+        }
+
+        if(this.isBeingPatted() && this.ticksExisted%20 ==0){
+            this.addMorale(0.02);
+        }
+        else if(this.isEntitySleeping() && this.ticksExisted%600 == 0){
+            this.addMorale(0.015);
+        }
+        else if(!this.isFreeRoaming()&& this.ticksExisted%600 == 0){
+            this.addMorale(-0.01);
+        }
+
     }
 
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new CompanionSwimGoal(this));
-        this.goalSelector.addGoal(2, new SitGoal(this));
-        this.goalSelector.addGoal(3, new KansenRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(6, new CompanionMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(7, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(8, new KansenWorkGoal(this, 1.0D));
-       this.goalSelector.addGoal(9, new CompanionOpenDoorGoal(this, true));
-       this.goalSelector.addGoal(10, new CompanionFreeroamGoal(this, 60, true));
-        this.goalSelector.addGoal(11, new CompanionFindBedGoal(this));
-        this.goalSelector.addGoal(12, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(13, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
+        this.goalSelector.addGoal(3, new SitGoal(this));
+        this.goalSelector.addGoal(4, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(5, new CompanionMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(6, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
+       this.goalSelector.addGoal(8, new CompanionOpenDoorGoal(this, true));
+       this.goalSelector.addGoal(9, new CompanionFreeroamGoal(this, 60, true));
+        this.goalSelector.addGoal(10, new CompanionFindBedGoal(this));
+        this.goalSelector.addGoal(11, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(12, new LookRandomlyGoal(this));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -560,10 +603,42 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return true;
     }
 
+    @Override
+    public void startSleeping(BlockPos pos) {
+        super.startSleeping(pos);
+        this.setLastSlept(this.getEntityWorld().getGameTime());
+    }
+
+    public void setLastSlept(long lastSlept) {
+        this.lastSlept = lastSlept;
+    }
+
+    public long getLastSlept() {
+        return this.lastSlept;
+    }
+
+    public long getLastWokenup() {
+        return this.lastWokenup;
+    }
+
+    public void setLastWokenup(long lastWokenup) {
+        this.lastWokenup = lastWokenup;
+    }
+
     public void setTamedBy(PlayerEntity player) {
         this.setTamed(true);
         this.setOwnerId(player.getUniqueID());
         //Triggering Tame Animal goal at the beginning of the world doesn't feel right.
+    }
+
+    @Override
+    public boolean canBePushed() {
+        return super.canBePushed() && !this.isSleeping();
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return super.canBeCollidedWith()&&!this.isSleeping();
     }
 
     @Override
@@ -597,7 +672,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
 
                 if(!(heldstacks.getItem() instanceof ItemBandage)) {
-                    if (EyeCheckFinal > 1.0D - 0.025D / EyeDeltaLength && player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player) < 4.0F) {
+
+                    if(this.isSleeping()){
+                        if(this.forceWakeupCounter>4){
+                            this.forceWakeup();
+                        }
+                        else{
+                            this.forceWakeupCounter++;
+                            this.forcewakeupExpireTimer = 20;
+                        }
+                        return ActionResultType.SUCCESS;
+                    }
+                    else if (EyeCheckFinal > 1.0D - 0.025D / EyeDeltaLength && player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player) < 4.0F) {
                         this.beingpatted();
                         return ActionResultType.SUCCESS;
                     } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
@@ -647,10 +733,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
-    public boolean isNearHome(){
-        return this.getBrain().hasMemory(MemoryModuleType.HOME) && this.getBrain().getMemory(MemoryModuleType.HOME).get().getDimension() == this.world.getDimensionKey() && this.getPosition().withinDistance(this.getBrain().getMemory(MemoryModuleType.HOME).get().getPos(), 64);
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.getHomePosition()!=BlockPos.ZERO&&this.ticksExisted%20==0){
+            BlockState blockstate = this.world.getBlockState(this.getHomePosition());
+            if(!blockstate.isBed(this.getEntityWorld(),this.getHomePosition(), this)) {
+                this.setHomePosAndDistance(BlockPos.ZERO, -1);
+            };
+        }
     }
-
     protected abstract void openGUI(PlayerEntity player);
 
     protected void beingpatted(){
@@ -677,6 +769,63 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void SwitchFreeRoamingStatus() {
         this.setStayCenterPos(this.getPosition());
         this.setFreeRoaming(!this.isFreeRoaming());
+    }
+
+    public void setForceWaken(boolean value){
+        this.getDataManager().set(ISFORCEWOKENUP, value);
+    }
+
+    public boolean isForceWaken(){
+        return this.getDataManager().get(ISFORCEWOKENUP);
+    }
+
+    public void forceWakeup(){
+        if(this.isSleeping()) {
+            this.wakeUp();
+            this.setForceWaken(true);
+        }
+
+    }
+
+    @Override
+    public void wakeUp() {
+        super.wakeUp();
+        this.setLastWokenup(this.getEntityWorld().getDayTime());
+    }
+
+    @SubscribeEvent
+    public void OnTimeSkip(PlayerWakeUpEvent event){
+        this.setLastWokenup(this.getEntityWorld().getDayTime());
+
+        this.CalculateMoraleBasedonTime(this.getLastSlept(), this.getLastWokenup());
+    }
+
+    private void CalculateMoraleBasedonTime(long lastSlept, long lastWokenup) {
+
+        long deltaTime;
+        if(lastWokenup<=lastSlept){
+            deltaTime = 24000-lastSlept-lastWokenup;
+        }
+        else{
+            deltaTime = lastSlept-lastWokenup;
+        }
+
+        this.addAffection(0.02*((float)deltaTime/300));
+        this.addMorale(((float)deltaTime/1000)*30);
+    }
+
+    public double getMorale() {
+        return this.morale;
+    }
+
+    public void setMorale(double morale) {
+        this.morale = morale;
+    }
+
+    public void addMorale(double value){
+        double prevmorale = this.getMorale();
+
+        this.setMorale(Math.min(prevmorale+value, 150));
     }
 
     public BlockPos getStayCenterPos() {

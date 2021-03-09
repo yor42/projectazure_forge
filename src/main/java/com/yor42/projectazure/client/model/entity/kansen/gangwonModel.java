@@ -46,11 +46,12 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
         IBone Flustered = this.getAnimationProcessor().getBone("Fluster");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
 
+        IBone body = this.getAnimationProcessor().getBone("Body");
+
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
         if(entity.isBeingPatted()){
             if(entity.isEntitySleeping()){
-                if(entity.isEntitySleeping()){
                     NormalFace.setHidden(true);
                     PatFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
@@ -58,24 +59,27 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
                     PoutFace.setHidden(true);
                     Flustered.setHidden(false);
                     ExcitedFace.setHidden(true);
-                }
-                else {
-                    NormalFace.setHidden(true);
-                    PatFace.setHidden(false);
-                    EyeclosedFace.setHidden(true);
-                    PoutFace.setHidden(true);
-                    PoutFace.setHidden(true);
-                    Flustered.setHidden(true);
-                    ExcitedFace.setHidden(true);
-                }
             }
+            else {
+                NormalFace.setHidden(true);
+                PatFace.setHidden(false);
+                EyeclosedFace.setHidden(true);
+                PoutFace.setHidden(true);
+                PoutFace.setHidden(true);
+                Flustered.setHidden(true);
+                ExcitedFace.setHidden(true);
+            }
+        }
+        else if(entity.isSleeping()){
             NormalFace.setHidden(true);
-            PatFace.setHidden(false);
-            EyeclosedFace.setHidden(true);
-            PoutFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(false);
             PoutFace.setHidden(true);
             Flustered.setHidden(true);
             ExcitedFace.setHidden(true);
+
+            body.setPositionY(-20);
+            body.setPositionZ(-10);
         }
         else {
             if (this.blinkinterval <= 5) {
@@ -102,7 +106,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
 
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if(!entity.isBeingPatted()) {
+        if(!entity.isBeingPatted() || !entity.isSleeping()) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
         }

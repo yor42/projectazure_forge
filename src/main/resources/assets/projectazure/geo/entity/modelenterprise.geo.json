@@ -647,6 +647,14 @@
 					]
 				},
 				{
+					"name": "Sleeping",
+					"parent": "Faces",
+					"pivot": [-3, 41.75, -2.65],
+					"cubes": [
+						{"origin": [-6.75, 57.02013, -7.16055], "size": [13.75, 14, 1], "uv": [2, 228]}
+					]
+				},
+				{
 					"name": "RightArm",
 					"parent": "Chest",
 					"pivot": [-8.5, 53.75, 0],
