@@ -45,6 +45,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
         IBone PoutFace = this.getAnimationProcessor().getBone("Tsun");
         IBone Flustered = this.getAnimationProcessor().getBone("Fluster");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
+        IBone SleepFace = this.getAnimationProcessor().getBone("Sleep");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
@@ -59,6 +60,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
                     PoutFace.setHidden(true);
                     Flustered.setHidden(false);
                     ExcitedFace.setHidden(true);
+                    SleepFace.setHidden(true);
             }
             else {
                 NormalFace.setHidden(true);
@@ -68,15 +70,17 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
                 PoutFace.setHidden(true);
                 Flustered.setHidden(true);
                 ExcitedFace.setHidden(true);
+                SleepFace.setHidden(true);
             }
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
             PatFace.setHidden(true);
-            EyeclosedFace.setHidden(false);
+            EyeclosedFace.setHidden(true);
             PoutFace.setHidden(true);
             Flustered.setHidden(true);
             ExcitedFace.setHidden(true);
+            SleepFace.setHidden(false);
 
             body.setPositionY(-20);
             body.setPositionZ(-10);
@@ -89,6 +93,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
                 PoutFace.setHidden(true);
                 Flustered.setHidden(true);
                 ExcitedFace.setHidden(true);
+                SleepFace.setHidden(true);
                 if (this.blinkinterval == 0) {
                     this.blinkinterval = 20 * (random.nextInt(9) + 2);
                 }
@@ -101,6 +106,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
                 PoutFace.setHidden(true);
                 Flustered.setHidden(true);
                 ExcitedFace.setHidden(true);
+                SleepFace.setHidden(true);
             }
         }
 

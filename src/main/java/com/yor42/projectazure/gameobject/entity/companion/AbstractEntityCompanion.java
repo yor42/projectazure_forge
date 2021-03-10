@@ -284,19 +284,22 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putDouble("affection", this.affection);
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
+        compound.putDouble("homeX", this.getHomePosition().getX());
+        compound.putDouble("homeY", this.getHomePosition().getY());
+        compound.putDouble("homeZ", this.getHomePosition().getZ());
         compound.putDouble("exp", this.exp);
         compound.putInt("level", this.level);
         compound.putInt("limitbreaklv", this.LimitBreakLv);
         compound.putInt("awaken", this.awakeningLevel);
         compound.putBoolean("freeroaming", this.isFreeRoaming());
         compound.putDouble("morale", this.morale);
-
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
     }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
+        this.setHomePosAndDistance(new BlockPos(compound.getDouble("homeX"), compound.getDouble("homeY"), compound.getDouble("homeZ")), 32);
         this.affection = compound.getFloat("affection");
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
@@ -577,6 +580,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.addMorale(-0.01);
         }
 
+        if(this.getEntityWorld().isDaytime())
+        {
+            this.wakeUp();
+        }
+
     }
 
     @Override
@@ -584,15 +592,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(1, new CompanionSwimGoal(this));
         this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
         this.goalSelector.addGoal(3, new SitGoal(this));
-        this.goalSelector.addGoal(4, new KansenRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(5, new CompanionMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(6, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(7, new KansenWorkGoal(this, 1.0D));
-       this.goalSelector.addGoal(8, new CompanionOpenDoorGoal(this, true));
-       this.goalSelector.addGoal(9, new CompanionFreeroamGoal(this, 60, true));
-        this.goalSelector.addGoal(10, new CompanionFindBedGoal(this));
-        this.goalSelector.addGoal(11, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(12, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(6, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(8, new CompanionMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(9, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(10, new KansenWorkGoal(this, 1.0D));
+       this.goalSelector.addGoal(11, new CompanionOpenDoorGoal(this, true));
+       this.goalSelector.addGoal(12, new CompanionFreeroamGoal(this, 60, true));
+        this.goalSelector.addGoal(13, new CompanionFindBedGoal(this));
+        this.goalSelector.addGoal(14, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(15, new LookRandomlyGoal(this));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));

@@ -126,16 +126,23 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderMorale(matrixStack, mousex, mousey);
         this.renderEntity(mousex, mousey);
-        this.drawButtons();
+        this.drawButtons(matrixStack, mousex, mousey);
         matrixStack.pop();
         //this.renderButton(matrixStack);
     }
 
-    private void drawButtons() {
+    private void drawButtons(MatrixStack stack, int MouseX, int MouseY) {
 
         int x = this.host.isFreeRoaming()? 185:176;
 
         ImageButton button = new ImageButton(this.x+159,this.y+52,9,9,x,25,9,TEXTURE,action->switchBehavior());
+
+        if(this.isPointInRegion(159,52,9,9, MouseX, MouseY)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": "+this.host.getHomePosition().getX()+" / "+this.host.getHomePosition().getY()+" / "+this.host.getHomePosition().getZ()));
+            this.renderWrappedToolTip(stack, tooltips, MouseX-this.x, MouseY-this.y, this.font);
+        }
+
         this.addButton(button);
     }
 

@@ -52,8 +52,7 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
-            EyeclosedFace.setHidden(false);
-
+            EyeclosedFace.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-10);
         }
@@ -74,11 +73,12 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
             }
         }
 
-
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if(!(entity.isBeingPatted()||!entity.isSleeping())) {
-            head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+        if(customPredicate != null) {
+            EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+            if (!(entity.isBeingPatted() || !entity.isSleeping())) {
+                head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+                head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+            }
         }
     }
 }

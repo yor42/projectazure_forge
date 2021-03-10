@@ -37,22 +37,20 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
     @Override
     protected Vector3d getPosition() {
 
-        BlockPos homepos = null;
+        if (this.entityCompanion.getStayCenterPos() == BlockPos.ZERO){
+            this.entityCompanion.setStayCenterPos(this.entityCompanion.getPosition());
+        }
+
+        BlockPos homepos = this.entityCompanion.getStayCenterPos();
         BlockPos originPosition;
         boolean flag = false;
 
-        if (this.entityCompanion.getBrain().hasMemory(MemoryModuleType.HOME)){
-            homepos = this.entityCompanion.getBrain().getMemory(MemoryModuleType.HOME).get().getPos();
-            flag = this.entityCompanion.getBrain().getMemory(MemoryModuleType.HOME).get().getDimension() == this.entityCompanion.getEntityWorld().getDimensionKey() && this.entityCompanion.getPosition().withinDistance(homepos, 32);
-        }
-        else {
-            if (this.entityCompanion.getBedPosition().isPresent()) {
-                homepos = this.entityCompanion.getBedPosition().get();
-                flag = this.entityCompanion.getEntityWorld().getDimensionKey() == World.OVERWORLD && this.entityCompanion.getPosition().withinDistance(homepos, 32);
-            }
+        if (this.entityCompanion.isWithinHomeDistanceCurrentPosition()) {
+            homepos = this.entityCompanion.getHomePosition();
+            flag = this.entityCompanion.getEntityWorld().getDimensionKey() == World.OVERWORLD && this.entityCompanion.getPosition().withinDistance(homepos, 32);
         }
 
-        originPosition = this.entityCompanion.getStayCenterPos();
+        originPosition = flag? homepos : this.entityCompanion.getStayCenterPos();
 
         int x = ((int)(getRand().nextFloat()*20)-10);
         int z = ((int)(getRand().nextFloat()*20)-10);

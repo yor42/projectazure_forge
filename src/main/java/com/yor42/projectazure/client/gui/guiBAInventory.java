@@ -29,12 +29,11 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/bluearchive_inventory.png");
 
-    private EntityGunUserBase host;
-    private enums.Affection affectionLevel;
-    private double affection;
+    private final EntityGunUserBase host;
+    private final enums.Affection affectionLevel;
+    private final double affection, morale;
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;
-    private PlayerInventory inventory;
 
     private int x, y;
 
@@ -43,7 +42,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         this.host = (EntityGunUserBase) Main.PROXY.getSharedMob();
         this.affection = this.host.getAffection();
         this.affectionLevel = this.affectionValuetoLevel();
-        this.inventory = inv;
+        this.morale = host.getMorale();
     }
 
     @Override
@@ -156,11 +155,83 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         matrixStack.pop();
     }
 
-    private void drawButtons() {
+    private enums.Morale moraleValuetoLevel(){
+        if(this.morale>=120.0D){
+            return enums.Morale.REALLY_HAPPY;
+        }
+        else if(this.affection>=70 && this.affection<120){
+            return enums.Morale.HAPPY;
+        }
+        else if(this.affection>=30 && this.affection<70){
+            return enums.Morale.NEUTRAL;
+        }
+        else if(this.affection>10 && this.affection<=30){
+            return enums.Morale.SAD;
+        }
+        else{
+            return enums.Morale.EXHAUSTED;
+        }
+    }
+
+    private void renderMorale(MatrixStack matrixStack, int mousex, int mousey) {
+        matrixStack.push();
+        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        int textureY = 13;
+        int textureX = 176;
+
+        int x = 72;
+        int y = 16;
+
+        enums.Morale morale = this.moraleValuetoLevel();
+
+        int color=16777215;
+        switch (morale){
+            case EXHAUSTED:{
+                color = 7829367;
+                break;
+            }
+            case SAD:{
+                color = 16481134;
+                textureX = 188;
+                break;
+            }
+            case NEUTRAL:{
+                color = 16695668;
+                textureX = 200;
+                break;
+            }
+            case HAPPY:{
+                color = 9824105;
+                textureX = 212;
+                break;
+            }
+            case REALLY_HAPPY:{
+                color = 11925139;
+                textureX = 224;
+                break;
+            }
+        }
+        this.blit(matrixStack, x, y, textureX, textureY, 12, 12);
+        if (isPointInRegion(x, y, 12,12,mousex,mousey)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            tooltips.add(new TranslationTextComponent("gui.current_morale_level").appendString(": ").append(new TranslationTextComponent(morale.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
+            tooltips.add(new TranslationTextComponent("gui.current_morale_value").appendString(": ").appendString(String.format("%.2f",this.affection)+"/150").setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
+            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
+        }
+        matrixStack.pop();
+    }
+
+    private void drawButtons(MatrixStack stack, int mousex, int mousey) {
 
         int x = this.host.isFreeRoaming()? 185:176;
 
         ImageButton button = new ImageButton(this.x+10,this.y+63,9,9,x,25,9,TEXTURE, action->switchBehavior());
+
+        if(this.isPointInRegion(10,63,9,9, mousex, mousey)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": "+this.host.getHomePosition().getX()+" / "+this.host.getHomePosition().getY()+" / "+this.host.getHomePosition().getZ()));
+            this.renderWrappedToolTip(stack, tooltips, mousex-this.x, mousey-this.y, this.font);
+        }
         this.addButton(button);
     }
 
@@ -176,7 +247,8 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         this.font.func_243248_b(matrixStack, leveltext, 12, (float)84, 16777215);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5, 5, 16777215);
         this.renderAffection(matrixStack, mousex, mousey);
-        this.drawButtons();
+        this.renderMorale(matrixStack, mousex, mousey);
+        this.drawButtons(matrixStack, mousex, mousey);
         this.renderEntity(mousex, mousey);
         matrixStack.pop();
         //this.renderButton(matrixStack);
