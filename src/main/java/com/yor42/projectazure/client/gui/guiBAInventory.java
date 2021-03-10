@@ -229,7 +229,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
 
         if(this.isPointInRegion(10,63,9,9, mousex, mousey)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": "+this.host.getHomePosition().getX()+" / "+this.host.getHomePosition().getY()+" / "+this.host.getHomePosition().getZ()));
+            tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": "+this.host.getHomePos().getX()+" / "+this.host.getHomePos().getY()+" / "+this.host.getHomePos().getZ()));
             this.renderWrappedToolTip(stack, tooltips, mousex-this.x, mousey-this.y, this.font);
         }
         this.addButton(button);

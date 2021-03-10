@@ -139,7 +139,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
         if(this.isPointInRegion(159,52,9,9, MouseX, MouseY)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": "+this.host.getHomePosition().getX()+" / "+this.host.getHomePosition().getY()+" / "+this.host.getHomePosition().getZ()));
+            tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": "+this.host.getHomePos().getX()+" / "+this.host.getHomePos().getY()+" / "+this.host.getHomePos().getZ()));
             this.renderWrappedToolTip(stack, tooltips, MouseX-this.x, MouseY-this.y, this.font);
         }
 
