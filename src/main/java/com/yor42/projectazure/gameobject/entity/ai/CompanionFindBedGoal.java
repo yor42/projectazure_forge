@@ -41,7 +41,7 @@ public class CompanionFindBedGoal extends Goal {
     @Override
     public void startExecuting() {
             Optional<BlockPos> optional = findHomePosition((ServerWorld) this.entityCompanion.getEntityWorld(), this.entityCompanion);
-            optional.ifPresent(blockPos -> setHomePosition((ServerWorld) this.entityCompanion.getEntityWorld(), this.entityCompanion, blockPos));
+            optional.ifPresent(blockPos -> setHomePosition(this.entityCompanion, blockPos));
     }
 
     private Optional<BlockPos> findHomePosition(ServerWorld world, AbstractEntityCompanion entity) {
@@ -53,24 +53,7 @@ public class CompanionFindBedGoal extends Goal {
         return path != null && path.reachesTarget();
     }
 
-    private List<BlockPos> getNearbyFreeBed() {
-        BlockPos blockpos = this.entityCompanion.getPosition();
-        PointOfInterestManager pointofinterestmanager = ((ServerWorld)this.entityCompanion.getEntityWorld()).getPointOfInterestManager();
-        Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b((p_226486_0_) -> p_226486_0_ == PointOfInterestType.HOME, blockpos, 20, PointOfInterestManager.Status.ANY);
-        return stream.map(PointOfInterest::getPos).filter(this::isBedFree).sorted(Comparator.comparingDouble((p_226488_1_) -> p_226488_1_.distanceSq(blockpos))).collect(Collectors.toList());
-    }
-
-    private boolean isBedFree(BlockPos pos) {
-        BlockState blockstate = this.entityCompanion.getEntityWorld().getBlockState(pos);
-        if (blockstate.isBed(this.entityCompanion.getEntityWorld(), pos, null)) {
-            return !blockstate.get(BedBlock.OCCUPIED);
-        }
-        return false;
-    }
-
-    private void setHomePosition(ServerWorld world, AbstractEntityCompanion entityCompanion, BlockPos pos) {
-        GlobalPos globalpos = GlobalPos.getPosition(world.getDimensionKey(), pos);
-        entityCompanion.setHomePosAndDistance(pos,32);
-        entityCompanion.getBrain().setMemory(MemoryModuleType.HOME, globalpos);
+    private void setHomePosition(AbstractEntityCompanion entityCompanion, BlockPos pos) {
+        entityCompanion.setHomepos(pos,64);
     }
 }

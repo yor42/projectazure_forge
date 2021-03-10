@@ -235,6 +235,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<BlockPos> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
+    protected static final DataParameter<BlockPos> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
+    protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.PATH, MemoryModuleType.OPENED_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
@@ -295,6 +297,32 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putDouble("morale", this.morale);
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
+    }
+
+    public void setHomepos(BlockPos pos, float validDistance){
+        this.dataManager.set(HOMEPOS, pos);
+        this.dataManager.set(VALID_HOME_DISTANCE, validDistance);
+    }
+
+    public BlockPos getHomePos() {
+        return this.dataManager.get(HOMEPOS);
+    }
+
+    public float getHomeDistance(){
+        return this.dataManager.get(VALID_HOME_DISTANCE);
+    }
+
+    public boolean isInHomeRange(BlockPos Startpos){
+        if(this.getHomeDistance() == -1.0f || this.getHomePos() == BlockPos.ZERO){
+            return false;
+        }
+        else{
+            return Startpos.withinDistance(this.getHomePos(), this.getHomeDistance());
+        }
+    }
+
+    public boolean isInHomeRangefromCurrenPos(){
+        return this.isInHomeRange(this.getPosition());
     }
 
     public void readAdditional(CompoundNBT compound) {
@@ -377,6 +405,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(USINGBOW, false);
         this.dataManager.register(STAYPOINT, BlockPos.ZERO);
         this.dataManager.register(ISFORCEWOKENUP, false);
+        this.dataManager.register(HOMEPOS, BlockPos.ZERO);
+        this.dataManager.register(VALID_HOME_DISTANCE, -1.0f);
     }
 
     public void setOpeningdoor(boolean openingdoor){
