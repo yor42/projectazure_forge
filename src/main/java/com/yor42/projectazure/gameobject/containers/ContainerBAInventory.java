@@ -160,7 +160,7 @@ public class ContainerBAInventory extends Container {
 
         @Override
         public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.shipinventory");
+            return new TranslationTextComponent("gui.companioninventory");
         }
 
         @Nullable

@@ -287,9 +287,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putDouble("affection", this.affection);
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
-        compound.putDouble("homeX", this.getHomePosition().getX());
-        compound.putDouble("homeY", this.getHomePosition().getY());
-        compound.putDouble("homeZ", this.getHomePosition().getZ());
+        compound.putDouble("homeX", this.dataManager.get(HOMEPOS).getX());
+        compound.putDouble("homeY", this.dataManager.get(HOMEPOS).getY());
+        compound.putDouble("homeZ", this.dataManager.get(HOMEPOS).getZ());
+        compound.putFloat("home_distance", this.dataManager.get(VALID_HOME_DISTANCE));
+        compound.putDouble("stayX", this.dataManager.get(STAYPOINT).getX());
+        compound.putDouble("stayY", this.dataManager.get(STAYPOINT).getY());
+        compound.putDouble("stayZ", this.dataManager.get(STAYPOINT).getZ());
+        compound.putBoolean("isforcewokenup", this.dataManager.get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.exp);
         compound.putInt("level", this.level);
         compound.putInt("limitbreaklv", this.LimitBreakLv);
@@ -331,6 +336,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.affection = compound.getFloat("affection");
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
+        this.dataManager.set(HOMEPOS, new BlockPos(compound.getDouble("homeX"), compound.getDouble("homeY"), compound.getDouble("homeZ")));
+        this.dataManager.set(STAYPOINT, new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ")));
+        this.dataManager.set(VALID_HOME_DISTANCE, compound.getFloat("home_distance"));
+        this.dataManager.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
         this.level = compound.getInt("level");
         this.exp = compound.getFloat("exp");
         this.LimitBreakLv = compound.getInt("limitbreaklv");
@@ -350,17 +359,29 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.isFreeRoaming = freeRoaming;
     }
 
+
+    /*
+    looks like this is for getting a child entity.
+    we don't need these.
+     */
     @Nullable
     @Override
     public AgeableEntity func_241840_a(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
         return null;
     }
 
+    /*
+    No. just No.
+     */
     @Override
     public boolean canMateWith(AnimalEntity otherAnimal) {
         return false;
     }
 
+    /*
+    determins if this entity can use ShipGirl Riggings.
+    Off by default.
+     */
     public boolean canUseRigging(){
         return false;
     }
@@ -610,7 +631,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.addMorale(-0.01);
         }
 
-        if(this.getEntityWorld().isDaytime())
+        if(!this.world.isRemote() && this.getEntityWorld().isDaytime())
         {
             this.wakeUp();
         }

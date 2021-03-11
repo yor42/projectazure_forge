@@ -44,7 +44,7 @@
 
   "gui.selectstarter.title": "Select Starter Ship",
   "gui.shipinventory": "KANSEN Inv.",
-  "gui.bainventory": "Inventory",
+  "gui.companioninventory": "Inventory",
 
   "gui.current_affection_level": "Current Affection",
   "gui.current_affection_value": "Affection",

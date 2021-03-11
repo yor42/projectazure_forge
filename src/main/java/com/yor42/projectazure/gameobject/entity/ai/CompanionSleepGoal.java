@@ -18,7 +18,7 @@ public class CompanionSleepGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        boolean flag = this.companion.getHomePosition() != BlockPos.ZERO && this.companion.getEntityWorld().getDimensionKey() == World.OVERWORLD;;
+        boolean flag = this.companion.getHomePos() != BlockPos.ZERO && this.companion.getEntityWorld().getDimensionKey() == World.OVERWORLD;;
         if(flag){
             if(this.companion.getEntityWorld().isNightTime() && !this.companion.isForceWaken()){
                 return this.companion.isInHomeRangefromCurrenPos() && !this.companion.isSleeping() && (this.companion.isFreeRoaming()||(this.companion.getOwner()!=null && this.companion.getOwner().isSleeping()));
