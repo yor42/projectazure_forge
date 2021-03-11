@@ -20,7 +20,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
     private AbstractEntityCompanion entityCompanion;
 
     public CompanionFreeroamGoal(AbstractEntityCompanion entity, int moveChance, boolean shouldStopBeforeMove){
-        super(entity, 1, moveChance,shouldStopBeforeMove);
+        super(entity, 0.6D, moveChance,shouldStopBeforeMove);
         this.entityCompanion = entity;
     }
 

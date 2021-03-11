@@ -624,14 +624,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(this.isBeingPatted() && this.ticksExisted%20 ==0){
             this.addMorale(0.02);
         }
-        else if(this.isEntitySleeping() && this.ticksExisted%600 == 0){
+        else if(this.isEntitySleeping() && this.ticksExisted%20 == 0){
             this.addMorale(0.015);
         }
-        else if(!this.isFreeRoaming()&& this.ticksExisted%600 == 0){
+        else if(!this.isFreeRoaming()&& this.ticksExisted%20 == 0){
             this.addMorale(-0.01);
         }
 
-        if(!this.world.isRemote() && this.getEntityWorld().isDaytime())
+        if(!this.world.isRemote() && this.getEntityWorld().isDaytime() && this.isSleeping())
         {
             this.wakeUp();
         }

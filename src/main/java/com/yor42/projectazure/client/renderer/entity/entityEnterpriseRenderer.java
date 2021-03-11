@@ -29,7 +29,7 @@ public class entityEnterpriseRenderer extends GeoEntityRenderer<EntityEnterprise
     public entityEnterpriseRenderer(EntityRendererManager renderManager) {
         super(renderManager, new enterpriseModel());
         this.addLayer(new EnterpriseRiggingLayer(this));
-        this.shadowSize = 0.7F; //change 0.7 to the desired shadow size.
+        this.shadowSize = 0.4F;
     }
 
     @Override
