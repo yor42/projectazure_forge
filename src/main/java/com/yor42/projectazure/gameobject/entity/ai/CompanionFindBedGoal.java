@@ -31,7 +31,7 @@ public class CompanionFindBedGoal extends Goal {
     @Override
     public boolean shouldExecute() {
 
-        boolean notalreadyhasbed = (this.entityCompanion.getHomePosition()==BlockPos.ZERO);
+        boolean notalreadyhasbed = (this.entityCompanion.getHomePos()==BlockPos.ZERO);
 
         boolean flag = notalreadyhasbed && this.entityCompanion.ticksExisted % 10 == 0;
 

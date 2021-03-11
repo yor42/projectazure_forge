@@ -327,7 +327,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        this.setHomePosAndDistance(new BlockPos(compound.getDouble("homeX"), compound.getDouble("homeY"), compound.getDouble("homeZ")), 32);
         this.affection = compound.getFloat("affection");
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
@@ -775,9 +774,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void tick() {
         super.tick();
         if(this.getHomePosition()!=BlockPos.ZERO&&this.ticksExisted%20==0){
-            BlockState blockstate = this.world.getBlockState(this.getHomePosition());
-            if(!blockstate.isBed(this.getEntityWorld(),this.getHomePosition(), this)) {
-                this.setHomePosAndDistance(BlockPos.ZERO, -1);
+            BlockState blockstate = this.world.getBlockState(this.getHomePos());
+            if(!blockstate.isBed(this.getEntityWorld(),this.getHomePos(), this)) {
+                this.setHomepos(BlockPos.ZERO, -1);
             };
         }
     }
