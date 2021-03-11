@@ -3,7 +3,6 @@ package com.yor42.projectazure.setup.register;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import static com.yor42.projectazure.libs.defined.MODID;

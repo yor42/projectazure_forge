@@ -96,7 +96,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         if (entity != null) {
             int entityWidth = (int) entity.getWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(57+(entityWidth/2), (int) (15+this.host.getHeight()), 25, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
+                InventoryScreen.drawEntityOnScreen(48+(entityWidth/2), 70, 25, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }
@@ -159,13 +159,13 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         if(this.morale>=120.0D){
             return enums.Morale.REALLY_HAPPY;
         }
-        else if(this.affection>=70 && this.affection<120){
+        else if(this.morale>=70 && this.morale<120){
             return enums.Morale.HAPPY;
         }
-        else if(this.affection>=30 && this.affection<70){
+        else if(this.morale>=30 && this.morale<70){
             return enums.Morale.NEUTRAL;
         }
-        else if(this.affection>10 && this.affection<=30){
+        else if(this.morale>=10 && this.morale<30){
             return enums.Morale.SAD;
         }
         else{
@@ -188,6 +188,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         switch (morale){
             case EXHAUSTED:{
                 color = 7829367;
+                textureX = 176;
                 break;
             }
             case SAD:{
@@ -214,8 +215,8 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         this.blit(matrixStack, x, y, textureX, textureY, 12, 12);
         if (isPointInRegion(x, y, 12,12,mousex,mousey)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            tooltips.add(new TranslationTextComponent("gui.current_morale_level").appendString(": ").append(new TranslationTextComponent(morale.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
-            tooltips.add(new TranslationTextComponent("gui.current_morale_value").appendString(": ").appendString(String.format("%.2f",this.affection)+"/150").setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
+            tooltips.add(new TranslationTextComponent("gui.current_morale_level").appendString(": ").append(new TranslationTextComponent(moraleValuetoLevel().getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
+            tooltips.add(new TranslationTextComponent("gui.current_morale_value").appendString(": ").appendString(String.format("%.2f",this.morale)+"/150").setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
             this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
         }
         matrixStack.pop();

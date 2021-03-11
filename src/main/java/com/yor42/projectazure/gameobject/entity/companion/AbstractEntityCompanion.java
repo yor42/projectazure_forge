@@ -47,6 +47,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -862,7 +863,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void addMorale(double value){
         double prevmorale = this.getMorale();
 
-        this.setMorale(Math.min(prevmorale+value, 150));
+
+        this.setMorale(MathUtils.clamp(prevmorale+value, 0, 150));
     }
 
     public BlockPos getStayCenterPos() {

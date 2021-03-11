@@ -78,13 +78,13 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         if(this.morale>=120.0D){
             return enums.Morale.REALLY_HAPPY;
         }
-        else if(this.affection>=70 && this.affection<120){
+        else if(this.morale>=70 && this.morale<120){
             return enums.Morale.HAPPY;
         }
-        else if(this.affection>=30 && this.affection<70){
+        else if(this.morale>=30 && this.morale<70){
             return enums.Morale.NEUTRAL;
         }
-        else if(this.affection>10 && this.affection<=30){
+        else if(this.morale>10 && this.morale<=30){
             return enums.Morale.SAD;
         }
         else{
@@ -266,7 +266,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
             double AffectionLimit = this.host.isOathed()? 200:100;
             tooltips.add(new TranslationTextComponent("gui.current_morale_level").appendString(": ").append(new TranslationTextComponent(morale.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
-            tooltips.add(new TranslationTextComponent("gui.current_morale_value").appendString(": ").appendString(String.format("%.2f",this.affection)+"/150").setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
+            tooltips.add(new TranslationTextComponent("gui.current_morale_value").appendString(": ").appendString(String.format("%.2f",this.morale)+"/150").setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
             this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
         }
         matrixStack.pop();
