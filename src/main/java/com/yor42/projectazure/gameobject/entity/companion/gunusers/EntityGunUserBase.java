@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -14,7 +15,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class EntityGunUserBase extends AbstractEntityCompanion {
 
-    private ItemStackHandler Inventory = new ItemStackHandler(12);
     private ItemStackHandler AmmoStorage = new ItemStackHandler(8){
         //TODO check if items are instance of bullets
     };
@@ -39,14 +39,12 @@ public abstract class EntityGunUserBase extends AbstractEntityCompanion {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.put("inventory", this.getInventory().serializeNBT());
         compound.put("ammoInv", this.getAmmoStorage().serializeNBT());
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        this.Inventory.deserializeNBT(compound.getCompound("Inventory"));
         this.getAmmoStorage().deserializeNBT(compound.getCompound("ammoInv"));
     }
 

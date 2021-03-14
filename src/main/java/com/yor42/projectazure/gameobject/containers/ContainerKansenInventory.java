@@ -4,7 +4,6 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.slots.SlotRigging;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemAmmo;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,7 +34,8 @@ public class ContainerKansenInventory extends Container {
     public ContainerKansenInventory(int id, PlayerInventory playerInventory) {
         super(registerManager.SHIP_CONTAINER.get(), id);
 
-        ItemStackHandler dummyStackHandler = new ItemStackHandler(19);
+        ItemStackHandler dummyStackHandler = new ItemStackHandler(1);
+        ItemStackHandler dummyInventory = new ItemStackHandler(12);
         ItemStackHandler dummyEquipmentHandler = new ItemStackHandler(19);
         ItemStackHandler dummyAmmoHandler = new ItemStackHandler(8);
 
@@ -65,7 +65,7 @@ public class ContainerKansenInventory extends Container {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(dummyStackHandler, 1 + n + 3 * m, 11 + n * 18, 19 + m * 18));
+                this.addSlot(new SlotItemHandler(dummyInventory, n + 3 * m, 11 + n * 18, 19 + m * 18));
             }
         }
 
@@ -95,7 +95,7 @@ public class ContainerKansenInventory extends Container {
     public ContainerKansenInventory(int id, PlayerInventory playerInventory, EntityKansenBase entity) {
         super(registerManager.SHIP_CONTAINER.get(), id);
         this.host = entity;
-        this.Stack = entity.getShipStorage();
+        this.Stack = entity.getShipRiggingStorage();
         this.equipment = this.host.getEquipment();
         this.AmmoStack = this.host.getAmmoStorage();
 
@@ -125,7 +125,7 @@ public class ContainerKansenInventory extends Container {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(this.Stack, 1 + n + 3 * m, 11 + n * 18, 19 + m * 18));
+                this.addSlot(new SlotItemHandler(this.host.getInventory(), n + 3 * m, 11 + n * 18, 19 + m * 18));
             }
         }
 
@@ -168,7 +168,7 @@ public class ContainerKansenInventory extends Container {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 
-        if(slot instanceof Slot && slot.getHasStack())
+        if(slot != null && slot.getHasStack())
         {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();

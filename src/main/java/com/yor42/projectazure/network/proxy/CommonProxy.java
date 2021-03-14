@@ -3,6 +3,7 @@ package com.yor42.projectazure.network.proxy;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 
@@ -21,6 +22,14 @@ public class CommonProxy {
     }
     public ItemStack getSharedStack() {
         return this.Sharedstack;
+    }
+
+    /**
+     * Return player on client, null on server
+     * @return
+     */
+    public PlayerEntity getPlayerClient() {
+        return null;
     }
 
 }

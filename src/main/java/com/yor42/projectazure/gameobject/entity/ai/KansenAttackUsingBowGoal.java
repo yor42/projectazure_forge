@@ -31,8 +31,8 @@ public class KansenAttackUsingBowGoal extends Goal {
         LivingEntity target = this.host.getAttackTarget();
         //TODO: check if plane can be used first
         if(target != null && target.isAlive()) {
-            for (int i = 0; i < this.host.getShipStorage().getSlots(); i++) {
-                if (this.host.getShipStorage().getStackInSlot(i).getItem() instanceof ArrowItem) {
+            for (int i = 0; i < this.host.getInventory().getSlots(); i++) {
+                if (this.host.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem) {
                     return this.host.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem;
                 }
             }

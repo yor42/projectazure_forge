@@ -3,6 +3,7 @@ package com.yor42.projectazure.libs.utils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector4f;
+import net.minecraft.util.text.Color;
 import software.bernie.shadowed.fasterxml.jackson.databind.ser.Serializers;
 
 import javax.swing.text.html.parser.Entity;
@@ -105,6 +106,11 @@ public class MathUtil {
             }
         }
         return new Vector4f(0,0,0,0);
+    }
+
+    public static int ColorHexToInt(String HEX_VALUE){
+        Color color = Color.fromHex(HEX_VALUE);
+        return color.getColor();
     }
 
 }

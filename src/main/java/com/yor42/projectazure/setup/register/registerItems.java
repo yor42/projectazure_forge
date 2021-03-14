@@ -4,16 +4,19 @@ import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRendere
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
 import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
+import com.yor42.projectazure.client.renderer.items.ItemAbydos550Renderer;
 import com.yor42.projectazure.client.renderer.items.ItemPlanef4fWildcatRenderer;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127Mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533Mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemPlanef4Fwildcat;
+import com.yor42.projectazure.gameobject.items.gun.ItemAbydos550;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -70,6 +73,12 @@ public class registerItems {
             return new TranslationTextComponent("item.projectazure.music_disc");
         }
     });
+
+    public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 10, 30, 60, 3, SoundEvents.ENTITY_EGG_THROW, SoundEvents.BLOCK_LEVER_CLICK, 30, (float) 0.3, new Item.Properties()
+            .setISTER(() -> ItemAbydos550Renderer::new)
+            .group(PA_GROUP).maxStackSize(1)));
+
+
 
     public static final RegistryObject<Item> BONKBAT = registerManager.ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
             .group(PA_GROUP)

@@ -1,6 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.network.packets.GunFiredPacket;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
@@ -36,6 +37,12 @@ public class registerNetwork {
                 .decoder(spawnParticlePacket::decode)
                 .encoder(spawnParticlePacket::encode)
                 .consumer(spawnParticlePacket::handle)
+                .add();
+
+        channel.messageBuilder(GunFiredPacket.class,4)
+                .decoder(GunFiredPacket::decode)
+                .encoder(GunFiredPacket::encode)
+                .consumer(GunFiredPacket::handle)
                 .add();
 
         return channel;

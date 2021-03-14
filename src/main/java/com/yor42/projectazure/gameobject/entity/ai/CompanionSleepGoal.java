@@ -38,6 +38,9 @@ public class CompanionSleepGoal extends Goal {
     @Override
     public void startExecuting() {
         BlockPos pos = this.companion.getHomePos();
+        if(this.companion.getNavigator().getPath() != null)
+            this.companion.getNavigator().clearPath();
+
         this.companion.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1);
         super.startExecuting();
     }

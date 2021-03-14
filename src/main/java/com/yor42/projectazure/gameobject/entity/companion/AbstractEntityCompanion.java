@@ -3,21 +3,19 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.ai.*;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -29,18 +27,17 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -51,8 +48,6 @@ import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.xml.crypto.Data;
-import java.util.Date;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
@@ -217,6 +212,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
+    protected final ItemStackHandler Inventory = new ItemStackHandler(12);
+
     protected int level,  patAnimationTime, LimitBreakLv, patTimer, healAnimationTime;
     protected double affection, exp, morale;
     protected boolean isFreeRoaming;
@@ -303,6 +300,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putDouble("morale", this.morale);
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
+        compound.put("inventory", this.getInventory().serializeNBT());
     }
 
     public void setHomepos(BlockPos pos, float validDistance){
@@ -346,9 +344,45 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.awakeningLevel = compound.getInt("awaken");
         this.setFreeRoaming(compound.getBoolean("freeroaming"));
         this.morale = compound.getDouble("morale");
+        this.getInventory().deserializeNBT(compound.getCompound("inventory"));
 
         this.lastSlept = compound.getLong("lastslept");
         this.lastWokenup = compound.getLong("lastwoken");
+    }
+
+    public ItemStackHandler getInventory(){
+        return this.Inventory;
+    };
+
+    public int getFirstEmptyStack() {
+        for(int i=0; i<this.getInventory().getSlots();i++){
+            if(this.getInventory().getStackInSlot(i) == ItemStack.EMPTY){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int storeItemStack(ItemStack itemStackIn)
+    {
+        for(int i = 0; i < 27; ++i)
+        {
+            if(this.canMergeStacks(this.getInventory().getStackInSlot(i).getStack(), itemStackIn, i))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private boolean canMergeStacks(ItemStack stack1, ItemStack stack2, int index)
+    {
+        return !stack1.isEmpty() && this.stackEqualExact(stack1, stack2) && stack1.isStackable() && stack1.getCount() < stack1.getMaxStackSize() && stack1.getCount() < this.getInventory().getSlotLimit(index);
+    }
+
+    private boolean stackEqualExact(ItemStack stack1, ItemStack stack2)
+    {
+        return stack1.getItem() == stack2.getItem() && ItemStack.areItemStackTagsEqual(stack1, stack2);
     }
 
     public boolean isFreeRoaming() {
@@ -636,6 +670,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.wakeUp();
         }
 
+        if(!this.getEntityWorld().isRemote() && this.getEntityWorld().isNightTime() && this.isEntitySleeping() && this.isInHomeRangefromCurrenPos()){
+            this.func_233687_w_(false);
+        }
+
     }
 
     @Override
@@ -649,6 +687,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(10, new KansenWorkGoal(this, 1.0D));
        this.goalSelector.addGoal(11, new CompanionOpenDoorGoal(this, true));
        this.goalSelector.addGoal(12, new CompanionFreeroamGoal(this, 60, true));
+       this.goalSelector.addGoal(13, new CompanionPickupItemGoal(this));
         this.goalSelector.addGoal(13, new CompanionFindBedGoal(this));
         this.goalSelector.addGoal(14, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(15, new LookRandomlyGoal(this));
@@ -689,7 +728,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setOwnerId(player.getUniqueID());
         //Triggering Tame Animal goal at the beginning of the world doesn't feel right.
     }
-
     @Override
     public boolean canBePushed() {
         return super.canBePushed() && !this.isSleeping();
@@ -894,5 +932,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void setStayCenterPos(BlockPos stayCenterPos) {
         this.getDataManager().set(STAYPOINT,stayCenterPos);
+    }
+
+    public void PickUpItem(ItemEntity target) {
+
+        ItemStack stack = target.getItem();
+
+        this.triggerItemPickupTrigger(target);
+        this.onItemPickup(target, stack.getCount());
+        ItemStack itemstack1 = stack.copy();
+        for(int i = 0; i<this.getInventory().getSlots(); i++){
+            itemstack1 = this.getInventory().insertItem(i, stack, false);
+            if(itemstack1.isEmpty()){
+                target.remove();
+                break;
+            }
+
+        }
+        if(!itemstack1.isEmpty()){
+            target.setItem(itemstack1);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.network.proxy;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -11,6 +12,12 @@ public class ClientProxy extends CommonProxy {
 
     private AbstractEntityCompanion SharedMob = null;
     private ItemStack SharedStack = ItemStack.EMPTY;
+
+    /**
+     * if local player has pressed the fire key this tick
+     */
+    public boolean keyFirePressedMainhand;
+    public boolean keyFirePressedOffhand;
 
     public static World getClientWorld()
     {
@@ -34,5 +41,14 @@ public class ClientProxy extends CommonProxy {
     public void setSharedStack(ItemStack stack){this.SharedStack = stack;}
     public ItemStack getSharedStack() {
         return this.SharedStack;
+    }
+
+    public static ClientProxy getClientProxy(){
+        return (ClientProxy) Main.PROXY;
+    }
+
+    @Override
+    public PlayerEntity getPlayerClient() {
+        return Minecraft.getInstance().player;
     }
 }

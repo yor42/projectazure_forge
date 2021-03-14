@@ -1,17 +1,21 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.SitGoal;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
-public class KansenSitGoal extends Goal{
+public class KansenSitGoal extends SitGoal {
 
-    private EntityKansenBase entity;
+    private AbstractEntityCompanion entity;
     private LivingEntity Owner;
 
-    public KansenSitGoal(EntityKansenBase entity){
+    public KansenSitGoal(AbstractEntityCompanion entity){
+        super(entity);
         this.entity = entity;
         this.setMutexFlags(EnumSet.of(Flag.LOOK));
     }

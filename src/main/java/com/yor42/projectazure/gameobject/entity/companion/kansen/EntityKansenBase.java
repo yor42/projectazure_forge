@@ -59,12 +59,10 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
     private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
 
-    public ItemStackHandler ShipStorage = new ItemStackHandler(13) {
+    public ItemStackHandler ShipStorage = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
-            if (slot == 0) {
                 EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(0));
-            }
         }
 
         @Override
@@ -75,10 +73,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     public ItemStackHandler AmmoStorage = new ItemStackHandler(8);
 
-    protected int level,  patAnimationTime, LimitBreakLv, patTimer;
-    protected double affection, exp;
-    protected boolean isMeleeing, isOpeningDoor;
-    protected int awakeningLevel;
     protected enums.shipClass shipclass;
 
     @Override
@@ -104,16 +98,16 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.put("inventory",this.ShipStorage.serializeNBT());
+        compound.put("rigging",this.ShipStorage.serializeNBT());
         compound.put("ammoStorage", this.AmmoStorage.serializeNBT());
     }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        if(compound.contains("inventory"))
-            this.ShipStorage.deserializeNBT((CompoundNBT) compound.get("inventory"));
+        if(compound.contains("rigging"))
+            this.ShipStorage.deserializeNBT(compound.getCompound("rigging"));
         if(compound.contains("ammoStorage"))
-            this.AmmoStorage.deserializeNBT((CompoundNBT) compound.get("ammoStorage"));
+            this.AmmoStorage.deserializeNBT(compound.getCompound("ammoStorage"));
     }
 
     public void setShipClass(enums.shipClass setclass){
@@ -146,7 +140,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             return this.dataManager.get(ITEM_RIGGING);
         }
         else{
-            return this.getShipStorage().getStackInSlot(0);
+            return this.getShipRiggingStorage().getStackInSlot(0);
         }
     }
 
@@ -158,14 +152,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public boolean hasRigging(){
 
         return this.getRigging().getItem() instanceof ItemRiggingBase;
-    }
-
-    @Nullable
-    public ItemStackHandler getRiggingInventory(){
-        if(this.getRigging().getItem() instanceof ItemRiggingBase) {
-            return new RiggingInventoryCapability(this.getRigging()).getEquipments();
-        }
-        else return null;
     }
 
     @Nullable
@@ -277,8 +263,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return canUseCannon(this.getRigging());
     }
 
-    public ItemStackHandler getShipStorage() {
-        return ShipStorage;
+    public ItemStackHandler getShipRiggingStorage() {
+        return this.ShipStorage;
     }
 
     public AmmoCategory getActiveAmmoCategory(){
@@ -350,9 +336,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     protected ItemStack findArrow(){
-        for(int i = 0; i<this.getShipStorage().getSlots(); i++){
-            if(this.getShipStorage().getStackInSlot(i).getItem() instanceof ArrowItem){
-                return this.getShipStorage().getStackInSlot(i);
+        for(int i = 0; i<this.getInventory().getSlots(); i++){
+            if(this.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem){
+                return this.getInventory().getStackInSlot(i);
             }
         }
         return ItemStack.EMPTY;
@@ -367,5 +353,4 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             this.setVelocity(vec3d.x, vec3d.y - 0.10, vec3d.z);
         }
     }
-
 }
