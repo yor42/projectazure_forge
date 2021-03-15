@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 public class ClientProxy extends CommonProxy {
@@ -13,11 +14,6 @@ public class ClientProxy extends CommonProxy {
     private AbstractEntityCompanion SharedMob = null;
     private ItemStack SharedStack = ItemStack.EMPTY;
 
-    /**
-     * if local player has pressed the fire key this tick
-     */
-    public boolean keyFirePressedMainhand;
-    public boolean keyFirePressedOffhand;
 
     public static World getClientWorld()
     {
@@ -50,5 +46,10 @@ public class ClientProxy extends CommonProxy {
     @Override
     public PlayerEntity getPlayerClient() {
         return Minecraft.getInstance().player;
+    }
+
+    @Override
+    public void PlaySoundonEntity(Entity entity, SoundEvent sound, float volume, float pitch, boolean repeat, boolean moving, boolean gunpos) {
+
     }
 }

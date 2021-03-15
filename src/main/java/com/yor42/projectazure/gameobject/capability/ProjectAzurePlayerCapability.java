@@ -59,6 +59,10 @@ public class ProjectAzurePlayerCapability {
         }
     }
 
+    public int getDelay(Hand handIn){
+        return handIn == Hand.MAIN_HAND? this.getMainHandFireDelay():getOffHandFireDelay();
+    }
+
     public static ProjectAzurePlayerCapability getCapability(@Nonnull PlayerEntity player){
         return (ProjectAzurePlayerCapability) player.getCapability(PA_PLAYER_CAPABILITY).orElseThrow(() -> new IllegalStateException("Failed to get PA Player Capability for player " + player));
     }

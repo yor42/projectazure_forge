@@ -38,5 +38,13 @@
         "stream": true
       }
     ]
+  },
+  "rifle_suppressed": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/rifle/rifle_suppressed",
+        "stream": true
+      }
+    ]
   }
 }

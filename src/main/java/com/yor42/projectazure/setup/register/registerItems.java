@@ -74,7 +74,7 @@ public class registerItems {
         }
     });
 
-    public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 10, 30, 60, 3, SoundEvents.ENTITY_EGG_THROW, SoundEvents.BLOCK_LEVER_CLICK, 30, (float) 0.3, new Item.Properties()
+    public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.BLOCK_LEVER_CLICK, 0, (float) 0.3, new Item.Properties()
             .setISTER(() -> ItemAbydos550Renderer::new)
             .group(PA_GROUP).maxStackSize(1)));
 

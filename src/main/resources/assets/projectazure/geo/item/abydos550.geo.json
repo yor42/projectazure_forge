@@ -6,22 +6,20 @@
 				"identifier": "geometry.unknown",
 				"texture_width": 256,
 				"texture_height": 256,
-				"visible_bounds_width": 2,
-				"visible_bounds_height": 1.5,
-				"visible_bounds_offset": [0, 0.25, 0]
+				"visible_bounds_width": 11,
+				"visible_bounds_height": 4,
+				"visible_bounds_offset": [0, 0, 0]
 			},
 			"bones": [
 				{
 					"name": "gun",
-					"pivot": [0.11765, 0.36433, 5.90958],
+					"pivot": [0.11765, -6.63567, 32.90958],
 					"cubes": [
 						{"origin": [-2, -5, -59], "size": [4, 4, 8], "uv": [83, 78]},
 						{"origin": [-4, -7, -51], "size": [8, 8, 4], "uv": [57, 68]},
 						{"origin": [-5, -7, -47], "size": [10, 8, 40], "uv": [68, 53]},
 						{"origin": [-4, -6, -7], "size": [8, 7, 8], "uv": [53, 120]},
 						{"origin": [-4, -11, 1], "size": [8, 12, 16], "uv": [184, 94]},
-						{"origin": [-2.9, -31, 2], "size": [5.8, 16, 14], "pivot": [-1, -15, 16], "rotation": [-10, 0, 0], "uv": [8, 146]},
-						{"origin": [-3, -15, 2], "size": [6, 15, 14], "uv": [8, 116]},
 						{"origin": [-4, -5, 17], "size": [8, 6, 12], "uv": [153, 112]},
 						{"origin": [-2, -8.4, 24], "size": [3, 3.4, 2], "uv": [78, 9]},
 						{"origin": [-2, -9.82526, 23.65124], "size": [3, 2, 2], "pivot": [-0.5, -8.82526, 24.65124], "rotation": [-27.5, 0, 0], "uv": [78, 17]},
@@ -83,6 +81,23 @@
 						{"origin": [-0.5, 8, -49], "size": [1, 2, 1], "uv": [149, 78]},
 						{"origin": [-4, -7, -91], "size": [8, 8, 32], "uv": [1, 52]},
 						{"origin": [-4.5, -7.5, -61], "size": [9, 9, 2], "uv": [8, 71]}
+					]
+				},
+				{
+					"name": "loadinghandle",
+					"parent": "gun",
+					"pivot": [-4.5, 3.75, 18.5],
+					"cubes": [
+						{"origin": [-6, 2.25, 17], "size": [3, 3, 3], "uv": [7, 13]}
+					]
+				},
+				{
+					"name": "magazine",
+					"parent": "gun",
+					"pivot": [0, -15.25, 9],
+					"cubes": [
+						{"origin": [-3, -15, 2], "size": [6, 15, 14], "uv": [8, 116]},
+						{"origin": [-2.9, -30, 2], "size": [5.8, 15, 14], "pivot": [0, -15, 16], "rotation": [-7.5, 0, 0], "uv": [8, 146]}
 					]
 				},
 				{

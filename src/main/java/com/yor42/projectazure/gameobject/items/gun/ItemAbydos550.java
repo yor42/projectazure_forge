@@ -22,7 +22,12 @@ public class ItemAbydos550 extends ItemGunBase{
     }
 
     @Override
-    public void shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, Entity target) {
+    protected void doReloadAnimation(AnimationController controller) {
+        controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
+    }
 
+    @Override
+    protected void doFireAnimation(AnimationController controller) {
+        controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
     }
 }

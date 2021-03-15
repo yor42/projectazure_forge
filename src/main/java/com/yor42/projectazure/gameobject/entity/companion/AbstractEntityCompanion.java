@@ -738,6 +738,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.canBeCollidedWith()&&!this.isSleeping();
     }
 
+
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
         if(this.isOwner(player)){

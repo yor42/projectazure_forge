@@ -9,8 +9,7 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatR
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectileTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
-import com.yor42.projectazure.network.EventHandler;
+import com.yor42.projectazure.network.ModBusEventHandler;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.register.*;
@@ -66,7 +65,7 @@ public class Main
 
     public Main() {
 
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
+        MinecraftForge.EVENT_BUS.register(new ModBusEventHandler());
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);

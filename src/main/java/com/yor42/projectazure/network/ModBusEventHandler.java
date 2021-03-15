@@ -36,7 +36,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-public class EventHandler {
+public class ModBusEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void playerLogin(PlayerEvent.PlayerLoggedInEvent event){
@@ -89,66 +89,6 @@ public class EventHandler {
                     event.setCanceled(true);
                 }
             }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public void ClientTickPlayer(TickEvent.PlayerTickEvent event){
-
-        ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability(event.player);
-
-        if(event.phase == TickEvent.Phase.START){
-            ClientProxy client = ClientProxy.getClientProxy();
-            if(event.player == client.getPlayerClient()){
-                if (Minecraft.getInstance().isGameFocused() && !event.player.isSpectator()) {
-                    ItemStack MainStack = event.player.getHeldItemMainhand();
-                    ItemStack OffStack = event.player.getHeldItemOffhand();
-                    if (!MainStack.isEmpty() && MainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) MainStack.getItem()).ShouldFireWithLeftClick()) {
-                        if (client.keyFirePressedMainhand) {
-                            ItemGunBase gun = ((ItemGunBase) MainStack.getItem());
-
-                            if(cap.getMainHandFireDelay()<=0){
-                                Main.NETWORK.sendToServer(new GunFiredPacket(false, false));
-                                gun.shootGun(MainStack, event.player.world, event.player, false, Hand.MAIN_HAND, null);
-                                cap.setDelay(Hand.MAIN_HAND, gun.getMinFireDelay());
-
-                                AnimationController controller = GeckoLibUtil.getControllerForStack(gun.getFactory(), MainStack, gun.getFactoryName());
-                                controller.markNeedsReload();
-                                controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
-                            }
-
-                            if (gun.isSemiAuto()) {
-                                client.keyFirePressedMainhand = false;
-                            }
-
-                        }
-                    }
-                    else {
-                        client.keyFirePressedMainhand = false;
-                    }
-
-
-                }
-                else {
-                    client.keyFirePressedMainhand = false;
-                    client.keyFirePressedOffhand = false;
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability(event.player);
-
-        if(event.phase == TickEvent.Phase.START){
-            if(cap.getOffHandFireDelay()>0){
-                cap.setOffHandFireDelay(cap.getOffHandFireDelay()-1);
-            }
-            if(cap.getMainHandFireDelay()>0){
-                cap.setMainHandFireDelay(cap.getMainHandFireDelay()-1);
-            }
-        }
     }
 
 
