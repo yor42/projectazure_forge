@@ -87,9 +87,9 @@ public class ForgeBusEventHandler {
             ItemStack mainStack = player.getHeldItemMainhand();
 
             if(!mainStack.isEmpty() && mainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) mainStack.getItem()).ShouldDoBowPose()){
-                EntityModel model = event.getRenderer().getEntityModel();
+                EntityModel<?> model = event.getRenderer().getEntityModel();
                 if(model instanceof PlayerModel){
-                    PlayerModel playermodel = (PlayerModel) model;
+                    PlayerModel<?> playermodel = (PlayerModel<?>) model;
 
                     if(player.getPrimaryHand() == HandSide.RIGHT){
                         playermodel.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
