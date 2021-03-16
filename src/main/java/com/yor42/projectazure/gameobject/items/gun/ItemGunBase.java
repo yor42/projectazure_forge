@@ -88,43 +88,46 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
     protected abstract void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem);
 
-    public void shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target){
+    public int shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target){
 
 
         ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(entity);
-        AnimationController controller = GeckoLibUtil.getControllerForStack(this.getFactory(), gun, this.getFactoryName());
+        //AnimationController controller = GeckoLibUtil.getControllerForStack(this.getFactory(), gun, this.getFactoryName());
         int ammo = this.getAmmo(gun);
-        if(ammo>=1 ) {
+        if(ammo>0 ) {
             if (capability.getDelay(hand) <= 0) {
 
                 entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
                     if (!entity.isCreative()) {
                         this.useAmmo(gun, (short) 1);
                     }
+                    /*
                     if (world.isRemote() && controller.getAnimationState() == AnimationState.Stopped) {
                         controller.markNeedsReload();
                         this.doFireAnimation(controller);
                     }
+
+                     */
                     if(!world.isRemote()) {
                         capability.setDelay(hand, this.getMinFireDelay());
                     }
             }
         }
-        else{
+        else {
+            if(!world.isRemote()) {
                 capability.setDelay(hand, this.reloadDelay - this.minFireDelay);
-                if (this.roundsPerReload > 0) {
-                    int i = 1;
-                    while (i < this.roundsPerReload) {
-                        i++;
-                    }
-                    this.reloadAmmo(gun, i);
-                } else {
-                    this.reloadAmmo(gun);
+            }
+            if (this.roundsPerReload > 0) {
+                int i = 1;
+                while (i < this.roundsPerReload) {
+                    i++;
                 }
-            controller.markNeedsReload();
-
-                this.doReloadAnimation(controller);
+                this.reloadAmmo(gun, i);
+            } else {
+                this.reloadAmmo(gun);
+            }
         }
+        return ammo;
     }
 
     protected abstract void doReloadAnimation(AnimationController controller);
@@ -178,12 +181,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
     public void useAmmo(ItemStack stack, short amount){
         short ammo = getAmmo(stack);
         CompoundNBT compound = stack.getOrCreateTag();
-        if (ammo-amount>=0){
-            compound.putShort("ammo", (short) (ammo-amount));
-        }
-        else{
-            compound.putShort("ammo", (short) 0);
-        }
+        compound.putShort("ammo", (short) Math.max(ammo-amount, 0));
     }
 
 

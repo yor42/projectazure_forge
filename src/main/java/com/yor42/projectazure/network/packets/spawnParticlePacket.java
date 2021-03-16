@@ -74,7 +74,7 @@ public class spawnParticlePacket {
     }
 
     public static void handle(final spawnParticlePacket message, final Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+        ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
 
             switch (message.particleID){
                 case defined.PARTICLE_CANNON_FIRE_ID:{

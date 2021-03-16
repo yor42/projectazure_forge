@@ -43,11 +43,9 @@ public class ForgeBusEventHandler {
 
     @SubscribeEvent
     public static void TickPlayer(TickEvent.PlayerTickEvent event){
-        ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability(event.player);
-        int mainHandDelay = cap.getMainHandFireDelay();
-        int offHandFireDelay = cap.getOffHandFireDelay();
-        if(event.player.world.isRemote()) {
-            if (event.phase == TickEvent.Phase.START) {
+        if (event.phase == TickEvent.Phase.START) {
+            if (event.player.world.isRemote()) {
+
                 ClientProxy client = ClientProxy.getClientProxy();
                 if (Minecraft.getInstance().isGameFocused() && !event.player.isSpectator()) {
                     ItemStack MainStack = event.player.getHeldItemMainhand();
@@ -55,11 +53,7 @@ public class ForgeBusEventHandler {
                     if (!MainStack.isEmpty() && MainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) MainStack.getItem()).ShouldFireWithLeftClick()) {
                         if (client.keyFirePressedMainhand) {
                             ItemGunBase gun = ((ItemGunBase) MainStack.getItem());
-
-                            if (mainHandDelay <= 0) {
-                                gun.shootGun(MainStack, event.player.world, event.player, false, Hand.MAIN_HAND, null);
-                                Main.NETWORK.sendToServer(new GunFiredPacket(false, false));
-                            }
+                            Main.NETWORK.sendToServer(new GunFiredPacket(false, false));
 
                             if (gun.isSemiAuto()) {
                                 client.keyFirePressedMainhand = false;
@@ -75,6 +69,7 @@ public class ForgeBusEventHandler {
                     client.keyFirePressedMainhand = false;
                     client.keyFirePressedOffhand = false;
                 }
+
             }
         }
     }

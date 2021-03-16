@@ -1,10 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.libs.defined;
-import com.yor42.projectazure.network.packets.GunFiredPacket;
-import com.yor42.projectazure.network.packets.selectedStarterPacket;
-import com.yor42.projectazure.network.packets.spawnParticlePacket;
-import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
+import com.yor42.projectazure.network.packets.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -43,6 +40,12 @@ public class registerNetwork {
                 .decoder(GunFiredPacket::decode)
                 .encoder(GunFiredPacket::encode)
                 .consumer(GunFiredPacket::handle)
+                .add();
+
+        channel.messageBuilder(DoGunAnimationPacket.class,5)
+                .decoder(DoGunAnimationPacket::decode)
+                .encoder(DoGunAnimationPacket::encode)
+                .consumer(DoGunAnimationPacket::handle)
                 .add();
 
         return channel;

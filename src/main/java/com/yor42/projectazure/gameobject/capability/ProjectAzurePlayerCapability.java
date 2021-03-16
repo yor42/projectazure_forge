@@ -1,12 +1,14 @@
 package com.yor42.projectazure.gameobject.capability;
 
 import com.yor42.projectazure.Main;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -70,7 +72,7 @@ public class ProjectAzurePlayerCapability {
     public static LazyOptional<ProjectAzurePlayerCapability> getOptional(@Nonnull PlayerEntity entity){
         LazyOptional<ProjectAzurePlayerCapability> optional = entity.getCapability(PA_PLAYER_CAPABILITY, null).cast();
         if(!optional.isPresent()){
-            Main.LOGGER.warn("Failed to get Player Capability. This might break mod functionality.", new Throwable().fillInStackTrace());
+            Main.LOGGER.warn("Failed to get Player Capability!", new Throwable().fillInStackTrace());
         }
         return optional;
     }
@@ -97,6 +99,20 @@ public class ProjectAzurePlayerCapability {
                 return (CompoundNBT) PA_PLAYER_CAPABILITY.getStorage().writeNBT(PA_PLAYER_CAPABILITY, inst, null);
             }
         };
+    }
+
+    public CompoundNBT serializeNBT(){
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putInt("mainHandDelay", this.getMainHandFireDelay());
+        nbt.putInt("offHandDelay", this.getOffHandFireDelay());
+        nbt.put("player", this.player.serializeNBT());
+        return nbt;
+    }
+
+    public void deserializeNBT(CompoundNBT compound){
+        this.player.deserializeNBT(compound.getCompound("player"));
+        this.setMainHandFireDelay(compound.getInt("mainHandDelay"));
+        this.setMainHandFireDelay(compound.getInt("offHandDelay"));
     }
 
     public INBT Savedata(INBT compound){

@@ -1,0 +1,120 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.abydos550.fire": {
+			"animation_length": 0.15,
+			"override_previous_animation": true,
+			"bones": {
+				"gun": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.05": {
+							"vector": [-10, 0, 0],
+							"easing": "easeOutBack"
+						},
+						"0.15": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutBack"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.05": {
+							"vector": [0, 0, 5],
+							"easing": "easeInBack"
+						},
+						"0.15": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutBack"
+						}
+					}
+				}
+			}
+		},
+		"animation.abydos550.reload": {
+			"animation_length": 3.6,
+			"bones": {
+				"gun": {
+					"rotation": {
+						"0.55": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-6.54, 0, -51.24],
+							"easing": "easeInOutSine"
+						},
+						"1.65": {
+							"vector": [-6.54, 0, -51.24],
+							"easing": "easeInOutSine"
+						},
+						"2.0": {
+							"vector": [-6.54, 0, 63.76],
+							"easing": "easeInOutSine"
+						},
+						"2.95": {
+							"vector": [-6.54, 0, 63.76]
+						},
+						"3.6": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutBack"
+						}
+					}
+				},
+				"magazine": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.55": {
+							"vector": [0, -290, 0],
+							"easing": "easeInSine"
+						},
+						"1.15": {
+							"vector": [0, -92, 0]
+						},
+						"1.5": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutSine"
+						}
+					},
+					"scale": {
+						"0.5": {
+							"vector": [1, 1, 1]
+						},
+						"0.55": {
+							"vector": [0, 0, 0]
+						},
+						"0.95": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [1, 1, 1]
+						}
+					}
+				},
+				"loadinghandle": {
+					"position": {
+						"2.3": {
+							"vector": [0, 0, 0]
+						},
+						"2.55": {
+							"vector": [0, 0, 11],
+							"easing": "easeOutSine"
+						},
+						"2.65": {
+							"vector": [0, 0, 0],
+							"easing": "easeInBack"
+						}
+					}
+				}
+			}
+		}
+	}
+}
