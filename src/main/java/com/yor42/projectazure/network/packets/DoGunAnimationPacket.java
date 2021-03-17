@@ -62,23 +62,6 @@ public class DoGunAnimationPacket {
 
                         AnimationController controller = GeckoLibUtil.getControllerForStack(((ItemGunBase) offStack.getItem()).getFactory(), offStack, ((ItemGunBase) offStack.getItem()).getFactoryName());
                         ((ItemGunBase) offStack.getItem()).shootGun(offStack, clientWorld, playerEntity, message.isZooming, Hand.OFF_HAND, null);
-                        /*if(message.shouldPlayReloadAnimation) {
-                            controller.markNeedsReload();
-                            controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
-                        }
-                        else{
-                            controller.markNeedsReload();
-                            controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
-                        }
-
-                         */
-                    }
-                }
-                else{
-                    if(mainstck.getItem() instanceof ItemGunBase){
-                        AnimationController controller = GeckoLibUtil.getControllerForStack(((ItemGunBase) mainstck.getItem()).getFactory(), mainstck, ((ItemGunBase) mainstck.getItem()).getFactoryName());
-                        ((ItemGunBase) mainstck.getItem()).shootGun(mainstck, clientWorld, playerEntity, message.isZooming, Hand.MAIN_HAND, null);
-                        /*
                         if(message.shouldPlayReloadAnimation) {
                             controller.markNeedsReload();
                             controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
@@ -88,7 +71,22 @@ public class DoGunAnimationPacket {
                             controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
                         }
 
-                         */
+
+                    }
+                }
+                else{
+                    if(mainstck.getItem() instanceof ItemGunBase){
+                        AnimationController controller = GeckoLibUtil.getControllerForStack(((ItemGunBase) mainstck.getItem()).getFactory(), mainstck, ((ItemGunBase) mainstck.getItem()).getFactoryName());
+                        ((ItemGunBase) mainstck.getItem()).shootGun(mainstck, clientWorld, playerEntity, message.isZooming, Hand.MAIN_HAND, null);
+
+                        if(message.shouldPlayReloadAnimation) {
+                            controller.markNeedsReload();
+                            controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
+                        }
+                        else{
+                            controller.markNeedsReload();
+                            controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
+                        }
                     }
                 }
             }

@@ -52,19 +52,7 @@ public class GunFiredPacket{
                 if (!heldStack.isEmpty() && heldStack.getItem() instanceof ItemGunBase) {
                     if(!message.offHand) {
                         if (mainDelay <= 0) {
-
-                            AnimationController controller = GeckoLibUtil.getControllerForStack(((ItemGunBase) heldStack.getItem()).getFactory(), heldStack, ((ItemGunBase) heldStack.getItem()).getFactoryName());
-
                             boolean shouldDoReloadAnim = ((ItemGunBase) heldStack.getItem()).getAmmo(heldStack)<=0;
-
-                            controller.markNeedsReload();
-                            if(shouldDoReloadAnim) {
-                                controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
-                            }
-                            else{
-                                controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
-                            }
-
                             ((ItemGunBase) heldStack.getItem()).shootGun(heldStack, playerEntity.getEntityWorld(), playerEntity, message.isZooming, hand, null);
                             Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getEntityId(), shouldDoReloadAnim));
                         }
