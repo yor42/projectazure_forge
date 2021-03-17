@@ -11,6 +11,9 @@ import net.minecraft.util.Hand;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.function.Supplier;
 
@@ -43,12 +46,27 @@ public class GunFiredPacket{
                 ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(playerEntity);
                 int mainDelay = capability.getMainHandFireDelay();
                 int offDelay = capability.getOffHandFireDelay();
-                ItemStack heldStack = playerEntity.getHeldItem(message.offHand ? Hand.OFF_HAND : Hand.MAIN_HAND);
+                Hand hand = message.offHand ? Hand.OFF_HAND : Hand.MAIN_HAND;
+                ItemStack heldStack = playerEntity.getHeldItem(hand);
 
                 if (!heldStack.isEmpty() && heldStack.getItem() instanceof ItemGunBase) {
                     if(!message.offHand) {
                         if (mainDelay <= 0) {
-                            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getEntityId(), ((ItemGunBase) heldStack.getItem()).shootGun(heldStack, playerEntity.getEntityWorld(), playerEntity, message.isZooming, message.offHand ? Hand.OFF_HAND : Hand.MAIN_HAND, null)));
+
+                            AnimationController controller = GeckoLibUtil.getControllerForStack(((ItemGunBase) heldStack.getItem()).getFactory(), heldStack, ((ItemGunBase) heldStack.getItem()).getFactoryName());
+
+                            boolean shouldDoReloadAnim = ((ItemGunBase) heldStack.getItem()).getAmmo(heldStack)<=0;
+
+                            controller.markNeedsReload();
+                            if(shouldDoReloadAnim) {
+                                controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
+                            }
+                            else{
+                                controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
+                            }
+
+                            ((ItemGunBase) heldStack.getItem()).shootGun(heldStack, playerEntity.getEntityWorld(), playerEntity, message.isZooming, hand, null);
+                            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getEntityId(), shouldDoReloadAnim));
                         }
                     }
                 }

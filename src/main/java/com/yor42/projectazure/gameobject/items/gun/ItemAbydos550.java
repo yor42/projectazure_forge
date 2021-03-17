@@ -20,14 +20,4 @@ public class ItemAbydos550 extends ItemGunBase{
     protected void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem) {
 
     }
-
-    @Override
-    protected void doReloadAnimation(AnimationController controller) {
-        controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
-    }
-
-    @Override
-    protected void doFireAnimation(AnimationController controller) {
-        controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
-    }
 }

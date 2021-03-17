@@ -88,7 +88,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
     protected abstract void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem);
 
-    public int shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target){
+    public boolean shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target){
 
 
         ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(entity);
@@ -98,20 +98,14 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
             if (capability.getDelay(hand) <= 0) {
 
                 entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
-                    if (!entity.isCreative()) {
+                if (!entity.isCreative()) {
                         this.useAmmo(gun, (short) 1);
-                    }
-                    /*
-                    if (world.isRemote() && controller.getAnimationState() == AnimationState.Stopped) {
-                        controller.markNeedsReload();
-                        this.doFireAnimation(controller);
-                    }
-
-                     */
-                    if(!world.isRemote()) {
+                }
+                if(!world.isRemote()) {
                         capability.setDelay(hand, this.getMinFireDelay());
-                    }
+                }
             }
+            return false;
         }
         else {
             if(!world.isRemote()) {
@@ -126,11 +120,20 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
             } else {
                 this.reloadAmmo(gun);
             }
+            return true;
         }
-        return ammo;
     }
 
-    protected abstract void doReloadAnimation(AnimationController controller);
+    public short getAmmo(ItemStack stack){
+        CompoundNBT compound = stack.getOrCreateTag();
+        return compound.getShort("ammo");
+    }
+
+    public void useAmmo(ItemStack stack, short amount){
+        short ammo = getAmmo(stack);
+        CompoundNBT compound = stack.getOrCreateTag();
+        compound.putShort("ammo", (short) Math.max(ammo-amount, 0));
+    }
 
     public void reloadAmmo(ItemStack gun, int amount) {
         short ammo = this.getAmmo(gun);
@@ -143,12 +146,11 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
         this.reloadAmmo(gun, this.magCap);
    }
 
-    protected abstract void doFireAnimation(AnimationController controller);
-
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
+        tooltip.add(new TranslationTextComponent("item.tooltip.remaining_ammo").appendString(": "+this.getAmmo(stack)+"/"+this.magCap));
         tooltip.add(new TranslationTextComponent("tempinfo.useable_gun_wip"));
     }
 
@@ -173,16 +175,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
         return 1-((float)getAmmo(stack)/this.magCap);
     }
 
-    public short getAmmo(ItemStack stack){
-        CompoundNBT compound = stack.getOrCreateTag();
-        return compound.getShort("ammo");
-    }
 
-    public void useAmmo(ItemStack stack, short amount){
-        short ammo = getAmmo(stack);
-        CompoundNBT compound = stack.getOrCreateTag();
-        compound.putShort("ammo", (short) Math.max(ammo-amount, 0));
-    }
 
 
 
