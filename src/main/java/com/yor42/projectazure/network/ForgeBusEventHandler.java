@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -95,5 +96,10 @@ public class ForgeBusEventHandler {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onClickInput(InputEvent.ClickInputEvent event){
+
     }
 }

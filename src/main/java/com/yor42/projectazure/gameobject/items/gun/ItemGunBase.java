@@ -1,17 +1,25 @@
 package com.yor42.projectazure.gameobject.items.gun;
 
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
+import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -102,8 +110,12 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
                         this.useAmmo(gun, (short) 1);
                 }
                 if(!world.isRemote()) {
+
+                        this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
+
                         capability.setDelay(hand, this.getMinFireDelay());
                 }
+
             }
             return false;
         }
@@ -122,6 +134,25 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
             }
             return true;
         }
+    }
+
+    private void spawnProjectile(LivingEntity Shooter, World worldIn, ItemStack gunStack, float Accuracy, float Damage, Entity target, Hand hand) {
+        EntityProjectileBullet entity = new EntityProjectileBullet(Shooter, worldIn, Damage);
+        if(target!=null){
+            double d0 = target.getPosYEye() - (double)1.1F;
+            double d1 = target.getPosX() - Shooter.getPosX();
+            double d2 = d0 - entity.getPosY();
+            double d3 = target.getPosZ() - Shooter.getPosZ();
+            float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
+            entity.shoot(d1, d2 + (double)f, d3, 2.0f, Accuracy);
+        }
+        else{
+            entity.ShootFromPlayer(Shooter, Shooter.rotationPitch, Shooter.rotationYaw, 0.0f, 2.0F, Accuracy, hand);
+
+        }
+        worldIn.addEntity(entity);
+
+
     }
 
     public short getAmmo(ItemStack stack){

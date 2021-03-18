@@ -139,7 +139,7 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
-        entity.attackEntityFrom(DamageSources.TORPEDO, 10F);
+        entity.attackEntityFrom(DamageSources.causeTorpedoDamage(this, this.func_234616_v_()), 10F);
         explode();
         super.onEntityHit(result);
     }

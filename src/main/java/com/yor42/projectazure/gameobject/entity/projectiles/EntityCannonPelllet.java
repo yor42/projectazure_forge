@@ -1,8 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.gameobject.DamageSources;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerManager;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -18,7 +20,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import static com.yor42.projectazure.gameobject.DamageSources.DAMAGE_GUN;
+import static com.yor42.projectazure.gameobject.DamageSources.DAMAGE_CANNON;
 
 public class EntityCannonPelllet extends DamagingProjectileEntity {
 
@@ -74,7 +76,9 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     protected void onImpact(RayTraceResult result) {
         if(this.properties != null) {
             super.onImpact(result);
+
             if (!this.world.isRemote()) {
+
                 if (this.properties.ShouldDamageMultipleComponent()) {
                     boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.func_234616_v_());
                     this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float) 1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
@@ -90,8 +94,8 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
         double DistanceMultiplier = Math.min(20/getDistanceSq(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
         if(this.properties != null) {
             if (target instanceof EntityKansenBase) {
-                ((EntityKansenBase) target).attackEntityFromCannon(DAMAGE_GUN, this.properties, DistanceMultiplier);
-            } else target.attackEntityFrom(DAMAGE_GUN, (float) (this.properties.getMaxDamage() * 1.2));
+                ((EntityKansenBase) target).attackEntityFromCannon(DamageSources.causeCannonDamage(this, this.func_234616_v_()), this.properties, DistanceMultiplier);
+            } else target.attackEntityFrom(DamageSources.causeCannonDamage(this, this.func_234616_v_()), (float) (this.properties.getMaxDamage() * 1.2));
         }
         this.remove();
     }
