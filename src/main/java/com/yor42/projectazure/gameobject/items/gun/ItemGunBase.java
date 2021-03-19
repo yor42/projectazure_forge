@@ -36,7 +36,7 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public abstract class ItemGunBase extends Item implements IAnimatable {
 
-    private boolean isSemiAuto;
+    private boolean isSemiAuto, isTwoHanded;
     private int minFireDelay;
     private int reloadDelay;
 
@@ -49,7 +49,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
     public AnimationFactory factory = new AnimationFactory(this);
 
-    public ItemGunBase(boolean semiAuto, int minFiretime, int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int roundsPerReload, float accuracy, Properties properties) {
+    public ItemGunBase(boolean semiAuto, int minFiretime, int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int roundsPerReload, float accuracy, Properties properties, boolean isTwohanded) {
         super(properties);
         this.isSemiAuto = semiAuto;
         this.minFireDelay = minFiretime;
@@ -60,7 +60,13 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
         this.accuracy = accuracy;
         this.magCap = clipsize;
         this.roundsPerReload = roundsPerReload;
+        this.isTwoHanded = isTwohanded;
     }
+
+    public boolean isTwoHanded(){
+        return this.isTwoHanded;
+    }
+
 
     public int getMinFireDelay() {
         return this.minFireDelay;

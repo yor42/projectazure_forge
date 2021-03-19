@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.gunusers;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -26,35 +27,21 @@ public class EntityShiroko extends EntityGunUserBase {
     }
 
     @Override
-    protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        AnimationBuilder builder = new AnimationBuilder();
-        if(Minecraft.getInstance().isGamePaused()){
-            return PlayState.STOP;
-        }
+    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sleep", true));
-            return PlayState.CONTINUE;
-        }
+        AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isBeingPatted()){
-            if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat_sit", true));
-            else
-                event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat", true));
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat", true));
             return PlayState.CONTINUE;
         }
 
         if(this.isGettingHealed()){
-            if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal_sit", true));
-            else
-                event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal", true));
-            return PlayState.CONTINUE;
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal", true));
         }
 
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit", true));
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_hand", true));
             return PlayState.CONTINUE;
         }
 
@@ -65,11 +52,58 @@ public class EntityShiroko extends EntityGunUserBase {
             else{
                 event.getController().setAnimation(builder.addAnimation("animation.shiroko.openDoorR", false));
             }
+            return PlayState.CONTINUE;
         }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("animation.shiroko.melee1", false));
             }
+            return PlayState.CONTINUE;
+        }
+
+        if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+
+            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_idle_twohanded", true));
+            }
+            return PlayState.CONTINUE;
+        }
+
+
+        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+            if(this.isSprinting()){
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.run_hand", true));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.walk_hand", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        event.getController().setAnimation(builder.addAnimation("animation.shiroko.idle_arm", true));
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
+
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
+        AnimationBuilder builder = new AnimationBuilder();
+        if(Minecraft.getInstance().isGamePaused()){
+            return PlayState.STOP;
+        }
+
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sleep", true));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.isEntitySleeping() || this.getRidingEntity() != null){
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {

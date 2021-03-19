@@ -1,12 +1,17 @@
 package com.yor42.projectazure.client.model.entity.gunUser;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import software.bernie.geckolib3.resource.GeckoLibCache;
+import software.bernie.shadowed.eliotlash.molang.MolangParser;
 
 import javax.annotation.Nullable;
 
@@ -97,11 +102,24 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
         Halo.setPositionY((float) (Math.sin(2*Math.PI*0.0125*entity.ticksExisted)*1.0F)%80);
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+
         if(!(entity.isBeingPatted()||entity.isSleeping())) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));}
+
+    }
+
+
+    @Override
+    public void setMolangQueries(IAnimatable animatable, double currentTick) {
+        super.setMolangQueries(animatable, currentTick);
+        MolangParser parser = GeckoLibCache.getInstance().parser;
+        if(animatable instanceof AbstractEntityCompanion){
+            parser.setValue("query.head_pitch", ((LivingEntity)animatable).rotationPitch);
+            parser.setValue("query.head_yaw", ((LivingEntity)animatable).rotationYawHead-((LivingEntity)animatable).renderYawOffset);
+
+            parser.setValue("query.prev_head_pitch", ((LivingEntity)animatable).prevRotationPitch * ((float) Math.PI / 180F));
+            parser.setValue("query.prev_head_yaw", ((LivingEntity)animatable).prevRotationYawHead * ((float) Math.PI / 180F));
         }
-
-
     }
 }

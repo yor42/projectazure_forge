@@ -24,7 +24,17 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
         this.setTamed(false);
     }
 
-    protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
+    @Override
+    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent) {
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
+        return PlayState.CONTINUE;
+    }
+
+    protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event)
     {
 
         if(Minecraft.getInstance().isGamePaused()){

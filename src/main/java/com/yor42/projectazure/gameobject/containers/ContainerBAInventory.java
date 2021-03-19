@@ -35,10 +35,10 @@ public class ContainerBAInventory extends Container {
         ItemStackHandler dummyAmmoHandler = new ItemStackHandler(8);
 
         //mainhand
-        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 0, 10, 12));
+        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 0, 10, 30));
 
         //Offhands
-        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 1, 10, 30));
+        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 1, 10, 12));
 
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {
@@ -91,10 +91,10 @@ public class ContainerBAInventory extends Container {
         this.host = companion;
 
         //mainhand
-        this.addSlot(new SlotItemHandler(this.equipment, 0, 10, 12));
+        this.addSlot(new SlotItemHandler(this.equipment, 0, 10, 30));
 
         //Offhands
-        this.addSlot(new SlotItemHandler(this.equipment, 1, 10, 30));
+        this.addSlot(new SlotItemHandler(this.equipment, 1, 10, 12));
 
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {

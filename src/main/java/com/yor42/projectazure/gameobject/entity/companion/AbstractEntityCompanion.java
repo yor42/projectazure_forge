@@ -434,14 +434,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+        animationData.addAnimationController(new AnimationController(this, "controller_lowerbody", 10, this::predicate_lowerbody));
+        animationData.addAnimationController(new AnimationController(this, "controller_upperbody", 10, this::predicate_upperbody));
+        animationData.addAnimationController(new AnimationController(this, "controller_head", 10, this::predicate_head));
     }
+
+    protected abstract <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent);
+
+    protected abstract <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent);
 
     public boolean isMeleeing(){
         return this.dataManager.get(MELEEATTACKING);
     }
 
-    protected abstract <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event);
+    protected abstract <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event);
 
     @Override
     public AnimationFactory getFactory() {

@@ -21,7 +21,7 @@ import static com.yor42.projectazure.libs.enums.CompanionRarity.SUPER_RARE;
 
 public class EntityEnterprise extends EntityKansenAircraftCarrier{
     @Override
-    protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+    protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
         }
@@ -78,6 +78,16 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
 
     public EntityEnterprise(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    @Override
+    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent) {
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
+        return PlayState.CONTINUE;
     }
 
     @Override
