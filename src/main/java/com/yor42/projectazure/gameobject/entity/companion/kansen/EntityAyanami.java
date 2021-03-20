@@ -22,39 +22,20 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent) {
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
-        return PlayState.CONTINUE;
-    }
-
-    protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event)
-    {
+    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep", true));
-            return PlayState.CONTINUE;
-        }
-
-        //event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
         if(this.isBeingPatted()){
-            if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat_sit", true));
-            else
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
             return PlayState.CONTINUE;
         }
 
-        if(this.isEntitySleeping() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_leg", true));
             return PlayState.CONTINUE;
         }
 
@@ -74,6 +55,45 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
             if(this.isSailing()){
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_arm", true));
+            }
+            else if(this.isSprinting()){
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run_arm", true));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk_arm", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
+        return PlayState.CONTINUE;
+    }
+
+    protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event)
+    {
+
+        if(Minecraft.getInstance().isGamePaused()){
+            return PlayState.STOP;
+        }
+        AnimationBuilder builder = new AnimationBuilder();
+
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_leg", true));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.isEntitySleeping() || this.getRidingEntity() != null){
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
+            return PlayState.CONTINUE;
+        }
+
+        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+            if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
             }
             else if(this.isSprinting()){
@@ -84,7 +104,8 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+
+        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle_leg", true));
         return PlayState.CONTINUE;
     }
 
