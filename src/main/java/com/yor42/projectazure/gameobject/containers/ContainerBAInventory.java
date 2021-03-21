@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.containers;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
-import com.yor42.projectazure.gameobject.items.ItemAmmo;
+import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -66,7 +66,7 @@ public class ContainerBAInventory extends Container {
                 this.addSlot(new SlotItemHandler(dummyAmmoHandler, n + 2 * m, 180 + n * 18, 15 + m * 18){
                     @Override
                     public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemAmmo;
+                        return stack.getItem() instanceof ItemCannonshell;
                     }
                 });
             }
@@ -122,7 +122,7 @@ public class ContainerBAInventory extends Container {
                 this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
                     @Override
                     public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemAmmo;
+                        return stack.getItem() instanceof ItemCannonshell;
                     }
                 });
             }

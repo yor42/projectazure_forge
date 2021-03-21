@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.items.gun;
 
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -19,5 +20,10 @@ public class ItemAbydos550 extends ItemGunBase{
     @Override
     protected void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem) {
 
+    }
+
+    @Override
+    public enums.AmmoCalibur getCalibur() {
+        return enums.AmmoCalibur.AMMO_5_56;
     }
 }

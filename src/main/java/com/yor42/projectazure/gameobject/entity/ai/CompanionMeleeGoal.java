@@ -7,7 +7,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.canUseCannon;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
 
 public class CompanionMeleeGoal extends MeleeAttackGoal {
@@ -31,7 +30,7 @@ public class CompanionMeleeGoal extends MeleeAttackGoal {
         }
         else{
             if(this.entity instanceof EntityKansenBase) {
-                boolean flag = !hasAttackableCannon(((EntityKansenBase) this.entity).getRigging()) && !((EntityKansenBase) this.entity).canUseAmmo(((EntityKansenBase) this.entity).getActiveAmmoCategory());
+                boolean flag = !hasAttackableCannon(((EntityKansenBase) this.entity).getRigging()) && !((EntityKansenBase) this.entity).canUseShell(((EntityKansenBase) this.entity).getActiveShellCategory());
                 return flag && super.shouldExecute();
             }
             else{

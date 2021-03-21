@@ -3,11 +3,14 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.ai.*;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
+import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ItemEntity;
@@ -44,10 +47,13 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getAmmo;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
@@ -236,6 +242,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<BlockPos> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
     protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> ISUSINGGUN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.PATH, MemoryModuleType.OPENED_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
 
@@ -276,6 +283,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected int getAwakeningLevel(){
         return this.awakeningLevel;
+    }
+
+    public void setUsingGun(boolean val){
+        this.getDataManager().set(ISUSINGGUN, val);
+    }
+
+    public boolean isUsingGun(){
+        return this.getDataManager().get(ISUSINGGUN);
     }
 
     @Override
@@ -363,6 +378,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return -1;
     }
 
+    public void AttackUsingGun(LivingEntity entity, ItemStack gun){
+        if(this instanceof EntityGunUserBase && gun.getItem() instanceof ItemGunBase){
+            if(getAmmo(gun) >0) {
+                AnimationController gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
+
+            }
+        }
+    }
+
     public int storeItemStack(ItemStack itemStackIn)
     {
         for(int i = 0; i < 27; ++i)
@@ -413,12 +437,22 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     /*
-    determins if this entity can use ShipGirl Riggings.
+    determines if this entity can use ShipGirl Riggings.
     Off by default.
      */
     public boolean canUseRigging(){
         return false;
     }
+
+    /*
+    determines if this entity can use Gun.
+    Off by default.
+     */
+    public boolean canUseGun(){
+        return false;
+    }
+
+
 
     @Override
     public boolean isChild() {
@@ -466,6 +500,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(USINGBOW, false);
         this.dataManager.register(STAYPOINT, BlockPos.ZERO);
         this.dataManager.register(ISFORCEWOKENUP, false);
+        this.dataManager.register(ISUSINGGUN, false);
         this.dataManager.register(HOMEPOS, BlockPos.ZERO);
         this.dataManager.register(VALID_HOME_DISTANCE, -1.0f);
     }
@@ -681,6 +716,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
 
     }
+
+
 
     @Override
     protected void registerGoals() {

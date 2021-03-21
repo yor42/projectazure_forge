@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.gun;
 
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
+import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -141,6 +142,37 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
             return true;
         }
     }
+
+    public boolean shootGunLivingEntity(ItemStack gun, World world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
+
+
+        //AnimationController controller = GeckoLibUtil.getControllerForStack(this.getFactory(), gun, this.getFactoryName());
+        int ammo = this.getAmmo(gun);
+        if (ammo > 0) {
+
+            entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
+            this.useAmmo(gun, (short) 1);
+            if (!world.isRemote()) {
+
+                this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
+            }
+            return false;
+        }
+        else {
+            if (this.roundsPerReload > 0) {
+                int i = 1;
+                while (i < this.roundsPerReload) {
+                    i++;
+                }
+                this.reloadAmmo(gun, i);
+            } else {
+                this.reloadAmmo(gun);
+            }
+            return true;
+        }
+    }
+
+    public abstract enums.AmmoCalibur getCalibur();
 
     private void spawnProjectile(LivingEntity Shooter, World worldIn, ItemStack gunStack, float Accuracy, float Damage, Entity target, Hand hand) {
         EntityProjectileBullet entity = new EntityProjectileBullet(Shooter, worldIn, Damage);

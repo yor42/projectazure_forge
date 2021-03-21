@@ -7,7 +7,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
-import com.yor42.projectazure.gameobject.items.ItemAmmo;
+import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
@@ -242,8 +242,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public ItemStack findAmmo(enums.AmmoCategory category){
         for (int i=0; i<this.AmmoStorage.getSlots();i++){
             Item AmmoItem = this.AmmoStorage.getStackInSlot(i).getItem();
-            if(AmmoItem instanceof ItemAmmo){
-                if(category == ((ItemAmmo) AmmoItem).getAmmoProperty().getCategory()){
+            if(AmmoItem instanceof ItemCannonshell){
+                if(category == ((ItemCannonshell) AmmoItem).getAmmoProperty().getCategory()){
                     return this.AmmoStorage.getStackInSlot(i);
                 };
             }
@@ -251,37 +251,33 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return ItemStack.EMPTY;
     }
 
-    public ItemStackHandler getAmmoStorage() {
+    public ItemStackHandler getCannonShellStorage() {
         return this.AmmoStorage;
     }
 
-    public boolean canUseAmmo(enums.AmmoCategory types){
+    public boolean canUseShell(enums.AmmoCategory types){
         return findAmmo(types) != ItemStack.EMPTY;
-    }
-
-    public boolean isCanonReady(){
-        return canUseCannon(this.getRigging());
     }
 
     public ItemStackHandler getShipRiggingStorage() {
         return this.ShipStorage;
     }
 
-    public AmmoCategory getActiveAmmoCategory(){
+    public AmmoCategory getActiveShellCategory(){
         return AmmoCategory.GENERIC;
     }
 
     public void AttackUsingCannon(LivingEntity target, float distanceFactor){
-        boolean shouldFire = this.canUseAmmo(getActiveAmmoCategory()) && this.canUseRigging() && canUseCannon(this.getRigging());
+        boolean shouldFire = this.canUseShell(getActiveShellCategory()) && this.canUseRigging() && canUseCannon(this.getRigging());
         if(shouldFire) {
             ItemStack Ammostack = this.findAmmo(enums.AmmoCategory.GENERIC);
-            if (Ammostack.getItem() instanceof ItemAmmo) {
+            if (Ammostack.getItem() instanceof ItemCannonshell) {
                 Vector3d vector3d = this.getLook(1.0F);
                 double d2 = target.getPosX() - this.getPosX();
                 double d3 = target.getPosY() - this.getPosY()+0.5F;
                 double d4 = target.getPosZ() - this.getPosZ();
 
-                EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, d2, d3, d4, ((ItemAmmo) Ammostack.getItem()).getAmmoProperty());
+                EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, d2, d3, d4, ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty());
                 this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                 shell.setPosition(this.getPosX() + vector3d.x, this.getPosY()+0.5F, shell.getPosZ() + vector3d.z);
                 this.world.addEntity(shell);

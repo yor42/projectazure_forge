@@ -3,15 +3,15 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 
-public class ItemAmmo extends ItemBaseTooltip {
+public class ItemCannonshell extends ItemBaseTooltip {
     enums.AmmoCategory ammoCategory;
     private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
     private boolean shouldDamageMultipleComponant, isIncendiary;
 
-    public ItemAmmo(enums.AmmoCategory category, Properties ItemProperties){
+    public ItemCannonshell(enums.AmmoCategory category, Properties ItemProperties){
         this(category, 0,0,0,0,0,category.ShouldDamageMultipleComponent(),category.isFiery(),ItemProperties);
     }
-    public ItemAmmo(enums.AmmoCategory ammoType, float damage_rigging, float damage_entity, float damage_component, float hitChance, float minimum_damage_modifier, boolean shouldDamageMultipleComponant, boolean isIncendiary, Properties properties) {
+    public ItemCannonshell(enums.AmmoCategory ammoType, float damage_rigging, float damage_entity, float damage_component, float hitChance, float minimum_damage_modifier, boolean shouldDamageMultipleComponant, boolean isIncendiary, Properties properties) {
         super(properties);
         this.ammoCategory = ammoType;
         this.damage_rigging = damage_rigging;

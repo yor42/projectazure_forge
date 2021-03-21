@@ -206,6 +206,12 @@ public class enums {
 
     }
 
+    public enum AmmoCalibur{
+        AMMO_5_56,
+        AMMO_45,
+        AMMO_9MM
+    }
+
     public enum Morale{
         REALLY_HAPPY("really_happy"),
         HAPPY("happy"),

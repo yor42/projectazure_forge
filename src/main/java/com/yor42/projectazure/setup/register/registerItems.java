@@ -46,7 +46,7 @@ public class registerItems {
             .rarity(Rarity.EPIC)
             .maxStackSize(1)));
 
-    public static final RegistryObject<Item> AMMO_GENERIC = registerManager.ITEMS.register("ammo_generic", () -> new ItemAmmo(enums.AmmoCategory.GENERIC ,new Item.Properties()
+    public static final RegistryObject<Item> AMMO_GENERIC = registerManager.ITEMS.register("ammo_generic", () -> new ItemCannonshell(enums.AmmoCategory.GENERIC ,new Item.Properties()
             .group(PA_GROUP)));
 
     //I'M READY TO GO TONIIIIGHT YEAH THERES PARTY ALRIGHTTTTTTT WE DON'T NEED REASON FOR JOY OH YEAHHHHH

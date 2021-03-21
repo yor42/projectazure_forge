@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.containers;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.slots.SlotRigging;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.gameobject.items.ItemAmmo;
+import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -74,7 +74,7 @@ public class ContainerKansenInventory extends Container {
                 this.addSlot(new SlotItemHandler(dummyAmmoHandler, n + 2 * m, 180 + n * 18, 15 + m * 18){
                     @Override
                     public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemAmmo;
+                        return stack.getItem() instanceof ItemCannonshell;
                     }
                 });
             }
@@ -97,7 +97,7 @@ public class ContainerKansenInventory extends Container {
         this.host = entity;
         this.Stack = entity.getShipRiggingStorage();
         this.equipment = this.host.getEquipment();
-        this.AmmoStack = this.host.getAmmoStorage();
+        this.AmmoStack = this.host.getCannonShellStorage();
 
 
         //rigging
@@ -134,7 +134,7 @@ public class ContainerKansenInventory extends Container {
                 this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
                     @Override
                     public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemAmmo;
+                        return stack.getItem() instanceof ItemCannonshell;
                     }
                 });
             }

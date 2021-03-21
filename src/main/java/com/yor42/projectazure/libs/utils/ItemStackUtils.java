@@ -307,6 +307,24 @@ public class ItemStackUtils {
         return 0;
     }
 
+    public static short getAmmo(ItemStack stack){
+        CompoundNBT compound = stack.getOrCreateTag();
+        return compound.getShort("ammo");
+    }
+
+    public static void useAmmo(ItemStack stack, short amount){
+        short ammo = getAmmo(stack);
+        CompoundNBT compound = stack.getOrCreateTag();
+        compound.putShort("ammo", (short) Math.max(ammo-amount, 0));
+    }
+
+    public static void reloadAmmo(ItemStack gun, int amount) {
+        short ammo = getAmmo(gun);
+
+        CompoundNBT nbt = gun.getOrCreateTag();
+        nbt.putShort("ammo", (short) (ammo+amount));
+    }
+
 
 
     public static int getDelayofEquipment(ItemStack Equipment){
