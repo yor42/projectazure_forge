@@ -45,6 +45,7 @@ public class serverEvents {
                     }
                     entity.setTamedBy(player);
                     entity.setAffection(40.0F);
+                    entity.setMorale(150);
                 }
                 player.closeScreen();
             }

@@ -43,7 +43,7 @@ public class ContainerBAInventory extends Container {
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {
             int finalL = l;
-            this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 3 + finalL, 85, 16 + finalL * 18) {
+            this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 2 + finalL, 85, 16 + finalL * 18) {
                 public int getSlotStackLimit() {
                     return 1;
                 }
@@ -99,7 +99,7 @@ public class ContainerBAInventory extends Container {
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {
             int finalL = l;
-            this.addSlot(new SlotItemHandler(this.equipment, 3 + finalL, 85, 16 + finalL * 18) {
+            this.addSlot(new SlotItemHandler(this.equipment, 2 + finalL, 85, 16 + finalL * 18) {
                 public int getSlotStackLimit() {
                     return 1;
                 }

@@ -28,36 +28,9 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.enterprise.sleep", true));
-            return PlayState.CONTINUE;
-        }
-
-        if(this.isBeingPatted()){
-            if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
-            else
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
-            return PlayState.CONTINUE;
-        }
-
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.sit", true));
             return PlayState.CONTINUE;
-        }
-
-        if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorL", false));
-            }
-            else{
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorR", false));
-            }
-        }
-        else if(this.isMeleeing()){
-            if(this.swingingHand == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.melee", false));
-            }
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
@@ -81,12 +54,59 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent) {
-        return PlayState.CONTINUE;
+    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
+
+        if(Minecraft.getInstance().isGamePaused()){
+            return PlayState.STOP;
+        }
+
+        AnimationBuilder builder = new AnimationBuilder();
+
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.enterprise.sleep", true));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.isBeingPatted()){
+            if(this.isEntitySleeping())
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
+            else
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.isOpeningDoor()){
+            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorL", false));
+            }
+            else{
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorR", false));
+            }
+        }
+        else if(this.isMeleeing()){
+            if(this.swingingHand == Hand.MAIN_HAND){
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.melee", false));
+            }
+        }
+
+        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+            if(this.isSailing()){
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail_arm", true));
+            }
+            else if(this.isSprinting()){
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.run_arm", true));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.walk_arm", true));
+            }
+            return PlayState.CONTINUE;
+        }
+
+        return PlayState.STOP;
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
         return PlayState.CONTINUE;
     }
 

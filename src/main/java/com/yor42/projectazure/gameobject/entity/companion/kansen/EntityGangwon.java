@@ -25,8 +25,54 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent) {
-        return PlayState.CONTINUE;
+    protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
+
+        if(Minecraft.getInstance().isGamePaused()){
+            return PlayState.STOP;
+        }
+        AnimationBuilder builder = new AnimationBuilder();
+
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.isBeingPatted()){
+            if(this.isEntitySleeping())
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));
+            else
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", true));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.isOpeningDoor()){
+            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorL", false));
+            }
+            else{
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorR", false));
+            }
+        }
+        else if(this.isMeleeing()){
+            if(this.swingingHand == Hand.MAIN_HAND){
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.melee", false));
+            }
+        }
+
+        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+            if(this.isSailing()){
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", true));
+            }
+            else if(this.isSprinting()){
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.run_arm", true));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk_arm", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        event.getController().setAnimation(builder.addAnimation("animation.gangwon.idle", true));
+        return PlayState.STOP;
     }
 
     @Override
@@ -47,37 +93,14 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
 
-        if(this.isBeingPatted()){
-            if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));
-            else
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", true));
-            return PlayState.CONTINUE;
-        }
-
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit", true));
             return PlayState.CONTINUE;
         }
 
-        if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorL", false));
-            }
-            else{
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorR", false));
-            }
-        }
-        else if(this.isMeleeing()){
-            if(this.swingingHand == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.melee", false));
-            }
-        }
-
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail", true));
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_hand", true));
             }
             else if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.run", true));
