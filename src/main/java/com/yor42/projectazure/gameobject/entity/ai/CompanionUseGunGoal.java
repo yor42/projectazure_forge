@@ -84,7 +84,6 @@ public class CompanionUseGunGoal extends Goal {
         if(target != null){
             double distanceSq = this.companion.getDistanceSq(target.getPosX(), target.getPosY(), target.getPosZ());
             boolean canSee = this.companion.getEntitySenses().canSee(target);
-            boolean seeing = this.seeTime > 0;
 
             if (canSee) {
                 ++this.seeTime;
@@ -126,7 +125,7 @@ public class CompanionUseGunGoal extends Goal {
                 this.companion.getLookController().setLookPositionWithEntity(target, 30.0F, 30.0F);
             }
 
-            boolean flag = this.companion.isHandActive() && this.getValidGunStack().getItem() instanceof ItemGunBase;
+            boolean flag = this.companion.isUsingGun();
 
             if (flag) {
                 if (!canSee && this.seeTime < -60) {
@@ -134,13 +133,13 @@ public class CompanionUseGunGoal extends Goal {
                     this.companion.setUsingGun(false);
                 } else if (canSee) {
 
-                    boolean hasAmmo = this.getAmmo(getValidGunStack())>0;
+                    boolean hasAmmo = this.getAmmo(this.getValidGunStack())>0;
 
                     if(hasAmmo && --this.attackTime <= 0) {
                         this.companion.AttackUsingGun(target, this.getValidGunStack(), this.getValidGunHand());
                         this.attackTime = ((ItemGunBase) this.getValidGunStack().getItem()).getMinFireDelay();
                     }
-                    else{
+                    else if(this.getValidGunStack().getItem() instanceof ItemGunBase && this.getAmmo(this.getValidGunStack())<=0){
                         this.companion.setReloadDelay();
                     }
                 }
