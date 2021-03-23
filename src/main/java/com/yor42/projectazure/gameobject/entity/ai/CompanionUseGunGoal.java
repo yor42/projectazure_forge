@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.ai;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
+import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.LivingEntity;
@@ -32,11 +33,8 @@ public class CompanionUseGunGoal extends Goal {
 
 
     private ItemStack getValidGunStack(){
-        if(this.companion.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-            return this.companion.getHeldItemMainhand();
-        }
-        else if(!((ItemGunBase) this.companion.getHeldItemOffhand().getItem()).isTwoHanded()){
-            return this.companion.getHeldItemOffhand();
+        if(this.companion.getHeldItem(this.getValidGunHand()).getItem() instanceof ItemGunBase){
+            return this.companion.getHeldItem(this.getValidGunHand());
         }
         return ItemStack.EMPTY;
     }
@@ -52,9 +50,14 @@ public class CompanionUseGunGoal extends Goal {
 
     @Override
     public boolean shouldExecute() {
-        return this.companion.canUseGun() && getValidGunStack().getItem() instanceof ItemGunBase && this.companion instanceof EntityGunUserBase &&
-                ((EntityGunUserBase)this.companion).HasRightMagazine(((ItemGunBase) getValidGunStack().getItem()).getCalibur()) != ItemStack.EMPTY && this.companion.getAttackTarget() != null && this.companion.getAttackTarget().isAlive();
+
+        boolean flag = this.companion.canUseGun() && getValidGunStack().getItem() instanceof ItemGunBase && !this.companion.isSleeping() &&!this.companion.isEntitySleeping()&&
+                this.companion.getAttackTarget() != null && this.companion.getAttackTarget().isAlive();
+
+        return flag;
     }
+
+
 
     public void startExecuting() {
         super.startExecuting();
@@ -67,6 +70,7 @@ public class CompanionUseGunGoal extends Goal {
         this.seeTime = 0;
         this.attackTime = -1;
         this.companion.resetActiveHand();
+        this.companion.setUsingGun(false);
     }
 
     @Override
@@ -81,9 +85,6 @@ public class CompanionUseGunGoal extends Goal {
             double distanceSq = this.companion.getDistanceSq(target.getPosX(), target.getPosY(), target.getPosZ());
             boolean canSee = this.companion.getEntitySenses().canSee(target);
             boolean seeing = this.seeTime > 0;
-            if (canSee != seeing) {
-                this.seeTime = 0;
-            }
 
             if (canSee) {
                 ++this.seeTime;
@@ -120,21 +121,30 @@ public class CompanionUseGunGoal extends Goal {
 
                 this.companion.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
                 this.companion.faceEntity(target, 30.0F, 30.0F);
+                this.companion.getLookController().setLookPositionWithEntity(target, 30.0F, 30.0F);
             } else {
                 this.companion.getLookController().setLookPositionWithEntity(target, 30.0F, 30.0F);
             }
 
-            if (this.companion.isHandActive() && this.getValidGunStack().getItem() instanceof ItemGunBase) {
+            boolean flag = this.companion.isHandActive() && this.getValidGunStack().getItem() instanceof ItemGunBase;
+
+            if (flag) {
                 if (!canSee && this.seeTime < -60) {
                     this.companion.resetActiveHand();
                     this.companion.setUsingGun(false);
                 } else if (canSee) {
-                    if(this.getAmmo(getValidGunStack())>0) {
-                        this.companion.AttackUsingGun(target, this.getValidGunStack());
+
+                    boolean hasAmmo = this.getAmmo(getValidGunStack())>0;
+
+                    if(hasAmmo && --this.attackTime <= 0) {
+                        this.companion.AttackUsingGun(target, this.getValidGunStack(), this.getValidGunHand());
                         this.attackTime = ((ItemGunBase) this.getValidGunStack().getItem()).getMinFireDelay();
                     }
+                    else{
+                        this.companion.setReloadDelay();
+                    }
                 }
-            } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
+            } else if (this.seeTime >= -60) {
                 this.companion.setUsingGun(true);
                 this.companion.setActiveHand(this.getValidGunHand());
             }
@@ -145,13 +155,10 @@ public class CompanionUseGunGoal extends Goal {
     }
 
     public short getAmmo(ItemStack stack){
-        CompoundNBT compound = stack.getOrCreateTag();
-        return compound.getShort("ammo");
-    }
-
-    public void useAmmo(ItemStack stack, short amount){
-        short ammo = getAmmo(stack);
-        CompoundNBT compound = stack.getOrCreateTag();
-        compound.putShort("ammo", (short) Math.max(ammo-amount, 0));
+        if(stack.getItem() instanceof ItemGunBase) {
+            CompoundNBT compound = stack.getOrCreateTag();
+            return compound.getShort("ammo");
+        }
+        else return 0;
     }
 }

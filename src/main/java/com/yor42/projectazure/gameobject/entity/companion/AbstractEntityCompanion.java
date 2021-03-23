@@ -6,6 +6,7 @@ import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AgeableEntity;
@@ -43,6 +44,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -243,6 +245,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISUSINGGUN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Integer> HEAL_TIMER = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> RELOAD_TIMER_MAINHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> RELOAD_TIMER_OFFHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
+
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.PATH, MemoryModuleType.OPENED_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
 
@@ -291,6 +297,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public boolean isUsingGun(){
         return this.getDataManager().get(ISUSINGGUN);
+    }
+
+    public ItemStack HasRightMagazine(enums.AmmoCalibur calibur){
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -378,12 +388,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return -1;
     }
 
-    public void AttackUsingGun(LivingEntity entity, ItemStack gun){
+    public void AttackUsingGun(LivingEntity target, ItemStack gun, Hand HandIn){
         if(this instanceof EntityGunUserBase && gun.getItem() instanceof ItemGunBase){
-            if(getAmmo(gun) >0) {
-                AnimationController gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
-
-            }
+            AnimationController gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
+            gunAnimation.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
+            ((ItemGunBase) gun.getItem()).shootGunLivingEntity(gun, this.getEntityWorld(), this, false, HandIn, target);
+            ((ItemGunBase) gun.getItem()).useAmmo(gun, (short) 1);
         }
     }
 
@@ -503,6 +513,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(ISUSINGGUN, false);
         this.dataManager.register(HOMEPOS, BlockPos.ZERO);
         this.dataManager.register(VALID_HOME_DISTANCE, -1.0f);
+        this.dataManager.register(HEAL_TIMER, 0);
+        this.dataManager.register(RELOAD_TIMER_MAINHAND, 0);
     }
 
     public void setOpeningdoor(boolean openingdoor){
@@ -666,6 +678,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
 
+        if(this.getDataManager().get(HEAL_TIMER)>0){
+            this.getDataManager().set(HEAL_TIMER, this.getDataManager().get(HEAL_TIMER)-1);
+        }
+
         if(this.isSleeping()){
             this.getNavigator().clearPath();
         }
@@ -673,6 +689,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if (this.forcewakeupExpireTimer>0){
             this.forcewakeupExpireTimer--;
         }
+
+        if(this.getDataManager().get(RELOAD_TIMER_MAINHAND)>0){
+            this.getDataManager().set(RELOAD_TIMER_MAINHAND, this.getDataManager().get(RELOAD_TIMER_MAINHAND)-1);
+            if(this.getDataManager().get(RELOAD_TIMER_MAINHAND) == 0){
+                if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+                    ((ItemGunBase) this.getHeldItemMainhand().getItem()).reloadAmmo(this.getHeldItemMainhand());
+                }
+                else if(this.getHeldItemOffhand().getItem() instanceof ItemGunBase && !((ItemGunBase) this.getHeldItemOffhand().getItem()).isTwoHanded()){
+                    ((ItemGunBase) this.getHeldItemOffhand().getItem()).reloadAmmo(this.getHeldItemOffhand());
+                }
+            }
+        }
+
+
         else if(this.forcewakeupExpireTimer==0 || !this.isSleeping()){
             this.forceWakeupCounter=0;
         }
@@ -724,16 +754,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(1, new CompanionSwimGoal(this));
         this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
         this.goalSelector.addGoal(3, new SitGoal(this));
-        this.goalSelector.addGoal(6, new KansenRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(8, new CompanionMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(9, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(10, new KansenWorkGoal(this, 1.0D));
-       this.goalSelector.addGoal(11, new CompanionOpenDoorGoal(this, true));
-       this.goalSelector.addGoal(12, new CompanionFreeroamGoal(this, 60, true));
-       this.goalSelector.addGoal(13, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(13, new CompanionFindBedGoal(this));
-        this.goalSelector.addGoal(14, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(15, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(6, new CompanionUseGunGoal(this, 40, 0.6));
+        this.goalSelector.addGoal(8, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(9, new CompanionMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(10, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(11, new KansenWorkGoal(this, 1.0D));
+       this.goalSelector.addGoal(12, new CompanionOpenDoorGoal(this, true));
+       this.goalSelector.addGoal(13, new CompanionFreeroamGoal(this, 60, true));
+       this.goalSelector.addGoal(14, new CompanionPickupItemGoal(this));
+        this.goalSelector.addGoal(15, new CompanionFindBedGoal(this));
+        this.goalSelector.addGoal(16, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(17, new LookRandomlyGoal(this));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -742,6 +773,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected boolean canOpenDoor() {
         return true;
+    }
+
+    public boolean ShouldPlayReloadAnim(){
+        return this.getDataManager().get(RELOAD_TIMER_MAINHAND)>0;
+    }
+
+    public void setReloadDelay(){
+        this.getDataManager().set(RELOAD_TIMER_MAINHAND, this.Reload_Anim_Delay());
+    }
+
+    public int Reload_Anim_Delay(){
+        return 0;
     }
 
     @Override
@@ -855,7 +898,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                 this.heal(1.0f);
                                 heldstacks.damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(player.getActiveHand()));
                                 player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f, 1.0f);
-                                this.healAnimationTime = 20;
+                                this.getDataManager().set(HEAL_TIMER, 20);
                             }
                             return ActionResultType.SUCCESS;
                         }

@@ -54,6 +54,7 @@ public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
         return RenderType.getEntitySmoothCutout(textureLocation);
     }
 
+
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if (bone.getName().equals("itemMainHand")){

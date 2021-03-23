@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.gunusers;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
@@ -38,10 +39,21 @@ public class EntityShiroko extends EntityGunUserBase {
 
         if(this.isGettingHealed()){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal", true));
+            return PlayState.CONTINUE;
         }
 
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_hand", true));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.ShouldPlayReloadAnim()){
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_shoot_twohanded_reload"));
+            return PlayState.CONTINUE;
+        }
+
+        if(this.isUsingGun()){
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }
 
@@ -87,6 +99,11 @@ public class EntityShiroko extends EntityGunUserBase {
     protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
 
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public int Reload_Anim_Delay() {
+        return 58;
     }
 
     @Override

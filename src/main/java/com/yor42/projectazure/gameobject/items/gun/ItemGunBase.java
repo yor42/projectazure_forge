@@ -144,32 +144,13 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
     }
 
     public boolean shootGunLivingEntity(ItemStack gun, World world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
+        entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
+        if (!world.isRemote()) {
 
-
-        //AnimationController controller = GeckoLibUtil.getControllerForStack(this.getFactory(), gun, this.getFactoryName());
-        int ammo = this.getAmmo(gun);
-        if (ammo > 0) {
-
-            entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
-            this.useAmmo(gun, (short) 1);
-            if (!world.isRemote()) {
-
-                this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
-            }
-            return false;
+            this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
         }
-        else {
-            if (this.roundsPerReload > 0) {
-                int i = 1;
-                while (i < this.roundsPerReload) {
-                    i++;
-                }
-                this.reloadAmmo(gun, i);
-            } else {
-                this.reloadAmmo(gun);
-            }
-            return true;
-        }
+        return false;
+
     }
 
     public abstract enums.AmmoCalibur getCalibur();
