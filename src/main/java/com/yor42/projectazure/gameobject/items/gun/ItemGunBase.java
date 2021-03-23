@@ -64,6 +64,14 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
         this.isTwoHanded = isTwohanded;
     }
 
+    public SoundEvent getFireSound() {
+        return this.fireSound;
+    }
+
+    public SoundEvent getReloadSound() {
+        return this.reloadSound;
+    }
+
     public boolean isTwoHanded(){
         return this.isTwoHanded;
     }

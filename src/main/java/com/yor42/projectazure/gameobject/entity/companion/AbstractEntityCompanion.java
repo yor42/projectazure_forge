@@ -56,6 +56,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getAmmo;
+import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
@@ -392,6 +393,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(this instanceof EntityGunUserBase && gun.getItem() instanceof ItemGunBase){
             AnimationController gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
             gunAnimation.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
+            this.playSound(((ItemGunBase) gun.getItem()).getFireSound(), 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
             ((ItemGunBase) gun.getItem()).shootGunLivingEntity(gun, this.getEntityWorld(), this, false, HandIn, target);
             ((ItemGunBase) gun.getItem()).useAmmo(gun, (short) 1);
         }
