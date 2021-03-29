@@ -72,7 +72,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
         event.getController().setAnimation(builder.addAnimation("animation.gangwon.idle", true));
-        return PlayState.STOP;
+        return PlayState.CONTINUE;
     }
 
     @Override
