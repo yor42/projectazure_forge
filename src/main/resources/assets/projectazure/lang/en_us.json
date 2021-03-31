@@ -66,9 +66,13 @@
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entitygangwon": "ROKS Gangwon",
+
+  "entity.projectazure.entitynagato": "IJN Nagato",
+
   "entity.projectazure.entityenterprise": "USS Enterprise",
 
   "entity.projectazure.entityshiroko": "Shiroko",
 
-  "death.attack.bonk": "%1$s was sent to horny jail"
+  "death.attack.bonk": "%1$s was sent to horny jail",
+  "gui.bainventory": "Inventory"
 }

@@ -25,6 +25,7 @@
   "item.projectazure.wisdomcube.tooltip": "의미심장한 빛을 내뿜는 큐브입니다.",
   "item.projectazure.bandage_roll.tooltip": "응금처치용 간단한 붕대입니다. ...화장지가 아닙니다.",
 
+  "item.projectazure.spawnegg.spawn": "Spawn: ",
 
   "item.projectazure.bonk_bat.tooltip": "???: Aㅏ. [검열됨]을 만들어 주마.",
 
@@ -43,7 +44,7 @@
 
   "gui.selectstarter.title": "초기함을 선택해주세요",
   "gui.shipinventory": "함선 보관함",
-  "gui.bainventory": "Inventory",
+  "gui.companioninventory": "Inventory",
 
   "gui.current_affection_level": "현재 호감도",
   "gui.current_affection_value": "호감도",
@@ -65,9 +66,13 @@
 
   "entity.projectazure.entityayanami": "IJN 아야나미",
   "entity.projectazure.entitygangwon": "ROKS 강원",
+
+  "entity.projectazure.entitynagato": "IJN 나가토",
+
   "entity.projectazure.entityenterprise": "USS 엔터프라이즈",
 
   "entity.projectazure.entityshiroko": "시로코",
 
-  "death.attack.bonk": "%1$s이 %2$s에 의해 Horny Jail로 보내졌습니다."
+  "death.attack.bonk": "%1$s이 %2$s에 의해 Horny Jail로 보내졌습니다.",
+  "gui.bainventory": "인벤토리"
 }
