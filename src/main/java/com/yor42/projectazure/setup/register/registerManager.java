@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
@@ -57,6 +58,9 @@ public class registerManager {
 
     public static final EntityType<EntityShiroko> SHIROKO_ENTITY_TYPE = EntityType.Builder.create(EntityShiroko::new, EntityClassification.CREATURE).size(1F, 1.8F).build(ModResourceLocation("entityshiroko").toString());
     public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> SHIROKO_ENTITY_TYPE);
+
+    public static final EntityType<EntityNagato> ENTITYTYPE_NAGATO = EntityType.Builder.create(EntityNagato::new, EntityClassification.CREATURE).size(0.572F, 1.5F).build(ModResourceLocation("entitynagato").toString());
+    public static final RegistryObject<EntityType<EntityNagato>> NAGATO = ENTITIES.register("entitynagato", () -> ENTITYTYPE_NAGATO);
 
     //projectile
     public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString());

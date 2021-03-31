@@ -410,6 +410,11 @@
 					]
 				},
 				{
+					"name": "itemMainHand",
+					"parent": "RightHand",
+					"pivot": [-6.40662, 19.96257, 0.14286]
+				},
+				{
 					"name": "LeftArm",
 					"parent": "Body",
 					"pivot": [6, 38.47151, 0.14286],
@@ -427,6 +432,11 @@
 						{"origin": [6, 18.97151, -2.35714], "size": [5, 11, 5], "uv": [195, 79], "mirror": true},
 						{"origin": [5.5, 21.97151, -2.85714], "size": [6, 8, 6], "uv": [216, 81], "mirror": true}
 					]
+				},
+				{
+					"name": "itemOffHand",
+					"parent": "LeftHand",
+					"pivot": [7, 19.97151, 0.14286]
 				},
 				{
 					"name": "waist",

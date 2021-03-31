@@ -5,11 +5,13 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingDD;
+import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
@@ -47,7 +49,10 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityGangwon entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (entitylivingbaseIn.getRigging() != ItemStack.EMPTY) {
+
+        Item item = entitylivingbaseIn.getRigging().getItem();
+
+        if (item instanceof ItemRiggingBase) {
 
             matrixStackIn.push();
             this.modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();
@@ -60,8 +65,7 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
             render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
 
-            if(entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingBase) {
-                ItemStackHandler Equipments = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getEquipments(entitylivingbaseIn.getRigging());
+            ItemStackHandler Equipments = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getEquipments(entitylivingbaseIn.getRigging());
 
                 //TODO: Clean this shit up with loop
                 /*
@@ -77,7 +81,7 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
 
 
 
-                if (entitylivingbaseIn.getRigging().getItem() == registerItems.DD_DEFAULT_RIGGING.get()){
+                if (entitylivingbaseIn.getRigging().getItem() instanceof itemRiggingDDDefault){
 
                     //gun Renderer
                     if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
@@ -146,8 +150,8 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
                         }
                     }
 
-                    if(Equipments.getStackInSlot(5) != ItemStack.EMPTY){
-                        if(Equipments.getStackInSlot(5).getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
+                    if(Equipments.getStackInSlot(5) != ItemStack.EMPTY) {
+                        if (Equipments.getStackInSlot(5).getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
                             matrixStackIn.push();
                             RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getTexture());
                             matrixStackIn.translate(-(11.5 + hostbone.getPositionX()) / 16, (-13 + hostbone.getPositionY() + riggingoffset) / 16, (12.5 + hostbone.getPositionZ()) / 16);
@@ -156,16 +160,15 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> impleme
                             EquipmentModel.getBone("MountX").get().setRotationY(0.75F + MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
 
                             int AmmoCount = getRemainingAmmo(Equipments.getStackInSlot(5));
-                            EquipmentModel.getBone("torpedo4").get().setHidden(AmmoCount<4);
-                            EquipmentModel.getBone("torpedo3").get().setHidden(AmmoCount<3);
-                            EquipmentModel.getBone("torpedo2").get().setHidden(AmmoCount<2);
-                            EquipmentModel.getBone("torpedo1").get().setHidden(AmmoCount<1);
+                            EquipmentModel.getBone("torpedo4").get().setHidden(AmmoCount < 4);
+                            EquipmentModel.getBone("torpedo3").get().setHidden(AmmoCount < 3);
+                            EquipmentModel.getBone("torpedo2").get().setHidden(AmmoCount < 2);
+                            EquipmentModel.getBone("torpedo1").get().setHidden(AmmoCount < 1);
 
                             render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
                             matrixStackIn.pop();
                         }
                     }
-                }
 
             }
         }

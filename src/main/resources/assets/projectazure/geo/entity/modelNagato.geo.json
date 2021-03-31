@@ -367,7 +367,10 @@
 				{
 					"name": "Sleep",
 					"parent": "Faces",
-					"pivot": [0, 40, 0.14286]
+					"pivot": [0, 40, 0.14286],
+					"cubes": [
+						{"origin": [-5.75, 39.97151, -5.40714], "size": [11.5, 11.5, 1], "uv": [0, 220]}
+					]
 				},
 				{
 					"name": "Ribborn",
@@ -489,6 +492,11 @@
 					]
 				},
 				{
+					"name": "itemMainHand",
+					"parent": "RightHand",
+					"pivot": [-8, 20.47151, 0.14286]
+				},
+				{
 					"name": "LeftArm",
 					"parent": "Body",
 					"pivot": [6, 38.47151, 0.14286],
@@ -506,6 +514,11 @@
 						{"origin": [6, 18.97151, -2.35714], "size": [5, 11, 5], "uv": [195, 79], "mirror": true},
 						{"origin": [5.5, 21.97151, -2.85714], "size": [6, 8, 6], "uv": [216, 81], "mirror": true}
 					]
+				},
+				{
+					"name": "itemOffHand",
+					"parent": "LeftHand",
+					"pivot": [8, 20.47151, 0.14286]
 				},
 				{
 					"name": "waist",

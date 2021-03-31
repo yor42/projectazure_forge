@@ -68,7 +68,6 @@ public class AyanamiRiggingLayer extends GeoLayerRenderer<EntityAyanami> impleme
             render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
 
-                GeoModel riggingmodel = this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider));
                 ItemStackHandler Equipments = new RiggingInventoryCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
 
                 if (entitylivingbaseIn.getRigging().getItem() instanceof itemRiggingDDDefault){

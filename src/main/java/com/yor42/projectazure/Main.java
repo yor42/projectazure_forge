@@ -1,10 +1,7 @@
 package com.yor42.projectazure;
 
 import com.yor42.projectazure.client.ClientRegisterManager;
-import com.yor42.projectazure.client.renderer.entity.entityAyanamiRenderer;
-import com.yor42.projectazure.client.renderer.entity.entityEnterpriseRenderer;
-import com.yor42.projectazure.client.renderer.entity.entityGangwonRenderer;
-import com.yor42.projectazure.client.renderer.entity.entityShirokoRenderer;
+import com.yor42.projectazure.client.renderer.entity.*;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityGunBulletRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectileTorpedoRenderer;
@@ -92,6 +89,7 @@ public class Main
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.GANGWON.get(), entityGangwonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.SHIROKO.get(), entityShirokoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.ENTERPRISE.get(), entityEnterpriseRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.NAGATO.get(), entityNagatoRenderer::new);
 
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);

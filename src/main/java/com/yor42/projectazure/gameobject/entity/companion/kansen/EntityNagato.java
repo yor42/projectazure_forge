@@ -3,18 +3,22 @@ package com.yor42.projectazure.gameobject.entity.companion.kansen;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 public class EntityNagato extends EntityKansenBattleship{
-    protected EntityNagato(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityNagato(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -62,7 +66,12 @@ public class EntityNagato extends EntityKansenBattleship{
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("idle", true));
+        if(this.isEntitySleeping()){
+            event.getController().setAnimation(builder.addAnimation("idle_sit", true));
+        }
+        else {
+            event.getController().setAnimation(builder.addAnimation("idle", true));
+        }
         return PlayState.CONTINUE;
     }
 
@@ -98,6 +107,17 @@ public class EntityNagato extends EntityKansenBattleship{
         }
 
         return PlayState.STOP;
+    }
+
+    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    {
+        return MobEntity.func_233666_p_()
+                //Attribute
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.0F)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 50F)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
+                ;
     }
 
     @Override

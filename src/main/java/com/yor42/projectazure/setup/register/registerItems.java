@@ -117,6 +117,9 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWM_ENTERPRISE = registerManager.ITEMS.register("spawnenterprise", ()-> new ItemKansenSpawnEgg(ENTERPRISE_ENTITY_TYPE, new Item.Properties().group(PA_SHIPS)));
 
 
+    public static final RegistryObject<Item> SPAWN_NAGATO = registerManager.ITEMS.register("spawnnagato", () -> new ItemKansenSpawnEgg(ENTITYTYPE_NAGATO, new Item.Properties()
+            .group(PA_SHIPS)));
+
 
     public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(SHIROKO_ENTITY_TYPE, new Item.Properties()
             .group(PA_SHIPS)));
