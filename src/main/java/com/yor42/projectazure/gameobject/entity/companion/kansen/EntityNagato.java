@@ -101,7 +101,7 @@ public class EntityNagato extends EntityKansenBattleship{
                 event.getController().setAnimation(builder.addAnimation("run", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walk", true));
+                event.getController().setAnimation(builder.addAnimation("walking_leg", true));
             }
             return PlayState.CONTINUE;
         }

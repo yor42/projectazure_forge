@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.kansen.gangwonModel;
 import com.yor42.projectazure.client.model.entity.kansen.nagatoModel;
 import com.yor42.projectazure.client.renderer.layer.GangwonRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.NagatoRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
@@ -31,7 +32,7 @@ public class entityNagatoRenderer extends GeoEntityRenderer<EntityNagato> {
 
     public entityNagatoRenderer(EntityRendererManager renderManager) {
         super(renderManager, new nagatoModel());
-        //this.addLayer(new GangwonRiggingLayer(this));
+        this.addLayer(new NagatoRiggingLayer(this));
         this.shadowSize = 0.4F;
     }
 

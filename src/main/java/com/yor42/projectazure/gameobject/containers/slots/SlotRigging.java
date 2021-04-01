@@ -24,9 +24,16 @@ public class SlotRigging extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(@Nonnull ItemStack stack) {
-        if(stack.getItem() instanceof ItemRiggingBase){
-            return ((ItemRiggingBase) stack.getItem()).getValidclass() == hostEntity.getShipClass();
+        if(this.hostEntity!= null) {
+            if (stack.getItem() instanceof ItemRiggingBase) {
+                return ((ItemRiggingBase) stack.getItem()).getValidclass() == this.hostEntity.getShipClass();
+            }
+            return false;
         }
-        return false;
+        else {
+            return stack.getItem() instanceof ItemRiggingBase;
+        }
+
+
     }
 }

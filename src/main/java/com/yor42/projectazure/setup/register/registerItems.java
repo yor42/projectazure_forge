@@ -2,15 +2,13 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
-import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
-import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
-import com.yor42.projectazure.client.renderer.items.ItemAbydos550Renderer;
-import com.yor42.projectazure.client.renderer.items.ItemPlanef4fWildcatRenderer;
+import com.yor42.projectazure.client.renderer.items.*;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127Mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533Mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemPlanef4Fwildcat;
 import com.yor42.projectazure.gameobject.items.gun.ItemAbydos550;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.enums;
@@ -91,7 +89,11 @@ public class registerItems {
 
     public static final RegistryObject<Item> CV_DEFAULT_RIGGING = registerManager.ITEMS.register("cv_default_rigging", () -> new ItemRiggingCVDefault(new Item.Properties()
             .setISTER(() -> CVDefaultRiggingRenderer::new)
-            .group(PA_GROUP).maxStackSize(1), 1000));
+            .group(PA_GROUP).maxStackSize(1), 750));
+
+    public static final RegistryObject<Item> BB_DEFAULT_RIGGING = registerManager.ITEMS.register("bb_default_rigging", () -> new ItemRiggingBBDefault(new Item.Properties()
+            .setISTER(() -> BBDefaultRiggingRenderer::new)
+            .group(PA_GROUP).maxStackSize(1), 1200));
 
     public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = registerManager.ITEMS.register("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533Mm(new Item.Properties()
             .setISTER(() -> equipment533mmTorpedoRenderer::new)

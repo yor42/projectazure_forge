@@ -101,7 +101,7 @@ public class ContainerKansenInventory extends Container {
 
 
         //rigging
-        this.addSlot(new SlotRigging(this.Stack, 0, 152, 35, (EntityKansenBase) Main.PROXY.getSharedMob()));
+        this.addSlot(new SlotRigging(this.Stack, 0, 152, 35, entity));
 
         //mainhand
         this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));
