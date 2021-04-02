@@ -6,7 +6,8 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rollBooleanRNG;
 public class enums {
 
     public enum SLOTTYPE{
-        GUN,
+        MAIN_GUN,
+        SUB_GUN,
         TORPEDO,
         UTILITY,
         AA,

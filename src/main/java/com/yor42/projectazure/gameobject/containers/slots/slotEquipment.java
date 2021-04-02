@@ -31,6 +31,11 @@ public class slotEquipment extends SlotItemHandler {
 
     @Override
     public boolean isItemValid(@Nonnull ItemStack stack) {
+
+        if(this.slottype == enums.SLOTTYPE.MAIN_GUN){
+            return stack.getItem() instanceof ItemEquipmentBase && (((ItemEquipmentBase) stack.getItem()).getSlot() == enums.SLOTTYPE.MAIN_GUN || ((ItemEquipmentBase) stack.getItem()).getSlot() == enums.SLOTTYPE.SUB_GUN);
+        }
+
         return stack.getItem() instanceof ItemEquipmentBase && ((ItemEquipmentBase) stack.getItem()).getSlot() == this.slottype;
     }
 

@@ -285,7 +285,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, vector3d.x, vector3d.y, vector3d.z));
 
                 this.addExp(1.0F);
-                ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.GUN, this);
+                ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.MAIN_GUN, this);
                 setEquipmentDelay(FiringCannon);
                 this.addMorale(-0.1);
             }

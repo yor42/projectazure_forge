@@ -63,16 +63,16 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         Color CategoryColor = Color.fromHex("#6bb82d");
         tooltip.add(new StringTextComponent(""));
         for(int i = 0; i<Equipments.getSlots(); i++){
-            if(this.getGunSlotCount()>0) {
+            if(this.getMainGunSlotCount()>0) {
                 if (i == 0)
                     tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             if(this.getAASlotCount()>0) {
-                if (i == this.getGunSlotCount())
+                if (i == this.getMainGunSlotCount())
                     tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             if(this.getTorpedoSlotCount()>0) {
-                if (i == this.getGunSlotCount() + this.getAASlotCount())
+                if (i == this.getMainGunSlotCount() + this.getAASlotCount())
                     tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             ItemStack currentstack = Equipments.getStackInSlot(i);
@@ -110,16 +110,18 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         return this.factory;
     }
 
-    public abstract int getGunSlotCount();
-    public abstract int getAASlotCount();
-    public abstract int getTorpedoSlotCount();
+    public int getMainGunSlotCount(){return 0;}
+    public int getSubGunSlotCount(){return 0;}
+    public int getAASlotCount(){return 0;}
+
+    public int getTorpedoSlotCount(){return 0;}
 
     public int getHangerSlots(){
         return 0;
     }
 
     public int getTotalSlotCount(){
-        return this.getAASlotCount()+getGunSlotCount()+this.getTorpedoSlotCount();
+        return this.getAASlotCount()+ this.getMainGunSlotCount()+this.getSubGunSlotCount()+this.getTorpedoSlotCount();
     }
 
     public abstract AnimatedGeoModel getModel();

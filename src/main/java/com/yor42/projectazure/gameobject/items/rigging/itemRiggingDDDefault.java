@@ -30,7 +30,12 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     }
 
     @Override
-    public int getGunSlotCount() {
+    public int getMainGunSlotCount() {
+        return 0;
+    }
+
+    @Override
+    public int getSubGunSlotCount() {
         return 2;
     }
 

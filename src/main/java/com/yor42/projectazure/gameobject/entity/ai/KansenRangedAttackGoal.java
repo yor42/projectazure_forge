@@ -44,7 +44,7 @@ public class KansenRangedAttackGoal extends Goal {
     public boolean shouldExecute() {
         LivingEntity target = this.entityHost.getAttackTarget();
 
-        if(this.entityHost instanceof EntityKansenBase) {
+        if(this.entityHost != null) {
             if (target != null && target.isAlive() && ((EntityKansenBase) this.entityHost).hasRigging()) {
                 if(hasGunOrTorpedo(((EntityKansenBase) this.entityHost).getRigging())) {
                     this.attackTarget = target;

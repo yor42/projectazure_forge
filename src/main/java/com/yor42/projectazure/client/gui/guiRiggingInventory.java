@@ -3,7 +3,6 @@ package com.yor42.projectazure.client.gui;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.defined;
@@ -67,10 +66,17 @@ public class guiRiggingInventory extends ContainerScreen<RiggingContainer> imple
     }
     private void renderSlotBackgrounds(MatrixStack matrixStack){
         if(this.RiggingStack.getItem() instanceof ItemRiggingBase) {
-            if(((ItemRiggingBase) this.RiggingStack.getItem()).getGunSlotCount()>0) {
+            if(((ItemRiggingBase) this.RiggingStack.getItem()).getMainGunSlotCount()>0) {
                 this.blit(matrixStack, this.x+6, this.y+26, 176, 59, 18, 7);
-                for(int i=0; i<((ItemRiggingBase) this.RiggingStack.getItem()).getGunSlotCount(); i++){
+                for(int i = 0; i<((ItemRiggingBase) this.RiggingStack.getItem()).getMainGunSlotCount(); i++){
                     this.blit(matrixStack, this.x+6, this.y+33+18*i, 176, 0, 18, 18);
+                }
+            }
+
+            if(((ItemRiggingBase) this.RiggingStack.getItem()).getSubGunSlotCount()>0) {
+                this.blit(matrixStack, this.x+30, this.y+26, 194, 59, 18, 7);
+                for(int i = 0; i<((ItemRiggingBase) this.RiggingStack.getItem()).getSubGunSlotCount(); i++){
+                    this.blit(matrixStack, this.x+30+18*i, this.y+33, 176, 0, 18, 18);
                 }
             }
 

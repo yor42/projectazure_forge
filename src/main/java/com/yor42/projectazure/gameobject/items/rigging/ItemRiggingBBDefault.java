@@ -11,8 +11,13 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
     }
 
     @Override
-    public int getGunSlotCount() {
-        return 5;
+    public int getMainGunSlotCount() {
+        return 3;
+    }
+
+    @Override
+    public int getSubGunSlotCount() {
+        return 2;
     }
 
     @Override

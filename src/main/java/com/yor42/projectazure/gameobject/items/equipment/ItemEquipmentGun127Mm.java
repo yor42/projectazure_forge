@@ -9,8 +9,8 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class ItemEquipmentGun127Mm extends ItemEquipmentGun{
     public ItemEquipmentGun127Mm(Properties properties, int maxHP) {
         super(properties, maxHP);
+        this.slot = enums.SLOTTYPE.SUB_GUN;
         this.firedelay = 60;
-        this.size = enums.CanonSize.MEDIUM;
     }
 
     @Override

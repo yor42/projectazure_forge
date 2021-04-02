@@ -10,17 +10,12 @@ import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.Color;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.lang.annotation.Target;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -248,7 +243,7 @@ public class ItemStackUtils {
             ItemStackHandler equipments = riggingItem.getEquipments(rigging);
             for(int i = 0; i<equipments.getSlots(); i++){
                 if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
-                    if(((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.GUN){
+                    if(((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.MAIN_GUN){
                         return !isDestroyed(equipments.getStackInSlot(i));
                     }
                 }
@@ -262,7 +257,7 @@ public class ItemStackUtils {
             ItemStackHandler equipments = ((ItemRiggingBase) riggingStack.getItem()).getEquipments(riggingStack);
             for(int i = 0; i<equipments.getSlots(); i++){
                 if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase){
-                    if(((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.TORPEDO || ((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.GUN){
+                    if(((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.TORPEDO || ((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.MAIN_GUN){
                         return true;
                     }
                 }
@@ -280,7 +275,7 @@ public class ItemStackUtils {
 
     public static boolean canUseCannon(ItemStack riggingStack){
         if(riggingStack.getItem() instanceof ItemRiggingBase) {
-            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.GUN, null) != ItemStack.EMPTY;
+            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.MAIN_GUN, null) != ItemStack.EMPTY;
         }
         else return false;
     }
