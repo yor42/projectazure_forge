@@ -83,6 +83,58 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
 
 
             if (entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingBBDefault){
+
+                //gun Renderer
+
+
+                if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
+
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem());
+
+                    matrixStackIn.push();
+                    RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
+                    matrixStackIn.translate((-21+hostbone.getPositionX())/16, (7+hostbone.getPositionY()+riggingoffset)/16, (7.5+hostbone.getPositionZ())/16);
+                    matrixStackIn.rotate(new Quaternion(0, 0, 0, true));
+
+                    GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
+                    EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian((entitylivingbaseIn.getRotationYawHead()-entitylivingbaseIn.renderYawOffset)));
+                    EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.rotationPitch, 7.5F, -12.5F, false, true));
+                    render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                    matrixStackIn.pop();
+                }
+
+                if(Equipments.getStackInSlot(1) != ItemStack.EMPTY){
+
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem());
+
+                    matrixStackIn.push();
+                    RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
+                    matrixStackIn.translate((-21+hostbone.getPositionX())/16, (-1+hostbone.getPositionY()+riggingoffset)/16, (-10+hostbone.getPositionZ())/16);
+                    matrixStackIn.rotate(new Quaternion(0, 0, 0, true));
+
+                    GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
+                    EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian((entitylivingbaseIn.getRotationYawHead()-entitylivingbaseIn.renderYawOffset)));
+                    EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.rotationPitch, 7.5F, -12.5F, false, true));
+                    render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                    matrixStackIn.pop();
+                }
+
+                if(Equipments.getStackInSlot(2) != ItemStack.EMPTY){
+
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(2).getItem());
+
+                    matrixStackIn.push();
+                    RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
+                    matrixStackIn.translate((-28.0206+hostbone.getPositionX())/16, (-4.35+hostbone.getPositionY()+riggingoffset)/16, (7.5+hostbone.getPositionZ())/16);
+                    matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
+
+                    GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
+                    EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
+                    EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-entitylivingbaseIn.rotationYaw-entitylivingbaseIn.renderYawOffset, 7.5F, -12.5F, false, true));
+                    render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                    matrixStackIn.pop();
+                }
+
                 /*
                 //gun Renderer
                 if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){

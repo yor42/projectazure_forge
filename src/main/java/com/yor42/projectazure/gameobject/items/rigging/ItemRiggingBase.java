@@ -61,18 +61,21 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
         ItemStackHandler Equipments = new RiggingInventoryCapability(stack).getEquipments();
         Color CategoryColor = Color.fromHex("#6bb82d");
-        tooltip.add(new StringTextComponent(""));
         for(int i = 0; i<Equipments.getSlots(); i++){
             if(this.getMainGunSlotCount()>0) {
                 if (i == 0)
                     tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
-            if(this.getAASlotCount()>0) {
+            if(this.getSubGunSlotCount()>0) {
                 if (i == this.getMainGunSlotCount())
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.sub_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            }
+            if(this.getAASlotCount()>0) {
+                if (i == this.getMainGunSlotCount()+this.getSubGunSlotCount())
                     tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             if(this.getTorpedoSlotCount()>0) {
-                if (i == this.getMainGunSlotCount() + this.getAASlotCount())
+                if (i == this.getMainGunSlotCount()+this.getSubGunSlotCount() + this.getAASlotCount())
                     tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             ItemStack currentstack = Equipments.getStackInSlot(i);
