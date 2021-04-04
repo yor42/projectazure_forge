@@ -135,6 +135,59 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
                     matrixStackIn.pop();
                 }
 
+                if(Equipments.getStackInSlot(3) != ItemStack.EMPTY){
+
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem());
+
+                    matrixStackIn.push();
+                    RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
+                    matrixStackIn.translate((21+hostbone.getPositionX())/16, (7+hostbone.getPositionY()+riggingoffset)/16, (7.5+hostbone.getPositionZ())/16);
+                    matrixStackIn.rotate(new Quaternion(0, 0, 0, true));
+
+                    GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
+                    EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian((entitylivingbaseIn.getRotationYawHead()-entitylivingbaseIn.renderYawOffset)));
+                    EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.rotationPitch, 7.5F, -12.5F, false, true));
+                    render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                    matrixStackIn.pop();
+                }
+
+                if(Equipments.getStackInSlot(4) != ItemStack.EMPTY){
+
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(4).getItem());
+
+                    matrixStackIn.push();
+                    RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
+                    matrixStackIn.translate((21+hostbone.getPositionX())/16, (-1+hostbone.getPositionY()+riggingoffset)/16, (-10+hostbone.getPositionZ())/16);
+                    matrixStackIn.rotate(new Quaternion(0, 0, 0, true));
+
+                    GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
+                    EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian((entitylivingbaseIn.getRotationYawHead()-entitylivingbaseIn.renderYawOffset)));
+                    EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.rotationPitch, 7.5F, -12.5F, false, true));
+                    render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                    matrixStackIn.pop();
+                }
+
+
+                if(Equipments.getStackInSlot(8) != ItemStack.EMPTY){
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(8).getItem());
+                    if(EquipmentItem == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
+                        matrixStackIn.push();
+                        RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getTexture());
+                        matrixStackIn.translate((0 + hostbone.getPositionX()) / 16, (-10 + hostbone.getPositionY() + riggingoffset) / 16, (26.75 + hostbone.getPositionZ()) / 16);
+                        matrixStackIn.rotate(new Quaternion(90, 180, 0, true));
+                        GeoModel EquipmentModel = ((ItemEquipmentBase) EquipmentItem).getEquipmentModel().getModel(((ItemEquipmentBase) EquipmentItem).getEquipmentModel().getModelLocation(null));
+                        EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead() + entitylivingbaseIn.prevRotationYaw, 45F, -45F, false, true)));
+                        int AmmoCount = getRemainingAmmo(Equipments.getStackInSlot(4));
+                        EquipmentModel.getBone("torpedo4").get().setHidden(AmmoCount<4);
+                        EquipmentModel.getBone("torpedo3").get().setHidden(AmmoCount<3);
+                        EquipmentModel.getBone("torpedo2").get().setHidden(AmmoCount<2);
+                        EquipmentModel.getBone("torpedo1").get().setHidden(AmmoCount<1);
+
+                        render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                        matrixStackIn.pop();
+                    }
+                }
+
                 /*
                 //gun Renderer
                 if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
