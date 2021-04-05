@@ -145,12 +145,13 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
                 if (!AmmoStack.isEmpty()) {
 
+                    int i;
                     if (this.roundsPerReload > 0) {
-                        int i = Math.min(this.roundsPerReload, getRemainingAmmoofMag(AmmoStack));
-                        this.reloadAmmo(gun, i);
+                        i = Math.min(this.roundsPerReload, getRemainingAmmoofMag(AmmoStack));
                     } else {
-                        this.reloadAmmo(gun);
+                        i = Math.min(this.magCap, getRemainingAmmoofMag(AmmoStack));
                     }
+                    this.reloadAmmo(gun, i);
                     if(!entity.isCreative()){
                         AmmoStack.shrink(1);
                         //TODO: ADD BACK EMPTY MAG TO PLAYER'S INV!
