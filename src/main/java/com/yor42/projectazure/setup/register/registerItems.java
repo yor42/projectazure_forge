@@ -132,6 +132,11 @@ public class registerItems {
     .maxDamage(7)));
 
 
+    public static final RegistryObject<Item> MAGAZINE_5_56 = registerManager.ITEMS.register("5.56_magazine", () -> new ItemMagazine(enums.AmmoCalibur.AMMO_5_56, 30, new Item.Properties()
+            .group(PA_GROUP)
+            .maxStackSize(1)
+            .maxDamage(7)));
+
 
 
 

@@ -4,32 +4,24 @@ import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import org.lwjgl.system.CallbackI;
-import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -145,7 +137,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
                     Item MagItem = entity.inventory.getStackInSlot(i).getItem();
 
                     if (MagItem instanceof ItemMagazine) {
-                        if (((ItemMagazine) MagItem).getCalibur() == ((ItemGunBase) gun.getItem()).getCalibur() && this.getAmmo(entity.inventory.getStackInSlot(i)) > 0) {
+                        if (((ItemMagazine) MagItem).getCalibur() == ((ItemGunBase) gun.getItem()).getCalibur() && getRemainingAmmoofMag(entity.inventory.getStackInSlot(i)) > 0) {
                             AmmoStack = entity.inventory.getStackInSlot(i);
                         }
                     }
@@ -154,7 +146,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
                 if (!AmmoStack.isEmpty()) {
 
                     if (this.roundsPerReload > 0) {
-                        int i = Math.min(this.roundsPerReload, this.getAmmo(AmmoStack));
+                        int i = Math.min(this.roundsPerReload, getRemainingAmmoofMag(AmmoStack));
                         this.reloadAmmo(gun, i);
                     } else {
                         this.reloadAmmo(gun);
@@ -169,6 +161,13 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
             }
         }
         return false;
+    }
+
+    public static int getRemainingAmmoofMag(ItemStack stack){
+        if(stack.getItem() instanceof ItemMagazine){
+            return ((ItemMagazine) stack.getItem()).getMagCap()-stack.getOrCreateTag().getInt("usedAmmo");
+        }
+        return 0;
     }
 
     public boolean shootGunLivingEntity(ItemStack gun, World world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {

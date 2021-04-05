@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.item.ItemStack;
 
 public class ItemMagazine extends ItemBaseTooltip{
 
@@ -13,7 +14,7 @@ public class ItemMagazine extends ItemBaseTooltip{
         this.Ammocount = AmmoCount;
     }
 
-    public int getAmmocount() {
+    public int getMagCap() {
         return this.Ammocount;
     }
 
