@@ -2,10 +2,12 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -53,13 +55,20 @@ public class GunFiredPacket{
                     if(!message.offHand) {
                         if (mainDelay <= 0) {
                             boolean shouldDoReloadAnim = ((ItemGunBase) heldStack.getItem()).shootGun(heldStack, playerEntity.getEntityWorld(), playerEntity, message.isZooming, hand, null);
-                            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getEntityId(), shouldDoReloadAnim));
+                            if(shouldDoReloadAnim || getAmmo(heldStack)>0) {
+                                Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getEntityId(), shouldDoReloadAnim));
+                            }
                         }
                     }
                 }
             }
         });
         ctx.get().setPacketHandled(true);
+    }
+
+    public static short getAmmo(ItemStack stack){
+        CompoundNBT compound = stack.getOrCreateTag();
+        return compound.getShort("ammo");
     }
 
 

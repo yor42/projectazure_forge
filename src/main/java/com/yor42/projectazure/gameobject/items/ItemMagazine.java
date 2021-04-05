@@ -14,6 +14,16 @@ public class ItemMagazine extends ItemBaseTooltip{
         this.Ammocount = AmmoCount;
     }
 
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        return (float)stack.getOrCreateTag().getInt("usedAmmo")/this.Ammocount;
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return true;
+    }
+
     public int getMagCap() {
         return this.Ammocount;
     }

@@ -26,6 +26,8 @@ public class itemModelProvider extends ItemModelProvider {
 
         buildModel("bandage_roll");
 
+        buildModel("5.56_magazine");
+
         buildModelWisdomCube("spawnayanami");
         buildModelWisdomCube("spawngangwon");
         buildModelWisdomCube("spawnenterprise");

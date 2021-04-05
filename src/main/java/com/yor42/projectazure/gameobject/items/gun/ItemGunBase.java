@@ -34,6 +34,8 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
     private int minFireDelay;
     private int reloadDelay;
 
+    private Item MagItem;
+
     private final SoundEvent fireSound;
     private SoundEvent reloadSound;
     private float damage, accuracy;
@@ -43,7 +45,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
     public AnimationFactory factory = new AnimationFactory(this);
 
-    public ItemGunBase(boolean semiAuto, int minFiretime, int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int roundsPerReload, float accuracy, Properties properties, boolean isTwohanded) {
+    public ItemGunBase(boolean semiAuto, int minFiretime, int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int roundsPerReload, float accuracy, Properties properties, boolean isTwohanded, Item MagItem) {
         super(properties);
         this.isSemiAuto = semiAuto;
         this.minFireDelay = minFiretime;
@@ -55,6 +57,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
         this.magCap = clipsize;
         this.roundsPerReload = roundsPerReload;
         this.isTwoHanded = isTwohanded;
+        this.MagItem = MagItem;
     }
 
     public SoundEvent getFireSound() {
@@ -102,6 +105,10 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
         return true;
     }
 
+    public Item getMagItem(){
+        return this.MagItem;
+    };
+
     protected abstract void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem);
 
     public boolean shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
@@ -134,10 +141,10 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
                 ItemStack AmmoStack = ItemStack.EMPTY;
 
                 for (int i = 0; i < entity.inventory.getSizeInventory(); i++) {
-                    Item MagItem = entity.inventory.getStackInSlot(i).getItem();
+                    Item MagCandidate = entity.inventory.getStackInSlot(i).getItem();
 
-                    if (MagItem instanceof ItemMagazine) {
-                        if (((ItemMagazine) MagItem).getCalibur() == ((ItemGunBase) gun.getItem()).getCalibur() && getRemainingAmmoofMag(entity.inventory.getStackInSlot(i)) > 0) {
+                    if (MagCandidate == ((ItemGunBase) gun.getItem()).getMagItem()) {
+                        if (getRemainingAmmoofMag(entity.inventory.getStackInSlot(i)) > 0) {
                             AmmoStack = entity.inventory.getStackInSlot(i);
                         }
                     }
@@ -154,7 +161,9 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
                     this.reloadAmmo(gun, i);
                     if(!entity.isCreative()){
                         AmmoStack.shrink(1);
-                        //TODO: ADD BACK EMPTY MAG TO PLAYER'S INV!
+                        ItemStack EmptyMag = new ItemStack(((ItemGunBase) gun.getItem()).getMagItem());
+                        setUsedAmmoofMag(EmptyMag, ((ItemMagazine)EmptyMag.getItem()).getMagCap());
+                        entity.inventory.addItemStackToInventory(EmptyMag);
                     }
                     return true;
                 }
@@ -169,6 +178,12 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
             return ((ItemMagazine) stack.getItem()).getMagCap()-stack.getOrCreateTag().getInt("usedAmmo");
         }
         return 0;
+    }
+
+    public static void setUsedAmmoofMag(ItemStack stack, int value){
+        if(stack.getItem() instanceof ItemMagazine){
+            stack.getOrCreateTag().putInt("usedAmmo", value);
+        }
     }
 
     public boolean shootGunLivingEntity(ItemStack gun, World world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
