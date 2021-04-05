@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.gun;
 
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
+import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.util.ITooltipFlag;
@@ -111,44 +112,63 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
     protected abstract void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem);
 
-    public boolean shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target){
+    public boolean shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
 
+        if (gun.getItem() instanceof ItemGunBase) {
+            ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(entity);
+            //AnimationController controller = GeckoLibUtil.getControllerForStack(this.getFactory(), gun, this.getFactoryName());
+            int ammo = this.getAmmo(gun);
+            if (ammo > 0) {
+                if (capability.getDelay(hand) <= 0) {
 
-        ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(entity);
-        //AnimationController controller = GeckoLibUtil.getControllerForStack(this.getFactory(), gun, this.getFactoryName());
-        int ammo = this.getAmmo(gun);
-        if(ammo>0 ) {
-            if (capability.getDelay(hand) <= 0) {
-
-                entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
-                if (!entity.isCreative()) {
+                    entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
+                    if (!entity.isCreative()) {
                         this.useAmmo(gun, (short) 1);
-                }
-                if(!world.isRemote()) {
+                    }
+                    if (!world.isRemote()) {
 
                         this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
 
                         capability.setDelay(hand, this.getMinFireDelay());
+                    }
+
+                }
+                return false;
+            } else {
+                if (!world.isRemote()) {
+                    capability.setDelay(hand, this.reloadDelay - this.minFireDelay);
                 }
 
-            }
-            return false;
-        }
-        else {
-            if(!world.isRemote()) {
-                capability.setDelay(hand, this.reloadDelay - this.minFireDelay);
-            }
-            if (this.roundsPerReload > 0) {
-                int i = 1;
-                while (i < this.roundsPerReload) {
-                    i++;
+                ItemStack AmmoStack = ItemStack.EMPTY;
+
+                for (int i = 0; i < entity.inventory.getSizeInventory(); i++) {
+                    Item MagItem = entity.inventory.getStackInSlot(i).getItem();
+
+                    if (MagItem instanceof ItemMagazine) {
+                        if (((ItemMagazine) MagItem).getCalibur() == ((ItemGunBase) gun.getItem()).getCalibur() && this.getAmmo(entity.inventory.getStackInSlot(i)) > 0) {
+                            AmmoStack = entity.inventory.getStackInSlot(i);
+                        }
+                    }
                 }
-                this.reloadAmmo(gun, i);
-            } else {
-                this.reloadAmmo(gun);
+
+                if (!AmmoStack.isEmpty()) {
+
+                    if (this.roundsPerReload > 0) {
+                        int i = Math.min(this.roundsPerReload, this.getAmmo(AmmoStack));
+                        this.reloadAmmo(gun, i);
+                    } else {
+                        this.reloadAmmo(gun);
+                    }
+                    if(!entity.isCreative()){
+                        AmmoStack.shrink(1);
+                        //TODO: ADD BACK EMPTY MAG TO PLAYER'S INV!
+                    }
+                    return true;
+                }
+                //TODO: ELSE PLAY CLICK SOUND
             }
-            return true;
         }
+        return false;
     }
 
     public boolean shootGunLivingEntity(ItemStack gun, World world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
