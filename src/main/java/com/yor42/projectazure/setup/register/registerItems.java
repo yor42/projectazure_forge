@@ -31,6 +31,11 @@ import static com.yor42.projectazure.setup.register.registerManager.*;
 
 public class registerItems {
 
+    public static final RegistryObject<Item> MAGAZINE_5_56 = registerManager.ITEMS.register("5.56_magazine", () -> new ItemMagazine(enums.AmmoCalibur.AMMO_5_56, 30, new Item.Properties()
+            .group(PA_GROUP)
+            .maxStackSize(1)
+            .maxDamage(7)));
+
     public static final RegistryObject<Item> Rainbow_Wisdom_Cube = registerManager.ITEMS.register("rainbow_wisdomcube", () -> new itemRainbowWisdomCube(new Item.Properties()
             .group(PA_GROUP)
             .rarity(Rarity.EPIC)));
@@ -74,7 +79,7 @@ public class registerItems {
 
     public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.BLOCK_LEVER_CLICK, 0, (float) 0.3, new Item.Properties()
             .setISTER(() -> ItemAbydos550Renderer::new)
-            .group(PA_GROUP).maxStackSize(1), true));
+            .group(PA_GROUP).maxStackSize(1), true, MAGAZINE_5_56.get()));
 
 
 
@@ -130,12 +135,6 @@ public class registerItems {
             .group(PA_GROUP)
     .maxStackSize(1)
     .maxDamage(7)));
-
-
-    public static final RegistryObject<Item> MAGAZINE_5_56 = registerManager.ITEMS.register("5.56_magazine", () -> new ItemMagazine(enums.AmmoCalibur.AMMO_5_56, 30, new Item.Properties()
-            .group(PA_GROUP)
-            .maxStackSize(1)
-            .maxDamage(7)));
 
 
 

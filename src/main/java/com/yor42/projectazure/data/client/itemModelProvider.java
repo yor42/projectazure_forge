@@ -13,8 +13,17 @@ public class itemModelProvider extends ItemModelProvider {
         super(generator, defined.MODID, existingFileHelper);
     }
 
+
     @Override
     protected void registerModels() {
+
+        /*
+        Build Ore Block Item model
+         */
+        buildOreModel("ore_stone_bauxite");
+        buildOreModel("ore_stone_copper");
+        buildOreModel("ore_stone_tin");
+        buildOreModel("ore_stone_lead");
 
         buildModel("rainbow_wisdomcube");
         buildModel("wisdomcube");
@@ -37,7 +46,11 @@ public class itemModelProvider extends ItemModelProvider {
 
     }
 
-    private ItemModelBuilder buildModel(String name){
+    public void buildOreModel(String name){
+        withExistingParent(name, modLoc("block/"+name));
+    }
+
+    public ItemModelBuilder buildModel(String name){
         ModelFile itemGenerated = getExistingFile(mcLoc("item/generated"));
         return buildModel(itemGenerated, name);
     }

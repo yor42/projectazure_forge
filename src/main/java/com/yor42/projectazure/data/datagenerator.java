@@ -1,5 +1,6 @@
 package com.yor42.projectazure.data;
 
+import com.yor42.projectazure.data.client.BlockModelProvider;
 import com.yor42.projectazure.data.client.itemModelProvider;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.data.DataGenerator;
@@ -17,6 +18,7 @@ public class datagenerator {
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper filehelper = event.getExistingFileHelper();
 
+        gen.addProvider(new BlockModelProvider(gen, filehelper));
         gen.addProvider(new itemModelProvider(gen, filehelper));
     }
 

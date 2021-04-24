@@ -61,6 +61,13 @@ public class Main
         }
     };
 
+    public static ItemGroup PA_RESOURCES = new ItemGroup("PA_RESOURCE") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(registerBlocks.BAUXITE_ORE.get().asItem());
+        }
+    };
+
     public Main() {
 
         MinecraftForge.EVENT_BUS.register(new ModBusEventHandler());
