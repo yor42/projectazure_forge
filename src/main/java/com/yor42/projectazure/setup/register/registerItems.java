@@ -25,11 +25,27 @@ import net.minecraftforge.fml.RegistryObject;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.yor42.projectazure.Main.PA_GROUP;
-import static com.yor42.projectazure.Main.PA_SHIPS;
+import static com.yor42.projectazure.Main.*;
 import static com.yor42.projectazure.setup.register.registerManager.*;
 
 public class registerItems {
+
+    //Resources.
+    //Remove on 1.17
+    public static final RegistryObject<Item> INGOT_COPPER = registerManager.ITEMS.register("ingot_copper", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> INGOT_LEAD = registerManager.ITEMS.register("ingot_lead", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> INGOT_TIN = registerManager.ITEMS.register("ingot_tin", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> INGOT_ALUMINIUM = registerManager.ITEMS.register("ingot_aluminium", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> INGOT_BRONZE = registerManager.ITEMS.register("ingot_bronze", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
 
     public static final RegistryObject<Item> MAGAZINE_5_56 = registerManager.ITEMS.register("5.56_magazine", () -> new ItemMagazine(enums.AmmoCalibur.AMMO_5_56, 30, new Item.Properties()
             .group(PA_GROUP)

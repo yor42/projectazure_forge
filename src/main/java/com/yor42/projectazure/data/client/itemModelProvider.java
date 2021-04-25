@@ -17,6 +17,13 @@ public class itemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
 
+        buildModel("ingot_copper");
+        buildModel("ingot_tin");
+        buildModel("ingot_bronze");
+        buildModel("ingot_lead");
+        buildModel("ingot_aluminium");
+
+
         /*
         Build Ore Block Item model
          */

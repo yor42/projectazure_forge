@@ -54,17 +54,17 @@ public class Main
         }
     };
 
-    public static ItemGroup PA_SHIPS = new ItemGroup("PA_SHIP") {
+    public static ItemGroup PA_SHIPS = new ItemGroup("pa_ship") {
         @Override
         public ItemStack createIcon() {
             return new ItemStack(registerItems.WISDOM_CUBE.get());
         }
     };
 
-    public static ItemGroup PA_RESOURCES = new ItemGroup("PA_RESOURCE") {
+    public static ItemGroup PA_RESOURCES = new ItemGroup("pa_resources") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(registerBlocks.BAUXITE_ORE.get().asItem());
+            return new ItemStack(registerItems.INGOT_COPPER.get().asItem());
         }
     };
 
