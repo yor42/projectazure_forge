@@ -5,6 +5,7 @@ import com.yor42.projectazure.data.client.itemModelProvider;
 import com.yor42.projectazure.data.common.BlockTagProvider;
 import com.yor42.projectazure.data.common.ItemTagProvider;
 import com.yor42.projectazure.data.common.RecipeProvider;
+import com.yor42.projectazure.data.common.loot.LootTableProvider;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -27,7 +28,7 @@ public class datagenerator {
         BlockTagProvider blockTagProvider = new BlockTagProvider(gen, filehelper);
         gen.addProvider(blockTagProvider);
         gen.addProvider(new ItemTagProvider(gen, blockTagProvider, filehelper));
-
+        gen.addProvider(new LootTableProvider(gen));
         gen.addProvider(new RecipeProvider(gen));
     }
 

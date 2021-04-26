@@ -32,10 +32,18 @@ public class ModTags {
         public static final ITag.INamedTag<Item> INGOT_BRONZE = forge("ingots/bronze");
         public static final ITag.INamedTag<Item> INGOT_LEAD = forge("ingots/lead");
 
+        public static final ITag.INamedTag<Item> DUST_ALUMINIUM = forge("dusts/aluminium");
+        public static final ITag.INamedTag<Item> DUST_COPPER = forge("dusts/copper");
+        public static final ITag.INamedTag<Item> DUST_TIN = forge("dusts/tin");
+        public static final ITag.INamedTag<Item> DUST_BRONZE = forge("dusts/bronze");
+        public static final ITag.INamedTag<Item> DUST_LEAD = forge("dusts/lead");
+
         public static final ITag.INamedTag<Item> ORES_ALUMINIUM = forge("ores/aluminium");
         public static final ITag.INamedTag<Item> ORES_COPPER = forge("ores/copper");
         public static final ITag.INamedTag<Item> ORES_TIN = forge("ores/tin");
         public static final ITag.INamedTag<Item> ORES_LEAD = forge("ores/lead");
+
+        public static final ITag.INamedTag<Item> MORTAR = forge("mortar");
 
         private static ITag.INamedTag<Item> forge(String path) {
             return ItemTags.makeWrapperTag(new ResourceLocation("forge", path).toString());

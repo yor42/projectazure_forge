@@ -12,7 +12,9 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.Color;
@@ -20,7 +22,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -46,6 +50,45 @@ public class registerItems {
 
     public static final RegistryObject<Item> INGOT_BRONZE = registerManager.ITEMS.register("ingot_bronze", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> INGOT_ZINC = registerManager.ITEMS.register("ingot_zinc", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> DUST_COPPER = registerManager.ITEMS.register("dust_copper", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> DUST_LEAD = registerManager.ITEMS.register("dust_lead", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> DUST_TIN = registerManager.ITEMS.register("dust_tin", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> DUST_ALUMINIUM = registerManager.ITEMS.register("dust_aluminium", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> DUST_BRONZE = registerManager.ITEMS.register("dust_bronze", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> DUST_ZINC = registerManager.ITEMS.register("dust_zinc", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    //crafting items
+    public static final RegistryObject<Item> MORTAR_IRON = registerManager.ITEMS.register("mortar_iron", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES).maxDamage(50)){
+        @Override
+        public boolean hasContainerItem(ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public ItemStack getContainerItem(ItemStack itemStack) {
+            ItemStack stack = itemStack.copy();
+            if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
+                return stack;
+            }
+            else return ItemStack.EMPTY;
+        }
+    });
 
     public static final RegistryObject<Item> MAGAZINE_5_56 = registerManager.ITEMS.register("5.56_magazine", () -> new ItemMagazine(enums.AmmoCalibur.AMMO_5_56, 30, new Item.Properties()
             .group(PA_GROUP)

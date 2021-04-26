@@ -22,6 +22,16 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("ingot_bronze");
         buildModel("ingot_lead");
         buildModel("ingot_aluminium");
+        buildModel("ingot_zinc");
+
+        buildModel("dust_copper");
+        buildModel("dust_tin");
+        buildModel("dust_bronze");
+        buildModel("dust_lead");
+        buildModel("dust_aluminium");
+        buildModel("dust_zinc");
+
+        buildModel("mortar_iron");
 
 
         /*
