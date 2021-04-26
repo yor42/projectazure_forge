@@ -34,14 +34,31 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.getOrCreateBuilder(ModTags.Items.INGOT_TIN).add(registerItems.INGOT_TIN.get());
         this.getOrCreateBuilder(ModTags.Items.INGOT_BRONZE).add(registerItems.INGOT_BRONZE.get());
         this.getOrCreateBuilder(ModTags.Items.INGOT_LEAD).add(registerItems.INGOT_LEAD.get());
+        this.getOrCreateBuilder(ModTags.Items.INGOT_ZINC).add(registerItems.INGOT_ZINC.get());
+        this.getOrCreateBuilder(ModTags.Items.INGOT_STEEL).add(registerItems.INGOT_STEEL.get());
+
+        this.getOrCreateBuilder(ModTags.Items.PLATE_ALUMINIUM).add(registerItems.PLATE_ALUMINIUM.get());
+        this.getOrCreateBuilder(ModTags.Items.PLATE_COPPER).add(registerItems.PLATE_COPPER.get());
+        this.getOrCreateBuilder(ModTags.Items.PLATE_TIN).add(registerItems.PLATE_TIN.get());
+        this.getOrCreateBuilder(ModTags.Items.PLATE_BRONZE).add(registerItems.PLATE_BRONZE.get());
+        this.getOrCreateBuilder(ModTags.Items.PLATE_LEAD).add(registerItems.PLATE_LEAD.get());
+        this.getOrCreateBuilder(ModTags.Items.PLATE_ZINC).add(registerItems.PLATE_ZINC.get());
+        this.getOrCreateBuilder(ModTags.Items.PLATE_IRON).add(registerItems.PLATE_IRON.get());
+        this.getOrCreateBuilder(ModTags.Items.PLATE_STEEL).add(registerItems.PLATE_STEEL.get());
 
         this.getOrCreateBuilder(ModTags.Items.DUST_ALUMINIUM).add(registerItems.DUST_ALUMINIUM.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_COPPER).add(registerItems.DUST_COPPER.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_TIN).add(registerItems.DUST_TIN.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_BRONZE).add(registerItems.DUST_BRONZE.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_LEAD).add(registerItems.DUST_LEAD.get());
+        this.getOrCreateBuilder(ModTags.Items.DUST_IRON).add(registerItems.DUST_IRON.get());
+        this.getOrCreateBuilder(ModTags.Items.DUST_ZINC).add(registerItems.DUST_ZINC.get());
+        this.getOrCreateBuilder(ModTags.Items.DUST_COAL).add(registerItems.DUST_COAL.get());
+        this.getOrCreateBuilder(ModTags.Items.DUST_STEEL).add(registerItems.DUST_STEEL.get());
 
         this.getOrCreateBuilder(ModTags.Items.MORTAR).add(registerItems.MORTAR_IRON.get());
+
+        this.getOrCreateBuilder(ModTags.Items.HAMMER).add(registerItems.HAMMER_IRON.get());
 
     }
 }

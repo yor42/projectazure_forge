@@ -8,10 +8,12 @@ import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.function.Consumer;
@@ -24,11 +26,40 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-        BuildMetalRecipe(consumer, 0.5F, new Metals("copper", registerItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).ore(registerBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(registerItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("tin", registerItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).ore(registerBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(registerItems.DUST_TIN.get(), ModTags.Items.DUST_TIN));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("lead", registerItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).ore(registerBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(registerItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", registerItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).dust(registerItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", registerItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).ore(registerBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(registerItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("copper", registerItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).ore(registerBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(registerItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(registerItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("tin", registerItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).ore(registerBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(registerItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(registerItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("lead", registerItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).ore(registerBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(registerItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(registerItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", registerItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).dust(registerItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE).plates(registerItems.PLATE_BRONZE.get(), ModTags.Items.PLATE_BRONZE));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", registerItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).ore(registerBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(registerItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM).plates(registerItems.PLATE_ALUMINIUM.get(), ModTags.Items.PLATE_ALUMINIUM));
+
+        BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(registerItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(registerItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON));
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.DUST_BRONZE.get(), 2)
+                .key('C', ModTags.Items.DUST_COPPER)
+                .key('T', ModTags.Items.DUST_TIN)
+                .patternLine("CC")
+                .patternLine("CT")
+                .addCriterion("has_copper", hasItem(ModTags.Items.DUST_COPPER))
+                .addCriterion("has_tin", hasItem(ModTags.Items.DUST_TIN))
+                .build(consumer, new ResourceLocation("bronze_powder_alloying"));
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.DUST_STEEL.get(), 2)
+                .key('I', ModTags.Items.DUST_IRON)
+                .key('C', ModTags.Items.DUST_COAL)
+                .patternLine("II")
+                .patternLine("IC")
+                .addCriterion("has_coal", hasItem(ModTags.Items.DUST_COAL))
+                .addCriterion("has_iron", hasItem(ModTags.Items.DUST_IRON))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.STEEL_PIPE.get())
+                .key('S', ModTags.Items.INGOT_STEEL)
+                .patternLine(" S ")
+                .patternLine("S S")
+                .patternLine(" S ")
+                .addCriterion("has_steel", hasItem(ModTags.Items.INGOT_STEEL))
+                .build(consumer);
+
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {
@@ -88,6 +119,20 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                     .build(consumer);
         }
 
+        if (metal.plate != null) {
+            ShapelessRecipeBuilder.shapelessRecipe(metal.plate, 1)
+                    .addIngredient(ModTags.Items.HAMMER)
+                    .addIngredient(metal.ingotTag)
+                    .addCriterion("has_item", hasIngot)
+                    .build(consumer);
+            ShapedRecipeBuilder.shapedRecipe(metal.plate)
+                    .key('#', metal.ingotTag)
+                    .patternLine("###")
+                    .addCriterion("has_item", hasIngot)
+                    .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_without_hammer"));
+        }
+
+
     }
 
 
@@ -104,6 +149,8 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         private ITag<Item> nuggetTag;
         private IItemProvider dust;
         private ITag<Item> dustTag;
+        private IItemProvider plate;
+        private ITag<Item> plateTag;
         private ITag<Item> chunksTag;
 
         public Metals(String name, IItemProvider ingot, ITag<Item> ingotTag) {
@@ -138,6 +185,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
         public Metals chunks(ITag<Item> tag) {
             this.chunksTag = tag;
+            return this;
+        }
+
+        public Metals plates(IItemProvider item, ITag<Item> tag) {
+            this.plate = item;
+            this.plateTag = tag;
             return this;
         }
     }

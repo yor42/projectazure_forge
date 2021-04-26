@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "II",
+    "IC"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:dusts/iron"
+    },
+    "C": {
+      "tag": "forge:dusts/coal"
+    }
+  },
+  "result": {
+    "item": "projectazure:dust_steel",
+    "count": 2
+  }
+}

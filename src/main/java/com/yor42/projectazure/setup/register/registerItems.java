@@ -24,6 +24,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -38,43 +39,83 @@ public class registerItems {
     //Remove on 1.17
     public static final RegistryObject<Item> INGOT_COPPER = registerManager.ITEMS.register("ingot_copper", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> INGOT_LEAD = registerManager.ITEMS.register("ingot_lead", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> INGOT_TIN = registerManager.ITEMS.register("ingot_tin", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> INGOT_ALUMINIUM = registerManager.ITEMS.register("ingot_aluminium", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> INGOT_BRONZE = registerManager.ITEMS.register("ingot_bronze", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> INGOT_ZINC = registerManager.ITEMS.register("ingot_zinc", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> INGOT_STEEL = registerManager.ITEMS.register("ingot_steel", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
 
     public static final RegistryObject<Item> DUST_COPPER = registerManager.ITEMS.register("dust_copper", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> DUST_LEAD = registerManager.ITEMS.register("dust_lead", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> DUST_TIN = registerManager.ITEMS.register("dust_tin", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> DUST_ALUMINIUM = registerManager.ITEMS.register("dust_aluminium", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> DUST_BRONZE = registerManager.ITEMS.register("dust_bronze", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
     public static final RegistryObject<Item> DUST_ZINC = registerManager.ITEMS.register("dust_zinc", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> DUST_IRON = registerManager.ITEMS.register("dust_iron", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> DUST_COAL = registerManager.ITEMS.register("dust_coal", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> DUST_STEEL = registerManager.ITEMS.register("dust_steel", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+
+    public static final RegistryObject<Item> PLATE_COPPER = registerManager.ITEMS.register("plate_copper", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PLATE_LEAD = registerManager.ITEMS.register("plate_lead", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PLATE_TIN = registerManager.ITEMS.register("plate_tin", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PLATE_ALUMINIUM = registerManager.ITEMS.register("plate_aluminium", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PLATE_BRONZE = registerManager.ITEMS.register("plate_bronze", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PLATE_ZINC = registerManager.ITEMS.register("plate_zinc", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PLATE_IRON = registerManager.ITEMS.register("plate_iron", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PLATE_STEEL = registerManager.ITEMS.register("plate_steel", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+
+    public static final RegistryObject<Item> IRON_PIPE = registerManager.ITEMS.register("iron_pipe", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> STEEL_PIPE = registerManager.ITEMS.register("steel_pipe", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
 
     //crafting items
     public static final RegistryObject<Item> MORTAR_IRON = registerManager.ITEMS.register("mortar_iron", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES).maxDamage(50)){
+        @Override
+        public boolean hasContainerItem(ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public ItemStack getContainerItem(ItemStack itemStack) {
+            ItemStack stack = itemStack.copy();
+            if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
+                return stack;
+            }
+            else return ItemStack.EMPTY;
+        }
+    });
+
+    public static final RegistryObject<Item> HAMMER_IRON = registerManager.ITEMS.register("hammer_iron", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES).maxDamage(43)){
         @Override
         public boolean hasContainerItem(ItemStack stack) {
             return true;

@@ -24,14 +24,24 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("ingot_aluminium");
         buildModel("ingot_zinc");
 
+        buildModel("plate_copper");
+        buildModel("plate_tin");
+        buildModel("plate_bronze");
+        buildModel("plate_lead");
+        buildModel("plate_aluminium");
+        buildModel("plate_zinc");
+
         buildModel("dust_copper");
         buildModel("dust_tin");
         buildModel("dust_bronze");
         buildModel("dust_lead");
         buildModel("dust_aluminium");
         buildModel("dust_zinc");
+        buildModel("dust_coal");
+        buildModel("dust_iron");
 
         buildModel("mortar_iron");
+        buildModel("hammer_iron");
 
 
         /*
