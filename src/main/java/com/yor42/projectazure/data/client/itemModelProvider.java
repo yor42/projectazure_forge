@@ -23,6 +23,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("ingot_lead");
         buildModel("ingot_aluminium");
         buildModel("ingot_zinc");
+        buildModel("ingot_steel");
 
         buildModel("plate_copper");
         buildModel("plate_tin");
@@ -30,6 +31,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("plate_lead");
         buildModel("plate_aluminium");
         buildModel("plate_zinc");
+        buildModel("plate_steel");
+        buildModel("plate_iron");
 
         buildModel("dust_copper");
         buildModel("dust_tin");
@@ -39,9 +42,16 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("dust_zinc");
         buildModel("dust_coal");
         buildModel("dust_iron");
+        buildModel("dust_steel");
 
         buildModel("mortar_iron");
         buildModel("hammer_iron");
+
+        buildModel("iron_pipe");
+        buildModel("steel_pipe");
+        buildModel("mechanical_parts");
+        buildModel("motor_basic");
+        buildModel("circuit_primitive");
 
 
         /*

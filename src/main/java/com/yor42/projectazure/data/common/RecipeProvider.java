@@ -53,13 +53,24 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.STEEL_PIPE.get())
-                .key('S', ModTags.Items.INGOT_STEEL)
+                .key('S', ModTags.Items.PLATE_STEEL)
                 .patternLine(" S ")
                 .patternLine("S S")
                 .patternLine(" S ")
                 .addCriterion("has_steel", hasItem(ModTags.Items.INGOT_STEEL))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(registerItems.EQUIPMENT_GUN_127MM.get())
+                .key('S', ModTags.Items.PLATE_STEEL)
+                .key('B', registerItems.STEEL_PIPE.get())
+                .key('P', registerItems.MECHANICAL_PARTS.get())
+                .key('M', registerItems.BASIC_MOTOR.get())
+                .key('E', registerItems.PRIMITIVE_CIRCUIT.get())
+                .patternLine(" SS")
+                .patternLine("BPS")
+                .patternLine("EME")
+                .addCriterion("has_steel", hasItem(registerItems.PRIMITIVE_CIRCUIT.get()))
+                .build(consumer);
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {

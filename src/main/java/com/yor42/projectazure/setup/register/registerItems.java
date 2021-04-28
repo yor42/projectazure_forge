@@ -94,6 +94,12 @@ public class registerItems {
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> STEEL_PIPE = registerManager.ITEMS.register("steel_pipe", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> MECHANICAL_PARTS = registerManager.ITEMS.register("mechanical_parts", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> BASIC_MOTOR = registerManager.ITEMS.register("motor_basic", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PRIMITIVE_CIRCUIT = registerManager.ITEMS.register("circuit_primitive", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
 
 
     //crafting items
