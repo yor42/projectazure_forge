@@ -53,6 +53,10 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("motor_basic");
         buildModel("circuit_primitive");
 
+        buildModel("copper_wire");
+        buildModel("copper_coil");
+        buildModel("steel_cutter");
+
 
         /*
         Build Ore Block Item model

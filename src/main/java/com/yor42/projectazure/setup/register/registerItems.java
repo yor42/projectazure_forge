@@ -100,6 +100,10 @@ public class registerItems {
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> PRIMITIVE_CIRCUIT = registerManager.ITEMS.register("circuit_primitive", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> COPPER_WIRE = registerManager.ITEMS.register("copper_wire", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> COPPER_COIL = registerManager.ITEMS.register("copper_coil", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
 
 
     //crafting items
@@ -121,6 +125,23 @@ public class registerItems {
     });
 
     public static final RegistryObject<Item> HAMMER_IRON = registerManager.ITEMS.register("hammer_iron", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES).maxDamage(43)){
+        @Override
+        public boolean hasContainerItem(ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public ItemStack getContainerItem(ItemStack itemStack) {
+            ItemStack stack = itemStack.copy();
+            if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
+                return stack;
+            }
+            else return ItemStack.EMPTY;
+        }
+    });
+
+    public static final RegistryObject<Item> STEEL_CUTTER = registerManager.ITEMS.register("steel_cutter", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES).maxDamage(43)){
         @Override
         public boolean hasContainerItem(ItemStack stack) {

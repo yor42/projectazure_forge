@@ -71,6 +71,23 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .patternLine("EME")
                 .addCriterion("has_steel", hasItem(registerItems.PRIMITIVE_CIRCUIT.get()))
                 .build(consumer);
+
+        ShapelessRecipeBuilder.shapelessRecipe(registerItems.COPPER_WIRE.get(), 3)
+                .addIngredient(ModTags.Items.CUTTER)
+                .addIngredient(ModTags.Items.PLATE_COPPER)
+                .addCriterion("has_copper_plate", hasItem(ModTags.Items.PLATE_COPPER))
+                .addCriterion("has_cutter", hasItem(ModTags.Items.CUTTER))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.COPPER_COIL.get(), 2)
+                .key('W', registerItems.COPPER_WIRE.get())
+                .key('B', registerItems.IRON_PIPE.get())
+                .patternLine("WBW")
+                .patternLine("WBW")
+                .patternLine("WBW")
+                .addCriterion("has_wire", hasItem(registerItems.COPPER_WIRE.get()))
+                .addCriterion("has_pipe", hasItem(registerItems.IRON_PIPE.get()))
+                .build(consumer);
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {

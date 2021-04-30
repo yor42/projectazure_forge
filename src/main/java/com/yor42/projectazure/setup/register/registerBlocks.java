@@ -1,6 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.blocks.MetalPressBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.OreBlock;
@@ -26,6 +27,10 @@ public class registerBlocks {
 
     public static final RegistryObject<Block> LEAD_ORE = register("ore_stone_lead", () ->
             new OreBlock((AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.STONE))), Main.PA_RESOURCES);
+
+
+    public static final RegistryObject<Block> METAL_PRESS = register("metal_press", () ->
+            new MetalPressBlock((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_RESOURCES);
 
     private static <T extends Block> RegistryObject<T> register_noblock(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);
