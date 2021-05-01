@@ -13,6 +13,8 @@ public class registerRecipes {
 
     public static class Types{
         public static final IRecipeType<PressingRecipe> PRESSING = IRecipeType.register(defined.MODID+"pressing");
+
+        public static void register(){}
     }
 
     public static class Serializers{
@@ -22,6 +24,10 @@ public class registerRecipes {
         private static <T extends IRecipe<?>> RegistryObject<IRecipeSerializer<T>> register(String name, Supplier<IRecipeSerializer<T>> serializer){
             return registerManager.RECIPE_SERIALIZERS.register(name, serializer);
         }
+
+        public static void register(){}
     }
+
+
 
 }

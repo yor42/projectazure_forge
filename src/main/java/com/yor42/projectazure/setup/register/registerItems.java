@@ -106,6 +106,24 @@ public class registerItems {
             .group(PA_RESOURCES)));
 
 
+    public static final RegistryObject<Item> MOLD_PLATE = registerManager.ITEMS.register("mold_plate", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES).maxDamage(128)){
+        @Override
+        public boolean hasContainerItem(ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public ItemStack getContainerItem(ItemStack itemStack) {
+            ItemStack stack = itemStack.copy();
+            if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
+                return stack;
+            }
+            else return ItemStack.EMPTY;
+        }
+    });
+
+
     //crafting items
     public static final RegistryObject<Item> MORTAR_IRON = registerManager.ITEMS.register("mortar_iron", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES).maxDamage(50)){

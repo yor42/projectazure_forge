@@ -57,6 +57,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("copper_coil");
         buildModel("steel_cutter");
 
+        buildModel("mold_plate");
+
 
         /*
         Build Ore Block Item model

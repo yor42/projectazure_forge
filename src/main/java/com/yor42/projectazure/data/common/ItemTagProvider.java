@@ -56,6 +56,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.getOrCreateBuilder(ModTags.Items.DUST_COAL).add(registerItems.DUST_COAL.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_STEEL).add(registerItems.DUST_STEEL.get());
 
+        this.getOrCreateBuilder(ModTags.Items.EXTRUSION_MOLD).add(registerItems.MOLD_PLATE.get());
 
         this.getOrCreateBuilder(ModTags.Items.MORTAR).add(registerItems.MORTAR_IRON.get());
         this.getOrCreateBuilder(ModTags.Items.CUTTER).add(registerItems.STEEL_CUTTER.get());

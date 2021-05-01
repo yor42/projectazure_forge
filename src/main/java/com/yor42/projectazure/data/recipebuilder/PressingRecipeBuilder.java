@@ -5,12 +5,15 @@ import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.IRequirementsStrategy;
 import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.CookingRecipeBuilder;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.CookingRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.IItemProvider;
@@ -36,8 +39,20 @@ public class PressingRecipeBuilder {
         this.processingTime = processingTime;
     }
 
+    public static PressingRecipeBuilder addRecipe(IItemProvider result, Ingredient ingredient, Ingredient mold, int count, int processingTime){
+        return new PressingRecipeBuilder(result, ingredient, mold, count, processingTime);
+    }
+
     public void build(Consumer<IFinishedRecipe> consumerIn) {
         this.build(consumerIn, Registry.ITEM.getKey(this.result));
+    }
+
+    /**
+     * Adds a criterion needed to unlock the recipe.
+     */
+    public PressingRecipeBuilder addCriterion(String name, ICriterionInstance criterionIn) {
+        this.advancementBuilder.withCriterion(name, criterionIn);
+        return this;
     }
 
     public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
@@ -92,7 +107,7 @@ public class PressingRecipeBuilder {
             }
 
             json.add("ingredient", this.ingredient.serialize());
-            json.add("mold", this.ingredient.serialize());
+            json.add("mold", this.mold.serialize());
             json.addProperty("result", ForgeRegistries.ITEMS.getKey(this.result).toString());
             json.addProperty("count", this.count);
             json.addProperty("cookingtime", this.cookingTime);

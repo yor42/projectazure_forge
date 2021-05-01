@@ -38,4 +38,12 @@ public class CustomEnergyStorage extends EnergyStorage {
         this.maxExtract = compound.getInt("energystorage_maxExtract");
     }
 
+    public void setEnergy(int value){
+        this.energy = value;
+    }
+
+    public void setMaxEnergy(int value){
+        this.capacity = value;
+    }
+
 }

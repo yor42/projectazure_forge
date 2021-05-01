@@ -15,6 +15,7 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         registerDropSelfLootTable(registerBlocks.COPPER_ORE.get());
         registerDropSelfLootTable(registerBlocks.TIN_ORE.get());
         registerDropSelfLootTable(registerBlocks.LEAD_ORE.get());
+        registerDropSelfLootTable(registerBlocks.METAL_PRESS.get());
     }
 
     @Override

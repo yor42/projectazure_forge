@@ -1,6 +1,7 @@
 package com.yor42.projectazure.data.common;
 
 import com.yor42.projectazure.data.ModTags;
+import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -15,6 +16,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.common.Mod;
+import org.lwjgl.system.CallbackI;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -88,6 +90,9 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_wire", hasItem(registerItems.COPPER_WIRE.get()))
                 .addCriterion("has_pipe", hasItem(registerItems.IRON_PIPE.get()))
                 .build(consumer);
+        PressingRecipeBuilder.addRecipe(registerItems.PLATE_IRON.get(), Ingredient.fromTag(Tags.Items.INGOTS_IRON), Ingredient.fromItems(registerItems.MOLD_PLATE.get()), 1, 200)
+                .addCriterion("hasmold", hasItem(registerItems.MOLD_PLATE.get()))
+                .build(consumer, new ResourceLocation("iron_plate_pressing"));
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {

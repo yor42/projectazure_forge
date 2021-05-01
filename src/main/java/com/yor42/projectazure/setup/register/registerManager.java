@@ -2,6 +2,7 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.containers.ContainerBAInventory;
 import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.containers.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
@@ -21,6 +22,7 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -48,6 +50,10 @@ public class registerManager {
 
     public static final ContainerType<ContainerBAInventory> BA_INVENTORY_TYPE = new ContainerType<ContainerBAInventory>(ContainerBAInventory::new);
     public static final RegistryObject<ContainerType<ContainerBAInventory>> BA_CONTAINER = CONTAINER.register("bluearchive_inventory", () -> BA_INVENTORY_TYPE);
+
+    public static final ContainerType<ContainerMetalPress> METAL_PRESS_CONTAINER_TYPE = IForgeContainerType.create(ContainerMetalPress::new);
+    public static final RegistryObject<ContainerType<ContainerMetalPress>> METAL_PRESS_CONTAINER = CONTAINER.register("metal_press_container", () -> METAL_PRESS_CONTAINER_TYPE);
+
 
     //entity
     public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(1F, 1.5F).build(ModResourceLocation("entityayanami").toString());
@@ -91,7 +97,8 @@ public class registerManager {
         registerBlocks.register();
         registerItems.register();
         registerTE.register();
-        registerRecipeSerializer.register();
+        registerRecipes.Serializers.register();
+        registerRecipes.Types.register();
     }
 
 
