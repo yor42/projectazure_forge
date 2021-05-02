@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:iron_plate_pressing"
+    ]
+  },
+  "criteria": {
+    "hasmold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "projectazure:mold_plate"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:iron_plate_pressing"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasmold",
+      "has_the_recipe"
+    ]
+  ]
+}

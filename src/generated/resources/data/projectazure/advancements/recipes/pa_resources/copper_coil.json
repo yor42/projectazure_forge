@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:copper_coil"
+    ]
+  },
+  "criteria": {
+    "has_wire": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "projectazure:copper_wire"
+          }
+        ]
+      }
+    },
+    "has_pipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "projectazure:iron_pipe"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:copper_coil"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wire",
+      "has_pipe",
+      "has_the_recipe"
+    ]
+  ]
+}
