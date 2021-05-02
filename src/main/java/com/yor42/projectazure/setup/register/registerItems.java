@@ -37,57 +37,33 @@ public class registerItems {
 
     //Resources.
     //Remove on 1.17
-    public static final RegistryObject<Item> INGOT_COPPER = registerManager.ITEMS.register("ingot_copper", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> INGOT_LEAD = registerManager.ITEMS.register("ingot_lead", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> INGOT_TIN = registerManager.ITEMS.register("ingot_tin", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> INGOT_ALUMINIUM = registerManager.ITEMS.register("ingot_aluminium", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> INGOT_BRONZE = registerManager.ITEMS.register("ingot_bronze", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> INGOT_ZINC = registerManager.ITEMS.register("ingot_zinc", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> INGOT_STEEL = registerManager.ITEMS.register("ingot_steel", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> INGOT_COPPER = registerManager.ITEMS.register("ingot_copper", () -> new ItemResource("copper", enums.ResourceType.INGOT));
+    public static final RegistryObject<Item> INGOT_LEAD = registerManager.ITEMS.register("ingot_lead", () ->new ItemResource("lead", enums.ResourceType.INGOT));
+    public static final RegistryObject<Item> INGOT_TIN = registerManager.ITEMS.register("ingot_tin", () -> new ItemResource("tin", enums.ResourceType.INGOT));
+    public static final RegistryObject<Item> INGOT_ALUMINIUM = registerManager.ITEMS.register("ingot_aluminium", () -> new ItemResource("aluminium", enums.ResourceType.INGOT));
+    public static final RegistryObject<Item> INGOT_BRONZE = registerManager.ITEMS.register("ingot_bronze", () -> new ItemResource("bronze", enums.ResourceType.INGOT));
+    public static final RegistryObject<Item> INGOT_ZINC = registerManager.ITEMS.register("ingot_zinc", () -> new ItemResource("zinc", enums.ResourceType.INGOT));
+    public static final RegistryObject<Item> INGOT_STEEL = registerManager.ITEMS.register("ingot_steel", () -> new ItemResource("steel", enums.ResourceType.INGOT));
 
-    public static final RegistryObject<Item> DUST_COPPER = registerManager.ITEMS.register("dust_copper", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> DUST_LEAD = registerManager.ITEMS.register("dust_lead", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> DUST_TIN = registerManager.ITEMS.register("dust_tin", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> DUST_ALUMINIUM = registerManager.ITEMS.register("dust_aluminium", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> DUST_BRONZE = registerManager.ITEMS.register("dust_bronze", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> DUST_ZINC = registerManager.ITEMS.register("dust_zinc", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> DUST_IRON = registerManager.ITEMS.register("dust_iron", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> DUST_COAL = registerManager.ITEMS.register("dust_coal", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> DUST_STEEL = registerManager.ITEMS.register("dust_steel", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> DUST_COPPER = registerManager.ITEMS.register("dust_copper", () -> new ItemResource("copper", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_LEAD = registerManager.ITEMS.register("dust_lead", () -> new ItemResource("lead", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_TIN = registerManager.ITEMS.register("dust_tin", () -> new ItemResource("tin", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_ALUMINIUM = registerManager.ITEMS.register("dust_aluminium", () -> new ItemResource("aluminium", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_BRONZE = registerManager.ITEMS.register("dust_bronze", () -> new ItemResource("bronze", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_ZINC = registerManager.ITEMS.register("dust_zinc", () -> new ItemResource("bronze", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_IRON = registerManager.ITEMS.register("dust_iron", () -> new ItemResource("iron", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_COAL = registerManager.ITEMS.register("dust_coal", () -> new ItemResource("coal", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_STEEL = registerManager.ITEMS.register("dust_steel", () -> new ItemResource("steel", enums.ResourceType.DUST));
 
 
-    public static final RegistryObject<Item> PLATE_COPPER = registerManager.ITEMS.register("plate_copper", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> PLATE_LEAD = registerManager.ITEMS.register("plate_lead", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> PLATE_TIN = registerManager.ITEMS.register("plate_tin", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> PLATE_ALUMINIUM = registerManager.ITEMS.register("plate_aluminium", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> PLATE_BRONZE = registerManager.ITEMS.register("plate_bronze", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> PLATE_ZINC = registerManager.ITEMS.register("plate_zinc", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> PLATE_IRON = registerManager.ITEMS.register("plate_iron", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> PLATE_STEEL = registerManager.ITEMS.register("plate_steel", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> PLATE_COPPER = registerManager.ITEMS.register("plate_copper", () -> new ItemResource("copper", enums.ResourceType.PLATE));
+    public static final RegistryObject<Item> PLATE_LEAD = registerManager.ITEMS.register("plate_lead", () -> new ItemResource("lead", enums.ResourceType.PLATE));
+    public static final RegistryObject<Item> PLATE_TIN = registerManager.ITEMS.register("plate_tin", () -> new ItemResource("tin", enums.ResourceType.PLATE));
+    public static final RegistryObject<Item> PLATE_ALUMINIUM = registerManager.ITEMS.register("plate_aluminium", () -> new ItemResource("aluminium", enums.ResourceType.PLATE));
+    public static final RegistryObject<Item> PLATE_BRONZE = registerManager.ITEMS.register("plate_bronze", () -> new ItemResource("bronze", enums.ResourceType.PLATE));
+    public static final RegistryObject<Item> PLATE_ZINC = registerManager.ITEMS.register("plate_zinc", () -> new ItemResource("zinc", enums.ResourceType.PLATE));
+    public static final RegistryObject<Item> PLATE_IRON = registerManager.ITEMS.register("plate_iron", () -> new ItemResource("iron", enums.ResourceType.PLATE));
+    public static final RegistryObject<Item> PLATE_STEEL = registerManager.ITEMS.register("plate_steel", () -> new ItemResource("steel", enums.ResourceType.PLATE));
 
 
     public static final RegistryObject<Item> IRON_PIPE = registerManager.ITEMS.register("iron_pipe", () -> new Item(new Item.Properties()

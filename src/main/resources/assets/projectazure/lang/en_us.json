@@ -12,6 +12,7 @@
 
   "item.projectazure.bandage_roll": "Roll of bandage",
 
+  "item.projectazure.mechanical_parts": "Mechanical Parts",
 
   "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
   "disc.brainpower.desc1": "LET THE BASS KICK O-oooooooooo AAAA E A A I A U",
@@ -72,6 +73,22 @@
   "entity.projectazure.entityenterprise": "USS Enterprise",
 
   "entity.projectazure.entityshiroko": "Shiroko",
+
+  "ingot": "ingot",
+  "plate": "plate",
+  "dust": "dust",
+  "wire": "wire",
+  "nugget": "nugget",
+  "ore": "ore",
+
+  "copper": "copper",
+  "tin": "tin",
+  "bronze": "bronze",
+  "aluminium": "aluminium",
+  "iron": "iron",
+  "zinc": "zinc",
+  "steel": "steel",
+  "coal": "coal",
 
   "death.attack.bonk": "%1$s was sent to horny jail",
   "gui.bainventory": "Inventory"

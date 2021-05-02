@@ -1,7 +1,6 @@
 package com.yor42.projectazure.libs;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.rand;
-import static com.yor42.projectazure.libs.utils.MathUtil.rollBooleanRNG;
 
 public class enums {
 
@@ -230,5 +229,41 @@ public class enums {
             return this.name;
         }
     }
+
+    public enum Material{
+        COPPER("copper"),
+        TIN("tin"),
+        BRONZE("bronze");
+
+        private final String name;
+
+        Material(String name){
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+    }
+
+    public enum ResourceType {
+        INGOT("ingot"),
+        PLATE("plate"),
+        DUST("dust"),
+        WIRE("wire"),
+        ORE("ore"),
+        NUGGET("nugget");
+
+        private final String name;
+
+        ResourceType(String name){
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+    }
+
 
 }
