@@ -30,7 +30,7 @@ public class guiMetalPress extends ContainerScreen<ContainerMetalPress> implemen
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 
         if(isPointInRegion(157, 6,10,72,mouseX,mouseY)){
-            this.renderTooltip(matrixStack, new StringTextComponent(Integer.toString(this.container.getprogressScaled(100))), mouseX,mouseY);
+            this.renderTooltip(matrixStack, new StringTextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), mouseX,mouseY);
         }
 
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -42,7 +42,7 @@ public class guiMetalPress extends ContainerScreen<ContainerMetalPress> implemen
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
-        int b = this.container.getprogressScaled(38);
+        int b = this.container.getprogressScaled(41);
         this.blit(matrixStack,this.guiLeft+65,this.guiTop+30,186,0,b+1,26);
 
         int p = this.container.getStoredPowerScaled(71);

@@ -58,7 +58,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> ORES_COPPER = forge("ores/copper");
         public static final ITag.INamedTag<Item> ORES_TIN = forge("ores/tin");
         public static final ITag.INamedTag<Item> ORES_LEAD = forge("ores/lead");
-        public static final ITag.INamedTag<Item> ORES_ZINC = forge("ores/zinc");
+        //public static final ITag.INamedTag<Item> ORES_ZINC = forge("ores/zinc");
 
         public static final ITag.INamedTag<Item> MORTAR = forge("mortar");
         public static final ITag.INamedTag<Item> CUTTER = forge("cutter");

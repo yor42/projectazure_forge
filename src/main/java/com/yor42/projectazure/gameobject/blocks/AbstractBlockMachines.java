@@ -1,8 +1,12 @@
 package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
@@ -24,12 +28,16 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class MetalPressBlock extends Block {
+public abstract class AbstractBlockMachines extends Block {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
-    public MetalPressBlock(Properties properties) {
+    public AbstractBlockMachines(){
+        this((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL)));
+    }
+
+    public AbstractBlockMachines(Properties properties) {
         super(properties);
     }
 
@@ -40,9 +48,8 @@ public class MetalPressBlock extends Block {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityMetalPress();
-    }
+    public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
+
     @SuppressWarnings("deprecation")
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {

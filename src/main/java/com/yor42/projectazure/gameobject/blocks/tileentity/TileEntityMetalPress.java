@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -22,60 +23,73 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IntArray;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityMetalPress extends LockableTileEntity implements INamedContainerProvider, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity  {
-    private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
-    protected final IRecipeType<? extends PressingRecipe> recipeType;
-    protected CustomEnergyStorage energyStorage = new CustomEnergyStorage(15000);
-    protected ItemStackHandler inventory = new ItemStackHandler(3);
-    protected int ProcessTime, totalProcessTime;
-    protected final int powerConsumption;
+public class TileEntityMetalPress extends AbstractTileEntityMachines  {
+
+    private final IIntArray fields = new IIntArray() {
+        @Override
+        public int get(int index) {
+            switch (index) {
+                case 0:
+                    return TileEntityMetalPress.this.ProcessTime;
+                case 1:
+                    return TileEntityMetalPress.this.totalProcessTime;
+                case 2:
+                    return TileEntityMetalPress.this.energyStorage.getEnergyStored();
+                case 3:
+                    return TileEntityMetalPress.this.energyStorage.getMaxEnergyStored();
+                default:
+                    return 0;
+            }
+        }
+
+        @Override
+        public void set(int index, int value) {
+            switch (index) {
+                case 0:
+                    TileEntityMetalPress.this.ProcessTime = value;
+                    break;
+                case 1:
+                    TileEntityMetalPress.this.totalProcessTime = value;
+                    break;
+                case 2:
+                    TileEntityMetalPress.this.energyStorage.setEnergy(value);
+                    break;
+                case 3:
+                    TileEntityMetalPress.this.energyStorage.setMaxEnergy(value);
+                    break;
+            }
+        }
+
+        @Override
+        public int size() {
+            return 4;
+        }
+    };
 
     public TileEntityMetalPress() {
         super(registerTE.METAL_PRESS.get());
         this.recipeType = registerRecipes.Types.PRESSING;
         this.powerConsumption = 100;
-    }
-
-    @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
-        this.energyStorage.deserializeNBT(nbt.getCompound("inventory"));
-        this.inventory.deserializeNBT(nbt.getCompound("energy_storage"));
-        this.ProcessTime = nbt.getInt("processtime");
-        this.totalProcessTime = nbt.getInt("totalprocesstime");
-    }
-
-    @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
-        compound.put("inventory", this.inventory.serializeNBT());
-        compound.put("energy_storage", this.energyStorage.serializeNBT());
-        compound.putInt("processtime", this.ProcessTime);
-        compound.putInt("totalprocesstime", this.totalProcessTime);
-        return compound;
+        this.inventory.setSize(3);
+        this.energyStorage.setMaxEnergy(15000);
     }
 
     public void encodeExtraData(PacketBuffer buffer){
         buffer.writeBlockPos(this.pos);
-    }
-
-    @Override
-    public int[] getSlotsForFace(Direction side) {
-        return new int[0];
     }
 
     @Override
@@ -97,186 +111,20 @@ public class TileEntityMetalPress extends LockableTileEntity implements INamedCo
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return false;
-    }
-
-    @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("te.metal_press");
+        return new TranslationTextComponent("metal_press");
     }
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return new ContainerMetalPress(id, player, this.inventory, this.pos);
-    }
-
-    public boolean isActive(){
-        return this.ProcessTime>0;
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return this.inventory.getSlots();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        for(int i=0;i<this.inventory.getSlots(); i++){
-            if(this.inventory.getStackInSlot(i) != ItemStack.EMPTY){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int index) {
-        return this.inventory.getStackInSlot(index);
-    }
-
-    @Override
-    public ItemStack decrStackSize(int index, int count) {
-        ItemStack stack = this.inventory.getStackInSlot(index);
-        stack.shrink(count);
-        return stack;
-    }
-
-    @Override
-    public ItemStack removeStackFromSlot(int index) {
-        if (index >=0 && index < this.inventory.getSlots()){
-            this.inventory.setStackInSlot(index, ItemStack.EMPTY);
-        }
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        ItemStack stack1 = this.getStackInSlot(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(stack1) && ItemStack.areItemStackTagsEqual(stack, stack1);
-        this.inventory.setStackInSlot(index, stack);
-
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
-        }
-
-        if (index == 0 || index==1 && !flag) {
-            this.totalProcessTime = this.getTargetProcessTime();
-            this.ProcessTime = 0;
-            this.markDirty();
-        }
-    }
-
-    public int getTotalProcessTime() {
-        return this.totalProcessTime;
+        return new ContainerMetalPress(id, player, this.inventory, this.fields);
     }
 
     protected int getTargetProcessTime(){
         return this.world.getRecipeManager().getRecipe((IRecipeType<? extends PressingRecipe>)this.recipeType, this, this.world).map(PressingRecipe::getProcessTick).orElse(200);
     }
 
-    public int getProcessTime() {
-        return this.ProcessTime;
-    }
-    @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        return true;
-    }
-
-    @Override
-    public void clear() {
-        for(int i=0;i<this.inventory.getSlots(); i++){
-            this.inventory.setStackInSlot(i, ItemStack.EMPTY);
-        }
-    }
-
-    @Override
-    public void fillStackedContents(RecipeItemHelper helper) {
-        for(int i=0; i<this.inventory.getSlots(); i++) {
-            helper.accountStack(this.inventory.getStackInSlot(i));
-        }
-    }
-
-    @Override
-    public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
-        if (recipe != null) {
-            ResourceLocation resourcelocation = recipe.getId();
-            this.recipes.addTo(resourcelocation, 1);
-        }
-    }
-
-    @Nullable
-    @Override
-    public IRecipe<?> getRecipeUsed() {
-        return null;
-    }
-
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
-
-    @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (facing == Direction.UP)
-                return handlers[0].cast();
-            else if (facing == Direction.DOWN)
-                return handlers[1].cast();
-            else
-                return handlers[2].cast();
-        }
-        return super.getCapability(capability, facing);
-    }
-
-    public CustomEnergyStorage getEnergyStorage() {
-        return this.energyStorage;
-    }
-
-    @Override
-    public void tick() {
-        boolean isActive = this.isActive();
-        boolean shouldsave = false;
-
-        if(this.world.isBlockPowered(this.getPos())){
-            this.energyStorage.receiveEnergy(1000, false);
-        }
-
-
-        if(this.world != null && !this.world.isRemote){
-            ItemStack ingredient = this.inventory.getStackInSlot(0);
-            ItemStack mold = this.inventory.getStackInSlot(1);
-
-            if(!ingredient.isEmpty() && !mold.isEmpty()){
-                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<? extends PressingRecipe>)this.recipeType, this, this.world).orElse(null);
-                if(this.energyStorage.getEnergyStored()>=this.powerConsumption && this.canProcess(irecipe)){
-                    shouldsave = true;
-                    this.ProcessTime++;
-                    this.energyStorage.extractEnergy(this.powerConsumption, false);
-                    if(this.ProcessTime == this.totalProcessTime) {
-                        this.ProcessTime = 0;
-                        this.totalProcessTime = this.getTargetProcessTime();
-                        this.process(irecipe);
-                        shouldsave = true;
-                    }
-                }
-                else {
-                    this.ProcessTime = 0;
-                }
-            }else {
-                this.ProcessTime = 0;
-            }
-
-            if (isActive != this.isActive()) {
-                shouldsave = true;
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(MetalPressBlock.ACTIVE, this.isActive()), 3);
-            }
-        }
-
-        if(shouldsave){
-            this.markDirty();
-        }
-    }
-
-    private void process(IRecipe<?> irecipe) {
+    protected void process(IRecipe<?> irecipe) {
 
         if(irecipe != null && this.canProcess(irecipe)){
             ItemStack ingredient = this.inventory.getStackInSlot(0);
@@ -336,4 +184,5 @@ public class TileEntityMetalPress extends LockableTileEntity implements INamedCo
             return false;
         }
     }
+
 }

@@ -25,13 +25,13 @@ import static com.yor42.projectazure.setup.register.registerManager.METAL_PRESS_
 
 public class ContainerMetalPress extends Container {
 
-    private final TileEntity TE;
+    private final IIntArray field;
 
     public ContainerMetalPress(int id, PlayerInventory inventory, PacketBuffer buffer) {
-        this(id, inventory, new ItemStackHandler(3), buffer.readBlockPos());
+        this(id, inventory, new ItemStackHandler(3), new IntArray(4));
     }
 
-    public ContainerMetalPress(int id, PlayerInventory inventory, ItemStackHandler Inventory, BlockPos pos) {
+    public ContainerMetalPress(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
         super(METAL_PRESS_CONTAINER_TYPE, id);
         IRecipeType<? extends PressingRecipe> recipeType = registerRecipes.Types.PRESSING;
 
@@ -39,7 +39,9 @@ public class ContainerMetalPress extends Container {
         this.addSlot(new SlotMold(Inventory, 1, 75,35));
         this.addSlot(new MachineResultSlot(inventory.player, Inventory, 2, 116, 35));
 
-        this.TE = inventory.player.world.getTileEntity(pos);
+        this.field = field;
+
+        trackIntArray(this.field);
 
 
         for (int i = 0; i < 3; ++i) {
@@ -53,27 +55,22 @@ public class ContainerMetalPress extends Container {
         }
     }
 
-
+    public IIntArray getField() {
+        return this.field;
+    }
 
     public int getStoredPowerScaled(int pixels){
 
-        if(this.TE instanceof TileEntityMetalPress){
-            int currentpower = ((TileEntityMetalPress) this.TE).getEnergyStorage().getEnergyStored();
-            int maxpower = ((TileEntityMetalPress) this.TE).getEnergyStorage().getMaxEnergyStored();
-
-            return currentpower != 0 && maxpower != 0? currentpower*pixels/maxpower:0;
-        }
-        return 0;
+        int currentpower = this.field.get(2);
+        int maxpower = this.field.get(3);
+        return currentpower != 0 && maxpower != 0? currentpower*pixels/maxpower:0;
     }
 
     public int getprogressScaled(int pixels){
-        if(this.TE instanceof TileEntityMetalPress) {
-            int i = ((TileEntityMetalPress) this.TE).getProcessTime();
-            int j = ((TileEntityMetalPress) this.TE).getTotalProcessTime();
-            double k = (double) i / j;
-            return (int)(i != 0 ? k * pixels : 0);
-        }
-        return 0;
+        int i = this.field.get(0);
+        int j = this.field.get(1);
+        double k = (double) i / j;
+        return (int)(i != 0 ? k * pixels : 0);
     }
 
     @Override
