@@ -21,6 +21,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -57,10 +58,10 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller_lowerbody", 10, this::predicate_machine));
+        animationData.addAnimationController(new AnimationController(this, "controller_machine", 0, this::predicate_machine));
     }
 
-    protected abstract <P extends IAnimatable> PlayState predicate_machine(AnimationEvent<P> event);
+    protected abstract <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event);
 
     @Override
     public void tick() {
@@ -102,9 +103,6 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
                 this.ProcessTime = 0;
             }
 
-            if (isActive != this.isActive()) {
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(MetalPressBlock.ACTIVE, this.isActive()), 3);
-            }
         }
         if(shouldsave){
             this.markDirty();

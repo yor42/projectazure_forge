@@ -26,10 +26,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.FurnaceTileEntity;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -127,12 +124,15 @@ public class TileEntityMetalPress extends AbstractTileEntityMachines {
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+    protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isActive()){
-            event.getController().setAnimation(builder.addAnimation("work", true));
-            return PlayState.CONTINUE;
+        event.getController().transitionLengthTicks = 0;
+        if(event.getAnimatable().getTileEntity() instanceof TileEntityMetalPress ){
+            boolean flag = ((TileEntityMetalPress) event.getAnimatable().getTileEntity()).getProcessTime()>0;
+            if(flag) {
+                event.getController().setAnimation(builder.addAnimation("work", true));
+                return PlayState.CONTINUE;
+            }
         }
 
         return PlayState.STOP;
@@ -201,5 +201,10 @@ public class TileEntityMetalPress extends AbstractTileEntityMachines {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean isActive() {
+        return this.fields.get(0)>0;
     }
 }

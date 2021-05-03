@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 public abstract class AbstractBlockMachines extends Block {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
     public AbstractBlockMachines(){
         this((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL)));
@@ -58,13 +57,7 @@ public abstract class AbstractBlockMachines extends Block {
         }
     }
 
-    private void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity TileentityAtPos = worldIn.getTileEntity(pos);
-        if(TileentityAtPos instanceof TileEntityMetalPress && player instanceof ServerPlayerEntity && !worldIn.isRemote()){
-            TileEntityMetalPress TE = (TileEntityMetalPress) TileentityAtPos;
-            NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
-        }
-    }
+    protected abstract void interactWith(World worldIn, BlockPos pos, PlayerEntity player);
 
     public BlockState rotate(BlockState state, Rotation rot) {
         return state.with(FACING, rot.rotate(state.get(FACING)));
@@ -99,6 +92,5 @@ public abstract class AbstractBlockMachines extends Block {
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
-        builder.add(ACTIVE);
     }
 }

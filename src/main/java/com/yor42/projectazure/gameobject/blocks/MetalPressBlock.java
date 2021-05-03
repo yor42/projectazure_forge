@@ -24,18 +24,11 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class MetalPressBlock extends Block {
+public class MetalPressBlock extends AbstractBlockMachines {
 
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
     public MetalPressBlock(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
     }
 
     @Nullable
@@ -43,53 +36,12 @@ public class MetalPressBlock extends Block {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileEntityMetalPress();
     }
-    @SuppressWarnings("deprecation")
-    @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (worldIn.isRemote) {
-            return ActionResultType.SUCCESS;
-        } else {
-            this.interactWith(worldIn, pos, player);
-            return ActionResultType.CONSUME;
-        }
-    }
 
-    private void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
+    protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
         TileEntity TileentityAtPos = worldIn.getTileEntity(pos);
         if(TileentityAtPos instanceof TileEntityMetalPress && player instanceof ServerPlayerEntity && !worldIn.isRemote()){
             TileEntityMetalPress TE = (TileEntityMetalPress) TileentityAtPos;
             NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
         }
-    }
-
-    public BlockState rotate(BlockState state, Rotation rot) {
-        return state.with(FACING, rot.rotate(state.get(FACING)));
-    }
-
-    public BlockState mirror(BlockState state, Mirror mirrorIn) {
-        return state.rotate(mirrorIn.toRotation(state.get(FACING)));
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
-    }
-
-    @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.isIn(newState.getBlock())) {
-            TileEntity te = worldIn.getTileEntity(pos);
-            if (te instanceof TileEntityMetalPress) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMetalPress) te);
-            }
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
-        }
-    }
-
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-        builder.add(ACTIVE);
     }
 }

@@ -27,7 +27,7 @@ public class registerBlocks {
 
 
     public static final RegistryObject<Block> METAL_PRESS = register("metal_press", () ->
-            new MetalPressBlock((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_RESOURCES);
+            new MetalPressBlock((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid())), Main.PA_RESOURCES);
 
     private static <T extends Block> RegistryObject<T> register_noblock(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);
