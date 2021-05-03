@@ -13,6 +13,18 @@
   "item.projectazure.bandage_roll": "Roll of bandage",
 
   "item.projectazure.mechanical_parts": "Mechanical Parts",
+  "item.projectazure.iron_pipe": "Iron Pipe",
+  "item.projectazure.steel_pipe": "Steel Pipe",
+  "item.projectazure.motor_basic": "Basic Motor",
+  "item.projectazure.circuit_primitive": "Primitive Circuit",
+  "item.projectazure.copper_coil": "Copper Coil",
+
+  "item.projectazure.mold_plate": "Plate Mold",
+  "item.projectazure.hammer_iron": "Iron Hammer",
+  "item.projectazure.mortar_iron": "Iron Mortar",
+  "item.projectazure.steel_cutter": "Steel Cutter",
+
+  "item.projectazure.5.56_magazine": "5.56mm Magazine",
 
   "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
   "disc.brainpower.desc1": "LET THE BASS KICK O-oooooooooo AAAA E A A I A U",
@@ -46,6 +58,8 @@
   "gui.selectstarter.title": "Select Starter Ship",
   "gui.shipinventory": "KANSEN Inv.",
   "gui.companioninventory": "Inventory",
+
+  "gui.bainventory": "Inventory",
 
   "gui.current_affection_level": "Current Affection",
   "gui.current_affection_value": "Affection",
@@ -90,6 +104,7 @@
   "steel": "Steel",
   "coal": "Coal",
 
-  "death.attack.bonk": "%1$s was sent to horny jail",
-  "gui.bainventory": "Inventory"
+  "block.projectazure.metal_press": "Metal Press",
+
+  "death.attack.bonk": "%1$s was sent to horny jail"
 }

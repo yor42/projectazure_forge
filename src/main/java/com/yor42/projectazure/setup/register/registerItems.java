@@ -65,6 +65,7 @@ public class registerItems {
     public static final RegistryObject<Item> PLATE_IRON = registerManager.ITEMS.register("plate_iron", () -> new ItemResource("iron", enums.ResourceType.PLATE));
     public static final RegistryObject<Item> PLATE_STEEL = registerManager.ITEMS.register("plate_steel", () -> new ItemResource("steel", enums.ResourceType.PLATE));
 
+    public static final RegistryObject<Item> COPPER_WIRE = registerManager.ITEMS.register("copper_wire", () -> new ItemResource("copper", enums.ResourceType.WIRE));
 
     public static final RegistryObject<Item> IRON_PIPE = registerManager.ITEMS.register("iron_pipe", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
@@ -75,8 +76,6 @@ public class registerItems {
     public static final RegistryObject<Item> BASIC_MOTOR = registerManager.ITEMS.register("motor_basic", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> PRIMITIVE_CIRCUIT = registerManager.ITEMS.register("circuit_primitive", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES)));
-    public static final RegistryObject<Item> COPPER_WIRE = registerManager.ITEMS.register("copper_wire", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> COPPER_COIL = registerManager.ITEMS.register("copper_coil", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
@@ -101,56 +100,12 @@ public class registerItems {
 
 
     //crafting items
-    public static final RegistryObject<Item> MORTAR_IRON = registerManager.ITEMS.register("mortar_iron", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES).maxDamage(50)){
-        @Override
-        public boolean hasContainerItem(ItemStack stack) {
-            return true;
-        }
+    public static final RegistryObject<Item> MORTAR_IRON = registerManager.ITEMS.register("mortar_iron", () -> new ItemCraftTool(50));
 
-        @Override
-        public ItemStack getContainerItem(ItemStack itemStack) {
-            ItemStack stack = itemStack.copy();
-            if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
-                return stack;
-            }
-            else return ItemStack.EMPTY;
-        }
-    });
+    public static final RegistryObject<Item> HAMMER_IRON = registerManager.ITEMS.register("hammer_iron", () -> new ItemCraftTool(43));
 
-    public static final RegistryObject<Item> HAMMER_IRON = registerManager.ITEMS.register("hammer_iron", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES).maxDamage(43)){
-        @Override
-        public boolean hasContainerItem(ItemStack stack) {
-            return true;
-        }
+    public static final RegistryObject<Item> STEEL_CUTTER = registerManager.ITEMS.register("steel_cutter", () -> new ItemCraftTool(70));
 
-        @Override
-        public ItemStack getContainerItem(ItemStack itemStack) {
-            ItemStack stack = itemStack.copy();
-            if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
-                return stack;
-            }
-            else return ItemStack.EMPTY;
-        }
-    });
-
-    public static final RegistryObject<Item> STEEL_CUTTER = registerManager.ITEMS.register("steel_cutter", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES).maxDamage(43)){
-        @Override
-        public boolean hasContainerItem(ItemStack stack) {
-            return true;
-        }
-
-        @Override
-        public ItemStack getContainerItem(ItemStack itemStack) {
-            ItemStack stack = itemStack.copy();
-            if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
-                return stack;
-            }
-            else return ItemStack.EMPTY;
-        }
-    });
 
     public static final RegistryObject<Item> MAGAZINE_5_56 = registerManager.ITEMS.register("5.56_magazine", () -> new ItemMagazine(enums.AmmoCalibur.AMMO_5_56, 30, new Item.Properties()
             .group(PA_GROUP)
