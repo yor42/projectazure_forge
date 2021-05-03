@@ -25,10 +25,18 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.ItemStackHandler;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractTileEntityMachines extends LockableTileEntity implements INamedContainerProvider, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public abstract class AbstractTileEntityMachines extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+
+    protected final AnimationFactory factory = new AnimationFactory(this);
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
     protected CustomEnergyStorage energyStorage = new CustomEnergyStorage(15000);
@@ -41,6 +49,18 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
 
     protected int ProcessTime, totalProcessTime;
     protected int powerConsumption;
+
+    @Override
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
+
+    @Override
+    public void registerControllers(AnimationData animationData) {
+        animationData.addAnimationController(new AnimationController(this, "controller_lowerbody", 10, this::predicate_machine));
+    }
+
+    protected abstract <P extends IAnimatable> PlayState predicate_machine(AnimationEvent<P> event);
 
     @Override
     public void tick() {

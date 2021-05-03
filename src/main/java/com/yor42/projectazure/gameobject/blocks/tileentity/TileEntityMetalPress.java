@@ -34,10 +34,16 @@ import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.ItemStackHandler;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class TileEntityMetalPress extends AbstractTileEntityMachines  {
+public class TileEntityMetalPress extends AbstractTileEntityMachines {
 
     private final IIntArray fields = new IIntArray() {
         @Override
@@ -120,6 +126,18 @@ public class TileEntityMetalPress extends AbstractTileEntityMachines  {
         return new ContainerMetalPress(id, player, this.inventory, this.fields);
     }
 
+    @Override
+    protected <P extends IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+        AnimationBuilder builder = new AnimationBuilder();
+
+        if(this.isActive()){
+            event.getController().setAnimation(builder.addAnimation("work", true));
+            return PlayState.CONTINUE;
+        }
+
+        return PlayState.STOP;
+    }
+
     protected int getTargetProcessTime(){
         return this.world.getRecipeManager().getRecipe((IRecipeType<? extends PressingRecipe>)this.recipeType, this, this.world).map(PressingRecipe::getProcessTick).orElse(200);
     }
@@ -184,5 +202,4 @@ public class TileEntityMetalPress extends AbstractTileEntityMachines  {
             return false;
         }
     }
-
 }

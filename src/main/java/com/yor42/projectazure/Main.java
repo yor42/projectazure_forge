@@ -1,6 +1,7 @@
 package com.yor42.projectazure;
 
 import com.yor42.projectazure.client.ClientRegisterManager;
+import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
 import com.yor42.projectazure.client.renderer.entity.*;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityGunBulletRenderer;
@@ -20,6 +21,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -101,6 +103,8 @@ public class Main
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.GUN_BULLET.get(), EntityGunBulletRenderer::new);
+
+        ClientRegistry.bindTileEntityRenderer(registerTE.METAL_PRESS.get(), MachineMetalPressRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
         ClientRegisterManager.registerScreen();

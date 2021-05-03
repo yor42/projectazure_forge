@@ -8,8 +8,8 @@ import static com.yor42.projectazure.Main.PA_RESOURCES;
 
 public class ItemCraftTool extends Item {
 
-    public ItemCraftTool(int Durability){
-        this(new Item.Properties().group(PA_RESOURCES).maxDamage(Durability).maxStackSize(1));
+    public ItemCraftTool(final int Durability){
+        this(new Item.Properties().group(PA_RESOURCES).maxDamage(Durability));
     }
 
 
