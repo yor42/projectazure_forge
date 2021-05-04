@@ -107,6 +107,10 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
         if(shouldsave){
             this.markDirty();
         }
+
+        if(this.getWorld() != null && isActive != this.isActive()) {
+            this.getWorld().notifyBlockUpdate(this.getPos(), this.getBlockState(), this.getBlockState(), 3);
+        }
     }
 
     @Override
@@ -176,6 +180,8 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
         CompoundNBT syncTag = pkt.getNbtCompound();
         this.inventory.deserializeNBT(syncTag.getCompound("inventory"));
         this.energyStorage.deserializeNBT(syncTag.getCompound("energy"));
+        this.totalProcessTime = syncTag.getInt("totalprogress");
+        this.ProcessTime = syncTag.getInt("progress");
     }
 
     @Override

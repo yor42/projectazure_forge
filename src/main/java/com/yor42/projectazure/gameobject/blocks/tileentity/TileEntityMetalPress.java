@@ -127,12 +127,10 @@ public class TileEntityMetalPress extends AbstractTileEntityMachines {
     protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().transitionLengthTicks = 0;
-        if(event.getAnimatable().getTileEntity() instanceof TileEntityMetalPress ){
-            boolean flag = ((TileEntityMetalPress) event.getAnimatable().getTileEntity()).getProcessTime()>0;
-            if(flag) {
-                event.getController().setAnimation(builder.addAnimation("work", true));
-                return PlayState.CONTINUE;
-            }
+        boolean flag = this.ProcessTime>0;
+        if(flag) {
+            event.getController().setAnimation(builder.addAnimation("work", true));
+            return PlayState.CONTINUE;
         }
 
         return PlayState.STOP;
