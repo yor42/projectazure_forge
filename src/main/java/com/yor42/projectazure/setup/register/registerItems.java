@@ -80,23 +80,14 @@ public class registerItems {
     public static final RegistryObject<Item> COPPER_COIL = registerManager.ITEMS.register("copper_coil", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
 
+    public static final RegistryObject<Item> TREE_SAP = registerManager.ITEMS.register("tree_sap", () -> new ItemCraftTool(128));
 
-    public static final RegistryObject<Item> MOLD_PLATE = registerManager.ITEMS.register("mold_plate", () -> new Item(new Item.Properties()
-            .group(PA_RESOURCES).maxDamage(128)){
-        @Override
-        public boolean hasContainerItem(ItemStack stack) {
-            return true;
-        }
 
-        @Override
-        public ItemStack getContainerItem(ItemStack itemStack) {
-            ItemStack stack = itemStack.copy();
-            if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
-                return stack;
-            }
-            else return ItemStack.EMPTY;
-        }
-    });
+
+
+    public static final RegistryObject<Item> MOLD_PLATE = registerManager.ITEMS.register("mold_plate", () -> new ItemCraftTool(128));
+    public static final RegistryObject<Item> MOLD_WIRE = registerManager.ITEMS.register("mold_wire", () -> new ItemCraftTool(128));
+    public static final RegistryObject<Item> MOLD_EXTRACTION = registerManager.ITEMS.register("mold_extraction", () -> new ItemCraftTool(128));
 
 
     //crafting items

@@ -23,6 +23,9 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void registerTags() {
+
+        copy(ModTags.Blocks.LOG, ModTags.Items.LOG);
+
         copy(ModTags.Blocks.ORES_COPPER, ModTags.Items.ORES_COPPER);
         copy(ModTags.Blocks.ORES_TIN, ModTags.Items.ORES_TIN);
         copy(ModTags.Blocks.ORES_LEAD, ModTags.Items.ORES_LEAD);
@@ -56,7 +59,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.getOrCreateBuilder(ModTags.Items.DUST_COAL).add(registerItems.DUST_COAL.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_STEEL).add(registerItems.DUST_STEEL.get());
 
-        this.getOrCreateBuilder(ModTags.Items.EXTRUSION_MOLD).add(registerItems.MOLD_PLATE.get());
+        this.getOrCreateBuilder(ModTags.Items.EXTRUSION_MOLD).add(registerItems.MOLD_PLATE.get()).add(registerItems.MOLD_WIRE.get()).add(registerItems.MOLD_EXTRACTION.get());
 
         this.getOrCreateBuilder(ModTags.Items.MORTAR).add(registerItems.MORTAR_IRON.get());
         this.getOrCreateBuilder(ModTags.Items.CUTTER).add(registerItems.STEEL_CUTTER.get());

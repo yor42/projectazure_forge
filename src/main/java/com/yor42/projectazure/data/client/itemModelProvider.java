@@ -51,6 +51,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("steel_pipe");
         buildModel("mechanical_parts");
         buildModel("motor_basic");
+        buildModel("tree_sap");
         buildModel("circuit_primitive");
 
         buildModel("copper_wire");
@@ -58,6 +59,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("steel_cutter");
 
         buildModel("mold_plate");
+        buildModel("mold_wire");
+        buildModel("mold_extraction");
 
 
         /*

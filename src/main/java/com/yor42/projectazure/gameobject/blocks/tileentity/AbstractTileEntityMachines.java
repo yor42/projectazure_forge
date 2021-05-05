@@ -68,7 +68,7 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
         boolean isActive = this.isActive();
         boolean shouldsave = false;
 
-        if (this.world.isBlockPowered(this.getPos())) {
+        if (this.world != null && this.world.isBlockPowered(this.getPos())) {
             this.energyStorage.receiveEnergy(1000, false);
         }
 
@@ -108,10 +108,17 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
             this.markDirty();
         }
 
+        if(!isActive && this.isActive()){
+            this.playsound();
+        }
+
+
         if(this.getWorld() != null && isActive != this.isActive()) {
             this.getWorld().notifyBlockUpdate(this.getPos(), this.getBlockState(), this.getBlockState(), 3);
         }
     }
+
+    protected abstract void playsound();
 
     @Override
     public int getSizeInventory() {

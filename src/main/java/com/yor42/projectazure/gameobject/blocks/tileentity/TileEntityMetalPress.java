@@ -10,6 +10,7 @@ import com.yor42.projectazure.setup.register.registerTE;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FurnaceBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
@@ -134,6 +135,10 @@ public class TileEntityMetalPress extends AbstractTileEntityMachines {
         }
 
         return PlayState.STOP;
+    }
+
+    @Override
+    protected void playsound() {
     }
 
     protected int getTargetProcessTime(){

@@ -90,8 +90,9 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_wire", hasItem(registerItems.COPPER_WIRE.get()))
                 .addCriterion("has_pipe", hasItem(registerItems.IRON_PIPE.get()))
                 .build(consumer);
-        PressingRecipeBuilder.addRecipe(registerItems.PLATE_IRON.get(), Ingredient.fromTag(Tags.Items.INGOTS_IRON), Ingredient.fromItems(registerItems.MOLD_PLATE.get()), 1, 200)
-                .addCriterion("hasmold", hasItem(registerItems.MOLD_PLATE.get()))
+
+        PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.fromTag(ModTags.Items.LOG), Ingredient.fromItems(registerItems.MOLD_EXTRACTION.get()), 1, 200)
+                .addCriterion("hasmold", hasItem(registerItems.MOLD_EXTRACTION.get()))
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
     }
 
@@ -163,6 +164,10 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                     .patternLine("###")
                     .addCriterion("has_item", hasIngot)
                     .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_without_hammer"));
+
+            PressingRecipeBuilder.addRecipe(metal.plate, Ingredient.fromTag(metal.ingotTag), Ingredient.fromItems(registerItems.MOLD_PLATE.get()), 1, 200)
+                    .addCriterion("hasmold", hasItem(registerItems.MOLD_PLATE.get()))
+                    .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_pressing"));
         }
 
 

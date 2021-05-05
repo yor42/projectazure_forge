@@ -8,9 +8,13 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.system.CallbackI;
 
 public class ModTags {
     public static final class Blocks {
+
+        public static final ITag.INamedTag<Block> LOG = forge("logs");
+
         public static final ITag.INamedTag<Block> ORES_ALUMINIUM = forge("ores/aluminium");
         public static final ITag.INamedTag<Block> ORES_COPPER = forge("ores/copper");
         public static final ITag.INamedTag<Block> ORES_TIN = forge("ores/tin");
@@ -23,9 +27,15 @@ public class ModTags {
         private static ITag.INamedTag<Block> mod(String path) {
             return BlockTags.makeWrapperTag(new ResourceLocation(defined.MODID, path).toString());
         }
+
+        private static ITag.INamedTag<Block> mc(String path) {
+            return BlockTags.makeWrapperTag(new ResourceLocation("minecraft", path).toString());
+        }
     }
 
     public static final class Items {
+
+        public static final ITag.INamedTag<Item> LOG = forge("logs");
 
         public static final ITag.INamedTag<Item> INGOT_ALUMINIUM = forge("ingots/aluminium");
         public static final ITag.INamedTag<Item> INGOT_COPPER = forge("ingots/copper");
@@ -66,9 +76,12 @@ public class ModTags {
 
         public static final ITag.INamedTag<Item> EXTRUSION_MOLD = mod("mold");
 
-
         private static ITag.INamedTag<Item> forge(String path) {
             return ItemTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
+        }
+
+        private static ITag.INamedTag<Item> mc(String path) {
+            return ItemTags.makeWrapperTag(new ResourceLocation("minecraft", path).toString());
         }
 
         private static ITag.INamedTag<Item> mod(String path) {

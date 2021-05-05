@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minecraft:iron_plate_pressing"
+      "projectazure:ingot_lead_pressing"
     ]
   },
   "criteria": {
@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:mold_extraction"
+            "item": "projectazure:mold_plate"
           }
         ]
       }
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minecraft:iron_plate_pressing"
+        "recipe": "projectazure:ingot_lead_pressing"
       }
     }
   },
