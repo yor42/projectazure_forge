@@ -74,6 +74,8 @@ public class ModTags {
         public static final ITag.INamedTag<Item> CUTTER = forge("cutter");
         public static final ITag.INamedTag<Item> HAMMER = forge("hammer");
 
+        public static final ITag.INamedTag<Item> TREE_SAP = forge("tree_sap");
+
         public static final ITag.INamedTag<Item> EXTRUSION_MOLD = mod("mold");
 
         private static ITag.INamedTag<Item> forge(String path) {

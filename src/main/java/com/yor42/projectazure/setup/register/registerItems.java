@@ -79,10 +79,16 @@ public class registerItems {
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> COPPER_COIL = registerManager.ITEMS.register("copper_coil", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> CAPACITOR_PRIMITIVE = registerManager.ITEMS.register("capacitor_primitive", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> RESISTOR_PRIMITIVE = registerManager.ITEMS.register("resistor_primitive", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
 
-    public static final RegistryObject<Item> TREE_SAP = registerManager.ITEMS.register("tree_sap", () -> new ItemCraftTool(128));
+    public static final RegistryObject<Item> TREE_SAP = registerManager.ITEMS.register("tree_sap", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
 
-
+    public static final RegistryObject<Item> PLATE_POLYMER = registerManager.ITEMS.register("polymer_plate", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
 
 
     public static final RegistryObject<Item> MOLD_PLATE = registerManager.ITEMS.register("mold_plate", () -> new ItemCraftTool(128));

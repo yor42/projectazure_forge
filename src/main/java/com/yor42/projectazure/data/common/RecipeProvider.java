@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -35,6 +36,39 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", registerItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).ore(registerBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(registerItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM).plates(registerItems.PLATE_ALUMINIUM.get(), ModTags.Items.PLATE_ALUMINIUM));
 
         BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(registerItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(registerItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON));
+
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.HAMMER_IRON.get())
+                .key('I', Tags.Items.INGOTS_IRON)
+                .key('S', Items.STICK)
+                .patternLine("III")
+                .patternLine("ISI")
+                .patternLine(" S ")
+                .addCriterion("has_stick", hasItem(Items.STICK))
+                .addCriterion("has_iron", hasItem(Tags.Items.INGOTS_IRON))
+                .build(consumer);
+        ShapedRecipeBuilder.shapedRecipe(registerItems.MORTAR_IRON.get())
+                .key('I', Tags.Items.INGOTS_IRON)
+                .key('S', Items.STICK)
+                .key('C', Items.COBBLESTONE)
+                .patternLine("  S")
+                .patternLine("CIC")
+                .patternLine("CCC")
+                .addCriterion("has_stick", hasItem(Items.STICK))
+                .addCriterion("has_iron", hasItem(Tags.Items.INGOTS_IRON))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.STEEL_CUTTER.get())
+                .key('I', ModTags.Items.PLATE_STEEL)
+                .key('S', Items.STICK)
+                .key('N', Items.IRON_NUGGET)
+                .patternLine(" I ")
+                .patternLine("INS")
+                .patternLine(" S ")
+                .addCriterion("has_stick", hasItem(Items.STICK))
+                .addCriterion("has_iron", hasItem(Tags.Items.INGOTS_IRON))
+                .build(consumer);
+
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.DUST_BRONZE.get(), 2)
                 .key('C', ModTags.Items.DUST_COPPER)
@@ -94,6 +128,59 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.fromTag(ModTags.Items.LOG), Ingredient.fromItems(registerItems.MOLD_EXTRACTION.get()), 1, 200)
                 .addCriterion("hasmold", hasItem(registerItems.MOLD_EXTRACTION.get()))
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
+
+        CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(ModTags.Items.TREE_SAP), registerItems.PLATE_POLYMER.get(), 0.5F, 200)
+                .addCriterion("has_item", hasItem(ModTags.Items.TREE_SAP))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.CAPACITOR_PRIMITIVE.get(), 1)
+                .key('A', registerItems.PLATE_ALUMINIUM.get())
+                .key('P', Items.PAPER)
+                .key('C', registerItems.COPPER_WIRE.get())
+                .patternLine("APA")
+                .patternLine("APA")
+                .patternLine("C C")
+                .addCriterion("has_wire", hasItem(registerItems.COPPER_WIRE.get()))
+                .addCriterion("has_aluminium", hasItem(ModTags.Items.PLATE_ALUMINIUM))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.RESISTOR_PRIMITIVE.get(), 1)
+                .key('C', ModTags.Items.DUST_COAL)
+                .key('D', registerItems.DUST_IRON.get())
+                .key('P', Items.PAPER)
+                .key('W', registerItems.COPPER_WIRE.get())
+                .patternLine(" P ")
+                .patternLine("WCW")
+                .patternLine(" D ")
+                .addCriterion("has_wire", hasItem(registerItems.COPPER_WIRE.get()))
+                .addCriterion("has_carbon", hasItem(ModTags.Items.DUST_COAL))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.BASIC_MOTOR.get(), 1)
+                .key('C', registerItems.COPPER_COIL.get())
+                .key('D', Items.IRON_INGOT)
+                .key('P', registerItems.PLATE_IRON.get())
+                .key('W', registerItems.COPPER_WIRE.get())
+                .patternLine(" D ")
+                .patternLine("PCP")
+                .patternLine("PWP")
+                .addCriterion("has_coil", hasItem(registerItems.COPPER_COIL.get()))
+                .addCriterion("has_wire", hasItem(registerItems.COPPER_WIRE.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.PRIMITIVE_CIRCUIT.get(), 1)
+                .key('C', ModTags.Items.PLATE_COPPER)
+                .key('P', registerItems.PLATE_POLYMER.get())
+                .key('I', ModTags.Items.PLATE_IRON)
+                .key('L', Items.REDSTONE)
+                .key('R', registerItems.RESISTOR_PRIMITIVE.get())
+                .key('T', registerItems.CAPACITOR_PRIMITIVE.get())
+                .patternLine(" I ")
+                .patternLine("RLT")
+                .patternLine("CPC")
+                .addCriterion("has_plate", hasItem(ModTags.Items.PLATE_COPPER))
+                .addCriterion("has_polymer", hasItem(registerItems.PLATE_POLYMER.get()))
+                .build(consumer);
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {

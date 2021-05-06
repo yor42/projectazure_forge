@@ -44,6 +44,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("dust_iron");
         buildModel("dust_steel");
 
+        buildModel("polymer_plate");
+
         buildModel("mortar_iron");
         buildModel("hammer_iron");
 
@@ -53,6 +55,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("motor_basic");
         buildModel("tree_sap");
         buildModel("circuit_primitive");
+        buildModel("capacitor_primitive");
+        buildModel("resistor_primitive");
 
         buildModel("copper_wire");
         buildModel("copper_coil");

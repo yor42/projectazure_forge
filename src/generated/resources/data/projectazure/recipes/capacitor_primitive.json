@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "APA",
+    "APA",
+    "C C"
+  ],
+  "key": {
+    "A": {
+      "item": "projectazure:plate_aluminium"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "C": {
+      "item": "projectazure:copper_wire"
+    }
+  },
+  "result": {
+    "item": "projectazure:capacitor_primitive"
+  }
+}
