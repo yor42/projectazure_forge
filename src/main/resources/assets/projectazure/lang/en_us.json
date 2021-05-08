@@ -94,6 +94,7 @@
   "wire": "Wire",
   "nugget": "Nugget",
   "ore": "Ore",
+  "gear": "Gear",
 
   "copper": "Copper",
   "tin": "Tin",
@@ -103,6 +104,7 @@
   "zinc": "Zinc",
   "steel": "Steel",
   "coal": "Coal",
+  "lead": "Lead",
 
   "block.projectazure.metal_press": "Metal Press",
 

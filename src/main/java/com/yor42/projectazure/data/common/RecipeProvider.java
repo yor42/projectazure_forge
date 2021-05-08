@@ -1,18 +1,22 @@
 package com.yor42.projectazure.data.common;
 
 import com.yor42.projectazure.data.ModTags;
+import com.yor42.projectazure.data.recipebuilder.AlloyingRecipeBuilder;
 import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
+import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -29,13 +33,14 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     @Override
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
-        BuildMetalRecipe(consumer, 0.5F, new Metals("copper", registerItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).ore(registerBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(registerItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(registerItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("tin", registerItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).ore(registerBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(registerItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(registerItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("copper", registerItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).ore(registerBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(registerItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(registerItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER).gear(registerItems.GEAR_COPPER.get(), ModTags.Items.GEAR_COPPER));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("tin", registerItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).ore(registerBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(registerItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(registerItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN).gear(registerItems.GEAR_TIN.get(), ModTags.Items.GEAR_TIN));
         BuildMetalRecipe(consumer, 0.5F, new Metals("lead", registerItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).ore(registerBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(registerItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(registerItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", registerItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).dust(registerItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE).plates(registerItems.PLATE_BRONZE.get(), ModTags.Items.PLATE_BRONZE));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", registerItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).dust(registerItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE).plates(registerItems.PLATE_BRONZE.get(), ModTags.Items.PLATE_BRONZE).gear(registerItems.GEAR_BRONZE.get(), ModTags.Items.GEAR_BRONZE));
         BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", registerItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).ore(registerBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(registerItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM).plates(registerItems.PLATE_ALUMINIUM.get(), ModTags.Items.PLATE_ALUMINIUM));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("steel", registerItems.INGOT_STEEL.get(), ModTags.Items.INGOT_STEEL).dust(registerItems.DUST_STEEL.get(), ModTags.Items.DUST_STEEL).plates(registerItems.PLATE_STEEL.get(), ModTags.Items.PLATE_STEEL).gear(registerItems.GEAR_STEEL.get(), ModTags.Items.GEAR_STEEL));
 
-        BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(registerItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(registerItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(registerItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(registerItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON).gear(registerItems.GEAR_IRON.get(), ModTags.Items.GEAR_IRON));
 
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.HAMMER_IRON.get())
@@ -69,6 +74,31 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_iron", hasItem(Tags.Items.INGOTS_IRON))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(registerBlocks.MACHINE_FRAME.get())
+                .key('I', ModTags.Items.PLATE_STEEL)
+                .key('P', registerItems.MECHANICAL_PARTS.get())
+                .key('N', Tags.Items.INGOTS_IRON)
+                .patternLine("NIN")
+                .patternLine("IPI")
+                .patternLine("NIN")
+                .addCriterion("has_iron", hasItem(Tags.Items.INGOTS_IRON))
+                .addCriterion("has_steel", hasItem(ModTags.Items.PLATE_STEEL))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerBlocks.METAL_PRESS.get())
+                .key('L', Items.LEVER)
+                .key('R', Blocks.REDSTONE_BLOCK)
+                .key('P', Items.PISTON)
+                .key('S', registerBlocks.MACHINE_FRAME.get())
+                .key('B', registerItems.PRIMITIVE_CIRCUIT.get())
+                .key('W', registerItems.COPPER_WIRE.get())
+                .key('C', registerItems.COPPER_COIL.get())
+                .patternLine("WBL")
+                .patternLine("PRP")
+                .patternLine("CSC")
+                .addCriterion("has_iron", hasItem(Tags.Items.INGOTS_IRON))
+                .addCriterion("has_steel", hasItem(ModTags.Items.PLATE_STEEL))
+                .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.DUST_BRONZE.get(), 2)
                 .key('C', ModTags.Items.DUST_COPPER)
@@ -78,15 +108,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_copper", hasItem(ModTags.Items.DUST_COPPER))
                 .addCriterion("has_tin", hasItem(ModTags.Items.DUST_TIN))
                 .build(consumer, new ResourceLocation("bronze_powder_alloying"));
-
-        ShapedRecipeBuilder.shapedRecipe(registerItems.DUST_STEEL.get(), 2)
-                .key('I', ModTags.Items.DUST_IRON)
-                .key('C', ModTags.Items.DUST_COAL)
-                .patternLine("II")
-                .patternLine("IC")
-                .addCriterion("has_coal", hasItem(ModTags.Items.DUST_COAL))
-                .addCriterion("has_iron", hasItem(ModTags.Items.DUST_IRON))
-                .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.STEEL_PIPE.get())
                 .key('S', ModTags.Items.PLATE_STEEL)
@@ -125,9 +146,23 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_pipe", hasItem(registerItems.IRON_PIPE.get()))
                 .build(consumer);
 
+        AlloyingRecipeBuilder.addRecipe(Ingredient.fromTag(ModTags.Items.INGOT_COPPER), 3,Ingredient.fromTag(ModTags.Items.INGOT_TIN), 1, registerItems.INGOT_BRONZE.get(), 4, 300)
+                .addCriterion("hastin", hasItem(ModTags.Items.INGOT_TIN))
+                .addCriterion("hascopper", hasItem(ModTags.Items.INGOT_COPPER))
+                .build(consumer);
+
         PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.fromTag(ModTags.Items.LOG), Ingredient.fromItems(registerItems.MOLD_EXTRACTION.get()), 1, 200)
                 .addCriterion("hasmold", hasItem(registerItems.MOLD_EXTRACTION.get()))
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.TREE_SAP.get(),4)
+                .key('L', ModTags.Items.LOG)
+                .patternLine("LLL")
+                .patternLine("LLL")
+                .patternLine("LLL")
+                .addCriterion("has_log", hasItem(ModTags.Items.LOG))
+                .build(consumer);
+
 
         CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(ModTags.Items.TREE_SAP), registerItems.PLATE_POLYMER.get(), 0.5F, 200)
                 .addCriterion("has_item", hasItem(ModTags.Items.TREE_SAP))
@@ -181,6 +216,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_plate", hasItem(ModTags.Items.PLATE_COPPER))
                 .addCriterion("has_polymer", hasItem(registerItems.PLATE_POLYMER.get()))
                 .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.MECHANICAL_PARTS.get(), 2)
+                .key('G', ModTags.Items.GEAR_STEEL)
+                .key('P', ModTags.Items.PLATE_STEEL)
+                .key('I', Tags.Items.INGOTS_IRON)
+                .patternLine("GPG")
+                .patternLine("PIP")
+                .patternLine("GPG")
+                .addCriterion("has_gear", hasItem(ModTags.Items.GEAR_STEEL))
+                .build(consumer);
+
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {
@@ -194,6 +240,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         }
 
         InventoryChangeTrigger.Instance hasIngot = hasItem(metal.ingotTag);
+        InventoryChangeTrigger.Instance hasPlate = hasItem(metal.plateTag);
 
         if (metal.block != null) {
             ShapelessRecipeBuilder.shapelessRecipe(metal.ingot, 9)
@@ -240,6 +287,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                     .build(consumer);
         }
 
+        if (metal.gear != null) {
+            ShapedRecipeBuilder.shapedRecipe(metal.gear)
+                    .key('#', metal.plateTag)
+                    .key('C', ModTags.Items.CUTTER)
+                    .patternLine(" # ")
+                    .patternLine("#C#")
+                    .patternLine(" # ")
+                    .addCriterion("has_plate", hasPlate)
+                    .build(consumer);
+        }
+
         if (metal.plate != null) {
             ShapelessRecipeBuilder.shapelessRecipe(metal.plate, 1)
                     .addIngredient(ModTags.Items.HAMMER)
@@ -276,6 +334,8 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         private ITag<Item> dustTag;
         private IItemProvider plate;
         private ITag<Item> plateTag;
+        private IItemProvider gear;
+        private ITag<Item> gearTag;
         private ITag<Item> chunksTag;
 
         public Metals(String name, IItemProvider ingot, ITag<Item> ingotTag) {
@@ -293,6 +353,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         public Metals block(IItemProvider item, ITag<Item> tag) {
             this.block = item;
             this.blockTag = tag;
+            return this;
+        }
+
+        public Metals gear(IItemProvider item, ITag<Item> tag) {
+            this.gear = item;
+            this.gearTag = tag;
             return this;
         }
 

@@ -1,7 +1,8 @@
-package com.yor42.projectazure.gameobject.containers;
+package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
+import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,11 +34,10 @@ public class ContainerMetalPress extends Container {
 
     public ContainerMetalPress(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
         super(METAL_PRESS_CONTAINER_TYPE, id);
-        IRecipeType<? extends PressingRecipe> recipeType = registerRecipes.Types.PRESSING;
 
         this.addSlot(new SlotItemHandler(Inventory, 0, 41, 35));
         this.addSlot(new SlotMold(Inventory, 1, 75,35));
-        this.addSlot(new MachineResultSlot(inventory.player, Inventory, 2, 116, 35));
+        this.addSlot(new ResultSlotStackHandler(inventory.player, Inventory, 2, 116, 35, false));
 
         this.field = field;
 
@@ -78,57 +78,6 @@ public class ContainerMetalPress extends Container {
         return true;
     }
     //Why do I have to do this all over again forge :kekw:
-    private static class MachineResultSlot extends SlotItemHandler{
-
-        private final PlayerEntity player;
-        private int removeCount;
-
-        public MachineResultSlot(PlayerEntity player , ItemStackHandler itemHandler, int index, int xPosition, int yPosition) {
-            super(itemHandler, index, xPosition, yPosition);
-            this.player = player;
-        }
-
-        public ItemStack decrStackSize(int amount) {
-            if (this.getHasStack()) {
-                this.removeCount += Math.min(amount, this.getStack().getCount());
-            }
-
-            return super.decrStackSize(amount);
-        }
-
-        @Override
-        public boolean isItemValid(@Nonnull ItemStack stack) {
-            return false;
-        }
-
-        @Override
-        public ItemStack onTake(PlayerEntity thePlayer, ItemStack stack) {
-            this.onCrafting(stack);
-            return super.onTake(thePlayer, stack);
-        }
-
-        /**
-         * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood. Typically increases an
-         * internal count then calls onCrafting(item).
-         */
-        protected void onCrafting(ItemStack stack, int amount) {
-            this.removeCount += amount;
-            this.onCrafting(stack);
-        }
-
-        /**
-         * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
-         */
-        protected void onCrafting(ItemStack stack) {
-            stack.onCrafting(this.player.world, this.player, this.removeCount);
-            if (!this.player.world.isRemote && this.inventory instanceof AbstractFurnaceTileEntity) {
-                ((AbstractFurnaceTileEntity)this.inventory).unlockRecipes(this.player);
-            }
-
-            this.removeCount = 0;
-            net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerSmeltedEvent(this.player, stack);
-        }
-    }
 
     private static class SlotMold extends SlotItemHandler{
 

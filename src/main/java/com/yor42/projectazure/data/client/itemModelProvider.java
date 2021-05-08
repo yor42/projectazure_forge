@@ -34,6 +34,13 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("plate_steel");
         buildModel("plate_iron");
 
+        buildModel("gear_copper");
+        buildModel("gear_tin");
+        buildModel("gear_bronze");
+        buildModel("gear_lead");
+        buildModel("gear_steel");
+        buildModel("gear_iron");
+
         buildModel("dust_copper");
         buildModel("dust_tin");
         buildModel("dust_bronze");
@@ -70,10 +77,12 @@ public class itemModelProvider extends ItemModelProvider {
         /*
         Build Ore Block Item model
          */
-        buildOreModel("ore_stone_bauxite");
-        buildOreModel("ore_stone_copper");
-        buildOreModel("ore_stone_tin");
-        buildOreModel("ore_stone_lead");
+        buildSimpleBlockModel("ore_stone_bauxite");
+        buildSimpleBlockModel("ore_stone_copper");
+        buildSimpleBlockModel("ore_stone_tin");
+        buildSimpleBlockModel("ore_stone_lead");
+
+        buildSimpleBlockModel("machine_frame");
 
         buildModel("rainbow_wisdomcube");
         buildModel("wisdomcube");
@@ -96,7 +105,7 @@ public class itemModelProvider extends ItemModelProvider {
 
     }
 
-    public void buildOreModel(String name){
+    public void buildSimpleBlockModel(String name){
         withExistingParent(name, modLoc("block/"+name));
     }
 

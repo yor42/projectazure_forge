@@ -49,6 +49,12 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.getOrCreateBuilder(ModTags.Items.PLATE_IRON).add(registerItems.PLATE_IRON.get());
         this.getOrCreateBuilder(ModTags.Items.PLATE_STEEL).add(registerItems.PLATE_STEEL.get());
 
+        this.getOrCreateBuilder(ModTags.Items.GEAR_STEEL).add(registerItems.GEAR_STEEL.get());
+        this.getOrCreateBuilder(ModTags.Items.GEAR_BRONZE).add(registerItems.GEAR_BRONZE.get());
+        this.getOrCreateBuilder(ModTags.Items.GEAR_TIN).add(registerItems.GEAR_TIN.get());
+        this.getOrCreateBuilder(ModTags.Items.GEAR_IRON).add(registerItems.GEAR_IRON.get());
+        this.getOrCreateBuilder(ModTags.Items.GEAR_COPPER).add(registerItems.GEAR_COPPER.get());
+
         this.getOrCreateBuilder(ModTags.Items.DUST_ALUMINIUM).add(registerItems.DUST_ALUMINIUM.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_COPPER).add(registerItems.DUST_COPPER.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_TIN).add(registerItems.DUST_TIN.get());

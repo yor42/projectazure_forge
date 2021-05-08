@@ -2,13 +2,11 @@ package com.yor42.projectazure.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yor42.projectazure.gameobject.containers.ContainerMetalPress;
+import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.screen.inventory.FurnaceScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -17,7 +15,7 @@ public class guiMetalPress extends ContainerScreen<ContainerMetalPress> implemen
 
     private static final ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/metal_press.png");
 
-    private ContainerMetalPress container;
+    private final ContainerMetalPress container;
 
     public guiMetalPress(ContainerMetalPress container, PlayerInventory inv, ITextComponent titleIn) {
         super(container, inv, titleIn);

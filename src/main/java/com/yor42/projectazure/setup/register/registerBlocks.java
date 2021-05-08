@@ -1,6 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.blocks.AlloyFurnaceBlock;
 import com.yor42.projectazure.gameobject.blocks.MetalPressBlock;
 import com.yor42.projectazure.gameobject.blocks.PAOreBlock;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
@@ -20,14 +21,15 @@ public class registerBlocks {
 
     public static final RegistryObject<Block> BAUXITE_ORE = registerOre("ore_stone_bauxite", "aluminium");
     public static final RegistryObject<Block> COPPER_ORE = registerOre("ore_stone_copper", "copper");
-
     public static final RegistryObject<Block> TIN_ORE = registerOre("ore_stone_tin", "tin");
-
     public static final RegistryObject<Block> LEAD_ORE = registerOre("ore_stone_lead", "lead");
 
+    public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
+            new Block((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid())), Main.PA_RESOURCES);
 
-    public static final RegistryObject<Block> METAL_PRESS = register("metal_press", () ->
-            new MetalPressBlock((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid())), Main.PA_RESOURCES);
+
+    public static final RegistryObject<Block> METAL_PRESS = register("metal_press", MetalPressBlock::new, Main.PA_RESOURCES);
+    public static final RegistryObject<Block> ALLOY_FURNACE = register("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_RESOURCES);
 
     private static <T extends Block> RegistryObject<T> register_noblock(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);

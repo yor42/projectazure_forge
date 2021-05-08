@@ -1,47 +1,28 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.gameobject.blocks.MetalPressBlock;
-import com.yor42.projectazure.gameobject.containers.ContainerMetalPress;
+import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
-import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FurnaceBlock;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.IRecipeHolder;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class TileEntityMetalPress extends AbstractTileEntityMachines {
+public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
 
     private final IIntArray fields = new IIntArray() {
         @Override
@@ -93,7 +74,6 @@ public class TileEntityMetalPress extends AbstractTileEntityMachines {
     }
 
     public void encodeExtraData(PacketBuffer buffer){
-        buffer.writeBlockPos(this.pos);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.gunusers;
 
-import com.yor42.projectazure.gameobject.containers.ContainerBAInventory;
-import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.libs.enums;

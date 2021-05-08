@@ -6,22 +6,12 @@
     ]
   },
   "criteria": {
-    "has_coal": {
+    "has_item": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:dusts/coal"
-          }
-        ]
-      }
-    },
-    "has_iron": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "forge:dusts/iron"
+            "tag": "forge:ingots/steel"
           }
         ]
       }
@@ -35,8 +25,7 @@
   },
   "requirements": [
     [
-      "has_coal",
-      "has_iron",
+      "has_item",
       "has_the_recipe"
     ]
   ]

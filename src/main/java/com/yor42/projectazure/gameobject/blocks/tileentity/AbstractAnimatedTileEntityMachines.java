@@ -35,7 +35,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractTileEntityMachines extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public abstract class AbstractAnimatedTileEntityMachines extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
 
     protected final AnimationFactory factory = new AnimationFactory(this);
 
@@ -44,7 +44,7 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
     protected ItemStackHandler inventory = new ItemStackHandler(1);
     protected IRecipeType<? extends IRecipe<IInventory>> recipeType;
 
-    protected AbstractTileEntityMachines(TileEntityType<?> typeIn) {
+    protected AbstractAnimatedTileEntityMachines(TileEntityType<?> typeIn) {
         super(typeIn);
     }
 
@@ -200,6 +200,7 @@ public abstract class AbstractTileEntityMachines extends LockableTileEntity impl
     public ItemStack decrStackSize(int index, int count) {
         ItemStack stack = this.inventory.getStackInSlot(index);
         stack.shrink(count);
+        this.inventory.setStackInSlot(index, stack);
         return stack;
     }
 

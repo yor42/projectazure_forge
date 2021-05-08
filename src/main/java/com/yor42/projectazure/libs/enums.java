@@ -247,6 +247,7 @@ public class enums {
     }
 
     public enum ResourceType {
+        GEAR("gear"),
         INGOT("ingot"),
         PLATE("plate"),
         DUST("dust"),

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.item.crafting.IRecipe;
@@ -13,6 +14,7 @@ public class registerRecipes {
 
     public static class Types{
         public static final IRecipeType<PressingRecipe> PRESSING = IRecipeType.register(defined.MODID+"pressing");
+        public static final IRecipeType<AlloyingRecipe> ALLOYING = IRecipeType.register(defined.MODID+"alloying");
 
         public static void register(){}
     }
@@ -20,6 +22,7 @@ public class registerRecipes {
     public static class Serializers{
 
         public static final RegistryObject<IRecipeSerializer<PressingRecipe>> PRESSING = register("pressing", PressingRecipe.Serializer::new);
+        public static final RegistryObject<IRecipeSerializer<AlloyingRecipe>> ALLOYING = register("alloying", AlloyingRecipe.Serializer::new);
 
         private static <T extends IRecipe<?>> RegistryObject<IRecipeSerializer<T>> register(String name, Supplier<IRecipeSerializer<T>> serializer){
             return registerManager.RECIPE_SERIALIZERS.register(name, serializer);

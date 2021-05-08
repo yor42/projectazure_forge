@@ -1,19 +1,14 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "II",
-    "IC"
-  ],
-  "key": {
-    "I": {
-      "tag": "forge:dusts/iron"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:mortar"
     },
-    "C": {
-      "tag": "forge:dusts/coal"
+    {
+      "tag": "forge:ingots/steel"
     }
-  },
+  ],
   "result": {
-    "item": "projectazure:dust_steel",
-    "count": 2
+    "item": "projectazure:dust_steel"
   }
 }

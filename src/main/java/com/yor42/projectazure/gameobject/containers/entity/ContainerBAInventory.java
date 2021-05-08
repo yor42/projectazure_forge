@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.containers;
+package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;

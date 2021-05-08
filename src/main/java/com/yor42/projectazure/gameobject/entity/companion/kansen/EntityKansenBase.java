@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
-import com.yor42.projectazure.gameobject.containers.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
