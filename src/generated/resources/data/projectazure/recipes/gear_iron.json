@@ -7,13 +7,13 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:plates/brass"
+      "tag": "forge:plates/iron"
     },
     "C": {
       "tag": "forge:cutter"
     }
   },
   "result": {
-    "item": "projectazure:gear_brass"
+    "item": "projectazure:gear_iron"
   }
 }
