@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#C#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:plates/steel"
+    },
+    "C": {
+      "tag": "forge:cutter"
+    }
+  },
+  "result": {
+    "item": "projectazure:gear_steel"
+  }
+}

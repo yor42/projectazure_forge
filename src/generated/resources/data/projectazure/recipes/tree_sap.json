@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "LLL",
+    "LLL"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:logs"
+    }
+  },
+  "result": {
+    "item": "projectazure:tree_sap",
+    "count": 4
+  }
+}

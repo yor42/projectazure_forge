@@ -50,7 +50,6 @@ public class registerItems {
     public static final RegistryObject<Item> GEAR_BRONZE = registerManager.ITEMS.register("gear_bronze", () -> new ItemResource("bronze", enums.ResourceType.GEAR));
     public static final RegistryObject<Item> GEAR_STEEL = registerManager.ITEMS.register("gear_steel", () -> new ItemResource("steel", enums.ResourceType.GEAR));
     public static final RegistryObject<Item> GEAR_IRON = registerManager.ITEMS.register("gear_iron", () -> new ItemResource("iron", enums.ResourceType.GEAR));
-    public static final RegistryObject<Item> GEAR_BRASS = registerManager.ITEMS.register("gear_brass", () -> new ItemResource("iron", enums.ResourceType.GEAR));
 
     public static final RegistryObject<Item> DUST_COPPER = registerManager.ITEMS.register("dust_copper", () -> new ItemResource("copper", enums.ResourceType.DUST));
     public static final RegistryObject<Item> DUST_LEAD = registerManager.ITEMS.register("dust_lead", () -> new ItemResource("lead", enums.ResourceType.DUST));

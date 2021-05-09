@@ -111,7 +111,7 @@ public class AlloyFurnaceBlock extends Block {
         if (!state.isIn(newState.getBlock())) {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te instanceof TileEntityAlloyFurnace) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMetalPress) te);
+                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityAlloyFurnace) te);
             }
             super.onReplaced(state, worldIn, pos, newState, isMoving);
         }
