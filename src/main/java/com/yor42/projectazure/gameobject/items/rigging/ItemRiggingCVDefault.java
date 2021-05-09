@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.client.model.rigging.modelCVRiggingDefault;
-import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class ItemRiggingCVDefault extends ItemRiggingCV{

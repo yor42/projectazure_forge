@@ -14,7 +14,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.text.*;
-import net.minecraft.util.text.Color;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -28,7 +27,8 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
 public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable {
 

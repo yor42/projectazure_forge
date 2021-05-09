@@ -6,7 +6,6 @@ import com.yor42.projectazure.client.renderer.GeoProjectileRenderer;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 

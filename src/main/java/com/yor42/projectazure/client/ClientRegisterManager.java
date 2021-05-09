@@ -4,8 +4,6 @@ import com.yor42.projectazure.client.gui.*;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.gui.ScreenManager;
 
-import java.util.Scanner;
-
 public class ClientRegisterManager {
 
     public static void registerScreen(){

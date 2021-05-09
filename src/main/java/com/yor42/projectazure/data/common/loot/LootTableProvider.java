@@ -2,7 +2,6 @@ package com.yor42.projectazure.data.common.loot;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
-import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.loot.*;
 import net.minecraft.util.ResourceLocation;

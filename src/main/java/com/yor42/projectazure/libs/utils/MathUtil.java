@@ -4,9 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.util.text.Color;
-import software.bernie.shadowed.fasterxml.jackson.databind.ser.Serializers;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Random;
 
 import static net.minecraft.util.math.MathHelper.clamp;

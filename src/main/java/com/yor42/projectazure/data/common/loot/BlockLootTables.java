@@ -3,7 +3,6 @@ package com.yor42.projectazure.data.common.loot;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.stream.Collectors;

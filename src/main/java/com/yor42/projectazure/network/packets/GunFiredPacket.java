@@ -2,20 +2,14 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
-import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.items.ItemStackHandler;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.function.Supplier;
 

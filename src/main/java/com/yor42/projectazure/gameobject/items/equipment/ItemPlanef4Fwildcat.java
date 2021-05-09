@@ -4,8 +4,6 @@ import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
-import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class ItemPlanef4Fwildcat extends ItemEquipmentPlaneBase{

@@ -1,7 +1,5 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
-import com.yor42.projectazure.gameobject.blocks.MetalPressBlock;
-import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;

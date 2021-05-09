@@ -1,8 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.libs.defined;
-import com.yor42.projectazure.libs.utils.AmmoProperties;
-import com.yor42.projectazure.libs.utils.ParticleUtils;
 import com.yor42.projectazure.libs.utils.ProjectileUtils;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;

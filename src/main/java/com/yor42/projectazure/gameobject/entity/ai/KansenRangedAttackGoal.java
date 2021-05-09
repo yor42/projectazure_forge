@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.ai;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.MathHelper;
 

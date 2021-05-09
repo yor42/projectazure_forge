@@ -4,7 +4,6 @@ import com.yor42.projectazure.gameobject.DamageSources;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -19,8 +18,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
-
-import static com.yor42.projectazure.gameobject.DamageSources.DAMAGE_CANNON;
 
 public class EntityCannonPelllet extends DamagingProjectileEntity {
 

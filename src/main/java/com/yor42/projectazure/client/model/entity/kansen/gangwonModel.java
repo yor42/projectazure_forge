@@ -9,10 +9,10 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
-
 import java.util.Random;
 
-import static com.yor42.projectazure.libs.utils.ResourceUtils.*;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
 

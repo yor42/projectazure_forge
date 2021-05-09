@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.entity.ai.targetAI;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
-import net.minecraft.entity.passive.TameableEntity;
 
 public class CompanionOwnerHurtTarget extends OwnerHurtTargetGoal {
 

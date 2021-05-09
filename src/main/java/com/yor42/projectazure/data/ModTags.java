@@ -3,12 +3,10 @@ package com.yor42.projectazure.data;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.system.CallbackI;
 
 public class ModTags {
     public static final class Blocks {
@@ -44,8 +42,10 @@ public class ModTags {
         public static final ITag.INamedTag<Item> INGOT_LEAD = forge("ingots/lead");
         public static final ITag.INamedTag<Item> INGOT_ZINC = forge("ingots/zinc");
         public static final ITag.INamedTag<Item> INGOT_STEEL = forge("ingots/steel");
+        public static final ITag.INamedTag<Item> INGOT_BRASS = forge("ingots/brass");
 
         public static final ITag.INamedTag<Item> GEAR_COPPER = forge("gears/copper");
+        public static final ITag.INamedTag<Item> GEAR_BRASS = forge("gears/brass");
         public static final ITag.INamedTag<Item> GEAR_TIN = forge("gears/tin");
         public static final ITag.INamedTag<Item> GEAR_BRONZE = forge("gears/bronze");
         public static final ITag.INamedTag<Item> GEAR_IRON = forge("gears/iron");
@@ -59,6 +59,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> PLATE_IRON = forge("plates/iron");
         public static final ITag.INamedTag<Item> PLATE_ZINC = forge("plates/zinc");
         public static final ITag.INamedTag<Item> PLATE_STEEL = forge("plates/steel");
+        public static final ITag.INamedTag<Item> PLATE_BRASS = forge("plates/brass");
 
         public static final ITag.INamedTag<Item> DUST_ALUMINIUM = forge("dusts/aluminium");
         public static final ITag.INamedTag<Item> DUST_COPPER = forge("dusts/copper");
@@ -69,6 +70,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> DUST_IRON = forge("dusts/iron");
         public static final ITag.INamedTag<Item> DUST_COAL = forge("dusts/coal");
         public static final ITag.INamedTag<Item> DUST_STEEL = forge("dusts/steel");
+        public static final ITag.INamedTag<Item> DUST_BRASS = forge("dusts/brass");
 
         public static final ITag.INamedTag<Item> ORES_ALUMINIUM = forge("ores/aluminium");
         public static final ITag.INamedTag<Item> ORES_COPPER = forge("ores/copper");

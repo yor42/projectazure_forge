@@ -1,6 +1,5 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.blocks.MetalPressBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import net.minecraft.block.Block;

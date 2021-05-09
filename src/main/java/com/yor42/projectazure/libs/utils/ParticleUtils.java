@@ -1,6 +1,5 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.world.World;

@@ -1,15 +1,12 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.defined;
-import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.settings.KeyModifier;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.system.CallbackI;
 
 public class ResourceUtils {
 

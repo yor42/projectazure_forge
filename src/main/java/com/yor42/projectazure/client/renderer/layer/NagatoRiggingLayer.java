@@ -1,13 +1,11 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingDD;
-import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

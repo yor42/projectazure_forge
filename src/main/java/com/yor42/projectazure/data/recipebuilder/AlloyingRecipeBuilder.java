@@ -1,9 +1,7 @@
 package com.yor42.projectazure.data.recipebuilder;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
-import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -14,15 +12,12 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.registries.ForgeRegistries;
-import java.util.List;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class AlloyingRecipeBuilder {

@@ -1,11 +1,7 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
-import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

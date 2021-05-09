@@ -4,7 +4,6 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBas
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.ServerPlayerEntity;

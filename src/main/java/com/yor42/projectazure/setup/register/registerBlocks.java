@@ -7,7 +7,6 @@ import com.yor42.projectazure.gameobject.blocks.PAOreBlock;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.OreBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;

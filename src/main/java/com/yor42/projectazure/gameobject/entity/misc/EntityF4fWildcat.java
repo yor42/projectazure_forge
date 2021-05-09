@@ -1,12 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;

@@ -12,20 +12,18 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.MusicDiscItem;
+import net.minecraft.item.Rarity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -44,6 +42,7 @@ public class registerItems {
     public static final RegistryObject<Item> INGOT_BRONZE = registerManager.ITEMS.register("ingot_bronze", () -> new ItemResource("bronze", enums.ResourceType.INGOT));
     public static final RegistryObject<Item> INGOT_ZINC = registerManager.ITEMS.register("ingot_zinc", () -> new ItemResource("zinc", enums.ResourceType.INGOT));
     public static final RegistryObject<Item> INGOT_STEEL = registerManager.ITEMS.register("ingot_steel", () -> new ItemResource("steel", enums.ResourceType.INGOT));
+    public static final RegistryObject<Item> INGOT_BRASS = registerManager.ITEMS.register("ingot_brass", () -> new ItemResource("brass", enums.ResourceType.INGOT));
 
     public static final RegistryObject<Item> GEAR_COPPER = registerManager.ITEMS.register("gear_copper", () -> new ItemResource("copper", enums.ResourceType.GEAR));
     public static final RegistryObject<Item> GEAR_LEAD = registerManager.ITEMS.register("gear_lead", () ->new ItemResource("lead", enums.ResourceType.GEAR));
@@ -51,6 +50,7 @@ public class registerItems {
     public static final RegistryObject<Item> GEAR_BRONZE = registerManager.ITEMS.register("gear_bronze", () -> new ItemResource("bronze", enums.ResourceType.GEAR));
     public static final RegistryObject<Item> GEAR_STEEL = registerManager.ITEMS.register("gear_steel", () -> new ItemResource("steel", enums.ResourceType.GEAR));
     public static final RegistryObject<Item> GEAR_IRON = registerManager.ITEMS.register("gear_iron", () -> new ItemResource("iron", enums.ResourceType.GEAR));
+    public static final RegistryObject<Item> GEAR_BRASS = registerManager.ITEMS.register("gear_brass", () -> new ItemResource("iron", enums.ResourceType.GEAR));
 
     public static final RegistryObject<Item> DUST_COPPER = registerManager.ITEMS.register("dust_copper", () -> new ItemResource("copper", enums.ResourceType.DUST));
     public static final RegistryObject<Item> DUST_LEAD = registerManager.ITEMS.register("dust_lead", () -> new ItemResource("lead", enums.ResourceType.DUST));
@@ -61,7 +61,7 @@ public class registerItems {
     public static final RegistryObject<Item> DUST_IRON = registerManager.ITEMS.register("dust_iron", () -> new ItemResource("iron", enums.ResourceType.DUST));
     public static final RegistryObject<Item> DUST_COAL = registerManager.ITEMS.register("dust_coal", () -> new ItemResource("coal", enums.ResourceType.DUST));
     public static final RegistryObject<Item> DUST_STEEL = registerManager.ITEMS.register("dust_steel", () -> new ItemResource("steel", enums.ResourceType.DUST));
-
+    public static final RegistryObject<Item> DUST_BRASS = registerManager.ITEMS.register("dust_brass", () -> new ItemResource("brass", enums.ResourceType.DUST));
 
     public static final RegistryObject<Item> PLATE_COPPER = registerManager.ITEMS.register("plate_copper", () -> new ItemResource("copper", enums.ResourceType.PLATE));
     public static final RegistryObject<Item> PLATE_LEAD = registerManager.ITEMS.register("plate_lead", () -> new ItemResource("lead", enums.ResourceType.PLATE));
@@ -71,6 +71,7 @@ public class registerItems {
     public static final RegistryObject<Item> PLATE_ZINC = registerManager.ITEMS.register("plate_zinc", () -> new ItemResource("zinc", enums.ResourceType.PLATE));
     public static final RegistryObject<Item> PLATE_IRON = registerManager.ITEMS.register("plate_iron", () -> new ItemResource("iron", enums.ResourceType.PLATE));
     public static final RegistryObject<Item> PLATE_STEEL = registerManager.ITEMS.register("plate_steel", () -> new ItemResource("steel", enums.ResourceType.PLATE));
+    public static final RegistryObject<Item> PLATE_BRASS = registerManager.ITEMS.register("plate_brass", () -> new ItemResource("brass", enums.ResourceType.PLATE));
 
     public static final RegistryObject<Item> COPPER_WIRE = registerManager.ITEMS.register("copper_wire", () -> new ItemResource("copper", enums.ResourceType.WIRE));
 

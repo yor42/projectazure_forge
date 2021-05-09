@@ -56,7 +56,6 @@ import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getAmmo;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {

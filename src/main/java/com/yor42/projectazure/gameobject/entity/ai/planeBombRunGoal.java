@@ -4,21 +4,13 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAir
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.serializePlane;
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.setCurrentDamage;
 
 public class planeBombRunGoal extends Goal {
 

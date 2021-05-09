@@ -1,9 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.gunusers;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -19,8 +16,6 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-
-import static com.yor42.projectazure.libs.enums.CompanionRarity.ELITE;
 
 public class EntityShiroko extends EntityGunUserBase {
     public EntityShiroko(EntityType<? extends TameableEntity> type, World worldIn) {

@@ -3,11 +3,9 @@ package com.yor42.projectazure.data.common;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.data.recipebuilder.AlloyingRecipeBuilder;
 import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
-import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
@@ -15,13 +13,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.system.CallbackI;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -39,6 +33,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", registerItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).dust(registerItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE).plates(registerItems.PLATE_BRONZE.get(), ModTags.Items.PLATE_BRONZE).gear(registerItems.GEAR_BRONZE.get(), ModTags.Items.GEAR_BRONZE));
         BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", registerItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).ore(registerBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(registerItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM).plates(registerItems.PLATE_ALUMINIUM.get(), ModTags.Items.PLATE_ALUMINIUM));
         BuildMetalRecipe(consumer, 0.5F, new Metals("steel", registerItems.INGOT_STEEL.get(), ModTags.Items.INGOT_STEEL).dust(registerItems.DUST_STEEL.get(), ModTags.Items.DUST_STEEL).plates(registerItems.PLATE_STEEL.get(), ModTags.Items.PLATE_STEEL).gear(registerItems.GEAR_STEEL.get(), ModTags.Items.GEAR_STEEL));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("brass", registerItems.INGOT_BRASS.get(), ModTags.Items.INGOT_BRASS).dust(registerItems.DUST_BRASS.get(), ModTags.Items.DUST_BRASS).plates(registerItems.PLATE_BRASS.get(), ModTags.Items.PLATE_BRASS).gear(registerItems.GEAR_BRASS.get(), ModTags.Items.GEAR_BRASS));
 
         BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(registerItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(registerItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON).gear(registerItems.GEAR_IRON.get(), ModTags.Items.GEAR_IRON));
 
@@ -148,6 +143,11 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
         AlloyingRecipeBuilder.addRecipe(Ingredient.fromTag(ModTags.Items.INGOT_COPPER), 3,Ingredient.fromTag(ModTags.Items.INGOT_TIN), 1, registerItems.INGOT_BRONZE.get(), 4, 300)
                 .addCriterion("hastin", hasItem(ModTags.Items.INGOT_TIN))
+                .addCriterion("hascopper", hasItem(ModTags.Items.INGOT_COPPER))
+                .build(consumer);
+
+        AlloyingRecipeBuilder.addRecipe(Ingredient.fromTag(ModTags.Items.INGOT_COPPER), 2,Ingredient.fromTag(ModTags.Items.INGOT_ZINC), 1, registerItems.INGOT_BRASS.get(), 3, 300)
+                .addCriterion("haszinc", hasItem(ModTags.Items.INGOT_ZINC))
                 .addCriterion("hascopper", hasItem(ModTags.Items.INGOT_COPPER))
                 .build(consumer);
 

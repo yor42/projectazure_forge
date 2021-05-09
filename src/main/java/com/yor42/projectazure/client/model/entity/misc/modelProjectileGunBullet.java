@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
 
 public class modelProjectileGunBullet extends EntityModel<Entity> {
 	private final ModelRenderer bb_main;

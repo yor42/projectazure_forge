@@ -2,7 +2,6 @@ package com.yor42.projectazure.client.model.equipments;
 
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class modelEquipmentTorpedo533mm extends AnimatedGeoModel {

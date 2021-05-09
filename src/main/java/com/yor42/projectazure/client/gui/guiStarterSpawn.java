@@ -7,7 +7,6 @@ import com.yor42.projectazure.client.gui.buttons.buttonStarterSelect;
 import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
 import com.yor42.projectazure.setup.register.registerManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;

@@ -2,8 +2,10 @@ package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;

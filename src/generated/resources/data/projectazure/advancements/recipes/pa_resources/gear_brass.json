@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:gear_brass"
+    ]
+  },
+  "criteria": {
+    "has_plate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:plates/brass"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:gear_brass"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_plate",
+      "has_the_recipe"
+    ]
+  ]
+}

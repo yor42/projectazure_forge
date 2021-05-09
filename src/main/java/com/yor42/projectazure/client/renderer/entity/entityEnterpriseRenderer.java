@@ -3,7 +3,6 @@ package com.yor42.projectazure.client.renderer.entity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.kansen.enterpriseModel;
-import com.yor42.projectazure.client.renderer.layer.AyanamiRiggingLayer;
 import com.yor42.projectazure.client.renderer.layer.EnterpriseRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
