@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "projectazure:ore_stone_bauxite"
+          "name": "projectazure:ore_stone_zinc"
         }
       ],
       "conditions": [

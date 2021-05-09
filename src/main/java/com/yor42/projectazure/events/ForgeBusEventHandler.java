@@ -1,4 +1,4 @@
-package com.yor42.projectazure.network;
+package com.yor42.projectazure.events;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;

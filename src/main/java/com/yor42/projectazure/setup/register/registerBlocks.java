@@ -18,10 +18,11 @@ import java.util.function.Supplier;
 
 public class registerBlocks {
 
-    public static final RegistryObject<Block> BAUXITE_ORE = registerOre("ore_stone_bauxite", "aluminium");
-    public static final RegistryObject<Block> COPPER_ORE = registerOre("ore_stone_copper", "copper");
-    public static final RegistryObject<Block> TIN_ORE = registerOre("ore_stone_tin", "tin");
-    public static final RegistryObject<Block> LEAD_ORE = registerOre("ore_stone_lead", "lead");
+    public static final RegistryObject<Block> BAUXITE_ORE = registerOre("aluminium");
+    public static final RegistryObject<Block> COPPER_ORE = registerOre("copper");
+    public static final RegistryObject<Block> TIN_ORE = registerOre("tin");
+    public static final RegistryObject<Block> LEAD_ORE = registerOre("lead");
+    public static final RegistryObject<Block> ZINC_ORE = registerOre("zinc");
 
     public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
             new Block((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid())), Main.PA_RESOURCES);
@@ -38,6 +39,10 @@ public class registerBlocks {
         RegistryObject<T> ret = register_noblock(name, block);
         registerManager.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().group(group)));
         return ret;
+    }
+
+    private static RegistryObject<Block> registerOre(String materialName){
+        return registerOre("ore_stone_"+materialName, materialName);
     }
 
     private static RegistryObject<Block> registerOre(String registryName, String materialName){

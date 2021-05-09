@@ -1,4 +1,4 @@
-package com.yor42.projectazure.network;
+package com.yor42.projectazure.events;
 
 import com.google.common.base.Throwables;
 import com.yor42.projectazure.Main;

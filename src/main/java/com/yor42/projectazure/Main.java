@@ -8,14 +8,16 @@ import com.yor42.projectazure.client.renderer.entity.projectile.EntityGunBulletR
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectileTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
-import com.yor42.projectazure.network.ModBusEventHandler;
+import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
+import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -72,6 +74,8 @@ public class Main
         registerManager.register();
         GeckoLibMod.DISABLE_IN_DEV = true;
         GeckoLib.initialize();
+
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldgenInit::registerWorldgen);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
