@@ -80,7 +80,7 @@ public class itemModelProvider extends ItemModelProvider {
         /*
         Build Ore Block Item model
          */
-        buildSimpleBlockModel("ore_stone_bauxite");
+        buildSimpleBlockModel("ore_stone_aluminium");
         buildSimpleBlockModel("ore_stone_copper");
         buildSimpleBlockModel("ore_stone_tin");
         buildSimpleBlockModel("ore_stone_lead");

@@ -80,6 +80,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_steel", hasItem(ModTags.Items.PLATE_STEEL))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(registerBlocks.ALLOY_FURNACE.get())
+                .key('F', Items.FURNACE)
+                .key('B', Blocks.BRICKS)
+                .key('S', ModTags.Items.PLATE_STEEL)
+                .patternLine("SBS")
+                .patternLine("BFB")
+                .patternLine("SBS")
+                .addCriterion("has_furnace", hasItem(Items.FURNACE))
+                .addCriterion("has_steel", hasItem(ModTags.Items.PLATE_STEEL))
+                .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(registerBlocks.METAL_PRESS.get())
                 .key('L', Items.LEVER)
                 .key('R', Blocks.REDSTONE_BLOCK)
