@@ -49,6 +49,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("nugget_lead");
         buildModel("nugget_steel");
         buildModel("nugget_brass");
+        buildModel("nugget_zinc");
 
         buildModel("dust_copper");
         buildModel("dust_tin");
@@ -91,6 +92,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildSimpleBlockModel("ore_stone_copper");
         buildSimpleBlockModel("ore_stone_tin");
         buildSimpleBlockModel("ore_stone_lead");
+        buildSimpleBlockModel("ore_stone_zinc");
 
         buildSimpleBlockModel("machine_frame");
 

@@ -63,6 +63,13 @@ public class Main
         }
     };
 
+    public static ItemGroup PA_MACHINES = new ItemGroup("pa_machines") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(registerBlocks.METAL_PRESS.get().asItem());
+        }
+    };
+
     public Main() {
 
         MinecraftForge.EVENT_BUS.register(new ModBusEventHandler());

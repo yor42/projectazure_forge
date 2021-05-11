@@ -19,7 +19,7 @@ public class MetalPressBlock extends AbstractAnimatedBlockMachines {
 
 
     public MetalPressBlock() {
-        super((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL)));
+        super((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid()));
     }
 
     @Nullable

@@ -28,8 +28,8 @@ public class registerBlocks {
             new Block((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid())), Main.PA_RESOURCES);
 
 
-    public static final RegistryObject<Block> METAL_PRESS = register("metal_press", MetalPressBlock::new, Main.PA_RESOURCES);
-    public static final RegistryObject<Block> ALLOY_FURNACE = register("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_RESOURCES);
+    public static final RegistryObject<Block> METAL_PRESS = register("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
+    public static final RegistryObject<Block> ALLOY_FURNACE = register("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);
 
     private static <T extends Block> RegistryObject<T> register_noblock(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);
