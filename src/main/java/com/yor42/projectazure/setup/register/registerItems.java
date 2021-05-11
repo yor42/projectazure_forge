@@ -72,6 +72,14 @@ public class registerItems {
     public static final RegistryObject<Item> PLATE_STEEL = registerManager.ITEMS.register("plate_steel", () -> new ItemResource("steel", enums.ResourceType.PLATE));
     public static final RegistryObject<Item> PLATE_BRASS = registerManager.ITEMS.register("plate_brass", () -> new ItemResource("brass", enums.ResourceType.PLATE));
 
+    public static final RegistryObject<Item> NUGGET_COPPER = registerManager.ITEMS.register("nugget_copper", () -> new ItemResource("copper", enums.ResourceType.NUGGET));
+    public static final RegistryObject<Item> NUGGET_LEAD = registerManager.ITEMS.register("nugget_lead", () -> new ItemResource("lead", enums.ResourceType.NUGGET));
+    public static final RegistryObject<Item> NUGGET_TIN = registerManager.ITEMS.register("nugget_tin", () -> new ItemResource("tin", enums.ResourceType.NUGGET));
+    public static final RegistryObject<Item> NUGGET_BRONZE = registerManager.ITEMS.register("nugget_bronze", () -> new ItemResource("bronze", enums.ResourceType.NUGGET));
+    public static final RegistryObject<Item> NUGGET_ZINC = registerManager.ITEMS.register("nugget_zinc", () -> new ItemResource("zinc", enums.ResourceType.NUGGET));
+    public static final RegistryObject<Item> NUGGET_STEEL = registerManager.ITEMS.register("nugget_steel", () -> new ItemResource("steel", enums.ResourceType.NUGGET));
+    public static final RegistryObject<Item> NUGGET_BRASS = registerManager.ITEMS.register("nugget_brass", () -> new ItemResource("brass", enums.ResourceType.NUGGET));
+
     public static final RegistryObject<Item> COPPER_WIRE = registerManager.ITEMS.register("copper_wire", () -> new ItemResource("copper", enums.ResourceType.WIRE));
 
     public static final RegistryObject<Item> IRON_PIPE = registerManager.ITEMS.register("iron_pipe", () -> new Item(new Item.Properties()

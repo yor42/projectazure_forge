@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "tag": "forge:dusts/zinc"
+  },
+  "result": "projectazure:ingot_zinc",
+  "experience": 0.5,
+  "cookingtime": 100
+}

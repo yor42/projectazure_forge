@@ -41,6 +41,14 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.getOrCreateBuilder(ModTags.Items.INGOT_STEEL).add(registerItems.INGOT_STEEL.get());
         this.getOrCreateBuilder(ModTags.Items.INGOT_BRASS).add(registerItems.INGOT_BRASS.get());
 
+        this.getOrCreateBuilder(ModTags.Items.NUGGET_COPPER).add(registerItems.NUGGET_COPPER.get());
+        this.getOrCreateBuilder(ModTags.Items.NUGGET_TIN).add(registerItems.NUGGET_TIN.get());
+        this.getOrCreateBuilder(ModTags.Items.NUGGET_BRONZE).add(registerItems.NUGGET_BRONZE.get());
+        this.getOrCreateBuilder(ModTags.Items.NUGGET_LEAD).add(registerItems.NUGGET_LEAD.get());
+        this.getOrCreateBuilder(ModTags.Items.NUGGET_ZINC).add(registerItems.NUGGET_ZINC.get());
+        this.getOrCreateBuilder(ModTags.Items.NUGGET_STEEL).add(registerItems.NUGGET_STEEL.get());
+        this.getOrCreateBuilder(ModTags.Items.NUGGET_BRASS).add(registerItems.NUGGET_BRASS.get());
+
         this.getOrCreateBuilder(ModTags.Items.PLATE_ALUMINIUM).add(registerItems.PLATE_ALUMINIUM.get());
         this.getOrCreateBuilder(ModTags.Items.PLATE_COPPER).add(registerItems.PLATE_COPPER.get());
         this.getOrCreateBuilder(ModTags.Items.PLATE_TIN).add(registerItems.PLATE_TIN.get());

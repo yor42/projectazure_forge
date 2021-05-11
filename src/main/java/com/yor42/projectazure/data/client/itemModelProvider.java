@@ -43,6 +43,13 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("gear_steel");
         buildModel("gear_iron");
 
+        buildModel("nugget_copper");
+        buildModel("nugget_tin");
+        buildModel("nugget_bronze");
+        buildModel("nugget_lead");
+        buildModel("nugget_steel");
+        buildModel("nugget_brass");
+
         buildModel("dust_copper");
         buildModel("dust_tin");
         buildModel("dust_bronze");
