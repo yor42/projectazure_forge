@@ -27,7 +27,7 @@ public class EntityChen extends AbstractSwordUserBase{
     @Override
     public void registerControllers(AnimationData animationData) {
         super.registerControllers(animationData);
-        animationData.addAnimationController(new AnimationController<>(this, "controller_tail", 20, this::predicate_tail));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_tail", 10, this::predicate_tail));
     }
 
     @Override

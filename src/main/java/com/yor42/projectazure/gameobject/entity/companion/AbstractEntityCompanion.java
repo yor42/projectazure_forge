@@ -480,9 +480,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<>(this, "controller_lowerbody", 20, this::predicate_lowerbody));
-        animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 20, this::predicate_upperbody));
-        animationData.addAnimationController(new AnimationController<>(this, "controller_head", 20, this::predicate_head));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_lowerbody", 10, this::predicate_lowerbody));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 10, this::predicate_upperbody));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_head", 10, this::predicate_head));
     }
 
     protected abstract <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent);
