@@ -53,6 +53,22 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         this.titleY=17;
     }
 
+    public int getY() {
+        return this.y;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getBackgroundWidth() {
+        return this.backgroundWidth;
+    }
+
+    public int getBackgroundHeight() {
+        return this.backgroundHeight;
+    }
+
     private enums.Affection affectionValuetoLevel(){
         if(this.affection>=100.0D){
             if(this.host.isOathed())

@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.libs.defined;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
@@ -21,6 +22,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.PLANEF4FWildCat, EntityF4fWildcat.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.SHIROKO_ENTITY_TYPE, EntityShiroko.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_NAGATO, EntityNagato.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CHEN, EntityChen.MutableAttribute().create());
     }
 
 /*

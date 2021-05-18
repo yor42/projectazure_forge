@@ -91,6 +91,22 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         }
     }
 
+    public int getY() {
+        return this.y;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getBackgroundWidth() {
+        return this.backgroundWidth;
+    }
+
+    public int getBackgroundHeight() {
+        return this.backgroundHeight;
+    }
+
 
 
     @Override

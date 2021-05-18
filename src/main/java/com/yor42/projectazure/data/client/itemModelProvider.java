@@ -113,6 +113,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelWisdomCube("spawnenterprise");
         buildModelWisdomCube("spawnnagato");
 
+        buildModelArknights("spawnchen");
+
         buildModelBlueArchive("spawnshiroko");
 
     }
@@ -145,5 +147,9 @@ public class itemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder buildModelBlueArchive(String ItemName){
         return buildModelWithSingleTex(ItemName, "spawn_bluearchive");
+    }
+
+    private ItemModelBuilder buildModelArknights(String ItemName){
+        return buildModelWithSingleTex(ItemName, "akn_document");
     }
 }
