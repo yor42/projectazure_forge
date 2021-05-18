@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -10,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -27,6 +29,7 @@ public class EntityChen extends AbstractSwordUserBase{
     @Override
     public void registerControllers(AnimationData animationData) {
         super.registerControllers(animationData);
+
         animationData.addAnimationController(new AnimationController<>(this, "controller_tail", 10, this::predicate_tail));
     }
 

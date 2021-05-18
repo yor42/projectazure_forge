@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -73,6 +74,30 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
     @Override
     public boolean canFit(int width, int height) {
         return true;
+    }
+
+    public NonNullList<ItemStack> getIngredientStack() {
+        NonNullList<ItemStack> list = NonNullList.create();
+
+        ItemStack stack1 = this.ingredient1.getMatchingStacks()[0];
+        stack1.setCount(this.ing1Count);
+
+        ItemStack stack2 = this.ingredient2.getMatchingStacks()[0];
+        stack2.setCount(this.ing2Count);
+
+        list.add(stack1);
+        list.add(stack2);
+
+        return list;
+    }
+
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> list = NonNullList.create();
+        list.add(ingredient1);
+        list.add(ingredient2);
+        return list;
     }
 
     @Override
