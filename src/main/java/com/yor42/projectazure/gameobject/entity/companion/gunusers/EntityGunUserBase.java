@@ -18,13 +18,11 @@ import javax.annotation.Nonnull;
 
 public abstract class EntityGunUserBase extends AbstractEntityCompanion {
 
-    private ItemStackHandler AmmoStorage = new ItemStackHandler(8){
+    private final ItemStackHandler AmmoStorage = new ItemStackHandler(8){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             return stack.getItem() instanceof ItemMagazine;
         }
-
-        //TODO check if items are instance of bullets
     };
 
     protected EntityGunUserBase(EntityType<? extends TameableEntity> type, World worldIn) {

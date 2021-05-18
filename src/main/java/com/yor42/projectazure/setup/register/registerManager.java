@@ -5,7 +5,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInvent
 import com.yor42.projectazure.gameobject.containers.machine.ContainerAlloyFurnace;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;

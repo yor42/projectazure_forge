@@ -4,6 +4,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.slots.SlotRigging;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
+import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -163,69 +164,66 @@ public class ContainerKansenInventory extends Container {
         return true;
     }
 
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index)
-    {
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
-
-        if(slot != null && slot.getHasStack())
-        {
+        if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-
-
-            if(itemstack1.getItem() instanceof ItemRiggingBase){
-                if(!this.mergeItemStack(itemstack1, 0, 1, true))
-                {
+            int i = 6;
+            int entityinv = i+12;
+            int ammoinv = entityinv+8;
+            int playerMainInv = ammoinv + 27;
+            int PlayerHotbar = playerMainInv + 9;
+            if (index < i) {
+                if (!this.mergeItemStack(itemstack1, i, this.inventorySlots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.getSlot(2).isItemValid(itemstack1) && !this.getSlot(2).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(3).isItemValid(itemstack1) && !this.getSlot(3).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 3, 4, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(4).isItemValid(itemstack1) && !this.getSlot(4).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 4, 5, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(5).isItemValid(itemstack1) && !this.getSlot(5).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 5, 6, false)) {
                     return ItemStack.EMPTY;
                 }
             }
-            else if(itemstack1.getItem() instanceof ArmorItem){
-                if(itemstack1.canEquip(EquipmentSlotType.HEAD, this.host)){
-                    if(!this.mergeItemStack(itemstack1, 3, 4, true))
-                    {
-                        return ItemStack.EMPTY;
-                    }
+            if(itemstack1.getItem() instanceof ItemMagazine){
+                if (!this.mergeItemStack(itemstack1, ammoinv, ammoinv+8, false)) {
+                    return ItemStack.EMPTY;
                 }
-                else if(itemstack1.canEquip(EquipmentSlotType.CHEST, this.host)){
-                    if(!this.mergeItemStack(itemstack1, 4, 5, true))
-                    {
-                        return ItemStack.EMPTY;
-                    }
-                }
-                else if(itemstack1.canEquip(EquipmentSlotType.LEGS, this.host)){
-                    if(!this.mergeItemStack(itemstack1, 5, 6, true))
-                    {
-                        return ItemStack.EMPTY;
-                    }
-                }
-                else if(itemstack1.canEquip(EquipmentSlotType.FEET, this.host)){
-                    if(!this.mergeItemStack(itemstack1, 6, 7, true))
-                    {
-                        return ItemStack.EMPTY;
-                    }
-                }
-            }
-            else if(index<19)
-            {
-                if(!this.mergeItemStack(itemstack1, 19, 53, true))
-                {
+            }else if (index < entityinv) {
+                if (!this.mergeItemStack(itemstack1, ammoinv+1, playerMainInv, false)) {
                     return ItemStack.EMPTY;
                 }
             }
-            else {
-                if(!this.mergeItemStack(itemstack1, 7, 19, true))
-                {
+            else if (!this.mergeItemStack(itemstack1, 6, entityinv, false)) {
+                if (index >= playerMainInv && index < PlayerHotbar) {
+                    if (!this.mergeItemStack(itemstack1, i, playerMainInv, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < playerMainInv) {
+                    if (!this.mergeItemStack(itemstack1, playerMainInv, PlayerHotbar, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (!this.mergeItemStack(itemstack1, playerMainInv, playerMainInv, false)) {
                     return ItemStack.EMPTY;
                 }
+
+                return ItemStack.EMPTY;
             }
 
-            if (itemstack1.isEmpty())
-            {
+            if (itemstack1.isEmpty()) {
                 slot.putStack(ItemStack.EMPTY);
-            }
-            else
-            {
+            } else {
                 slot.onSlotChanged();
             }
         }

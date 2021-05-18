@@ -250,6 +250,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> RELOAD_TIMER_MAINHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> RELOAD_TIMER_OFFHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
 
+    public abstract enums.EntityType getEntityType();
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.PATH, MemoryModuleType.OPENED_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
 

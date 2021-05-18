@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
-import com.yor42.projectazure.libs.utils.ResourceUtils;
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -22,6 +21,11 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class EntityChen extends AbstractSwordUserBase{
+    @Override
+    public enums.EntityType getEntityType() {
+        return enums.EntityType.OPERATOR;
+    }
+
     public EntityChen(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }

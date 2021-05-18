@@ -14,9 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.RegistryObject;
-
-import java.util.Collections;
 
 public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe> {
 

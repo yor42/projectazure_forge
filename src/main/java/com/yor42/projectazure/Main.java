@@ -7,8 +7,8 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatR
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityGunBulletRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectileTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
-import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.events.ModBusEventHandler;
+import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.WorldgenInit;
@@ -19,7 +19,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;

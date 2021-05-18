@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

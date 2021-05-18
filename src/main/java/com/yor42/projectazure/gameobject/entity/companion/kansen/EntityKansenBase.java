@@ -75,6 +75,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         }
     };
 
+    @Override
+    public enums.EntityType getEntityType() {
+        return enums.EntityType.KANSEN;
+    }
+
     public ItemStackHandler AmmoStorage = new ItemStackHandler(8);
 
     protected enums.shipClass shipclass;

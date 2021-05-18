@@ -1,6 +1,8 @@
-package com.yor42.projectazure.gameobject.entity.companion.gunusers;
+package com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive;
 
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -18,6 +20,11 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 public class EntityShiroko extends EntityGunUserBase {
+    @Override
+    public enums.EntityType getEntityType() {
+        return enums.EntityType.BLUEARCHIVE;
+    }
+
     public EntityShiroko(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }

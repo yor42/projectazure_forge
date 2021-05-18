@@ -1,6 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;

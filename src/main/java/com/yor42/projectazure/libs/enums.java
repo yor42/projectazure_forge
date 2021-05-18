@@ -181,10 +181,30 @@ public class enums {
         SMALL
     }
 
+    public enum OperatorClass{
+        VANGUARD,
+        SNIPER,
+        DEFENDER,
+        CASTER,
+        GUARD,
+        MEDIC,
+        SPECIALIST,
+        SUPPORTER
+    }
+
     public enum DamageType{
         RIGGING,
         ENTITY,
         COMPONENT;
+    }
+
+    public enum EntityType{
+        KANSEN,
+        TDOLL,
+        BLUEARCHIVE,
+        OPERATOR,
+        ELEMENTS,
+        SERVANT
     }
 
     public enum Affection{

@@ -3,9 +3,11 @@ package com.yor42.projectazure.gameobject.containers.entity;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
+import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.HorseInventoryContainer;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
@@ -25,6 +27,7 @@ public class ContainerBAInventory extends Container {
 
     private ItemStackHandler AmmoStack;
     private IItemHandlerModifiable equipment;
+
 
     private EntityGunUserBase host;
 
@@ -122,7 +125,7 @@ public class ContainerBAInventory extends Container {
                 this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
                     @Override
                     public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemCannonshell;
+                        return stack.getItem() instanceof ItemMagazine;
                     }
                 });
             }
@@ -143,6 +146,73 @@ public class ContainerBAInventory extends Container {
     public void onContainerClosed(PlayerEntity playerIn) {
         Main.PROXY.setSharedMob(null);
         super.onContainerClosed(playerIn);
+    }
+
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+            int i = 6;
+            int entityinv = i+12;
+            int ammoinv = entityinv+8;
+            int playerMainInv = ammoinv + 27;
+            int PlayerHotbar = playerMainInv + 9;
+            if (index < i) {
+                if (!this.mergeItemStack(itemstack1, i, this.inventorySlots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.getSlot(2).isItemValid(itemstack1) && !this.getSlot(2).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(3).isItemValid(itemstack1) && !this.getSlot(3).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 3, 4, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(4).isItemValid(itemstack1) && !this.getSlot(4).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 4, 5, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(5).isItemValid(itemstack1) && !this.getSlot(5).getHasStack()) {
+                if (!this.mergeItemStack(itemstack1, 5, 6, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if(itemstack1.getItem() instanceof ItemMagazine){
+                if (!this.mergeItemStack(itemstack1, ammoinv, ammoinv+8, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (index < entityinv) {
+                if (!this.mergeItemStack(itemstack1, ammoinv+1, playerMainInv, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            else if (!this.mergeItemStack(itemstack1, 6, entityinv, false)) {
+                if (index >= playerMainInv && index < PlayerHotbar) {
+                    if (!this.mergeItemStack(itemstack1, i, playerMainInv, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < playerMainInv) {
+                    if (!this.mergeItemStack(itemstack1, playerMainInv, PlayerHotbar, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (!this.mergeItemStack(itemstack1, playerMainInv, playerMainInv, false)) {
+                    return ItemStack.EMPTY;
+                }
+
+                return ItemStack.EMPTY;
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
+            } else {
+                slot.onSlotChanged();
+            }
+        }
+
+        return itemstack;
     }
 
     @Override

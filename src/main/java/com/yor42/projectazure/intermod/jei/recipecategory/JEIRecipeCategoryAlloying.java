@@ -1,7 +1,6 @@
 package com.yor42.projectazure.intermod.jei.recipecategory;
 
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
-import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import mezz.jei.api.constants.VanillaTypes;
@@ -12,7 +11,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
 public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe> {
