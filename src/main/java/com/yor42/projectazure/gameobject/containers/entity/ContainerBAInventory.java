@@ -29,12 +29,10 @@ public class ContainerBAInventory extends Container {
     private IItemHandlerModifiable equipment;
 
 
-    private EntityGunUserBase host;
-
     public ContainerBAInventory(int ID, PlayerInventory inventory) {
         super(BA_CONTAINER.get(), ID);
         ItemStackHandler dummyStackHandler = new ItemStackHandler(12);
-        ItemStackHandler dummyEquipmentHandler = new ItemStackHandler(19);
+        ItemStackHandler dummyEquipmentHandler = new ItemStackHandler(6);
         ItemStackHandler dummyAmmoHandler = new ItemStackHandler(8);
 
         //mainhand
@@ -91,7 +89,6 @@ public class ContainerBAInventory extends Container {
         ItemStackHandler stack = companion.getInventory();
         this.equipment = companion.getEquipment();
         this.AmmoStack = companion.getAmmoStorage();
-        this.host = companion;
 
         //mainhand
         this.addSlot(new SlotItemHandler(this.equipment, 0, 10, 30));

@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
+import com.yor42.projectazure.gameobject.items.ItemCannonshell;
+import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
@@ -19,6 +22,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -222,6 +226,22 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     };
 
     protected final ItemStackHandler Inventory = new ItemStackHandler(12);
+    public ItemStackHandler AmmoStorage = new ItemStackHandler(0){
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+
+            AbstractEntityCompanion entity = AbstractEntityCompanion.this;
+
+            if (entity instanceof EntityKansenBase){
+                return stack.getItem() instanceof ItemCannonshell;
+            }
+            else if(entity instanceof EntityGunUserBase){
+                return stack.getItem() instanceof ItemMagazine;
+            }
+            else
+                return false;
+        }
+    };
 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer, healAnimationTime;
     protected double affection, exp, morale;
@@ -833,7 +853,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(this.isOwner(player) && !(player.getHeldItem(hand).getItem() instanceof ItemRiggingBase)){
             if(player.isSneaking()){
                 if(!world.isRemote) {
-                    this.openGUI(player);
+                    this.openGUI((ServerPlayerEntity) player);
                     Main.PROXY.setSharedMob(this);
                     return ActionResultType.SUCCESS;
                 }
@@ -930,7 +950,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             };
         }
     }
-    protected abstract void openGUI(PlayerEntity player);
+    protected abstract void openGUI(ServerPlayerEntity player);
 
     protected void beingpatted(){
         if(this.patAnimationTime == 0 || this.dataManager.get(MAXPATEFFECTCOUNT) == 0){
@@ -945,6 +965,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public IItemHandlerModifiable getEquipment(){
         return this.EQUIPMENT;
+    }
+
+    public ItemStackHandler getAmmoStorage() {
+        return this.AmmoStorage;
     }
 
     @Override

@@ -4,11 +4,15 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.containers.slots.slotEquipment;
 import com.yor42.projectazure.gameobject.containers.slots.slotInventory;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun;
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -116,9 +120,73 @@ public class RiggingContainer extends Container {
             }
         }
     }
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
 
-    public ItemStack getRiggingStack() {
-        return this.riggingStack;
+            int hangercount = 0;
+            ItemStackHandler hanger = ((ItemRiggingBase) riggingStack.getItem()).getHangers(riggingStack);
+            if(hanger != null){
+                hangercount =  Math.min(hanger.getSlots(), 3);
+            }
+
+            int mainguncount = ((ItemRiggingBase) this.riggingStack.getItem()).getMainGunSlotCount()-1;
+            int subgunCount = mainguncount+ ((ItemRiggingBase) this.riggingStack.getItem()).getSubGunSlotCount();
+            int AACount = subgunCount+mainguncount+ ((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount();
+            int torpedocount = AACount+ ((ItemRiggingBase) this.riggingStack.getItem()).getTorpedoSlotCount();
+
+            int maxEquipmenttSlots = ((ItemRiggingBase) this.riggingStack.getItem()).getMainGunSlotCount() + ((ItemRiggingBase) this.riggingStack.getItem()).getSubGunSlotCount() + ((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount()+hangercount;
+            int playerMainInv = maxEquipmenttSlots + 27;
+            int PlayerHotbar = playerMainInv + 9;
+            if(index<((ItemRiggingBase) this.riggingStack.getItem()).getMainGunSlotCount() + ((ItemRiggingBase) this.riggingStack.getItem()).getSubGunSlotCount() + ((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount()){
+                if (!this.mergeItemStack(itemstack1, maxEquipmenttSlots, PlayerHotbar, true)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            else {
+                if (itemstack1.getItem() instanceof ItemEquipmentBase) {
+                    if (itemstack1.getItem() instanceof ItemEquipmentGun) {
+                        ItemEquipmentGun gun = (ItemEquipmentGun) itemstack1.getItem();
+                        if(gun.getSize() == enums.CanonSize.LARGE) {
+                            if (!this.mergeItemStack(itemstack1, 0, mainguncount, false)) {
+                                return ItemStack.EMPTY;
+                            }
+                        }
+                        else{
+                            if (!this.mergeItemStack(itemstack1, 0, subgunCount, false)) {
+                                return ItemStack.EMPTY;
+                            }
+                        }
+                    }
+                    /*
+                    else if (itemstack1.getItem() instanceof ItemEquipmentAA) {
+                        if (!this.mergeItemStack(itemstack1, AACount+1, torpedocount, false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    }
+
+                     */
+                    else if (itemstack1.getItem() instanceof ItemEquipmentTorpedo) {
+                        if (!this.mergeItemStack(itemstack1, AACount+1, torpedocount, false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    }
+                    if(index<playerMainInv) {
+                        if (!this.mergeItemStack(itemstack1, playerMainInv + 1, PlayerHotbar, false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    }else{
+                        if (!this.mergeItemStack(itemstack1, maxEquipmenttSlots+1, playerMainInv, false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    }
+                }
+            }
+        }
+        return itemstack;
     }
 
     @Override

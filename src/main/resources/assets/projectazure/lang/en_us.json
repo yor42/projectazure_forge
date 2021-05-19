@@ -65,6 +65,9 @@
   "gui.current_affection_value": "Affection",
   "gui.entity.level": "Lv",
 
+  "gui.akn_inventory": "Operator Inv.",
+  "gui.akn_trust": "Trust",
+
   "gui.ammostorage.title": "Ammo",
 
   "gui.kansen_ammostorage_usage": "Ammo Storage Usage",

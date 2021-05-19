@@ -18,28 +18,18 @@ import javax.annotation.Nonnull;
 
 public abstract class EntityGunUserBase extends AbstractEntityCompanion {
 
-    private final ItemStackHandler AmmoStorage = new ItemStackHandler(8){
-        @Override
-        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return stack.getItem() instanceof ItemMagazine;
-        }
-    };
-
     protected EntityGunUserBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+        this.AmmoStorage.setSize(8);
     }
 
     @Override
-    protected void openGUI(PlayerEntity player) {
+    protected void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerBAInventory.Supplier(this));
     }
 
     public ItemStackHandler getInventory() {
         return this.Inventory;
-    }
-
-    public ItemStackHandler getAmmoStorage() {
-        return this.AmmoStorage;
     }
 
     @Override

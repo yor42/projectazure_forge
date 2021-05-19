@@ -45,6 +45,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
+import org.apache.logging.log4j.core.jmx.Server;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
@@ -80,7 +81,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return enums.EntityType.KANSEN;
     }
 
-    public ItemStackHandler AmmoStorage = new ItemStackHandler(8);
 
     protected enums.shipClass shipclass;
 
@@ -92,6 +92,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
+        this.AmmoStorage.setSize(8);
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
     }
 
@@ -153,8 +154,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         }
     }
 
-    protected void openGUI(PlayerEntity player){
-        NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerKansenInventory.Supplier(this));
+    protected void openGUI(ServerPlayerEntity player){
+        NetworkHooks.openGui(player, new ContainerKansenInventory.Supplier(this));
     }
 
 
