@@ -12,13 +12,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -33,8 +38,8 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.host = Main.PROXY.getSharedMob();
         this.affection = this.host.getAffection();
         this.morale = host.getMorale();
-        this.xSize = 170;
-        this.ySize = 181;
+        this.xSize = 171;
+        this.ySize = 182;
     }
 
     public int getBackgroundWidth() {
@@ -48,20 +53,28 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
         this.renderValues(matrixStack, mouseX, mouseY);
+        this.drawButtons(matrixStack, mouseX, mouseY);
     }
 
     private void renderValues(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         int affectionlv1_scaled = (int)(46*Math.min(this.host.getAffection(), 100)/100);
+        int affectionlv2_scaled = (int)(46*Math.min(this.host.getAffection()-100, 100)/100);
+        int morale_scaled = (int)(35*this.host.getMorale()/150);
+        int exp_scaled = (int)(46*this.host.getExp()/this.host.getMaxExp());
 
         this.blit(matrixStack, this.guiLeft + 2, this.guiTop + 72, 173, 98, affectionlv1_scaled, 2);
         if(this.host.getAffection()>100){
-            this.blit(matrixStack, this.guiLeft + 2, this.guiTop + 72, 173, 96, (int)(46*(Math.min(this.host.getAffection()-100, 100)/100)), 2);
+            this.blit(matrixStack, this.guiLeft + 2, this.guiTop + 72, 173, 96, affectionlv2_scaled, 2);
         }
+
+        this.blit(matrixStack, this.guiLeft + 1, this.guiTop + 86, 173, 93, exp_scaled, 2);
+
+
+        this.blit(matrixStack, this.guiLeft + 53, this.guiTop + 11, 173, 90, morale_scaled, 2);
     }
 
     /*
@@ -70,7 +83,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
     public void renderBackground(MatrixStack matrixStack, int vOffset) {
         if ((this.minecraft != null ? this.minecraft.world : null) != null) {
 
-            this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xcbcbcbC0, 0x6D6D6DC0);
+            this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xcbcbcbC0, 0xC06D6D6D);
             net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.GuiScreenEvent.BackgroundDrawnEvent(this, matrixStack));
         } else {
             this.renderDirtBackground(vOffset);
@@ -85,11 +98,14 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         matrixStack.scale(scalerate,scalerate,scalerate);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.akn_inventory"), 115/scalerate, 8/scalerate, 16777215);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.akn_trust"), 2/scalerate, 65/scalerate, 0x313131);
+        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.morale"), 54/scalerate, 4/scalerate, 0xffffff);
+        this.font.func_243248_b(matrixStack, new TranslationTextComponent(Integer.toString(this.host.getLevel())), 10/scalerate, 79/scalerate, 0xffffff);
         matrixStack.pop();
 
         matrixStack.push();
         scalerate = 0.5F;
         matrixStack.scale(scalerate,scalerate,scalerate);
+        this.font.func_243248_b(matrixStack, new StringTextComponent("Lv."), 1/scalerate, 81/scalerate, 0xffffff);
         this.font.func_243248_b(matrixStack, new StringTextComponent((int)this.host.getAffection()+"%"), 33/scalerate, 68/scalerate, 0x313131);
         matrixStack.pop();
     }
@@ -102,9 +118,39 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
         if(this.host instanceof EntityGunUserBase) {
-            this.blit(matrixStack, this.guiLeft + this.xSize + 4, this.guiTop + 9, 178, 102, 38, 86);
+            this.blit(matrixStack, this.guiLeft + this.xSize + 4, this.guiTop + 9, 178, 102, 39, 87);
         }
         matrixStack.pop();
+    }
+
+    private void switchBehavior() {
+        this.host.SwitchFreeRoamingStatus();
+    }
+
+    private void drawButtons(MatrixStack stack, int mousex, int mousey) {
+
+        int x = this.host.isFreeRoaming()? 10:0;
+
+        ImageButton button = new ImageButton(this.guiLeft,this.guiTop+51,10,10,x,200,10,TEXTURE, action->switchBehavior());
+
+        if(this.isPointInRegion(this.guiLeft,this.guiTop+51,10,10, mousex, mousey)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            if(this.host.isFreeRoaming()){
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.on"));
+            }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.off"));
+            }
+
+            if(this.host.getHomePos() != BlockPos.ZERO) {
+                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + this.host.getHomePos().getX() + " / " + this.host.getHomePos().getY() + " / " + this.host.getHomePos().getZ()));
+            }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome"));
+            }
+            this.renderWrappedToolTip(stack, tooltips, mousex-this.guiLeft, mousey-this.guiTop, this.font);
+        }
+        this.addButton(button);
     }
 
     private void renderEntity(int mousex, int mousey){

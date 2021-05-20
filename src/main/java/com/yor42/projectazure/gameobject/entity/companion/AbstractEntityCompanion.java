@@ -13,11 +13,15 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -59,6 +63,8 @@ import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.Map;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
@@ -251,7 +257,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected long lastSlept, lastWokenup;
 
-    private int forcewakeupExpireTimer, forceWakeupCounter;
+    private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
 
     protected static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -370,6 +376,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         else{
             return Startpos.withinDistance(this.getHomePos(), this.getHomeDistance());
         }
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entityIn) {
+        super.collideWithEntity(entityIn);
     }
 
     public boolean isInHomeRangefromCurrenPos(){
@@ -657,6 +668,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void livingTick() {
         super.livingTick();
+
+        if(this.expdelay>0){
+            this.expdelay--;
+        }
 
         if(this.healAnimationTime>0){
             this.healAnimationTime--;
@@ -950,6 +965,29 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             };
         }
     }
+
+    public void pickupExpOrb(ExperienceOrbEntity orbEntity){
+        if(!this.world.isRemote){
+            if(orbEntity.delayBeforeCanPickup <= 0 && this.expdelay <= 0){
+                this.expdelay = 2;
+                Map.Entry<EquipmentSlotType, ItemStack> entry = EnchantmentHelper.getRandomEquippedWithEnchantment(Enchantments.MENDING, this, ItemStack::isDamaged);
+                if (entry != null) {
+                    ItemStack itemstack = entry.getValue();
+                    if (!itemstack.isEmpty() && itemstack.isDamaged()) {
+                        int i = Math.min((int)(orbEntity.xpValue * itemstack.getXpRepairRatio()), itemstack.getDamage());
+                        orbEntity.xpValue -= i/2;
+                        itemstack.setDamage(itemstack.getDamage() - i);
+                    }
+                }
+                if (orbEntity.xpValue > 0) {
+                    this.addExp(orbEntity.xpValue);
+                }
+
+                this.remove();
+            }
+        }
+    }
+
     protected abstract void openGUI(ServerPlayerEntity player);
 
     protected void beingpatted(){
