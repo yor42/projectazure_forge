@@ -891,26 +891,60 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             }
             else{
-                //check is player is looking at Head
-                Vector3d PlayerLook = player.getLook(1.0F).normalize();
-                float eyeHeight = (float) (this.isEntitySleeping()? this.getPosYEye()-0.575: this.getPosYEye());
-
-
-                Vector3d EyeDelta = new Vector3d(this.getPosX() - player.getPosX(), eyeHeight - player.getPosYEye(), this.getPosZ() - player.getPosZ());
-                double EyeDeltaLength = EyeDelta.length();
-                EyeDelta = EyeDelta.normalize();
-                double EyeCheckFinal = PlayerLook.dotProduct(EyeDelta);
-
-                //check is player is looking at leg
-                Vector3d LegDelta = new Vector3d(this.getPosX() - player.getPosX(), this.getPosY()+0.3 - player.getPosYEye(), this.getPosZ() - player.getPosZ());
-                double LegDeltaLength = LegDelta.length();
-                LegDelta = LegDelta.normalize();
-                double LegCheckFinal = PlayerLook.dotProduct(LegDelta);
 
                 ItemStack heldstacks = player.getHeldItemMainhand();
 
+                if(heldstacks != ItemStack.EMPTY) {
+                    if (heldstacks.getItem() == registerItems.OATHRING.get()) {
+                        if (this.getAffection() < 100 && !player.isCreative()) {
+                            player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUniqueID());
+                            return ActionResultType.FAIL;
+                        } else {
+                            if (!this.isOathed()) {
+                                if (player.isCreative()) {
+                                    this.setAffection(100);
+                                } else {
+                                    player.getHeldItem(hand).shrink(1);
+                                }
+                                this.setOathed(true);
+                                return ActionResultType.CONSUME;
+                            }
+                        }
+                    }
+                    else if(heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()){
+                        this.setMorale(150);
+                        if(!player.isCreative()){
+                            heldstacks.shrink(1);
+                        }
+                    }
+                    else if(heldstacks.getItem() instanceof ItemBandage){
+                        if(this.getHealth()<this.getMaxHealth()){
+                            if(this.ticksExisted %20 == 0) {
+                                this.heal(1.0f);
+                                heldstacks.damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(player.getActiveHand()));
+                                player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f, 1.0f);
+                                this.getDataManager().set(HEAL_TIMER, 20);
+                            }
+                            return ActionResultType.SUCCESS;
+                        }
+                    }
+                }else{
 
-                if(!(heldstacks.getItem() instanceof ItemBandage)) {
+                    //check is player is looking at Head
+                    Vector3d PlayerLook = player.getLook(1.0F).normalize();
+                    float eyeHeight = (float) (this.isEntitySleeping()? this.getPosYEye()-0.575: this.getPosYEye());
+
+
+                    Vector3d EyeDelta = new Vector3d(this.getPosX() - player.getPosX(), eyeHeight - player.getPosYEye(), this.getPosZ() - player.getPosZ());
+                    double EyeDeltaLength = EyeDelta.length();
+                    EyeDelta = EyeDelta.normalize();
+                    double EyeCheckFinal = PlayerLook.dotProduct(EyeDelta);
+
+                    //check is player is looking at leg
+                    Vector3d LegDelta = new Vector3d(this.getPosX() - player.getPosX(), this.getPosY()+0.3 - player.getPosYEye(), this.getPosZ() - player.getPosZ());
+                    double LegDeltaLength = LegDelta.length();
+                    LegDelta = LegDelta.normalize();
+                    double LegCheckFinal = PlayerLook.dotProduct(LegDelta);
 
                     if(this.isSleeping()){
                         if(this.forceWakeupCounter>4){
@@ -928,35 +962,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
                         this.func_233687_w_(!this.isSitting());
                         return ActionResultType.SUCCESS;
-                    }
-                }
-                else if(player.getHeldItemMainhand() != ItemStack.EMPTY) {
-                    if (heldstacks.getItem() == registerItems.OATHRING.get()) {
-                        if (this.getAffection() < 100 && !player.isCreative()) {
-                            player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUniqueID());
-                            return ActionResultType.FAIL;
-                        } else {
-                            if (!this.isOathed()) {
-                                this.setOathed(true);
-                                if (player.isCreative()) {
-                                    this.setAffection(100);
-                                } else {
-                                    player.getHeldItem(hand).shrink(1);
-                                }
-                                return ActionResultType.CONSUME;
-                            }
-                        }
-                    }
-                    else if(heldstacks.getItem() instanceof ItemBandage){
-                        if(this.getHealth()<this.getMaxHealth()){
-                            if(this.ticksExisted %20 == 0) {
-                                this.heal(1.0f);
-                                heldstacks.damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(player.getActiveHand()));
-                                player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f, 1.0f);
-                                this.getDataManager().set(HEAL_TIMER, 20);
-                            }
-                            return ActionResultType.SUCCESS;
-                        }
                     }
                 }
                 return ActionResultType.FAIL;

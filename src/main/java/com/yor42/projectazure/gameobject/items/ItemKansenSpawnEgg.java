@@ -49,7 +49,7 @@ public class ItemKansenSpawnEgg extends ItemBaseTooltip {
             spawnedEntity.setPosition(context.getPos().getX(), context.getPos().getY() + 1.1F, context.getPos().getZ());
             spawnedEntity.setTamedBy(context.getPlayer());
             spawnedEntity.setMorale(150);
-            spawnedEntity.setAffection(30);
+            spawnedEntity.setAffection(50);
             context.getWorld().addEntity(spawnedEntity);
 
 

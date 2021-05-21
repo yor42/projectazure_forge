@@ -83,6 +83,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("mold_plate");
         buildModel("mold_wire");
         buildModel("mold_extraction");
+        buildModel("energy_drink");
 
 
         /*

@@ -26,6 +26,8 @@
 
   "item.projectazure.5.56_magazine": "5.56mm Magazine",
 
+  "item.projectazure.energy_drink": "Cursed Energy Mix from Deep part of hell (Debug Item)",
+
   "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
   "disc.brainpower.desc1": "LET THE BASS KICK O-oooooooooo AAAA E A A I A U",
   "item.projectazure.disc_brainpower.desc": "Noma - Brain Power (Long Version)",
@@ -37,6 +39,17 @@
   "item.projectazure.ammo_generic.tooltip": "Most basic ammunition for KANSEN. weak, but cheap.",
   "item.projectazure.wisdomcube.tooltip": "Mysterious Glowing Cube. Used to Build KANSEN.",
   "item.projectazure.bandage_roll.tooltip": "Simple roll of bandage for quick patch up. not a toilet paper.",
+
+  "item.projectazure.energy_drink.tooltip1": "The Ultimate Energy drink made by senior in his final!",
+  "item.projectazure.energy_drink.tooltip2": "Procrastinated Essay? Cramming Final? No Problem!",
+  "item.projectazure.energy_drink.tooltip3": "This unholy mix of chemicals will literally juice the $h!t out of you!",
+  "item.projectazure.energy_drink.tooltip4": "- DISCLAIMER -",
+  "item.projectazure.energy_drink.tooltip5": "We don't take responsibility for Side effects such as:",
+  "item.projectazure.energy_drink.tooltip6": "Shakiness, Dizziness, Rapid Heart rhythm, Oripathy, Death",
+  "item.projectazure.energy_drink.tooltip7": " - Allergy advice -",
+  "item.projectazure.energy_drink.tooltip8": "This product contains following ingredients:",
+  "item.projectazure.energy_drink.tooltip9": "Originium slug extraction, Powdered Primogem, Powdered Originium",
+  "item.projectazure.energy_drink.tooltip10": "Terrazine gas extraction, Condensed 5 Hour energy, Peanut",
 
   "item.projectazure.spawnegg.spawn": "Spawn: ",
 

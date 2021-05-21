@@ -28,14 +28,11 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> implements IHasContainer<ContainerAKNInventory> {
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/arknights_inventory.png");
     private final AbstractEntityCompanion host;
-    private final double affection, morale;
 
 
     public GuiAKNInventory(ContainerAKNInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
         this.host = Main.PROXY.getSharedMob();
-        this.affection = this.host.getAffection();
-        this.morale = host.getMorale();
         this.xSize = 171;
         this.ySize = 182;
     }
@@ -54,7 +51,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         int affectionlv1_scaled = (int)(46*Math.min(this.host.getAffection(), 100)/100);
         int affectionlv2_scaled = (int)(46*Math.min(this.host.getAffection()-100, 100)/100);
         int morale_scaled = (int)(35*this.host.getMorale()/150);
-        int exp_scaled = (int)(48*this.host.getExp()/this.host.getMaxExp());
+        int exp_scaled = (int)(63*this.host.getExp()/this.host.getMaxExp());
 
         this.blit(matrixStack, this.guiLeft + 2, this.guiTop + 72, 173, 98, affectionlv1_scaled, 2);
         if(this.host.getAffection()>100){
@@ -82,6 +79,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
     }
 
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), 11, 52, 16777215);
         this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), 5, 95, 16777215);
         matrixStack.push();
         float scalerate = 0.8F;

@@ -70,19 +70,19 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
     }
 
     private enums.Affection affectionValuetoLevel(){
-        if(this.affection>=100.0D){
+        if(this.host.getAffection()>=100.0D){
             if(this.host.isOathed())
                 return enums.Affection.OATH;
             else
                 return enums.Affection.LOVE;
         }
-        else if(this.affection>80 && this.affection<100){
+        else if(this.host.getAffection()>80 && this.host.getAffection()<100){
             return enums.Affection.CRUSH;
         }
-        else if(this.affection>60 && this.affection<=80){
+        else if(this.host.getAffection()>60 && this.host.getAffection()<=80){
             return enums.Affection.FRIENDLY;
         }
-        else if(this.affection>30 && this.affection<=60){
+        else if(this.host.getAffection()>30 && this.host.getAffection()<=60){
             return enums.Affection.STRANGER;
         }
         else{
@@ -168,7 +168,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
     }
 
     private enums.Morale moraleValuetoLevel(){
-        if(this.morale>=120.0D){
+        if(this.host.getMorale()>=120.0D){
             return enums.Morale.REALLY_HAPPY;
         }
         else if(this.morale>=70 && this.morale<120){

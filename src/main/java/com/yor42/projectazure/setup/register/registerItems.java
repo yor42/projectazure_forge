@@ -110,6 +110,25 @@ public class registerItems {
     public static final RegistryObject<Item> MOLD_WIRE = registerManager.ITEMS.register("mold_wire", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_EXTRACTION = registerManager.ITEMS.register("mold_extraction", () -> new ItemCraftTool(128));
 
+    public static final RegistryObject<Item> ENERGY_DRINK_DEBUG = registerManager.ITEMS.register("energy_drink", () -> new Item(new Item.Properties()
+            .group(PA_GROUP)
+            .rarity(Rarity.EPIC)){
+        @Override
+        public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+            super.addInformation(stack, worldIn, tooltip, flagIn);
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.setBold(true).setColor(Color.fromInt(0xff00fc)).setItalic(true)));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip2"));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip3"));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.setColor(Color.fromInt(0x990000)).setItalic(true)));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.setColor(Color.fromInt(0x999900)).setItalic(true)));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+            tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+        }
+    });
+
 
     //crafting items
     public static final RegistryObject<Item> MORTAR_IRON = registerManager.ITEMS.register("mortar_iron", () -> new ItemCraftTool(50));
