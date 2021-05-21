@@ -60,6 +60,7 @@ public class CompanionPickupItemGoal extends Goal {
         else if(!this.Explist.isEmpty()) {
             ExperienceOrbEntity target = null;
             for (ExperienceOrbEntity orbEntity : this.Explist) {
+
                 if (orbEntity != null) {
                     target = orbEntity;
                     break;

@@ -16,10 +16,8 @@ import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
+import net.minecraft.util.text.Color;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -42,14 +40,6 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.ySize = 182;
     }
 
-    public int getBackgroundWidth() {
-        return this.xSize;
-    }
-
-    public int getBackgroundHeight() {
-        return this.ySize;
-    }
-
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
@@ -64,7 +54,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         int affectionlv1_scaled = (int)(46*Math.min(this.host.getAffection(), 100)/100);
         int affectionlv2_scaled = (int)(46*Math.min(this.host.getAffection()-100, 100)/100);
         int morale_scaled = (int)(35*this.host.getMorale()/150);
-        int exp_scaled = (int)(46*this.host.getExp()/this.host.getMaxExp());
+        int exp_scaled = (int)(48*this.host.getExp()/this.host.getMaxExp());
 
         this.blit(matrixStack, this.guiLeft + 2, this.guiTop + 72, 173, 98, affectionlv1_scaled, 2);
         if(this.host.getAffection()>100){
@@ -99,13 +89,14 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.akn_inventory"), 115/scalerate, 8/scalerate, 16777215);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.akn_trust"), 2/scalerate, 65/scalerate, 0x313131);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.morale"), 54/scalerate, 4/scalerate, 0xffffff);
-        this.font.func_243248_b(matrixStack, new TranslationTextComponent(Integer.toString(this.host.getLevel())), 10/scalerate, 79/scalerate, 0xffffff);
+        this.font.func_243248_b(matrixStack, new TranslationTextComponent(Integer.toString(this.host.getLevel())), 9/scalerate, 79/scalerate, 0xffffff);
         matrixStack.pop();
 
         matrixStack.push();
         scalerate = 0.5F;
         matrixStack.scale(scalerate,scalerate,scalerate);
         this.font.func_243248_b(matrixStack, new StringTextComponent("Lv."), 1/scalerate, 81/scalerate, 0xffffff);
+        this.font.func_243248_b(matrixStack, new StringTextComponent("EXP: ").append(new StringTextComponent(Integer.toString((int)this.host.getExp())).setStyle(Style.EMPTY.setColor(Color.fromInt(0xf4cf03)))).append(new TranslationTextComponent("/"+(int)this.host.getMaxExp()).setStyle(Style.EMPTY.setColor(Color.fromInt(0xffffff)))), 23/scalerate, 81/scalerate, 0xffffff);
         this.font.func_243248_b(matrixStack, new StringTextComponent((int)this.host.getAffection()+"%"), 33/scalerate, 68/scalerate, 0x313131);
         matrixStack.pop();
     }

@@ -27,6 +27,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -35,8 +36,10 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.play.server.SCollectItemPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -64,6 +67,7 @@ import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
@@ -254,6 +258,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected boolean isFreeRoaming;
     protected boolean isMeleeing, isOpeningDoor;
     protected int awakeningLevel;
+    private List<ExperienceOrbEntity> nearbyExpList;
 
     protected long lastSlept, lastWokenup;
 
@@ -673,6 +678,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.expdelay--;
         }
 
+        if(this.nearbyExpList == null || this.ticksExisted%5 == 0){
+            this.nearbyExpList = this.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, this.getBoundingBox().grow(2));
+        }
+
+        if(!this.nearbyExpList.isEmpty()) {
+            for(ExperienceOrbEntity orbEntity: this.nearbyExpList){
+                if(this.expdelay<=0 && this.getDistance(orbEntity)>1.5){
+                    this.pickupExpOrb(orbEntity);
+                }
+            }
+        }
+
         if(this.healAnimationTime>0){
             this.healAnimationTime--;
         }
@@ -969,6 +986,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void pickupExpOrb(ExperienceOrbEntity orbEntity){
         if(!this.world.isRemote){
             if(orbEntity.delayBeforeCanPickup <= 0 && this.expdelay <= 0){
+                this.onItemPickup(orbEntity, 1);
                 this.expdelay = 2;
                 Map.Entry<EquipmentSlotType, ItemStack> entry = EnchantmentHelper.getRandomEquippedWithEnchantment(Enchantments.MENDING, this, ItemStack::isDamaged);
                 if (entry != null) {
@@ -982,10 +1000,26 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 if (orbEntity.xpValue > 0) {
                     this.addExp(orbEntity.xpValue);
                 }
-
-                this.remove();
+                orbEntity.remove();
             }
         }
+    }
+
+
+    @Override
+    protected void collideWithNearbyEntities() {
+        if(!this.world.isRemote) {
+            List<ExperienceOrbEntity> list = this.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, this.getBoundingBox().grow(1));
+            if(!list.isEmpty()){
+                for (ExperienceOrbEntity orbEntity : list) {
+                    if (orbEntity != null && this.expdelay<=0) {
+                        this.expdelay=2;
+                        this.pickupExpOrb(orbEntity);
+                    }
+                }
+            }
+        }
+        super.collideWithNearbyEntities();
     }
 
     protected abstract void openGUI(ServerPlayerEntity player);
@@ -1087,7 +1121,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void PickUpItem(ItemEntity target) {
-
+        this.onItemPickup(target, target.getItem().getCount());
         ItemStack stack = target.getItem();
 
         this.triggerItemPickupTrigger(target);
