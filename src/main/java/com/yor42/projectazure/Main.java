@@ -121,13 +121,13 @@ CREDIT
 -----------------------------------------------
 
 Original Game by
-Kadokawa games, Moe Fantasy, Shanghai Manjuu
+Kadokawa games, Moe Fantasy, Shanghai Manjuu, Hyperglyph, NAT GAMES
 
 Original Concept by
 Waisse, yor42, guri, necrom, Aoichi
 
 Developed by
-yor42
+yor42, FakeDomi
 
 Modeling by
 yor42
