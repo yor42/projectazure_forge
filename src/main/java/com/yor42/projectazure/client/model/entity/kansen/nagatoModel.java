@@ -50,26 +50,14 @@ public class nagatoModel extends AnimatedGeoModel<EntityNagato> {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
         if(entity.isBeingPatted()){
-            if(entity.isEntitySleeping()){
                 NormalFace.setHidden(true);
                 PatFace.setHidden(true);
                 EyeclosedFace.setHidden(true);
                 PoutFace.setHidden(true);
                 PoutFace.setHidden(true);
-                Flustered.setHidden(false);
-                ExcitedFace.setHidden(true);
-                SleepFace.setHidden(true);
-            }
-            else {
-                NormalFace.setHidden(true);
-                PatFace.setHidden(false);
-                EyeclosedFace.setHidden(true);
-                PoutFace.setHidden(true);
-                PoutFace.setHidden(true);
                 Flustered.setHidden(true);
-                ExcitedFace.setHidden(true);
+                ExcitedFace.setHidden(false);
                 SleepFace.setHidden(true);
-            }
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);

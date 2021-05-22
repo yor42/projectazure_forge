@@ -35,9 +35,7 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
     @Override
     public void setLivingAnimations(EntityEnterprise entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
         IBone head = this.getAnimationProcessor().getBone("Head");
-        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
@@ -47,12 +45,6 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
-        if(!entity.isSailing()){
-            LeftArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F) * 0.8F * entity.limbSwingAmount);
-            RightArm.setRotationX(MathHelper.cos(entity.limbSwing * 0.6662F + (float) Math.PI) * 0.8F * entity.limbSwingAmount);
-        }
-
         if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
@@ -60,7 +52,7 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             PatFace.setHidden(false);
             SleepFace.setHidden(true);
         }
-        if(entity.isSleeping()){
+        else if(entity.isSleeping()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);

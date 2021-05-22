@@ -9,7 +9,9 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
@@ -79,7 +81,6 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
     }
 
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), 11, 52, 16777215);
         this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), 5, 95, 16777215);
         matrixStack.push();
         float scalerate = 0.8F;
@@ -94,9 +95,14 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         scalerate = 0.5F;
         matrixStack.scale(scalerate,scalerate,scalerate);
         this.font.func_243248_b(matrixStack, new StringTextComponent("Lv."), 1/scalerate, 81/scalerate, 0xffffff);
-        this.font.func_243248_b(matrixStack, new StringTextComponent("EXP: ").append(new StringTextComponent(Integer.toString((int)this.host.getExp())).setStyle(Style.EMPTY.setColor(Color.fromInt(0xf4cf03)))).append(new TranslationTextComponent("/"+(int)this.host.getMaxExp()).setStyle(Style.EMPTY.setColor(Color.fromInt(0xffffff)))), 23/scalerate, 81/scalerate, 0xffffff);
+
+        ITextComponent text = new StringTextComponent("EXP: ").append(new StringTextComponent(Integer.toString((int)this.host.getExp())).setStyle(Style.EMPTY.setColor(Color.fromInt(0xf4cf03)))).append(new TranslationTextComponent("/"+(int)this.host.getMaxExp()).setStyle(Style.EMPTY.setColor(Color.fromInt(0xffffff))));
+        int textwidth = this.font.getStringWidth(text.getString());
+        this.font.func_243248_b(matrixStack, text, (64/scalerate)-textwidth, 81/scalerate, 0xffffff);
         this.font.func_243248_b(matrixStack, new StringTextComponent((int)this.host.getAffection()+"%"), 33/scalerate, 68/scalerate, 0x313131);
         matrixStack.pop();
+
+        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), 11, 53, 16777215);
     }
 
     @Override
@@ -118,7 +124,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
 
     private void drawButtons(MatrixStack stack, int mousex, int mousey) {
 
-        int x = this.host.isFreeRoaming()? 10:0;
+        int x = this.host.isFreeRoaming()? 0:10;
 
         ImageButton button = new ImageButton(this.guiLeft,this.guiTop+51,10,10,x,200,10,TEXTURE, action->switchBehavior());
 

@@ -122,7 +122,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         int textureX = 176;
 
         int x = 63;
-        int y = 78;
+        int y = 74;
 
         int color=16777215;
         switch (this.affectionLevel){
@@ -253,27 +253,50 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
     }
 
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mousex, int mousey) {
+
         matrixStack.push();
-        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 16777215);
-        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (float)17, (float)75, 16777215);
+
+        int InventoryTextCenter = this.font.getStringWidth(new TranslationTextComponent("gui.companioninventory").getString())/2;
         IFormattableTextComponent leveltext = new StringTextComponent("Lv.").appendString(Integer.toString(this.host.getLevel()));
-        this.font.func_243248_b(matrixStack, leveltext, 12, (float)84, 16777215);
-        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5, 5, 16777215);
+        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+6, 5, 16777215);
+        this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), 9, 101, 0x38393b);
+        //this.playerInventory.getDisplayName()
+        matrixStack.push();
+        float drawscale = 0.8F;
+        matrixStack.scale(drawscale,drawscale,drawscale);
+        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.companioninventory"), (float)(140-(InventoryTextCenter*drawscale))/drawscale, (float)this.titleY/drawscale, 16777215);
+
+        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (float)16/drawscale, (float)78/drawscale, 16777215);
+        matrixStack.pop();
+
+        StringTextComponent ExpText = new StringTextComponent(this.host.getExp()+"/"+this.host.getMaxExp());
+        float ExptextwidthHalf = this.font.getStringWidth(ExpText.getString())/2.0F;
+
+        matrixStack.push();
+        drawscale = 0.5F;
+        matrixStack.scale(drawscale,drawscale,drawscale);
+        this.font.func_243248_b(matrixStack, ExpText.setStyle(Style.EMPTY.setColor(Color.fromInt(0xfdfdfd))), (50.5F-(ExptextwidthHalf*drawscale))/drawscale, 86F/drawscale, 16777215);
+        this.font.func_243248_b(matrixStack, leveltext.setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(0xdbe4e9))), 12/drawscale, 86.5F/drawscale, 16777215);
+        matrixStack.pop();
+
+
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderMorale(matrixStack, mousex, mousey);
         this.drawButtons(matrixStack, mousex, mousey);
         this.renderEntity(mousex, mousey);
-        matrixStack.pop();
         //this.renderButton(matrixStack);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+
+        int expVal = (int)(49*this.host.getExp()/this.host.getMaxExp());
         matrixStack.push();
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         this.blit(matrixStack, this.x+backgroundWidth, this.y, 176, 104, 43, 90);
+        this.blit(matrixStack, this.x+26, this.y+87, 176, 44, expVal, 2);
         matrixStack.pop();
     }
 }

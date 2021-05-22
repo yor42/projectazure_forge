@@ -1225,6 +1225,31 @@
 					}
 				}
 			}
+		},
+		"animation.gangwon.sit_arm": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"vector": [-22.5, 0, -12.5]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -5]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-22.5, 0, 12.5]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 5]
+					}
+				}
+			}
 		}
 	}
 }
