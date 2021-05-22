@@ -102,7 +102,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.font.func_243248_b(matrixStack, new StringTextComponent((int)this.host.getAffection()+"%"), 33/scalerate, 68/scalerate, 0x313131);
         matrixStack.pop();
 
-        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), 11, 53, 16777215);
+        this.font.drawStringWithShadow(matrixStack, this.host.getDisplayName().getString(), 11, 53, 16777215);
     }
 
     @Override

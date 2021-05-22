@@ -11,6 +11,7 @@ import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -253,7 +254,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected int level,  patAnimationTime, LimitBreakLv, patTimer, healAnimationTime;
+    protected int level,  patAnimationTime, LimitBreakLv, patTimer;
     protected double affection, exp, morale;
     protected boolean isFreeRoaming;
     protected boolean isMeleeing, isOpeningDoor;
@@ -689,9 +690,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             }
         }
-
-        if(this.healAnimationTime>0){
-            this.healAnimationTime--;
+        int healAnimationTime = this.dataManager.get(HEAL_TIMER);
+        if(healAnimationTime>0){
+            this.dataManager.set(HEAL_TIMER, --healAnimationTime);
         }
 
         if(this.patAnimationTime >0){
@@ -882,13 +883,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
-        if(this.isOwner(player) && !(player.getHeldItem(hand).getItem() instanceof ItemRiggingBase)){
+        if(this.isOwner(player) && !(player.getHeldItem(hand).getItem() instanceof ItemRiggingBase) && !this.world.isRemote){
             if(player.isSneaking()){
-                if(!world.isRemote) {
                     this.openGUI((ServerPlayerEntity) player);
                     Main.PROXY.setSharedMob(this);
                     return ActionResultType.SUCCESS;
-                }
             }
             else{
 
@@ -921,9 +920,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         if(this.getHealth()<this.getMaxHealth()){
                             if(this.ticksExisted %20 == 0) {
                                 this.heal(1.0f);
-                                heldstacks.damageItem(1, player, (playerEntity) -> playerEntity.sendBreakAnimation(player.getActiveHand()));
+                                if(!player.isCreative()) {
+                                    if(heldstacks.attemptDamageItem(1, MathUtil.getRand(), (ServerPlayerEntity) player)){
+                                        heldstacks.shrink(1);
+                                    }
+                                }
+                                double d0 = this.rand.nextGaussian() * 0.02D;
+                                double d1 = this.rand.nextGaussian() * 0.02D;
+                                double d2 = this.rand.nextGaussian() * 0.02D;
                                 player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f, 1.0f);
-                                this.getDataManager().set(HEAL_TIMER, 20);
+                                this.getDataManager().set(HEAL_TIMER, 50);
+                                this.addAffection(0.2F);
+                                this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
                             }
                             return ActionResultType.SUCCESS;
                         }
@@ -1037,7 +1045,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isGettingHealed(){
-        return this.healAnimationTime>0;
+        return this.dataManager.get(HEAL_TIMER)>0;
     }
 
     public IItemHandlerModifiable getEquipment(){

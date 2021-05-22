@@ -269,7 +269,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (float)16/drawscale, (float)78/drawscale, 16777215);
         matrixStack.pop();
 
-        StringTextComponent ExpText = new StringTextComponent(this.host.getExp()+"/"+this.host.getMaxExp());
+        StringTextComponent ExpText = new StringTextComponent((int)this.host.getExp()+"/"+(int)this.host.getMaxExp());
         float ExptextwidthHalf = this.font.getStringWidth(ExpText.getString())/2.0F;
 
         matrixStack.push();
