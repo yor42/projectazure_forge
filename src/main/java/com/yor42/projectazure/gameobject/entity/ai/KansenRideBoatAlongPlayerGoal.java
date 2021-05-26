@@ -47,7 +47,6 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
     @Override
     public void resetTask() {
         this.entity.stopRiding();
-        this.entity.getNavigator().clearPath();
         super.resetTask();
     }
 
@@ -63,11 +62,6 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
                     if (distanceSq <= 3.0) {
                         this.entity.startRiding(Boat);
                     }
-                }
-            }
-            else {
-                if(this.entity.getNavigator().getPath() != null) {
-                    this.entity.getNavigator().clearPath();
                 }
             }
         }

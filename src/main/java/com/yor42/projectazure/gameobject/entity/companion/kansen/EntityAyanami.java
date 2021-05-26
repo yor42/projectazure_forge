@@ -35,13 +35,11 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
             return PlayState.CONTINUE;
         }
-
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_leg", true));
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_body", true));
             return PlayState.CONTINUE;
         }
-
-        if(this.isOpeningDoor()){
+        else if(this.isOpeningDoor()){
             if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorL", false));
             }
@@ -49,13 +47,16 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorR", false));
             }
         }
+        else if(this.isGettingHealed()){
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.heal_arm", true));
+            return PlayState.CONTINUE;
+        }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.melee1", false));
             }
         }
-
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        else if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_arm", true));
             }

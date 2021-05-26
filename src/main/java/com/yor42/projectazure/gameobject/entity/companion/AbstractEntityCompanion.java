@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
@@ -13,14 +14,14 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
+import javafx.scene.shape.MoveTo;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -39,6 +40,10 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SCollectItemPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.FlyingPathNavigator;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
@@ -256,9 +261,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer;
     protected double affection, exp, morale;
-    protected boolean isFreeRoaming;
+    protected boolean isFreeRoaming, isSwimmingUp;
     protected boolean isMeleeing, isOpeningDoor;
     protected int awakeningLevel;
+    private final MovementController SwimController;
+    private final MovementController MoveController;
+    protected final SwimmerPathNavigator swimmingNav;
+    private final GroundPathNavigator groundNav;
+    private final FlyingPathNavigator airNav;
     private List<ExperienceOrbEntity> nearbyExpList;
 
     protected long lastSlept, lastWokenup;
@@ -291,6 +301,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setAffection(40F);
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
         this.setFreeRoaming(false);
+        this.swimmingNav = new SwimmerPathNavigator(this, worldIn);
+        this.groundNav = new GroundPathNavigator(this, worldIn);
+        this.airNav = new FlyingPathNavigator(this, worldIn);
+        this.SwimController = new CompanionSwimPathFinder(this);
+        this.MoveController = new MovementController(this);
     }
 
     public void setOathed(boolean bool){
@@ -425,6 +440,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
         return -1;
+    }
+
+    public boolean isSwimmingUp() {
+        return this.isSwimmingUp;
+    }
+
+    public void setSwimmingUp(boolean swimmingUp) {
+        this.isSwimmingUp = swimmingUp;
     }
 
     public void AttackUsingGun(LivingEntity target, ItemStack gun, Hand HandIn){
@@ -675,6 +698,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void livingTick() {
         super.livingTick();
 
+        if(this.collidedHorizontally && this.isInWater()){
+            Vector3d vec3d = this.getMotion();
+            this.setMotion(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 0.01 : 0.0F), vec3d.z);
+        }
+
         if(this.expdelay>0){
             this.expdelay--;
         }
@@ -685,7 +713,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         if(!this.nearbyExpList.isEmpty()) {
             for(ExperienceOrbEntity orbEntity: this.nearbyExpList){
-                if(this.expdelay<=0 && this.getDistance(orbEntity)>1.5){
+                if(this.getDistance(orbEntity)>1.5) {
                     this.pickupExpOrb(orbEntity);
                 }
             }
@@ -772,9 +800,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.affection = 200;
             }
         }
-        if(this.isSleeping() && this.getNavigator().hasPath()){
-            this.getNavigator().clearPath();
-        }
         this.navigator.getNodeProcessor().setCanEnterDoors(this.canOpenDoor());
         this.navigator.getNodeProcessor().setCanOpenDoors(this.canOpenDoor());
 
@@ -807,13 +832,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new CompanionSwimGoal(this));
+        //this.goalSelector.addGoal(1, new CompanionSwimGoal(this));
         this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
         this.goalSelector.addGoal(3, new SitGoal(this));
         this.goalSelector.addGoal(6, new CompanionUseGunGoal(this, 40, 0.6));
         this.goalSelector.addGoal(8, new KansenRideBoatAlongPlayerGoal(this, 1.0));
         this.goalSelector.addGoal(9, new CompanionMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(10, new CompanionFollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(10, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
         this.goalSelector.addGoal(11, new KansenWorkGoal(this, 1.0D));
        this.goalSelector.addGoal(12, new CompanionOpenDoorGoal(this, true));
        this.goalSelector.addGoal(13, new CompanionFreeroamGoal(this, 60, true));
@@ -883,8 +908,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
-        if(this.isOwner(player) && !(player.getHeldItem(hand).getItem() instanceof ItemRiggingBase) && !this.world.isRemote){
-            if(player.isSneaking()){
+        if(this.isOwner(player) && !(player.getHeldItem(hand).getItem() instanceof ItemRiggingBase)){
+            if(player.isSneaking() && !this.world.isRemote && !(player.getHeldItem(hand).getItem() instanceof ItemBandage)){
                     this.openGUI((ServerPlayerEntity) player);
                     Main.PROXY.setSharedMob(this);
                     return ActionResultType.SUCCESS;
@@ -988,12 +1013,28 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void tick() {
         super.tick();
+        this.setPathPriority(PathNodeType.WATER, 0.0F);
         if(this.getHomePosition()!=BlockPos.ZERO&&this.ticksExisted%20==0){
             BlockState blockstate = this.world.getBlockState(this.getHomePos());
             if(!blockstate.isBed(this.getEntityWorld(),this.getHomePos(), this)) {
                 this.setHomepos(BlockPos.ZERO, -1);
             };
         }
+    }
+
+    public void updateSwimming() {
+        if (!this.world.isRemote && this.ticksExisted%10 == 0) {
+            if (this.isServerWorld() && this.eyesInWater) {
+                this.navigator = this.swimmingNav;
+                this.moveController = this.SwimController;
+                this.setSwimming(true);
+            } else {
+                this.navigator = this.groundNav;
+                this.moveController = this.MoveController;
+                this.setSwimming(false);
+            }
+        }
+
     }
 
     public void pickupExpOrb(ExperienceOrbEntity orbEntity){
@@ -1016,23 +1057,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 orbEntity.remove();
             }
         }
-    }
-
-
-    @Override
-    protected void collideWithNearbyEntities() {
-        if(!this.world.isRemote) {
-            List<ExperienceOrbEntity> list = this.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, this.getBoundingBox().grow(1));
-            if(!list.isEmpty()){
-                for (ExperienceOrbEntity orbEntity : list) {
-                    if (orbEntity != null && this.expdelay<=0) {
-                        this.expdelay=2;
-                        this.pickupExpOrb(orbEntity);
-                    }
-                }
-            }
-        }
-        super.collideWithNearbyEntities();
     }
 
     protected abstract void openGUI(ServerPlayerEntity player);

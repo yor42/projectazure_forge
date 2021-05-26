@@ -65,28 +65,29 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
         if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.sleep", true));
             return PlayState.CONTINUE;
-        }
-
-        if(this.isBeingPatted()){
+        }else if(this.isBeingPatted()){
             if(this.isEntitySleeping())
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
             else
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
             return PlayState.CONTINUE;
-        }
-
-        if(this.isOpeningDoor()){
+        } else if(this.isOpeningDoor()){
             if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorL", false));
             }
             else{
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorR", false));
             }
+            return PlayState.CONTINUE;
         }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.melee", false));
+                return PlayState.CONTINUE;
             }
+        }else if(this.isGettingHealed()){
+            event.getController().setAnimation(builder.addAnimation("animation.enterprise.heal_arm", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
@@ -101,8 +102,8 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
             }
             return PlayState.CONTINUE;
         }
-
-        return PlayState.STOP;
+        event.getController().setAnimation(builder.addAnimation("animation.enterprise.idle", true));
+        return PlayState.CONTINUE;
     }
 
     @Override

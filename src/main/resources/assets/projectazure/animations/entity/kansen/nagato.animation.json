@@ -956,6 +956,46 @@
 					}
 				}
 			}
+		},
+		"heal_arm": {
+			"loop": true,
+			"bones": {
+				"Head": {
+					"rotation": {
+						"vector": [0, -40, 0]
+					}
+				},
+				"earR": {
+					"rotation": {
+						"vector": [30, -15, 0]
+					}
+				},
+				"earR2": {
+					"rotation": {
+						"vector": [30, -15, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-25, 0, 12.5]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -17.5]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-17.5, 0, 37.5]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 35]
+					}
+				}
+			}
 		}
 	}
 }

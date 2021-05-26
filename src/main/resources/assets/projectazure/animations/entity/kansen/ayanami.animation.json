@@ -1456,6 +1456,42 @@
 		},
 		"animation.ayanami.idle_leg": {
 			"loop": true
+		},
+		"animation.ayanami.heal_arm": {
+			"loop": true,
+			"animation_length": 3.12,
+			"bones": {
+				"Head": {
+					"rotation": {
+						"vector": [0, 20, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-30, 0, -25]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -45]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-25, 0, 15]
+						},
+						"1.56": {
+							"vector": [-37.5, 0, 15],
+							"easing": "easeInOutSine"
+						},
+						"3.12": {
+							"vector": [-25, 0, 15],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

@@ -43,9 +43,8 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             else
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.isEntitySleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_arm", true));
+        } else if(this.isGettingHealed()){
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.heal_arm", true));
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
@@ -60,21 +59,28 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.melee", false));
             }
-        }
+        }else {
 
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
-            if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", true));
+            if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+                if (this.isSailing()) {
+                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", true));
+                } else if (this.isSprinting()) {
+                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.run_arm", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk_arm", true));
+                }
+                return PlayState.CONTINUE;
             }
-            else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.run_arm", true));
+            else{
+                if(this.isEntitySleeping()) {
+                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_arm", true));
+                    return PlayState.CONTINUE;
+                }
+                else{
+                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.idle", true));
+                }
             }
-            else {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk_arm", true));
-            }
-            return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("animation.gangwon.idle", true));
         return PlayState.CONTINUE;
     }
 

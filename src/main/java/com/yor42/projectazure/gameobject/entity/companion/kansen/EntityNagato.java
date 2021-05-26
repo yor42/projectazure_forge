@@ -47,11 +47,16 @@ public class EntityNagato extends EntityKansenBattleship{
             else{
                 event.getController().setAnimation(builder.addAnimation("openDoorR", false));
             }
+            return PlayState.CONTINUE;
         }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("melee", false));
             }
+            return PlayState.CONTINUE;
+        }else if(this.isGettingHealed()){
+            event.getController().setAnimation(builder.addAnimation("heal_arm", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {

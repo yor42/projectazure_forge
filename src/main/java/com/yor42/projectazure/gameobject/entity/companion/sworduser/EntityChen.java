@@ -121,6 +121,9 @@ public class EntityChen extends AbstractSwordUserBase{
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("meleeR", false));
             }
+        }else if(this.isGettingHealed()){
+            event.getController().setAnimation(builder.addAnimation("heal_arm", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F) && !this.isEntitySleeping()) {

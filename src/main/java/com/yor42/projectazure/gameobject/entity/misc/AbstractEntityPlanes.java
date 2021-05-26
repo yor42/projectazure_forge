@@ -181,7 +181,7 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
         if (this.isOnGround())
         {
-            this.setMotion(this.getMotion().getX(), this.getMotion().getY()+0.2, this.getMotion().getZ());
+            this.setMotion(this.getMotion().getX(), this.getMotion().getY()+0.02, this.getMotion().getZ());
         }
 
         super.travel(travelVector);

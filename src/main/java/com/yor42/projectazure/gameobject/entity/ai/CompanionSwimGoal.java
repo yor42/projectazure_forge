@@ -16,7 +16,7 @@ public class CompanionSwimGoal extends SwimGoal {
         this.hasRigging = entityIn instanceof EntityKansenBase && ((EntityKansenBase) entityIn).hasRigging();
     }
     public boolean shouldExecute() {
-        return !this.hasRigging && this.entity.isInWater() && this.entity.func_233571_b_(FluidTags.WATER) > this.entity.func_233579_cu_() || this.entity.isInLava();
+        return !this.hasRigging && this.entity.isInWater() && this.entity.getOwner()!= null && this.entity.getOwner().getPosY()-this.entity.getPosY() >=0.5 && !this.entity.getOwner().isInWater()|| this.entity.isInLava();
     }
 
 }

@@ -206,7 +206,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         super.registerGoals();
         this.goalSelector.addGoal(4, new KansenLaunchPlaneGoal(this, 20, 40, 50));
         this.goalSelector.addGoal(5, new KansenRangedAttackGoal(this, 1.0F, 10,20, 100F, 160F));
-        this.goalSelector.addGoal(7, new CompanionFollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
 
     }
 
@@ -354,7 +353,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         Vector3d vec3d = this.getMotion();
         float f = this.getEyeHeight() - 1.25F;
         if(this.func_233571_b_(FluidTags.WATER)>f)
-            this.setMotion(vec3d.x * (double)0.99F, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-4F : 0.0F), vec3d.z * (double)0.99F);
+            this.setMotion(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-4F : 0.0F), vec3d.z);
         else if (vec3d.y>0){
             this.setVelocity(vec3d.x, vec3d.y - 0.10, vec3d.z);
         }
