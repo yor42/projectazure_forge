@@ -62,6 +62,12 @@ public class EntityShiroko extends EntityGunUserBase {
                 event.getController().setAnimation(builder.addAnimation("animation.shiroko.melee1", false));
             }
             return PlayState.CONTINUE;
+        }else if(this.isGettingHealed()){
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal_arm", true));
+            return PlayState.CONTINUE;
+        }else if(this.isSwimming()) {
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.swim_arm", true));
+            return PlayState.CONTINUE;
         }else{
             if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
                 if(this.isSprinting()){
@@ -116,6 +122,9 @@ public class EntityShiroko extends EntityGunUserBase {
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit", true));
             return PlayState.CONTINUE;
+        }else if(this.isSwimming()) {
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.swim_leg", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
@@ -136,7 +145,7 @@ public class EntityShiroko extends EntityGunUserBase {
         return MobEntity.func_233666_p_()
                 //Attribute
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.0F)
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 2.5F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;

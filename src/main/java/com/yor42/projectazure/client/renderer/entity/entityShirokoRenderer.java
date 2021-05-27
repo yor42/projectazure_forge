@@ -7,17 +7,20 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive.EntityShiroko;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
 
@@ -76,6 +79,11 @@ public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
             }
             stack.pop();
         }
+
+        int light = packedLightIn;
+        if (Objects.equals(bone.getName(), "Halo")) {
+            light = LightTexture.packLight(15, this.func_239381_b_((EntityShiroko) this.entity, this.entity.getPosition()));
+        }
         /*
         else if (bone.getName().equals("Body")){
             stack.push();
@@ -90,6 +98,6 @@ public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
          */
 
         bufferIn = rtb.getBuffer(RenderType.getEntitySmoothCutout(texture));
-        super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        super.renderRecursively(bone, stack, bufferIn, light, packedOverlayIn, red, green, blue, alpha);
     }
 }

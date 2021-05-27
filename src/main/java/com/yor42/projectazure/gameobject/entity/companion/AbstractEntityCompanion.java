@@ -44,6 +44,7 @@ import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
@@ -262,7 +263,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer;
     protected double affection, exp, morale;
     protected boolean isFreeRoaming, isSwimmingUp;
-    protected boolean isMeleeing, isOpeningDoor;
+    protected boolean isMeleeing, isOpeningDoor, isstuck;
     protected int awakeningLevel;
     private final MovementController SwimController;
     private final MovementController MoveController;
@@ -697,10 +698,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void livingTick() {
         super.livingTick();
-
-        if(this.collidedHorizontally && this.isInWater()){
+        if(this.collidedHorizontally && this.isInWater()) {
             Vector3d vec3d = this.getMotion();
-            this.setMotion(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 0.01 : 0.0F), vec3d.z);
+            isstuck = true;
+            this.setSwimmingUp(this.collidedHorizontally);
+            this.setMotion(vec3d.x, vec3d.y + (double) (0.02F), vec3d.z);
+        }else if(this.isstuck && !this.collidedHorizontally){
+            this.setSwimmingUp(false);
+            this.setSwimmingUp(false);
         }
 
         if(this.expdelay>0){
@@ -905,6 +910,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.canBeCollidedWith()&&!this.isSleeping();
     }
 
+    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
+        return this.isEntitySleeping()? (float) (sizeIn.height * 0.5) : sizeIn.height * 0.85F;
+    }
+
 
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
@@ -1013,7 +1022,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void tick() {
         super.tick();
-        this.setPathPriority(PathNodeType.WATER, 0.0F);
+        this.setPathPriority(PathNodeType.WATER, this.getOwner() != null && this.getOwner().isInWater()? 0.0F:-1.0F);
         if(this.getHomePosition()!=BlockPos.ZERO&&this.ticksExisted%20==0){
             BlockState blockstate = this.world.getBlockState(this.getHomePos());
             if(!blockstate.isBed(this.getEntityWorld(),this.getHomePos(), this)) {
@@ -1023,8 +1032,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void updateSwimming() {
-        if (!this.world.isRemote && this.ticksExisted%10 == 0) {
-            if (this.isServerWorld() && this.eyesInWater) {
+        if (!this.world.isRemote &&!this.canUseRigging()&& this.ticksExisted%10 == 0) {
+            double f = this.getEyeHeight()-0.8;
+            double waterheight = this.func_233571_b_(FluidTags.WATER);
+            if (this.isServerWorld() && this.isInWater() && (!this.isOnGround() || this.eyesInWater) && waterheight>f) {
                 this.navigator = this.swimmingNav;
                 this.moveController = this.SwimController;
                 this.setSwimming(true);

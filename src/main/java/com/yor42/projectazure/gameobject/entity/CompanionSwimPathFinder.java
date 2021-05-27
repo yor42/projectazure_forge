@@ -32,9 +32,9 @@ public class CompanionSwimPathFinder extends MovementController {
             LivingEntity livingentity = this.companion.getAttackTarget();
 
             if((this.companion.isInWater() || this.companion.isInLava()) && ((livingentity != null && livingentity.getPosY() > this.companion.getPosY()) || this.companion.isSwimmingUp() || (this.companion.getOwner() != null && this.companion.getOwner().getPosY()+1 > this.companion.getPosY())) && !this.companion.canUseRigging()){
-                double f = this.companion.getEyeHeight()-2;
+                double f = this.companion.getEyeHeight()-0.2;
                 double waterheight = this.companion.func_233571_b_(FluidTags.WATER);
-                 if(waterheight > f) {
+                 if(waterheight > f || this.companion.isSwimmingUp()) {
                      Vector3d vec3d = this.companion.getMotion();
                     this.companion.setMotion(vec3d.x, vec3d.y + (double)(0.0075F), vec3d.z);
                  }

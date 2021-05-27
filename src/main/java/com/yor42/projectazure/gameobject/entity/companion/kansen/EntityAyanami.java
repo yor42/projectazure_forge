@@ -55,6 +55,9 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.melee1", false));
             }
+        }else if(this.isSwimming()) {
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_arm", true));
+            return PlayState.CONTINUE;
         }
         else if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
             if(this.isSailing()){
@@ -93,6 +96,9 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
             return PlayState.CONTINUE;
+        }else if(this.isSwimming()) {
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_leg", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
@@ -117,7 +123,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable 
         return MobEntity.func_233666_p_()
                 //Attribute
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.0F)
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 2.5F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;

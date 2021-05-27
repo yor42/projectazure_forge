@@ -52,6 +52,9 @@ public class EntityChen extends AbstractSwordUserBase{
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("sit_leg", true));
             return PlayState.CONTINUE;
+        }else if(this.isSwimming()) {
+            event.getController().setAnimation(builder.addAnimation("swim_leg", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
@@ -124,9 +127,11 @@ public class EntityChen extends AbstractSwordUserBase{
         }else if(this.isGettingHealed()){
             event.getController().setAnimation(builder.addAnimation("heal_arm", true));
             return PlayState.CONTINUE;
+        }else if(this.isSwimming()) {
+            event.getController().setAnimation(builder.addAnimation("swim_arm", true));
+            return PlayState.CONTINUE;
         }
-
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F) && !this.isEntitySleeping()) {
+        else if(!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F) && !this.isEntitySleeping()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }
@@ -152,7 +157,7 @@ public class EntityChen extends AbstractSwordUserBase{
         return MobEntity.func_233666_p_()
                 //Attribute
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.0F)
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 2.5F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, 25F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;

@@ -31,6 +31,9 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
         if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.sit", true));
             return PlayState.CONTINUE;
+        }else if(this.isSwimming()) {
+            event.getController().setAnimation(builder.addAnimation("animation.enterprise.swim_leg", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
@@ -88,6 +91,9 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
         }else if(this.isGettingHealed()){
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.heal_arm", true));
             return PlayState.CONTINUE;
+        }else if(this.isSwimming()) {
+            event.getController().setAnimation(builder.addAnimation("animation.enterprise.swim_arm", true));
+            return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
@@ -126,7 +132,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
         return MobEntity.func_233666_p_()
                 //Attribute
                 .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 1.0F)
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 2.5F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, 30F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;
