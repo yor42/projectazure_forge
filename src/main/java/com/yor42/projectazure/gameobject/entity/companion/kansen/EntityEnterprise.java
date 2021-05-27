@@ -123,6 +123,11 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier{
     }
 
     @Override
+    protected float getSitHeight() {
+        return 1.3F;
+    }
+
+    @Override
     public enums.CompanionRarity getRarity() {
         return SUPER_RARE;
     }

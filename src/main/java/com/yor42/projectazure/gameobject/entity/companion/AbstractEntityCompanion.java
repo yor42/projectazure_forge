@@ -700,6 +700,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void livingTick() {
         super.livingTick();
+
+        this.dataManager.set(SITTING, this.isSitting());
+
         if(this.collidedHorizontally && this.isInWater()) {
             Vector3d vec3d = this.getMotion();
             isstuck = true;
@@ -1193,7 +1196,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public EntitySize getSize(Pose poseIn) {
 
-        if(this.isSitting()){
+        if(this.dataManager.get(SITTING)){
             return new EntitySize(this.getWidth(), this.getSitHeight(), false);
         }
 
