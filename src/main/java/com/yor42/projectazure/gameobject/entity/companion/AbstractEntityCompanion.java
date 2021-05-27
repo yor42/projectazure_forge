@@ -261,6 +261,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     };
 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer;
+    private final EntitySize originalsize;
     protected double affection, exp, morale;
     protected boolean isFreeRoaming, isSwimmingUp;
     protected boolean isMeleeing, isOpeningDoor, isstuck;
@@ -307,6 +308,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.airNav = new FlyingPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
         this.MoveController = new MovementController(this);
+        this.originalsize = type.getSize();;
     }
 
     public void setOathed(boolean bool){
@@ -910,10 +912,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.canBeCollidedWith()&&!this.isSleeping();
     }
 
-    protected float getStandingEyeHeight(Pose poseIn, EntitySize sizeIn) {
-        return this.isEntitySleeping()? (float) (sizeIn.height * 0.5) : sizeIn.height * 0.85F;
-    }
-
 
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
@@ -974,7 +972,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
                     //check is player is looking at Head
                     Vector3d PlayerLook = player.getLook(1.0F).normalize();
-                    float eyeHeight = (float) (this.isEntitySleeping()? this.getPosYEye()-0.575: this.getPosYEye());
+                    float eyeHeight = (float) this.getPosYEye();
 
 
                     Vector3d EyeDelta = new Vector3d(this.getPosX() - player.getPosX(), eyeHeight - player.getPosYEye(), this.getPosZ() - player.getPosZ());
@@ -1187,4 +1185,24 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             target.setItem(itemstack1);
         }
     }
+
+    protected float getSitHeight(){
+        return 1F;
+    }
+
+    @Override
+    public EntitySize getSize(Pose poseIn) {
+
+        if(this.isSitting()){
+            return new EntitySize(this.getWidth(), this.getSitHeight(), false);
+        }
+
+        return super.getSize(poseIn);
+    }
+
+    public void func_233687_w_(boolean p_233687_1_) {
+        super.func_233687_w_(p_233687_1_);
+        this.recalculateSize();
+    }
+
 }
