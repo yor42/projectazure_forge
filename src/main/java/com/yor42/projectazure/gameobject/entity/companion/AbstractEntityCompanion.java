@@ -919,6 +919,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
         if(this.isOwner(player) && !(player.getHeldItem(hand).getItem() instanceof ItemRiggingBase)){
+
+            if(this.getRidingEntity() != null){
+                this.stopRiding();
+            }
+
             if(player.isSneaking() && !this.world.isRemote && !(player.getHeldItem(hand).getItem() instanceof ItemBandage)){
                     this.openGUI((ServerPlayerEntity) player);
                     Main.PROXY.setSharedMob(this);
@@ -1034,9 +1039,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void updateSwimming() {
         if (!this.world.isRemote &&!this.canUseRigging()&& this.ticksExisted%10 == 0) {
-            double f = this.getEyeHeight()-0.8;
             double waterheight = this.func_233571_b_(FluidTags.WATER);
-            if (this.isServerWorld() && this.isInWater() && (!this.isOnGround() || this.eyesInWater) && waterheight>f) {
+            if (this.isServerWorld() && this.isInWater() && (!this.isOnGround() || this.eyesInWater) && waterheight > 0.9) {
                 this.navigator = this.swimmingNav;
                 this.moveController = this.SwimController;
                 this.setSwimming(true);
