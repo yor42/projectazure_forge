@@ -90,7 +90,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
                 this.boat = Boat;
             }
             else{
-                List<Entity> possibleBoat = this.entity.getEntityWorld().getEntitiesInAABBexcluding(this.entity, this.entity.getBoundingBox().expand(20, 2, 20), (entity) -> entity instanceof BoatEntity && entity.getPassengers().size() < 2);
+                List<Entity> possibleBoat = this.entity.getEntityWorld().getEntitiesInAABBexcluding(this.entity, this.entity.getBoundingBox().expand(20, 2, 20), (entity) -> (entity instanceof BoatEntity && entity.getPassengers().size() < 2) || entity.getControllingPassenger() instanceof AbstractEntityCompanion && ((AbstractEntityCompanion)entity.getControllingPassenger()).getOwner() == this.entity.getOwner() );
                 if(!possibleBoat.isEmpty()) {
                     this.boat = possibleBoat.get(possibleBoat.size() <= 1 ? 0 :this.entity.getRNG().nextInt(possibleBoat.size()));
                     if (this.boat != null) {
