@@ -58,7 +58,7 @@ public abstract class EntityGunUserBase extends AbstractEntityCompanion {
         return ItemStack.EMPTY;
     }
 
-                                      @Override
+    @Override
     public boolean canUseGun() {
         return true;
     }

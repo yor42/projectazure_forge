@@ -71,7 +71,7 @@ public class EntityShiroko extends EntityGunUserBase {
         }else{
             if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
                 if(this.isSprinting()){
-                    event.getController().setAnimation(builder.addAnimation("animation.shiroko.run_hand", true));
+                    event.getController().setAnimation(builder.addAnimation("animation.shiroko.run_arm", true));
                 }
                 else {
                     event.getController().setAnimation(builder.addAnimation("animation.shiroko.walk_hand", true));
