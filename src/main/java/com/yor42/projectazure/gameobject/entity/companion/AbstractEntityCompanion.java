@@ -561,9 +561,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected void registerData() {
         super.registerData();
-
         this.dataManager.register(EXP, 0.0F);
-        this.dataManager.register(AFFECTION, 0.0f);
         this.dataManager.register(LIMITBREAKLEVEL, 0);
         this.dataManager.register(MORALE, 0.0F);
         this.dataManager.register(LEVEL, 0);
