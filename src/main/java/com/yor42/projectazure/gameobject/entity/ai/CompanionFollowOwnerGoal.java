@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.ai;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;

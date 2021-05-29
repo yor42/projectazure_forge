@@ -5,16 +5,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.tags.FluidTags;
-import java.util.List;
-
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.system.CallbackI;
 
-import java.util.Map.Entry;
-import java.util.function.Predicate;
+import java.util.List;
 
 public class KansenRideBoatAlongPlayerGoal extends Goal {
 

@@ -6,15 +6,12 @@ import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
-
-import javax.annotation.Nonnull;
 
 public abstract class EntityGunUserBase extends AbstractEntityCompanion {
 

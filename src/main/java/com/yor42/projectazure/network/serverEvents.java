@@ -11,9 +11,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class serverEvents {
-
     public static void spawnStarter(ServerPlayerEntity player, int StarterID){
         World world = player.world;
         EntityType<?> entitytype;
@@ -46,7 +46,6 @@ public class serverEvents {
                     entity.setAffection(40.0F);
                     entity.setMorale(150);
                 }
-                player.closeScreen();
             }
         }
     }

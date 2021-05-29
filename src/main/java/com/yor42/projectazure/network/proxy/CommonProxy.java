@@ -29,10 +29,6 @@ public class CommonProxy {
         return this.Sharedstack;
     }
 
-    /**
-     * Return player on client, null on server
-     * @return
-     */
     public PlayerEntity getPlayerClient() {
         return null;
     }

@@ -53,7 +53,10 @@ public class guiStarterSpawn extends Screen {
         for(int index = 0; index < 1; index++) {
             if (this.notYetPopulated) {
                 int finalIndex = index;
-                Button button = createButton(this.x+9 + (index * buttonHeight), this.y+26, buttonWidth, buttonHeight, index, this.entityList[index], action -> Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex)));
+                Button button = createButton(this.x+9 + (index * buttonHeight), this.y+26, buttonWidth, buttonHeight, index, this.entityList[index], (action) -> {
+                    Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex));
+                    this.closeScreen();
+                });
                 this.addButton(button);
                         //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslationTextComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
             } else {

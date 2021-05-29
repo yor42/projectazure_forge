@@ -71,6 +71,7 @@ public class Main
     };
 
     public Main() {
+        MinecraftForge.EVENT_BUS.register(this);
 
         MinecraftForge.EVENT_BUS.register(new ModBusEventHandler());
         // Register the setup method for modloading
@@ -84,8 +85,7 @@ public class Main
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldgenInit::registerWorldgen);
 
-        // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
+        // Register ourselves for server and other game events we are interested i
     }
 
     private void setup(final FMLCommonSetupEvent event)

@@ -11,7 +11,6 @@ import com.yor42.projectazure.gameobject.items.gun.ItemAbydos550;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
-import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -115,23 +114,23 @@ public class registerItems {
         @Override
         public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
             super.addInformation(stack, worldIn, tooltip, flagIn);
-
-            if(Screen.hasShiftDown()){
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.setBold(true).setColor(Color.fromInt(0xff00fc)).setItalic(true)));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip2"));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip3"));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.setColor(Color.fromInt(0x990000)).setItalic(true)));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.setColor(Color.fromInt(0x999900)).setItalic(true)));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
-            }
-            else{
-                ITextComponent shift = new StringTextComponent("[SHIFT]").mergeStyle(TextFormatting.YELLOW);
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.desc1").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e))));
-                tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.shiftinfo", shift).mergeStyle(TextFormatting.GRAY));
+            if(worldIn != null && worldIn.isRemote) {
+                if (Screen.hasShiftDown()) {
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.setBold(true).setColor(Color.fromInt(0xff00fc)).setItalic(true)));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip2"));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip3"));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.setColor(Color.fromInt(0x990000)).setItalic(true)));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.setColor(Color.fromInt(0x999900)).setItalic(true)));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e)).setItalic(true)));
+                } else {
+                    ITextComponent shift = new StringTextComponent("[SHIFT]").mergeStyle(TextFormatting.YELLOW);
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.desc1").setStyle(Style.EMPTY.setColor(Color.fromInt(0x5e5e5e))));
+                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.shiftinfo", shift).mergeStyle(TextFormatting.GRAY));
+                }
             }
         }
     });
