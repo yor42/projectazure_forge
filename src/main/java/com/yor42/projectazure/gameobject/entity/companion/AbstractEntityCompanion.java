@@ -256,7 +256,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected int level,  patAnimationTime, LimitBreakLv, patTimer;
     private final EntitySize originalsize;
-    protected double affection, exp, morale;
+    protected float exp, morale;
     protected boolean isFreeRoaming, isSwimmingUp;
     protected boolean isMeleeing, isOpeningDoor, isstuck;
     protected int awakeningLevel;
@@ -271,6 +271,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
 
+    protected static final DataParameter<Float> AFFECTION = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -352,7 +353,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putDouble("affection", this.affection);
+        compound.putFloat("affection", this.dataManager.get(AFFECTION));
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
         compound.putDouble("homeX", this.dataManager.get(HOMEPOS).getX());
@@ -407,7 +408,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        this.affection = compound.getFloat("affection");
+        this.dataManager.set(AFFECTION, compound.getFloat("affection"));
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
         this.dataManager.set(HOMEPOS, new BlockPos(compound.getDouble("homeX"), compound.getDouble("homeY"), compound.getDouble("homeZ")));
@@ -419,7 +420,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.LimitBreakLv = compound.getInt("limitbreaklv");
         this.awakeningLevel = compound.getInt("awaken");
         this.setFreeRoaming(compound.getBoolean("freeroaming"));
-        this.morale = compound.getDouble("morale");
         this.getInventory().deserializeNBT(compound.getCompound("inventory"));
 
         this.lastSlept = compound.getLong("lastslept");
@@ -560,6 +560,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected void registerData() {
         super.registerData();
+        this.dataManager.register(AFFECTION, 0.0F);
         this.dataManager.register(SITTING, this.isSitting());
         this.dataManager.register(OPENINGDOOR, false);
         this.dataManager.register(MELEEATTACKING, false);
@@ -625,23 +626,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public double getAffection() {
-        return this.affection;
+        return this.getDataManager().get(AFFECTION);
     }
 
-    public void setAffection(double affection){
-        this.affection = affection;
+    public void setAffection(float affection){
+        this.getDataManager().set(AFFECTION, affection);
     }
 
-    public double getmaxAffextion(){
+    public double getmaxAffection(){
         return this.isOathed()? 200:100;
     };
 
     public void addAffection(double Delta){
-        this.setAffection(Math.min(this.getAffection() + Delta, this.getmaxAffextion()));
+        this.setAffection((float) Math.min(this.getAffection() + Delta, this.getmaxAffection()));
     }
 
     public void setExp(double exp) {
-        this.exp = exp;
+        this.exp = (float) exp;
     }
 
     public double getExp() {
@@ -670,7 +671,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public double addExp(double deltaExp){
         if(this.getExp()+deltaExp >= this.getMaxExp()) {
-            this.exp = this.getExp()+deltaExp;
+            this.exp = (float) (this.getExp()+deltaExp);
             this.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
             while(this.exp>this.getMaxExp() && this.getLevel() <= this.getMaxLevel()){
                 this.addLevel(1);
@@ -795,13 +796,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.forceWakeupCounter=0;
         }
 
-        if(this.affection <0)
-            this.affection = 0;
-        else if(this.affection>100){
+        if(this.getAffection() <0)
+            this.getDataManager().set(AFFECTION, 0F);
+        else if(this.getAffection()>100){
             if(!this.isOathed())
-                this.affection=100;
-            else if(this.affection > 200){
-                this.affection = 200;
+                this.getDataManager().set(AFFECTION, 100F);
+            else if(this.getAffection() > 200){
+                this.getDataManager().set(AFFECTION, 200F);
             }
         }
         this.navigator.getNodeProcessor().setCanEnterDoors(this.canOpenDoor());
@@ -918,10 +919,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.stopRiding();
             }
 
-            if(player.isSneaking() && !this.world.isRemote && !(player.getHeldItem(hand).getItem() instanceof ItemBandage)){
+            if(player.isSneaking() && !(player.getHeldItem(hand).getItem() instanceof ItemBandage)){
+                if(!this.world.isRemote) {
                     this.openGUI((ServerPlayerEntity) player);
-                    Main.PROXY.setSharedMob(this);
-                    return ActionResultType.SUCCESS;
+                }
+                Main.PROXY.setSharedMob(this);
+                return ActionResultType.SUCCESS;
             }
             else{
 
@@ -1148,7 +1151,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.morale;
     }
 
-    public void setMorale(double morale) {
+    public void setMorale(float morale) {
         this.morale = morale;
     }
 
@@ -1156,7 +1159,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         double prevmorale = this.getMorale();
 
 
-        this.setMorale(MathUtils.clamp(prevmorale+value, 0, 150));
+        this.setMorale((float) MathUtils.clamp(prevmorale+value, 0, 150));
     }
 
     public BlockPos getStayCenterPos() {
