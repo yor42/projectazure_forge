@@ -1,6 +1,8 @@
 package com.yor42.projectazure.libs.utils;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.util.text.Color;
@@ -109,6 +111,27 @@ public class MathUtil {
     public static int ColorHexToInt(String HEX_VALUE){
         Color color = Color.fromHex(HEX_VALUE);
         return color.getColor();
+    }
+
+    //From Immersive Engineering
+    public static final Direction[] VALUES = Direction.values();
+
+    public static Rotation getRotationBetweenFacings(Direction orig, Direction to)
+    {
+        if(to==orig)
+            return Rotation.NONE;
+        if(orig.getAxis()== Direction.Axis.Y||to.getAxis()== Direction.Axis.Y)
+            return null;
+        orig = orig.rotateY();
+        if(orig==to)
+            return Rotation.CLOCKWISE_90;
+        orig = orig.rotateY();
+        if(orig==to)
+            return Rotation.CLOCKWISE_180;
+        orig = orig.rotateY();
+        if(orig==to)
+            return Rotation.COUNTERCLOCKWISE_90;
+        return null;//This shouldn't ever happen
     }
 
 }

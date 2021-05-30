@@ -93,8 +93,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
     }
 
-    public abstract enums.CompanionRarity getRarity();
-
     protected void registerData() {
         super.registerData();
         this.dataManager.register(STORAGE, new CompoundNBT());

@@ -140,7 +140,13 @@ Domi, Rongmario, Nali_, Alex the 666, Tiviacz1337, Mojang studio, Gecko#5075, Pi
 
 and YOU <3
 
-This mod contains codes from these mods:
+This mod contains codes from these dev/mods:
 Immersive engineering by BluSunrize on multiblock
 Botania by Vazkii on Shift-Tooltip
+Techgun by pWn3d1337 on gun related stuff
+Code by Fakedomi for Container Server<>Client sync
+
+Are you missing from this credit? Let me know on:
+yor42#0420
+Issue tab of this project:
  */

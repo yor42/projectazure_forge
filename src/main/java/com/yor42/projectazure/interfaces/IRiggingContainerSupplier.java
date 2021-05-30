@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.containers.riggingcontainer;
+package com.yor42.projectazure.interfaces;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;

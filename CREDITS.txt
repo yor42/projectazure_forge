@@ -1,41 +1,41 @@
-Minecraft Forge: Credits/Thank You
+-----------------------------------------------
+PROJECT: AZURE
+CREDIT
+-----------------------------------------------
 
-Forge is a set of tools and modifications to the Minecraft base game code to assist 
-mod developers in creating new and exciting content. It has been in development for 
-several years now, but I would like to take this time thank a few people who have 
-helped it along it's way.
+Original Game by
+Kadokawa games, Moe Fantasy, Shanghai Manjuu, Hyperglyph, NAT GAMES
 
-First, the people who originally created the Forge projects way back in Minecraft 
-alpha. Eloraam of RedPower, and SpaceToad of Buildcraft, without their acceptiance 
-of me taking over the project, who knows what Minecraft modding would be today.
+Original Concept by
+Waisse, yor42, guri, necrom, Aoichi
 
-Secondly, someone who has worked with me, and developed some of the core features
-that allow modding to be as functional, and as simple as it is, cpw. For developing
-FML, which stabelized the client and server modding ecosystem. As well as the base
-loading system that allows us to modify Minecraft's code as elegently as possible.
+Developed by
+yor42, FakeDomi
 
-Mezz, who has stepped up as the issue and pull request manager. Helping to keep me
-sane as well as guiding the community into creating better additions to Forge.
+Modeling by
+yor42
 
-Searge, Bspks, Fesh0r, ProfMobious, and all the rest over on the MCP team {of which 
-I am a part}. For creating some of the core tools needed to make Minecraft modding 
-both possible, and as stable as can be.
-  On that note, here is some specific information of the MCP data we use:
-    * Minecraft Coder Pack (MCP) *
-      Forge Mod Loader and Minecraft Forge have permission to distribute and automatically 
-      download components of MCP and distribute MCP data files. This permission is not 
-      transitive and others wishing to redistribute the Minecraft Forge source independently
-      should seek permission of MCP or remove the MCP data files and request their users 
-      to download MCP separately.
-      
-And lastly, the countless community members who have spent time submitting bug reports, 
-pull requests, and just helping out the community in general. Thank you.
+Texture by
+yor42
 
---LexManos
+Thanks to
+Domi, Rongmario, Nali_, Alex the 666, Tiviacz1337, Mojang studio, Gecko#5075, Pinkalulan, Dane Kenect
+
+and YOU <3
+
+This mod contains codes from these dev/mods:
+Immersive engineering by BluSunrize on multiblock
+Botania by Vazkii on Shift-Tooltip
+Techgun by pWn3d1337 on gun related stuff
+Code by Fakedomi for Container Server<->Client sync
+
+Are you missing from this credit? Let me know on:
+yor42#0420
+Issue tab of this project
 
 =========================================================================
 
-This is Forge Mod Loader.
+This Project uses Forge Mod Loader.
 
 You can find the source code at all times at https://github.com/MinecraftForge/MinecraftForge/tree/1.12.x/src/main/java/net/minecraftforge/fml
 

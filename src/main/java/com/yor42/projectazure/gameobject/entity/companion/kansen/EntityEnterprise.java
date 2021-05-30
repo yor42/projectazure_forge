@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
+import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -19,7 +20,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.libs.enums.CompanionRarity.SUPER_RARE;
 
-public class EntityEnterprise extends EntityKansenAircraftCarrier{
+public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAzurLaneKansen {
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         if(Minecraft.getInstance().isGamePaused()){

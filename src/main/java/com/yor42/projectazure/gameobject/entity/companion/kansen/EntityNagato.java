@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
+import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -17,7 +18,7 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-public class EntityNagato extends EntityKansenBattleship{
+public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKansen {
     public EntityNagato(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
