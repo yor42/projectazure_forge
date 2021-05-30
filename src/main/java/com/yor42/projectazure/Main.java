@@ -139,4 +139,8 @@ Thanks to
 Domi, Rongmario, Nali_, Alex the 666, Tiviacz1337, Mojang studio, Gecko#5075, Pinkalulan, Dane Kenect
 
 and YOU <3
+
+This mod contains codes from these mods:
+Immersive engineering by BluSunrize on multiblock
+Botania by Vazkii on Shift-Tooltip
  */

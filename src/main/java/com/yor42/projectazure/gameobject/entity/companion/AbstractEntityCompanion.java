@@ -566,7 +566,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(MORALE, 0.0F);
         this.dataManager.register(LEVEL, 0);
         this.dataManager.register(AFFECTION, 0.0F);
-        this.dataManager.register(SITTING, this.isSitting());
+        this.dataManager.register(SITTING, false);
         this.dataManager.register(OPENINGDOOR, false);
         this.dataManager.register(MELEEATTACKING, false);
         this.dataManager.register(MAXPATEFFECTCOUNT, 0);
@@ -581,6 +581,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(VALID_HOME_DISTANCE, -1.0f);
         this.dataManager.register(HEAL_TIMER, 0);
         this.dataManager.register(RELOAD_TIMER_MAINHAND, 0);
+        this.dataManager.register(RELOAD_TIMER_OFFHAND, 0);
     }
 
     public void setOpeningdoor(boolean openingdoor){
@@ -701,7 +702,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void livingTick() {
         super.livingTick();
 
-        this.dataManager.set(SITTING, this.isSitting());
+        this.dataManager.set(SITTING, this.isEntitySleeping());
 
         if(this.collidedHorizontally && this.isInWater()) {
             Vector3d vec3d = this.getMotion();
