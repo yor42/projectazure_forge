@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
@@ -154,10 +155,10 @@ public class EntityChen extends AbstractSwordUserBase{
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 2.5F)
-                .createMutableAttribute(Attributes.MAX_HEALTH, 25F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ChenMovementSpeed.get())
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ChenSwimSpeed.get())
+                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.ChenHealth.get())
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ChenAttackDamage.get())
                 ;
     }
 

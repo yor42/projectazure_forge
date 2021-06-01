@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
@@ -144,10 +145,10 @@ public class EntityShiroko extends EntityGunUserBase {
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 2.5F)
-                .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ShirokoMovementSpeed.get())
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ShirokoSwimSpeed.get())
+                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.ShirokoHealth.get())
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ShirokoAttackDamage.get())
                 ;
     }
 

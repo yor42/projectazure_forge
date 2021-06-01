@@ -7,20 +7,12 @@
  */
 package com.yor42.projectazure.libs.utils;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.interfaces.IMultiBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.template.Template.BlockInfo;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
@@ -28,7 +20,6 @@ import net.minecraftforge.eventbus.api.Cancelable;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MultiblockUtils {
@@ -71,14 +62,14 @@ public class MultiblockUtils {
     {
         private final IMultiBlock multiblock;
         private final BlockPos clickedBlock;
-        private final ItemStack hammer;
+        private final ItemStack wrench;
 
         public MultiblockFormEvent(PlayerEntity player, IMultiBlock multiblock, BlockPos clickedBlock, ItemStack hammer)
         {
             super(player);
             this.multiblock = multiblock;
             this.clickedBlock = clickedBlock;
-            this.hammer = hammer;
+            this.wrench = hammer;
         }
 
         public IMultiBlock getMultiblock()
@@ -91,9 +82,9 @@ public class MultiblockUtils {
             return clickedBlock;
         }
 
-        public ItemStack getHammer()
+        public ItemStack getWrench()
         {
-            return hammer;
+            return wrench;
         }
     }
 

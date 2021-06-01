@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -133,10 +134,10 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 2.5F)
-                .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.GangwonMovementSpeed.get())
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.GangwonSwimSpeed.get())
+                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.GangwonHealth.get())
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.GangwonAttackDamage.get())
                 ;
     }
 

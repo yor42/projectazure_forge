@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
@@ -123,10 +124,10 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.35F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 2.5F)
-                .createMutableAttribute(Attributes.MAX_HEALTH, 40F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.AyanamiMovementSpeed.get())
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.AyanamiSwimSpeed.get())
+                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.AyanamiHealth.get())
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.AyanamiAttackDamage.get())
                 ;
     }
 

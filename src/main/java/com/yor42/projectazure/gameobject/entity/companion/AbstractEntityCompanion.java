@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.ai.*;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
@@ -332,7 +333,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isPVPenabled(){
-        return false;
+        return PAConfig.CONFIG.EnablePVP.get();
     }
 
     protected int getAwakeningLevel(){
