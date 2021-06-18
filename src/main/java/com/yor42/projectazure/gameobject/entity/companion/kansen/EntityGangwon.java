@@ -147,4 +147,8 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
     }
 
     //Warship girls doesnt have rarity system. WHAT?
+    @Override
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.STAR_4;
+    }
 }

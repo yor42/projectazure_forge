@@ -1124,7 +1124,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.wakeUp();
             this.setForceWaken(true);
         }
-
     }
 
     @Override
@@ -1201,15 +1200,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return 1F;
     }
 
+    public abstract enums.CompanionRarity getRarity();
+
     @Override
     public EntitySize getSize(Pose poseIn) {
 
         if(this.dataManager.get(SITTING)){
             return new EntitySize(this.getWidth(), this.getSitHeight(), false);
-        }
+        }else{
 
         return super.getSize(poseIn);
-    }
+    }}
 
     public void func_233687_w_(boolean p_233687_1_) {
         super.func_233687_w_(p_233687_1_);

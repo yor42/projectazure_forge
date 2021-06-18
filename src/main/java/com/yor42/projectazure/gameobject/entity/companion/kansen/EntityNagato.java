@@ -135,7 +135,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
 
     @Override
     public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.SUPER_RARE;
+        return enums.CompanionRarity.STAR_5;
     }
 
     @Override

@@ -79,7 +79,7 @@ public class EntityChen extends AbstractSwordUserBase{
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isEntitySleeping()){
+        if(this.dataManager.get(SITTING)){
             event.getController().setAnimation(builder.addAnimation("sit_tail", true));
         }
         else if(this.isBeingPatted()){
@@ -140,7 +140,7 @@ public class EntityChen extends AbstractSwordUserBase{
             return PlayState.CONTINUE;
         }
 
-        if(this.isEntitySleeping()){
+        if(this.dataManager.get(SITTING)){
             event.getController().setAnimation(builder.addAnimation("sit_arm", true));
 
         }
@@ -172,5 +172,10 @@ public class EntityChen extends AbstractSwordUserBase{
     @Override
     protected void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this));
+    }
+
+    @Override
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.STAR_6;
     }
 }

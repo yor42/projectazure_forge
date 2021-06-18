@@ -138,6 +138,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
 
     @Override
     public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.ELITE;
+        return enums.CompanionRarity.STAR_4;
     }
 }

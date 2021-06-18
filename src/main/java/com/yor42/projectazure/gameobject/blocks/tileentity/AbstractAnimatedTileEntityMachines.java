@@ -33,13 +33,11 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractAnimatedTileEntityMachines extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimateableEnergyTickTE implements IRecipeHolder, IRecipeHelperPopulator {
 
     protected final AnimationFactory factory = new AnimationFactory(this);
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
-    protected CustomEnergyStorage energyStorage = new CustomEnergyStorage(15000);
-    protected ItemStackHandler inventory = new ItemStackHandler(1);
     protected IRecipeType<? extends IRecipe<IInventory>> recipeType;
 
     protected AbstractAnimatedTileEntityMachines(TileEntityType<?> typeIn) {
@@ -50,25 +48,9 @@ public abstract class AbstractAnimatedTileEntityMachines extends LockableTileEnt
     protected int powerConsumption;
 
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController(this, "controller_machine", 0, this::predicate_machine));
-    }
-
-    protected abstract <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event);
-
-    @Override
     public void tick() {
         boolean isActive = this.isActive();
         boolean shouldsave = false;
-
-        if (this.world != null && this.world.isBlockPowered(this.getPos())) {
-            this.energyStorage.receiveEnergy(1000, false);
-        }
 
 
         if (this.world != null && !this.world.isRemote) {
@@ -116,28 +98,6 @@ public abstract class AbstractAnimatedTileEntityMachines extends LockableTileEnt
         }
     }
 
-    protected abstract void playsound();
-
-    @Override
-    public int getSizeInventory() {
-        return this.inventory.getSlots();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        for(int i=0;i<this.inventory.getSlots(); i++){
-            if(this.inventory.getStackInSlot(i) != ItemStack.EMPTY){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return false;
-    }
-
     protected abstract int getTargetProcessTime();
 
     protected abstract void process(IRecipe<?> irecipe);
@@ -147,8 +107,6 @@ public abstract class AbstractAnimatedTileEntityMachines extends LockableTileEnt
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
         super.read(state, nbt);
-        this.energyStorage.deserializeNBT(nbt.getCompound("energy_storage"));
-        this.inventory.deserializeNBT(nbt.getCompound("inventory"));
         this.ProcessTime = nbt.getInt("processtime");
         this.totalProcessTime = nbt.getInt("totalprocesstime");
     }
@@ -156,24 +114,15 @@ public abstract class AbstractAnimatedTileEntityMachines extends LockableTileEnt
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         super.write(compound);
-        compound.put("inventory", this.inventory.serializeNBT());
-        compound.put("energy_storage", this.energyStorage.serializeNBT());
         compound.putInt("processtime", this.ProcessTime);
         compound.putInt("totalprocesstime", this.totalProcessTime);
         return compound;
     }
 
-    @Override
-    public int[] getSlotsForFace(Direction side) {
-        return new int[0];
-    }
-
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT syncTag = this.getUpdateTag();
-        syncTag.put("inventory", this.inventory.serializeNBT());
-        syncTag.put("energy", this.energyStorage.serializeNBT());
+        CompoundNBT syncTag = super.getUpdateTag();
         syncTag.putInt("progress", this.ProcessTime);
         syncTag.putInt("totalprogress", this.totalProcessTime);
         return new SUpdateTileEntityPacket(pos, 1, syncTag);
@@ -183,42 +132,15 @@ public abstract class AbstractAnimatedTileEntityMachines extends LockableTileEnt
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
         CompoundNBT syncTag = pkt.getNbtCompound();
-        this.inventory.deserializeNBT(syncTag.getCompound("inventory"));
-        this.energyStorage.deserializeNBT(syncTag.getCompound("energy"));
         this.totalProcessTime = syncTag.getInt("totalprogress");
         this.ProcessTime = syncTag.getInt("progress");
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
-        return this.inventory.getStackInSlot(index);
-    }
-
-    @Override
-    public ItemStack decrStackSize(int index, int count) {
-        ItemStack stack = this.inventory.getStackInSlot(index);
-        stack.shrink(count);
-        this.inventory.setStackInSlot(index, stack);
-        return stack;
-    }
-
-    @Override
-    public ItemStack removeStackFromSlot(int index) {
-        if (index >=0 && index < this.inventory.getSlots()){
-            this.inventory.setStackInSlot(index, ItemStack.EMPTY);
-        }
-        return ItemStack.EMPTY;
-    }
-
-    @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
+        super.setInventorySlotContents(index, stack);
         ItemStack stack1 = this.getStackInSlot(index);
         boolean flag = !stack.isEmpty() && stack.isItemEqual(stack1) && ItemStack.areItemStackTagsEqual(stack, stack1);
-        this.inventory.setStackInSlot(index, stack);
-
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
-        }
 
         if (index == 0 || index==1 && !flag) {
             this.totalProcessTime = this.getTargetProcessTime();
@@ -267,31 +189,9 @@ public abstract class AbstractAnimatedTileEntityMachines extends LockableTileEnt
         return null;
     }
 
-    net.minecraftforge.common.util.LazyOptional<? extends net.minecraftforge.items.IItemHandler>[] handlers =
-            net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
-
-    @Override
-    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
-        if (!this.removed && facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (facing == Direction.UP)
-                return handlers[0].cast();
-            else if (facing == Direction.DOWN)
-                return handlers[1].cast();
-            else
-                return handlers[2].cast();
-        }
-        return super.getCapability(capability, facing);
-    }
-
-    public CustomEnergyStorage getEnergyStorage() {
-        return this.energyStorage;
-    }
-
     public boolean isActive(){
         return this.ProcessTime>0;
     }
-
-    public abstract void encodeExtraData(PacketBuffer buffer);
 
 
 

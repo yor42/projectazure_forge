@@ -19,8 +19,6 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-import static com.yor42.projectazure.libs.enums.CompanionRarity.SUPER_RARE;
-
 public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAzurLaneKansen {
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
@@ -131,7 +129,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
 
     @Override
     public enums.CompanionRarity getRarity() {
-        return SUPER_RARE;
+        return enums.CompanionRarity.STAR_5;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

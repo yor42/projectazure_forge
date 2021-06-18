@@ -52,6 +52,26 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue ChenAttackDamage;
         public final ForgeConfigSpec.DoubleValue ChenMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue Star_1_Chance;
+        public final ForgeConfigSpec.DoubleValue Star_2_Chance;
+        public final ForgeConfigSpec.DoubleValue Star_3_Chance;
+        public final ForgeConfigSpec.DoubleValue Star_4_Chance;
+        public final ForgeConfigSpec.DoubleValue Star_5_Chance;
+        public final ForgeConfigSpec.DoubleValue Star_6_Chance;
+
+        public final ForgeConfigSpec.IntValue Star_1_MinTime;
+        public final ForgeConfigSpec.IntValue Star_1_MaxTime;
+        public final ForgeConfigSpec.IntValue Star_2_MinTime;
+        public final ForgeConfigSpec.IntValue Star_2_MaxTime;
+        public final ForgeConfigSpec.IntValue Star_3_MinTime;
+        public final ForgeConfigSpec.IntValue Star_3_MaxTime;
+        public final ForgeConfigSpec.IntValue Star_4_MinTime;
+        public final ForgeConfigSpec.IntValue Star_4_MaxTime;
+        public final ForgeConfigSpec.IntValue Star_5_MinTime;
+        public final ForgeConfigSpec.IntValue Star_5_MaxTime;
+        public final ForgeConfigSpec.IntValue Star_6_MinTime;
+        public final ForgeConfigSpec.IntValue Star_6_MaxTime;
+
         private PAModConfig(ForgeConfigSpec.Builder builder){
 
             builder.push("General");
@@ -90,6 +110,29 @@ public class PAConfig {
             GangwonSwimSpeed = builder.defineInRange("Swim Speed of Gangwon", 2.5, 0, 1024);
             GangwonAttackDamage = builder.defineInRange("Attack Damage of Gangwon", 2.0F, 0, 1024);
             GangwonMovementSpeed = builder.defineInRange("Movement speed of Gangwon", 0.35F, 0, 2);
+
+            builder.pop().push("Gacha Roll RNG").comment("Chance of Roll per rarity.").comment("1 star is most common, and 6 star is most rare.").comment("Higher the number is, Commoner the item is.");
+            Star_1_Chance = (ForgeConfigSpec.DoubleValue) builder.define("1 Star Rarity", 60D);
+            Star_2_Chance = (ForgeConfigSpec.DoubleValue) builder.define("2 Star Rarity", 20D);
+            Star_3_Chance = (ForgeConfigSpec.DoubleValue) builder.define("3 Star Rarity", 10D);
+            Star_4_Chance = (ForgeConfigSpec.DoubleValue) builder.define("4 Star Rarity", 5D);
+            Star_5_Chance = (ForgeConfigSpec.DoubleValue) builder.define("5 Star Rarity", 3D);
+            Star_6_Chance = (ForgeConfigSpec.DoubleValue) builder.define("6 Star Rarity", 2D);
+
+            builder.comment("Construction/'Recruiting time for each rarity in seconds");
+            Star_1_MinTime = (ForgeConfigSpec.IntValue) builder.define("1 Star Minimum Recruiting Time", 45);
+            Star_1_MaxTime = (ForgeConfigSpec.IntValue) builder.define("1 Star Maximum Recruiting Time", 90);
+            Star_2_MinTime = (ForgeConfigSpec.IntValue) builder.define("2 Star Minimum Recruiting Time", 60);
+            Star_2_MaxTime = (ForgeConfigSpec.IntValue) builder.define("2 Star Maximum Recruiting Time", 100);
+            Star_3_MinTime = (ForgeConfigSpec.IntValue) builder.define("3 Star Minimum Recruiting Time", 70);
+            Star_3_MaxTime = (ForgeConfigSpec.IntValue) builder.define("3 Star Maximum Recruiting Time", 140);
+            Star_4_MinTime = (ForgeConfigSpec.IntValue) builder.define("4 Star Minimum Recruiting Time", 110);
+            Star_4_MaxTime = (ForgeConfigSpec.IntValue) builder.define("4 Star Maximum Recruiting Time", 180);
+            Star_5_MinTime = (ForgeConfigSpec.IntValue) builder.define("5 Star Minimum Recruiting Time", 150);
+            Star_5_MaxTime = (ForgeConfigSpec.IntValue) builder.define("5 Star Maximum Recruiting Time", 210);
+            Star_6_MinTime = (ForgeConfigSpec.IntValue) builder.define("6 Star Minimum Recruiting Time", 180);
+            Star_6_MaxTime = (ForgeConfigSpec.IntValue) builder.define("6 Star Maximum Recruiting Time", 250);
+
         }
     }
 

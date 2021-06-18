@@ -109,6 +109,11 @@ public class EntityShiroko extends EntityGunUserBase {
     }
 
     @Override
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.STAR_5;
+    }
+
+    @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
         if(Minecraft.getInstance().isGamePaused()){
