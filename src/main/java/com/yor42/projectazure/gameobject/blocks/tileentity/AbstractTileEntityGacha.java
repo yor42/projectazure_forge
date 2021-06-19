@@ -4,9 +4,9 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntityType;
-import org.objectweb.asm.tree.AbstractInsnNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,30 +16,64 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
 
     private class Entry {
         double accumulatedWeight;
-        AbstractEntityCompanion entity;
+        EntityType<? extends AbstractEntityCompanion> EntityType;
     }
 
     private final List<Entry> entries = new ArrayList<>();
     private double accumulatedWeight;
     protected int ProcessTime, totalProcessTime;
-    protected AbstractEntityCompanion entityCompanion;
+    protected EntityType<? extends AbstractEntityCompanion> entityCompanion;
+    protected PlayerEntity nextTaskOwner;
     protected int powerConsumption;
+    protected boolean shouldProcess;
     private final Random rand = new Random();
 
-    public void addEntry(AbstractEntityCompanion entity, double weight) {
+    public void addEntryCustomWeight(EntityType<? extends AbstractEntityCompanion> entity, double weight) {
         accumulatedWeight += weight;
         Entry e = new Entry();
-        e.entity = entity;
+        e.EntityType = entity;
         e.accumulatedWeight = accumulatedWeight;
         entries.add(e);
     }
 
-    public AbstractEntityCompanion getRollResult(){
+    public void addEntry(EntityType<? extends AbstractEntityCompanion> entityType) {
+        if(this.world != null) {
+            AbstractEntityCompanion companion = entityType.create(this.world);
+            if(companion!= null) {
+                double weight = this.getWeightFromRarity(companion);
+                accumulatedWeight += weight;
+                Entry e = new Entry();
+                e.EntityType = entityType;
+                e.accumulatedWeight = accumulatedWeight;
+                entries.add(e);
+            }
+        }
+    }
+
+    private double getWeightFromRarity(AbstractEntityCompanion entity) {
+        switch (entity.getRarity()){
+            default: return 0;
+            case STAR_1:
+                return PAConfig.CONFIG.Star_1_Chance.get();
+            case STAR_2:
+                return PAConfig.CONFIG.Star_2_Chance.get();
+            case STAR_3:
+                return PAConfig.CONFIG.Star_3_Chance.get();
+            case STAR_4:
+                return PAConfig.CONFIG.Star_4_Chance.get();
+            case STAR_5:
+                return PAConfig.CONFIG.Star_5_Chance.get();
+            case STAR_6:
+                return PAConfig.CONFIG.Star_6_Chance.get();
+        }
+    }
+
+    public EntityType<? extends AbstractEntityCompanion> getRollResult(){
         double r = rand.nextDouble() * accumulatedWeight;
 
         for (Entry entry: entries) {
             if (entry.accumulatedWeight >= r - this.getResourceChanceBonus()) {
-                return entry.entity;
+                return entry.EntityType;
             }
         }
         return null;
@@ -51,17 +85,21 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
      */
     protected abstract double getResourceChanceBonus();
 
-    public void StartMachine(){
-        AbstractEntityCompanion RollResult = this.getRollResult();
-        int expectedProcessTime = this.getProcessTimePerRarity(RollResult);
+    public void StartMachine(PlayerEntity starter){
+        EntityType<? extends AbstractEntityCompanion> result = this.getRollResult();
+        AbstractEntityCompanion Entity = result.create(this.world);
+
+        int expectedProcessTime = this.getProcessTimePerEntity(Entity);
         if(expectedProcessTime>0) {
             //Convert Second to Tick
             this.totalProcessTime = expectedProcessTime*20;
-            this.entityCompanion = RollResult;
+            this.entityCompanion = result;
+            this.shouldProcess = true;
+            this.nextTaskOwner = starter;
             this.UseGivenResource();
         }
         else{
-            Main.LOGGER.error("Expected COnstruction time is 0! Is entry valid?");
+            Main.LOGGER.error("Next Spawn Delay time is 0! Is entry valid?");
         }
 
     }
@@ -73,9 +111,11 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     public void resetMachine(){
         this.totalProcessTime = 0;
         this.entityCompanion = null;
+        this.shouldProcess = false;
+        this.nextTaskOwner = null;
     }
 
-    public int getProcessTimePerRarity(AbstractEntityCompanion entity){
+    public int getProcessTimePerEntity(AbstractEntityCompanion entity){
         enums.CompanionRarity rarity = entity.getRarity();
         int minTime = 0;
         int maxTime = 0;
@@ -107,8 +147,11 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
                 break;
         }
 
-        if(maxTime>0 && minTime>0){
+        if(maxTime-minTime>0){
             return (int) ((maxTime-minTime)*this.rand.nextFloat())+minTime;
+        }
+        else{
+            Main.LOGGER.error("Min Construction Time for "+rarity+" rarity is larger than Max Construction time!");
         }
 
         return 0;
@@ -119,11 +162,52 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         this.registerRollEntry();
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        boolean isActive = this.isActive();
+        boolean shouldsave = false;
+        if (this.world != null && !this.world.isRemote) {
+            boolean flag1 = this.energyStorage.getEnergyStored() >= this.powerConsumption;
+            boolean flag2 = canProcess() && this.shouldProcess && this.totalProcessTime>0;
+            if(flag1 && flag2){
+                shouldsave = true;
+                this.ProcessTime++;
+                this.energyStorage.extractEnergy(this.powerConsumption, false);
+                if(this.ProcessTime >= this.totalProcessTime){
+                    this.SpawnResultEntity();
+                    this.resetMachine();
+                }
+            }
+        }
+        if(shouldsave){
+            this.markDirty();
+        }
+
+        if(!isActive && this.isActive()){
+            this.playsound();
+        }
+
+
+        if(this.getWorld() != null && isActive != this.isActive()) {
+            this.getWorld().notifyBlockUpdate(this.getPos(), this.getBlockState(), this.getBlockState(), 3);
+        }
+    }
+
+    protected abstract void SpawnResultEntity();
+
+    protected abstract boolean canProcess();
+
+
+
     /*
-    register Roll Entries here using addEntry(entity, chance);
+    register Roll Entries here using addEntry(entity);
      */
 
     public abstract void registerRollEntry();
 
+    public boolean isActive(){
+        return this.ProcessTime>0;
+    }
 
 }

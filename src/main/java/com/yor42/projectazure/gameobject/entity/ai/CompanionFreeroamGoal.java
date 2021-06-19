@@ -22,7 +22,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
     @Override
     public boolean shouldExecute() {
 
-        if(this.entityCompanion.isBeingPatted()||!this.entityCompanion.isFreeRoaming()){
+        if((this.entityCompanion.isBeingPatted()||!this.entityCompanion.isFreeRoaming())&& !this.entityCompanion.isMovingtoRecruitStation){
             return false;
         }
         return super.shouldExecute() && !this.entityCompanion.isSleeping();

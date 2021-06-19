@@ -72,6 +72,8 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue Star_6_MinTime;
         public final ForgeConfigSpec.IntValue Star_6_MaxTime;
 
+        public final ForgeConfigSpec.BooleanValue RedStonePoweredMachines;
+
         private PAModConfig(ForgeConfigSpec.Builder builder){
 
             builder.push("General");
@@ -133,6 +135,9 @@ public class PAConfig {
             Star_6_MinTime = (ForgeConfigSpec.IntValue) builder.define("6 Star Minimum Recruiting Time", 180);
             Star_6_MaxTime = (ForgeConfigSpec.IntValue) builder.define("6 Star Maximum Recruiting Time", 250);
 
+            builder.pop();
+            builder.push("Debug");
+            RedStonePoweredMachines = builder.define("Make Machines can be powered with redstone", false);
         }
     }
 

@@ -1,12 +1,19 @@
 package com.yor42.projectazure.libs.utils;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.util.text.Color;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 import static net.minecraft.util.math.MathHelper.clamp;
@@ -113,26 +120,43 @@ public class MathUtil {
         return color.getColor();
     }
 
-    //From Immersive Engineering
-    public static final Direction[] VALUES = Direction.values();
-
-    public static Rotation getRotationBetweenFacings(Direction orig, Direction to)
-    {
-        if(to==orig)
-            return Rotation.NONE;
-        if(orig.getAxis()== Direction.Axis.Y||to.getAxis()== Direction.Axis.Y)
-            return null;
-        orig = orig.rotateY();
-        if(orig==to)
-            return Rotation.CLOCKWISE_90;
-        orig = orig.rotateY();
-        if(orig==to)
-            return Rotation.CLOCKWISE_180;
-        orig = orig.rotateY();
-        if(orig==to)
-            return Rotation.COUNTERCLOCKWISE_90;
-        return null;//This shouldn't ever happen
+    public static int Tick2Second(int Tick){
+        return Tick/20;
     }
+
+    public static int Tick2Minute(int Tick){
+        return Tick2Second(Tick)/60;
+    }
+
+    public static int Tick2Hour(int Tick){
+        return Tick2Minute(Tick)/60;
+    }
+
+    public static StringTextComponent Tick2FormattedClock(int Tick){
+
+        int millisecs = Tick%20;
+        int second = Tick2Second(Tick)%60;
+        int minute = Tick2Minute(Tick)%60;
+        int hour = Tick2Hour(Tick);
+
+        return new StringTextComponent(hour+":"+minute+":"+second+":"+millisecs);
+    }
+
+    @Nullable
+    public static BlockPos getRandomBlockposInRadius2D(World world, BlockPos originPos, int maxRadius, int minRadius){
+        if(maxRadius-minRadius<0){
+            throw new IllegalArgumentException("maxRadius must be larger then minRadius!");
+        }
+        if(world.isAreaLoaded(originPos, maxRadius)) {
+            double RandRadian = rand.nextFloat() * 2 * Math.PI;
+            double radius = ((maxRadius - minRadius) * rand.nextDouble()) + minRadius;
+            int x = originPos.getX() + (int) (radius * Math.cos(RandRadian));
+            int z = originPos.getZ() + (int) (radius * Math.sin(RandRadian));
+            int y = world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z);
+            return new BlockPos(x, y, z);
+        }
+        return null;
+    };
 
 }
 /*

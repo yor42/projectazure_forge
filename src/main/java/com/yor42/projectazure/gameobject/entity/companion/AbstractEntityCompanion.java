@@ -256,8 +256,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     };
 
     protected int patAnimationTime, patTimer;
-    protected boolean isFreeRoaming, isSwimmingUp;
-    protected boolean isMeleeing, isOpeningDoor, isstuck;
+    protected boolean isFreeRoaming;
+    protected boolean isSwimmingUp;
+    protected boolean isMeleeing;
+    protected boolean isOpeningDoor;
+    protected boolean isstuck;
+    public boolean isMovingtoRecruitStation = false;
     protected int awakeningLevel;
     private final MovementController SwimController;
     private final MovementController MoveController;
@@ -285,6 +289,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<BlockPos> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
     protected static final DataParameter<BlockPos> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
+    protected static final DataParameter<BlockPos> RecruitStationPos = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
     protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISUSINGGUN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -365,6 +370,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putDouble("stayX", this.dataManager.get(STAYPOINT).getX());
         compound.putDouble("stayY", this.dataManager.get(STAYPOINT).getY());
         compound.putDouble("stayZ", this.dataManager.get(STAYPOINT).getZ());
+        compound.putDouble("RecruitStationPosX", this.dataManager.get(RecruitStationPos).getX());
+        compound.putDouble("RecruitStationPosY", this.dataManager.get(RecruitStationPos).getY());
+        compound.putDouble("RecruitStationPosZ", this.dataManager.get(RecruitStationPos).getZ());
         compound.putBoolean("isforcewokenup", this.dataManager.get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.dataManager.get(EXP));
         compound.putInt("level", this.getDataManager().get(LEVEL));
@@ -374,12 +382,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putDouble("morale", this.dataManager.get(MORALE));
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
+        compound.putBoolean("isMovingtoRecruitStation", this.isMovingtoRecruitStation);
         compound.put("inventory", this.getInventory().serializeNBT());
     }
 
     public void setHomepos(BlockPos pos, float validDistance){
         this.dataManager.set(HOMEPOS, pos);
         this.dataManager.set(VALID_HOME_DISTANCE, validDistance);
+    }
+
+    public BlockPos getRecruitStationPos() {
+        return this.getDataManager().get(RecruitStationPos);
     }
 
     public BlockPos getHomePos() {
@@ -416,14 +429,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(HOMEPOS, new BlockPos(compound.getDouble("homeX"), compound.getDouble("homeY"), compound.getDouble("homeZ")));
         this.dataManager.set(STAYPOINT, new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ")));
         this.dataManager.set(VALID_HOME_DISTANCE, compound.getFloat("home_distance"));
+        this.dataManager.set(RecruitStationPos, new BlockPos(compound.getDouble("RecruitStationPosX"), compound.getDouble("RecruitStationPosY"), compound.getDouble("RecruitStationPosZ")));
         this.dataManager.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
         this.getDataManager().set(LEVEL, compound.getInt("level"));
         this.dataManager.set(EXP, compound.getFloat("exp"));
         this.dataManager.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.awakeningLevel = compound.getInt("awaken");
+        this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
         this.setFreeRoaming(compound.getBoolean("freeroaming"));
         this.getInventory().deserializeNBT(compound.getCompound("inventory"));
-
         this.lastSlept = compound.getLong("lastslept");
         this.lastWokenup = compound.getLong("lastwoken");
     }
@@ -576,6 +590,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(OATHED, false);
         this.dataManager.register(USINGBOW, false);
         this.dataManager.register(STAYPOINT, BlockPos.ZERO);
+        this.dataManager.register(RecruitStationPos, BlockPos.ZERO);
         this.dataManager.register(ISFORCEWOKENUP, false);
         this.dataManager.register(ISUSINGGUN, false);
         this.dataManager.register(HOMEPOS, BlockPos.ZERO);
@@ -606,6 +621,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.isMeleeing = attacking;
         this.dataManager.set(MELEEATTACKING, this.isMeleeing);
 
+    }
+
+    public void setMovingtoRecruitStation(BlockPos pos){
+        this.isMovingtoRecruitStation=true;
+        this.dataManager.set(RecruitStationPos, pos);
+    }
+
+    public void stopMovingtoRecruitStation(){
+        this.isMovingtoRecruitStation = false;
+        this.dataManager.set(RecruitStationPos, BlockPos.ZERO);
     }
 
     public boolean isBeingPatted() {

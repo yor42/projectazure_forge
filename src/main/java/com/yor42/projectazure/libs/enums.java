@@ -51,47 +51,6 @@ public class enums {
         STAR_6,
     }
 
-    public enum BodyHeight {
-        TOP,
-        HEAD,
-        NECK,
-        CHEST,
-        BELLY,
-        UBELLY,
-        LEG
-    }
-
-    public enum BodySide{
-        FRONT,
-        RIGHT,
-        LEFT,
-        BACK;
-    }
-
-    public enum InteractionPoint{
-        UBELLY("underbelly"),
-        CHEST("chest"),
-        BUTT("butt"),
-        NECK("nech"),
-        FACE("face"),
-        BACK("back"),
-        BELLY("belly"),
-        TOP("top"),
-        HEAD("head"),
-        LEG("head"),
-        ARM("arm");
-
-        private String name;
-
-        InteractionPoint(String name){
-            this.name = name;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-    }
-
     public enum AmmoCategory {
         //.... and fallback values
         //AP: Higher damage on kansen, lower chance to damage rigging
@@ -114,7 +73,8 @@ public class enums {
         HEIAP(0.78F, 8, 4F, 4F, 0.6F, false,true);
 
         private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
-        private boolean shouldDamageMultipleComponant, isIncendiary;
+        private final boolean shouldDamageMultipleComponant;
+        private final boolean isIncendiary;
         AmmoCategory(float HitChance, float riggingDamage, float entityDamage, float componentDamage, float MinimumDamageModifier, boolean isFiery, boolean splashDamage) {
             this.hitChance = HitChance;
             this.damage_rigging = riggingDamage;

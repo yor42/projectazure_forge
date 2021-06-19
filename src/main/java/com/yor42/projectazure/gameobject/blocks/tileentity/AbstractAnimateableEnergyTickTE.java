@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
@@ -52,7 +53,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
 
     @Override
     public void tick() {
-        if (this.world != null && this.world.isBlockPowered(this.getPos())) {
+        if (this.world != null && this.world.isBlockPowered(this.getPos()) && PAConfig.CONFIG.RedStonePoweredMachines.get()) {
             this.energyStorage.receiveEnergy(1000, false);
         }
     }
