@@ -114,26 +114,26 @@ public class PAConfig {
             GangwonMovementSpeed = builder.defineInRange("Movement speed of Gangwon", 0.35F, 0, 2);
 
             builder.pop().push("Gacha Roll RNG").comment("Chance of Roll per rarity.").comment("1 star is most common, and 6 star is most rare.").comment("Higher the number is, Commoner the item is.");
-            Star_1_Chance = (ForgeConfigSpec.DoubleValue) builder.define("1 Star Rarity", 60D);
-            Star_2_Chance = (ForgeConfigSpec.DoubleValue) builder.define("2 Star Rarity", 20D);
-            Star_3_Chance = (ForgeConfigSpec.DoubleValue) builder.define("3 Star Rarity", 10D);
-            Star_4_Chance = (ForgeConfigSpec.DoubleValue) builder.define("4 Star Rarity", 5D);
-            Star_5_Chance = (ForgeConfigSpec.DoubleValue) builder.define("5 Star Rarity", 3D);
-            Star_6_Chance = (ForgeConfigSpec.DoubleValue) builder.define("6 Star Rarity", 2D);
+            Star_1_Chance =  builder.defineInRange("1 Star Rarity", 60D, 0, Double.MAX_VALUE);
+            Star_2_Chance = builder.defineInRange("2 Star Rarity", 20D, 0, Double.MAX_VALUE);
+            Star_3_Chance = builder.defineInRange("3 Star Rarity", 10D, 0, Double.MAX_VALUE);
+            Star_4_Chance = builder.defineInRange("4 Star Rarity", 5D, 0, Double.MAX_VALUE);
+            Star_5_Chance = builder.defineInRange("5 Star Rarity", 3D, 0, Double.MAX_VALUE);
+            Star_6_Chance = builder.defineInRange("6 Star Rarity", 2D, 0, Double.MAX_VALUE);
 
             builder.comment("Construction/'Recruiting time for each rarity in seconds");
-            Star_1_MinTime = (ForgeConfigSpec.IntValue) builder.define("1 Star Minimum Recruiting Time", 45);
-            Star_1_MaxTime = (ForgeConfigSpec.IntValue) builder.define("1 Star Maximum Recruiting Time", 90);
-            Star_2_MinTime = (ForgeConfigSpec.IntValue) builder.define("2 Star Minimum Recruiting Time", 60);
-            Star_2_MaxTime = (ForgeConfigSpec.IntValue) builder.define("2 Star Maximum Recruiting Time", 100);
-            Star_3_MinTime = (ForgeConfigSpec.IntValue) builder.define("3 Star Minimum Recruiting Time", 70);
-            Star_3_MaxTime = (ForgeConfigSpec.IntValue) builder.define("3 Star Maximum Recruiting Time", 140);
-            Star_4_MinTime = (ForgeConfigSpec.IntValue) builder.define("4 Star Minimum Recruiting Time", 110);
-            Star_4_MaxTime = (ForgeConfigSpec.IntValue) builder.define("4 Star Maximum Recruiting Time", 180);
-            Star_5_MinTime = (ForgeConfigSpec.IntValue) builder.define("5 Star Minimum Recruiting Time", 150);
-            Star_5_MaxTime = (ForgeConfigSpec.IntValue) builder.define("5 Star Maximum Recruiting Time", 210);
-            Star_6_MinTime = (ForgeConfigSpec.IntValue) builder.define("6 Star Minimum Recruiting Time", 180);
-            Star_6_MaxTime = (ForgeConfigSpec.IntValue) builder.define("6 Star Maximum Recruiting Time", 250);
+            Star_1_MinTime = builder.defineInRange("1 Star Minimum Recruiting Time", 450, 0, Integer.MAX_VALUE);
+            Star_1_MaxTime = builder.defineInRange("1 Star Maximum Recruiting Time", 90, 0, Integer.MAX_VALUE);
+            Star_2_MinTime = builder.defineInRange("2 Star Minimum Recruiting Time", 60, 0, Integer.MAX_VALUE);
+            Star_2_MaxTime = builder.defineInRange("2 Star Maximum Recruiting Time", 100, 0, Integer.MAX_VALUE);
+            Star_3_MinTime = builder.defineInRange("3 Star Minimum Recruiting Time", 70, 0, Integer.MAX_VALUE);
+            Star_3_MaxTime = builder.defineInRange("3 Star Maximum Recruiting Time", 140, 0, Integer.MAX_VALUE);
+            Star_4_MinTime = builder.defineInRange("4 Star Minimum Recruiting Time", 110, 0, Integer.MAX_VALUE);
+            Star_4_MaxTime = builder.defineInRange("4 Star Maximum Recruiting Time", 180, 0, Integer.MAX_VALUE);
+            Star_5_MinTime = builder.defineInRange("5 Star Minimum Recruiting Time", 150, 0, Integer.MAX_VALUE);
+            Star_5_MaxTime = builder.defineInRange("5 Star Maximum Recruiting Time", 210, 0, Integer.MAX_VALUE);
+            Star_6_MinTime = builder.defineInRange("6 Star Minimum Recruiting Time", 180, 0, Integer.MAX_VALUE);
+            Star_6_MaxTime = builder.defineInRange("6 Star Maximum Recruiting Time", 250, 0, Integer.MAX_VALUE);
 
             builder.pop();
             builder.push("Debug");

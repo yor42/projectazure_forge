@@ -85,6 +85,9 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("mold_extraction");
         buildModel("energy_drink");
 
+        buildModel("orundum");
+        buildModel("headhunting_pcb");
+
 
         /*
         Build Ore Block Item model

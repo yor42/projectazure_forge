@@ -40,11 +40,8 @@ public class MultiblockHandler {
         int patternTemp = 0;
         int patternMatch = 1;  //init match pattern = 0001 (bit)
 
-        //高度3以下不須偵測
         if (yCoord < 3) return -1;
 
-        //scan a 3x3x3 area
-        //1.檢查block並設定type 2.判定是否符合pattern 3.檢查tile entity是否有master
         for (int x = 0; x < 3; x++)
         {
             for (int y = 0; y < 3; y++)
@@ -80,12 +77,12 @@ public class MultiblockHandler {
                             patternTemp += Math.pow(2, t);		//match pattern t
                         }
                     }
-                    patternMatch = (patternMatch & patternTemp);		//進行and運算, 刪去不符合的type
+                    patternMatch = (patternMatch & patternTemp);
 
                     Main.LOGGER.debug("DEBUG: check structure: type "+patternMatch+" "+patternTemp);
-                    if (patternMatch == 0) return -1;	//全部pattern都被濾掉, 無符合, 結束檢查
+                    if (patternMatch == 0) return -1;
 
-                    //3. check master block, 無主方塊才能加入, 有主方塊則結束檢查
+
                     if (blockType > 0)
                     {
                         TileEntity t = world.getTileEntity(pos);

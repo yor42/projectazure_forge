@@ -869,7 +869,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     protected void registerGoals() {
-        //this.goalSelector.addGoal(1, new CompanionSwimGoal(this));
+        this.goalSelector.addGoal(1, new CompanionMoveToRecruitStationGoal(this, 1.0F));
         this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
         this.goalSelector.addGoal(3, new SitGoal(this));
         this.goalSelector.addGoal(6, new CompanionUseGunGoal(this, 40, 0.6));

@@ -104,6 +104,11 @@ public class registerItems {
             .group(PA_RESOURCES)));
 
 
+    public static final RegistryObject<Item> HEADHUNTING_PCB = registerManager.ITEMS.register("headhunting_pcb", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES).maxStackSize(16)));
+    public static final RegistryObject<Item> ORUNDUM = registerManager.ITEMS.register("orundum", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
     public static final RegistryObject<Item> MOLD_PLATE = registerManager.ITEMS.register("mold_plate", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_WIRE = registerManager.ITEMS.register("mold_wire", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_EXTRACTION = registerManager.ITEMS.register("mold_extraction", () -> new ItemCraftTool(128));

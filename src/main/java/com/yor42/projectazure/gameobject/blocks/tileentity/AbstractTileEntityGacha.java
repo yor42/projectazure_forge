@@ -50,6 +50,10 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         }
     }
 
+    public int getPowerConsumption(){
+        return this.powerConsumption;
+    }
+
     private double getWeightFromRarity(AbstractEntityCompanion entity) {
         switch (entity.getRarity()){
             default: return 0;
@@ -69,6 +73,9 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     }
 
     public EntityType<? extends AbstractEntityCompanion> getRollResult(){
+        if(entries.isEmpty()){
+            this.registerRollEntry();
+        }
         double r = rand.nextDouble() * accumulatedWeight;
 
         for (Entry entry: entries) {

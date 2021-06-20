@@ -76,7 +76,6 @@ public class AbstractMultiBlockBase extends Block {
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tile = worldIn.getTileEntity(pos);
 
-        //原本形成結構, 則解除之
         if(!worldIn.isRemote && tile instanceof MultiblockBaseTE)
         {
             MultiblockBaseTE tile2 = (MultiblockBaseTE) tile;
@@ -87,7 +86,6 @@ public class AbstractMultiBlockBase extends Block {
             }
         }
 
-        //呼叫原先的breakBlock, 會把tile entity移除掉
 
         super.onReplaced(state, worldIn, pos, newState, isMoving);
     }

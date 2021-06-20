@@ -4,6 +4,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.AlloyFurnaceBlock;
 import com.yor42.projectazure.gameobject.blocks.MetalPressBlock;
 import com.yor42.projectazure.gameobject.blocks.PAOreBlock;
+import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -30,6 +31,7 @@ public class registerBlocks {
 
     public static final RegistryObject<Block> METAL_PRESS = register("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> ALLOY_FURNACE = register("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);
+    public static final RegistryObject<Block> RECRUIT_BEACON = register("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES);
 
     private static <T extends Block> RegistryObject<T> register_noblock(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);

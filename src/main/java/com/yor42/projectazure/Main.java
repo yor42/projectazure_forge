@@ -2,6 +2,7 @@ package com.yor42.projectazure;
 
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
+import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer;
 import com.yor42.projectazure.client.renderer.entity.*;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityGunBulletRenderer;
@@ -110,6 +111,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.GUN_BULLET.get(), EntityGunBulletRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(registerTE.METAL_PRESS.get(), MachineMetalPressRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
         ClientRegisterManager.registerScreen();

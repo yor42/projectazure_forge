@@ -81,7 +81,7 @@ public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
 
         int light = packedLightIn;
         if (Objects.equals(bone.getName(), "Halo")) {
-            light = LightTexture.packLight(15, this.func_239381_b_((EntityShiroko) this.entity, this.entity.getPosition()));
+            light = LightTexture.packLight(15,15);
         }
         /*
         else if (bone.getName().equals("Body")){
