@@ -1,10 +1,12 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.client.renderer.items.ItemRecruitBeaconRenderer;
 import com.yor42.projectazure.gameobject.blocks.AlloyFurnaceBlock;
 import com.yor42.projectazure.gameobject.blocks.MetalPressBlock;
 import com.yor42.projectazure.gameobject.blocks.PAOreBlock;
 import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
+import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -31,15 +33,26 @@ public class registerBlocks {
 
     public static final RegistryObject<Block> METAL_PRESS = register("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> ALLOY_FURNACE = register("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);
-    public static final RegistryObject<Block> RECRUIT_BEACON = register("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES);
+
+    public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties().setISTER(()-> ItemRecruitBeaconRenderer::new));
 
     private static <T extends Block> RegistryObject<T> register_noblock(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);
     }
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block, ItemGroup group){
+        return register(name, block, group, new Item.Properties().group(group));
+    }
+
+    private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block, ItemGroup group, Item.Properties properties){
         RegistryObject<T> ret = register_noblock(name, block);
-        registerManager.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().group(group)));
+        registerManager.ITEMS.register(name, () -> new BlockItem(ret.get(), properties.group(group)));
+        return ret;
+    }
+
+    private static <T extends Block> RegistryObject<T> registerAnimatedMachines(String name, Supplier<T> block, ItemGroup group, Item.Properties properties){
+        RegistryObject<T> ret = register_noblock(name, block);
+        registerManager.ITEMS.register(name, () -> new AnimateableMachineBlockItems(ret.get(), properties.group(group)));
         return ret;
     }
 
