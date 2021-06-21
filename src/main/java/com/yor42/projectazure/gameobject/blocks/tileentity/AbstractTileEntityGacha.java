@@ -4,9 +4,12 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +21,12 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         double accumulatedWeight;
         EntityType<? extends AbstractEntityCompanion> EntityType;
     }
-
     private final List<Entry> entries = new ArrayList<>();
+    private Entry currentEntry = null;
     private double accumulatedWeight;
     protected int ProcessTime, totalProcessTime;
-    protected EntityType<? extends AbstractEntityCompanion> entityCompanion;
-    protected PlayerEntity nextTaskOwner;
+    protected EntityType<? extends AbstractEntityCompanion> RollResult;
+    protected PlayerEntity nextTaskStarter;
     protected int powerConsumption;
     protected boolean shouldProcess;
     private final Random rand = new Random();
@@ -80,6 +83,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
 
         for (Entry entry: entries) {
             if (entry.accumulatedWeight >= r - this.getResourceChanceBonus()) {
+                this.currentEntry = entry;
                 return entry.EntityType;
             }
         }
@@ -92,34 +96,47 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
      */
     protected abstract double getResourceChanceBonus();
 
-    public void StartMachine(PlayerEntity starter){
-        EntityType<? extends AbstractEntityCompanion> result = this.getRollResult();
-        AbstractEntityCompanion Entity = result.create(this.world);
+    protected abstract boolean canStartProcess();
 
-        int expectedProcessTime = this.getProcessTimePerEntity(Entity);
-        if(expectedProcessTime>0) {
-            //Convert Second to Tick
-            this.totalProcessTime = expectedProcessTime*20;
-            this.entityCompanion = result;
-            this.shouldProcess = true;
-            this.nextTaskOwner = starter;
-            this.UseGivenResource();
-        }
-        else{
-            Main.LOGGER.error("Next Spawn Delay time is 0! Is entry valid?");
+    public void StartMachine(PlayerEntity starter){
+
+        if(this.canStartProcess()) {
+
+            EntityType<? extends AbstractEntityCompanion> result = this.getRollResult();
+            AbstractEntityCompanion Entity = result.create(this.world);
+
+            int expectedProcessTime = this.getProcessTimePerEntity(Entity);
+            if (expectedProcessTime > 0) {
+                //Convert Second to Tick
+                this.totalProcessTime = expectedProcessTime * 20;
+                this.RollResult = result;
+                Main.LOGGER.debug("Roll Result:"+Entity.getName().toString()+" with "+expectedProcessTime+"second Recruit Time");
+                this.shouldProcess = true;
+                this.nextTaskStarter = starter;
+                this.UseGivenResource();
+            } else {
+                Main.LOGGER.error("Next Spawn Delay time is 0! Is entry valid?");
+            }
+        }else{
+            starter.sendMessage(new TranslationTextComponent("machine.notenoughresource"),starter.getUniqueID());
         }
 
     }
+
+
+
     /*
-    Deduct the used item from machine's inventory
-     */
+        Deduct the used item from machine's inventory
+         */
     protected abstract void UseGivenResource();
 
     public void resetMachine(){
         this.totalProcessTime = 0;
-        this.entityCompanion = null;
+        this.ProcessTime = 0;
+        this.currentEntry = null;
+        this.RollResult = null;
         this.shouldProcess = false;
-        this.nextTaskOwner = null;
+        this.nextTaskStarter = null;
     }
 
     public int getProcessTimePerEntity(AbstractEntityCompanion entity){
@@ -203,9 +220,46 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
 
     protected abstract void SpawnResultEntity();
 
-    protected abstract boolean canProcess();
+    /*
+    For Future usage of additional processing criteria
+     */
+    protected boolean canProcess(){return true;};
 
+    @Override
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
+        compound.putInt("processtime", this.ProcessTime);
+        compound.putInt("totalprocesstime", this.totalProcessTime);
+        compound.putDouble("accumulatedWeight", this.accumulatedWeight);
+        compound.putString("taskresult", this.RollResult == null? "null": EntityType.getKey(this.RollResult).toString());
+        if(this.nextTaskStarter != null) {
+            compound.putUniqueId("taskOwner", this.nextTaskStarter.getUniqueID());
+        }
+        compound.putBoolean("shouldProcess", this.shouldProcess);
+        return compound;
+    }
 
+    /*
+    I know What I'm doing java :concern:
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
+        this.ProcessTime = nbt.getInt("processtime");
+        this.totalProcessTime = nbt.getInt("totalprocesstime");
+        this.accumulatedWeight = nbt.getDouble("accumulatedWeight");
+        this.shouldProcess = nbt.getBoolean("shouldProcess");
+        String key = nbt.getString("taskresult");
+        if(key.equals("null") || !EntityType.byKey(key).isPresent()){
+            this.RollResult = null;
+        }
+        else {
+            //WARNING: Because of this line DO NOT ADD NON COMPANION ENTITY IN POOL
+            this.RollResult = (EntityType<? extends AbstractEntityCompanion>) EntityType.byKey(key).orElse(null);
+        }
+        this.nextTaskStarter = this.world == null || !nbt.contains("taskOwner")? null:this.world.getPlayerByUuid(nbt.getUniqueId("taskOwner"));
+    }
 
     /*
     register Roll Entries here using addEntry(entity);
@@ -214,7 +268,6 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     public abstract void registerRollEntry();
 
     public boolean isActive(){
-        return this.ProcessTime>0;
+        return this.ProcessTime>0 && this.totalProcessTime >0;
     }
-
 }

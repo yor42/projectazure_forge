@@ -1,17 +1,22 @@
 package com.yor42.projectazure.libs.utils;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.raid.Raid;
+import net.minecraft.world.spawner.WorldEntitySpawner;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -134,29 +139,34 @@ public class MathUtil {
 
     public static StringTextComponent Tick2FormattedClock(int Tick){
 
-        int millisecs = Tick%20;
+        int millisecs = Tick%20*50;
         int second = Tick2Second(Tick)%60;
         int minute = Tick2Minute(Tick)%60;
         int hour = Tick2Hour(Tick);
 
-        return new StringTextComponent(hour+":"+minute+":"+second+":"+millisecs);
+        return new StringTextComponent(String.format("%02d", hour)+":"+String.format("%02d", minute)+":"+String.format("%02d", second)+":"+String.format("%03d", millisecs));
     }
 
-    @Nullable
     public static BlockPos getRandomBlockposInRadius2D(World world, BlockPos originPos, int maxRadius, int minRadius){
         if(maxRadius-minRadius<0){
             throw new IllegalArgumentException("maxRadius must be larger then minRadius!");
         }
-        if(world.isAreaLoaded(originPos, maxRadius)) {
-            double RandRadian = rand.nextFloat() * 2 * Math.PI;
+        double RandRadian = rand.nextFloat() * 2 * Math.PI;
+        int tries = 0;
+        BlockPos.Mutable pos = new BlockPos.Mutable();
+        do {
             double radius = ((maxRadius - minRadius) * rand.nextDouble()) + minRadius;
             int x = originPos.getX() + (int) (radius * Math.cos(RandRadian));
             int z = originPos.getZ() + (int) (radius * Math.sin(RandRadian));
             int y = world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z);
-            return new BlockPos(x, y, z);
+            pos.setPos(x,y,z);
+            tries++;
+        }while(!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkProvider().isChunkLoaded(new ChunkPos(pos)) && tries<5);
+        if(tries >=5){
+            pos.setPos(originPos.getX(),originPos.getY(), originPos.getZ());
         }
-        return null;
-    };
+        return pos;
+    }
 
 }
 /*

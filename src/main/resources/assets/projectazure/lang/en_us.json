@@ -72,6 +72,10 @@
   "rigging.torpedo": "Torpedo",
   "rigging.empty": "Empty",
 
+  "gui.recruitbeacon_remainingtime": "ETA Until Recruit is Complete",
+
+  "gui.machine.start": "Start",
+
   "gui.morale": "Morale",
   "gui.selectstarter.title": "Select Starter Ship",
   "gui.shipinventory": "KANSEN Inv.",
@@ -129,7 +133,9 @@
   "coal": "Coal",
   "lead": "Lead",
 
-  "block.projectazure.metal_press": "Metal Press",
+  "recruit_beacon": "Recruit Beacon",
+  "metal_press": "Hydraulic Press",
 
+  "block.projectazure.metal_press": "Hydraulic Press",
   "death.attack.bonk": "%1$s was sent to horny jail"
 }

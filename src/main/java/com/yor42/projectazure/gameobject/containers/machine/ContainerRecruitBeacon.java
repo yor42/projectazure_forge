@@ -11,6 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -24,7 +25,25 @@ public class ContainerRecruitBeacon extends Container {
     private final IIntArray field;
 
     public ContainerRecruitBeacon(int id, PlayerInventory inventory, PacketBuffer buffer) {
-        this(id, inventory, new ItemStackHandler(5), new IntArray(4));
+this(id, inventory, new ItemStackHandler(5), new IIntArray() {
+
+    final int[] values = buffer.readVarIntArray();
+
+    @Override
+    public int get(int index) {
+        return values[index];
+    }
+
+    @Override
+    public void set(int index, int value) {
+        values[index] = value;
+    }
+
+    @Override
+    public int size() {
+        return values.length;
+    }
+});
     }
 
     public ContainerRecruitBeacon(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
@@ -37,7 +56,7 @@ public class ContainerRecruitBeacon extends Container {
                 return stack.getItem() == registerItems.HEADHUNTING_PCB.get();
             }
         });
-        for(int i=1; i<2; i++){
+        for(int i=0; i<2; i++){
             this.addSlot(new SlotItemHandler(Inventory, 1+i, 10+18*i, 33){
                 @Override
                 public boolean isItemValid(@Nonnull ItemStack stack) {
@@ -45,8 +64,8 @@ public class ContainerRecruitBeacon extends Container {
                 }
             });
         }
-        for(int i=1; i<2; i++){
-            this.addSlot(new SlotItemHandler(Inventory, 1+i, 10+18*i, 33){
+        for(int i=0; i<2; i++){
+            this.addSlot(new SlotItemHandler(Inventory, 3+i, 10+18*i, 56){
                 @Override
                 public boolean isItemValid(@Nonnull ItemStack stack) {
                     return stack.getItem() == Items.GOLD_INGOT;
@@ -63,6 +82,14 @@ public class ContainerRecruitBeacon extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));
         }
+    }
+
+    public int getRemainingTick(){
+        return this.getField().get(1)-this.getField().get(0);
+    }
+
+    public BlockPos getBlockPos(){
+        return new BlockPos(this.field.get(4),this.field.get(5),this.field.get(6));
     }
 
     public IIntArray getField() {

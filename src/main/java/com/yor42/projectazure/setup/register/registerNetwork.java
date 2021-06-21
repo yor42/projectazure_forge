@@ -48,6 +48,12 @@ public class registerNetwork {
                 .consumer(DoGunAnimationPacket::handle)
                 .add();
 
+        channel.messageBuilder(StartRecruitPacket.class,6)
+                .decoder(StartRecruitPacket::decode)
+                .encoder(StartRecruitPacket::encode)
+                .consumer(StartRecruitPacket::handle)
+                .add();
+
         return channel;
     }
 

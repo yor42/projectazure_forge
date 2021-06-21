@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.model.block;
 
+import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
@@ -35,11 +36,10 @@ public class ModelRecruitBeacon extends AnimatedGeoModel<TileEntityRecruitBeacon
     public void setLivingAnimations(TileEntityRecruitBeacon entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone Light = this.getAnimationProcessor().getBone("light");
-
         if(this.LastLightSwitchTime == 0){
             this.LastLightSwitchTime = System.currentTimeMillis();
         }
-
+        if(entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).get(RecruitBeaconBlock.ACTIVE)) {
             if (System.currentTimeMillis() - this.LastLightSwitchTime >= this.lightDelay) {
                 if (Light.isHidden()) {
                     this.lightDelay = 2000;
@@ -49,6 +49,10 @@ public class ModelRecruitBeacon extends AnimatedGeoModel<TileEntityRecruitBeacon
                     Light.setHidden(true);
                 }
                 this.LastLightSwitchTime = System.currentTimeMillis();
+            }
+        }
+        else{
+            Light.setHidden(true);
         }
     }
 }

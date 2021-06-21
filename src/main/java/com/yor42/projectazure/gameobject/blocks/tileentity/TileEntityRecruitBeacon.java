@@ -1,18 +1,18 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
-import com.yor42.projectazure.gameobject.blocks.AlloyFurnaceBlock;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
@@ -39,6 +39,12 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                     return TileEntityRecruitBeacon.this.energyStorage.getEnergyStored();
                 case 3:
                     return TileEntityRecruitBeacon.this.energyStorage.getMaxEnergyStored();
+                case 4:
+                    return TileEntityRecruitBeacon.this.getPos().getX();
+                case 5:
+                    return TileEntityRecruitBeacon.this.getPos().getY();
+                case 6:
+                    return TileEntityRecruitBeacon.this.getPos().getZ();
                 default:
                     return 0;
             }
@@ -94,25 +100,40 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         this.powerConsumption = 1000;
     }
 
+
+
     @Override
     protected void SpawnResultEntity() {
-        if(this.world != null && this.world.isRemote() && this.entityCompanion != null) {
-            BlockPos pos = getRandomBlockposInRadius2D(this.getWorld(), this.getPos(), 40, 5);
-            if(pos != null) {
-                AbstractEntityCompanion entityCompanion = this.entityCompanion.create(this.world);
-                if (entityCompanion != null) {
-                    entityCompanion.setPosition(pos.getX(), pos.getY(), pos.getZ());
-                    entityCompanion.setMovingtoRecruitStation(pos);
-                    entityCompanion.setTamedBy(this.nextTaskOwner);
-                    this.world.addEntity(entityCompanion);
-                }
+
+        boolean worldReady = this.world != null && !this.world.isRemote();
+        boolean EntityTypeNotNull = this.RollResult != null;
+
+        if(!EntityTypeNotNull){
+            Main.LOGGER.error("Spawn FAILED: EntityType is NULL");
+        }
+        else if(worldReady) {
+            BlockPos pos = getRandomBlockposInRadius2D(this.getWorld(), this.getPos(), 20, 10);
+            Main.LOGGER.debug("Entity is Spawned at:" + pos.toString());
+            AbstractEntityCompanion entityCompanion = this.RollResult.create(this.world);
+            if (entityCompanion != null) {
+                entityCompanion.setPosition(pos.getX(), pos.getY(), pos.getZ());
+                entityCompanion.getNavigator().tryMoveToXYZ((double) this.getPos().getX(), (double) this.getPos().getY(), (double) this.getPos().getZ(), 1.0F);
+                entityCompanion.setMovingtoRecruitStation(this.getPos());
+                entityCompanion.setTamedBy(this.nextTaskStarter);
+                this.world.addEntity(entityCompanion);
             }
+
         }
     }
 
     @Override
-    protected boolean canProcess() {
-        return !this.inventory.getStackInSlot(0).isEmpty();
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT compound) {
+        return super.write(compound);
     }
 
     @Override
@@ -127,12 +148,22 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
 
     @Override
     public void encodeExtraData(PacketBuffer buffer) {
-
+        int[] var = {this.ProcessTime, this.totalProcessTime, this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()};
+        buffer.writeVarIntArray(var);
     }
 
     @Override
     protected double getResourceChanceBonus() {
         return 0;
+    }
+
+    @Override
+    protected boolean canStartProcess() {
+
+        int OrundumCount = this.inventory.getStackInSlot(1).getCount()+this.inventory.getStackInSlot(2).getCount();
+        int GoldIngotCount = this.inventory.getStackInSlot(2).getCount()+this.inventory.getStackInSlot(3).getCount();
+
+        return this.inventory.getStackInSlot(0) != ItemStack.EMPTY && OrundumCount>40? GoldIngotCount>=20:GoldIngotCount>60 && OrundumCount>=10;
     }
 
     @Override
