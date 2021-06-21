@@ -32,11 +32,16 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     private final Random rand = new Random();
 
     public void addEntryCustomWeight(EntityType<? extends AbstractEntityCompanion> entity, double weight) {
-        accumulatedWeight += weight;
-        Entry e = new Entry();
-        e.EntityType = entity;
-        e.accumulatedWeight = accumulatedWeight;
-        entries.add(e);
+        if(weight<0){
+            this.addEntry(entity);
+        }
+        else {
+            accumulatedWeight += weight;
+            Entry e = new Entry();
+            e.EntityType = entity;
+            e.accumulatedWeight = accumulatedWeight;
+            entries.add(e);
+        }
     }
 
     public void addEntry(EntityType<? extends AbstractEntityCompanion> entityType) {

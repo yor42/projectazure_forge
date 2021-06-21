@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -181,6 +182,13 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     @Override
     public void registerRollEntry() {
         addEntry(registerManager.ENTITYTYPE_CHEN);
+        if(PAConfig.CONFIG.shouldRecruitBeaconSpawnAllCompanions.get()){
+            addEntry(registerManager.ENTERPRISE_ENTITY_TYPE);
+            addEntry(registerManager.ENTITYAYANAMI);
+            addEntry(registerManager.ENTITYGANGWON);
+            addEntry(registerManager.ENTITYTYPE_NAGATO);
+            addEntry(registerManager.SHIROKO_ENTITY_TYPE);
+        }
     }
 
     public IIntArray getFields(){

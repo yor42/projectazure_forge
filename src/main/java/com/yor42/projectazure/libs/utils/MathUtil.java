@@ -1,5 +1,6 @@
 package com.yor42.projectazure.libs.utils;
 
+import com.yor42.projectazure.PAConfig;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
@@ -161,8 +162,8 @@ public class MathUtil {
             int y = world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z);
             pos.setPos(x,y,z);
             tries++;
-        }while(!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkProvider().isChunkLoaded(new ChunkPos(pos)) && tries<5);
-        if(tries >=5){
+        }while(!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkProvider().isChunkLoaded(new ChunkPos(pos)) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
+        if(tries >= PAConfig.CONFIG.BeaconFindSpawnPositionTries.get()){
             pos.setPos(originPos.getX(),originPos.getY(), originPos.getZ());
         }
         return pos;

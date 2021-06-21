@@ -72,7 +72,11 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue Star_6_MinTime;
         public final ForgeConfigSpec.IntValue Star_6_MaxTime;
 
+        public final ForgeConfigSpec.IntValue BeaconFindSpawnPositionTries;
+
         public final ForgeConfigSpec.BooleanValue RedStonePoweredMachines;
+
+        public final ForgeConfigSpec.BooleanValue shouldRecruitBeaconSpawnAllCompanions;
 
         private PAModConfig(ForgeConfigSpec.Builder builder){
 
@@ -135,9 +139,16 @@ public class PAConfig {
             Star_6_MinTime = builder.defineInRange("6 Star Minimum Recruiting Time", 180, 0, Integer.MAX_VALUE);
             Star_6_MaxTime = builder.defineInRange("6 Star Maximum Recruiting Time", 250, 0, Integer.MAX_VALUE);
 
+            builder.pop().push("Performance").comment("Things that might impact performance");
+            BeaconFindSpawnPositionTries = builder.defineInRange("How many tries should Recruit beacon try to find spawn position of entity before returning machine's own position?", 5, 1, 20);
+
             builder.pop();
             builder.push("Debug");
             RedStonePoweredMachines = builder.define("Make Machines can be powered with redstone", false);
+
+            builder.pop().push("Misc").comment("Other Thingys");
+            shouldRecruitBeaconSpawnAllCompanions = builder.define("Should Recruit Beacon Spawn ALL Companion?", false);
+            builder.pop();
         }
     }
 
