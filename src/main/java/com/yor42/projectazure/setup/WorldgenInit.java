@@ -18,6 +18,8 @@ public class WorldgenInit {
         addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.COPPER_ORE, 7, 5, 60, 8);
         addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.TIN_ORE, 7, 5, 60, 8);
 
+        addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.ORIROCK, 15, 3, 30, 5);
+
         addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.LEAD_ORE, 4, 5, 30, 4);
         addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.LEAD_ORE, 4, 5, 40, 5);
     }

@@ -10,6 +10,7 @@ import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.OreBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
@@ -21,11 +22,12 @@ import java.util.function.Supplier;
 
 public class registerBlocks {
 
-    public static final RegistryObject<Block> BAUXITE_ORE = registerOre("aluminium");
-    public static final RegistryObject<Block> COPPER_ORE = registerOre("copper");
-    public static final RegistryObject<Block> TIN_ORE = registerOre("tin");
-    public static final RegistryObject<Block> LEAD_ORE = registerOre("lead");
-    public static final RegistryObject<Block> ZINC_ORE = registerOre("zinc");
+    public static final RegistryObject<Block> BAUXITE_ORE = registerMetalOre_Stone("aluminium");
+    public static final RegistryObject<Block> COPPER_ORE = registerMetalOre_Stone("copper");
+    public static final RegistryObject<Block> TIN_ORE = registerMetalOre_Stone("tin");
+    public static final RegistryObject<Block> LEAD_ORE = registerMetalOre_Stone("lead");
+    public static final RegistryObject<Block> ZINC_ORE = registerMetalOre_Stone("zinc");
+    public static final RegistryObject<Block> ORIROCK = register("orirock",() -> new OreBlock(AbstractBlock.Properties.create(Material.ROCK).harvestLevel(0).hardnessAndResistance(1.5F, 3F)), Main.PA_RESOURCES);
 
     public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
             new Block((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid())), Main.PA_RESOURCES);
@@ -56,11 +58,11 @@ public class registerBlocks {
         return ret;
     }
 
-    private static RegistryObject<Block> registerOre(String materialName){
-        return registerOre("ore_stone_"+materialName, materialName);
+    private static RegistryObject<Block> registerMetalOre_Stone(String materialName){
+        return registerMetalOre("ore_stone_"+materialName, materialName);
     }
 
-    private static RegistryObject<Block> registerOre(String registryName, String materialName){
+    private static RegistryObject<Block> registerMetalOre(String registryName, String materialName){
         RegistryObject<Block> ret = register_noblock(registryName, () -> new PAOreBlock(materialName));
         registerManager.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName));
         return ret;

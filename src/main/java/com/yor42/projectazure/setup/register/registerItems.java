@@ -78,8 +78,8 @@ public class registerItems {
     public static final RegistryObject<Item> NUGGET_STEEL = registerManager.ITEMS.register("nugget_steel", () -> new ItemResource("steel", enums.ResourceType.NUGGET));
     public static final RegistryObject<Item> NUGGET_BRASS = registerManager.ITEMS.register("nugget_brass", () -> new ItemResource("brass", enums.ResourceType.NUGGET));
 
+    //Electronic Stuff
     public static final RegistryObject<Item> COPPER_WIRE = registerManager.ITEMS.register("copper_wire", () -> new ItemResource("copper", enums.ResourceType.WIRE));
-
     public static final RegistryObject<Item> IRON_PIPE = registerManager.ITEMS.register("iron_pipe", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> STEEL_PIPE = registerManager.ITEMS.register("steel_pipe", () -> new Item(new Item.Properties()
@@ -97,10 +97,15 @@ public class registerItems {
     public static final RegistryObject<Item> RESISTOR_PRIMITIVE = registerManager.ITEMS.register("resistor_primitive", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
 
+    //Natural Resource
     public static final RegistryObject<Item> TREE_SAP = registerManager.ITEMS.register("tree_sap", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
 
     public static final RegistryObject<Item> PLATE_POLYMER = registerManager.ITEMS.register("polymer_plate", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
+    //Originium Engineering
+    public static final RegistryObject<Item> ORIGINITE = registerManager.ITEMS.register("originite", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
 
 

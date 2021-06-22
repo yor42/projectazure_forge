@@ -16,6 +16,7 @@ import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Mod;
 
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -103,6 +104,20 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .patternLine("WBL")
                 .patternLine("PRP")
                 .patternLine("CSC")
+                .addCriterion("has_iron", hasItem(Tags.Items.INGOTS_IRON))
+                .addCriterion("has_steel", hasItem(ModTags.Items.PLATE_STEEL))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerBlocks.RECRUIT_BEACON.get())
+                .key('L', registerItems.STEEL_PIPE.get())
+                .key('R', ModTags.Items.PLATE_STEEL)
+                .key('O', registerItems.ORUNDUM.get())
+                .key('S', registerBlocks.MACHINE_FRAME.get())
+                .key('B', registerItems.PRIMITIVE_CIRCUIT.get())
+                .key('C', registerItems.COPPER_COIL.get())
+                .patternLine("  L")
+                .patternLine("ORC")
+                .patternLine("BSB")
                 .addCriterion("has_iron", hasItem(Tags.Items.INGOTS_IRON))
                 .addCriterion("has_steel", hasItem(ModTags.Items.PLATE_STEEL))
                 .build(consumer);
@@ -237,6 +252,27 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .patternLine("PIP")
                 .patternLine("GPG")
                 .addCriterion("has_gear", hasItem(ModTags.Items.GEAR_STEEL))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.ORUNDUM.get(), 4)
+                .key('C', ModTags.Items.WIRE_COPPER)
+                .key('P', ModTags.Items.PLATE_STEEL)
+                .key('O', ModTags.Items.ORIGINITE)
+                .key('R', ModTags.Items.CIRCUITS_BASIC)
+                .patternLine("CPC")
+                .patternLine("ROR")
+                .patternLine("CPC")
+                .addCriterion("has_originite", hasItem(ModTags.Items.ORIGINITE))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.HEADHUNTING_PCB.get())
+                .key('P', Items.ENDER_PEARL)
+                .key('E', Items.ENDER_EYE)
+                .key('R', ModTags.Items.CIRCUITS_BASIC)
+                .key('O', registerItems.ORUNDUM.get())
+                .patternLine("EP")
+                .patternLine("OR")
+                .addCriterion("has_orundum", hasItem(registerItems.ORUNDUM.get()))
                 .build(consumer);
 
     }

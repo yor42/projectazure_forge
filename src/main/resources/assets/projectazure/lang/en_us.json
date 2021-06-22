@@ -1,5 +1,8 @@
 {
-  "itemGroup.projectazure": "Project: Azure",
+  "itemGroup.projectazure": "Project: Azure - Main",
+  "itemGroup.pa_machines": "Project: Azure - Machines",
+  "itemGroup.pa_resources": "Project: Azure - Resources",
+  "itemGroup.pa_ship": "Project: Azure - Companions",
 
   "item.projectazure.rainbow_wisdomcube": "Rainbow Wisdom Cube",
   "item.projectazure.wisdomcube": "Wisdom Cube",
@@ -64,6 +67,10 @@
   "item.projectazure.ammo_generic": "Generic Shell",
 
   "item.projectazure.shiftinfo": "Press %s for more info",
+
+  "block.projectazure.recruit_beacon": "Recruit Beacon",
+  "block.projectazure.metal_press": "Hydraulic Press",
+  "block.projectazure.alloy_furnace": "Alloy Furnace",
 
   "rigging_valid_on.tooltip": "Useable On:",
 
@@ -136,6 +143,5 @@
   "recruit_beacon": "Recruit Beacon",
   "metal_press": "Hydraulic Press",
 
-  "block.projectazure.metal_press": "Hydraulic Press",
   "death.attack.bonk": "%1$s was sent to horny jail"
 }

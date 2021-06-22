@@ -88,6 +88,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("orundum");
         buildModel("headhunting_pcb");
 
+        buildModel("originite");
+
 
         /*
         Build Ore Block Item model
@@ -97,6 +99,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildSimpleBlockModel("ore_stone_tin");
         buildSimpleBlockModel("ore_stone_lead");
         buildSimpleBlockModel("ore_stone_zinc");
+
+        buildSimpleBlockModel("orirock");
 
         buildSimpleBlockModel("machine_frame");
 

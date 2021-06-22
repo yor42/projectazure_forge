@@ -76,6 +76,13 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.getOrCreateBuilder(ModTags.Items.DUST_STEEL).add(registerItems.DUST_STEEL.get());
         this.getOrCreateBuilder(ModTags.Items.DUST_BRASS).add(registerItems.DUST_BRASS.get());
 
+        this.getOrCreateBuilder(ModTags.Items.WIRE_COPPER).add(registerItems.COPPER_WIRE.get());
+
+        this.getOrCreateBuilder(ModTags.Items.CIRCUITS).add(registerItems.PRIMITIVE_CIRCUIT.get());
+        this.getOrCreateBuilder(ModTags.Items.CIRCUITS_BASIC).add(registerItems.PRIMITIVE_CIRCUIT.get());
+
+        this.getOrCreateBuilder(ModTags.Items.ORIGINITE).add(registerItems.ORIGINITE.get());
+
         this.getOrCreateBuilder(ModTags.Items.TREE_SAP).add(registerItems.TREE_SAP.get());
 
         this.getOrCreateBuilder(ModTags.Items.EXTRUSION_MOLD).add(registerItems.MOLD_PLATE.get()).add(registerItems.MOLD_WIRE.get()).add(registerItems.MOLD_EXTRACTION.get());

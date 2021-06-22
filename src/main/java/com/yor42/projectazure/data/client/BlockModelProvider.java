@@ -18,6 +18,6 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
         simpleBlock(registerBlocks.LEAD_ORE.get());
         simpleBlock(registerBlocks.ZINC_ORE.get());
         simpleBlock(registerBlocks.MACHINE_FRAME.get());
-
+        simpleBlock(registerBlocks.ORIROCK.get());
     }
 }
