@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -275,6 +276,14 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_orundum", hasItem(registerItems.ORUNDUM.get()))
                 .build(consumer);
 
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.BANDAGE_ROLL.get(), 4)
+                .key('W', ItemTags.WOOL)
+                .patternLine("WWW")
+                .patternLine("W W")
+                .patternLine("WWW")
+                .addCriterion("has_orundum", hasItem(registerItems.ORUNDUM.get()))
+                .build(consumer);
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {

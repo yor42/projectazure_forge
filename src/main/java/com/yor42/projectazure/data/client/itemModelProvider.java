@@ -124,6 +124,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelArknights("spawnchen");
 
         buildModelBlueArchive("spawnshiroko");
+        buildSimpleBlockModel("reenforced_concrete");
 
     }
 

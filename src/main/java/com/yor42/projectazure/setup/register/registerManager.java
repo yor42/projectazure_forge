@@ -4,6 +4,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerAlloyFurnace;
+import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
@@ -66,6 +67,8 @@ public class registerManager {
     public static final ContainerType<ContainerRecruitBeacon> RECRUIT_BEACON_CONTAINER_TYPE = IForgeContainerType.create(ContainerRecruitBeacon::new);
     public static final RegistryObject<ContainerType<ContainerRecruitBeacon>> RECRUIT_BEACON_CONTAINER = CONTAINER.register("recruit_beacon_container", () -> RECRUIT_BEACON_CONTAINER_TYPE);
 
+    public static final ContainerType<ContainerDryDock> DRYDOCK_CONTAINER_TYPE = IForgeContainerType.create(ContainerDryDock::new);
+    public static final RegistryObject<ContainerType<ContainerDryDock>> DRYDOCK_CONTAINER = CONTAINER.register("drydock_container", () -> DRYDOCK_CONTAINER_TYPE);
 
     //entity
     public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());

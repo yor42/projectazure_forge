@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -22,7 +23,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractAnimatedBlockMachines extends Block {
+public abstract class AbstractAnimatedBlockMachines extends AbstractContainerBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -63,6 +64,16 @@ public abstract class AbstractAnimatedBlockMachines extends Block {
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
+    public boolean shouldNotifyBlockChange() {
+        return true;
+    }
+
+    @Override
+    public boolean canDropInventory(BlockState state) {
+        return true;
     }
 
     @Nullable

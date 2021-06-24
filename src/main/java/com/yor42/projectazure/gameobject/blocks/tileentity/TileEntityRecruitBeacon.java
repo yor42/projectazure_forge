@@ -4,6 +4,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
+import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
@@ -19,6 +20,9 @@ import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -71,7 +75,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
 
         @Override
         public int size() {
-            return 4;
+            return 7;
         }
     };
 
@@ -101,7 +105,19 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         this.powerConsumption = 1000;
     }
 
+    private final LazyOptional<ItemStackHandler> Invhandler = LazyOptional.of(this::getInventory);
+    private final LazyOptional<CustomEnergyStorage> Energyhandler = LazyOptional.of(this::getEnergyStorage);
 
+
+    @Override
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+        if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return Invhandler.cast();
+        }
+        else if(capability == CapabilityEnergy.ENERGY)
+            return Energyhandler.cast();
+        return super.getCapability(capability, facing);
+    }
 
     @Override
     protected void SpawnResultEntity() {

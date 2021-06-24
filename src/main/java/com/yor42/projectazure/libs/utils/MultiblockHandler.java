@@ -2,6 +2,7 @@ package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockBaseTE;
+import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,66 +14,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiblockHandler {
-    private static final int[][][][] PATTERN =
+
+    private static final Block[][][][] MULTIBLOCKPATTERN =
             {
-            {
-                    {  { 1, 1, 1}, { 1,-1, 1}, {-1,-1,-1}  },	//x = 0
-                    {  { 1, 1, 1}, {-1,-1,-1}, {-1, 2,-1}  },	//x = 1
-                    {  { 1, 1, 1}, { 1,-1, 1}, {-1,-1,-1}  }	//x = 2
-            }
+                    {
+                            {  { registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.REENFORCEDCONCRETE.get()}, { registerBlocks.REENFORCEDCONCRETE.get(), Blocks.AIR, registerBlocks.REENFORCEDCONCRETE.get()}, { registerBlocks.MACHINE_FRAME.get(), Blocks.AIR, registerBlocks.MACHINE_FRAME.get()}, {registerBlocks.MACHINE_FRAME.get(),Blocks.AIR,registerBlocks.MACHINE_FRAME.get()}  },	//x = 0
+                            {  { registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.MACHINE_FRAME.get(), registerBlocks.REENFORCEDCONCRETE.get()}, { Blocks.AIR, Blocks.AIR, Blocks.AIR}, { Blocks.AIR, Blocks.AIR, Blocks.AIR}, {Blocks.AIR, registerBlocks.DRYDOCKCONTROLLER.get(), Blocks.AIR}  },	//x = 1
+                            {  { registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.REENFORCEDCONCRETE.get()}, { registerBlocks.REENFORCEDCONCRETE.get(), Blocks.AIR, registerBlocks.REENFORCEDCONCRETE.get()}, { registerBlocks.MACHINE_FRAME.get(), Blocks.AIR, registerBlocks.MACHINE_FRAME.get()}, {registerBlocks.MACHINE_FRAME.get(),Blocks.AIR,registerBlocks.MACHINE_FRAME.get()}  }	//x = 2
+                    }
             };
 
     /**CHECK MULTI BLOCK FORM
      * called when RIGHT CLICK heavy grudge block
      * (heavy grudge block is always at TOP-MIDDLE, so check X+-1 Y-2 Z+-1)
      */
+
+    public static int checkMultiBlockForm(World world, BlockPos pos){
+        return checkMultiBlockForm(world, pos.getX(), pos.getY(), pos.getZ());
+    }
+
     public static int checkMultiBlockForm(World world, int xCoord, int yCoord, int zCoord)
     {
-        BlockState state = null;
-        BlockPos pos = null;
-        Block block = null;
-        int blockType = -1;
+        BlockState state;
+        BlockPos pos;
+        Block blockType;
         /** bitwise pattern match
          *  ex: type = 3 (int) = 0011 (bit) = match pattern 0,1
          *      type = 2 (int) = 0010 (bit) = match pattern 1
          *      type = 13(int) = 1101 (bit) = match pattern 0,2,3
          */
-        int patternTemp = 0;
+        int patternTemp;
         int patternMatch = 1;  //init match pattern = 0001 (bit)
 
-        if (yCoord < 3) return -1;
+        if (yCoord < 4) return -1;
 
         for (int x = 0; x < 3; x++)
         {
-            for (int y = 0; y < 3; y++)
+            for (int y = 0; y < 4; y++)
             {
                 for (int z = 0; z < 3; z++)
                 {
-                    pos = new BlockPos(xCoord - 1 + x, yCoord - 2 + y, zCoord - 1 + z);
+                    pos = new BlockPos(xCoord - 1 + x, yCoord - 3 + y, zCoord - 1 + z);
 
                     //1. get block
                     state = world.getBlockState(pos);
-                    if (state != null)
-                    {
-                        block = state.getBlock();
-                    }
-                    else
-                    {
-                        block = null;
-                    }
+                    blockType = state.getBlock();
 
-                    blockType = -1;
-                    if (block != null)
-                    {
-                        if (block == Blocks.GRAY_CONCRETE) blockType = 1;
-                        Main.LOGGER.debug("DEBUG: multi block check: pos "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" "+block.getTranslatedName()+" "+blockType);
-                    }
+                    Main.LOGGER.debug("DEBUG: multi block check: pos "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" "+blockType.getTranslatedName()+" "+blockType);
 
                     //2. match pattern
                     patternTemp = 0;
-                    for (int t = 0; t < PATTERN.length; t++)
+                    for (int t = 0; t < MULTIBLOCKPATTERN.length; t++)
                     {
-                        if (blockType == PATTERN[t][x][y][z])
+                        if (blockType == MULTIBLOCKPATTERN[t][x][y][z])
                         {
                             patternTemp += Math.pow(2, t);		//match pattern t
                         }
@@ -83,7 +77,7 @@ public class MultiblockHandler {
                     if (patternMatch == 0) return -1;
 
 
-                    if (blockType > 0)
+                    if (blockType != Blocks.AIR)
                     {
                         TileEntity t = world.getTileEntity(pos);
                         if (t instanceof MultiblockBaseTE && ((MultiblockBaseTE) t).hasMaster())
@@ -106,6 +100,10 @@ public class MultiblockHandler {
      *
      *  type: 0:no MBS, 1:large shipyard, 2:-
      */
+    public static void setupStructure(World world, BlockPos pos, int type) {
+        setupStructure(world, pos.getX(), pos.getY(), pos.getZ(), type);
+    }
+
     public static void setupStructure(World world, int xCoord, int yCoord, int zCoord, int type)
     {
         List<MultiblockBaseTE> tiles = new ArrayList<MultiblockBaseTE>();  //all tile in structure
@@ -119,7 +117,7 @@ public class MultiblockHandler {
         //get all tile and master tile
         for (int x = xCoord - 1; x < xCoord + 2; x++)
         {
-            for (int y = yCoord - 2; y < yCoord + 1; y++)
+            for (int y = yCoord - 3; y < yCoord + 1; y++)
             {
                 for (int z = zCoord - 1; z < zCoord + 2; z++)
                 {
@@ -174,7 +172,7 @@ public class MultiblockHandler {
 
         for (int x = xCoord - 1; x < xCoord + 2; x++)
         {
-            for (int y = yCoord - 2; y < yCoord + 1; y++)
+            for (int y = yCoord - 3; y < yCoord + 1; y++)
             {
                 for (int z = zCoord - 1; z < zCoord + 2; z++)
                 {

@@ -15,8 +15,11 @@ public class ItemBonkBat extends ItemBaseTooltip {
     //Can't forget that Bonk Sound
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-        entity.attackEntityFrom(DamageSources.BONK, 25565);
-        player.playSound(registerSounds.WEAPON_BONK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-        return true;
+        if(entity.isAlive()) {
+            entity.attackEntityFrom(DamageSources.BONK, 25565);
+            player.playSound(registerSounds.WEAPON_BONK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            return true;
+        }
+        return false;
     }
 }

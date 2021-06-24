@@ -9,6 +9,8 @@ package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMultiBlockBase;
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractAnimatedTileEntityMachines;
+import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -16,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 
-public abstract class MultiblockBaseTE extends AbstractAnimatedTileEntityMachines {
+public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
 
     protected MultiblockBaseTE masterTile = null;
     protected boolean hasMaster, isMaster;			//master flag
@@ -38,6 +40,15 @@ public abstract class MultiblockBaseTE extends AbstractAnimatedTileEntityMachine
         compound.putBoolean("hasMaster", hasMaster);
         compound.putBoolean("isMaster", isMaster);
         return compound;
+    }
+
+    @Override
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
+        this.masterPos = new BlockPos(nbt.getInt("masterX"), nbt.getInt("masterY"), nbt.getInt("masterZ"));
+        this.structType = nbt.getInt("structType");
+        this.hasMaster = nbt.getBoolean("hasMaster");
+        this.isMaster = nbt.getBoolean("isMaster");
     }
 
     //getter
@@ -94,14 +105,8 @@ public abstract class MultiblockBaseTE extends AbstractAnimatedTileEntityMachine
 
         //set blockstate
         //type: 0:NO mbs, 1:mbs INACTIVE, 2:mbs ACTIVE
-        if (type == 0)
-        {
-            AbstractMultiBlockBase.updateMultiBlockState(0, world, this.getPos());  //NO MBS
-        }
-        else
-        {
-            AbstractMultiBlockBase.updateMultiBlockState(1, world, this.getPos());  //INACTIVE
-        }
+        //INACTIVE
+        AbstractMultiBlockBase.updateMultiBlockState(type !=0 , world, this.getPos());  //NO MBS
     }
 
     /** set mater tile, separate from setHasMaster */

@@ -133,16 +133,18 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mousex, int mousey) {
         matrixStack.push();
-        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 14085119);
-        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (float)76, (float)25, 14085119);
+        float rendersize = 0.8F;
+        matrixStack.scale(rendersize, rendersize, rendersize);
+        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX/rendersize, (float)this.titleY/rendersize, 14085119);
+        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (float)76/rendersize, (float)25/rendersize, 14085119);
+        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5/rendersize, 5/rendersize, 14085119);
+        matrixStack.pop();
         IFormattableTextComponent leveltext = new StringTextComponent("Lv.").appendString(Integer.toString(this.host.getLevel()));
         this.font.func_243248_b(matrixStack, leveltext, (float)168-this.font.getStringPropertyWidth(leveltext), (float)81, 14085119);
-        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5, 5, 14085119);
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderMorale(matrixStack, mousex, mousey);
         this.renderEntity(mousex, mousey);
         this.drawButtons(matrixStack, mousex, mousey);
-        matrixStack.pop();
         //this.renderButton(matrixStack);
     }
 

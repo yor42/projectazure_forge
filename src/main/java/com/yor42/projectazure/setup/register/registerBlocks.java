@@ -2,22 +2,20 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.items.ItemRecruitBeaconRenderer;
-import com.yor42.projectazure.gameobject.blocks.AlloyFurnaceBlock;
-import com.yor42.projectazure.gameobject.blocks.MetalPressBlock;
-import com.yor42.projectazure.gameobject.blocks.PAOreBlock;
-import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
+import com.yor42.projectazure.gameobject.blocks.*;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockSteelFrame;
 import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.OreBlock;
-import net.minecraft.block.SoundType;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.fml.RegistryObject;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class registerBlocks {
@@ -30,11 +28,19 @@ public class registerBlocks {
     public static final RegistryObject<Block> ORIROCK = register("orirock",() -> new OreBlock(AbstractBlock.Properties.create(Material.ROCK).harvestLevel(0).hardnessAndResistance(1.5F, 3F)), Main.PA_RESOURCES);
 
     public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
-            new Block((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid())), Main.PA_RESOURCES);
+            new MultiblockStructureBlocks((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL))){
+                @Override
+                public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+                    return new MultiblockSteelFrame();
+                }
+            }, Main.PA_RESOURCES);
 
 
     public static final RegistryObject<Block> METAL_PRESS = register("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> ALLOY_FURNACE = register("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);
+
+    public static final RegistryObject<Block> DRYDOCKCONTROLLER = register("multiblock_controller",()-> new blockMultiblockDryDockController(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> REENFORCEDCONCRETE = register("reenforced_concrete",()-> new MultiblockStructureBlocks(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.STONE).notSolid()), Main.PA_MACHINES);
 
     public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties().setISTER(()-> ItemRecruitBeaconRenderer::new));
 

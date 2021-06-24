@@ -107,6 +107,8 @@ repositories {
         url = "https://modmaven.k-4u.nl"
     }
 
+    maven { url 'https://modmaven.dev/' }//Mekanism
+
     maven { // TOP
         name 'tterrag maven'
         url "http://maven.tterrag.com/"
@@ -130,6 +132,14 @@ dependencies {
         // at runtime, use the full JEI jar
         runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
     }
+
+    compileOnly "mekanism:Mekanism:${mekanism_version}:api"
+
+    // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

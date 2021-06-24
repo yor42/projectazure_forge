@@ -51,9 +51,9 @@ public class ModBusEventHandler {
                 boolean isDev = player.getUniqueID().equals(yorUUID);
                 player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.Rainbow_Wisdom_Cube.get()));
                 if (isDev) {
-                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWM_AYANAMI.get()));
+                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_NAGATO.get()));
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWM_ENTERPRISE.get()));
-                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_GANGWON.get()));
+                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_CHEN.get()));
                 }
                 data.putBoolean("PRJA:gotStarterCube", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);

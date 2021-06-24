@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
+import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,6 +17,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -103,6 +107,20 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         else{
             return false;
         }
+    }
+
+    private final LazyOptional<ItemStackHandler> Invhandler = LazyOptional.of(this::getInventory);
+    private final LazyOptional<CustomEnergyStorage> Energyhandler = LazyOptional.of(this::getEnergyStorage);
+
+
+    @Override
+    public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
+        if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return Invhandler.cast();
+        }
+        else if(capability == CapabilityEnergy.ENERGY)
+            return Energyhandler.cast();
+        return super.getCapability(capability, facing);
     }
 
     @Override
