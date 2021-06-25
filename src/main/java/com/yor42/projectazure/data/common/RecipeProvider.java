@@ -146,10 +146,10 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .key('P', registerItems.MECHANICAL_PARTS.get())
                 .key('M', registerItems.BASIC_MOTOR.get())
                 .key('E', registerItems.PRIMITIVE_CIRCUIT.get())
-                .patternLine(" SS")
+                .patternLine("PSS")
                 .patternLine("BPS")
                 .patternLine("EME")
-                .addCriterion("has_steel", hasItem(registerItems.PRIMITIVE_CIRCUIT.get()))
+                .addCriterion("has_circuit", hasItem(registerItems.PRIMITIVE_CIRCUIT.get()))
                 .build(consumer);
 
         ShapelessRecipeBuilder.shapelessRecipe(registerItems.COPPER_WIRE.get(), 3)
@@ -332,6 +332,37 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .patternLine("QCQ")
                 .addCriterion("has_diamond", hasItem(Tags.Items.GEMS_DIAMOND))
                 .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.DISC_FRIDAYNIGHT.get(), 1)
+                .key('S', ModTags.Items.PLATE_IRON)
+                .key('D', Tags.Items.DYES_GREEN)
+                .patternLine(" S ")
+                .patternLine("SDS")
+                .patternLine(" S ")
+                .addCriterion("has_plate", hasItem(ModTags.Items.PLATE_IRON))
+                .addCriterion("has_dye", hasItem(Tags.Items.DYES_GREEN))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.DISC_BRAINPOWER.get(), 1)
+                .key('S', ModTags.Items.PLATE_IRON)
+                .key('D', Tags.Items.DYES_BLACK)
+                .patternLine(" S ")
+                .patternLine("SDS")
+                .patternLine(" S ")
+                .addCriterion("has_plate", hasItem(ModTags.Items.PLATE_IRON))
+                .addCriterion("has_dye", hasItem(Tags.Items.DYES_BLACK))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.DISC_RICKROLL.get(), 1)
+                .key('S', ModTags.Items.PLATE_IRON)
+                .key('D', Tags.Items.DYES_GRAY)
+                .patternLine(" S ")
+                .patternLine("SDS")
+                .patternLine(" S ")
+                .addCriterion("has_plate", hasItem(ModTags.Items.PLATE_IRON))
+                .addCriterion("has_dye", hasItem(Tags.Items.DYES_GRAY))
+                .build(consumer);
+
 
     }
 

@@ -206,6 +206,16 @@ public class registerItems {
         }
     });
 
+    //You know the rules and so do I
+    public static final RegistryObject<Item> DISC_RICKROLL = registerManager.ITEMS.register("disc_rickroll", () -> new MusicDiscItem(15, registerSounds.DISC_RICKROLL, new Item.Properties()
+            .group(PA_GROUP).maxStackSize(1))
+    {
+        @Override
+        public ITextComponent getDisplayName(ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
     public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.BLOCK_LEVER_CLICK, 0, (float) 0.3, new Item.Properties()
             .setISTER(() -> ItemAbydos550Renderer::new)
             .group(PA_GROUP).maxStackSize(1), true, MAGAZINE_5_56.get()));

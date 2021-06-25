@@ -15,6 +15,14 @@
       }
     ]
   },
+  "disc_rickroll": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/rickroll",
+        "stream": true
+      }
+    ]
+  },
   "bonk": {
     "sounds": [
       {

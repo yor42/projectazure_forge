@@ -15,6 +15,7 @@ public final class registerSounds {
 
     public static final SoundEvent DISC_FRIDAY_NIGHT = registerSoundEvent("disc_fridaynight");
     public static final SoundEvent DISC_BRAINPOWER = registerSoundEvent("disc_brainpower");
+    public static final SoundEvent DISC_RICKROLL = registerSoundEvent("disc_rickroll");
 
     public static final SoundEvent WEAPON_BONK = registerSoundEvent("bonk");
 
@@ -32,6 +33,7 @@ public final class registerSounds {
         registry.register(WEAPON_BONK);
         registry.register(CANON_FIRE_MEDIUM);
         registry.register(PLANE_GUN);
+        registry.register(DISC_RICKROLL);
         registry.register(RIFLE_FIRE_SUPPRESSED);
     }
 }
