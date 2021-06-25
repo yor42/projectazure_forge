@@ -121,12 +121,6 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
     public int getRiggingOffset() {
         return 0;
     }
-
-    @Override
-    protected float getSitHeight() {
-        return 1.3F;
-    }
-
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_5;

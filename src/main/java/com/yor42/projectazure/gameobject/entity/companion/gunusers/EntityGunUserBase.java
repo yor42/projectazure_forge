@@ -13,6 +13,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 public abstract class EntityGunUserBase extends AbstractEntityCompanion {
 
     protected EntityGunUserBase(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -30,7 +32,7 @@ public abstract class EntityGunUserBase extends AbstractEntityCompanion {
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.put("ammoInv", this.getAmmoStorage().serializeNBT());
     }

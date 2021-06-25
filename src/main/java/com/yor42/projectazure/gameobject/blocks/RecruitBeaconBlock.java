@@ -22,9 +22,6 @@ import javax.annotation.Nullable;
 
 public class RecruitBeaconBlock extends AbstractAnimatedBlockMachines{
 
-    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
-
     public RecruitBeaconBlock() {
         super((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid()));
     }
@@ -43,17 +40,4 @@ public class RecruitBeaconBlock extends AbstractAnimatedBlockMachines{
             NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
         }
     }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(ACTIVE, false).with(POWERED, false);
-    }
-
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
-        builder.add(ACTIVE,POWERED);
-    }
-
 }

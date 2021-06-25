@@ -10,6 +10,7 @@ import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -29,6 +30,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nullable;
 
+import static com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock.POWERED;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRandomBlockposInRadius2D;
 
 public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
@@ -86,9 +88,9 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         boolean shouldSave = false;
         super.tick();
         if(!(this.world != null && this.world.isRemote)){
-            if(isPowered!=this.isPowered()){
+            if(isPowered!=this.isPowered() || this.isPowered() && !this.world.getBlockState(this.pos).get(POWERED) || !this.isPowered() && this.world.getBlockState(this.pos).get(POWERED)) {
                 shouldSave = true;
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(RecruitBeaconBlock.POWERED, this.isPowered()), 2);
+                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(POWERED, this.isPowered()), 2);
             }
             if(isActive!=this.isActive()){
                 shouldSave = true;
@@ -120,7 +122,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    protected void SpawnResultEntity() {
+    protected void SpawnResultEntity(ServerPlayerEntity owner) {
 
         boolean worldReady = this.world != null && !this.world.isRemote();
         boolean EntityTypeNotNull = this.RollResult != null;
@@ -136,7 +138,8 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                 entityCompanion.setPosition(pos.getX(), pos.getY(), pos.getZ());
                 entityCompanion.getNavigator().tryMoveToXYZ((double) this.getPos().getX(), (double) this.getPos().getY(), (double) this.getPos().getZ(), 1.0F);
                 entityCompanion.setMovingtoRecruitStation(this.getPos());
-                entityCompanion.setTamedBy(this.nextTaskStarter);
+                entityCompanion.setTamedBy(owner);
+                entityCompanion.setMorale(150);
                 this.world.addEntity(entityCompanion);
             }
 
@@ -178,7 +181,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     protected boolean canStartProcess() {
 
         int OrundumCount = this.inventory.getStackInSlot(1).getCount()+this.inventory.getStackInSlot(2).getCount();
-        int GoldIngotCount = this.inventory.getStackInSlot(2).getCount()+this.inventory.getStackInSlot(3).getCount();
+        int GoldIngotCount = this.inventory.getStackInSlot(3).getCount()+this.inventory.getStackInSlot(4).getCount();
 
         return this.inventory.getStackInSlot(0) != ItemStack.EMPTY && OrundumCount>40? GoldIngotCount>=20:GoldIngotCount>60 && OrundumCount>=10;
     }
@@ -191,19 +194,15 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         }
     }
 
-    public boolean isPowered(){
-        return this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();
-    }
-
     @Override
     public void registerRollEntry() {
         addEntry(registerManager.ENTITYTYPE_CHEN);
+        addEntry(registerManager.SHIROKO_ENTITY_TYPE);
         if(PAConfig.CONFIG.shouldRecruitBeaconSpawnAllCompanions.get()){
             addEntry(registerManager.ENTERPRISE_ENTITY_TYPE);
             addEntry(registerManager.ENTITYAYANAMI);
             addEntry(registerManager.ENTITYGANGWON);
             addEntry(registerManager.ENTITYTYPE_NAGATO);
-            addEntry(registerManager.SHIROKO_ENTITY_TYPE);
         }
     }
 

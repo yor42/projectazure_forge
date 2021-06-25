@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.network.packets.StartRecruitPacket;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -27,7 +28,6 @@ public class guiDryDock extends ContainerScreen<ContainerDryDock> {
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
@@ -48,7 +48,20 @@ public class guiDryDock extends ContainerScreen<ContainerDryDock> {
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-        super.drawGuiContainerForegroundLayer(matrixStack, x, y);
+        this.font.func_243248_b(matrixStack, this.title, 51, 7, 0x00FF00);
+
+        float renderScale = 0.6F;
+        matrixStack.push();
+        matrixStack.scale(renderScale, renderScale, renderScale);
+        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.construction_eta").appendString(":"), 51/renderScale,39/renderScale, 0x00FF00);
+        matrixStack.pop();
+
+        renderScale = 0.95F;
+        matrixStack.push();
+        matrixStack.scale(renderScale, renderScale, renderScale);
+        StringTextComponent RemainingTime = MathUtil.Tick2FormattedClock(container.getRemainingTick());
+        this.font.func_243248_b(matrixStack, RemainingTime, 51/renderScale,46/renderScale, 0x00FF00);
+        matrixStack.pop();
         this.renderButtons();
     }
 

@@ -80,8 +80,10 @@ public class ItemTagProvider extends ItemTagsProvider {
 
         this.getOrCreateBuilder(ModTags.Items.CIRCUITS).add(registerItems.PRIMITIVE_CIRCUIT.get());
         this.getOrCreateBuilder(ModTags.Items.CIRCUITS_BASIC).add(registerItems.PRIMITIVE_CIRCUIT.get());
+        this.getOrCreateBuilder(ModTags.Items.CIRCUITS_ADVANCED).add(registerItems.ADVANCED_CIRCUIT.get());
 
         this.getOrCreateBuilder(ModTags.Items.ORIGINITE).add(registerItems.ORIGINITE.get());
+        this.getOrCreateBuilder(ModTags.Items.ORIGINIUM_PRIME).add(registerItems.ORIGINIUM_PRIME.get());
 
         this.getOrCreateBuilder(ModTags.Items.TREE_SAP).add(registerItems.TREE_SAP.get());
 

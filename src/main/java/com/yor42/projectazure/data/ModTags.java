@@ -87,7 +87,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> WIRE_COPPER = forge("wires/copper");
 
         public static final ITag.INamedTag<Item> ORIGINITE = forge("gems/originite");
-        public static final ITag.INamedTag<Item> ORIGINIUM_PRIME = forge("gems/originium_prime");
+        public static final ITag.INamedTag<Item> ORIGINIUM_PRIME = forge("gems/originium");
         //public static final ITag.INamedTag<Item> ORES_ZINC = forge("ores/zinc");
 
         public static final ITag.INamedTag<Item> MORTAR = forge("mortar");
@@ -101,6 +101,7 @@ public class ModTags {
         //Mekanism Compat Layer
         public static final ITag.INamedTag<Item> CIRCUITS = forge("circuits");
         public static final ITag.INamedTag<Item> CIRCUITS_BASIC = forge("circuits/basic");
+        public static final ITag.INamedTag<Item> CIRCUITS_ADVANCED = forge("circuits/advanced");
 
         private static ITag.INamedTag<Item> forge(String path) {
             return ItemTags.makeWrapperTag(new ResourceLocation("forge", path).toString());

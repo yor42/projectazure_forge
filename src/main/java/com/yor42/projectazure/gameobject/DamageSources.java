@@ -4,6 +4,7 @@ import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.EnchantedGoldenAppleItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
 
@@ -14,6 +15,8 @@ public class DamageSources {
 
     public static final DamageSource SHIP_FIRE = new DamageSource("ship_fire").setFireDamage();
     public static final DamageSource TORPEDO = new DamageSource("torpedo").setExplosion();
+
+    public static final DamageSource ACUTE_ORIPATHY = new DamageSource("ate_originium_prime").setDamageBypassesArmor().setDamageIsAbsolute();
 
     public static final DamageSource PLANE_GUN = new DamageSource("plane_gun").setProjectile();
 

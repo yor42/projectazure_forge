@@ -39,7 +39,7 @@ public class registerBlocks {
     public static final RegistryObject<Block> METAL_PRESS = register("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> ALLOY_FURNACE = register("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> DRYDOCKCONTROLLER = register("multiblock_controller",()-> new blockMultiblockDryDockController(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> DRYDOCKCONTROLLER = register("drydock_controller",()-> new blockMultiblockDryDockController(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid()), Main.PA_MACHINES);
     public static final RegistryObject<Block> REENFORCEDCONCRETE = register("reenforced_concrete",()-> new MultiblockStructureBlocks(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.STONE).notSolid()), Main.PA_MACHINES);
 
     public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties().setISTER(()-> ItemRecruitBeaconRenderer::new));

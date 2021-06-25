@@ -7,6 +7,7 @@ import com.yor42.projectazure.libs.enums;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -103,24 +104,25 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
 
     protected abstract boolean canStartProcess();
 
-    public void StartMachine(PlayerEntity starter){
+    public void StartMachine(ServerPlayerEntity starter){
 
         if(this.canStartProcess()) {
 
             EntityType<? extends AbstractEntityCompanion> result = this.getRollResult();
             AbstractEntityCompanion Entity = result.create(this.world);
-
-            int expectedProcessTime = this.getProcessTimePerEntity(Entity);
-            if (expectedProcessTime > 0) {
-                //Convert Second to Tick
-                this.totalProcessTime = expectedProcessTime * 20;
-                this.RollResult = result;
-                Main.LOGGER.debug("Roll Result:"+Entity.getName().toString()+" with "+expectedProcessTime+"second Recruit Time");
-                this.shouldProcess = true;
-                this.nextTaskStarter = starter;
-                this.UseGivenResource();
-            } else {
-                Main.LOGGER.error("Next Spawn Delay time is 0! Is entry valid?");
+            if(Entity != null) {
+                int expectedProcessTime = this.getProcessTimePerEntity(Entity);
+                if (expectedProcessTime > 0) {
+                    //Convert Second to Tick
+                    this.totalProcessTime = expectedProcessTime * 20;
+                    this.RollResult = result;
+                    Main.LOGGER.debug("Roll Result:" + Entity.getName().toString() + " with " + expectedProcessTime + "second Recruit Time");
+                    this.shouldProcess = true;
+                    this.nextTaskStarter = starter;
+                    this.UseGivenResource();
+                } else {
+                    Main.LOGGER.error("Next Spawn Delay time is 0! Is entry valid?");
+                }
             }
         }else{
             starter.sendMessage(new TranslationTextComponent("machine.notenoughresource"),starter.getUniqueID());
@@ -128,6 +130,9 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
 
     }
 
+    public boolean isPowered(){
+        return this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();
+    }
 
 
     /*
@@ -204,7 +209,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
                 this.ProcessTime++;
                 this.energyStorage.extractEnergy(this.powerConsumption, false);
                 if(this.ProcessTime >= this.totalProcessTime){
-                    this.SpawnResultEntity();
+                    this.SpawnResultEntity((ServerPlayerEntity) this.nextTaskStarter);
                     this.resetMachine();
                 }
             }
@@ -223,7 +228,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         }
     }
 
-    protected abstract void SpawnResultEntity();
+    protected abstract void SpawnResultEntity(ServerPlayerEntity owner);
 
     /*
     For Future usage of additional processing criteria

@@ -23,8 +23,11 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -39,6 +42,7 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 public class registerManager {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, defined.MODID);
+    public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, defined.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, defined.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, defined.MODID);
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, defined.MODID);
@@ -112,11 +116,13 @@ public class registerManager {
         CONTAINER.register(eventbus);
         TILE_ENTITY.register(eventbus);
         RECIPE_SERIALIZERS.register(eventbus);
+        EFFECTS.register(eventbus);
         registerBlocks.register();
         registerItems.register();
         registerTE.register();
         registerRecipes.Serializers.register();
         registerRecipes.Types.register();
+        RegisterPotionEffects.register();
     }
 
 

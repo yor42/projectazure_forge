@@ -26,6 +26,8 @@ import javax.annotation.Nullable;
 public abstract class AbstractAnimatedBlockMachines extends AbstractContainerBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
 
     public AbstractAnimatedBlockMachines(Properties properties) {
         super(properties);
@@ -79,7 +81,7 @@ public abstract class AbstractAnimatedBlockMachines extends AbstractContainerBlo
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(ACTIVE, false).with(POWERED, false);
     }
 
     @Override
@@ -95,6 +97,6 @@ public abstract class AbstractAnimatedBlockMachines extends AbstractContainerBlo
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, ACTIVE, POWERED);
     }
 }

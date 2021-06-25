@@ -267,7 +267,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private final MovementController MoveController;
     protected final SwimmerPathNavigator swimmingNav;
     private final GroundPathNavigator groundNav;
-    private final FlyingPathNavigator airNav;
     private List<ExperienceOrbEntity> nearbyExpList;
 
     protected long lastSlept, lastWokenup;
@@ -298,9 +297,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> RELOAD_TIMER_OFFHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
 
     public abstract enums.EntityType getEntityType();
-
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.PATH, MemoryModuleType.OPENED_DOORS, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
-
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
@@ -308,7 +304,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setFreeRoaming(false);
         this.swimmingNav = new SwimmerPathNavigator(this, worldIn);
         this.groundNav = new GroundPathNavigator(this, worldIn);
-        this.airNav = new FlyingPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
         this.MoveController = new MovementController(this);
     }
@@ -358,7 +353,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putFloat("affection", this.dataManager.get(AFFECTION));
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
@@ -433,6 +428,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
         this.getDataManager().set(LEVEL, compound.getInt("level"));
         this.dataManager.set(EXP, compound.getFloat("exp"));
+        this.dataManager.set(MORALE, compound.getFloat("morale"));
         this.dataManager.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.awakeningLevel = compound.getInt("awaken");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
@@ -1221,21 +1217,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    protected float getSitHeight(){
-        return 1F;
-    }
-
     public abstract enums.CompanionRarity getRarity();
-
-    @Override
-    public EntitySize getSize(Pose poseIn) {
-
-        if(this.dataManager.get(SITTING)){
-            return new EntitySize(this.getWidth(), this.getSitHeight(), false);
-        }else{
-
-        return super.getSize(poseIn);
-    }}
 
     public void func_233687_w_(boolean p_233687_1_) {
         super.func_233687_w_(p_233687_1_);

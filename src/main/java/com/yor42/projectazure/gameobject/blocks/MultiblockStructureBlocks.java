@@ -61,7 +61,7 @@ public class MultiblockStructureBlocks extends AbstractMultiBlockBase{
         }
 
 
-        return ActionResultType.SUCCESS;
+        return state.get(FORMED)? ActionResultType.SUCCESS:ActionResultType.PASS;
     }
 
     @Override

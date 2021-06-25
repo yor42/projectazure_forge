@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -67,15 +68,13 @@ public abstract class MultiblockStructuralBlockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected void SpawnResultEntity() {
+    protected void SpawnResultEntity(ServerPlayerEntity owner) {
     }
 
     @Override
     public void registerRollEntry() {
     }
 
-    private final LazyOptional<ItemStackHandler> Invhandler = LazyOptional.of(()->this.getMaster().getInventory());
-    private final LazyOptional<CustomEnergyStorage> Energyhandler = LazyOptional.of(()->this.getMaster().getEnergyStorage());
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {

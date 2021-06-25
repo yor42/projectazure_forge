@@ -89,7 +89,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("headhunting_pcb");
 
         buildModel("originite");
-
+        buildModel("originium_prime");
 
         /*
         Build Ore Block Item model

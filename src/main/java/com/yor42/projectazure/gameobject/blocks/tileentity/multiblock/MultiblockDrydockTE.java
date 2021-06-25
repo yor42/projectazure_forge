@@ -10,6 +10,7 @@ import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -26,12 +27,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.gameobject.blocks.blockMultiblockDryDockController.ACTIVE;
-import static com.yor42.projectazure.gameobject.blocks.blockMultiblockDryDockController.POWERED;
+import static com.yor42.projectazure.gameobject.blocks.AbstractAnimatedBlockMachines.ACTIVE;
+import static com.yor42.projectazure.gameobject.blocks.AbstractAnimatedBlockMachines.POWERED;
 import static com.yor42.projectazure.setup.register.registerTE.DRYDOCK;
 
 public class MultiblockDrydockTE extends MultiblockBaseTE{
@@ -94,32 +96,43 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
 
     @Override
     protected boolean canStartProcess() {
-        return false;
+        int AluminiumCount = this.inventory.getStackInSlot(1).getCount()+this.inventory.getStackInSlot(2).getCount();
+        int SteelCount = this.inventory.getStackInSlot(3).getCount()+this.inventory.getStackInSlot(4).getCount();
+        int CopperCount = this.inventory.getStackInSlot(5).getCount()+this.inventory.getStackInSlot(6).getCount();
+        int ZincCount = this.inventory.getStackInSlot(7).getCount()+this.inventory.getStackInSlot(8).getCount();
+
+        return this.inventory.getStackInSlot(0) != ItemStack.EMPTY && AluminiumCount>=40 && CopperCount>=30 && SteelCount>=60 && ZincCount>=20;
     }
 
     @Override
     protected void UseGivenResource() {
-
+        this.inventory.getStackInSlot(0).shrink(1);
+        for(int i=1; i<this.inventory.getSlots(); i++){
+            this.inventory.setStackInSlot(i, ItemStack.EMPTY);
+        }
     }
 
     public boolean isPowered(){
-        return this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();
+
+        boolean flag = this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();
+
+        return flag;
     }
 
     @Override
     public void tick() {
-        boolean isPowered = this.isPowered();
         boolean isActive = this.isActive();
+        boolean isPowered = this.isPowered();
         boolean shouldSave = false;
         super.tick();
         if(this.world != null && !this.world.isRemote){
-            if(isPowered!=this.isPowered()){
-                shouldSave = true;
+            if(isPowered!=this.isPowered() || this.isPowered() && !this.world.getBlockState(this.pos).get(POWERED) || !this.isPowered() && this.world.getBlockState(this.pos).get(POWERED)) {
                 this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(POWERED, this.isPowered()), 2);
+                shouldSave = true;
             }
             if(isActive!=this.isActive()){
-                shouldSave = true;
                 this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(ACTIVE, this.isActive()), 2);
+                shouldSave = true;
             }
         }
 
@@ -134,13 +147,15 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected void SpawnResultEntity() {
+    protected void SpawnResultEntity(ServerPlayerEntity owner) {
         if(this.getWorld() != null && !this.getWorld().isRemote()){
             AbstractEntityCompanion entity = this.getRollResult().create(this.getWorld());
-            if(entity != null){
-                entity.setTamedBy(this.nextTaskStarter);
-                entity.setPosition(this.pos.getX(), this.pos.getY()-2, this.pos.getZ());
+            if(entity != null && owner != null){
+                entity.setTamedBy(owner);
+                entity.setPosition(this.pos.getX()+0.5, this.pos.getY()-2, this.pos.getZ()+0.5);
                 entity.func_233687_w_(true);
+                entity.setMorale(150);
+                this.getWorld().addEntity(entity);
             }
         }
     }
@@ -155,6 +170,14 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
 
     @Override
     protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+        AnimationBuilder builder = new AnimationBuilder();
+        event.getController().transitionLengthTicks = 20;
+        boolean flag = this.getWorld()!= null && this.getWorld().getBlockState(this.getPos()).get(ACTIVE) && this.getWorld().getBlockState(this.getPos()).get(POWERED);
+        if(flag) {
+            event.getController().setAnimation(builder.addAnimation("working", true));
+            return PlayState.CONTINUE;
+        }
+
         return PlayState.STOP;
     }
 
@@ -185,7 +208,7 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("drydock");
+        return new TranslationTextComponent("tile.drydock");
     }
 
     @Override

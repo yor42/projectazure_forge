@@ -80,6 +80,7 @@
   "rigging.empty": "Empty",
 
   "gui.recruitbeacon_remainingtime": "ETA Until Recruit is Complete",
+  "gui.construction_eta": "Construction ETA",
 
   "gui.machine.start": "Start",
 
@@ -113,9 +114,7 @@
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entitygangwon": "ROKS Gangwon",
-
   "entity.projectazure.entitynagato": "IJN Nagato",
-
   "entity.projectazure.entityenterprise": "USS Enterprise",
 
   "entity.projectazure.entityshiroko": "Shiroko",
@@ -141,7 +140,11 @@
   "lead": "Lead",
 
   "recruit_beacon": "Recruit Beacon",
+  "tile.drydock": "Dry Dock",
   "metal_press": "Hydraulic Press",
 
-  "death.attack.bonk": "%1$s was sent to horny jail"
+  "effect.projectazure.acute_oripathy": "Acute Oripathy",
+
+  "death.attack.bonk": "%1$s was sent to horny jail",
+  "death.attack.ate_originium_prime": "%1$s Literally ate pure originium. ...Are you serious?"
 }

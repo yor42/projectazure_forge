@@ -137,13 +137,17 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().transitionLengthTicks = 0;
-        boolean flag = this.ProcessTime>0;
+        boolean flag = this.isActive() && this.isPowered();
         if(flag) {
             event.getController().setAnimation(builder.addAnimation("work", true));
             return PlayState.CONTINUE;
         }
 
         return PlayState.STOP;
+    }
+
+    private boolean isPowered() {
+        return this.getEnergyStorage().getEnergyStored()>=this.powerConsumption;
     }
 
     @Override

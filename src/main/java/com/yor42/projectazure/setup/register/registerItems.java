@@ -3,6 +3,7 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.*;
+import com.yor42.projectazure.gameobject.ModFoods;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127Mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533Mm;
@@ -90,6 +91,10 @@ public class registerItems {
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> PRIMITIVE_CIRCUIT = registerManager.ITEMS.register("circuit_primitive", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> ADVANCED_CIRCUIT = registerManager.ITEMS.register("circuit_advanced", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+
     public static final RegistryObject<Item> COPPER_COIL = registerManager.ITEMS.register("copper_coil", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> CAPACITOR_PRIMITIVE = registerManager.ITEMS.register("capacitor_primitive", () -> new Item(new Item.Properties()
@@ -107,7 +112,8 @@ public class registerItems {
     //Originium Engineering
     public static final RegistryObject<Item> ORIGINITE = registerManager.ITEMS.register("originite", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
-
+    public static final RegistryObject<Item> ORIGINIUM_PRIME = registerManager.ITEMS.register("originium_prime", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES).food(ModFoods.ORIGINIUM_PRIME)));
 
     public static final RegistryObject<Item> HEADHUNTING_PCB = registerManager.ITEMS.register("headhunting_pcb", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES).maxStackSize(16)));

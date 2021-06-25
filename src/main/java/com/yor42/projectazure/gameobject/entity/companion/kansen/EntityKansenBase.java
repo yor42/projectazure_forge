@@ -45,6 +45,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.UUID;
@@ -101,7 +102,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public abstract int getRiggingOffset();
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
+    public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.put("rigging",this.ShipStorage.serializeNBT());
         compound.put("ammoStorage", this.AmmoStorage.serializeNBT());

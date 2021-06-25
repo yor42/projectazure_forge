@@ -21,9 +21,6 @@ import javax.annotation.Nullable;
 
 public class blockMultiblockDryDockController extends MultiblockStructureBlocks{
 
-    public static final BooleanProperty ACTIVE = BooleanProperty.create("drydock_active");
-    public static final BooleanProperty POWERED = BooleanProperty.create("drydock_powered");
-
     public blockMultiblockDryDockController(Properties properties) {
         super(properties);
     }
@@ -43,11 +40,5 @@ public class blockMultiblockDryDockController extends MultiblockStructureBlocks{
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         return super.getStateForPlacement(context).with(ACTIVE, false).with(POWERED, false);
-    }
-
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
-        builder.add(ACTIVE,POWERED);
     }
 }

@@ -282,8 +282,57 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .patternLine("WWW")
                 .patternLine("W W")
                 .patternLine("WWW")
+                .addCriterion("has_wool", hasItem(ItemTags.WOOL))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.ADVANCED_CIRCUIT.get(), 2)
+                .key('C', ModTags.Items.CIRCUITS_BASIC)
+                .key('O', registerItems.ORUNDUM.get())
+                .key('R', registerItems.RESISTOR_PRIMITIVE.get())
+                .key('T', registerItems.CAPACITOR_PRIMITIVE.get())
+                .key('K', registerItems.PLATE_POLYMER.get())
+                .patternLine("ROT")
+                .patternLine("CKC")
                 .addCriterion("has_orundum", hasItem(registerItems.ORUNDUM.get()))
                 .build(consumer);
+
+
+        ShapedRecipeBuilder.shapedRecipe(registerBlocks.DRYDOCKCONTROLLER.get(), 1)
+                .key('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .key('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .key('A', ModTags.Items.GEAR_STEEL)
+                .key('L', Items.REDSTONE_LAMP)
+                .key('M', registerItems.BASIC_MOTOR.get())
+                .key('O', registerItems.ORUNDUM.get())
+                .patternLine("COC")
+                .patternLine("LFL")
+                .patternLine("MAM")
+                .addCriterion("has_orundum", hasItem(registerItems.ORUNDUM.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.ORIGINIUM_PRIME.get(), 1)
+                .key('N', ModTags.Items.ORIGINITE)
+                .patternLine("NNN")
+                .patternLine("NNN")
+                .patternLine("NNN")
+                .addCriterion("has_originite", hasItem(ModTags.Items.ORIGINITE))
+                .build(consumer);
+
+        ShapelessRecipeBuilder.shapelessRecipe(registerItems.ORIGINITE.get(), 9)
+                .addIngredient(ModTags.Items.ORIGINIUM_PRIME).addCriterion("hasoriginium", hasItem(registerItems.ORIGINIUM_PRIME.get()));
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.WISDOM_CUBE.get(), 2)
+                .key('D', Tags.Items.GEMS_DIAMOND)
+                .key('Q', Tags.Items.GEMS_QUARTZ)
+                .key('C', ModTags.Items.CIRCUITS_BASIC)
+                .key('L', Tags.Items.GEMS_LAPIS)
+                .key('R', Tags.Items.DUSTS_REDSTONE)
+                .patternLine("QCQ")
+                .patternLine("LDR")
+                .patternLine("QCQ")
+                .addCriterion("has_diamond", hasItem(Tags.Items.GEMS_DIAMOND))
+                .build(consumer);
+
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {
