@@ -75,10 +75,12 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("circuit_primitive");
         buildModel("capacitor_primitive");
         buildModel("resistor_primitive");
-
+        buildModel("5_56_ammo");
+        buildModel("torpedo_ammo");
         buildModel("copper_wire");
         buildModel("copper_coil");
         buildModel("steel_cutter");
+        buildModel("circuit_advanced");
 
         buildModel("mold_plate");
         buildModel("mold_wire");

@@ -14,6 +14,7 @@ import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.enums.AmmoCategory;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.EntityType;
@@ -310,7 +311,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             this.world.addEntity(torpedo);
             this.addExp(1.0F);
             ItemStack FiringTorpedo = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.TORPEDO, this);
-            useTorpedoAmmo(FiringTorpedo);
+            ItemStackUtils.useAmmo(FiringTorpedo);
             setEquipmentDelay(FiringTorpedo);
             this.addMorale(-0.15);
         }

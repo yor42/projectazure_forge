@@ -184,6 +184,7 @@ public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
 
     private void BlockDropItem(ItemStack stack, float offsetY)
     {
+
         if(!stack.isEmpty())
         {
             ItemEntity entityitem = new ItemEntity(this.host.world, this.targetBlockPos.getX(), this.targetBlockPos.getY() + (double)offsetY, this.targetBlockPos.getZ(), stack);

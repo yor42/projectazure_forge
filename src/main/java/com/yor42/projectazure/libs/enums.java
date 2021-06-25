@@ -190,7 +190,8 @@ public class enums {
     public enum AmmoCalibur{
         AMMO_5_56,
         AMMO_45,
-        AMMO_9MM
+        AMMO_9MM,
+        TORPEDO
     }
 
     public enum Morale{

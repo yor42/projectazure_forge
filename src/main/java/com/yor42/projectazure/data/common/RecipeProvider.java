@@ -6,12 +6,15 @@ import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
@@ -363,6 +366,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_dye", hasItem(Tags.Items.DYES_GRAY))
                 .build(consumer);
 
+        CustomRecipeBuilder.customRecipe((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).build(consumer, "repair_item");
 
     }
 

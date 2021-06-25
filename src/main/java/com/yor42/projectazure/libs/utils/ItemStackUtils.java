@@ -9,6 +9,7 @@ import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
@@ -282,44 +283,44 @@ public class ItemStackUtils {
 
     public static boolean isOutOfAmmo(ItemStack equipment){
         CompoundNBT compoundNBT = equipment.getOrCreateTag();
-        if(equipment.getItem() instanceof ItemEquipmentTorpedo){
-            return compoundNBT.getInt("UsedAmmo")>= ((ItemEquipmentTorpedo) equipment.getItem()).getMaxAmmoCap();
+        if(equipment.getItem() instanceof ICraftingTableReloadable){
+            return compoundNBT.getInt("usedAmmo")>= ((ICraftingTableReloadable) equipment.getItem()).getMaxAmmo();
         }
         return true;
     }
 
-    public static void useTorpedoAmmo(ItemStack torpedo){
-        CompoundNBT compoundNBT = torpedo.getOrCreateTag();
-        int prevammo =  compoundNBT.getInt("UsedAmmo");
-        compoundNBT.putInt("UsedAmmo", prevammo+1);
+    public static void useAmmo(ItemStack stack){
+        CompoundNBT compoundNBT = stack.getOrCreateTag();
+        int prevammo =  compoundNBT.getInt("usedAmmo");
+        compoundNBT.putInt("usedAmmo", prevammo+1);
+    }
+
+    public static void emptyAmmo(ItemStack stack){
+        setAmmo(stack, 0);
+    }
+
+    public static void setAmmo(ItemStack stack, int count){
+        CompoundNBT compoundNBT = stack.getOrCreateTag();
+        if(stack.getItem() instanceof ICraftingTableReloadable){
+            compoundNBT.putInt("usedAmmo", ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo()-count);
+        }
+    }
+
+    public static ItemStack addAmmo(ItemStack stack, int count) {
+        int currentAmmo = getRemainingAmmo(stack);
+        if (stack.getItem() instanceof ICraftingTableReloadable) {
+            setAmmo(stack, Math.min(currentAmmo+count, ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo()));
+        }
+        return stack;
     }
 
     public static int getRemainingAmmo(ItemStack equipment){
         CompoundNBT compoundNBT = equipment.getOrCreateTag();
-        if(equipment.getItem() instanceof ItemEquipmentTorpedo){
-            return ((ItemEquipmentTorpedo) equipment.getItem()).getMaxAmmoCap() - compoundNBT.getInt("UsedAmmo");
+        if(equipment.getItem() instanceof ICraftingTableReloadable){
+            return ((ICraftingTableReloadable) equipment.getItem()).getMaxAmmo() - compoundNBT.getInt("usedAmmo");
         }
-        return 0;
+        return -1;
     }
-
-    public static short getAmmo(ItemStack stack){
-        CompoundNBT compound = stack.getOrCreateTag();
-        return compound.getShort("ammo");
-    }
-
-    public static void useAmmo(ItemStack stack, short amount){
-        short ammo = getAmmo(stack);
-        CompoundNBT compound = stack.getOrCreateTag();
-        compound.putShort("ammo", (short) Math.max(ammo-amount, 0));
-    }
-
-    public static void reloadAmmo(ItemStack gun, int amount) {
-        short ammo = getAmmo(gun);
-
-        CompoundNBT nbt = gun.getOrCreateTag();
-        nbt.putShort("ammo", (short) (ammo+amount));
-    }
-
 
 
     public static int getDelayofEquipment(ItemStack Equipment){

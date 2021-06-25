@@ -181,6 +181,12 @@ public class registerItems {
     public static final RegistryObject<Item> AMMO_GENERIC = registerManager.ITEMS.register("ammo_generic", () -> new ItemCannonshell(enums.AmmoCategory.GENERIC ,new Item.Properties()
             .group(PA_GROUP)));
 
+    public static final RegistryObject<Item> AMMO_5_56 = registerManager.ITEMS.register("5_56_ammo", () -> new ItemAmmo(enums.AmmoCalibur.AMMO_5_56, 6 ,new Item.Properties()
+            .group(PA_GROUP).maxStackSize(5)));
+
+    public static final RegistryObject<Item> AMMO_TORPEDO = registerManager.ITEMS.register("torpedo_ammo", () -> new ItemAmmo(enums.AmmoCalibur.TORPEDO, 1 ,new Item.Properties()
+            .group(PA_GROUP).maxStackSize(1)));
+
     //I'M READY TO GO TONIIIIGHT YEAH THERES PARTY ALRIGHTTTTTTT WE DON'T NEED REASON FOR JOY OH YEAHHHHH
     public static final RegistryObject<Item> DISC_FRIDAYNIGHT = registerManager.ITEMS.register("disc_fridaynight", () -> new MusicDiscItem(15, registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
             .group(PA_GROUP).maxStackSize(1)){

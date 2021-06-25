@@ -29,21 +29,26 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.emptyAmmo;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public abstract class ItemGunBase extends Item implements IAnimatable {
 
-    private boolean isSemiAuto, isTwoHanded;
-    private int minFireDelay;
-    private int reloadDelay;
+    private final boolean isSemiAuto;
+    private final boolean isTwoHanded;
+    private final int minFireDelay;
+    private final int reloadDelay;
 
-    private Item MagItem;
+    private final Item MagItem;
 
     private final SoundEvent fireSound;
-    private SoundEvent reloadSound;
-    private float damage, accuracy;
+    private final SoundEvent reloadSound;
+    private final float damage;
+    private final float accuracy;
 
-    private int magCap, roundsPerReload;
+    private final int magCap;
+    private final int roundsPerReload;
     protected final String controllerName = "gunController";
 
     public AnimationFactory factory = new AnimationFactory(this);
@@ -147,7 +152,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
                     Item MagCandidate = entity.inventory.getStackInSlot(i).getItem();
 
                     if (MagCandidate == ((ItemGunBase) gun.getItem()).getMagItem()) {
-                        if (getRemainingAmmoofMag(entity.inventory.getStackInSlot(i)) > 0) {
+                        if (getRemainingAmmo(entity.inventory.getStackInSlot(i)) > 0) {
                             AmmoStack = entity.inventory.getStackInSlot(i);
                         }
                     }
@@ -157,15 +162,15 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
                     int i;
                     if (this.roundsPerReload > 0) {
-                        i = Math.min(this.roundsPerReload, getRemainingAmmoofMag(AmmoStack));
+                        i = Math.min(this.roundsPerReload, getRemainingAmmo(AmmoStack));
                     } else {
-                        i = Math.min(this.magCap, getRemainingAmmoofMag(AmmoStack));
+                        i = Math.min(this.magCap, getRemainingAmmo(AmmoStack));
                     }
                     this.reloadAmmo(gun, i);
                     if(!entity.isCreative()){
                         AmmoStack.shrink(1);
                         ItemStack EmptyMag = new ItemStack(((ItemGunBase) gun.getItem()).getMagItem());
-                        setUsedAmmoofMag(EmptyMag, ((ItemMagazine)EmptyMag.getItem()).getMagCap());
+                        emptyAmmo(EmptyMag);
                         entity.inventory.addItemStackToInventory(EmptyMag);
                     }
                     return true;
@@ -174,19 +179,6 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
             }
         }
         return false;
-    }
-
-    public static int getRemainingAmmoofMag(ItemStack stack){
-        if(stack.getItem() instanceof ItemMagazine){
-            return ((ItemMagazine) stack.getItem()).getMagCap()-stack.getOrCreateTag().getInt("usedAmmo");
-        }
-        return 0;
-    }
-
-    public static void setUsedAmmoofMag(ItemStack stack, int value){
-        if(stack.getItem() instanceof ItemMagazine){
-            stack.getOrCreateTag().putInt("usedAmmo", value);
-        }
     }
 
     public boolean shootGunLivingEntity(ItemStack gun, World world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
