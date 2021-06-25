@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:originium_prime"
+    ]
+  },
+  "criteria": {
+    "has_originite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:gems/originite"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:originium_prime"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_originite",
+      "has_the_recipe"
+    ]
+  ]
+}
