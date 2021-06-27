@@ -67,7 +67,7 @@ public class AlloyFurnaceBlock extends Block {
             NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
             player.addStat(Stats.INTERACT_WITH_FURNACE);
         }
-    };
+    }
 
     public BlockState rotate(BlockState state, Rotation rot) {
         return state.with(FACING, rot.rotate(state.get(FACING)));
@@ -81,7 +81,7 @@ public class AlloyFurnaceBlock extends Block {
     public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (stateIn.get(ACTIVE)) {
             double d0 = (double)pos.getX() + 0.5D;
-            double d1 = (double)pos.getY();
+            double d1 = pos.getY();
             double d2 = (double)pos.getZ() + 0.5D;
             if (rand.nextDouble() < 0.1D) {
                 worldIn.playSound(d0, d1, d2, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
@@ -118,6 +118,7 @@ public class AlloyFurnaceBlock extends Block {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        super.fillStateContainer(builder);
         builder.add(FACING,ACTIVE);
     }
 

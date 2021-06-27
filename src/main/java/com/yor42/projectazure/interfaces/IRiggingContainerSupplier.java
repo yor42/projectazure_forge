@@ -17,8 +17,4 @@ public interface IRiggingContainerSupplier {
     ItemStack getRigging();
 
     CompoundNBT getNBT(ItemStack stack);
-
-    static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack) {
-    }
-
 }
