@@ -47,7 +47,7 @@ public class AlloyFurnaceBlock extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world){
         return new TileEntityAlloyFurnace();
-    };
+    }
 
     @SuppressWarnings("deprecation")
     @Override
