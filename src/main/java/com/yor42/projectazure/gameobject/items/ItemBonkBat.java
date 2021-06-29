@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.yor42.projectazure.gameobject.DamageSources;
+import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;

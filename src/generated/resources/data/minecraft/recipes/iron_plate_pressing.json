@@ -1,7 +1,7 @@
 {
   "type": "projectazure:pressing",
   "ingredient": {
-    "tag": "forge:logs"
+    "tag": "minecraft:logs"
   },
   "mold": {
     "item": "projectazure:mold_extraction"

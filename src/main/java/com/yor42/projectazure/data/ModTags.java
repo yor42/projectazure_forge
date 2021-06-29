@@ -32,9 +32,6 @@ public class ModTags {
     }
 
     public static final class Items {
-
-        public static final ITag.INamedTag<Item> LOG = forge("logs");
-
         public static final ITag.INamedTag<Item> INGOT_ALUMINIUM = forge("ingots/aluminium");
         public static final ITag.INamedTag<Item> INGOT_COPPER = forge("ingots/copper");
         public static final ITag.INamedTag<Item> INGOT_TIN = forge("ingots/tin");

@@ -130,8 +130,9 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
                 tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.off"));
             }
 
-            if(this.host.getHomePos() != BlockPos.ZERO) {
-                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + this.host.getHomePos().getX() + " / " + this.host.getHomePos().getY() + " / " + this.host.getHomePos().getZ()));
+            if(this.host.getHOMEPOS().isPresent()) {
+                BlockPos Home = this.host.getHOMEPOS().get();
+                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
             }
             else{
                 tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome"));

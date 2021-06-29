@@ -9,11 +9,13 @@ import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUser
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 
 import java.util.ArrayList;
@@ -241,15 +243,23 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         ImageButton button = new ImageButton(this.x+10,this.y+63,9,9,x,25,9,TEXTURE, action->switchBehavior());
 
         if(this.isPointInRegion(10,63,9,9, mousex, mousey)){
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": "+this.host.getHomePos().getX()+" / "+this.host.getHomePos().getY()+" / "+this.host.getHomePos().getZ()));
-            this.renderWrappedToolTip(stack, tooltips, mousex-this.x, mousey-this.y, this.font);
+            if(this.host.getHOMEPOS().isPresent()) {
+                List<IFormattableTextComponent> tooltips = new ArrayList<>();
+                BlockPos Home = this.host.getHOMEPOS().get();
+                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
+                this.renderWrappedToolTip(stack, tooltips, mousex-this.x, mousey-this.y, this.font);
+            }
         }
         this.addButton(button);
     }
 
     private void switchBehavior() {
-        this.host.SwitchFreeRoamingStatus();
+        if (Screen.hasShiftDown()) {
+            this.host.clearHomePos();
+        }
+        else {
+            this.host.SwitchFreeRoamingStatus();
+        }
     }
 
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mousex, int mousey) {

@@ -1,10 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
-import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
-import com.yor42.projectazure.gameobject.entity.ai.*;
+import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
@@ -12,6 +11,7 @@ import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.intermod.ModCompatibilities;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -19,7 +19,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -37,7 +36,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
@@ -48,6 +46,9 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.village.PointOfInterestType;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
@@ -71,6 +72,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
@@ -79,7 +81,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
 
         private final EquipmentSlotType[] EQUIPMENTSLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-
 
         @Override
         public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
@@ -287,8 +288,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<BlockPos> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
-    protected static final DataParameter<BlockPos> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
-    protected static final DataParameter<BlockPos> RecruitStationPos = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
+    protected static final DataParameter<Optional<BlockPos>> RecruitStationPos = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
+    protected static final DataParameter<Optional<BlockPos>> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISUSINGGUN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -358,16 +359,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putFloat("affection", this.dataManager.get(AFFECTION));
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
-        compound.putDouble("homeX", this.dataManager.get(HOMEPOS).getX());
-        compound.putDouble("homeY", this.dataManager.get(HOMEPOS).getY());
-        compound.putDouble("homeZ", this.dataManager.get(HOMEPOS).getZ());
         compound.putFloat("home_distance", this.dataManager.get(VALID_HOME_DISTANCE));
         compound.putDouble("stayX", this.dataManager.get(STAYPOINT).getX());
         compound.putDouble("stayY", this.dataManager.get(STAYPOINT).getY());
         compound.putDouble("stayZ", this.dataManager.get(STAYPOINT).getZ());
-        compound.putDouble("RecruitStationPosX", this.dataManager.get(RecruitStationPos).getX());
-        compound.putDouble("RecruitStationPosY", this.dataManager.get(RecruitStationPos).getY());
-        compound.putDouble("RecruitStationPosZ", this.dataManager.get(RecruitStationPos).getZ());
+        if(this.dataManager.get(RecruitStationPos).isPresent()) {
+            compound.putDouble("RecruitStationPosX", this.dataManager.get(RecruitStationPos).get().getX());
+            compound.putDouble("RecruitStationPosY", this.dataManager.get(RecruitStationPos).get().getY());
+            compound.putDouble("RecruitStationPosZ", this.dataManager.get(RecruitStationPos).get().getZ());
+        }
+        if(this.dataManager.get(HOMEPOS).isPresent()) {
+            compound.putDouble("HomePosX", this.dataManager.get(HOMEPOS).get().getX());
+            compound.putDouble("HomePosY", this.dataManager.get(HOMEPOS).get().getY());
+            compound.putDouble("HomePosZ", this.dataManager.get(HOMEPOS).get().getZ());
+        }
         compound.putBoolean("isforcewokenup", this.dataManager.get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.dataManager.get(EXP));
         compound.putInt("level", this.getDataManager().get(LEVEL));
@@ -381,17 +386,22 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.put("inventory", this.getInventory().serializeNBT());
     }
 
-    public void setHomepos(BlockPos pos, float validDistance){
-        this.dataManager.set(HOMEPOS, pos);
+    public void setHomeposAndDistance(BlockPos pos, float validDistance){
+        this.setHOMEPOS(pos);
         this.dataManager.set(VALID_HOME_DISTANCE, validDistance);
     }
 
-    public BlockPos getRecruitStationPos() {
+    public void clearHomePos(){
+        this.getDataManager().set(HOMEPOS, Optional.empty());
+        this.dataManager.set(VALID_HOME_DISTANCE, -1.0f);
+    }
+
+    public Optional<BlockPos> getRecruitStationPos() {
         return this.getDataManager().get(RecruitStationPos);
     }
 
-    public BlockPos getHomePos() {
-        return this.dataManager.get(HOMEPOS);
+    public void setRecruitStationPos(BlockPos pos){
+        this.getDataManager().set(RecruitStationPos, Optional.of(pos));
     }
 
     public float getHomeDistance(){
@@ -399,12 +409,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isInHomeRange(BlockPos Startpos){
-        if(this.getHomeDistance() == -1.0f || this.getHomePos() == BlockPos.ZERO){
+        if(this.getHomeDistance() == -1.0f || !this.getHOMEPOS().isPresent()){
             return false;
         }
         else{
-            return Startpos.withinDistance(this.getHomePos(), this.getHomeDistance());
+            return Startpos.withinDistance(this.getHOMEPOS().get(), this.getHomeDistance());
         }
+    }
+
+    public Optional<BlockPos> getHOMEPOS(){
+        return this.getDataManager().get(HOMEPOS);
+    }
+
+    public void setHOMEPOS(BlockPos pos){
+        this.getDataManager().set(HOMEPOS, Optional.of(pos));
     }
 
     @Override
@@ -421,10 +439,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(AFFECTION, compound.getFloat("affection"));
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
-        this.dataManager.set(HOMEPOS, new BlockPos(compound.getDouble("homeX"), compound.getDouble("homeY"), compound.getDouble("homeZ")));
         this.dataManager.set(STAYPOINT, new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ")));
         this.dataManager.set(VALID_HOME_DISTANCE, compound.getFloat("home_distance"));
-        this.dataManager.set(RecruitStationPos, new BlockPos(compound.getDouble("RecruitStationPosX"), compound.getDouble("RecruitStationPosY"), compound.getDouble("RecruitStationPosZ")));
+        boolean hasRecruitBeaconPos = compound.contains("RecruitStationPosX") && compound.contains("RecruitStationPosY") && compound.contains("RecruitStationPosZ");
+        if(hasRecruitBeaconPos) {
+            this.dataManager.set(RecruitStationPos, Optional.of(new BlockPos(compound.getDouble("RecruitStationPosX"), compound.getDouble("RecruitStationPosY"), compound.getDouble("RecruitStationPosZ"))));
+        }
+
+        boolean hasHomePos = compound.contains("HomePosX") && compound.contains("HomePosY") && compound.contains("HomePosZ");
+        if(hasHomePos) {
+            this.dataManager.set(HOMEPOS, Optional.of(new BlockPos(compound.getDouble("HomePosX"), compound.getDouble("HomePosY"), compound.getDouble("HomePosZ"))));
+        }
         this.dataManager.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
         this.getDataManager().set(LEVEL, compound.getInt("level"));
         this.dataManager.set(EXP, compound.getFloat("exp"));
@@ -586,10 +611,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(OATHED, false);
         this.dataManager.register(USINGBOW, false);
         this.dataManager.register(STAYPOINT, BlockPos.ZERO);
-        this.dataManager.register(RecruitStationPos, BlockPos.ZERO);
+        this.dataManager.register(RecruitStationPos, Optional.empty());
+        this.dataManager.register(HOMEPOS, Optional.empty());
         this.dataManager.register(ISFORCEWOKENUP, false);
         this.dataManager.register(ISUSINGGUN, false);
-        this.dataManager.register(HOMEPOS, BlockPos.ZERO);
         this.dataManager.register(VALID_HOME_DISTANCE, -1.0f);
         this.dataManager.register(HEAL_TIMER, 0);
         this.dataManager.register(RELOAD_TIMER_MAINHAND, 0);
@@ -621,12 +646,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void setMovingtoRecruitStation(BlockPos pos){
         this.isMovingtoRecruitStation=true;
-        this.dataManager.set(RecruitStationPos, pos);
+        this.setRecruitStationPos(pos);
     }
 
     public void stopMovingtoRecruitStation(){
         this.isMovingtoRecruitStation = false;
-        this.dataManager.set(RecruitStationPos, BlockPos.ZERO);
+        this.dataManager.set(RecruitStationPos, Optional.empty());
     }
 
     public boolean isBeingPatted() {
@@ -849,11 +874,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         else if(!this.isFreeRoaming()&& this.ticksExisted%20 == 0){
             this.addMorale(-0.01);
         }
+        if(!this.world.isRemote() && this.getEntityWorld().isDaytime()) {
 
-        if(!this.world.isRemote() && this.getEntityWorld().isDaytime() && this.isSleeping())
-        {
-            this.wakeUp();
+            if (this.isSleeping()) {
+                this.wakeUp();
+            }
         }
+
+
 
         if(!this.getEntityWorld().isRemote() && this.getEntityWorld().isNightTime() && this.isEntitySleeping() && this.isInHomeRangefromCurrenPos()){
             this.func_233687_w_(false);
@@ -861,7 +889,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     }
 
-
+    @Override
+    public float getBlockPathWeight(BlockPos pos, IWorldReader worldIn) {
+        if(!worldIn.isRemote() && ModCompatibilities.isSunlightDangerous((ServerWorld) worldIn)){
+            return 0.0F-worldIn.getLightFor(LightType.SKY, pos);
+        }
+        else {
+            return super.getBlockPathWeight(pos, worldIn);
+        }
+    }
 
     @Override
     protected void registerGoals() {
@@ -900,7 +936,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public int Reload_Anim_Delay(){
         return 0;
     }
-
     @Override
     public void startSleeping(BlockPos pos) {
         super.startSleeping(pos);
@@ -1054,10 +1089,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void tick() {
         super.tick();
         this.setPathPriority(PathNodeType.WATER, this.getOwner() != null && this.getOwner().isInWater()? 0.0F:-1.0F);
-        if(this.getHomePosition()!=BlockPos.ZERO&&this.ticksExisted%20==0){
-            BlockState blockstate = this.world.getBlockState(this.getHomePos());
-            if(!blockstate.isBed(this.getEntityWorld(),this.getHomePos(), this)) {
-                this.setHomepos(BlockPos.ZERO, -1);
+        if(this.getHOMEPOS().isPresent()&&this.ticksExisted%30==0){
+            BlockState blockstate = this.world.getBlockState(this.getHOMEPOS().get());
+            if(!blockstate.isBed(this.getEntityWorld(),this.getHOMEPOS().get(), this)) {
+                this.clearHomePos();
             };
         }
     }

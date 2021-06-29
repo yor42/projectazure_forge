@@ -183,16 +183,16 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("hascopper", hasItem(ModTags.Items.INGOT_COPPER))
                 .build(consumer);
 
-        PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.fromTag(ModTags.Items.LOG), Ingredient.fromItems(registerItems.MOLD_EXTRACTION.get()), 1, 200)
+        PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.fromTag(ItemTags.LOGS), Ingredient.fromItems(registerItems.MOLD_EXTRACTION.get()), 1, 200)
                 .addCriterion("hasmold", hasItem(registerItems.MOLD_EXTRACTION.get()))
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
 
-        ShapedRecipeBuilder.shapedRecipe(registerItems.TREE_SAP.get(),4)
-                .key('L', ModTags.Items.LOG)
+        ShapedRecipeBuilder.shapedRecipe(registerItems.TREE_SAP.get(),2)
+                .key('L', ItemTags.LOGS)
                 .patternLine("LLL")
                 .patternLine("LLL")
                 .patternLine("LLL")
-                .addCriterion("has_log", hasItem(ModTags.Items.LOG))
+                .addCriterion("has_log", hasItem(ItemTags.LOGS))
                 .build(consumer);
 
 
@@ -335,6 +335,31 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .patternLine("LDR")
                 .patternLine("QCQ")
                 .addCriterion("has_diamond", hasItem(Tags.Items.GEMS_DIAMOND))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.AMMO_5_56.get(), 2)
+                .key('B', ModTags.Items.INGOT_BRASS)
+                .key('L', ModTags.Items.INGOT_LEAD)
+                .key('G', Tags.Items.GUNPOWDER)
+                .patternLine(" L ")
+                .patternLine("BGB")
+                .patternLine("BGB")
+                .addCriterion("has_breass", hasItem(ModTags.Items.INGOT_BRASS))
+                .addCriterion("has_lead", hasItem(ModTags.Items.INGOT_LEAD))
+                .addCriterion("has_gunpowder", hasItem(Tags.Items.GUNPOWDER))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.AMMO_TORPEDO.get(), 1)
+                .key('A', ModTags.Items.INGOT_ALUMINIUM)
+                .key('T', Blocks.TNT.asItem())
+                .key('C', ModTags.Items.CIRCUITS_BASIC)
+                .key('S', ModTags.Items.PLATE_STEEL)
+                .patternLine(" AT")
+                .patternLine("ACA")
+                .patternLine("SA ")
+                .addCriterion("has_aluminium", hasItem(ModTags.Items.INGOT_ALUMINIUM))
+                .addCriterion("has_circuit", hasItem(ModTags.Items.CIRCUITS_BASIC))
+                .addCriterion("has_tnt", hasItem(Blocks.TNT.asItem()))
                 .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.DISC_FRIDAYNIGHT.get(), 1)

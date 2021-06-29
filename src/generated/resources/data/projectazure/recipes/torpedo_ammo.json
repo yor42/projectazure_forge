@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " AT",
+    "ACA",
+    "SA "
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:ingots/aluminium"
+    },
+    "T": {
+      "item": "minecraft:tnt"
+    },
+    "C": {
+      "tag": "forge:circuits/basic"
+    },
+    "S": {
+      "tag": "forge:plates/steel"
+    }
+  },
+  "result": {
+    "item": "projectazure:torpedo_ammo"
+  }
+}

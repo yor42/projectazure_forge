@@ -1,15 +1,20 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
-import com.yor42.projectazure.gameobject.entity.ai.PlaneReturntoOwnerGoal;
-import com.yor42.projectazure.gameobject.entity.ai.PlaneWanderAroundCarrierGoal;
-import com.yor42.projectazure.gameobject.entity.ai.planeBombRunGoal;
+import com.yor42.projectazure.gameobject.entity.ai.goals.PlaneReturntoOwnerGoal;
+import com.yor42.projectazure.gameobject.entity.ai.goals.PlaneWanderAroundCarrierGoal;
+import com.yor42.projectazure.gameobject.entity.ai.goals.planeBombRunGoal;
+import com.yor42.projectazure.gameobject.entity.ai.targetAI.PlaneInterceptGoal;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
@@ -29,12 +34,18 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     private boolean hasPayloads;
     private boolean isOnBombRun;
     private int maxOperativetime;
+    private boolean isReturningToOwner;
     private boolean isLifeLimited;
+    private final boolean hasRadar;
 
     protected AbstractEntityPlanes(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
         this.moveController = new FlyingMovementController(this, 20, true);
         this.isLifeLimited = false;
+        this.hasRadar = false;
+        this.isReturningToOwner = false;
+        this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
+        this.setPathPriority(PathNodeType.WATER, -1.0F);
     }
 
     protected final AnimationFactory factory = new AnimationFactory(this);
@@ -42,6 +53,18 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+    }
+
+    public boolean hasRadar(){
+        return this.hasRadar;
+    }
+
+    public void setReturningtoOwner(boolean value){
+        this.isReturningToOwner = value;
+    }
+
+    public boolean isReturningToOwner(){
+        return this.isReturningToOwner;
     }
 
     protected abstract <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event);
@@ -59,6 +82,10 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         return this.isOnBombRun;
     }
 
+    public boolean canAttack(){
+        return this.hasPayload() && this.getAttackTarget() != null && this.getMaxOperativeTick() - this.ticksExisted >200;
+    }
+
     @Override
     public void livingTick() {
         super.livingTick();
@@ -70,8 +97,11 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         }
         if(this.isLimitedLifespan()) {
             if (this.ticksExisted >= this.getMaxOperativeTick()) {
-                this.setDead();
+                this.crashThePlane();
             }
+        }
+        if(!this.getOwner().isAlive()){
+            this.crashThePlane();
         }
     }
 
@@ -214,6 +244,8 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         this.goalSelector.addGoal(0, new planeBombRunGoal(this));
         this.goalSelector.addGoal(1, new PlaneReturntoOwnerGoal(this));
         this.goalSelector.addGoal(2, new PlaneWanderAroundCarrierGoal(this));
+        this.targetSelector.addGoal(1, new PlaneInterceptGoal(this));
+        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
     }
 }
 

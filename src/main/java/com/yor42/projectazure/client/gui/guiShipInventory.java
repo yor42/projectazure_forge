@@ -14,6 +14,7 @@ import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 
 import java.util.ArrayList;
@@ -155,9 +156,12 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         ImageButton button = new ImageButton(this.x+159,this.y+52,9,9,x,25,9,TEXTURE,action->switchBehavior());
 
         if(this.isPointInRegion(159,52,9,9, MouseX, MouseY)){
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": "+this.host.getHomePos().getX()+" / "+this.host.getHomePos().getY()+" / "+this.host.getHomePos().getZ()));
-            this.renderWrappedToolTip(stack, tooltips, MouseX-this.x, MouseY-this.y, this.font);
+            if(this.host.getHOMEPOS().isPresent()) {
+                List<IFormattableTextComponent> tooltips = new ArrayList<>();
+                BlockPos Home = this.host.getHOMEPOS().get();
+                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
+                this.renderWrappedToolTip(stack, tooltips, MouseX-this.x, MouseY-this.y, this.font);
+            }
         }
 
         this.addButton(button);

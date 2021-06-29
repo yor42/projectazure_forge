@@ -6,21 +6,29 @@ import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.intermod.ModCompatibilities;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -29,6 +37,8 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nullable;
+
+import java.util.Random;
 
 import static com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock.POWERED;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRandomBlockposInRadius2D;
@@ -126,23 +136,58 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
 
         boolean worldReady = this.world != null && !this.world.isRemote();
         boolean EntityTypeNotNull = this.RollResult != null;
+        boolean spawn_sitting = true;
 
         if(!EntityTypeNotNull){
             Main.LOGGER.error("Spawn FAILED: EntityType is NULL");
         }
         else if(worldReady) {
-            BlockPos pos = getRandomBlockposInRadius2D(this.getWorld(), this.getPos(), 20, 10);
-            Main.LOGGER.debug("Entity is Spawned at:" + pos.toString());
+            BlockPos blockpos;
+            //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
+            if(ModCompatibilities.isSunlightDangerous((ServerWorld) this.world)) {
+                int tries = 0;
+                BlockPos.Mutable CandidatePos;
+                do {
+                    int x = this.getPos().getX() + (new Random().nextInt(11) - 5);
+                    int z = this.getPos().getZ() + (new Random().nextInt(11) - 5);
+                    int y = this.getPos().getY()+10;
+                    CandidatePos = new BlockPos.Mutable(x, y, z);
+                    while(CandidatePos.getY() > 0 && !this.world.getBlockState(CandidatePos).getMaterial().blocksMovement() && !this.world.canBlockSeeSky(CandidatePos.move(0,1,0))) {
+                        CandidatePos.move(Direction.DOWN);
+                    }
+                    tries++;
+                }
+                while (!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, this.world, CandidatePos, EntityType.WANDERING_TRADER) && world.getChunkProvider().isChunkLoaded(new ChunkPos(CandidatePos)) && !this.world.canBlockSeeSky(CandidatePos.move(0,1,0)) && tries < PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
+                blockpos = CandidatePos;
+            }
+            else {
+                blockpos = getRandomBlockposInRadius2D(this.getWorld(), this.getPos(), 20, 10);
+                spawn_sitting = false;
+            }
+            this.spawnEntity(blockpos, owner, spawn_sitting);
+        }
+    }
+
+    public void spawnEntity(BlockPos pos, ServerPlayerEntity owner, boolean spawn_sitting){
+        if(this.world != null) {
             AbstractEntityCompanion entityCompanion = this.RollResult.create(this.world);
             if (entityCompanion != null) {
+                Random rand = new Random();
+                for(int i = 0; i < 32; ++i) {
+                    this.world.addParticle(ParticleTypes.PORTAL, pos.getX(), pos.getY() + rand.nextDouble() * 2.0D, pos.getZ(), rand.nextGaussian(), 0.0D, rand.nextGaussian());
+                }
                 entityCompanion.setPosition(pos.getX(), pos.getY(), pos.getZ());
                 entityCompanion.getNavigator().tryMoveToXYZ((double) this.getPos().getX(), (double) this.getPos().getY(), (double) this.getPos().getZ(), 1.0F);
                 entityCompanion.setMovingtoRecruitStation(this.getPos());
                 entityCompanion.setTamedBy(owner);
+                if(spawn_sitting) {
+                    entityCompanion.func_233687_w_(true);
+                }
                 entityCompanion.setMorale(150);
                 this.world.addEntity(entityCompanion);
-            }
 
+                Main.LOGGER.debug("Entity is Spawned at:" + pos.toString());
+            }
         }
     }
 

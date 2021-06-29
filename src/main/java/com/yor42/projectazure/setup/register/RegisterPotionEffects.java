@@ -1,14 +1,10 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.DamageSources;
-import net.minecraft.entity.Entity;
+import com.yor42.projectazure.gameobject.misc.DamageSources;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
-import net.minecraft.util.DamageSource;
 import net.minecraftforge.fml.RegistryObject;
-
-import javax.annotation.Nullable;
 
 public class RegisterPotionEffects {
 

@@ -10,6 +10,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.controller.FlyingMovementController;
+import net.minecraft.pathfinding.FlyingPathNavigator;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -17,13 +20,15 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-import static com.yor42.projectazure.gameobject.DamageSources.PLANE_GUN;
+import static com.yor42.projectazure.gameobject.misc.DamageSources.PLANE_GUN;
 import static com.yor42.projectazure.setup.register.registerItems.WildcatHP;
 
 public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatable{
 
     public EntityF4fWildcat(EntityType<? extends AbstractEntityPlanes> type, World worldIn) {
         super(type, worldIn);
+        this.navigator = new FlyingPathNavigator(this, worldIn);
+        this.moveController = new FlyingMovementController(this, 20, true);
     }
 
     @Override

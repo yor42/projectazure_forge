@@ -11,6 +11,8 @@ import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectile
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.intermod.ModCompatibilities;
+import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.WorldgenInit;
@@ -21,6 +23,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -28,12 +32,17 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
+
+import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import static com.yor42.projectazure.libs.defined.MODID;
 
@@ -81,6 +90,10 @@ public class Main
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        // Register the enqueueIMC method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        // Register the processIMC method for modloading
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(SoundEvent.class, registerSounds::register);
 
         registerManager.register();
@@ -96,6 +109,19 @@ public class Main
     {
         ProjectAzurePlayerCapability.registerCapability();
         registerEntity.RegisterAttributes();
+    }
+
+    private void enqueueIMC(final InterModEnqueueEvent event)
+    {
+
+    }
+
+    private void processIMC(final InterModProcessEvent event)
+    {
+
+        Stream<InterModComms.IMCMessage> messageStream = InterModComms.getMessages(defined.MODID);
+        messageStream.forEach((msg)->{
+        });
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -147,7 +173,6 @@ Domi, Rongmario, Nali_, Alex the 666, Tiviacz1337, Mojang studio, Gecko#5075, Pi
 and YOU <3
 
 This mod contains codes from these dev/mods:
-Immersive engineering by BluSunrize on multiblock
 Botania by Vazkii on Shift-Tooltip
 Techgun by pWn3d1337 on gun related stuff
 Code by Fakedomi for Container Server<>Client sync

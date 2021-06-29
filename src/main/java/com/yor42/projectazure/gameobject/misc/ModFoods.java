@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject;
+package com.yor42.projectazure.gameobject.misc;
 
 import com.yor42.projectazure.setup.register.RegisterPotionEffects;
 import net.minecraft.item.Food;

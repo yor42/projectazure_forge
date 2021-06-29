@@ -3,7 +3,7 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.*;
-import com.yor42.projectazure.gameobject.ModFoods;
+import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127Mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533Mm;

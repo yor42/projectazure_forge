@@ -23,9 +23,6 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void registerTags() {
-
-        copy(ModTags.Blocks.LOG, ModTags.Items.LOG);
-
         copy(ModTags.Blocks.ORES_COPPER, ModTags.Items.ORES_COPPER);
         copy(ModTags.Blocks.ORES_TIN, ModTags.Items.ORES_TIN);
         copy(ModTags.Blocks.ORES_LEAD, ModTags.Items.ORES_LEAD);

@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity.ai;
+package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.ai.goal.Goal;
@@ -20,11 +20,9 @@ public class CompanionFindBedGoal extends Goal {
     @Override
     public boolean shouldExecute() {
 
-        boolean notalreadyhasbed = (this.entityCompanion.getHomePos()==BlockPos.ZERO);
+        boolean alreadyhasbed = this.entityCompanion.getHOMEPOS().isPresent();
 
-        boolean flag = notalreadyhasbed && this.entityCompanion.ticksExisted % 10 == 0;
-
-        return flag;
+        return !alreadyhasbed && this.entityCompanion.ticksExisted % 10 == 0;
     }
 
     @Override
@@ -43,6 +41,6 @@ public class CompanionFindBedGoal extends Goal {
     }
 
     private void setHomePosition(AbstractEntityCompanion entityCompanion, BlockPos pos) {
-        entityCompanion.setHomepos(pos,64);
+        entityCompanion.setHomeposAndDistance(pos,64);
     }
 }

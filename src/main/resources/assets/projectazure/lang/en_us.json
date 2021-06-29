@@ -147,5 +147,10 @@
   "effect.projectazure.acute_oripathy": "Acute Oripathy",
 
   "death.attack.bonk": "%1$s was sent to horny jail",
-  "death.attack.ate_originium_prime": "%1$s Literally ate pure originium. ...Are you serious?"
+
+  "death.attack.ate_originium_prime_0": "%1$s Literally ate pure originium. ...oh my god",
+  "death.attack.ate_originium_prime_1": "%1$s discovered the delicious taste of originium",
+  "death.attack.ate_originium_prime_2": "%1$s tried to get arts abilty. little did he know was this mod doesn't have that.",
+  "death.attack.ate_originium_prime_3": "%1$s tasted the s p i c y  r o c c",
+  "death.attack.ate_originium_prime_4": "%1$s died from acute originium poisoning"
 }

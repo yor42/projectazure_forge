@@ -14,7 +14,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import static com.yor42.projectazure.gameobject.DamageSources.causeGunDamage;
+import static com.yor42.projectazure.gameobject.misc.DamageSources.causeGunDamage;
 
 public class EntityProjectileBullet extends ThrowableEntity {
 

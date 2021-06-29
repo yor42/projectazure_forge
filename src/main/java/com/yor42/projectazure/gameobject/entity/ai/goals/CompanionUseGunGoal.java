@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity.ai;
+package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
@@ -10,7 +10,7 @@ import net.minecraft.util.Hand;
 
 public class CompanionUseGunGoal extends Goal {
 
-    private AbstractEntityCompanion companion;
+    private final AbstractEntityCompanion companion;
     private final double moveSpeedAmp;
     private final float maxAttackDistance;
     private int attackTime = -1;
