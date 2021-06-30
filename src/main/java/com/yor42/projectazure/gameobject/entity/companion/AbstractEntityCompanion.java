@@ -46,7 +46,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -74,6 +73,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.useAmmo;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
@@ -287,7 +287,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<BlockPos> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BLOCK_POS);
+    protected static final DataParameter<Optional<BlockPos>> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Optional<BlockPos>> RecruitStationPos = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Optional<BlockPos>> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
@@ -325,12 +325,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getDataManager().set(LEVEL, level);
     }
 
-    public boolean addLevel(int deltaLevel){
+    public void addLevel(int deltaLevel){
         if(this.getLevel()+deltaLevel > this.getMaxLevel()){
-            return false;
+            return;
         }
-        this.getDataManager().set(LEVEL, this.getLevel() + deltaLevel);
-        return true;
+        this.setLevel(this.getLevel() + deltaLevel);
     }
 
     public boolean isPVPenabled(){
@@ -360,9 +359,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
         compound.putFloat("home_distance", this.dataManager.get(VALID_HOME_DISTANCE));
-        compound.putDouble("stayX", this.dataManager.get(STAYPOINT).getX());
-        compound.putDouble("stayY", this.dataManager.get(STAYPOINT).getY());
-        compound.putDouble("stayZ", this.dataManager.get(STAYPOINT).getZ());
+        if(this.dataManager.get(STAYPOINT).isPresent()) {
+            compound.putDouble("stayX", this.dataManager.get(STAYPOINT).get().getX());
+            compound.putDouble("stayY", this.dataManager.get(STAYPOINT).get().getY());
+            compound.putDouble("stayZ", this.dataManager.get(STAYPOINT).get().getZ());
+        }
         if(this.dataManager.get(RecruitStationPos).isPresent()) {
             compound.putDouble("RecruitStationPosX", this.dataManager.get(RecruitStationPos).get().getX());
             compound.putDouble("RecruitStationPosY", this.dataManager.get(RecruitStationPos).get().getY());
@@ -426,7 +427,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    protected void collideWithEntity(Entity entityIn) {
+    protected void collideWithEntity(@Nonnull Entity entityIn) {
         super.collideWithEntity(entityIn);
     }
 
@@ -434,12 +435,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.isInHomeRange(this.getPosition());
     }
 
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
         this.dataManager.set(AFFECTION, compound.getFloat("affection"));
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
-        this.dataManager.set(STAYPOINT, new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ")));
+
+        boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
+        if(hasStayPos) {
+            this.dataManager.set(RecruitStationPos, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
+        }
         this.dataManager.set(VALID_HOME_DISTANCE, compound.getFloat("home_distance"));
         boolean hasRecruitBeaconPos = compound.contains("RecruitStationPosX") && compound.contains("RecruitStationPosY") && compound.contains("RecruitStationPosZ");
         if(hasRecruitBeaconPos) {
@@ -465,7 +470,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public ItemStackHandler getInventory(){
         return this.Inventory;
-    };
+    }
 
     public int getFirstEmptyStack() {
         for(int i=0; i<this.getInventory().getSlots();i++){
@@ -486,17 +491,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void AttackUsingGun(LivingEntity target, ItemStack gun, Hand HandIn){
         if(this instanceof EntityGunUserBase && gun.getItem() instanceof ItemGunBase){
+            @SuppressWarnings("rawtypes")
             AnimationController gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
             gunAnimation.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
             this.playSound(((ItemGunBase) gun.getItem()).getFireSound(), 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
             ((ItemGunBase) gun.getItem()).shootGunLivingEntity(gun, this.getEntityWorld(), this, false, HandIn, target);
-            ((ItemGunBase) gun.getItem()).useAmmo(gun, (short) 1);
+            useAmmo(gun);
         }
     }
 
     public int storeItemStack(ItemStack itemStackIn)
     {
-        for(int i = 0; i < 27; ++i)
+        for(int i = 0; i < this.getInventory().getSlots(); ++i)
         {
             if(this.canMergeStacks(this.getInventory().getStackInSlot(i).getStack(), itemStackIn, i))
             {
@@ -531,7 +537,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
      */
     @Nullable
     @Override
-    public AgeableEntity func_241840_a(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
+    public AgeableEntity func_241840_a(@Nonnull ServerWorld p_241840_1_, @Nonnull AgeableEntity p_241840_2_) {
         return null;
     }
 
@@ -539,7 +545,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     No. just No.
      */
     @Override
-    public boolean canMateWith(AnimalEntity otherAnimal) {
+    public boolean canMateWith(@Nonnull AnimalEntity otherAnimal) {
         return false;
     }
 
@@ -610,7 +616,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(PATCOOLDOWN, 0);
         this.dataManager.register(OATHED, false);
         this.dataManager.register(USINGBOW, false);
-        this.dataManager.register(STAYPOINT, BlockPos.ZERO);
+        this.dataManager.register(STAYPOINT, Optional.empty());
         this.dataManager.register(RecruitStationPos, Optional.empty());
         this.dataManager.register(HOMEPOS, Optional.empty());
         this.dataManager.register(ISFORCEWOKENUP, false);
@@ -650,6 +656,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void stopMovingtoRecruitStation(){
+        this.getNavigator().clearPath();
         this.isMovingtoRecruitStation = false;
         this.dataManager.set(RecruitStationPos, Optional.empty());
     }
@@ -671,7 +678,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void addLimitBreak(int delta){
-        this.dataManager.set(LIMITBREAKLEVEL, this.getLimitBreakLv() + delta);
+        setLimitBreakLv(this.getLimitBreakLv() + delta);
     }
 
     public void doLimitBreak(){
@@ -831,16 +838,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if (this.forcewakeupExpireTimer>0){
             this.forcewakeupExpireTimer--;
         }
-
-        if(this.getDataManager().get(RELOAD_TIMER_MAINHAND)>0){
-            this.getDataManager().set(RELOAD_TIMER_MAINHAND, this.getDataManager().get(RELOAD_TIMER_MAINHAND)-1);
+        int mainhandDelay = this.getDataManager().get(RELOAD_TIMER_MAINHAND);
+        if(mainhandDelay>0){
+            this.getDataManager().set(RELOAD_TIMER_MAINHAND, mainhandDelay - 1);
             if(this.getDataManager().get(RELOAD_TIMER_MAINHAND) == 0){
-                if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-                    ((ItemGunBase) this.getHeldItemMainhand().getItem()).reloadAmmo(this.getHeldItemMainhand());
-                }
-                else if(this.getHeldItemOffhand().getItem() instanceof ItemGunBase && !((ItemGunBase) this.getHeldItemOffhand().getItem()).isTwoHanded()){
-                    ((ItemGunBase) this.getHeldItemOffhand().getItem()).reloadAmmo(this.getHeldItemOffhand());
-                }
+                this.reloadAmmo();
             }
         }
 
@@ -899,6 +901,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
+    public ItemStack getGunStack(){
+        return ItemStack.EMPTY;
+    }
+
+    public void reloadAmmo(){}
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new CompanionMoveToRecruitStationGoal(this));
@@ -937,9 +945,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return 0;
     }
     @Override
-    public void startSleeping(BlockPos pos) {
+    public void startSleeping(@Nonnull BlockPos pos) {
         super.startSleeping(pos);
-        this.setLastSlept(this.getEntityWorld().getGameTime());
+        this.setLastSlept(this.getEntityWorld().getDayTime());
     }
 
     public void setLastSlept(long lastSlept) {
@@ -974,8 +982,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
 
+    @Nonnull
     @Override
-    public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
+    public ActionResultType applyPlayerInteraction(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
         if(this.isOwner(player) && !(player.getHeldItem(hand).getItem() instanceof ItemRiggingBase)){
 
             if(this.getRidingEntity() != null){
@@ -1093,7 +1102,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             BlockState blockstate = this.world.getBlockState(this.getHOMEPOS().get());
             if(!blockstate.isBed(this.getEntityWorld(),this.getHOMEPOS().get(), this)) {
                 this.clearHomePos();
-            };
+            }
         }
     }
 
@@ -1156,6 +1165,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.AmmoStorage;
     }
 
+    @Nonnull
     @Override
     public IPacket<?> createSpawnPacket() {
         NetworkHooks.getEntitySpawningPacket(this);
@@ -1191,19 +1201,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @SubscribeEvent
     public void OnTimeSkip(PlayerWakeUpEvent event){
         this.setLastWokenup(this.getEntityWorld().getDayTime());
-
         this.CalculateMoraleBasedonTime(this.getLastSlept(), this.getLastWokenup());
     }
 
     private void CalculateMoraleBasedonTime(long lastSlept, long lastWokenup) {
 
-        long deltaTime;
-        if(lastWokenup<=lastSlept){
-            deltaTime = 24000-lastSlept-lastWokenup;
-        }
-        else{
-            deltaTime = lastSlept-lastWokenup;
-        }
+        long deltaTime = lastSlept-lastWokenup;
 
         this.addAffection(0.02*((float)deltaTime/300));
         this.addMorale(((float)deltaTime/1000)*30);
@@ -1224,12 +1227,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setMorale((float) MathUtils.clamp(prevmorale+value, 0, 150));
     }
 
-    public BlockPos getStayCenterPos() {
+    public Optional<BlockPos> getStayCenterPos() {
         return this.getDataManager().get(STAYPOINT);
     }
 
     public void setStayCenterPos(BlockPos stayCenterPos) {
-        this.getDataManager().set(STAYPOINT,stayCenterPos);
+        this.getDataManager().set(STAYPOINT,Optional.of(stayCenterPos));
+    }
+
+    public void clearStayCenterPos() {
+        this.getDataManager().set(STAYPOINT, Optional.empty());
     }
 
     public void PickUpItem(ItemEntity target) {
@@ -1250,6 +1257,24 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(!itemstack1.isEmpty()){
             target.setItem(itemstack1);
         }
+    }
+
+    public boolean addStackToInventory(ItemStack stack){
+        for(int i=0; i<this.getInventory().getSlots(); i++){
+            if(this.getInventory().insertItem(i, stack, false) == ItemStack.EMPTY){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean addStackToAmmoStorage(ItemStack stack){
+        for(int i=0; i<this.getAmmoStorage().getSlots(); i++){
+            if(this.getAmmoStorage().insertItem(i, stack, false) == ItemStack.EMPTY){
+                return true;
+            }
+        }
+        return false;
     }
 
     public abstract enums.CompanionRarity getRarity();

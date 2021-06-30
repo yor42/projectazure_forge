@@ -101,7 +101,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildSimpleBlockModel("ore_stone_tin");
         buildSimpleBlockModel("ore_stone_lead");
         buildSimpleBlockModel("ore_stone_zinc");
-
+        buildSimpleBlockModel("reenforced_plank");
         buildSimpleBlockModel("orirock");
 
         buildSimpleBlockModel("machine_frame");

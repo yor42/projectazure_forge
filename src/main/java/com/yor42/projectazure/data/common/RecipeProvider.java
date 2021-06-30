@@ -349,6 +349,18 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_gunpowder", hasItem(Tags.Items.GUNPOWDER))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(registerItems.AMMO_GENERIC.get(), 2)
+                .key('B', ModTags.Items.PLATE_BRASS)
+                .key('L', ModTags.Items.INGOT_LEAD)
+                .key('G', Tags.Items.GUNPOWDER)
+                .patternLine(" L ")
+                .patternLine("BGB")
+                .patternLine("BGB")
+                .addCriterion("has_breass", hasItem(ModTags.Items.PLATE_BRASS))
+                .addCriterion("has_lead", hasItem(ModTags.Items.INGOT_LEAD))
+                .addCriterion("has_gunpowder", hasItem(Tags.Items.GUNPOWDER))
+                .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(registerItems.AMMO_TORPEDO.get(), 1)
                 .key('A', ModTags.Items.INGOT_ALUMINIUM)
                 .key('T', Blocks.TNT.asItem())
@@ -372,6 +384,16 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_dye", hasItem(Tags.Items.DYES_GREEN))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(registerBlocks.REENFORCED_PLANK.get(), 4)
+                .key('P', ItemTags.PLANKS)
+                .key('S', ModTags.Items.INGOT_STEEL)
+                .patternLine("SPS")
+                .patternLine("PSP")
+                .patternLine("SPS")
+                .addCriterion("has_steel", hasItem(ModTags.Items.INGOT_STEEL))
+                .addCriterion("has_plank", hasItem(ItemTags.PLANKS))
+                .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(registerItems.DISC_BRAINPOWER.get(), 1)
                 .key('S', ModTags.Items.PLATE_IRON)
                 .key('D', Tags.Items.DYES_BLACK)
@@ -393,6 +415,68 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .build(consumer);
 
         CustomRecipeBuilder.customRecipe((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).build(consumer, "reloading_items");
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.DD_DEFAULT_RIGGING.get(), 1)
+                .key('A', ModTags.Items.PLATE_ALUMINIUM)
+                .key('S', ModTags.Items.INGOT_STEEL)
+                .key('G', ModTags.Items.GEAR_STEEL)
+                .key('P', registerItems.MECHANICAL_PARTS.get())
+                .key('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .key('M', registerItems.BASIC_MOTOR.get())
+                .key('W', registerItems.WISDOM_CUBE.get())
+                .patternLine("CSP")
+                .patternLine("AWG")
+                .patternLine(" MA")
+                .addCriterion("has_cube", hasItem(registerItems.WISDOM_CUBE.get()))
+                .addCriterion("has_motor", hasItem(registerItems.BASIC_MOTOR.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.BB_DEFAULT_RIGGING.get(), 1)
+                .key('A', ModTags.Items.PLATE_ALUMINIUM)
+                .key('S', ModTags.Items.PLATE_STEEL)
+                .key('G', ModTags.Items.GEAR_STEEL)
+                .key('P', registerItems.MECHANICAL_PARTS.get())
+                .key('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .key('M', registerItems.BASIC_MOTOR.get())
+                .key('D', registerItems.DD_DEFAULT_RIGGING.get())
+                .patternLine("SMS")
+                .patternLine("PDG")
+                .patternLine("ACA")
+                .addCriterion("has_dd_rigging", hasItem(registerItems.DD_DEFAULT_RIGGING.get()))
+                .addCriterion("has_motor", hasItem(registerItems.BASIC_MOTOR.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.CV_DEFAULT_RIGGING.get(), 1)
+                .key('W', registerBlocks.REENFORCED_PLANK.get().asItem())
+                .key('M', registerItems.BASIC_MOTOR.get())
+                .key('D', registerItems.DD_DEFAULT_RIGGING.get())
+                .key('P', registerItems.MECHANICAL_PARTS.get())
+                .key('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .key('S', ModTags.Items.PLATE_STEEL)
+                .key('I', ModTags.Items.INGOT_STEEL)
+                .patternLine("SSW")
+                .patternLine("IDW")
+                .patternLine("PCM")
+                .addCriterion("has_dd_rigging", hasItem(registerItems.DD_DEFAULT_RIGGING.get()))
+                .addCriterion("has_motor", hasItem(registerItems.BASIC_MOTOR.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.EQUIPMENT_TORPEDO_533MM.get(), 1)
+                .key('A', ModTags.Items.PLATE_ALUMINIUM)
+                .key('S', registerItems.STEEL_PIPE.get())
+                .key('G', ModTags.Items.GEAR_STEEL)
+                .key('P', registerItems.MECHANICAL_PARTS.get())
+                .key('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .key('M', registerItems.BASIC_MOTOR.get())
+                .patternLine("ACA")
+                .patternLine("SSS")
+                .patternLine("GMP")
+                .addCriterion("has_barrel", hasItem(registerItems.STEEL_PIPE.get()))
+                .addCriterion("has_part", hasItem(registerItems.MECHANICAL_PARTS.get()))
+                .addCriterion("has_motor", hasItem(registerItems.BASIC_MOTOR.get()))
+                .build(consumer);
+
+
 
     }
 

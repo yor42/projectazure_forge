@@ -43,9 +43,7 @@ public class CompanionMoveToRecruitStationGoal extends Goal {
         }
 
         if(this.host.getRecruitStationPos().isPresent() && this.host.getDistanceSq(this.host.getRecruitStationPos().get().getX(),this.host.getRecruitStationPos().get().getY(),this.host.getRecruitStationPos().get().getZ())<=9){
-            this.host.getNavigator().clearPath();
-            this.host.func_233687_w_(true);
-            this.host.isMovingtoRecruitStation = false;
+            this.host.stopMovingtoRecruitStation();
         }
 
     }

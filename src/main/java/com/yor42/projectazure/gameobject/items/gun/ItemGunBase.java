@@ -3,7 +3,9 @@ package com.yor42.projectazure.gameobject.items.gun;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
+import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -29,11 +31,10 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.emptyAmmo;
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
-public abstract class ItemGunBase extends Item implements IAnimatable {
+public abstract class ItemGunBase extends Item implements IAnimatable, ICraftingTableReloadable {
 
     private final boolean isSemiAuto;
     private final boolean isTwoHanded;
@@ -101,6 +102,14 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
         return new ActionResult<>(ActionResultType.PASS, playerIn.getHeldItem(handIn));
     }
 
+    public int getMaxAmmo(){
+        return this.magCap;
+    }
+
+    public int getRoundsPerReload() {
+        return this.roundsPerReload;
+    }
+
     public boolean isSemiAuto() {
         return this.isSemiAuto;
     }
@@ -124,18 +133,17 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
         if (gun.getItem() instanceof ItemGunBase) {
             ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(entity);
             //AnimationController controller = GeckoLibUtil.getControllerForStack(this.getFactory(), gun, this.getFactoryName());
-            int ammo = this.getAmmo(gun);
+            int ammo = getRemainingAmmo(gun);
             if (ammo > 0) {
                 if (capability.getDelay(hand) <= 0) {
 
                     entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
                     if (!entity.isCreative()) {
-                        this.useAmmo(gun, (short) 1);
+                        useAmmo(gun);
                     }
+
                     if (!world.isRemote()) {
-
                         this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
-
                         capability.setDelay(hand, this.getMinFireDelay());
                     }
 
@@ -166,7 +174,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
                     } else {
                         i = Math.min(this.magCap, getRemainingAmmo(AmmoStack));
                     }
-                    this.reloadAmmo(gun, i);
+                    addAmmo(gun, i);
                     if(!entity.isCreative()){
                         AmmoStack.shrink(1);
                         ItemStack EmptyMag = new ItemStack(((ItemGunBase) gun.getItem()).getMagItem());
@@ -175,7 +183,8 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
                     }
                     return true;
                 }
-                //TODO: ELSE PLAY CLICK SOUND
+                entity.playSound(registerSounds.GUN_CLICK, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
+                capability.setDelay(hand, 30);
             }
         }
         return false;
@@ -212,33 +221,11 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
     }
 
-    public short getAmmo(ItemStack stack){
-        CompoundNBT compound = stack.getOrCreateTag();
-        return compound.getShort("ammo");
-    }
-
-    public void useAmmo(ItemStack stack, short amount){
-        short ammo = getAmmo(stack);
-        CompoundNBT compound = stack.getOrCreateTag();
-        compound.putShort("ammo", (short) Math.max(ammo-amount, 0));
-    }
-
-    public void reloadAmmo(ItemStack gun, int amount) {
-        short ammo = this.getAmmo(gun);
-
-        CompoundNBT nbt = gun.getOrCreateTag();
-        nbt.putShort("ammo", (short) (ammo+amount));
-    }
-
-   public void reloadAmmo(ItemStack gun){
-        this.reloadAmmo(gun, this.magCap);
-   }
-
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent("item.tooltip.remaining_ammo").appendString(": "+this.getAmmo(stack)+"/"+this.magCap));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remaining_ammo").appendString(": "+getRemainingAmmo(stack)+"/"+this.magCap));
         tooltip.add(new TranslationTextComponent("tempinfo.useable_gun_wip"));
     }
 
@@ -260,7 +247,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable {
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        return 1-((float)getAmmo(stack)/this.magCap);
+        return 1-((float)getRemainingAmmo(stack)/this.magCap);
     }
 
 

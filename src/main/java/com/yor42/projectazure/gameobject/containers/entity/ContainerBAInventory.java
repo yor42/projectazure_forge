@@ -66,7 +66,7 @@ public class ContainerBAInventory extends Container {
                 this.addSlot(new SlotItemHandler(dummyAmmoHandler, n + 2 * m, 180 + n * 18, 15 + m * 18){
                     @Override
                     public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemCannonshell;
+                        return stack.getItem() instanceof ItemMagazine;
                     }
                 });
             }

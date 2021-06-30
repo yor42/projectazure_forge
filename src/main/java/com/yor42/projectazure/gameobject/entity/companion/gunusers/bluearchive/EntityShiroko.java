@@ -105,7 +105,7 @@ public class EntityShiroko extends EntityGunUserBase {
 
     @Override
     public int Reload_Anim_Delay() {
-        return 58;
+        return 63;
     }
 
     @Override

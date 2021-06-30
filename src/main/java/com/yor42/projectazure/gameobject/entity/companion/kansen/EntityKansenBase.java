@@ -109,7 +109,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         compound.put("ammoStorage", this.AmmoStorage.serializeNBT());
     }
 
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
         if(compound.contains("rigging"))
             this.ShipStorage.deserializeNBT(compound.getCompound("rigging"));

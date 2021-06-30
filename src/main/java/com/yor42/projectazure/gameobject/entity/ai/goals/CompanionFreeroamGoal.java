@@ -12,7 +12,7 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public class CompanionFreeroamGoal extends RandomWalkingGoal {
 
-    private AbstractEntityCompanion entityCompanion;
+    private final AbstractEntityCompanion entityCompanion;
 
     public CompanionFreeroamGoal(AbstractEntityCompanion entity, int moveChance, boolean shouldStopBeforeMove){
         super(entity, 0.6D, moveChance,shouldStopBeforeMove);
@@ -32,11 +32,11 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
     @Override
     protected Vector3d getPosition() {
 
-        if (this.entityCompanion.getStayCenterPos() == BlockPos.ZERO){
+        if (!this.entityCompanion.getStayCenterPos().isPresent()){
             this.entityCompanion.setStayCenterPos(this.entityCompanion.getPosition());
         }
 
-        BlockPos homepos = this.entityCompanion.getStayCenterPos();
+        BlockPos homepos = this.entityCompanion.getStayCenterPos().get();
         BlockPos originPosition;
         boolean flag = false;
 
@@ -45,7 +45,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
             flag = this.entityCompanion.getEntityWorld().getDimensionKey() == World.OVERWORLD && this.entityCompanion.getPosition().withinDistance(homepos, 32);
         }
 
-        originPosition = flag? homepos : this.entityCompanion.getStayCenterPos();
+        originPosition = flag? homepos : this.entityCompanion.getStayCenterPos().get();
 
         int x = ((int)(getRand().nextFloat()*20)-10);
         int z = ((int)(getRand().nextFloat()*20)-10);
@@ -54,6 +54,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
     }
 
     public void resetTask() {
+        this.entityCompanion.clearStayCenterPos();
         this.entityCompanion.getNavigator().clearPath();
         super.resetTask();
     }

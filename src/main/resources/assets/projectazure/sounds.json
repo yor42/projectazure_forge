@@ -54,5 +54,13 @@
         "stream": true
       }
     ]
+  },
+  "gun_click": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/rifle/gun_click",
+        "stream": true
+      }
+    ]
   }
 }
