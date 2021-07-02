@@ -21,6 +21,8 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
+
 public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
 
     private AbstractEntityCompanion entity;
@@ -46,6 +48,11 @@ public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
         stack.pop();
+    }
+
+    @Override
+    public ResourceLocation getEntityTexture(EntityShiroko entity) {
+        return TextureEntityLocation("entityshiroko");
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.yor42.projectazure.client.model.entity.kansen.ayanamiModel;
 import com.yor42.projectazure.client.renderer.layer.AyanamiRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.libs.defined;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -46,6 +47,11 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
         stack.pop();
+    }
+
+    @Override
+    public ResourceLocation getEntityTexture(EntityAyanami entity) {
+        return new ResourceLocation(defined.MODID, "textures/entity/modelayanami.png");
     }
 
     @Override

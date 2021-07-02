@@ -19,6 +19,8 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
 
+import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
+
 public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
 
     private AbstractEntityCompanion entity;
@@ -45,6 +47,11 @@ public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
         stack.pop();
+    }
+
+    @Override
+    public ResourceLocation getEntityTexture(EntityChen entity) {
+        return TextureEntityLocation("modelchen");
     }
 
     @Override

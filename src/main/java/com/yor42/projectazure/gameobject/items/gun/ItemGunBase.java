@@ -13,20 +13,22 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.network.ISyncable;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -34,7 +36,7 @@ import java.util.List;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
-public abstract class ItemGunBase extends Item implements IAnimatable, ICraftingTableReloadable {
+public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable,  ICraftingTableReloadable {
 
     private final boolean isSemiAuto;
     private final boolean isTwoHanded;
@@ -52,6 +54,9 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ICrafting
     private final int roundsPerReload;
     protected final String controllerName = "gunController";
 
+    public static final int FIRING = 1;
+    public static final int RELOADING = 2;
+
     public AnimationFactory factory = new AnimationFactory(this);
 
     public ItemGunBase(boolean semiAuto, int minFiretime, int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int roundsPerReload, float accuracy, Properties properties, boolean isTwohanded, Item MagItem) {
@@ -67,6 +72,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ICrafting
         this.roundsPerReload = roundsPerReload;
         this.isTwoHanded = isTwohanded;
         this.MagItem = MagItem;
+        GeckoLibNetwork.registerSyncable(this);
     }
 
     public SoundEvent getFireSound() {
@@ -129,20 +135,27 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ICrafting
     protected abstract void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem);
 
     public boolean shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
-
+        // Gets the item that the player is holding, should be this item.
+        final int id = GeckoLibUtil.guaranteeIDForStack(gun, (ServerWorld) world);
+        // Tell all nearby clients to trigger this item to animate
+        final PacketDistributor.PacketTarget receiver = PacketDistributor.TRACKING_ENTITY_AND_SELF
+                .with(() -> entity);
         if (gun.getItem() instanceof ItemGunBase) {
             ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(entity);
             //AnimationController controller = GeckoLibUtil.getControllerForStack(this.getFactory(), gun, this.getFactoryName());
             int ammo = getRemainingAmmo(gun);
             if (ammo > 0) {
                 if (capability.getDelay(hand) <= 0) {
-
-                    entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
                     if (!entity.isCreative()) {
                         useAmmo(gun);
                     }
-
                     if (!world.isRemote()) {
+                        world.playSound(null, entity.getPosX(), entity.getPosY(),
+                                entity.getPosZ(), this.fireSound, SoundCategory.PLAYERS, 1.0F,
+                                1.0F / (random.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
+
+                        GeckoLibNetwork.syncAnimation(receiver, this, id, FIRING);
+
                         this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
                         capability.setDelay(hand, this.getMinFireDelay());
                     }
@@ -150,6 +163,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ICrafting
                 }
                 return false;
             } else {
+                GeckoLibNetwork.syncAnimation(receiver, this, id, RELOADING);
                 if (!world.isRemote()) {
                     capability.setDelay(hand, this.reloadDelay - this.minFireDelay);
                 }
@@ -221,6 +235,8 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ICrafting
 
     }
 
+    @Override
+    public abstract void onAnimationSync(int id, int state);
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
@@ -252,7 +268,10 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ICrafting
 
 
 
-
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return false;
+    }
 
     @Override
     public AnimationFactory getFactory() {

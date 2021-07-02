@@ -20,6 +20,8 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
 
+import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
+
 public class entityGangwonRenderer extends GeoEntityRenderer<EntityGangwon> {
 
     private EntityKansenBase entity;
@@ -47,6 +49,11 @@ public class entityGangwonRenderer extends GeoEntityRenderer<EntityGangwon> {
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
         stack.pop();
+    }
+
+    @Override
+    public ResourceLocation getEntityTexture(EntityGangwon entity) {
+        return TextureEntityLocation("modelgangwon");
     }
 
     @Override
