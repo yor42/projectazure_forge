@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "active=false,facing=west,powered=true": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=false,facing=west,powered=false": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=false,facing=south,powered=true": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=false,facing=south,powered=false": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=false,facing=east,powered=true": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=false,facing=east,powered=false": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=false,facing=north,powered=true": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=false,facing=north,powered=false": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=true,facing=west,powered=true": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=true,facing=west,powered=false": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=true,facing=south,powered=true": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=true,facing=south,powered=false": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=true,facing=east,powered=true": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=true,facing=east,powered=false": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=true,facing=north,powered=true": {
+      "model": "projectazure:block/machine_frame"
+    },
+    "active=true,facing=north,powered=false": {
+      "model": "projectazure:block/machine_frame"
+    }
+  }
+}

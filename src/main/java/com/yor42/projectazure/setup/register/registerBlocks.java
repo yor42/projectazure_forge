@@ -42,7 +42,7 @@ public class registerBlocks {
     public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
             new MultiblockStructureBlocks((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL))){
                 @Override
-                public TileEntity createTileEntity(BlockState state, @Nonnull IBlockReader world) {
+                public TileEntity createTileEntity(@Nonnull BlockState state, @Nonnull IBlockReader world) {
                     return new MultiblockSteelFrame();
                 }
             }, Main.PA_RESOURCES);

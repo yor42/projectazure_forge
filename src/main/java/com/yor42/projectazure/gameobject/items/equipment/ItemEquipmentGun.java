@@ -17,7 +17,7 @@ public abstract class ItemEquipmentGun extends ItemEquipmentBase{
 
     public ItemEquipmentGun(Properties properties, int maxHP) {
         super(properties, maxHP);
-        this.slot = enums.SLOTTYPE.MAIN_GUN;
+        this.slot = enums.SLOTTYPE.SUB_GUN;
     }
 
     public enums.CanonSize getSize(){

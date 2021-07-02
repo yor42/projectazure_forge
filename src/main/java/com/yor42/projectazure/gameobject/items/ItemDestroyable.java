@@ -1,10 +1,11 @@
 package com.yor42.projectazure.gameobject.items;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentDamage;
 
-public class ItemDestroyable extends ItemBaseTooltip {
+public class ItemDestroyable extends Item {
 
     protected int MaxHP;
 

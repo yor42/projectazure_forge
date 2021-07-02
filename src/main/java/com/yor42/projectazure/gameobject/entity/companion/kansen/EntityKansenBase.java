@@ -48,6 +48,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 import java.util.UUID;
 
@@ -185,7 +186,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return true;
     }
 
-
+    @ParametersAreNonnullByDefault
     public boolean attackEntityFrom(DamageSource source, float amount) {
 
         float DamageMultiplier = 1.0F;
@@ -215,7 +216,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
         if (this.isSailing()) {
             this.kansenFloat();
-            if (modifiableattributeinstance.getModifier(SAILING_SPEED_MODIFIER) == null) {
+            if (modifiableattributeinstance != null && modifiableattributeinstance.getModifier(SAILING_SPEED_MODIFIER) == null) {
                 modifiableattributeinstance.applyNonPersistentModifier(SAILING_SPEED_BOOST);
             }
             Vector3d vector3d = this.getMotion();
@@ -226,7 +227,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 this.world.addParticle(ParticleTypes.CLOUD, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             }
         }
-        else{
+        else if(modifiableattributeinstance != null){
             modifiableattributeinstance.removeModifier(SAILING_SPEED_BOOST);
         }
 
@@ -251,7 +252,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             if(AmmoItem instanceof ItemCannonshell){
                 if(category == ((ItemCannonshell) AmmoItem).getAmmoProperty().getCategory()){
                     return this.AmmoStorage.getStackInSlot(i);
-                };
+                }
             }
         }
         return ItemStack.EMPTY;
@@ -276,7 +277,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public void AttackUsingCannon(LivingEntity target, float distanceFactor){
         boolean shouldFire = this.canUseShell(getActiveShellCategory()) && this.canUseRigging() && canUseCannon(this.getRigging());
         if(shouldFire) {
-            ItemStack Ammostack = this.findAmmo(enums.AmmoCategory.GENERIC);
+            ItemStack Ammostack = this.findAmmo(this.getActiveShellCategory());
             if (Ammostack.getItem() instanceof ItemCannonshell) {
                 Vector3d vector3d = this.getLook(1.0F);
                 double d2 = target.getPosX() - this.getPosX();
@@ -325,7 +326,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         double d0 = target.getPosX() - this.getPosX();
         double d1 = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getPosY();
         double d2 = target.getPosZ() - this.getPosZ();
-        double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
         abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, 3);
         this.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(abstractarrowentity);
@@ -337,14 +338,14 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return ProjectileHelper.fireArrow(this, arrowStack, distanceFactor);
     }
 
-    protected ItemStack findArrow(){
-        for(int i = 0; i<this.getInventory().getSlots(); i++){
-            if(this.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem){
+    protected ItemStack findArrow() {
+        for (int i = 0; i < this.getInventory().getSlots(); i++) {
+            if (this.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem) {
                 return this.getInventory().getStackInSlot(i);
             }
         }
         return ItemStack.EMPTY;
-    };
+    }
 
     private void kansenFloat() {
         Vector3d vec3d = this.getMotion();

@@ -40,6 +40,7 @@ import javax.annotation.Nullable;
 
 import java.util.Random;
 
+import static com.yor42.projectazure.gameobject.blocks.AbstractAnimatedBlockMachines.FACING;
 import static com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock.POWERED;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRandomBlockposInRadius2D;
 
@@ -141,23 +142,15 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         if(!EntityTypeNotNull){
             Main.LOGGER.error("Spawn FAILED: EntityType is NULL");
         }
+        if(owner == null){
+            Main.LOGGER.error("Spawn FAILED: OWNER is NULL");
+        }
         else if(worldReady) {
             BlockPos blockpos;
             //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
             if(ModCompatibilities.isSunlightDangerous((ServerWorld) this.world)) {
-                int tries = 0;
-                BlockPos.Mutable CandidatePos;
-                do {
-                    int x = this.getPos().getX() + (new Random().nextInt(11) - 5);
-                    int z = this.getPos().getZ() + (new Random().nextInt(11) - 5);
-                    int y = this.getPos().getY()+10;
-                    CandidatePos = new BlockPos.Mutable(x, y, z);
-                    while(CandidatePos.getY() > 0 && !this.world.getBlockState(CandidatePos).getMaterial().blocksMovement() && !this.world.canBlockSeeSky(CandidatePos.move(0,1,0))) {
-                        CandidatePos.move(Direction.DOWN);
-                    }
-                    tries++;
-                }
-                while (!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, this.world, CandidatePos, EntityType.WANDERING_TRADER) && world.getChunkProvider().isChunkLoaded(new ChunkPos(CandidatePos)) && !this.world.canBlockSeeSky(CandidatePos.move(0,1,0)) && tries < PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
+                BlockPos.Mutable CandidatePos = this.pos.toMutable();
+                CandidatePos = CandidatePos.move(this.world.getBlockState(this.pos).get(FACING));
                 blockpos = CandidatePos;
             }
             else {
@@ -177,7 +170,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                     this.world.addParticle(ParticleTypes.PORTAL, pos.getX(), pos.getY() + rand.nextDouble() * 2.0D, pos.getZ(), rand.nextGaussian(), 0.0D, rand.nextGaussian());
                 }
                 entityCompanion.setPosition(pos.getX(), pos.getY(), pos.getZ());
-                entityCompanion.getNavigator().tryMoveToXYZ((double) this.getPos().getX(), (double) this.getPos().getY(), (double) this.getPos().getZ(), 1.0F);
+                entityCompanion.getNavigator().tryMoveToXYZ((double) this.getPos().getX()+0.5, (double) this.getPos().getY(), (double) this.getPos().getZ()+0.5, 1.0F);
                 entityCompanion.setMovingtoRecruitStation(this.getPos());
                 entityCompanion.setTamedBy(owner);
                 if(spawn_sitting) {

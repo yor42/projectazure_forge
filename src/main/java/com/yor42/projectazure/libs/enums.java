@@ -5,18 +5,37 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rand;
 public class enums {
 
     public enum SLOTTYPE{
-        MAIN_GUN,
-        SUB_GUN,
-        TORPEDO,
-        UTILITY,
-        AA,
-        PLANE,
+        MAIN_GUN("main_gun"),
+        SUB_GUN("sub_gun"),
+        TORPEDO("torpedo"),
+        UTILITY("utility"),
+        AA("antiair"),
+        PLANE("plane");
+
+        private final String name;
+        SLOTTYPE(String name) {
+            this.name = name;
+        }
+
+        public String getName(){
+            return this.name;
+        }
+
     }
 
     public enum PLANE_TYPE{
-        FIGHTER,
-        TORPEDO_BOMBER,
-        DIVE_BOMBER
+        FIGHTER("fighter"),
+        TORPEDO_BOMBER("torpedo_bomber"),
+        DIVE_BOMBER("dive_bomber");
+
+        private final String name;
+        PLANE_TYPE(String name) {
+            this.name = name;
+        }
+
+        public String getName(){
+            return this.name;
+        }
     }
 
     public enum shipClass {
@@ -156,7 +175,7 @@ public class enums {
     public enum DamageType{
         RIGGING,
         ENTITY,
-        COMPONENT;
+        COMPONENT
     }
 
     public enum EntityType{

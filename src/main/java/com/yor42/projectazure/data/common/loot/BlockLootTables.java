@@ -11,6 +11,7 @@ import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.conditions.TableBonus;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Collectors;
 
 public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
@@ -29,12 +30,11 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.registerLootTable(registerBlocks.METAL_PRESS.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
         this.registerLootTable(registerBlocks.ALLOY_FURNACE.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
         this.registerLootTable(registerBlocks.RECRUIT_BEACON.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
-        this.registerLootTable(registerBlocks.ORIROCK.get(), (orirock) -> {
-            return droppingWithSilkTouch(orirock, withSurvivesExplosion(orirock, ItemLootEntry.builder(registerItems.ORIGINITE.get()).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).alternatively(ItemLootEntry.builder(orirock))));
-        });
+        this.registerLootTable(registerBlocks.ORIROCK.get(), (orirock) -> droppingWithSilkTouch(orirock, withSurvivesExplosion(orirock, ItemLootEntry.builder(registerItems.ORIGINITE.get()).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).alternatively(ItemLootEntry.builder(orirock)))));
 
     }
 
+    @Nonnull
     @Override
     protected Iterable<Block> getKnownBlocks() {
         return ForgeRegistries.BLOCKS.getValues().stream()

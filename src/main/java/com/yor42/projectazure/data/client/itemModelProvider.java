@@ -87,6 +87,9 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("mold_extraction");
         buildModel("energy_drink");
 
+        buildModel("steel_gunframe_rifle");
+        buildModel("pistol_grip");
+
         buildModel("orundum");
         buildModel("headhunting_pcb");
 

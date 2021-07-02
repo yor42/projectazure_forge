@@ -178,6 +178,12 @@ public class registerItems {
             .rarity(Rarity.EPIC)
             .maxStackSize(1)));
 
+    public static final RegistryObject<Item> PISTOL_GRIP = registerManager.ITEMS.register("pistol_grip", () -> new Item(new Item.Properties()
+            .group(PA_GROUP)));
+
+    public static final RegistryObject<Item> STEEL_RIFLE_FRAME = registerManager.ITEMS.register("steel_gunframe_rifle", () -> new Item(new Item.Properties()
+            .group(PA_GROUP)));
+
     public static final RegistryObject<Item> AMMO_GENERIC = registerManager.ITEMS.register("ammo_generic", () -> new ItemCannonshell(enums.AmmoCategory.GENERIC ,new Item.Properties()
             .group(PA_GROUP)));
 

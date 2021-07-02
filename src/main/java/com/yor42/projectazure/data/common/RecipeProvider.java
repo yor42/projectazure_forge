@@ -349,6 +349,40 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_gunpowder", hasItem(Tags.Items.GUNPOWDER))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(registerItems.STEEL_RIFLE_FRAME.get(), 1)
+                .key('P', ModTags.Items.PLATE_STEEL)
+                .key('I', ModTags.Items.INGOT_STEEL)
+                .key('G', ModTags.Items.GEAR_STEEL)
+                .key('M', registerItems.MECHANICAL_PARTS.get())
+                .patternLine("PPP")
+                .patternLine("MIM")
+                .patternLine("PPG")
+                .addCriterion("has_parts", hasItem(registerItems.MECHANICAL_PARTS.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.PISTOL_GRIP.get(), 1)
+                .key('P', ModTags.Items.PLATE_STEEL)
+                .key('I', ModTags.Items.INGOT_STEEL)
+                .patternLine("IP ")
+                .patternLine("PIP")
+                .patternLine(" PP")
+                .addCriterion("has_parts", hasItem(registerItems.MECHANICAL_PARTS.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.ABYDOS_550.get(), 1)
+                .key('P', ModTags.Items.PLATE_STEEL)
+                .key('I', ModTags.Items.INGOT_STEEL)
+                .key('B', registerItems.STEEL_RIFLE_FRAME.get())
+                .key('M', registerItems.MAGAZINE_5_56.get())
+                .key('R', registerItems.STEEL_PIPE.get())
+                .key('G', registerItems.PISTOL_GRIP.get())
+                .key('T', registerItems.HAMMER_IRON.get())
+                .patternLine("PPP")
+                .patternLine("RBI")
+                .patternLine("TMG")
+                .addCriterion("has_parts", hasItem(registerItems.STEEL_RIFLE_FRAME.get()))
+                .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(registerItems.AMMO_GENERIC.get(), 2)
                 .key('B', ModTags.Items.PLATE_BRASS)
                 .key('L', ModTags.Items.INGOT_LEAD)
