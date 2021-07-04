@@ -54,6 +54,7 @@ public class ModBusEventHandler {
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_NAGATO.get()));
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWM_ENTERPRISE.get()));
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_CHEN.get()));
+                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_SHIROKO.get()));
                 }
                 data.putBoolean("PRJA:gotStarterCube", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
@@ -71,7 +72,7 @@ public class ModBusEventHandler {
             }
             catch (Exception e) {
                 Main.LOGGER.error("Failed to attach capabilities to player. Player: {}", event.getObject());
-                Throwables.propagate(e);
+                Throwables.throwIfUnchecked(e);
             }
         }
     }
