@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
@@ -51,6 +52,12 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
+        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+            }
+            return PlayState.CONTINUE;
+        }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("melee", false));
@@ -80,6 +87,12 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             event.getController().setAnimation(builder.addAnimation("idle_sit", true));
         }
         else {
+            if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+                if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+                    event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+                }
+                return PlayState.CONTINUE;
+            }
             event.getController().setAnimation(builder.addAnimation("idle", true));
         }
         return PlayState.CONTINUE;

@@ -17,7 +17,7 @@ public class CompanionPickupItemGoal extends Goal {
 
     public CompanionPickupItemGoal(AbstractEntityCompanion host) {
         this.host = host;
-        this.range = 10;
+        this.range = 5;
         this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
@@ -52,7 +52,7 @@ public class CompanionPickupItemGoal extends Goal {
                 if (target!=null) {
                     this.host.getNavigator().tryMoveToEntityLiving(target, 1.0F);
 
-                    if (this.host.getDistanceSq(target) < 1.5) {
+                    if (this.host.getDistanceSq(target) < 1) {
                         this.host.PickUpItem(target);
                     }
                 }

@@ -5,12 +5,9 @@ import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUser
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.emptyAmmo;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class CompanionUseGunGoal extends Goal {
@@ -52,10 +49,11 @@ public class CompanionUseGunGoal extends Goal {
         ItemStack gunStack = this.getValidGunStack();
 
         if(gunStack.getItem() instanceof ItemGunBase) {
-            ItemGunBase gunItem = (ItemGunBase) gunStack.getItem();
-            boolean hasGunAmmo =  (this.companion.HasRightMagazine(gunItem.getCalibur()) != ItemStack.EMPTY || getRemainingAmmo(gunStack) > 0);
-            return this.companion.canUseGun() && gunStack != ItemStack.EMPTY && !this.companion.isSleeping() && !this.companion.isEntitySleeping() &&
-                    this.companion.getAttackTarget() != null && this.companion.getAttackTarget().isAlive() && hasGunAmmo;
+            boolean canusegun = this.companion.shouldUseGun();
+            boolean hastarget = this.companion.getAttackTarget() != null && this.companion.getAttackTarget().isAlive();
+            boolean entitycanAttack = !this.companion.isSleeping() && !this.companion.isEntitySleeping();
+            return canusegun && entitycanAttack && hastarget;
+
         }
         return false;
     }
@@ -74,6 +72,7 @@ public class CompanionUseGunGoal extends Goal {
         this.attackTime = -1;
         this.companion.resetActiveHand();
         this.companion.setUsingGun(false);
+        this.companion.getNavigator().clearPath();
     }
 
     @Override
@@ -84,7 +83,7 @@ public class CompanionUseGunGoal extends Goal {
     @Override
     public void tick() {
         LivingEntity target = this.companion.getAttackTarget();
-        if(target != null && this.companion instanceof EntityGunUserBase){
+        if(target != null){
             double distanceSq = this.companion.getDistanceSq(target.getPosX(), target.getPosY(), target.getPosZ());
             boolean canSee = this.companion.getEntitySenses().canSee(target);
 

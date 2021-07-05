@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
@@ -83,6 +84,13 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             return PlayState.CONTINUE;
         }
+        else if(this.ShouldPlayReloadAnim()){
+            event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
+            return PlayState.CONTINUE;
+        }else if(this.isUsingGun()){
+            event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
+            return PlayState.CONTINUE;
+        }
         else if(this.isMeleeing()){
             if(this.swingingHand == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.melee", false));
@@ -105,6 +113,12 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             else {
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.walk_arm", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
             return PlayState.CONTINUE;
         }

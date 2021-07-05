@@ -5,7 +5,6 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
@@ -27,8 +26,11 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -44,6 +46,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IWorldReader;
@@ -73,7 +76,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.useAmmo;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
@@ -243,16 +246,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 
-            AbstractEntityCompanion entity = AbstractEntityCompanion.this;
-
-            if (entity instanceof EntityKansenBase){
-                return stack.getItem() instanceof ItemCannonshell;
-            }
-            else if(entity instanceof EntityGunUserBase){
-                return stack.getItem() instanceof ItemMagazine;
-            }
-            else
-                return false;
+            return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof ItemMagazine;
         }
     };
 
@@ -287,6 +281,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> PICKUP_ITEM = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Optional<BlockPos>> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Optional<BlockPos>> RecruitStationPos = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Optional<BlockPos>> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
@@ -348,7 +343,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.getDataManager().get(ISUSINGGUN);
     }
 
-    public ItemStack HasRightMagazine(enums.AmmoCalibur calibur){
+    public ItemStack getMagazine(enums.AmmoCalibur calibur){
+        for(int i=0; i<this.getAmmoStorage().getSlots();i++){
+            if(this.getAmmoStorage().getStackInSlot(i).getItem() instanceof ItemMagazine && ((ItemMagazine) this.getAmmoStorage().getStackInSlot(i).getItem()).getCalibur() == calibur){
+                return this.getAmmoStorage().getStackInSlot(i);
+            }
+        }
         return ItemStack.EMPTY;
     }
 
@@ -358,6 +358,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putFloat("affection", this.dataManager.get(AFFECTION));
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
+        compound.putBoolean("pickupitem", this.dataManager.get(PICKUP_ITEM));
         compound.putFloat("home_distance", this.dataManager.get(VALID_HOME_DISTANCE));
         if(this.dataManager.get(STAYPOINT).isPresent()) {
             compound.putDouble("stayX", this.dataManager.get(STAYPOINT).get().getX());
@@ -385,6 +386,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putLong("lastwoken", this.lastWokenup);
         compound.putBoolean("isMovingtoRecruitStation", this.isMovingtoRecruitStation);
         compound.put("inventory", this.getInventory().serializeNBT());
+        compound.put("ammostorage", this.getAmmoStorage().serializeNBT());
     }
 
     public void setHomeposAndDistance(BlockPos pos, float validDistance){
@@ -440,7 +442,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(AFFECTION, compound.getFloat("affection"));
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
-
+        this.dataManager.set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
         if(hasStayPos) {
             this.dataManager.set(RecruitStationPos, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
@@ -466,6 +468,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getInventory().deserializeNBT(compound.getCompound("inventory"));
         this.lastSlept = compound.getLong("lastslept");
         this.lastWokenup = compound.getLong("lastwoken");
+        this.getAmmoStorage().deserializeNBT(compound.getCompound("ammostorage"));
     }
 
     public ItemStackHandler getInventory(){
@@ -490,12 +493,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void AttackUsingGun(LivingEntity target, ItemStack gun, Hand HandIn){
-        if(this instanceof EntityGunUserBase && gun.getItem() instanceof ItemGunBase){
-            @SuppressWarnings("rawtypes")
-            AnimationController gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
-            gunAnimation.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
+        if(gun.getItem() instanceof ItemGunBase){
+            AnimationController<?> gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
+            gunAnimation.setAnimation(new AnimationBuilder().addAnimation("fire", false));
             this.playSound(((ItemGunBase) gun.getItem()).getFireSound(), 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
-            ((ItemGunBase) gun.getItem()).shootGunLivingEntity(gun, this.getEntityWorld(), this, false, HandIn, target);
+            ((ItemGunBase) gun.getItem()).shootGunCompanion(gun, this.getEntityWorld(), this, false, HandIn, target);
             useAmmo(gun);
         }
     }
@@ -557,15 +559,26 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return false;
     }
 
-    /*
-    determines if this entity can use Gun.
-    Off by default.
-     */
-    public boolean canUseGun(){
+    public boolean canUseCannonOrTorpedo(){
         return false;
     }
 
+    public boolean shouldUseGun() {
+        ItemStack gunstack = this.getGunStack();
+        if (gunstack.getItem() instanceof ItemGunBase) {
+            ItemGunBase gunitem = (ItemGunBase) gunstack.getItem();
+            return (!this.canUseCannonOrTorpedo() || !this.isSailing()) && this.getGunStack() != ItemStack.EMPTY && (this.HasRightMagazine(gunitem.getCalibur()) || getRemainingAmmo(gunstack)>0);
+        }
+        return false;
+    }
 
+    public boolean HasRightMagazine(enums.AmmoCalibur calibur){
+        return this.getMagazine(calibur).getItem() instanceof ItemMagazine;
+    }
+
+    public boolean isSailing(){
+        return false;
+    }
 
     @Override
     public boolean isChild() {
@@ -625,11 +638,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(HEAL_TIMER, 0);
         this.dataManager.register(RELOAD_TIMER_MAINHAND, 0);
         this.dataManager.register(RELOAD_TIMER_OFFHAND, 0);
+        this.dataManager.register(PICKUP_ITEM, false);
     }
 
     public void setOpeningdoor(boolean openingdoor){
         this.isOpeningDoor = openingdoor;
         this.dataManager.set(OPENINGDOOR, this.isOpeningDoor);
+    }
+
+    public boolean shouldPickupItem(){
+        return this.dataManager.get(PICKUP_ITEM);
+    }
+
+    public void setPickupItem(boolean value){
+        this.dataManager.set(PICKUP_ITEM, value);
     }
 
     public boolean isOpeningDoor() {
@@ -695,7 +717,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public double getmaxAffection(){
         return this.isOathed()? 200:100;
-    };
+    }
 
     public void addAffection(double Delta){
         this.setAffection((float) Math.min(this.getAffection() + Delta, this.getmaxAffection()));
@@ -755,6 +777,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void livingTick() {
         super.livingTick();
+
+        if(this.getLastAttackedEntityTime()>200 && this.getGunAmmoCount() <= 0){
+            this.setReloadDelay();
+        }
 
         this.dataManager.set(SITTING, this.isEntitySleeping());
 
@@ -892,7 +918,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    public float getBlockPathWeight(BlockPos pos, IWorldReader worldIn) {
+    public float getBlockPathWeight(@Nonnull BlockPos pos, IWorldReader worldIn) {
         if(!worldIn.isRemote() && ModCompatibilities.isSunlightDangerous((ServerWorld) worldIn)){
             return 0.0F-worldIn.getLightFor(LightType.SKY, pos);
         }
@@ -901,11 +927,86 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
+    public void reloadAmmo(){
+        ItemGunBase gun = (ItemGunBase) this.getGunStack().getItem();
+        ItemStack MagStack = this.getMagazine(((ItemGunBase) this.getGunStack().getItem()).getCalibur());
+        int i;
+        if (gun.getRoundsPerReload() > 0) {
+            i = Math.min(gun.getRoundsPerReload(), getRemainingAmmo(MagStack));
+        } else {
+            i = Math.min(gun.getMaxAmmo(), getRemainingAmmo(MagStack));
+        }
+        addAmmo(this.getGunStack(), i);
+        MagStack.shrink(1);
+        ItemStack EmptyMag = new ItemStack(((ItemGunBase) this.getGunStack().getItem()).getMagItem());
+        emptyAmmo(EmptyMag);
+
+        //Return Empty Magazine for Reloading
+        if(!this.addStackToInventory(EmptyMag)){
+            if(!this.addStackToAmmoStorage(EmptyMag)){
+                ItemEntity itemEntity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), EmptyMag);
+                this.getEntityWorld().addEntity(itemEntity);
+            }
+        }
+    }
+
+    public short getGunAmmoCount(){
+        return getGunAmmo(this.getGunStack());
+    }
+
+    public static short getGunAmmo(ItemStack stack){
+        if(stack.getItem() instanceof ItemGunBase) {
+            CompoundNBT compound = stack.getOrCreateTag();
+            return compound.getShort("ammo");
+        }
+        else return 0;
+    }
+
     public ItemStack getGunStack(){
+        if(this.getHeldItem(this.getValidGunHand()).getItem() instanceof ItemGunBase){
+            return this.getHeldItem(this.getValidGunHand());
+        }
         return ItemStack.EMPTY;
     }
 
-    public void reloadAmmo(){}
+    private Hand getValidGunHand(){
+        if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+            return Hand.MAIN_HAND;
+        }
+        else
+            return Hand.OFF_HAND;
+    }
+
+    public enums.GunClass getGunSpecialty(){
+        return enums.GunClass.NONE;
+    }
+
+    public void ShootArrow(LivingEntity target, float distanceFactor) {
+        ItemStack itemstack = this.findArrow();
+        AbstractArrowEntity abstractarrowentity = this.fireArrow(itemstack, distanceFactor, this.getItemStackFromSlot(EquipmentSlotType.MAINHAND));
+        if (this.getHeldItemMainhand().getItem() instanceof net.minecraft.item.BowItem)
+            abstractarrowentity = ((net.minecraft.item.BowItem)this.getHeldItemMainhand().getItem()).customArrow(abstractarrowentity);
+        double d0 = target.getPosX() - this.getPosX();
+        double d1 = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getPosY();
+        double d2 = target.getPosZ() - this.getPosZ();
+        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, 3);
+        this.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+        this.world.addEntity(abstractarrowentity);
+    }
+
+    protected AbstractArrowEntity fireArrow(ItemStack arrowStack, float distanceFactor, ItemStack ItemInHand) {
+        return ProjectileHelper.fireArrow(this, arrowStack, distanceFactor);
+    }
+
+    protected ItemStack findArrow() {
+        for (int i = 0; i < this.getInventory().getSlots(); i++) {
+            if (this.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem) {
+                return this.getInventory().getStackInSlot(i);
+            }
+        }
+        return ItemStack.EMPTY;
+    }
 
     @Override
     protected void registerGoals() {

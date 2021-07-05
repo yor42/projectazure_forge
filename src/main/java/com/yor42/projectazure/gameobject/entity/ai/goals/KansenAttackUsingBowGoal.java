@@ -12,8 +12,8 @@ public class KansenAttackUsingBowGoal extends Goal {
     private EntityKansenBase host;
     private int seeTime;
     private int strafingTime = -1;
-    private double moveSpeedAmp;
-    private float maxAttackDistance;
+    private final double moveSpeedAmp;
+    private final float maxAttackDistance;
     private int attackCooldown;
     private boolean strafingClockwise;
     private boolean strafingBackwards;
@@ -29,11 +29,10 @@ public class KansenAttackUsingBowGoal extends Goal {
     @Override
     public boolean shouldExecute() {
         LivingEntity target = this.host.getAttackTarget();
-        //TODO: check if plane can be used first
-        if(target != null && target.isAlive()) {
+        if(target != null && target.isAlive() && this.host.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem) {
             for (int i = 0; i < this.host.getInventory().getSlots(); i++) {
                 if (this.host.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem) {
-                    return this.host.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem;
+                    return true;
                 }
             }
         }

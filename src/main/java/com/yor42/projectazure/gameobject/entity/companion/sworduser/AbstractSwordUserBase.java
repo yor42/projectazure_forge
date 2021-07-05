@@ -10,13 +10,6 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion {
         super(type, worldIn);
     }
 
-    @Override
-    public boolean canUseGun() {
-        return false;
-    }
+    //Dont delete yet might handle skills and shit later
 
-    @Override
-    public boolean canUseRigging() {
-        return false;
-    }
 }

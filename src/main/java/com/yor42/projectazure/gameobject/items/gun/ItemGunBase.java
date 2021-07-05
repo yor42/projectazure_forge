@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.items.gun;
 
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
-import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
@@ -12,7 +12,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -31,6 +30,7 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
@@ -42,6 +42,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     private final boolean isTwoHanded;
     private final int minFireDelay;
     private final int reloadDelay;
+    private final enums.GunClass GunClass;
 
     private final Item MagItem;
 
@@ -59,7 +60,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     public AnimationFactory factory = new AnimationFactory(this);
 
-    public ItemGunBase(boolean semiAuto, int minFiretime, int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int roundsPerReload, float accuracy, Properties properties, boolean isTwohanded, Item MagItem) {
+    public ItemGunBase(boolean semiAuto, int minFiretime, int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int roundsPerReload, float accuracy, Properties properties, boolean isTwohanded, Item MagItem, enums.GunClass gunclass) {
         super(properties);
         this.isSemiAuto = semiAuto;
         this.minFireDelay = minFiretime;
@@ -72,6 +73,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
         this.roundsPerReload = roundsPerReload;
         this.isTwoHanded = isTwohanded;
         this.MagItem = MagItem;
+        this.GunClass = gunclass;
         GeckoLibNetwork.registerSyncable(this);
     }
 
@@ -87,6 +89,9 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
         return this.isTwoHanded;
     }
 
+    public enums.GunClass getGunClass(){
+        return this.GunClass;
+    }
 
     public int getMinFireDelay() {
         return this.minFireDelay;
@@ -130,7 +135,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     public Item getMagItem(){
         return this.MagItem;
-    };
+    }
 
     protected abstract void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem);
 
@@ -207,11 +212,30 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     public boolean shootGunLivingEntity(ItemStack gun, World world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
         entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
         if (!world.isRemote()) {
-
             this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
+            return true;
         }
         return false;
+    }
 
+    public void shootGunCompanion(ItemStack gun, World world, AbstractEntityCompanion entity, boolean zooming, Hand hand, @Nullable Entity target) {
+        entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
+        if (!world.isRemote()) {
+
+            float inaccuracymultiplier;
+            float damagemultiplier;
+
+            if(entity.getGunSpecialty() != enums.GunClass.NONE) {
+                inaccuracymultiplier = entity.getGunSpecialty() == this.getGunClass() ? 0.9F : 1.2F;
+                damagemultiplier = entity.getGunSpecialty() == this.getGunClass() ? 1.1F : 0.85F;
+            }
+            else{
+                inaccuracymultiplier = 1.25F;
+                damagemultiplier = 0.7F;
+            }
+
+            this.spawnProjectile(entity, world, gun, this.accuracy*inaccuracymultiplier, this.damage*damagemultiplier, target, hand);
+        }
     }
 
     public abstract enums.AmmoCalibur getCalibur();
@@ -238,6 +262,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     @Override
     public abstract void onAnimationSync(int id, int state);
 
+    @ParametersAreNonnullByDefault
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
@@ -247,7 +272,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        AnimationController controller = new AnimationController(this, this.controllerName, 1, this::predicate);
+        AnimationController<?> controller = new AnimationController(this, this.controllerName, 1, this::predicate);
         animationData.addAnimationController(controller);
     }
 

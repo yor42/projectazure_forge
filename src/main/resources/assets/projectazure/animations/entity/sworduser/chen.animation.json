@@ -1557,6 +1557,199 @@
 					}
 				}
 			}
+		},
+		"gun_shoot_twohanded": {
+			"loop": true,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": ["-92.5+query.head_pitch", "35+query.head_yaw", 0]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 10]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": ["-37.5+query.head_pitch", "-10+query.head_yaw", 0]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [-80, 0, 0]
+					}
+				},
+				"itemMainHand": {
+					"rotation": {
+						"vector": [27.5, 0, 0]
+					}
+				}
+			}
+		},
+		"gun_reload_twohanded": {
+			"animation_length": 3.16,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": ["-92.5+query.head_pitch", "35+query.head_yaw", 0]
+						},
+						"0.72": {
+							"vector": ["-92.5+query.head_pitch", "35+query.head_yaw", 0]
+						},
+						"1.08": {
+							"vector": ["32.5+query.head_pitch", "2.5+query.head_yaw", 0]
+						},
+						"1.24": {
+							"vector": [22.5, 2.5, 0]
+						},
+						"1.6": {
+							"vector": [22.5, 2.5, 0]
+						},
+						"1.96": {
+							"vector": ["-92.5+query.head_pitch", "35+query.head_yaw", 0]
+						},
+						"2.16": {
+							"vector": ["-77.5+query.head_pitch", "17.5+query.head_yaw", 0]
+						},
+						"2.4": {
+							"vector": ["-105+query.head_pitch", "42.5+query.head_yaw", 0]
+						},
+						"2.6": {
+							"vector": ["-105+query.head_pitch", "55+query.head_yaw", 0]
+						},
+						"2.88": {
+							"vector": ["-92.5+query.head_pitch", "35+query.head_yaw", 0]
+						}
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 10]
+						},
+						"0.72": {
+							"vector": [0, 0, 10]
+						},
+						"1.08": {
+							"vector": [-42.5, 0, 0]
+						},
+						"1.24": {
+							"vector": [-47.5, 0, 0]
+						},
+						"1.6": {
+							"vector": [-47.5, 0, 0]
+						},
+						"1.96": {
+							"vector": [0, 0, 10]
+						},
+						"2.16": {
+							"vector": [0, 0, 10]
+						},
+						"2.4": {
+							"vector": [0, 0, 32.5]
+						},
+						"2.6": {
+							"vector": [0, 0, 22.5]
+						},
+						"2.88": {
+							"vector": [0, 0, 10]
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-37.5, "-10+query.body_y_rotation", 0]
+						},
+						"0.36": {
+							"vector": [-37.5, "-10+query.body_y_rotation", 0]
+						},
+						"0.56": {
+							"vector": [-95, "-10+query.body_y_rotation", 0],
+							"easing": "easeInOutSine"
+						},
+						"1.24": {
+							"vector": [-95, "-10+query.body_y_rotation", 0]
+						},
+						"1.56": {
+							"vector": [-37.5, "-10+query.body_y_rotation", 0]
+						},
+						"2.08": {
+							"vector": [-37.5, "-10+query.body_y_rotation", 0]
+						},
+						"2.4": {
+							"vector": [-37.5, "-10+query.body_y_rotation", 32.5]
+						},
+						"2.88": {
+							"vector": [-37.5, "-10+query.body_y_rotation", 0]
+						}
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"0.0": {
+							"vector": [-80, 0, 0]
+						},
+						"0.44": {
+							"vector": [-80, 0, 0]
+						},
+						"2.36": {
+							"vector": [-80, 0, 0]
+						},
+						"2.56": {
+							"vector": [-80, 0, 35]
+						},
+						"2.88": {
+							"vector": [-80, 0, 35]
+						},
+						"3.16": {
+							"vector": [-80, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"gun_idle_twohanded": {
+			"loop": true,
+			"animation_length": 7,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-26.63, 0, 22.5]
+						},
+						"4.0": {
+							"vector": [-34.13, 0, 22.5]
+						},
+						"7.0": {
+							"vector": [-26.63, 0, 22.5]
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-30, 0, 0]
+						},
+						"4.0": {
+							"vector": [-35, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"7.0": {
+							"vector": [-30, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -50]
+					}
+				}
+			}
 		}
 	}
 }

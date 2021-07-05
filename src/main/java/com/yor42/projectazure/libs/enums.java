@@ -62,12 +62,27 @@ public class enums {
     }
 
     public enum CompanionRarity {
-        STAR_1,
-        STAR_2,
-        STAR_3,
-        STAR_4,
-        STAR_5,
-        STAR_6,
+        STAR_1("c", 0xadadad),
+        STAR_2("uc", 0x007eff),
+        STAR_3("r", 0xb4ff00),
+        STAR_4("sr", 0x7200ff),
+        STAR_5("ssr", 0xffcc00),
+        STAR_6("ur", 0xff6db5);
+
+        private final String translationkey;
+        private final int rarityColor;
+        CompanionRarity(String name, int rarityColor) {
+            this.translationkey = name;
+            this.rarityColor = rarityColor;
+        }
+
+        public String getTranslationkey(){
+            return this.translationkey;
+        }
+
+        public int getColor(){
+            return this.rarityColor;
+        }
     }
 
     public enum AmmoCategory {
@@ -162,14 +177,40 @@ public class enums {
     }
 
     public enum OperatorClass{
-        VANGUARD,
-        SNIPER,
-        DEFENDER,
-        CASTER,
-        GUARD,
-        MEDIC,
-        SPECIALIST,
-        SUPPORTER
+        VANGUARD("vanguard"),
+        SNIPER("sniper"),
+        DEFENDER("defender"),
+        CASTER("caster"),
+        GUARD("guard"),
+        MEDIC("medic"),
+        SPECIALIST("specialist"),
+        SUPPORTER("supporter");
+
+        private final String name;
+        OperatorClass(String name) {
+            this.name = name;
+        }
+
+        public String getName(){
+            return this.name;
+        }
+    }
+
+    public enum GunClass {
+        NONE("none"),
+        AR("assault_rifle"),
+        SG("shotgun"),
+        HG("handgun"),
+        SR("sniper");
+
+        private final String name;
+        GunClass(String name) {
+            this.name = name;
+        }
+
+        public String getName(){
+            return this.name;
+        }
     }
 
     public enum DamageType{
@@ -179,12 +220,22 @@ public class enums {
     }
 
     public enum EntityType{
-        KANSEN,
-        TDOLL,
-        BLUEARCHIVE,
-        OPERATOR,
-        ELEMENTS,
-        SERVANT
+        KANSEN("al_kansen"),
+        KANMUSU("kc_kanmusu"),
+        TDOLL("gfl_tdoll"),
+        BLUEARCHIVE("bluearchive"),
+        OPERATOR("akn_operator"),
+        ELEMENTS("gi_elements"),
+        SERVANT("fgo_servant");
+
+        private final String name;
+        EntityType(String name) {
+            this.name = name;
+        }
+
+        public String getName(){
+            return this.name;
+        }
     }
 
     public enum Affection{

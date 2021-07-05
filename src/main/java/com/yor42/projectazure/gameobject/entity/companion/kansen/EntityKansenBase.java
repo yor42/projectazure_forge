@@ -23,10 +23,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArrowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -37,7 +33,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -64,7 +59,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
     private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
 
-    public ItemStackHandler ShipStorage = new ItemStackHandler(1) {
+    public ItemStackHandler RiggingSlot = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
                 EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(0));
@@ -106,16 +101,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     @Override
     public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.put("rigging",this.ShipStorage.serializeNBT());
-        compound.put("ammoStorage", this.AmmoStorage.serializeNBT());
+        compound.put("rigging",this.RiggingSlot.serializeNBT());
     }
 
     public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
         if(compound.contains("rigging"))
-            this.ShipStorage.deserializeNBT(compound.getCompound("rigging"));
-        if(compound.contains("ammoStorage"))
-            this.AmmoStorage.deserializeNBT(compound.getCompound("ammoStorage"));
+            this.RiggingSlot.deserializeNBT(compound.getCompound("rigging"));
     }
 
     public void setShipClass(enums.shipClass setclass){
@@ -258,6 +250,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return ItemStack.EMPTY;
     }
 
+    @Override
+    public boolean canUseCannonOrTorpedo() {
+        return this.canUseRigging() && (canUseCannon(this.getRigging()) || canUseTorpedo(this.getRigging()));
+    }
+
     public ItemStackHandler getCannonShellStorage() {
         return this.AmmoStorage;
     }
@@ -267,7 +264,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public ItemStackHandler getShipRiggingStorage() {
-        return this.ShipStorage;
+        return this.RiggingSlot;
     }
 
     public AmmoCategory getActiveShellCategory(){
@@ -316,35 +313,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             setEquipmentDelay(FiringTorpedo);
             this.addMorale(-0.15);
         }
-    }
-
-    public void ShootArrow(LivingEntity target, float distanceFactor) {
-        ItemStack itemstack = this.findArrow();
-        AbstractArrowEntity abstractarrowentity = this.fireArrow(itemstack, distanceFactor, this.getItemStackFromSlot(EquipmentSlotType.MAINHAND));
-        if (this.getHeldItemMainhand().getItem() instanceof net.minecraft.item.BowItem)
-            abstractarrowentity = ((net.minecraft.item.BowItem)this.getHeldItemMainhand().getItem()).customArrow(abstractarrowentity);
-        double d0 = target.getPosX() - this.getPosX();
-        double d1 = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getPosY();
-        double d2 = target.getPosZ() - this.getPosZ();
-        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, 3);
-        this.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-        this.world.addEntity(abstractarrowentity);
-    }
-
-    protected AbstractArrowEntity fireArrow(ItemStack arrowStack, float distanceFactor, ItemStack ItemInHand) {
-
-
-        return ProjectileHelper.fireArrow(this, arrowStack, distanceFactor);
-    }
-
-    protected ItemStack findArrow() {
-        for (int i = 0; i < this.getInventory().getSlots(); i++) {
-            if (this.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem) {
-                return this.getInventory().getStackInSlot(i);
-            }
-        }
-        return ItemStack.EMPTY;
     }
 
     private void kansenFloat() {
