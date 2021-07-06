@@ -133,7 +133,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         ImageButton HomeModeButton = new ImageButton(this.guiLeft,this.guiTop+51,10,10,homeModeX,200,10,TEXTURE, action->switchBehavior());
         ImageButton ItemPickupButton = new ImageButton(this.guiLeft,this.guiTop+40,10,10,ItemPickupX,220,10,TEXTURE, action->switchItemBehavior());
 
-        if(this.isPointInRegion(this.guiLeft,this.guiTop+51,10,10, mousex, mousey)){
+        if(this.isPointInRegion(0,51,10,10, mousex, mousey)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
             if(this.host.isFreeRoaming()){
                 tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.on").mergeStyle(TextFormatting.GREEN));
@@ -153,7 +153,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
             }
             this.renderWrappedToolTip(stack, tooltips, mousex, mousey, this.font);
         }
-        else if(this.isPointInRegion(this.guiLeft,this.guiTop+40,10,10, mousex, mousey)){
+        else if(this.isPointInRegion(0,40,10,10, mousex, mousey)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
             if(this.host.shouldPickupItem()){
                 tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.on").mergeStyle(TextFormatting.GREEN));
@@ -161,7 +161,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
             else{
                 tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").mergeStyle(TextFormatting.BLUE));
             }
-            this.renderWrappedToolTip(stack, tooltips, mousex-this.guiLeft, mousey-this.guiTop, this.font);
+            this.renderWrappedToolTip(stack, tooltips, mousex, mousey, this.font);
         }
 
         this.addButton(HomeModeButton);

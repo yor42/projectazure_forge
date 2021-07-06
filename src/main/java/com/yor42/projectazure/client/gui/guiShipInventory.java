@@ -154,15 +154,25 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         int FreeRoamX = this.host.isFreeRoaming()? 185:176;
         int itemPickupX = this.host.shouldPickupItem()? 176:185;
         ImageButton FreeroamButton = new ImageButton(this.x+159,this.y+52,9,9,FreeRoamX,25,9,TEXTURE,action->switchBehavior());
-        ImageButton ItemPickupButton = new ImageButton(this.x+159,this.y+62,9,9,itemPickupX,43,9,TEXTURE,action->switchBehavior());
+        ImageButton ItemPickupButton = new ImageButton(this.x+159,this.y+62,9,9,itemPickupX,43,9,TEXTURE,action->switchItemBehavior());
 
         if(this.isPointInRegion(159,52,9,9, MouseX, MouseY)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+
+            if(this.host.isFreeRoaming()){
+                tooltips.add(new TranslationTextComponent("gui.tooltip.freeroaming.on").mergeStyle(TextFormatting.GREEN));
+            }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.freeroaming.off").mergeStyle(TextFormatting.BLUE));
+            }
+
             if(this.host.getHOMEPOS().isPresent()) {
-                List<IFormattableTextComponent> tooltips = new ArrayList<>();
                 BlockPos Home = this.host.getHOMEPOS().get();
                 tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
-                this.renderWrappedToolTip(stack, tooltips, MouseX-this.x, MouseY-this.y, this.font);
+            }else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").mergeStyle(TextFormatting.GRAY));
             }
+            this.renderWrappedToolTip(stack, tooltips, MouseX-this.x, MouseY-this.y, this.font);
         }
         else if(this.isPointInRegion(159,62,9,9, MouseX, MouseY)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
@@ -172,12 +182,15 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
             else{
                 tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").mergeStyle(TextFormatting.BLUE));
             }
-            this.renderWrappedToolTip(stack, tooltips, MouseX-this.guiLeft, MouseY-this.guiTop, this.font);
+            this.renderWrappedToolTip(stack, tooltips, MouseX-this.x, MouseY-this.y, this.font);
         }
         this.addButton(ItemPickupButton);
         this.addButton(FreeroamButton);
     }
 
+    private void switchItemBehavior() {
+        this.host.SwitchItemBehavior();
+    }
     private void switchBehavior() {
         this.host.SwitchFreeRoamingStatus();
     }

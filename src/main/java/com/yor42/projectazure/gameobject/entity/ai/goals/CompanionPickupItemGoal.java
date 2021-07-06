@@ -36,7 +36,7 @@ public class CompanionPickupItemGoal extends Goal {
 
     @Override
     public void tick() {
-        if(this.host.ticksExisted *40 == 0){
+        if(this.host.ticksExisted % 10 == 0){
             this.Lootlist = this.host.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, this.host.getBoundingBox().grow(this.range));;
             this.Explist = this.host.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, this.host.getBoundingBox().grow(this.range));
         }
