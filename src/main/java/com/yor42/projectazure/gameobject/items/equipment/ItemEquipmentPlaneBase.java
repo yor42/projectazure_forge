@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -56,7 +57,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent("item.tooltip.plane_type").appendString(": ").append(new TranslationTextComponent(this.getType().getName())));
+        tooltip.add(new TranslationTextComponent("item.tooltip.plane_type").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.getType().getName()).mergeStyle(TextFormatting.YELLOW)));
     }
 
     public abstract int getreloadTime();

@@ -5,6 +5,8 @@ import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
@@ -43,8 +45,20 @@ public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloa
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").appendString(": "+ getRemainingAmmo(stack)+"/"+this.Ammocount));
+    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformationAfterShift(stack, worldIn, tooltip, flagIn);
+        TextFormatting color;
+
+        if(((float)getRemainingAmmo(stack)/this.Ammocount)<0.3F){
+            color = TextFormatting.RED;
+        }
+        else if(((float)getRemainingAmmo(stack)/this.Ammocount)<0.6F){
+            color = TextFormatting.YELLOW;
+        }
+        else{
+            color = TextFormatting.GREEN;
+        }
+
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.Ammocount).mergeStyle(color)));
     }
 }

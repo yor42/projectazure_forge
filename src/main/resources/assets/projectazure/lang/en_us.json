@@ -7,10 +7,12 @@
   "item.projectazure.rainbow_wisdomcube": "Rainbow Wisdom Cube",
   "item.projectazure.wisdomcube": "Wisdom Cube",
   "item.projectazure.dd_default_rigging": "Destroyer Basic Rigging",
+  "item.projectazure.bb_default_rigging": "Battleship Basic Rigging",
   "item.projectazure.cv_default_rigging": "Aircraft Carrier Basic Rigging",
 
   "item.projectazure.music_disc": "Music Disc",
-  "item.projectazure.oath_ring": "Promise Ring",
+  "item.projectazure.oath_ring": "Oath Ring",
+  "item.projectazure.oath_ring.tooltip": "Shiny Ring that means your affection toward your life companion.",
 
   "item.projectazure.bonk_bat": "The Bonk™ Bat",
 
@@ -21,9 +23,22 @@
   "item.projectazure.steel_pipe": "Steel Pipe",
   "item.projectazure.motor_basic": "Basic Motor",
   "item.projectazure.circuit_primitive": "Primitive Circuit",
+  "item.projectazure.resistor_primitive": "Primitive Resistor",
+  "item.projectazure.capacitor_primitive": "Primitive Capacitor",
+  "item.projectazure.circuit_advanced": "Advanced Circuit",
   "item.projectazure.copper_coil": "Copper Coil",
+  "item.projectazure.polymer_plate": "Polymer Plate",
+  "item.projectazure.tree_sap": "Tree Sap",
+
+  "item.projectazure.orundum": "Orundum",
+  "item.projectazure.originite": "Originite",
+  "item.projectazure.originium_prime": "Originium Prime",
+
+  "item.projectazure.headhunting_pcb": "Beacon Amplifier Circuit",
 
   "item.projectazure.mold_plate": "Plate Mold",
+  "item.projectazure.mold_extraction": "Extraction Mold",
+  "item.projectazure.mold_wire": "Wire Mold",
   "item.projectazure.hammer_iron": "Iron Hammer",
   "item.projectazure.mortar_iron": "Iron Mortar",
   "item.projectazure.steel_cutter": "Steel Cutter",
@@ -71,6 +86,20 @@
   "item.projectazure.energy_drink.desc1": "Instantly refills companion's morale to max",
   "item.projectazure.energy_drink.shiftinfo": "Press %s for more F U N N I Info",
 
+  "item.tooltip.gunclass": "Gun Category",
+
+  "item.tooltip.equipmenttype": "Equipment Type",
+  "item.tooltip.plane_type": "Plane Type",
+  "item.tooltip.torpedo_not_reloadable": "Does not support automatic reloading",
+
+  "tooltip.companion.rarity": "Rarity",
+  "tooltip.companion.type": "Companion Type",
+  "tooltip.companion.shiupgirl_class": "Ship Class",
+  "tooltip.companion.operator_class": "Operator Class",
+  "tooltip.companion.shipgirl_class": "Ship Class",
+  "tooltip.companion.gun_speciality": "Gun Specialty",
+  "tooltip.companion.maxhealth": "Max Health",
+
   "item.projectazure.spawnegg.spawn": "Spawn: ",
 
   "item.projectazure.bonk_bat.tooltip": "Sends every being in existence who dares to cross this bat's path to horny jail. AND THERES NO EXCEPTION.",
@@ -81,18 +110,32 @@
 
   "item.projectazure.ammo_generic": "Generic Shell",
 
-  "item.projectazure.shiftinfo": "Press %s for more info",
+  "item.tooltip.shiftinfo": "Press %s for more info",
 
   "block.projectazure.recruit_beacon": "Recruit Beacon",
+  "block.projectazure.recruit_beacon.tooltip": "Machine for Recruiting companion",
   "block.projectazure.metal_press": "Hydraulic Press",
+  "block.projectazure.metal_press.tooltip": "Machine for applying lot of force to material",
   "block.projectazure.alloy_furnace": "Alloy Furnace",
+  "block.projectazure.alloy_furnace.tooltip": "Machine for mixing 2 metals into alloy",
+  "block.projectazure.drydock_controller": "Drydock Controller",
+  "block.projectazure.drydock_controller.tooltip":"Brain of Drydock; part of multiblock Structure.",
+  "block.projectazure.machine_frame": "Machine Frame",
+  "block.projectazure.reenforced_plank": "Reenforced Wooden Plank",
+  "block.projectazure.reenforced_concrete": "Reenforced Concrete",
+  "block.projectazure.reenforced_concrete.tooltip":"Concrete Reenforced with steel; part of multiblock Structure.",
+  "block.projectazure.orirock": "Orirock",
+
 
   "rigging_valid_on.tooltip": "Useable On:",
 
-  "rigging.main_gun": "Main Gun",
-  "rigging.anti_air": "Anti Air",
-  "rigging.torpedo": "Torpedo",
-  "rigging.empty": "Empty",
+  "equiment.main_gun": "Main Gun",
+  "equiment.sub_gun": "Sub Gun",
+  "equiment.anti_air": "Anti Air",
+  "equiment.torpedo": "Torpedo",
+  "equiment.plane": "Planes",
+  "equiment.utility": "Utility",
+  "equiment.empty": "Empty",
 
   "gui.recruitbeacon_remainingtime": "ETA Until Recruit is Complete",
   "gui.construction_eta": "Construction ETA",
@@ -117,6 +160,8 @@
 
   "destroyer": "Destroyer",
   "light_cruiser": "Light Cruiser",
+  "battleship": "Battleship",
+  "aircraft_carrier": "Aircraft Carrier",
 
   "disappointed":"Disappointed",
   "stranger": "Stranger",
@@ -124,6 +169,26 @@
   "crush": "Crush",
   "love": "Love",
   "oath": "Oath",
+
+  "rarity.c": "Common",
+  "rarity.uc": "Uncommon",
+  "rarity.r": "Rare",
+  "rarity.sr": "Super Rare",
+  "rarity.ur": "Ultra Rare",
+  "rarity.leg": "Legendary",
+
+  "operator.vanguard": "Vanguard",
+  "operator.sniper": "Sniper",
+  "operator.defender": "Defender",
+  "operator.guard": "Guard",
+  "operator.caster": "Caster",
+  "operator.medic": "Medic",
+  "operator.specialist": "Specialist",
+  "operator.supporter": "Supporter",
+
+  "akn_operator": "Operator/Arknights",
+  "bluearchive": "Gun User/Blue Archive",
+  "al_kansen": "Shipgirl/Azur Lane",
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entitygangwon": "ROKS Gangwon",
@@ -134,6 +199,15 @@
 
   "entity.projectazure.entitychen": "Ch'en",
 
+  "guntype.assault_rifle": "Assault Rifle",
+  "guntype.shotgun": "Shotgun",
+  "guntype.handgun": "Handgun",
+  "guntype.sniper": "Sniper Rifle",
+
+  "plane.fighter": "Fighter",
+  "plane.torpedo_bomber": "Torpedo Bomber",
+  "plane.dive_bomber": "Dive Bomber",
+
   "ingot": "Ingot",
   "plate": "Plate",
   "dust": "Dust",
@@ -142,6 +216,7 @@
   "ore": "Ore",
   "gear": "Gear",
 
+  "brass": "Brass",
   "copper": "Copper",
   "tin": "Tin",
   "bronze": "Bronze",

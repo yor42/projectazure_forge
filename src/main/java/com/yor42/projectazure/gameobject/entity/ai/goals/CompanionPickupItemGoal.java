@@ -26,7 +26,7 @@ public class CompanionPickupItemGoal extends Goal {
 
         this.Lootlist = this.host.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, this.host.getBoundingBox().grow(this.range));
         this.Explist = this.host.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, this.host.getBoundingBox().grow(this.range));
-        return ((this.host.getAttackTarget() == null || this.host.getRevengeTarget() == null) && (!this.Lootlist.isEmpty() || !this.Explist.isEmpty()) && !(this.host.isSleeping()&&this.host.isEntitySleeping())) && (this.host.getFirstEmptyStack() != -1 || (!Lootlist.isEmpty() && this.host.storeItemStack(Lootlist.get(0).getItem()) != -1));
+        return ((this.host.getAttackTarget() == null || this.host.getRevengeTarget() == null) && this.host.shouldPickupItem() && (!this.Lootlist.isEmpty() || !this.Explist.isEmpty()) && !(this.host.isSleeping()&&this.host.isEntitySleeping())) && (this.host.getFirstEmptyStack() != -1 || (!Lootlist.isEmpty() && this.host.storeItemStack(Lootlist.get(0).getItem()) != -1));
     }
 
     @Override

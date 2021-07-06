@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.TooltipUtils;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -15,9 +16,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -202,7 +207,9 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
                     }
                     return true;
                 }
-                entity.playSound(registerSounds.GUN_CLICK, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
+                world.playSound(null, entity.getPosX(), entity.getPosY(),
+                        entity.getPosZ(), registerSounds.GUN_CLICK, SoundCategory.PLAYERS, 1.0F,
+                        1.0F / (random.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
                 capability.setDelay(hand, 30);
             }
         }
@@ -224,7 +231,9 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
             float inaccuracymultiplier;
             float damagemultiplier;
-
+            world.playSound(null, entity.getPosX(), entity.getPosY(),
+                    entity.getPosZ(), this.fireSound, SoundCategory.PLAYERS, 1.0F,
+                    1.0F / (random.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
             if(entity.getGunSpecialty() != enums.GunClass.NONE) {
                 inaccuracymultiplier = entity.getGunSpecialty() == this.getGunClass() ? 0.9F : 1.2F;
                 damagemultiplier = entity.getGunSpecialty() == this.getGunClass() ? 1.1F : 0.85F;
@@ -266,8 +275,27 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent("item.tooltip.remaining_ammo").appendString(": "+getRemainingAmmo(stack)+"/"+this.magCap));
-        tooltip.add(new TranslationTextComponent("tempinfo.useable_gun_wip"));
+        tooltip.add(new TranslationTextComponent("item.tooltip.gunclass").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.getGunClass().getName()).mergeStyle(TextFormatting.BLUE)));
+        if (worldIn != null && worldIn.isRemote) {
+            TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
+        TextFormatting color;
+
+        if(((float)getRemainingAmmo(stack)/this.magCap)<0.3F){
+            color = TextFormatting.RED;
+        }
+        else if(((float)getRemainingAmmo(stack)/this.magCap)<0.6F){
+            color = TextFormatting.YELLOW;
+        }
+        else{
+            color = TextFormatting.GREEN;
+        }
+
+        tooltip.add(new TranslationTextComponent("item.tooltip.remaining_ammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.magCap).mergeStyle(color)));
     }
 
     @Override

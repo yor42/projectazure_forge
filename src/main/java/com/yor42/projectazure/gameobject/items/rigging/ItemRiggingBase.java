@@ -74,25 +74,25 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         for(int i = 0; i<Equipments.getSlots(); i++){
             if(this.getMainGunSlotCount()>0) {
                 if (i == 0)
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("equiment.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             if(this.getSubGunSlotCount()>0) {
                 if (i == this.getMainGunSlotCount())
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.sub_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("equiment.sub_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             if(this.getAASlotCount()>0) {
                 if (i == this.getMainGunSlotCount()+this.getSubGunSlotCount())
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("equiment.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             if(this.getTorpedoSlotCount()>0) {
                 if (i == this.getMainGunSlotCount()+this.getSubGunSlotCount() + this.getAASlotCount())
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("rigging.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("equiment.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             }
             ItemStack currentstack = Equipments.getStackInSlot(i);
             if(currentstack != ItemStack.EMPTY && currentstack.getItem() instanceof ItemEquipmentBase)
                 tooltip.add(currentstack.getDisplayName().copyRaw().appendString("("+getCurrentHP(currentstack)+"/"+((ItemEquipmentBase)currentstack.getItem()).getMaxHP()+")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
             else {
-                tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("rigging.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
+                tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
             }
         }
     }

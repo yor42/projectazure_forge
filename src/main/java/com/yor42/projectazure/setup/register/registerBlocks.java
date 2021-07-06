@@ -16,6 +16,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -77,7 +78,7 @@ public class registerBlocks {
 
             @OnlyIn(Dist.CLIENT)
             public void addInformationAfterShift(ItemStack stack, List<ITextComponent> tooltip){
-                tooltip.add(new TranslationTextComponent(stack.getItem().getTranslationKey()+".tooltip"));
+                tooltip.add(new TranslationTextComponent(stack.getItem().getTranslationKey()+".tooltip").mergeStyle(TextFormatting.GRAY));
             }
 
         });

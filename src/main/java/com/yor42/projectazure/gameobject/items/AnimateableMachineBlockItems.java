@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -53,7 +54,7 @@ public class AnimateableMachineBlockItems extends BlockItem implements IAnimatab
 
     @OnlyIn(Dist.CLIENT)
     public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-        tooltip.add(new TranslationTextComponent(stack.getItem().getTranslationKey()+".tooltip"));
+        tooltip.add(new TranslationTextComponent(stack.getItem().getTranslationKey()+".tooltip").mergeStyle(TextFormatting.GRAY));
     }
 
     @Override

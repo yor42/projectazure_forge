@@ -238,28 +238,56 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
 
     private void drawButtons(MatrixStack stack, int mousex, int mousey) {
 
-        int x = this.host.isFreeRoaming()? 185:176;
+        int FreeRoamingX = this.host.isFreeRoaming()? 185:176;
+        int ItemPickupX = this.host.shouldPickupItem()? 194:203;
 
-        ImageButton button = new ImageButton(this.x+10,this.y+63,9,9,x,25,9,TEXTURE, action->switchBehavior());
-
+        ImageButton FreeRoamingButton = new ImageButton(this.x+10,this.y+63,9,9,FreeRoamingX,25,9,TEXTURE, action-> switchFreeRoamingBehavior());
+        ImageButton ItemPickupButton = new ImageButton(this.x+10,this.y+53,9,9,ItemPickupX,25,9,TEXTURE, action-> switchItemBehavior());
         if(this.isPointInRegion(10,63,9,9, mousex, mousey)){
-            if(this.host.getHOMEPOS().isPresent()) {
-                List<IFormattableTextComponent> tooltips = new ArrayList<>();
-                BlockPos Home = this.host.getHOMEPOS().get();
-                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
-                this.renderWrappedToolTip(stack, tooltips, mousex-this.x, mousey-this.y, this.font);
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            if(this.host.isFreeRoaming()){
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.on").mergeStyle(TextFormatting.GREEN));
             }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.off").mergeStyle(TextFormatting.BLUE));
+            }
+
+            if(this.host.getHOMEPOS().isPresent()) {
+                ITextComponent shift = new StringTextComponent("[SHIFT]").mergeStyle(TextFormatting.YELLOW);
+                BlockPos Home = this.host.getHOMEPOS().get();
+                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()).mergeStyle(TextFormatting.BLUE));
+                tooltips.add(new TranslationTextComponent("gui.tooltip.shifttoclearhome", shift).mergeStyle(TextFormatting.GRAY));
+            }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").mergeStyle(TextFormatting.GRAY));
+            }
+            this.renderWrappedToolTip(stack, tooltips, mousex - this.x, mousey - this.y, this.font);
         }
-        this.addButton(button);
+        else if(this.isPointInRegion(10,53,9,9, mousex, mousey)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            if(this.host.shouldPickupItem()){
+                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.on").mergeStyle(TextFormatting.GREEN));
+            }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").mergeStyle(TextFormatting.BLUE));
+            }
+            this.renderWrappedToolTip(stack, tooltips, mousex - this.x, mousey - this.y, this.font);
+        }
+        this.addButton(FreeRoamingButton);
+        this.addButton(ItemPickupButton);
     }
 
-    private void switchBehavior() {
+    private void switchFreeRoamingBehavior() {
         if (Screen.hasShiftDown()) {
             this.host.clearHomePos();
         }
         else {
             this.host.SwitchFreeRoamingStatus();
         }
+    }
+
+    private void switchItemBehavior() {
+        this.host.SwitchItemBehavior();
     }
 
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mousex, int mousey) {

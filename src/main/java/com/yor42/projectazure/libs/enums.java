@@ -5,12 +5,12 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rand;
 public class enums {
 
     public enum SLOTTYPE{
-        MAIN_GUN("main_gun"),
-        SUB_GUN("sub_gun"),
-        TORPEDO("torpedo"),
-        UTILITY("utility"),
-        AA("antiair"),
-        PLANE("plane");
+        MAIN_GUN("equiment.main_gun"),
+        SUB_GUN("equiment.sub_gun"),
+        TORPEDO("equiment.torpedo"),
+        UTILITY("equiment.utility"),
+        AA("equiment.antiair"),
+        PLANE("equiment.plane");
 
         private final String name;
         SLOTTYPE(String name) {
@@ -24,9 +24,9 @@ public class enums {
     }
 
     public enum PLANE_TYPE{
-        FIGHTER("fighter"),
-        TORPEDO_BOMBER("torpedo_bomber"),
-        DIVE_BOMBER("dive_bomber");
+        FIGHTER("plane.fighter"),
+        TORPEDO_BOMBER("plane.torpedo_bomber"),
+        DIVE_BOMBER("plane.dive_bomber");
 
         private final String name;
         PLANE_TYPE(String name) {
@@ -62,12 +62,12 @@ public class enums {
     }
 
     public enum CompanionRarity {
-        STAR_1("c", 0xadadad),
-        STAR_2("uc", 0x007eff),
-        STAR_3("r", 0xb4ff00),
-        STAR_4("sr", 0x7200ff),
-        STAR_5("ssr", 0xffcc00),
-        STAR_6("ur", 0xff6db5);
+        STAR_1("rarity.c", 0xadadad),
+        STAR_2("rarity.uc", 0x007eff),
+        STAR_3("rarity.r", 0xb4ff00),
+        STAR_4("rarity.sr", 0x7200ff),
+        STAR_5("rarity.ur", 0xffcc00),
+        STAR_6("rarity.leg", 0xff6db5);
 
         private final String translationkey;
         private final int rarityColor;
@@ -177,14 +177,14 @@ public class enums {
     }
 
     public enum OperatorClass{
-        VANGUARD("vanguard"),
-        SNIPER("sniper"),
-        DEFENDER("defender"),
-        CASTER("caster"),
-        GUARD("guard"),
-        MEDIC("medic"),
-        SPECIALIST("specialist"),
-        SUPPORTER("supporter");
+        VANGUARD("operator.vanguard"),
+        SNIPER("operator.sniper"),
+        DEFENDER("operator.defender"),
+        CASTER("operator.caster"),
+        GUARD("operator.guard"),
+        MEDIC("operator.medic"),
+        SPECIALIST("operator.specialist"),
+        SUPPORTER("operator.supporter");
 
         private final String name;
         OperatorClass(String name) {
@@ -198,10 +198,10 @@ public class enums {
 
     public enum GunClass {
         NONE("none"),
-        AR("assault_rifle"),
-        SG("shotgun"),
-        HG("handgun"),
-        SR("sniper");
+        AR("guntype.assault_rifle"),
+        SG("guntype.shotgun"),
+        HG("guntype.handgun"),
+        SR("guntype.sniper");
 
         private final String name;
         GunClass(String name) {

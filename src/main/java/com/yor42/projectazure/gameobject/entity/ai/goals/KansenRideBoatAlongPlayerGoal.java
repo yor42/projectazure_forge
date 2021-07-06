@@ -36,7 +36,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
 
         Entity Owner = this.entity.getOwner();
 
-        if(Owner == null){
+        if(Owner == null || this.entity.getEntityWorld() != this.entity.getOwner().getEntityWorld()){
             return false;
         }
 

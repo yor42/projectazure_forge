@@ -176,7 +176,12 @@ public class registerItems {
     public static final RegistryObject<Item> OATHRING = registerManager.ITEMS.register("oath_ring", () -> new ItemBaseTooltip(new Item.Properties()
             .group(PA_GROUP)
             .rarity(Rarity.EPIC)
-            .maxStackSize(1)));
+            .maxStackSize(1)){
+        @Override
+        public boolean hasEffect(ItemStack stack) {
+            return true;
+        }
+    });
 
     public static final RegistryObject<Item> PISTOL_GRIP = registerManager.ITEMS.register("pistol_grip", () -> new Item(new Item.Properties()
             .group(PA_GROUP)));

@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBas
 import com.yor42.projectazure.interfaces.IArknightOperator;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,14 +18,12 @@ import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
@@ -39,6 +38,7 @@ public class ItemKansenSpawnEgg extends Item {
     }
 
     @Override
+    @MethodsReturnNonnullByDefault
     public ActionResultType onItemUse(ItemUseContext context) {
         World world = context.getWorld();
 
@@ -49,7 +49,7 @@ public class ItemKansenSpawnEgg extends Item {
             return ActionResultType.SUCCESS;
         }
         ItemStack itemstack = context.getItem();
-        BlockPos blockpos = context.getPos();
+        context.getPos();
 
         AbstractEntityCompanion spawnedEntity = this.Entity.create(context.getWorld());
 
@@ -72,31 +72,34 @@ public class ItemKansenSpawnEgg extends Item {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public ITextComponent getDisplayName(ItemStack stack) {
         return new TranslationTextComponent("item.projectazure.spawnegg.spawn").append(this.Entity.getName());
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        if(Minecraft.getInstance().world != null) {
-            AbstractEntityCompanion entity = this.Entity.create(Minecraft.getInstance().world);
+        if(worldIn != null) {
+            AbstractEntityCompanion entity = this.Entity.create(worldIn);
             if (entity!= null) {
-                tooltip.add(new TranslationTextComponent("tooltip.companion.type").appendString(": ").append(new TranslationTextComponent(entity.getEntityType().getName())));
+
+                enums.CompanionRarity rarity = entity.getRarity();
+                tooltip.add(new TranslationTextComponent("tooltip.companion.rarity").appendString(": ").append(new TranslationTextComponent(entity.getRarity().getTranslationkey()).setStyle(Style.EMPTY.setColor(Color.fromInt(rarity.getColor())))).mergeStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent("tooltip.companion.type").appendString(": ").append(new TranslationTextComponent(entity.getEntityType().getName())).mergeStyle(TextFormatting.GRAY));
                 if(entity instanceof EntityKansenBase){
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.shipgirl_class").appendString(": ").append(new TranslationTextComponent(((EntityKansenBase) entity).getShipClass().getName())));
+                    tooltip.add(new TranslationTextComponent("tooltip.companion.shipgirl_class").appendString(": ").append(new TranslationTextComponent(((EntityKansenBase) entity).getShipClass().getName()).mergeStyle(TextFormatting.YELLOW)).mergeStyle(TextFormatting.GRAY));
                 }
                 else if(entity instanceof IArknightOperator){
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.operator_class").appendString(": ").append(new TranslationTextComponent(((IArknightOperator) entity).getOperatorClass().getName())));
+                    tooltip.add(new TranslationTextComponent("tooltip.companion.operator_class").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(((IArknightOperator) entity).getOperatorClass().getName()).mergeStyle(TextFormatting.YELLOW)));
                 }
 
                 if(entity.getGunSpecialty() != enums.GunClass.NONE){
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.gun_speciality").appendString(": ").append(new TranslationTextComponent(entity.getGunSpecialty().getName())));
+                    tooltip.add(new TranslationTextComponent("tooltip.companion.gun_speciality").appendString(": ").append(new TranslationTextComponent(entity.getGunSpecialty().getName()).mergeStyle(TextFormatting.YELLOW)).mergeStyle(TextFormatting.GRAY));
                 }
-
-                tooltip.add(new TranslationTextComponent("tooltip.companion.rarity").appendString(": ").append(new TranslationTextComponent(entity.getRarity().getTranslationkey()).setStyle(Style.EMPTY.setColor(Color.fromInt(entity.getRarity().getColor())))));
                 if(entity.getAttribute(MAX_HEALTH) != null) {
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.maxhealth").appendString(": ").appendString(String.format("%,.2f", entity.getAttribute(MAX_HEALTH).getBaseValue())));
+                    tooltip.add(new TranslationTextComponent("tooltip.companion.maxhealth").appendString(": ").append(new StringTextComponent(String.format("%,.2f", entity.getAttribute(MAX_HEALTH).getBaseValue())).mergeStyle(Style.EMPTY.setColor(Color.fromInt(0xFFC0CB)))).mergeStyle(TextFormatting.GRAY));
                 }
             }
         }

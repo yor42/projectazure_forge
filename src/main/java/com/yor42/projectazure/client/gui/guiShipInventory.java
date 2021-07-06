@@ -151,9 +151,10 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     private void drawButtons(MatrixStack stack, int MouseX, int MouseY) {
 
-        int x = this.host.isFreeRoaming()? 185:176;
-
-        ImageButton button = new ImageButton(this.x+159,this.y+52,9,9,x,25,9,TEXTURE,action->switchBehavior());
+        int FreeRoamX = this.host.isFreeRoaming()? 185:176;
+        int itemPickupX = this.host.shouldPickupItem()? 176:185;
+        ImageButton FreeroamButton = new ImageButton(this.x+159,this.y+52,9,9,FreeRoamX,25,9,TEXTURE,action->switchBehavior());
+        ImageButton ItemPickupButton = new ImageButton(this.x+159,this.y+62,9,9,itemPickupX,43,9,TEXTURE,action->switchBehavior());
 
         if(this.isPointInRegion(159,52,9,9, MouseX, MouseY)){
             if(this.host.getHOMEPOS().isPresent()) {
@@ -163,8 +164,18 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
                 this.renderWrappedToolTip(stack, tooltips, MouseX-this.x, MouseY-this.y, this.font);
             }
         }
-
-        this.addButton(button);
+        else if(this.isPointInRegion(159,62,9,9, MouseX, MouseY)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            if(this.host.shouldPickupItem()){
+                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.on").mergeStyle(TextFormatting.GREEN));
+            }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").mergeStyle(TextFormatting.BLUE));
+            }
+            this.renderWrappedToolTip(stack, tooltips, MouseX-this.guiLeft, MouseY-this.guiTop, this.font);
+        }
+        this.addButton(ItemPickupButton);
+        this.addButton(FreeroamButton);
     }
 
     private void switchBehavior() {

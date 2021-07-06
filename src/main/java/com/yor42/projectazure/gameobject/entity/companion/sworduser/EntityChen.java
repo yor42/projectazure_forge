@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.interfaces.IArknightOperator;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -24,7 +25,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
-public class EntityChen extends AbstractSwordUserBase{
+public class EntityChen extends AbstractSwordUserBase implements IArknightOperator {
     @Override
     public enums.EntityType getEntityType() {
         return enums.EntityType.OPERATOR;
@@ -191,5 +192,10 @@ public class EntityChen extends AbstractSwordUserBase{
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_6;
+    }
+
+    @Override
+    public enums.OperatorClass getOperatorClass() {
+        return enums.OperatorClass.GUARD;
     }
 }

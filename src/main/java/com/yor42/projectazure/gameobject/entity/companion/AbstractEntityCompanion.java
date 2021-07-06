@@ -44,6 +44,7 @@ import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -496,7 +497,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(gun.getItem() instanceof ItemGunBase){
             AnimationController<?> gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
             gunAnimation.setAnimation(new AnimationBuilder().addAnimation("fire", false));
-            this.playSound(((ItemGunBase) gun.getItem()).getFireSound(), 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
             ((ItemGunBase) gun.getItem()).shootGunCompanion(gun, this.getEntityWorld(), this, false, HandIn, target);
             useAmmo(gun);
         }
@@ -1128,7 +1128,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     else if(heldstacks.getItem() instanceof ItemBandage){
                         if(this.getHealth()<this.getMaxHealth()){
-                            if(this.ticksExisted %20 == 0) {
                                 this.heal(1.0f);
                                 if(!player.isCreative()) {
                                     if(heldstacks.attemptDamageItem(1, MathUtil.getRand(), (ServerPlayerEntity) player)){
@@ -1140,9 +1139,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                 double d2 = this.rand.nextGaussian() * 0.02D;
                                 player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f, 1.0f);
                                 this.getDataManager().set(HEAL_TIMER, 50);
-                                this.addAffection(0.2F);
+                                this.addAffection(0.12F);
                                 this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
-                            }
                             return ActionResultType.SUCCESS;
                         }
                     }
@@ -1273,8 +1271,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.createSpawnPacket();
     }
 
+    public void SwitchItemBehavior(){
+        this.setPickupItem(!this.shouldPickupItem());
+    }
+
     public void SwitchFreeRoamingStatus() {
-        this.setStayCenterPos(this.getPosition());
+        if(!this.isFreeRoaming()){
+            this.setStayCenterPos(this.getPosition());
+        }
+        else{
+            this.clearStayCenterPos();
+        }
         this.setFreeRoaming(!this.isFreeRoaming());
     }
 

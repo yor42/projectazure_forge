@@ -195,6 +195,15 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_log", hasItem(ItemTags.LOGS))
                 .build(consumer);
 
+        ShapedRecipeBuilder.shapedRecipe(registerBlocks.REENFORCEDCONCRETE.get().asItem(),2)
+                .key('G', Blocks.GRAY_CONCRETE_POWDER)
+                .key('S', ModTags.Items.PLATE_STEEL)
+                .patternLine("SGS")
+                .patternLine("GSG")
+                .patternLine("SGS")
+                .addCriterion("has_concrete_powder", hasItem(Blocks.GRAY_CONCRETE_POWDER))
+                .build(consumer);
+
 
         CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(ModTags.Items.TREE_SAP), registerItems.PLATE_POLYMER.get(), 0.5F, 200)
                 .addCriterion("has_item", hasItem(ModTags.Items.TREE_SAP))

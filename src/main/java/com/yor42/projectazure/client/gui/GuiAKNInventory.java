@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import net.minecraft.client.gui.IHasContainer;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
@@ -112,34 +113,59 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
     }
 
     private void switchBehavior() {
-        this.host.SwitchFreeRoamingStatus();
+        if(Screen.hasShiftDown()){
+            this.host.clearHomePos();
+        }
+        else {
+            this.host.SwitchFreeRoamingStatus();
+        }
+    }
+
+    private void switchItemBehavior() {
+        this.host.SwitchItemBehavior();
     }
 
     private void drawButtons(MatrixStack stack, int mousex, int mousey) {
 
-        int x = this.host.isFreeRoaming()? 0:10;
+        int homeModeX = this.host.isFreeRoaming()? 0:10;
+        int ItemPickupX = this.host.shouldPickupItem()? 0:10;
 
-        ImageButton button = new ImageButton(this.guiLeft,this.guiTop+51,10,10,x,200,10,TEXTURE, action->switchBehavior());
+        ImageButton HomeModeButton = new ImageButton(this.guiLeft,this.guiTop+51,10,10,homeModeX,200,10,TEXTURE, action->switchBehavior());
+        ImageButton ItemPickupButton = new ImageButton(this.guiLeft,this.guiTop+40,10,10,ItemPickupX,220,10,TEXTURE, action->switchItemBehavior());
 
         if(this.isPointInRegion(this.guiLeft,this.guiTop+51,10,10, mousex, mousey)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
             if(this.host.isFreeRoaming()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.on"));
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.on").mergeStyle(TextFormatting.GREEN));
             }
             else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.off"));
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.off").mergeStyle(TextFormatting.BLUE));
             }
 
             if(this.host.getHOMEPOS().isPresent()) {
+                ITextComponent shift = new StringTextComponent("[SHIFT]").mergeStyle(TextFormatting.YELLOW);
                 BlockPos Home = this.host.getHOMEPOS().get();
-                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
+                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()).mergeStyle(TextFormatting.BLUE));
+                tooltips.add(new TranslationTextComponent("gui.tooltip.shifttoclearhome", shift).mergeStyle(TextFormatting.GRAY));
             }
             else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome"));
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").mergeStyle(TextFormatting.GRAY));
+            }
+            this.renderWrappedToolTip(stack, tooltips, mousex, mousey, this.font);
+        }
+        else if(this.isPointInRegion(this.guiLeft,this.guiTop+40,10,10, mousex, mousey)){
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            if(this.host.shouldPickupItem()){
+                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.on").mergeStyle(TextFormatting.GREEN));
+            }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").mergeStyle(TextFormatting.BLUE));
             }
             this.renderWrappedToolTip(stack, tooltips, mousex-this.guiLeft, mousey-this.guiTop, this.font);
         }
-        this.addButton(button);
+
+        this.addButton(HomeModeButton);
+        this.addButton(ItemPickupButton);
     }
 
     private void renderEntity(int mousex, int mousey){
