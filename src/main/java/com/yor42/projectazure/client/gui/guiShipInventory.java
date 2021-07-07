@@ -138,7 +138,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
         matrixStack.scale(rendersize, rendersize, rendersize);
         this.font.func_243248_b(matrixStack, this.title, (float)this.titleX/rendersize, (float)this.titleY/rendersize, 14085119);
         this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (float)76/rendersize, (float)25/rendersize, 14085119);
-        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+5/rendersize, 5/rendersize, 14085119);
+        this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), (this.backgroundWidth+5)/rendersize, 6/rendersize, 14085119);
         matrixStack.pop();
         IFormattableTextComponent leveltext = new StringTextComponent("Lv.").appendString(Integer.toString(this.host.getLevel()));
         this.font.func_243248_b(matrixStack, leveltext, (float)168-this.font.getStringPropertyWidth(leveltext), (float)81, 14085119);
@@ -168,7 +168,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
             if(this.host.getHOMEPOS().isPresent()) {
                 BlockPos Home = this.host.getHOMEPOS().get();
-                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
+                tooltips.add(new TranslationTextComponent("gui.tooltip.homepos").appendString(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
             }else{
                 tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").mergeStyle(TextFormatting.GRAY));
             }
@@ -305,8 +305,8 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
                 break;
             }
         }
-        this.blit(matrixStack, 126, 35, textureX, textureY, 12, 12);
-        if (isPointInRegion(126, 35, 12,12,mousex,mousey)){
+        this.blit(matrixStack, 125, 35, textureX, textureY, 12, 12);
+        if (isPointInRegion(125, 35, 12,12,mousex,mousey)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
             double AffectionLimit = this.host.isOathed()? 200:100;
             tooltips.add(new TranslationTextComponent("gui.current_morale_level").appendString(": ").append(new TranslationTextComponent(morale.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(color))));

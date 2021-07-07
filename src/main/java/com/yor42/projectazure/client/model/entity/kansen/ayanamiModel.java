@@ -11,9 +11,12 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
+
 public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
 
     private int blinkinterval = 0;
+    private long LastBlinkTime = 0;
     private final Random random = new Random();
 
     @Override
@@ -56,19 +59,23 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
             body.setPositionZ(-10);
         }
         else {
-            if (this.blinkinterval <= 5) {
-                NormalFace.setHidden(true);
-                ExcitedFace.setHidden(true);
-                EyeclosedFace.setHidden(false);
-                if (this.blinkinterval == 0) {
-                    this.blinkinterval = 20 * (random.nextInt(9) + 2);
+            if(this.LastBlinkTime == 0){
+                this.LastBlinkTime = System.currentTimeMillis();
+            }
+            if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
+                if(EyeclosedFace.isHidden()){
+                    NormalFace.setHidden(true);
+                    ExcitedFace.setHidden(true);
+                    EyeclosedFace.setHidden(false);
+                    this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
-                this.blinkinterval--;
-            } else {
-                this.blinkinterval--;
-                NormalFace.setHidden(false);
-                ExcitedFace.setHidden(true);
-                EyeclosedFace.setHidden(true);
+                else{
+                    NormalFace.setHidden(false);
+                    ExcitedFace.setHidden(true);
+                    EyeclosedFace.setHidden(true);
+                    this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
+                }
+                this.LastBlinkTime = System.currentTimeMillis();
             }
         }
 

@@ -15,12 +15,13 @@ import software.bernie.shadowed.eliotlash.molang.MolangParser;
 import javax.annotation.Nullable;
 import java.util.Random;
 
+import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.*;
 
 public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
 
     private int blinkinterval = 0;
-    private final Random random = new Random();
+    private long LastBlinkTime = 0;
 
     @Override
     public ResourceLocation getModelLocation(EntityShiroko entityShiroko) {
@@ -76,23 +77,27 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
             body.setPositionZ(-5);
         }
         else {
-            if (this.blinkinterval <= 5) {
-                NormalFace.setHidden(true);
-                ExcitedFace.setHidden(true);
-                PatFace.setHidden(true);
-                EyeclosedFace.setHidden(false);
-                HealFace.setHidden(true);
-                if (this.blinkinterval == 0) {
-                    this.blinkinterval = 20 * (random.nextInt(9) + 2);
+            if(this.LastBlinkTime == 0){
+                this.LastBlinkTime = System.currentTimeMillis();
+            }
+            if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
+                if(EyeclosedFace.isHidden()){
+                    NormalFace.setHidden(true);
+                    ExcitedFace.setHidden(true);
+                    PatFace.setHidden(true);
+                    EyeclosedFace.setHidden(false);
+                    HealFace.setHidden(true);
+                    this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
-                this.blinkinterval--;
-            } else {
-                this.blinkinterval--;
-                NormalFace.setHidden(false);
-                PatFace.setHidden(true);
-                ExcitedFace.setHidden(true);
-                EyeclosedFace.setHidden(true);
-                HealFace.setHidden(true);
+                else{
+                    NormalFace.setHidden(false);
+                    PatFace.setHidden(true);
+                    ExcitedFace.setHidden(true);
+                    EyeclosedFace.setHidden(true);
+                    HealFace.setHidden(true);
+                    this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
+                }
+                this.LastBlinkTime = System.currentTimeMillis();
             }
         }
         Halo.setHidden(entity.isSleeping());

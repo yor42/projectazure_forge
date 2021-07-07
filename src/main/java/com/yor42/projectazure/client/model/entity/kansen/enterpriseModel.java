@@ -15,6 +15,7 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.*;
 public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
 
     private int blinkinterval = 0;
+    private long LastBlinkTime = 0;
 
     @Override
     public ResourceLocation getModelLocation(EntityEnterprise entityEnterprise) {
@@ -62,23 +63,27 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             body.setPositionZ(-5);
         }
         else {
-            if (this.blinkinterval <= 5) {
-                NormalFace.setHidden(true);
-                ExcitedFace.setHidden(true);
-                EyeclosedFace.setHidden(false);
-                PatFace.setHidden(true);
-                SleepFace.setHidden(true);
-                if (this.blinkinterval == 0) {
-                    this.blinkinterval = 20 * (getRand().nextInt(9) + 2);
+            if(this.LastBlinkTime == 0){
+                this.LastBlinkTime = System.currentTimeMillis();
+            }
+            if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
+                if(EyeclosedFace.isHidden()){
+                    NormalFace.setHidden(true);
+                    ExcitedFace.setHidden(true);
+                    EyeclosedFace.setHidden(false);
+                    PatFace.setHidden(true);
+                    SleepFace.setHidden(true);
+                    this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
-                this.blinkinterval--;
-            } else {
-                this.blinkinterval--;
-                NormalFace.setHidden(false);
-                ExcitedFace.setHidden(true);
-                EyeclosedFace.setHidden(true);
-                PatFace.setHidden(true);
-                SleepFace.setHidden(true);
+                else{
+                    NormalFace.setHidden(false);
+                    ExcitedFace.setHidden(true);
+                    EyeclosedFace.setHidden(true);
+                    PatFace.setHidden(true);
+                    SleepFace.setHidden(true);
+                    this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
+                }
+                this.LastBlinkTime = System.currentTimeMillis();
             }
         }
 

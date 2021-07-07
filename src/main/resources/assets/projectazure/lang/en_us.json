@@ -147,12 +147,23 @@
   "gui.shipinventory": "KANSEN Inv.",
   "gui.companioninventory": "Inventory",
 
+  "gui.current_morale_level": "Current Affection",
+  "gui.current_morale_value": "Affection",
   "gui.current_affection_level": "Current Affection",
   "gui.current_affection_value": "Affection",
   "gui.entity.level": "Lv",
 
   "gui.akn_inventory": "Operator Inv.",
   "gui.akn_trust": "Trust",
+
+  "gui.tooltip.freeroaming.off": "This companion is following you",
+  "gui.tooltip.freeroaming.on": "This companion will stay around here freely",
+
+  "gui.tooltip.homemode.nohome": "Currently has no bed to sleep",
+  "gui.tooltip.homepos": "Current Bed Position",
+
+  "gui.tooltip.itempickup.off": "This companion will not pickup items",
+  "gui.tooltip.itempickup.on": "This companion will pick up nearby items",
 
   "gui.ammostorage.title": "Ammo",
 
@@ -203,6 +214,12 @@
   "guntype.shotgun": "Shotgun",
   "guntype.handgun": "Handgun",
   "guntype.sniper": "Sniper Rifle",
+
+  "really_happy": "Excited",
+  "happy": "Happy",
+  "neutral": "Neutral",
+  "sad": "Sad",
+  "EXHAUSTED": "Exhausted",
 
   "plane.fighter": "Fighter",
   "plane.torpedo_bomber": "Torpedo Bomber",
