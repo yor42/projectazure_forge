@@ -37,7 +37,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail", true));
             }
@@ -104,7 +104,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail_arm", true));
             }

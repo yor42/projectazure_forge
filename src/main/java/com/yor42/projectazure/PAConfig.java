@@ -109,7 +109,7 @@ public class PAConfig {
             ChenHealth = builder.defineInRange("Max Health of Ch'en", 25D, 1, 1024);
             ChenSwimSpeed = builder.defineInRange("Swim Speed of Ch'en", 2.5, 0, 1024);
             ChenAttackDamage = builder.defineInRange("Attack Damage of Ch'en", 2.0F, 0, 1024);
-            ChenMovementSpeed = builder.defineInRange("Movement speed of Ch'en", 0.25F, 0, 2);
+            ChenMovementSpeed = builder.defineInRange("Movement speed of Ch'en", 0.4F, 0, 2);
 
             builder.comment("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);

@@ -69,7 +69,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_arm", true));
             return PlayState.CONTINUE;
         }
-        else if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        else if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_arm", true));
             }
@@ -117,7 +117,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
             }

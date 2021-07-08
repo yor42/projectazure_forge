@@ -268,7 +268,7 @@ public class enums {
         REALLY_HAPPY("really_happy"),
         HAPPY("happy"),
         NEUTRAL("neutral"),
-        SAD("sad"),
+        TIRED("tired"),
         EXHAUSTED("exhausted");
 
         private final String name;

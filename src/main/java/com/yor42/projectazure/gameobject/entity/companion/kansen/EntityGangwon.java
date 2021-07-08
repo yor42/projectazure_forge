@@ -73,7 +73,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }else {
 
-            if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+            if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
                 if (this.isSailing()) {
                     event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", true));
                 } else if (this.isSprinting()) {
@@ -129,7 +129,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail", true));
             }

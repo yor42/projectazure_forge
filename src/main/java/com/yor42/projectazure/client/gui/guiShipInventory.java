@@ -85,7 +85,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
             return enums.Morale.NEUTRAL;
         }
         else if(this.morale>10 && this.morale<=30){
-            return enums.Morale.SAD;
+            return enums.Morale.TIRED;
         }
         else{
             return enums.Morale.EXHAUSTED;
@@ -284,7 +284,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
                 color = 7829367;
                 break;
             }
-            case SAD:{
+            case TIRED:{
                 color = 16481134;
                 textureX = 188;
                 break;

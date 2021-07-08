@@ -10,9 +10,4 @@ public abstract class EntityKansenAircraftCarrier extends EntityKansenBase {
         super(type, worldIn);
         this.setShipClass(enums.shipClass.AircraftCarrier);
     }
-
-    @Override
-    protected void registerGoals() {
-        super.registerGoals();
-    }
 }

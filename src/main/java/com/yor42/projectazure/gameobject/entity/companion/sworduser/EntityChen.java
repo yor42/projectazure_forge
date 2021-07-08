@@ -6,6 +6,7 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IArknightOperator;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -38,7 +39,6 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
     @Override
     public void registerControllers(AnimationData animationData) {
         super.registerControllers(animationData);
-
         animationData.addAnimationController(new AnimationController<>(this, "controller_tail", 10, this::predicate_tail));
     }
 
@@ -58,7 +58,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_leg", true));
             }
@@ -139,7 +139,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
-        else if(!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F) && !this.isEntitySleeping()) {
+        else if(!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F) && !this.isEntitySleeping()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }

@@ -218,8 +218,8 @@
   "really_happy": "Excited",
   "happy": "Happy",
   "neutral": "Neutral",
-  "sad": "Sad",
-  "EXHAUSTED": "Exhausted",
+  "tired": "Tired",
+  "exhaused": "Exhausted",
 
   "plane.fighter": "Fighter",
   "plane.torpedo_bomber": "Torpedo Bomber",

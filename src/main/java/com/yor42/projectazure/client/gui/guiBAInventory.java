@@ -180,7 +180,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
             return enums.Morale.NEUTRAL;
         }
         else if(this.morale>=10 && this.morale<30){
-            return enums.Morale.SAD;
+            return enums.Morale.TIRED;
         }
         else{
             return enums.Morale.EXHAUSTED;
@@ -205,7 +205,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
                 textureX = 176;
                 break;
             }
-            case SAD:{
+            case TIRED:{
                 color = 16481134;
                 textureX = 188;
                 break;
