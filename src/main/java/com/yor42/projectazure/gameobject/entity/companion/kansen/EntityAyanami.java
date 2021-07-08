@@ -33,8 +33,11 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isBeingPatted()){
+        if(this.isSwingInProgress){
+            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
             return PlayState.CONTINUE;
         }
@@ -60,11 +63,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
         else if(this.isGettingHealed()){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.heal_arm", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.isMeleeing()){
-            if(this.swingingHand == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.melee1", false));
-            }
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_arm", true));
             return PlayState.CONTINUE;
@@ -108,8 +106,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_leg", true));
             return PlayState.CONTINUE;
         }
-
-        if(this.isEntitySleeping() || this.getRidingEntity() != null){
+        else if(this.isEntitySleeping() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {

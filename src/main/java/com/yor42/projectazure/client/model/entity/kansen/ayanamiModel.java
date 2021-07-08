@@ -2,7 +2,9 @@ package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.libs.defined;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -85,6 +87,7 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
                 head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
                 head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
             }
+
         }
     }
 }

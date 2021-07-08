@@ -595,7 +595,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController<>(this, "controller_lowerbody", 10, this::predicate_lowerbody));
-        animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 10, this::predicate_upperbody));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 1, this::predicate_upperbody));
         animationData.addAnimationController(new AnimationController<>(this, "controller_head", 10, this::predicate_head));
     }
 
@@ -645,6 +645,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.isOpeningDoor = openingdoor;
         this.dataManager.set(OPENINGDOOR, this.isOpeningDoor);
     }
+
+
 
     public boolean shouldPickupItem(){
         return this.dataManager.get(PICKUP_ITEM);
@@ -777,6 +779,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void livingTick() {
         super.livingTick();
+
+        this.updateArmSwingProgress();
 
         if(this.getLastAttackedEntityTime()>200 && this.getGunAmmoCount() <= 0){
             this.setReloadDelay();
@@ -1024,6 +1028,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(15, new CompanionFindBedGoal(this));
         this.goalSelector.addGoal(16, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(17, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(18, new CompanionPlaceTorchGoal(this));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));

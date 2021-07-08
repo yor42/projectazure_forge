@@ -58,10 +58,8 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isMeleeing()){
-            if(this.swingingHand == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("melee", false));
-            }
+        else if(this.swingProgress>0){
+            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }else if(this.isGettingHealed()){
             event.getController().setAnimation(builder.addAnimation("heal_arm", true));
