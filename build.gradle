@@ -2,9 +2,15 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
+
+        maven {
+            name = "cursemaven"
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath "com.wynprice.cursemaven:CurseMaven:2.1.1"
     }
 }
 
@@ -12,8 +18,9 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: "com.wynprice.cursemaven"
 
-version = '0.1.4'
+version = '0.1.5'
 group = 'com.yor42.projecrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = project.archive_basename
 
@@ -118,6 +125,12 @@ repositories {
 
     maven { url 'https://modmaven.dev/' }//Mekanism
 
+    maven {
+
+        url "https://www.cursemaven.com"
+
+    }
+
     maven { // TOP
         name 'tterrag maven'
         url "http://maven.tterrag.com/"
@@ -138,6 +151,8 @@ dependencies {
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.41')
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+
+    implementation fg.deobf('curse.maven:realistic-torches-235729:3191715')
 
 
     implementation fg.deobf('com.yor42:solarapocalypse:1.0')
