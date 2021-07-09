@@ -21,7 +21,7 @@ public class CompanionSleepGoal extends Goal {
             if(this.companion.getEntityWorld().isNightTime() && !this.companion.isForceWaken()){
 
                 boolean flag3 = this.companion.isInHomeRangefromCurrenPos();
-                boolean flag4 = (this.companion.isFreeRoaming()||(this.companion.getOwner()!=null && this.companion.getOwner().isSleeping()) || this.companion.getMorale()<=30);
+                boolean flag4 = (this.companion.isFreeRoaming()||(this.companion.getOwner()!=null && this.companion.getOwner().isSleeping()) || this.companion.getMorale()<=30) || (this.companion.isFreeRoaming() && (this.companion.getEntityWorld().isThundering() || this.companion.getEntityWorld().isNightTime()));
                 boolean flag2 = !this.companion.isSleeping();
                 return flag2 && flag3 && flag4;
             }

@@ -381,6 +381,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("level", this.getDataManager().get(LEVEL));
         compound.putInt("limitbreaklv", this.dataManager.get(LIMITBREAKLEVEL));
         compound.putInt("awaken", this.awakeningLevel);
+        compound.putBoolean("isSitting", this.isSitting());
         compound.putBoolean("freeroaming", this.isFreeRoaming());
         compound.putDouble("morale", this.dataManager.get(MORALE));
         compound.putLong("lastslept", this.lastSlept);
@@ -439,11 +440,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void readAdditional(@Nonnull CompoundNBT compound) {
+
         super.readAdditional(compound);
         this.dataManager.set(AFFECTION, compound.getFloat("affection"));
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
         this.dataManager.set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
+        this.func_233687_w_(compound.getBoolean("isSitting"));
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
         if(hasStayPos) {
             this.dataManager.set(RecruitStationPos, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
@@ -915,7 +918,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
 
 
-        if(!this.getEntityWorld().isRemote() && this.getEntityWorld().isNightTime() && this.isEntitySleeping() && this.isInHomeRangefromCurrenPos()){
+        if(!this.getEntityWorld().isRemote() && (this.getEntityWorld().isNightTime() && this.isSitting() && this.isInHomeRangefromCurrenPos())){
             this.func_233687_w_(false);
         }
 
@@ -1087,6 +1090,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.canBeCollidedWith()&&!this.isSleeping();
     }
 
+    @Override
+    public boolean canCollide(Entity entity) {
+
+        if(this.isSleeping()){
+            return false;
+        }
+
+
+        return super.canCollide(entity);
+    }
 
     @Nonnull
     @Override
@@ -1133,9 +1146,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     else if(heldstacks.getItem() instanceof ItemBandage){
                         if(this.getHealth()<this.getMaxHealth()){
+                            if(!this.world.isRemote) {
                                 this.heal(1.0f);
-                                if(!player.isCreative()) {
-                                    if(heldstacks.attemptDamageItem(1, MathUtil.getRand(), (ServerPlayerEntity) player)){
+                                if (!player.isCreative()) {
+                                    if (heldstacks.attemptDamageItem(1, MathUtil.getRand(), (ServerPlayerEntity) player)) {
                                         heldstacks.shrink(1);
                                     }
                                 }
@@ -1146,6 +1160,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                 this.getDataManager().set(HEAL_TIMER, 50);
                                 this.addAffection(0.12F);
                                 this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+                            }
                             return ActionResultType.SUCCESS;
                         }
                     }
@@ -1162,7 +1177,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     double EyeCheckFinal = PlayerLook.dotProduct(EyeDelta);
 
                     //check is player is looking at leg
-                    Vector3d LegDelta = new Vector3d(this.getPosX() - player.getPosX(), this.getPosY()+0.3 - player.getPosYEye(), this.getPosZ() - player.getPosZ());
+                    Vector3d LegDelta = new Vector3d(this.getPosX() - player.getPosX(), this.getPosY()+0.4 - player.getPosYEye(), this.getPosZ() - player.getPosZ());
                     double LegDeltaLength = LegDelta.length();
                     LegDelta = LegDelta.normalize();
                     double LegCheckFinal = PlayerLook.dotProduct(LegDelta);
