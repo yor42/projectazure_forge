@@ -106,7 +106,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_leg", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isEntitySleeping() || this.getRidingEntity() != null){
+        else if(this.isSitting() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {

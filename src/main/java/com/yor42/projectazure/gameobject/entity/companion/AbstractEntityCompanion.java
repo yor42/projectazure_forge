@@ -252,7 +252,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     };
 
     protected int patAnimationTime, patTimer;
-    protected boolean isFreeRoaming;
     protected boolean isSwimmingUp;
     protected boolean isMeleeing;
     protected boolean isOpeningDoor;
@@ -283,6 +282,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> PICKUP_ITEM = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> ISFREEROAMING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Optional<BlockPos>> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Optional<BlockPos>> RecruitStationPos = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Optional<BlockPos>> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
@@ -528,11 +528,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isFreeRoaming() {
-        return this.isFreeRoaming;
+        return this.dataManager.get(ISFREEROAMING);
     }
 
-    public void setFreeRoaming(boolean freeRoaming) {
-        this.isFreeRoaming = freeRoaming;
+    public void setFreeRoaming(boolean value) {
+        this.dataManager.set(ISFREEROAMING, value);
     }
 
 
@@ -637,6 +637,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(HOMEPOS, Optional.empty());
         this.dataManager.register(ISFORCEWOKENUP, false);
         this.dataManager.register(ISUSINGGUN, false);
+        this.dataManager.register(ISFREEROAMING, false);
         this.dataManager.register(VALID_HOME_DISTANCE, -1.0f);
         this.dataManager.register(HEAL_TIMER, 0);
         this.dataManager.register(RELOAD_TIMER_MAINHAND, 0);
@@ -789,7 +790,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.setReloadDelay();
         }
 
-        this.dataManager.set(SITTING, this.isEntitySleeping());
+        if(this.getDataManager().get(SITTING) != this.isSitting()) {
+            this.func_233687_w_(this.getDataManager().get(SITTING));
+        }
 
         if(this.collidedHorizontally && this.isInWater()) {
             Vector3d vec3d = this.getMotion();
@@ -903,7 +906,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(this.isBeingPatted() && this.ticksExisted%20 ==0){
             this.addMorale(0.02);
         }
-        else if(this.isEntitySleeping() && this.ticksExisted%20 == 0){
+        else if(this.isSitting() && this.ticksExisted%20 == 0){
             this.addMorale(0.015);
         }
         else if(!this.isFreeRoaming()&& this.ticksExisted%20 == 0){
@@ -1409,7 +1412,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void func_233687_w_(boolean p_233687_1_) {
         super.func_233687_w_(p_233687_1_);
-        this.recalculateSize();
+        this.getDataManager().set(SITTING, p_233687_1_);
     }
 
 }

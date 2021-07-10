@@ -40,7 +40,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
         }
 
         if(this.isBeingPatted()){
-            if(this.isEntitySleeping())
+            if(this.isSitting())
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));
             else
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", true));
@@ -83,7 +83,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
                 return PlayState.CONTINUE;
             }
             else{
-                if(this.isEntitySleeping()) {
+                if(this.isSitting()) {
                     event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_arm", true));
                     return PlayState.CONTINUE;
                 }
@@ -120,7 +120,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
 
-        if(this.isEntitySleeping() || this.getRidingEntity() != null){
+        if(this.isSitting() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
