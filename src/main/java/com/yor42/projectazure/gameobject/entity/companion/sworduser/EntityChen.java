@@ -50,7 +50,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isEntitySleeping() || this.getRidingEntity() != null){
+        if(this.isSitting() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("sit_leg", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -81,7 +81,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.dataManager.get(SITTING)){
+        if(this.isSitting()){
             event.getController().setAnimation(builder.addAnimation("sit_tail", true));
         }
         else if(this.isBeingPatted()){
@@ -138,7 +138,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
-        else if(!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F) && !this.isEntitySleeping()) {
+        else if(!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F) && !this.isSitting()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }

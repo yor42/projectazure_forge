@@ -53,7 +53,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
         if(entity.isBeingPatted()){
-            if(entity.isEntitySleeping()){
+            if(entity.isSitting()){
                     NormalFace.setHidden(true);
                     PatFace.setHidden(true);
                     EyeclosedFace.setHidden(true);

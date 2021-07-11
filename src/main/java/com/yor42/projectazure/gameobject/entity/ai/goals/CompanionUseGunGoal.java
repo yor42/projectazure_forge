@@ -51,7 +51,7 @@ public class CompanionUseGunGoal extends Goal {
         if(gunStack.getItem() instanceof ItemGunBase) {
             boolean canusegun = this.companion.shouldUseGun();
             boolean hastarget = this.companion.getAttackTarget() != null && this.companion.getAttackTarget().isAlive();
-            boolean entitycanAttack = !this.companion.isSleeping() && !this.companion.isEntitySleeping();
+            boolean entitycanAttack = !this.companion.isSleeping() && !this.companion.isSitting();
             return canusegun && entitycanAttack && hastarget;
 
         }

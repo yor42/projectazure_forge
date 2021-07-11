@@ -20,7 +20,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '0.1.9'
+version = '0.2.0'
 group = 'com.yor42.projecrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = project.archive_basename
 
@@ -153,7 +153,7 @@ dependencies {
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
     implementation fg.deobf('curse.maven:realistic-torches-235729:3191715')
-
+    implementation fg.deobf('curse.maven:performant-354143:3381890')
 
     implementation fg.deobf('com.yor42:solarapocalypse:1.0')
 

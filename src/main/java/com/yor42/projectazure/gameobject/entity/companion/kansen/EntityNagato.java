@@ -38,8 +38,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
         }
 
         if(this.isBeingPatted()){
-            if(this.isEntitySleeping())
-                event.getController().setAnimation(builder.addAnimation("pat_arm", true));
+            event.getController().setAnimation(builder.addAnimation("pat_arm", true));
             return PlayState.CONTINUE;
         }
 
@@ -81,7 +80,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
-        if(this.isEntitySleeping()){
+        if(this.isSitting()){
             event.getController().setAnimation(builder.addAnimation("idle_sit", true));
         }
         else {
@@ -109,7 +108,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isEntitySleeping() || this.getRidingEntity() != null){
+        if(this.isSitting() || this.getRidingEntity() != null){
             event.getController().setAnimation(builder.addAnimation("sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {

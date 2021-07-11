@@ -70,7 +70,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.sleep", true));
             return PlayState.CONTINUE;
         }else if(this.isBeingPatted()){
-            if(this.isEntitySleeping())
+            if(this.isSitting())
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
             else
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));

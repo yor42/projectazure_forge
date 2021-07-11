@@ -51,7 +51,7 @@ public class KansenLaunchPlaneGoal extends Goal {
             return false;
         }
 
-        boolean flag = !this.entity.isEntitySleeping()&&this.entity.hasRigging() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive();
+        boolean flag = !this.entity.isSitting()&&this.entity.hasRigging() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive();
 
         if (flag){
             boolean flag2 =this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && EntityHasPlanes(this.entity);

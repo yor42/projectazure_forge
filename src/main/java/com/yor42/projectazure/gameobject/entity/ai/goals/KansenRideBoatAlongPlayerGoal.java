@@ -51,7 +51,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
         if (flag) {
             this.boat = Boat;
             this.sameBoatWithOwner = true;
-            return !this.entity.canUseRigging() && !this.entity.isEntitySleeping();
+            return !this.entity.canUseRigging() && !this.entity.isSitting();
         }
         else{
             List<Entity> possibleBoat = this.entity.getEntityWorld().getEntitiesInAABBexcluding(this.entity, this.entity.getBoundingBox().expand(10, 2, 10), (entity) -> entity instanceof BoatEntity && entity.getPassengers().size() < 2 && entity.areEyesInFluid(FluidTags.WATER));

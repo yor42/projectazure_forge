@@ -35,7 +35,7 @@ public class CompanionPlaceTorchGoal extends Goal {
         ItemStack mainHandStack = this.companion.getHeldItem(MAIN_HAND);
         ItemStack offHandStack = this.companion.getHeldItem(OFF_HAND);
 
-        if(this.companion.isEntitySleeping() || this.companion.isSleeping()){
+        if(this.companion.isSitting() || this.companion.isSleeping()){
             return false;
         }
 
