@@ -235,7 +235,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     @Override
     public boolean hasNoGravity() {
-        return this.isInWater();
+        boolean flag = this.isSailing();
+
+        return flag;
     }
 
     public ItemStack findAmmo(enums.AmmoCategory category){

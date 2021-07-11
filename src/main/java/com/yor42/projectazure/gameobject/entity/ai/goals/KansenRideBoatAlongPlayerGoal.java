@@ -113,7 +113,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
                 }
             }
 
-            if (this.boat != null && this.boat instanceof BoatEntity) {
+            if (this.boat != null && this.boat instanceof BoatEntity && this.entity.getOwner() != null) {
                 if (this.boat.getPassengers().size()<2 && this.sameBoatWithOwner) {
                     double distanceSq = this.entity.getDistanceSq(this.boat.getPosX(), this.boat.getPosY(), this.boat.getPosZ());
                     if (distanceSq <= 3.0 && !this.entity.isRidingOrBeingRiddenBy(this.boat)) {
@@ -193,22 +193,6 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
         }
 
 
-    }
-    //Shameless copy of vanilla path thing
-    private boolean func_234112_b_(Vector3d currentPosition, Path path) {
-        if (path.getCurrentPathIndex() + 1 >= path.getCurrentPathLength()) {
-            return false;
-        } else {
-            Vector3d vector3d = Vector3d.copyCenteredHorizontally(path.func_242948_g());
-            if (!currentPosition.isWithinDistanceOf(vector3d, 2.0D)) {
-                return false;
-            } else {
-                Vector3d vector3d1 = Vector3d.copyCenteredHorizontally(path.func_242947_d(path.getCurrentPathIndex() + 1));
-                Vector3d vector3d2 = vector3d1.subtract(vector3d);
-                Vector3d vector3d3 = currentPosition.subtract(vector3d);
-                return vector3d2.dotProduct(vector3d3) > 0.0D;
-            }
-        }
     }
 
 }

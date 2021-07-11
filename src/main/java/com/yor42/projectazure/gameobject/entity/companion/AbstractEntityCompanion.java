@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
+import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
@@ -299,7 +300,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setAffection(40F);
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
         this.setFreeRoaming(false);
-        this.swimmingNav = new SwimmerPathNavigator(this, worldIn);
+        this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
         this.groundNav = new GroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
         this.MoveController = new MovementController(this);
@@ -581,6 +582,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public boolean isSailing(){
         return false;
+    }
+
+    public boolean isPushedByWater() {
+        return !this.isSwimming();
     }
 
     @Override

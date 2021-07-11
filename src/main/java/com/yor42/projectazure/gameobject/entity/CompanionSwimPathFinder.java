@@ -5,10 +5,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.ForgeMod;
+
+import static net.minecraft.tags.FluidTags.WATER;
 
 public class CompanionSwimPathFinder extends MovementController {
 
@@ -22,18 +26,26 @@ public class CompanionSwimPathFinder extends MovementController {
     public void tick() {
         if(this.companion.isInWater() || this.companion.isInLava())
         {
-
-            BlockPos blockpos = new BlockPos(this.companion.getPosX(), this.companion.getPosY(), this.companion.getPosZ());
-            BlockState blockstate = this.companion.world.getBlockState(blockpos.up());
+            BlockPos blockpos = this.mob.getPosition();
+            BlockState blockstate = this.mob.world.getBlockState(blockpos);
             LivingEntity livingentity = this.companion.getAttackTarget();
 
-            if((this.companion.isInWater() || this.companion.isInLava()) && ((livingentity != null && livingentity.getPosY() > this.companion.getPosY()) || this.companion.isSwimmingUp() || (this.companion.getOwner() != null && this.companion.getOwner().getPosY()+1 > this.companion.getPosY())) && !this.companion.canUseRigging()){
-                double f = this.companion.getEyeHeight()-0.2;
-                double waterheight = this.companion.func_233571_b_(FluidTags.WATER);
-                 if(waterheight > f || this.companion.isSwimmingUp()) {
-                     Vector3d vec3d = this.companion.getMotion();
-                    this.companion.setMotion(vec3d.x, vec3d.y + (double)(0.0075F), vec3d.z);
-                 }
+            double d0 = this.posX - this.mob.getPosX();
+            double d1 = this.posZ - this.mob.getPosZ();
+            double d2 = this.posY - this.mob.getPosY();
+            VoxelShape voxelshape = blockstate.getCollisionShape(this.mob.world, blockpos);
+
+            boolean obstructed = d0 * d0 + d1 * d1 < (double)Math.max(1.0F, this.mob.getWidth()) || !voxelshape.isEmpty() && this.mob.getPosY() < voxelshape.getEnd(Direction.Axis.Y) + (double)blockpos.getY();
+
+            boolean isOwnerHigherinWater = this.companion.getOwner() != null && this.companion.getOwner().areEyesInFluid(WATER) && (this.companion.getOwner().getPosY() > this.companion.getPosY());
+            boolean isTargetHigher = livingentity != null && livingentity.isInWater() && livingentity.getPosY() > this.companion.getPosY();
+            double f = this.companion.getEyeHeight()-0.2;
+            double waterheight = this.companion.func_233571_b_(WATER);
+            boolean shouldswim = waterheight > f && !this.companion.getOwner().areEyesInFluid(WATER);
+            boolean isJumping = this.action == Action.JUMPING;
+            if((shouldswim || this.companion.isInLava()) || isTargetHigher || this.companion.isSwimmingUp() || obstructed || isOwnerHigherinWater || isJumping || this.companion.collidedHorizontally && !this.companion.canUseRigging()){
+                Vector3d vec3d = this.companion.getMotion();
+                this.companion.setMotion(vec3d.x, vec3d.y + (double)(0.0175F), vec3d.z);
             }
         }
 
