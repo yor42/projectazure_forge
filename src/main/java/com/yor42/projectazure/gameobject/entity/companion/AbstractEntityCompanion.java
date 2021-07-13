@@ -14,6 +14,7 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.intermod.ModCompatibilities;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.network.packets.ChangeEntityBehaviorPacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -299,7 +300,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         super(type, worldIn);
         this.setAffection(40F);
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
-        this.setFreeRoaming(false);
         this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
         this.groundNav = new GroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
@@ -534,6 +534,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void setFreeRoaming(boolean value) {
         this.dataManager.set(ISFREEROAMING, value);
+        if(value) {
+            this.setStayCenterPos(this.getPosition());
+        }
+        else{
+            this.clearStayCenterPos();
+        }
     }
 
 
@@ -1204,7 +1210,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         this.beingpatted();
                         return ActionResultType.SUCCESS;
                     } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
-                        this.func_233687_w_(!this.isSitting());
+                        if(this.getEntityWorld().isRemote()){
+                            this.SwitchSittingStatus();
+                        }
+                        //this.func_233687_w_(!this.isSitting());
                         return ActionResultType.SUCCESS;
                     }
                 }
@@ -1219,6 +1228,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
         return super.applyPlayerInteraction(player, vec, hand);
+    }
+
+    private void SwitchSittingStatus() {
+        Main.NETWORK.sendToServer(new ChangeEntityBehaviorPacket(this.getEntityId(), ChangeEntityBehaviorPacket.EntityBehaviorType.SIT, !this.isSitting()));
     }
 
     @Override
@@ -1300,17 +1313,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void SwitchItemBehavior(){
-        this.setPickupItem(!this.shouldPickupItem());
+        Main.NETWORK.sendToServer(new ChangeEntityBehaviorPacket(this.getEntityId(), ChangeEntityBehaviorPacket.EntityBehaviorType.ITEMPICKUP, !this.shouldPickupItem()));
     }
 
     public void SwitchFreeRoamingStatus() {
-        if(!this.isFreeRoaming()){
-            this.setStayCenterPos(this.getPosition());
-        }
-        else{
-            this.clearStayCenterPos();
-        }
-        this.setFreeRoaming(!this.isFreeRoaming());
+        Main.NETWORK.sendToServer(new ChangeEntityBehaviorPacket(this.getEntityId(), ChangeEntityBehaviorPacket.EntityBehaviorType.HOMEMODE, !this.isFreeRoaming()));
     }
 
     public void setForceWaken(boolean value){

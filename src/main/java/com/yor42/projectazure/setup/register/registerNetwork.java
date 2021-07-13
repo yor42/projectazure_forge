@@ -9,7 +9,7 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 public class registerNetwork {
 
     public static final ResourceLocation CHANNEL_NAME = new ResourceLocation(defined.MODID, "network");
-    public static final String NETWORK_VERSION = new ResourceLocation(defined.MODID, "1").toString();
+    public static final String NETWORK_VERSION = new ResourceLocation(defined.MODID, "2").toString();
 
     public static SimpleChannel getNetworkChannel() {
         final SimpleChannel channel = NetworkRegistry.ChannelBuilder.named(CHANNEL_NAME)
@@ -52,6 +52,12 @@ public class registerNetwork {
                 .decoder(StartRecruitPacket::decode)
                 .encoder(StartRecruitPacket::encode)
                 .consumer(StartRecruitPacket::handle)
+                .add();
+
+        channel.messageBuilder(ChangeEntityBehaviorPacket.class,7)
+                .decoder(ChangeEntityBehaviorPacket::decode)
+                .encoder(ChangeEntityBehaviorPacket::encode)
+                .consumer(ChangeEntityBehaviorPacket::handle)
                 .add();
 
         return channel;

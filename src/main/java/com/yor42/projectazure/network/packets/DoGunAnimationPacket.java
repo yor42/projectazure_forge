@@ -46,7 +46,7 @@ public class DoGunAnimationPacket {
     }
 
     public static void handle(final DoGunAnimationPacket message, final Supplier<NetworkEvent.Context> ctx){
-        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+        ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
             World clientWorld = ClientProxy.getClientWorld();;
             Entity entity =  clientWorld.getEntityByID(message.PlayerID);
 
