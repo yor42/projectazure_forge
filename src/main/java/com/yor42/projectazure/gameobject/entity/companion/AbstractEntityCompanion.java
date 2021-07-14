@@ -16,6 +16,7 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.ChangeEntityBehaviorPacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -44,17 +45,14 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.LightType;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -262,6 +260,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private final MovementController MoveController;
     protected final SwimmerPathNavigator swimmingNav;
     private final GroundPathNavigator groundNav;
+    protected CompanionFoodStats foodStats = new CompanionFoodStats();
     private List<ExperienceOrbEntity> nearbyExpList;
 
     protected long lastSlept, lastWokenup;
@@ -387,6 +386,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putBoolean("isMovingtoRecruitStation", this.isMovingtoRecruitStation);
         compound.put("inventory", this.getInventory().serializeNBT());
         compound.put("ammostorage", this.getAmmoStorage().serializeNBT());
+        this.foodStats.write(compound);
     }
 
     public void setHomeposAndDistance(BlockPos pos, float validDistance){
@@ -438,7 +438,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void readAdditional(@Nonnull CompoundNBT compound) {
-
         super.readAdditional(compound);
         this.dataManager.set(AFFECTION, compound.getFloat("affection"));
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
@@ -472,6 +471,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.lastSlept = compound.getLong("lastslept");
         this.lastWokenup = compound.getLong("lastwoken");
         this.getAmmoStorage().deserializeNBT(compound.getCompound("ammostorage"));
+        this.getFoodStats().read(compound);
     }
 
     public ItemStackHandler getInventory(){
@@ -698,6 +698,30 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(RecruitStationPos, Optional.empty());
     }
 
+    public boolean canEat(boolean ignoreHunger) {
+        return ignoreHunger || this.foodStats.needFood();
+    }
+
+    public void addExhaustion(float exhaustion) {
+        if (!this.world.isRemote) {
+            this.foodStats.addExhaustion(exhaustion);
+        }
+    }
+
+    public ItemStack onFoodEaten(World p_213357_1_, ItemStack p_213357_2_) {
+        this.getFoodStats().consume(p_213357_2_.getItem(), p_213357_2_);
+        p_213357_1_.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS, 0.5F, p_213357_1_.rand.nextFloat() * 0.1F + 0.9F);
+        return super.onFoodEaten(p_213357_1_, p_213357_2_);
+    }
+
+    public CompanionFoodStats getFoodStats() {
+        return this.foodStats;
+    }
+
+    public boolean shouldHeal() {
+        return this.getHealth() > 0.0F && this.getHealth() < this.getMaxHealth();
+    }
+
     public boolean isBeingPatted() {
         return this.patAnimationTime !=0;
     }
@@ -792,6 +816,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void livingTick() {
         super.livingTick();
+        /*
+        if (this.world.getDifficulty() == Difficulty.PEACEFUL && this.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION)) {
+            if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 20 == 0) {
+                this.heal(1.0F);
+            }
+
+            if (this.foodStats.needFood() && this.ticksExisted % 10 == 0) {
+                this.foodStats.setFoodLevel(this.foodStats.getFoodLevel() + 1);
+            }
+        }
+
+         */
 
         this.updateArmSwingProgress();
 
@@ -1223,6 +1259,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             if(!blockstate.isBed(this.getEntityWorld(),this.getHOMEPOS().get(), this)) {
                 this.clearHomePos();
             }
+        }
+        if(!this.getEntityWorld().isRemote()){
+            //this.foodStats.tick(this);
         }
     }
 
