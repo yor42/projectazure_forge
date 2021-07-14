@@ -60,6 +60,12 @@ public class registerNetwork {
                 .consumer(ChangeEntityBehaviorPacket::handle)
                 .add();
 
+        channel.messageBuilder(EditEntityValuePacket.class,8)
+                .decoder(EditEntityValuePacket::decode)
+                .encoder(EditEntityValuePacket::encode)
+                .consumer(EditEntityValuePacket::handle)
+                .add();
+
         return channel;
     }
 

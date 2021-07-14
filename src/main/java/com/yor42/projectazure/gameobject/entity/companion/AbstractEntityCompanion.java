@@ -5,7 +5,6 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
@@ -16,6 +15,7 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.ChangeEntityBehaviorPacket;
 import com.yor42.projectazure.setup.register.registerItems;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -46,7 +46,6 @@ import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -75,12 +74,12 @@ import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
-import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
@@ -267,7 +266,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private List<ExperienceOrbEntity> nearbyExpList;
 
     protected long lastSlept, lastWokenup;
-
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
 
     protected static final DataParameter<Float> MORALE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
@@ -303,7 +301,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
         this.groundNav = new GroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
-        this.MoveController = new MovementController(this);
+        this.MoveController = new MovementController(this);;
     }
 
     public void setOathed(boolean bool){
@@ -1212,9 +1210,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
                         if(this.getEntityWorld().isRemote()){
                             this.SwitchSittingStatus();
+                            return ActionResultType.SUCCESS;
                         }
                         //this.func_233687_w_(!this.isSitting());
-                        return ActionResultType.SUCCESS;
                     }
                 }
                 return ActionResultType.FAIL;
@@ -1422,9 +1420,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public abstract enums.CompanionRarity getRarity();
 
+    protected float getSitHeight(){
+        return 1F;
+    }
+
+    @Override
+    @MethodsReturnNonnullByDefault
+    public EntitySize getSize(@ParametersAreNonnullByDefault Pose poseIn) {
+        if(this.isSitting()){
+            return new EntitySize(this.getWidth(), this.getSitHeight(), false);
+        }
+        return super.getSize(poseIn);
+    }
+
     public void func_233687_w_(boolean p_233687_1_) {
         super.func_233687_w_(p_233687_1_);
         this.getDataManager().set(SITTING, p_233687_1_);
+        this.recalculateSize();
     }
 
 }
