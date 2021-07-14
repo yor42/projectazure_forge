@@ -55,7 +55,6 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -256,7 +255,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected boolean isSwimmingUp;
     protected boolean isMeleeing;
     protected boolean isOpeningDoor;
-    protected boolean isstuck;
     public boolean isMovingtoRecruitStation = false;
     protected int awakeningLevel;
     private final MovementController SwimController;
@@ -297,11 +295,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
-        this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
         this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
         this.groundNav = new GroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
-        this.MoveController = new MovementController(this);;
+        this.MoveController = new MovementController(this);
     }
 
     public void setOathed(boolean bool){
@@ -768,7 +765,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    public double addExp(double deltaExp){
+    public void addExp(double deltaExp){
         if(this.getExp()+deltaExp >= this.getMaxExp()) {
             this.setExp((float) (this.getExp()+deltaExp));
             this.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
@@ -778,7 +775,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
         this.setExp(this.getExp()+deltaExp);
-        return this.getExp();
+        this.getExp();
     }
 
     @Override
@@ -1095,7 +1092,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    public boolean canCollide(Entity entity) {
+    public boolean canCollide(@ParametersAreNonnullByDefault Entity entity) {
 
         if(this.isSleeping()){
             return false;
