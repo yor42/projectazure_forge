@@ -72,6 +72,30 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue Star_6_MinTime;
         public final ForgeConfigSpec.IntValue Star_6_MaxTime;
 
+        public final ForgeConfigSpec.BooleanValue ENABLE_COPPER;
+        public final ForgeConfigSpec.IntValue COPPER_VEINSIZE;
+        public final ForgeConfigSpec.IntValue COPPER_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue COPPER_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue COPPER_MAXHEIGHT;
+
+        public final ForgeConfigSpec.BooleanValue ENABLE_TIN;
+        public final ForgeConfigSpec.IntValue TIN_VEINSIZE;
+        public final ForgeConfigSpec.IntValue TIN_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue TIN_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue TIN_MAXHEIGHT;
+
+        public final ForgeConfigSpec.BooleanValue ENABLE_LEAD;
+        public final ForgeConfigSpec.IntValue LEAD_VEINSIZE;
+        public final ForgeConfigSpec.IntValue LEAD_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue LEAD_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue LEAD_MAXHEIGHT;
+
+        public final ForgeConfigSpec.BooleanValue ENABLE_ORIROCK;
+        public final ForgeConfigSpec.IntValue ORIROCK_VEINSIZE;
+        public final ForgeConfigSpec.IntValue ORIROCK_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue ORIROCK_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue ORIROCK_MAXHEIGHT;
+
         public final ForgeConfigSpec.IntValue BeaconFindSpawnPositionTries;
 
         public final ForgeConfigSpec.BooleanValue RedStonePoweredMachines;
@@ -141,6 +165,31 @@ public class PAConfig {
 
             builder.pop().push("Performance").comment("Things that might impact performance");
             BeaconFindSpawnPositionTries = builder.defineInRange("How many tries should Recruit beacon try to find spawn position of entity before returning machine's own position?", 5, 1, 20);
+
+            builder.pop().push("Worldgen").comment("Options about worldgen like ores");
+            ENABLE_COPPER = builder.define("Enable Copper Generation", true);
+            COPPER_VEINSPERCHUNK = builder.defineInRange("Count of copper vein in single chunk", 8,0,128);
+            COPPER_VEINSIZE = builder.defineInRange("Count of copper vein in single chunk", 7,0,512);
+            COPPER_MINHEIGHT = builder.defineInRange("Minimum Y axis value that copper can generate", 0,0,256);
+            COPPER_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that copper can generate", 60,0,256);
+
+            ENABLE_TIN = builder.define("Enable Tin Generation", true);
+            TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 8,0,128);
+            TIN_VEINSIZE = builder.defineInRange("Count of Tin vein in single chunk", 7,0,512);
+            TIN_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Tin can generate", 0,0,256);
+            TIN_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Tin can generate", 60,0,256);
+
+            ENABLE_LEAD = builder.define("Enable Lead Generation", true);
+            LEAD_VEINSPERCHUNK = builder.defineInRange("Count of Lead vein in single chunk", 4,0,128);
+            LEAD_VEINSIZE = builder.defineInRange("Count of Lead vein in single chunk", 4,0,512);
+            LEAD_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Lead can generate", 5,0,256);
+            LEAD_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Lead can generate", 40,0,256);
+
+            ENABLE_ORIROCK = builder.define("Enable Orirock Generation", true);
+            ORIROCK_VEINSPERCHUNK = builder.defineInRange("Count of Orirock vein in single chunk", 10,0,128);
+            ORIROCK_VEINSIZE = builder.defineInRange("Count of Orirock vein in single chunk", 2,0,512);
+            ORIROCK_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Orirock can generate", 0,0,256);
+            ORIROCK_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Orirock can generate", 30,0,256);
 
             builder.pop();
             builder.push("Debug");

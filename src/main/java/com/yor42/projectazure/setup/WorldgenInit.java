@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -15,12 +16,18 @@ import net.minecraftforge.fml.RegistryObject;
 public class WorldgenInit {
 
     public static void registerWorldgen(final BiomeLoadingEvent event){
-        addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.COPPER_ORE, 7, 5, 60, 8);
-        addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.TIN_ORE, 7, 5, 60, 8);
-
-        addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.ORIROCK, 10, 3, 30, 2);
-
-        addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.LEAD_ORE, 4, 5, 30, 4);
+        if(PAConfig.CONFIG.ENABLE_COPPER.get()) {
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.COPPER_ORE, PAConfig.CONFIG.COPPER_VEINSIZE.get(), PAConfig.CONFIG.COPPER_MINHEIGHT.get(), PAConfig.CONFIG.COPPER_MAXHEIGHT.get(), PAConfig.CONFIG.COPPER_VEINSPERCHUNK.get());
+        }
+        if(PAConfig.CONFIG.ENABLE_TIN.get()) {
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.TIN_ORE, PAConfig.CONFIG.TIN_VEINSIZE.get(), PAConfig.CONFIG.TIN_MINHEIGHT.get(), PAConfig.CONFIG.TIN_MAXHEIGHT.get(), PAConfig.CONFIG.TIN_VEINSPERCHUNK.get());
+        }
+        if(PAConfig.CONFIG.ENABLE_LEAD.get()) {
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.LEAD_ORE, PAConfig.CONFIG.LEAD_VEINSIZE.get(), PAConfig.CONFIG.LEAD_MINHEIGHT.get(), PAConfig.CONFIG.LEAD_MAXHEIGHT.get(), PAConfig.CONFIG.LEAD_VEINSPERCHUNK.get());
+        }
+        if(PAConfig.CONFIG.ENABLE_ORIROCK.get()) {
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.ORIROCK, PAConfig.CONFIG.ORIROCK_VEINSIZE.get(), PAConfig.CONFIG.ORIROCK_MINHEIGHT.get(), PAConfig.CONFIG.ORIROCK_MAXHEIGHT.get(), PAConfig.CONFIG.ORIROCK_VEINSPERCHUNK.get());
+        }
     }
 
 
