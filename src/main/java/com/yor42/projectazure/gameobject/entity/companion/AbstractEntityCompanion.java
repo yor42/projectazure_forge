@@ -17,6 +17,7 @@ import com.yor42.projectazure.network.packets.ChangeEntityBehaviorPacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.PushReaction;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -1086,20 +1087,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.canBePushed() && !this.isSleeping();
     }
 
+    @MethodsReturnNonnullByDefault
     @Override
-    public boolean canBeCollidedWith() {
-        return super.canBeCollidedWith()&&!this.isSleeping();
-    }
-
-    @Override
-    public boolean canCollide(@ParametersAreNonnullByDefault Entity entity) {
-
-        if(this.isSleeping()){
-            return false;
-        }
-
-
-        return super.canCollide(entity);
+    public PushReaction getPushReaction() {
+        return this.isSleeping()? PushReaction.IGNORE:super.getPushReaction();
     }
 
     @Nonnull
@@ -1415,6 +1406,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return 1F;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     @MethodsReturnNonnullByDefault
     public EntitySize getSize(@ParametersAreNonnullByDefault Pose poseIn) {
