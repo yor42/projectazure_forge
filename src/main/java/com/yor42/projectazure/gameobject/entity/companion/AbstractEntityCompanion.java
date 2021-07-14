@@ -360,6 +360,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putBoolean("oathed", this.dataManager.get(OATHED));
         compound.putBoolean("pickupitem", this.dataManager.get(PICKUP_ITEM));
         compound.putFloat("home_distance", this.dataManager.get(VALID_HOME_DISTANCE));
+        compound.putBoolean("issitting", this.dataManager.get(SITTING));
         if(this.dataManager.get(STAYPOINT).isPresent()) {
             compound.putDouble("stayX", this.dataManager.get(STAYPOINT).get().getX());
             compound.putDouble("stayY", this.dataManager.get(STAYPOINT).get().getY());
@@ -464,6 +465,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getDataManager().set(LEVEL, compound.getInt("level"));
         this.dataManager.set(EXP, compound.getFloat("exp"));
         this.dataManager.set(MORALE, compound.getFloat("morale"));
+        this.dataManager.set(SITTING, compound.getBoolean("issitting"));
         this.dataManager.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.awakeningLevel = compound.getInt("awaken");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
@@ -803,16 +805,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.func_233687_w_(this.getDataManager().get(SITTING));
         }
 
-        if(this.collidedHorizontally && this.isInWater()) {
-            Vector3d vec3d = this.getMotion();
-            isstuck = true;
-            this.setSwimmingUp(this.collidedHorizontally);
-            this.setMotion(vec3d.x, vec3d.y + (double) (0.02F), vec3d.z);
-        }else if(this.isstuck && !this.collidedHorizontally){
-            this.setSwimmingUp(false);
-            this.setSwimmingUp(false);
-        }
-
         if(this.expdelay>0){
             this.expdelay--;
         }
@@ -851,7 +843,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
                 } else {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(MAXPATEFFECTCOUNT));
-                    this.addAffection(-0.015);
+                    this.addAffection(-0.008);
                     if(this.dataManager.get(PATCOOLDOWN) == 0){
                         this.dataManager.set(PATCOOLDOWN, (7+this.rand.nextInt(5))*1200);
                     }
@@ -1208,10 +1200,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         this.beingpatted();
                         return ActionResultType.SUCCESS;
                     } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
-                        if(this.getEntityWorld().isRemote()){
-                            this.SwitchSittingStatus();
-                            return ActionResultType.SUCCESS;
-                        }
+                        this.SwitchSittingStatus();
+                        return ActionResultType.SUCCESS;
                         //this.func_233687_w_(!this.isSitting());
                     }
                 }
@@ -1229,7 +1219,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     private void SwitchSittingStatus() {
-        Main.NETWORK.sendToServer(new ChangeEntityBehaviorPacket(this.getEntityId(), ChangeEntityBehaviorPacket.EntityBehaviorType.SIT, !this.isSitting()));
+        boolean value = !this.isSitting();
+        this.func_233687_w_(value);
+        if(this.getEntityWorld().isRemote()) {
+            Main.NETWORK.sendToServer(new ChangeEntityBehaviorPacket(this.getEntityId(), ChangeEntityBehaviorPacket.EntityBehaviorType.SIT, value));
+        }
     }
 
     @Override
@@ -1434,8 +1428,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void func_233687_w_(boolean p_233687_1_) {
-        super.func_233687_w_(p_233687_1_);
         this.getDataManager().set(SITTING, p_233687_1_);
+        super.func_233687_w_(p_233687_1_);
         this.recalculateSize();
     }
 
