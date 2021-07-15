@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "RBI",
+    "TMG"
+  ],
+  "key": {
+    "P": {
+      "tag": "forge:plates/steel"
+    },
+    "I": {
+      "tag": "forge:ingots/steel"
+    },
+    "B": {
+      "item": "projectazure:steel_gunframe_rifle"
+    },
+    "M": {
+      "item": "projectazure:5.56_magazine"
+    },
+    "R": {
+      "item": "projectazure:steel_pipe"
+    },
+    "G": {
+      "item": "projectazure:pistol_grip"
+    },
+    "T": {
+      "item": "projectazure:hammer_iron"
+    }
+  },
+  "result": {
+    "item": "projectazure:abydos550"
+  }
+}

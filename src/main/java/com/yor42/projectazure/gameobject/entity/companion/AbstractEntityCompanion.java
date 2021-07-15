@@ -43,6 +43,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.potion.EffectInstance;
@@ -54,6 +55,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
@@ -819,10 +821,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return false;
     }
 
+    private Optional<BlockPos> findHomePosition(ServerWorld world, AbstractEntityCompanion entity) {
+        return world.getPointOfInterestManager().take(PointOfInterestType.HOME.getPredicate(), (pos) -> this.canReachHomePosition(entity, pos), entity.getPosition(), 20);
+    }
+
+    private boolean canReachHomePosition(AbstractEntityCompanion entity, BlockPos pos) {
+        Path path = entity.getNavigator().getPathToPos(pos, PointOfInterestType.HOME.getValidRange());
+        return path != null && path.reachesTarget();
+    }
+
+
     @Override
     public void livingTick() {
         super.livingTick();
-        /*
         if (this.world.getDifficulty() == Difficulty.PEACEFUL && this.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION)) {
             if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 20 == 0) {
                 this.heal(1.0F);
@@ -833,7 +844,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
 
-         */
+        if(!this.getEntityWorld().isRemote() && this.ticksExisted % 200 == 0&& !this.getHOMEPOS().isPresent()){
+            Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getEntityWorld(), this);
+            optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 20));
+        }
 
         this.updateArmSwingProgress();
 
@@ -1075,10 +1089,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
        this.goalSelector.addGoal(12, new CompanionOpenDoorGoal(this, true));
        this.goalSelector.addGoal(13, new CompanionFreeroamGoal(this, 60, true));
        this.goalSelector.addGoal(14, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(15, new CompanionFindBedGoal(this));
-        this.goalSelector.addGoal(16, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(17, new LookRandomlyGoal(this));
-        this.goalSelector.addGoal(18, new CompanionPlaceTorchGoal(this));
+        this.goalSelector.addGoal(15, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(16, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(17, new CompanionPlaceTorchGoal(this));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
