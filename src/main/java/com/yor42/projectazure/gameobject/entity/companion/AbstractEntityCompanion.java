@@ -18,6 +18,7 @@ import com.yor42.projectazure.setup.register.registerItems;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -27,15 +28,14 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -45,6 +45,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
@@ -606,9 +608,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<>(this, "controller_lowerbody", 10, this::predicate_lowerbody));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_lowerbody", 1, this::predicate_lowerbody));
         animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 1, this::predicate_upperbody));
-        animationData.addAnimationController(new AnimationController<>(this, "controller_head", 10, this::predicate_head));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_head", 1, this::predicate_head));
     }
 
     protected abstract <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent);
@@ -760,6 +762,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void addAffection(double Delta){
         this.setAffection((float) Math.min(this.getAffection() + Delta, this.getmaxAffection()));
+    }
+
+    public void MaxFillHunger(){
+        this.getFoodStats().addStats(20, 20);
     }
 
     public void setExp(double exp) {
@@ -917,6 +923,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
 
+        if(this.ticksExisted%10==0){
+            this.setSneaking((this.getOwner()!= null && this.getOwner().isSneaking()) || this.getEntityWorld().getBlockState(this.getPosition().down()).getBlock() == Blocks.MAGMA_BLOCK);
+        }
 
         else if(this.forcewakeupExpireTimer==0 || !this.isSleeping()){
             this.forceWakeupCounter=0;
@@ -1076,6 +1085,49 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
     }
 
+    @Override
+    public void travel(Vector3d travelVector) {
+        double d0 = this.getPosX();
+        double d1 = this.getPosY();
+        double d2 = this.getPosZ();
+        super.travel(travelVector);
+        this.calculateTravelHunger(this.getPosX() - d0, this.getPosY() - d1, this.getPosZ() - d2);
+    }
+
+    public void calculateTravelHunger(double p_71000_1_, double p_71000_3_, double p_71000_5_) {
+        if (!this.isPassenger()) {
+            double movemlength = p_71000_1_ * p_71000_1_ + p_71000_3_ * p_71000_3_ + p_71000_5_ * p_71000_5_;
+            if (this.isSwimming()) {
+                int i = Math.round(MathHelper.sqrt(movemlength) * 100.0F);
+                if (i > 0) {
+                    this.addExhaustion(0.005F * (float)i * 0.005F);
+                }
+            } else if (this.areEyesInFluid(FluidTags.WATER)) {
+                int j = Math.round(MathHelper.sqrt(movemlength) * 100.0F);
+                if (j > 0) {
+                    this.addExhaustion(0.005F * (float)j * 0.005F);
+                }
+            } else if (this.isInWater()) {
+                int k = Math.round(MathHelper.sqrt(p_71000_1_ * p_71000_1_ + p_71000_5_ * p_71000_5_) * 100.0F);
+                if (k > 0) {
+                    this.addExhaustion(0.005F * (float)k * 0.005F);
+                }
+            } else if (this.onGround) {
+                int l = Math.round(MathHelper.sqrt(p_71000_1_ * p_71000_1_ + p_71000_5_ * p_71000_5_) * 100.0F);
+                if (l > 0) {
+                    if (this.isSprinting()) {
+                        this.addExhaustion(0.05F * (float)l * 0.005F);
+                    } else if (this.isCrouching()) {
+                        this.addExhaustion(0.0F * (float)l * 0.0025F);
+                    } else {
+                        this.addExhaustion(0.0F * (float)l * 0.0025F);
+                    }
+                }
+            }
+
+        }
+    }
+
     protected boolean canOpenDoor() {
         return true;
     }
@@ -1145,6 +1197,29 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 Main.PROXY.setSharedMob(this);
                 return ActionResultType.SUCCESS;
             }
+            else if(player.getHeldItem(hand).getItem() != registerItems.ORIGINIUM_PRIME.get() && player.getHeldItem(hand).getItem().isFood() && this.canEat(player.getHeldItem(hand).getItem().getFood().canEatWhenFull())){
+                ItemStack stack = this.onFoodEaten(this.getEntityWorld(), player.getHeldItem(hand));
+                this.addAffection(0.03);
+                if(!player.isCreative()){
+                    player.setHeldItem(hand, stack);
+                }
+                return ActionResultType.SUCCESS;
+            }
+            else if(player.getHeldItem(hand).getItem() instanceof PotionItem){
+                ItemStack stack =player.getHeldItem(hand);
+                for(EffectInstance effectinstance : PotionUtils.getEffectsFromStack(stack)) {
+                    if (effectinstance.getPotion().isInstant()) {
+                        effectinstance.getPotion().affectEntity(player, player, this, effectinstance.getAmplifier(), 1.0D);
+                    } else {
+                        this.addPotionEffect(new EffectInstance(effectinstance));
+                    }
+                    this.addAffection(effectinstance.getPotion().isBeneficial()? 0.05:-0.075);
+                }
+                if(!player.isCreative()) {
+                    player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE));
+                }
+                return ActionResultType.SUCCESS;
+            }
             else{
 
                 ItemStack heldstacks = player.getHeldItemMainhand();
@@ -1154,7 +1229,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         if (this.getAffection() < 100 && !player.isCreative()) {
                             player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUniqueID());
                             return ActionResultType.FAIL;
-                        } else {
+                        }
+                        else {
                             if (!this.isOathed()) {
                                 if (player.isCreative()) {
                                     this.setAffection(100);
@@ -1261,7 +1337,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
         if(!this.getEntityWorld().isRemote()){
-            //this.foodStats.tick(this);
+            this.foodStats.tick(this);
         }
     }
 

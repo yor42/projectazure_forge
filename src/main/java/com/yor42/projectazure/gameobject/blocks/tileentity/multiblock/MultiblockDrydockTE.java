@@ -155,6 +155,8 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
                 entity.setPosition(this.pos.getX()+0.5, this.pos.getY()-2, this.pos.getZ()+0.5);
                 entity.func_233687_w_(true);
                 entity.setMorale(150);
+                entity.setAffection(40F);
+                entity.MaxFillHunger();
                 this.getWorld().addEntity(entity);
             }
         }

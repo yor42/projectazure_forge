@@ -49,7 +49,6 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
 
     @Override
     public void resetTask() {
-        this.host.setSprinting(false);
         super.resetTask();
     }
 
@@ -68,7 +67,7 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
                 this.host.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.host.getVerticalFaceSpeed());
                 this.host.getNavigator().tryMoveToEntityLiving(this.owner, this.speed);
                 if(!val) {
-                    this.host.setSprinting(this.host.getDistance(this.owner) > 7.0 && !this.host.isInWater());
+                    this.host.setSprinting(this.host.getDistance(this.owner) > 7.0);
                 }
 
                 if(this.host.isSwimming()){

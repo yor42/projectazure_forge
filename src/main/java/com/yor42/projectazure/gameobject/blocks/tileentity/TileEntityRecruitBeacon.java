@@ -177,6 +177,8 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                     entityCompanion.func_233687_w_(true);
                 }
                 entityCompanion.setMorale(150);
+                entityCompanion.setAffection(40F);
+                entityCompanion.MaxFillHunger();
                 this.world.addEntity(entityCompanion);
 
                 Main.LOGGER.debug("Entity is Spawned at:" + pos.toString());

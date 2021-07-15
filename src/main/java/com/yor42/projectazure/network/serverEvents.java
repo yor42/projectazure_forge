@@ -44,6 +44,7 @@ public class serverEvents {
                     }
                     entity.setTamedBy(player);
                     entity.setAffection(40.0F);
+                    entity.MaxFillHunger();
                     entity.setMorale(150);
                 }
             }
