@@ -12,13 +12,14 @@ import net.minecraft.world.GameRules;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import static com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion.FOODLEVEL;
+
 public class CompanionFoodStats {
 
-    private int foodLevel = 30;
+    private int foodLevel = 20;
     private float foodSaturationLevel;
     private float foodExhaustionLevel;
     private int foodTimer;
-    private int prevFoodLevel = 20;
 
     public CompanionFoodStats() {
         this.foodSaturationLevel = 5.0F;
@@ -46,7 +47,6 @@ public class CompanionFoodStats {
      */
     public void tick(AbstractEntityCompanion companion) {
         Difficulty difficulty = companion.world.getDifficulty();
-        this.prevFoodLevel = this.foodLevel;
         if (this.foodExhaustionLevel > 4.0F) {
             this.foodExhaustionLevel -= 4.0F;
             if (this.foodSaturationLevel > 0.0F) {
@@ -57,8 +57,8 @@ public class CompanionFoodStats {
         }
 
         boolean flag = companion.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION);
+        ++this.foodTimer;
         if (flag && this.foodSaturationLevel > 0.0F && companion.shouldHeal() && this.foodLevel >= 20) {
-            ++this.foodTimer;
             if (this.foodTimer >= 10) {
                 float f = Math.min(this.foodSaturationLevel, 6.0F);
                 companion.heal(f / 6.0F);
@@ -66,14 +66,12 @@ public class CompanionFoodStats {
                 this.foodTimer = 0;
             }
         } else if (flag && this.foodLevel >= 18 && companion.shouldHeal()) {
-            ++this.foodTimer;
             if (this.foodTimer >= 80) {
                 companion.heal(1.0F);
                 this.addExhaustion(6.0F);
                 this.foodTimer = 0;
             }
         } else if (this.foodLevel <= 0) {
-            ++this.foodTimer;
             if (this.foodTimer >= 80) {
                 if (companion.getHealth() > 10.0F || difficulty == Difficulty.HARD || companion.getHealth() > 1.0F && difficulty == Difficulty.NORMAL) {
                     //companion.attackEntityFrom(DamageSource.STARVE, 1.0F);
@@ -86,7 +84,7 @@ public class CompanionFoodStats {
         } else {
             this.foodTimer = 0;
         }
-
+        companion.getDataManager().set(FOODLEVEL, this.foodLevel);
     }
 
     /**

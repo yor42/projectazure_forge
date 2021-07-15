@@ -294,7 +294,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> HEAL_TIMER = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> RELOAD_TIMER_MAINHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> RELOAD_TIMER_OFFHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
-
+    protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     public abstract enums.EntityType getEntityType();
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -656,6 +656,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(RELOAD_TIMER_MAINHAND, 0);
         this.dataManager.register(RELOAD_TIMER_OFFHAND, 0);
         this.dataManager.register(PICKUP_ITEM, false);
+        this.dataManager.register(FOODLEVEL, 0);
     }
 
     public void setOpeningdoor(boolean openingdoor){
