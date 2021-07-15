@@ -36,7 +36,7 @@ public class CompanionFoodStats {
     public void consume(Item maybeFood, ItemStack stack) {
         if (maybeFood.isFood()) {
             Food food = maybeFood.getFood();
-            this.addStats(food.getHealing(), food.getSaturation());
+            this.addStats(food != null ? food.getHealing() : 0, food.getSaturation());
         }
 
     }
