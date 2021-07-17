@@ -57,7 +57,7 @@ public class CompanionSleepGoal extends Goal {
                 this.companion.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1);
             }
 
-            if (this.companion.getDistanceSq(Vector3d.copyCentered(pos)) < 1) {
+            if (this.companion.getDistanceSq(Vector3d.copyCentered(pos)) < 3) {
                 if (!this.companion.isSleeping()) {
                     this.companion.startSleeping(pos);
                 }

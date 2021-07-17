@@ -980,7 +980,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
 
 
-        if(!this.getEntityWorld().isRemote() && (this.getEntityWorld().isNightTime() && this.isSitting() && this.isInHomeRangefromCurrenPos())){
+        if(!this.getEntityWorld().isRemote() && (this.getEntityWorld().isNightTime() && this.isSitting() && this.isInHomeRangefromCurrenPos() && this.getNavigator().getPathToPos(this.getHOMEPOS().get(), 0) != null && this.getNavigator().getPathToPos(this.getHOMEPOS().get(), 0).reachesTarget())){
             this.func_233687_w_(false);
         }
 
