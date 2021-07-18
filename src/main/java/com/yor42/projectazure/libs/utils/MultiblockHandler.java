@@ -60,7 +60,7 @@ public class MultiblockHandler {
                     state = world.getBlockState(pos);
                     blockType = state.getBlock();
 
-                    Main.LOGGER.debug("DEBUG: multi block check: pos "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" "+blockType.getTranslatedName()+" "+blockType);
+                    //Main.LOGGER.debug("DEBUG: multi block check: pos "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" "+blockType.getTranslatedName()+" "+blockType);
 
                     //2. match pattern
                     patternTemp = 0;
@@ -73,7 +73,7 @@ public class MultiblockHandler {
                     }
                     patternMatch = (patternMatch & patternTemp);
 
-                    Main.LOGGER.debug("DEBUG: check structure: type "+patternMatch+" "+patternTemp);
+                    //Main.LOGGER.debug("DEBUG: check structure: type "+patternMatch+" "+patternTemp);
                     if (patternMatch == 0) return -1;
 
 
@@ -90,7 +90,7 @@ public class MultiblockHandler {
             }//end y for
         }//end x for
 
-        Main.LOGGER.debug("DEBUG: check structure: type "+patternMatch);
+        //Main.LOGGER.debug("DEBUG: check structure: type "+patternMatch);
         return patternMatch;
     }
 

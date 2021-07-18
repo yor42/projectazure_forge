@@ -13,10 +13,10 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.intermod.ModCompatibilities;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.network.packets.ChangeEntityBehaviorPacket;
+import com.yor42.projectazure.network.packets.EntityInteractionPacket;
+import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
@@ -28,7 +28,6 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -41,6 +40,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
@@ -48,7 +48,6 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -61,6 +60,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -82,6 +82,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
+import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
+import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
 
@@ -254,7 +256,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected int patAnimationTime, patTimer;
+    protected int patTimer;
     protected boolean isSwimmingUp;
     protected boolean isMeleeing;
     protected boolean isOpeningDoor;
@@ -282,6 +284,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> PAT_ANIMATION_TIME = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> PICKUP_ITEM = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISFREEROAMING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -385,6 +388,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putBoolean("isSitting", this.isSitting());
         compound.putBoolean("freeroaming", this.isFreeRoaming());
         compound.putDouble("morale", this.dataManager.get(MORALE));
+        compound.putInt("pat_animation", this.dataManager.get(PAT_ANIMATION_TIME));
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
         compound.putBoolean("isMovingtoRecruitStation", this.isMovingtoRecruitStation);
@@ -468,6 +472,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(MORALE, compound.getFloat("morale"));
         this.dataManager.set(SITTING, compound.getBoolean("issitting"));
         this.dataManager.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
+        this.dataManager.set(PAT_ANIMATION_TIME, compound.getInt("pat_animation"));
         this.awakeningLevel = compound.getInt("awaken");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
         this.setFreeRoaming(compound.getBoolean("freeroaming"));
@@ -643,6 +648,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(MAXPATEFFECTCOUNT, 0);
         this.dataManager.register(PATEFFECTCOUNT, 0);
         this.dataManager.register(PATCOOLDOWN, 0);
+        this.dataManager.register(PAT_ANIMATION_TIME, 0);
         this.dataManager.register(OATHED, false);
         this.dataManager.register(USINGBOW, false);
         this.dataManager.register(STAYPOINT, Optional.empty());
@@ -715,6 +721,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public ItemStack onFoodEaten(World p_213357_1_, ItemStack p_213357_2_) {
         this.getFoodStats().consume(p_213357_2_.getItem(), p_213357_2_);
+        if(!this.getEntityWorld().isRemote()) {
+            Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, p_213357_2_));
+        }
         p_213357_1_.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS, 0.5F, p_213357_1_.rand.nextFloat() * 0.1F + 0.9F);
         return super.onFoodEaten(p_213357_1_, p_213357_2_);
     }
@@ -728,7 +737,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isBeingPatted() {
-        return this.patAnimationTime !=0;
+        return this.getDataManager().get(PAT_ANIMATION_TIME) !=0;
     }
 
     public double getMaxExp(){
@@ -849,10 +858,28 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getEntityWorld(), this);
             optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 20));
         }
+        int val = this.getLastAttackedEntityTime();
+        if(this.ticksExisted-val > 160 && this.ticksExisted%100 == 0 && this.getHealth() < this.getMaxHealth()){
+            ItemStack Foodstack = ItemStack.EMPTY;
+            int foodindex = -1;
+            for(int i = 0; i<this.getInventory().getSlots(); i++){
+                Item canBeFood = this.getInventory().getStackInSlot(i).getItem();
+                if(canBeFood.isFood() && canBeFood != registerItems.ORIGINIUM_PRIME.get()){
+                    Foodstack = this.getInventory().getStackInSlot(i);
+                    foodindex = i;
+                    break;
+                }
+            }
+            if(Foodstack != ItemStack.EMPTY && Foodstack.getItem().isFood() && this.canEat(Foodstack.getItem().getFood().canEatWhenFull())){
+                Foodstack = this.onFoodEaten(this.getEntityWorld(), Foodstack);
+                this.getInventory().setStackInSlot(foodindex, Foodstack);
+            }
+        }
 
         this.updateArmSwingProgress();
 
-        if(this.getLastAttackedEntityTime()>200 && this.getGunAmmoCount() <= 0){
+        if(this.ticksExisted-this.getLastAttackedEntityTime()>100 && this.getGunAmmoCount() <= 0){
+
             this.setReloadDelay();
         }
 
@@ -880,28 +907,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.dataManager.set(HEAL_TIMER, --healAnimationTime);
         }
 
-        if(this.patAnimationTime >0){
+        if(this.getDataManager().get(PAT_ANIMATION_TIME) >0){
 
             this.navigator.clearPath();
 
-            this.patAnimationTime--;
+            this.getDataManager().set(PAT_ANIMATION_TIME, this.getDataManager().get(PAT_ANIMATION_TIME)-1);
             this.patTimer++;
 
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            if (this.patTimer%20 == 0) {
+            if (this.patTimer%20 == 0 && !this.getEntityWorld().isRemote()) {
                 if (this.dataManager.get(PATEFFECTCOUNT) < this.dataManager.get(MAXPATEFFECTCOUNT)) {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(PATEFFECTCOUNT)+1);
-                    this.addAffection(0.01);
-                    this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+                    this.addAffection(0.025);
+                    Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
 
                 } else {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(MAXPATEFFECTCOUNT));
                     if(this.dataManager.get(PATCOOLDOWN) == 0){
                         this.dataManager.set(PATCOOLDOWN, (7+this.rand.nextInt(5))*1200);
                     }
-                    this.world.addParticle(ParticleTypes.SMOKE, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+                    Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_SMOKE));
                 }
             }
         }
@@ -1219,7 +1243,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 return ActionResultType.SUCCESS;
             }
             else if(player.getHeldItem(hand).getItem() instanceof PotionItem){
-                ItemStack stack =player.getHeldItem(hand);
+                ItemStack stack = player.getHeldItem(hand);
                 for(EffectInstance effectinstance : PotionUtils.getEffectsFromStack(stack)) {
                     if (effectinstance.getPotion().isInstant()) {
                         effectinstance.getPotion().affectEntity(player, player, this, effectinstance.getAmplifier(), 1.0D);
@@ -1270,13 +1294,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                         heldstacks.shrink(1);
                                     }
                                 }
-                                double d0 = this.rand.nextGaussian() * 0.02D;
-                                double d1 = this.rand.nextGaussian() * 0.02D;
-                                double d2 = this.rand.nextGaussian() * 0.02D;
-                                player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f, 1.0f);
-                                this.getDataManager().set(HEAL_TIMER, 50);
-                                this.addAffection(0.12F);
-                                this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+                            }
+                            this.addAffection(0.12F);
+                            this.getDataManager().set(HEAL_TIMER, 50);
+                            if(!this.getEntityWorld().isRemote()) {
+                                Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
                             }
                             return ActionResultType.SUCCESS;
                         }
@@ -1310,7 +1332,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         return ActionResultType.SUCCESS;
                     }
                     else if (EyeCheckFinal > 1.0D - 0.025D / EyeDeltaLength && player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player) < 4.0F) {
-                        this.beingpatted();
+                        if(this.getEntityWorld().isRemote()){
+                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getEntityId(), EntityInteractionPacket.EntityBehaviorType.PAT, true));
+                        }
                         return ActionResultType.SUCCESS;
                     } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
                         this.SwitchSittingStatus();
@@ -1335,8 +1359,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         boolean value = !this.isSitting();
         this.func_233687_w_(value);
         if(this.getEntityWorld().isRemote()) {
-            Main.NETWORK.sendToServer(new ChangeEntityBehaviorPacket(this.getEntityId(), ChangeEntityBehaviorPacket.EntityBehaviorType.SIT, value));
+            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getEntityId(), EntityInteractionPacket.EntityBehaviorType.SIT, value));
         }
+    }
+
+    public void doHeal(){
+        this.heal(1.0f);
+        this.addAffection(0.12F);
+        this.getDataManager().set(HEAL_TIMER, 50);
+        double d0 = this.rand.nextGaussian() * 0.02D;
+        double d1 = this.rand.nextGaussian() * 0.02D;
+        double d2 = this.rand.nextGaussian() * 0.02D;
+        this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
     }
 
     @Override
@@ -1394,11 +1428,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected abstract void openGUI(ServerPlayerEntity player);
 
-    protected void beingpatted(){
-        if(this.patAnimationTime == 0 || this.dataManager.get(MAXPATEFFECTCOUNT) == 0){
+    public void beingpatted(){
+        if(this.getDataManager().get(PAT_ANIMATION_TIME) == 0 || this.dataManager.get(MAXPATEFFECTCOUNT) == 0){
             this.dataManager.set(MAXPATEFFECTCOUNT, 5+this.rand.nextInt(3));
         }
-        this.patAnimationTime = 20;
+        this.getDataManager().set(PAT_ANIMATION_TIME, 25);
     }
 
     public boolean isGettingHealed(){
@@ -1421,11 +1455,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void SwitchItemBehavior(){
-        Main.NETWORK.sendToServer(new ChangeEntityBehaviorPacket(this.getEntityId(), ChangeEntityBehaviorPacket.EntityBehaviorType.ITEMPICKUP, !this.shouldPickupItem()));
+        Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getEntityId(), EntityInteractionPacket.EntityBehaviorType.ITEMPICKUP, !this.shouldPickupItem()));
     }
 
     public void SwitchFreeRoamingStatus() {
-        Main.NETWORK.sendToServer(new ChangeEntityBehaviorPacket(this.getEntityId(), ChangeEntityBehaviorPacket.EntityBehaviorType.HOMEMODE, !this.isFreeRoaming()));
+        Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getEntityId(), EntityInteractionPacket.EntityBehaviorType.HOMEMODE, !this.isFreeRoaming()));
     }
 
     public void setForceWaken(boolean value){

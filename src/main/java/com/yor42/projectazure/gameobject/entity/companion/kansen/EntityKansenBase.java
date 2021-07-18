@@ -288,7 +288,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 shell.setPosition(this.getPosX() + vector3d.x, this.getPosY()+0.5F, shell.getPosZ() + vector3d.z);
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);
-                Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, defined.PARTICLE_CANNON_FIRE_ID, vector3d.x, vector3d.y, vector3d.z));
+                Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));
 
                 this.addExp(1.0F);
                 ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.MAIN_GUN, this);
