@@ -898,7 +898,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
                 } else {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(MAXPATEFFECTCOUNT));
-                    this.addAffection(-0.008);
                     if(this.dataManager.get(PATCOOLDOWN) == 0){
                         this.dataManager.set(PATCOOLDOWN, (7+this.rand.nextInt(5))*1200);
                     }
@@ -969,7 +968,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.addMorale(0.015);
         }
         else if(!this.isFreeRoaming()&& this.ticksExisted%20 == 0){
-            this.addMorale(-0.01);
+            this.addMorale(-0.0001);
         }
         if(!this.world.isRemote() && this.getEntityWorld().isDaytime()) {
 
