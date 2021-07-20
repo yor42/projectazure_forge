@@ -75,7 +75,7 @@ public class CompanionFoodStats {
             if (this.foodTimer >= 80) {
                 if (companion.getHealth() > 10.0F || difficulty == Difficulty.HARD || companion.getHealth() > 1.0F && difficulty == Difficulty.NORMAL) {
                     //companion.attackEntityFrom(DamageSource.STARVE, 1.0F);
-                    companion.addMorale(-0.0025F);
+                    companion.addMorale(-0.025F);
                     //companion.addAffection(-0.00001F);
                 }
 

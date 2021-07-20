@@ -924,6 +924,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 if (this.dataManager.get(PATEFFECTCOUNT) < this.dataManager.get(MAXPATEFFECTCOUNT)) {
                     this.dataManager.set(PATEFFECTCOUNT, this.dataManager.get(PATEFFECTCOUNT)+1);
                     this.addAffection(0.025);
+                    this.addMorale(0.5);
                     Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
 
                 } else {
@@ -991,10 +992,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.setForceWaken(false);
         }
 
-        if(this.isBeingPatted() && this.ticksExisted%20 ==0){
-            this.addMorale(0.02);
-        }
-        else if(this.isSitting() && this.ticksExisted%20 == 0){
+        if(this.isSitting() && this.ticksExisted%20 == 0){
             this.addMorale(0.015);
         }
         else if(!this.isFreeRoaming()&& this.ticksExisted%20 == 0){
