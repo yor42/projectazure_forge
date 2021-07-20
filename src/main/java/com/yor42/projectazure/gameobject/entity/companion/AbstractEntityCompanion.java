@@ -719,13 +719,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    public ItemStack onFoodEaten(World p_213357_1_, ItemStack p_213357_2_) {
-        this.getFoodStats().consume(p_213357_2_.getItem(), p_213357_2_);
+    public ItemStack onFoodEaten(World WorldIn, ItemStack foodStack) {
+        this.getFoodStats().consume(foodStack.getItem(), foodStack);
         if(!this.getEntityWorld().isRemote()) {
-            Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, p_213357_2_));
+            Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, foodStack));
         }
-        p_213357_1_.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS, 0.5F, p_213357_1_.rand.nextFloat() * 0.1F + 0.9F);
-        return super.onFoodEaten(p_213357_1_, p_213357_2_);
+        WorldIn.playSound(null, this.getPosX(), this.getPosY(), this.getPosZ(), SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.PLAYERS, 0.5F, WorldIn.rand.nextFloat() * 0.1F + 0.9F);
+        if(foodStack.getItem().isFood()){
+            Food food = foodStack.getItem().getFood();
+            if(food != null) {
+                this.addMorale(foodStack.getItem().getFood().getHealing() * 4);
+            }
+        }
+        return super.onFoodEaten(WorldIn, foodStack);
     }
 
     public CompanionFoodStats getFoodStats() {
