@@ -174,7 +174,7 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().transitionLengthTicks = 20;
-        boolean flag = this.getWorld()!= null && this.getWorld().getBlockState(this.getPos()).get(ACTIVE) && this.getWorld().getBlockState(this.getPos()).get(POWERED);
+        boolean flag = this.getWorld()!= null && this.getWorld().getBlockState(this.getPos()).hasProperty(ACTIVE) && this.getWorld().getBlockState(this.getPos()).hasProperty(POWERED) && this.getWorld().getBlockState(this.getPos()).get(ACTIVE) && this.getWorld().getBlockState(this.getPos()).get(POWERED);
         if(flag) {
             event.getController().setAnimation(builder.addAnimation("working", true));
             return PlayState.CONTINUE;
