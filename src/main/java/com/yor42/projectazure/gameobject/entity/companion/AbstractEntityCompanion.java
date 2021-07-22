@@ -963,7 +963,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         int mainhandDelay = this.getDataManager().get(RELOAD_TIMER_MAINHAND);
         if(mainhandDelay>0){
             this.getDataManager().set(RELOAD_TIMER_MAINHAND, mainhandDelay - 1);
-            if(this.getDataManager().get(RELOAD_TIMER_MAINHAND) == 0){
+            if(this.getDataManager().get(RELOAD_TIMER_MAINHAND) == 0 && this.ticksExisted - this.getLastAttackedEntityTime()>200 && this.getGunStack().getItem() instanceof ItemGunBase){
                 this.reloadAmmo();
             }
         }
@@ -1024,24 +1024,28 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void reloadAmmo(){
-        ItemGunBase gun = (ItemGunBase) this.getGunStack().getItem();
-        ItemStack MagStack = this.getMagazine(((ItemGunBase) this.getGunStack().getItem()).getCalibur());
-        int i;
-        if (gun.getRoundsPerReload() > 0) {
-            i = Math.min(gun.getRoundsPerReload(), getRemainingAmmo(MagStack));
-        } else {
-            i = Math.min(gun.getMaxAmmo(), getRemainingAmmo(MagStack));
-        }
-        addAmmo(this.getGunStack(), i);
-        MagStack.shrink(1);
-        ItemStack EmptyMag = new ItemStack(((ItemGunBase) this.getGunStack().getItem()).getMagItem());
-        emptyAmmo(EmptyMag);
 
-        //Return Empty Magazine for Reloading
-        if(!this.addStackToInventory(EmptyMag)){
-            if(!this.addStackToAmmoStorage(EmptyMag)){
-                ItemEntity itemEntity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), EmptyMag);
-                this.getEntityWorld().addEntity(itemEntity);
+        Item guncandidate = this.getGunStack().getItem();
+        if(guncandidate instanceof ItemGunBase) {
+            ItemGunBase gun = (ItemGunBase) guncandidate;
+            ItemStack MagStack = this.getMagazine(((ItemGunBase) this.getGunStack().getItem()).getCalibur());
+            int i;
+            if (gun.getRoundsPerReload() > 0) {
+                i = Math.min(gun.getRoundsPerReload(), getRemainingAmmo(MagStack));
+            } else {
+                i = Math.min(gun.getMaxAmmo(), getRemainingAmmo(MagStack));
+            }
+            addAmmo(this.getGunStack(), i);
+            MagStack.shrink(1);
+            ItemStack EmptyMag = new ItemStack(((ItemGunBase) this.getGunStack().getItem()).getMagItem());
+            emptyAmmo(EmptyMag);
+
+            //Return Empty Magazine for Reloading
+            if (!this.addStackToInventory(EmptyMag)) {
+                if (!this.addStackToAmmoStorage(EmptyMag)) {
+                    ItemEntity itemEntity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), EmptyMag);
+                    this.getEntityWorld().addEntity(itemEntity);
+                }
             }
         }
     }
