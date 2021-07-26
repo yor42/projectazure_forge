@@ -9,10 +9,7 @@ import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive.EntityShiroko;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.*;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
@@ -23,11 +20,9 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -75,8 +70,11 @@ public class registerManager {
     public static final RegistryObject<ContainerType<ContainerDryDock>> DRYDOCK_CONTAINER = CONTAINER.register("drydock_container", () -> DRYDOCK_CONTAINER_TYPE);
 
     //entity
-    public static final EntityType<EntityAyanami> ENTITYAYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());
-    public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> ENTITYAYANAMI);
+    public static final EntityType<EntityAyanami> ENTITY_AYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());
+    public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> ENTITY_AYANAMI);
+
+    public static final EntityType<EntityJavelin> ENTITY_JAVELIN = EntityType.Builder.create(EntityJavelin::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());
+    public static final RegistryObject<EntityType<EntityJavelin>> JAVELIN = ENTITIES.register("entityjavelin", () -> ENTITY_JAVELIN);
 
     public static final EntityType<EntityGangwon> ENTITYGANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.35F).build(ModResourceLocation("entitygandwon").toString());
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYGANGWON);

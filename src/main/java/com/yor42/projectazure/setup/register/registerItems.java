@@ -271,7 +271,9 @@ public class registerItems {
             .group(PA_GROUP).maxStackSize(1), (int) WildcatHP));
 
 
-    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(ENTITYAYANAMI, new Item.Properties()
+    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(ENTITY_AYANAMI, new Item.Properties()
+            .group(PA_SHIPS)));
+    public static final RegistryObject<Item> SPAWM_JAVELIN = registerManager.ITEMS.register("spawnjavelin", () -> new ItemKansenSpawnEgg(ENTITY_JAVELIN, new Item.Properties()
             .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(ENTITYGANGWON, new Item.Properties()

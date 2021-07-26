@@ -1,10 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive.EntityShiroko;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.*;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.libs.defined;
@@ -16,7 +13,8 @@ public class registerEntity {
 
     //kansen
     public static void RegisterAttributes(){
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYAYANAMI, EntityAyanami.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITY_AYANAMI, EntityAyanami.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITY_JAVELIN, EntityJavelin.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYGANGWON, EntityGangwon.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTERPRISE_ENTITY_TYPE, EntityEnterprise.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.PLANEF4FWildCat, EntityF4fWildcat.MutableAttribute().create());

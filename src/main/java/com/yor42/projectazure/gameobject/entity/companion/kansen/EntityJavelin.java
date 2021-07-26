@@ -19,15 +19,14 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable, IAzurLaneKansen {
+public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable, IAzurLaneKansen {
 
-    public EntityAyanami(EntityType<? extends EntityAyanami> type, World worldIn) {
+    public EntityJavelin(EntityType<? extends EntityJavelin> type, World worldIn) {
         super(type, worldIn);
     }
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
-
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
         }
@@ -37,19 +36,19 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
+            event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_body", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
             if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorL", false));
+                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
             }
             else{
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorR", false));
+                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
             }
         }
         else if(this.ShouldPlayReloadAnim()){
@@ -60,21 +59,21 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isGettingHealed()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.heal_arm", true));
+            event.getController().setAnimation(builder.addAnimation("heal_arm", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_arm", true));
+            event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
         else if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_arm", true));
+                event.getController().setAnimation(builder.addAnimation("sail_arm", true));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run_arm", true));
+                event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk_arm", true));
+                event.getController().setAnimation(builder.addAnimation("walk_arm", true));
             }
             return PlayState.CONTINUE;
         }
@@ -84,7 +83,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+        event.getController().setAnimation(builder.addAnimation("idle", true));
         return PlayState.CONTINUE;
     }
 
@@ -93,8 +92,8 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
         return PlayState.CONTINUE;
     }
 
-    protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event)
-    {
+    @Override
+    protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
 
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
@@ -102,31 +101,30 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_leg", true));
+            event.getController().setAnimation(builder.addAnimation("sleep", true));
             return PlayState.CONTINUE;
         }
         else if(this.isSitting() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
+            event.getController().setAnimation(builder.addAnimation("sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_leg", true));
+            event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
         }
 
         if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
+                event.getController().setAnimation(builder.addAnimation("sail", true));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run", true));
+                event.getController().setAnimation(builder.addAnimation("run", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk", true));
+                event.getController().setAnimation(builder.addAnimation("walk", true));
             }
             return PlayState.CONTINUE;
         }
-
-        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle_leg", true));
+        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
         return PlayState.CONTINUE;
     }
 
@@ -142,12 +140,12 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     }
 
     @Override
-    public int getRiggingOffset() {
-        return 0;
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.STAR_4;
     }
 
     @Override
-    public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_4;
+    public int getRiggingOffset() {
+        return 0;
     }
 }

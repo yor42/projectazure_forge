@@ -18,13 +18,13 @@ import net.minecraft.world.IWorldReader;
  *
  */
 
-public class KansenWorkGoal extends KansenMoveEntityForWorkGoal {
+public class WorkGoal extends MoveEntityForWorkGoal {
 
 
     private int breakingTime;
     private int previousBreakProgress = -1;
 
-    public KansenWorkGoal(AbstractEntityCompanion entity, double speed){
+    public WorkGoal(AbstractEntityCompanion entity, double speed){
         super(entity, speed);
     }
 

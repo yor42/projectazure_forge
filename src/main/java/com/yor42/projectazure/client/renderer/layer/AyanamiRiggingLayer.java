@@ -30,7 +30,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class AyanamiRiggingLayer extends GeoLayerRenderer<EntityAyanami> implements IGeoRenderer {
 
-    private AnimatedGeoModel modelRiggingProvider;
+    private AnimatedGeoModel<? extends IAnimatable> modelRiggingProvider;
 
 
     static {
@@ -65,7 +65,7 @@ public class AyanamiRiggingLayer extends GeoLayerRenderer<EntityAyanami> impleme
 
 
             RenderType type = RenderType.getEntitySmoothCutout(((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getTexture());
-            render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(null)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
 
                 ItemStackHandler Equipments = new RiggingInventoryCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
@@ -179,6 +179,6 @@ public class AyanamiRiggingLayer extends GeoLayerRenderer<EntityAyanami> impleme
 
     @Override
     public ResourceLocation getTextureLocation(Object o) {
-        return this.modelRiggingProvider.getTextureLocation(o);
+        return this.modelRiggingProvider.getTextureLocation(null);
     }
 }

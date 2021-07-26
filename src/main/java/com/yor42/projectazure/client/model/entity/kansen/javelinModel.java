@@ -1,46 +1,43 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityJavelin;
 import com.yor42.projectazure.libs.defined;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
-public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
+public class javelinModel extends AnimatedGeoModel<EntityJavelin> {
 
     private int blinkinterval = 0;
     private long LastBlinkTime = 0;
 
     @Override
-    public ResourceLocation getModelLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "geo/entity/modelayanami.geo.json");
+    public ResourceLocation getModelLocation(EntityJavelin object) {
+        return new ResourceLocation(defined.MODID, "geo/entity/modeljavelin.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "textures/entity/modelayanami.png");
+    public ResourceLocation getTextureLocation(EntityJavelin object) {
+        return new ResourceLocation(defined.MODID, "textures/entity/entityjavelin.png");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "animations/entity/kansen/ayanami.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntityJavelin animatable) {
+        return new ResourceLocation(defined.MODID, "animations/entity/kansen/javelin.animation.json");
     }
 
     @Override
-    public void setLivingAnimations(EntityAyanami entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
-    {
+    public void setLivingAnimations(EntityJavelin entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
+        IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
 
@@ -49,13 +46,15 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
 
         if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
-            ExcitedFace.setHidden(false);
+            ExcitedFace.setHidden(true);
+            PatFace.setHidden(false);
             EyeclosedFace.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(false);
+            PatFace.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-10);
         }
@@ -68,12 +67,14 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
                     NormalFace.setHidden(true);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
+                    PatFace.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
                     NormalFace.setHidden(false);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
+                    PatFace.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();

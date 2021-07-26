@@ -123,6 +123,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("5.56_magazine");
 
         buildModelWisdomCube("spawnayanami");
+        buildModelWisdomCube("spawnjavelin");
         buildModelWisdomCube("spawngangwon");
         buildModelWisdomCube("spawnenterprise");
         buildModelWisdomCube("spawnnagato");

@@ -1,22 +1,14 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
-import com.yor42.projectazure.gameobject.blocks.AbstractMultiBlockBase;
-import com.yor42.projectazure.gameobject.blocks.MultiblockStructureBlocks;
-import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -165,9 +157,10 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     @Override
     public void registerRollEntry() {
         addEntry(registerManager.ENTERPRISE_ENTITY_TYPE);
-        addEntry(registerManager.ENTITYAYANAMI);
+        addEntry(registerManager.ENTITY_AYANAMI);
         addEntry(registerManager.ENTITYGANGWON);
         addEntry(registerManager.ENTITYTYPE_NAGATO);
+        addEntry(registerManager.ENTITY_JAVELIN);
     }
 
     @Override

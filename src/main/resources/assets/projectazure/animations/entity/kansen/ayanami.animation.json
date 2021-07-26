@@ -771,7 +771,7 @@
 			}
 		},
 		"animation.ayanami.openDoorR": {
-			"animation_length": 0.6,
+			"animation_length": 0.96,
 			"bones": {
 				"RightArm": {
 					"rotation": {
@@ -785,6 +785,9 @@
 						"0.6": {
 							"vector": [-57.5, -35, 0],
 							"easing": "easeInSine"
+						},
+						"0.96": {
+							"vector": [0, 0, 0]
 						}
 					}
 				},
@@ -799,6 +802,9 @@
 						"0.52": {
 							"vector": [0, 0, -32.5],
 							"easing": "easeInOutSine"
+						},
+						"0.96": {
+							"vector": [0, 0, 0]
 						}
 					}
 				}

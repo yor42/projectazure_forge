@@ -10,8 +10,6 @@ import com.yor42.projectazure.intermod.ModCompatibilities;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
@@ -23,12 +21,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.spawner.WorldEntitySpawner;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -240,7 +235,8 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         addEntry(registerManager.SHIROKO_ENTITY_TYPE);
         if(PAConfig.CONFIG.shouldRecruitBeaconSpawnAllCompanions.get()){
             addEntry(registerManager.ENTERPRISE_ENTITY_TYPE);
-            addEntry(registerManager.ENTITYAYANAMI);
+            addEntry(registerManager.ENTITY_AYANAMI);
+            addEntry(registerManager.ENTITY_JAVELIN);
             addEntry(registerManager.ENTITYGANGWON);
             addEntry(registerManager.ENTITYTYPE_NAGATO);
         }

@@ -40,7 +40,6 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
@@ -60,7 +59,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -82,7 +80,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
-import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
@@ -1117,7 +1114,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(8, new KansenRideBoatAlongPlayerGoal(this, 1.0));
         this.goalSelector.addGoal(9, new CompanionMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(10, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(11, new KansenWorkGoal(this, 1.0D));
+        this.goalSelector.addGoal(11, new WorkGoal(this, 1.0D));
        this.goalSelector.addGoal(12, new CompanionOpenDoorGoal(this, true));
        this.goalSelector.addGoal(13, new CompanionFreeroamGoal(this, 60, true));
        this.goalSelector.addGoal(14, new CompanionPickupItemGoal(this));
