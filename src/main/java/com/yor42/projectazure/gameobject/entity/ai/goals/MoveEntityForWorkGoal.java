@@ -5,15 +5,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.IFluidBlock;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
@@ -21,7 +20,8 @@ abstract class MoveEntityForWorkGoal extends Goal {
 
     protected AbstractEntityCompanion host;
     private final double speed;
-    protected BlockPos targetBlockPos;
+    @Nullable
+    protected BlockPos BlockPosBelowTarget;
     protected boolean work;
     private int UpdateTimer;
     private final ArrayList<BlockPos> BlockList = new ArrayList<>();
@@ -36,31 +36,31 @@ abstract class MoveEntityForWorkGoal extends Goal {
     {
 
         if(this.UpdateTimer == 0){
-            this.UpdateTimer = 40;
+            this.UpdateTimer = 10;
             this.UpdateBlockList();
         }
         else{
             this.UpdateTimer--;
         }
-        return this.searchForDestination();
+        if(!this.BlockList.isEmpty() || this.BlockPosBelowTarget == null) {
+            this.searchForDestination();
+        }
+
+        return this.BlockPosBelowTarget != null;
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        if(this.targetBlockPos == null)
-        {
-            return false;
-        }
-        else
-        {
-            return this.shouldMoveTo(this.host.world, this.targetBlockPos);
-        }
+
+        return this.shouldExecute();
     }
 
     private void UpdateBlockList(){
-        BlockPos pos = this.host.getPosition();
-        int diameter = 8;
-        int height = 8;
+
+        int diameter = 16;
+        int height = 16;
+
+        BlockPos pos = new BlockPos(this.host.getPosition().getX()-(diameter/2), Math.max(this.host.getPosition().getY()-(height/2), 0), this.host.getPosition().getZ()-(diameter/2));
         int size = diameter*diameter*height;
         Block block;
         for(int i = 0; i<size; i++) {
@@ -91,14 +91,10 @@ abstract class MoveEntityForWorkGoal extends Goal {
         if(this.BlockList.size() > 0) {
             for (BlockPos pos : this.BlockList) {
 
-                boolean flag = this.canSeeBlock(pos);
+                boolean flag = this.canSeeBlock(pos.up()) && this.shouldMoveTo(this.host.world, pos);
                 if (flag) {
-                    Path path = this.host.getNavigator().getPathToPos(this.targetBlockPos, 1);
-                    boolean val = path != null && path.reachesTarget();
-                    if(val){
-                        this.targetBlockPos = pos;
-                        return true;
-                    }
+                    this.BlockPosBelowTarget = pos;
+                    return true;
                 }
             }
         }
@@ -107,31 +103,38 @@ abstract class MoveEntityForWorkGoal extends Goal {
 
     private boolean canSeeBlock(BlockPos blockpos1){
         Vector3d hostPositionVec = new Vector3d(this.host.getPosX(), this.host.getPosYEye(), this.host.getPosZ());
-        Vector3d targetVec = new Vector3d(blockpos1.getX()+0.5D, blockpos1.getY()+0.5D, blockpos1.getZ()+0.5D);
+        Vector3d targetVec = new Vector3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
         RayTraceContext rayTraceContext = new RayTraceContext(hostPositionVec, targetVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.host);
         BlockRayTraceResult RayTraceResult = this.host.world.rayTraceBlocks(rayTraceContext);
-        return RayTraceResult.getPos().equals(blockpos1);
+        BlockPos hitpos = RayTraceResult.getPos();
+
+        boolean isXEqual = hitpos.getX() == blockpos1.getX();
+        boolean isYEqual = hitpos.getY() == blockpos1.getY();
+        boolean isZEqual = hitpos.getZ() == blockpos1.getZ();
+
+        return isXEqual && isYEqual && isZEqual;
     }
 
     @Override
     public void resetTask() {
-        BlockPos blockpos = this.targetBlockPos.up();
+        if(this.BlockPosBelowTarget != null) {
+            BlockPos blockpos = this.BlockPosBelowTarget.up();
+            this.host.world.sendBlockBreakProgress(this.host.getEntityId(), blockpos, -1);
+            this.BlockPosBelowTarget = null;
+        }
         this.host.getNavigator().clearPath();
-        this.host.world.sendBlockBreakProgress(this.host.getEntityId(), blockpos, -1);
-        this.targetBlockPos = null;
         super.resetTask();
     }
 
     public void tick()
     {
-        BlockPos blockpos = this.targetBlockPos.up();
-        if(blockpos.distanceSq(this.host.getPosX(), this.host.getPosY(), this.host.getPosZ(), false) <= 2d)
-        {
-            this.work = true;
-        }
-        else
-        {
-            this.work = !this.host.getNavigator().tryMoveToXYZ((double) ((float) blockpos.getX()) + 0.5D, (double) blockpos.getY(), (double) ((float) blockpos.getZ()) + 0.5D, this.speed);
+        if(this.BlockPosBelowTarget != null) {
+            BlockPos blockpos = this.BlockPosBelowTarget.up();
+            if (blockpos.distanceSq(this.host.getPosX(), this.host.getPosY(), this.host.getPosZ(), true) <= 4d) {
+                this.work = true;
+            } else {
+                this.work = !this.host.getNavigator().tryMoveToXYZ((double) ((float) blockpos.getX()) + 0.5D, (double) blockpos.getY(), (double) ((float) blockpos.getZ()) + 0.5D, this.speed);
+            }
         }
     }
 

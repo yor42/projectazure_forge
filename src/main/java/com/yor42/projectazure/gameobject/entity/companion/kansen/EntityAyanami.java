@@ -28,9 +28,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
-        if(Minecraft.getInstance().isGamePaused()){
-            return PlayState.STOP;
-        }
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isSwingInProgress){
             event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
@@ -95,10 +92,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
 
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event)
     {
-
-        if(Minecraft.getInstance().isGamePaused()){
-            return PlayState.STOP;
-        }
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isSleeping()){

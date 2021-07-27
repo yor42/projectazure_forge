@@ -25,6 +25,10 @@ public class serverEvents {
                     entitytype = registerManager.AYANAMI.get();
                     break;
                 }
+                case defined.STARTER_ROYAL:{
+                    entitytype = registerManager.JAVELIN.get();
+                    break;
+                }
                 default:{
                     entitytype = null;
                     break;

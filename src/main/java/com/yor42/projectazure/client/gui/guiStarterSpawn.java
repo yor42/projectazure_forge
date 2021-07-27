@@ -32,9 +32,11 @@ public class guiStarterSpawn extends Screen {
     private int scrollBarFarLeft, lastScrollX;
 
     private final int buttonWidth = 59;
-    private final int buttonHeight = 127;
 
-    private final EntityType[] entityList = {registerManager.AYANAMI.get()};
+    private final EntityType<?>[] entityList = {
+            registerManager.AYANAMI.get(),
+            registerManager.JAVELIN.get()
+    };
 
     public guiStarterSpawn(ITextComponent titleIn) {
         super(titleIn);
@@ -50,23 +52,23 @@ public class guiStarterSpawn extends Screen {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         //this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        for(int index = 0; index < 1; index++) {
+        for(int index = 0; index < this.entityList.length; index++) {
+            int buttonHeight = 127;
             if (this.notYetPopulated) {
                 int finalIndex = index;
-                Button button = createButton(this.x+9 + (index * buttonHeight), this.y+26, buttonWidth, buttonHeight, index, this.entityList[index], (action) -> {
+                Button button = createButton(this.x+9+(index * buttonWidth), this.y+26, buttonWidth, buttonHeight, index, this.entityList[index], (action) -> {
                     Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex));
                     this.closeScreen();
                 });
                 this.addButton(button);
                         //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslationTextComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
-            } else {
+            } /*else {
                 Button button = (Button) this.buttons.get(index);
                 //button.setMessage(getSkillEntryFormattedText(skill, entry.getValue()));
                 button.x = this.scrollBarFarLeft + (index * buttonHeight);
                 button.y = this.y+26;
-            }
+            }*/
         }
-        this.notYetPopulated = false;
     }
 
     @Override
@@ -84,8 +86,13 @@ public class guiStarterSpawn extends Screen {
     }
 
     private void renderButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        buttonStarterSelect button = (buttonStarterSelect) this.buttons.get(0);
-        button.render(matrixStack, mouseX, mouseY, partialTicks);
+
+        if(this.buttons.size() > 0) {
+            for (net.minecraft.client.gui.widget.Widget widget : this.buttons) {
+                buttonStarterSelect button = (buttonStarterSelect) widget;
+                button.render(matrixStack, mouseX, mouseY, partialTicks);
+            }
+        }
         //will be implemented when screen actually needs to be scrolled
         /*
         int position = Math.floorDiv(this.lastScrollX - this.scrollBarFarLeft, 20); // CORRECT - GETS THE 'INDEX"

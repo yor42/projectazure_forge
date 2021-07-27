@@ -6,12 +6,7 @@ public class defined {
 
     //Starter ID
     public static final int STARTER_SAKURA = 0;
-    public static final int STARTER_EAGLEUNION = 1;
-    public static final int STARTER_IRONBLOOD = 2;
-    public static final int STARTER_EASTERNRADIANCE = 3;
-    public static final int STARTER_NORTHUNION = 4;
-    public static final int STARTER_VICHYA = 5;
-    public static final int STARTER_SARDEGNA = 6;
+    public static final int STARTER_ROYAL = 1;
 
     //ParticleID
     //Yeah I really Don't want to do this but MC doesn't allow me to.
