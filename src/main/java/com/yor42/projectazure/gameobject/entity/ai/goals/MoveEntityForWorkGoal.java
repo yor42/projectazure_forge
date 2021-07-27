@@ -46,7 +46,7 @@ abstract class MoveEntityForWorkGoal extends Goal {
             this.searchForDestination();
         }
 
-        return this.BlockPosBelowTarget != null;
+        return this.BlockPosBelowTarget != null && this.host.shouldPickupItem();
     }
 
     @Override
