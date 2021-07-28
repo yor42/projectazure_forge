@@ -22,6 +22,7 @@ import net.minecraft.item.Rarity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nullable;

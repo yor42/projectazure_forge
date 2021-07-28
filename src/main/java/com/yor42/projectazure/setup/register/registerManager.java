@@ -24,6 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -36,6 +37,7 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 
 public class registerManager {
 
+    public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, defined.MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, defined.MODID);
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, defined.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, defined.MODID);
@@ -105,10 +107,14 @@ public class registerManager {
     public static final EntityType<EntityF4fWildcat> PLANEF4FWildCat = EntityType.Builder.<EntityF4fWildcat>create(EntityF4fWildcat::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString());
     public static final RegistryObject<EntityType<EntityF4fWildcat>> F4FWildCat = ENTITIES.register("planef4fwildcat", () -> PLANEF4FWildCat);
 
+    //Biomes
+    public static final RegistryObject<Biome> MIRROR_SEA = registerManager.BIOMES.register("mirror_sea", registerBiomes::makeMirrorSea);
+
 
     public static void register() {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
         ENTITIES.register(eventbus);
+        BIOMES.register(eventbus);
         BLOCKS.register(eventbus);
         ITEMS.register(eventbus);
         CONTAINER.register(eventbus);
@@ -116,6 +122,7 @@ public class registerManager {
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
         registerBlocks.register();
+        registerBiomes.register();
         registerItems.register();
         registerTE.register();
         registerRecipes.Serializers.register();

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
+import com.yor42.projectazure.gameobject.entity.PlaneFlyMovementController;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -27,8 +28,6 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
 
     public EntityF4fWildcat(EntityType<? extends AbstractEntityPlanes> type, World worldIn) {
         super(type, worldIn);
-        this.navigator = new FlyingPathNavigator(this, worldIn);
-        this.moveController = new FlyingMovementController(this, 20, true);
     }
 
     @Override
@@ -77,10 +76,10 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4F)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 1.0F)
                 .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 0.0F)
                 .createMutableAttribute(Attributes.MAX_HEALTH, WildcatHP)
-                .createMutableAttribute(Attributes.FLYING_SPEED, 0.4F)
+                .createMutableAttribute(Attributes.FLYING_SPEED, 1F)
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
                 ;
     }

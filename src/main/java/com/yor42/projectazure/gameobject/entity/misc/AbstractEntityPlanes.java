@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
+import com.yor42.projectazure.gameobject.entity.PlaneFlyMovementController;
 import com.yor42.projectazure.gameobject.entity.ai.goals.PlaneReturntoOwnerGoal;
 import com.yor42.projectazure.gameobject.entity.ai.goals.PlaneWanderAroundCarrierGoal;
 import com.yor42.projectazure.gameobject.entity.ai.goals.planeBombRunGoal;
@@ -14,12 +15,14 @@ import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -40,7 +43,8 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
     protected AbstractEntityPlanes(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new FlyingMovementController(this, 20, true);
+        this.moveController = new PlaneFlyMovementController(this, 20, true);
+        this.navigator = new FlyingPathNavigator(this, worldIn);
         this.isLifeLimited = false;
         this.hasRadar = false;
         this.isReturningToOwner = false;
@@ -89,7 +93,7 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     @Override
     public void livingTick() {
         super.livingTick();
-        this.setNoGravity(true);
+        this.setNoGravity(this.isAlive());
         //in water = crash
         if(this.isInWater()){
             this.world.createExplosion(this, this.getPosX(), getPosY(), getPosZ(), 0.5F, Explosion.Mode.DESTROY);
@@ -100,7 +104,7 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
                 this.crashThePlane();
             }
         }
-        if(!this.getOwner().isAlive()){
+        if(this.getOwner() != null && !this.getOwner().isAlive()){
             this.crashThePlane();
         }
     }
@@ -208,23 +212,16 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
     @Override
     public void travel(Vector3d travelVector) {
-
+        super.travel(travelVector);
         if (this.isOnGround())
         {
             this.setMotion(this.getMotion().getX(), this.getMotion().getY()+0.02, this.getMotion().getZ());
         }
-
-        super.travel(travelVector);
     }
 
     @Override
     public boolean isOnLadder() {
         return false;
-    }
-
-    @Override
-    public void move(MoverType typeIn, Vector3d pos) {
-        super.move(typeIn, pos);
     }
 
     @Override
@@ -245,7 +242,6 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         this.goalSelector.addGoal(1, new PlaneReturntoOwnerGoal(this));
         this.goalSelector.addGoal(2, new PlaneWanderAroundCarrierGoal(this));
         this.targetSelector.addGoal(1, new PlaneInterceptGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());
     }
 }
 

@@ -41,8 +41,8 @@ public class planeBombRunGoal extends Goal {
     public void startExecuting() {
         LivingEntity target = this.entity.getAttackTarget();
         if(target!= null) {
-            this.entity.getMoveHelper().setMoveTo(target.getPosX(),target.getPosYEye(),target.getPosZ(), 1.2);
             this.entity.setOnBombRun(true);
+            this.entity.getNavigator().tryMoveToXYZ(target.getPosX(), target.getPosYEye()+1, target.getPosZ(), 2F);
         }
     }
 
@@ -56,7 +56,7 @@ public class planeBombRunGoal extends Goal {
                     float bombHeightOffset = this.entity.getPlaneItem().getType() == enums.PLANE_TYPE.FIGHTER? 0:2;
 
                     if (this.entity.ticksExisted % 2 == 0) {
-                        this.entity.getNavigator().tryMoveToXYZ(target.getPosX(), target.getPosYEye()+bombHeightOffset, target.getPosZ(), 1.2);
+                        this.entity.getNavigator().tryMoveToXYZ(target.getPosX(), target.getPosYEye()+bombHeightOffset, target.getPosZ(), 2F);
                     }
                     boolean ShouldDropPayloads;
                     switch (this.entity.getPlaneType()) {
@@ -67,7 +67,7 @@ public class planeBombRunGoal extends Goal {
                             ShouldDropPayloads = target.getPosX() - 1 < this.entity.getPosX() && this.entity.getPosX() < target.getPosX() + 1 && target.getPosZ() - 1 < this.entity.getPosZ() && this.entity.getPosZ() < target.getPosZ() + 1;
                             break;
                         case FIGHTER:
-                            ShouldDropPayloads = this.entity.getDistance(target)<1.5;
+                            ShouldDropPayloads = this.entity.getDistance(target)<2.5;
                             break;
                         case TORPEDO_BOMBER:
                             ShouldDropPayloads = this.entity.getDistance(target) < 8F;
