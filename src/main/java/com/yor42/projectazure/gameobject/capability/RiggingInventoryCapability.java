@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
@@ -27,8 +28,6 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
 
     protected final LivingEntity entity;
     protected final ItemStack stack;
-
-    protected final LazyOptional<ItemStackHandler> riggingItemCapability = LazyOptional.of(() -> this.equipments);
 
     protected final ItemStackHandler equipments = new ItemStackHandler(){
         @Override
@@ -57,6 +56,8 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         }
     };
 
+    protected final FluidHandlerItemStack fuelTank;
+
     public RiggingInventoryCapability(ItemStack stack){
         this(stack, null);
     }
@@ -66,8 +67,14 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         int slotCount = ((ItemRiggingBase) stack.getItem()).getTotalSlotCount();
         this.getEquipments().setSize(slotCount);
 
+        int fuelCapacity = ((ItemRiggingBase) stack.getItem()).getFuelTankCapacity();
+        this.fuelTank = new FluidHandlerItemStack(stack, fuelCapacity);
+
         int HangerSlots = ((ItemRiggingBase) stack.getItem()).getHangerSlots();
-        this.getHangar().setSize(HangerSlots);
+
+        if(this.getHangar() != null) {
+            this.getHangar().setSize(HangerSlots);
+        }
 
         this.loadEquipments(this.getNBT(stack));
     }
@@ -122,6 +129,10 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     @Override
     public ItemStackHandler getEquipments() {
         return this.equipments;
+    }
+
+    public FluidHandlerItemStack getFuelTank() {
+        return this.fuelTank;
     }
 
     @Override

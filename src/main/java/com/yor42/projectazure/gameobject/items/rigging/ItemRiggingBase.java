@@ -133,6 +133,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         return 0;
     }
 
+    public int getFuelTankCapacity(){return 50000;}
+
     public int getTotalSlotCount(){
         return this.getAASlotCount()+ this.getMainGunSlotCount()+this.getSubGunSlotCount()+this.getTorpedoSlotCount();
     }

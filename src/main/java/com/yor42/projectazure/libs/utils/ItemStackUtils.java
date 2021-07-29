@@ -284,15 +284,15 @@ public class ItemStackUtils {
     public static boolean isOutOfAmmo(ItemStack equipment){
         CompoundNBT compoundNBT = equipment.getOrCreateTag();
         if(equipment.getItem() instanceof ICraftingTableReloadable){
-            return compoundNBT.getInt("usedAmmo")>= ((ICraftingTableReloadable) equipment.getItem()).getMaxAmmo();
+            return compoundNBT.getInt("Ammo")<= 0;
         }
         return true;
     }
 
     public static void useAmmo(ItemStack stack){
         CompoundNBT compoundNBT = stack.getOrCreateTag();
-        int prevammo =  compoundNBT.getInt("usedAmmo");
-        compoundNBT.putInt("usedAmmo", prevammo+1);
+        int prevammo =  compoundNBT.getInt("Ammo");
+        compoundNBT.putInt("Ammo", prevammo-1);
     }
 
     public static void emptyAmmo(ItemStack stack){
@@ -302,19 +302,19 @@ public class ItemStackUtils {
     public static void setAmmo(ItemStack stack, int count){
         CompoundNBT compoundNBT = stack.getOrCreateTag();
         if(stack.getItem() instanceof ICraftingTableReloadable){
-            compoundNBT.putInt("usedAmmo", ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo()-count);
+            compoundNBT.putInt("Ammo", count);
         }
     }
 
     public static void setAmmoFull(ItemStack stack){
         CompoundNBT compoundNBT = stack.getOrCreateTag();
-        compoundNBT.putInt("usedAmmo", 0);
+        compoundNBT.putInt("Ammo", ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo());
     }
 
     public static ItemStack addAmmo(ItemStack stack, int count) {
         int currentAmmo = getRemainingAmmo(stack);
         if (stack.getItem() instanceof ICraftingTableReloadable) {
-            setAmmo(stack, Math.min(currentAmmo+count, ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo()));
+            setAmmo(stack, Math.max(currentAmmo+count, ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo()));
         }
         return stack;
     }
@@ -322,7 +322,7 @@ public class ItemStackUtils {
     public static int getRemainingAmmo(ItemStack equipment){
         CompoundNBT compoundNBT = equipment.getOrCreateTag();
         if(equipment.getItem() instanceof ICraftingTableReloadable){
-            return ((ICraftingTableReloadable) equipment.getItem()).getMaxAmmo() - compoundNBT.getInt("usedAmmo");
+            return compoundNBT.getInt("Ammo");
         }
         return -1;
     }

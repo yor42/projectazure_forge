@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.util.ITooltipFlag;
@@ -12,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
@@ -244,6 +246,16 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
             }
 
             this.spawnProjectile(entity, world, gun, this.accuracy*inaccuracymultiplier, this.damage*damagemultiplier, target, hand);
+        }
+    }
+
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        super.fillItemGroup(group, items);
+        if (this.isInGroup(group)) {
+            ItemStack stack = new ItemStack(this);
+            ItemStackUtils.setAmmoFull(stack);
+            items.add(stack);
         }
     }
 
