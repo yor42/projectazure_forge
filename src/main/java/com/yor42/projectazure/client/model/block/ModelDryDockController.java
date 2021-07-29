@@ -16,7 +16,7 @@ public class ModelDryDockController extends AnimatedGeoModel<MultiblockDrydockTE
 
         if(TE.getWorld() != null) {
             BlockState state = TE.getWorld().getBlockState(TE.getPos());
-            if (state.getBlock() instanceof blockMultiblockDryDockController && state.get(FORMED)) {
+            if (state.getBlock() instanceof blockMultiblockDryDockController && state.hasProperty(FORMED) &&  state.get(FORMED)) {
                 return ResourceUtils.ModelLocation("block/drydock_built.geo.json");
             }
             else {
@@ -31,7 +31,7 @@ public class ModelDryDockController extends AnimatedGeoModel<MultiblockDrydockTE
 
         if(TE.getWorld() != null) {
             BlockState state = TE.getWorld().getBlockState(TE.getPos());
-            if (state.getBlock() instanceof blockMultiblockDryDockController && state.get(FORMED)) {
+            if (state.getBlock() instanceof blockMultiblockDryDockController && state.hasProperty(FORMED) && state.get(FORMED)) {
                 return ResourceUtils.ModResourceLocation("textures/block/drydock_controller_built.png");
             }
         }

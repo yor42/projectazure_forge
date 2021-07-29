@@ -34,7 +34,7 @@ public abstract class AbstractMultiBlockBase extends AbstractAnimatedBlockMachin
     @Override
     public boolean isTransparent(BlockState state) {
 
-        return state.get(FORMED);
+        return state.hasProperty(FORMED) && state.get(FORMED);
     }
 
     @Override

@@ -28,6 +28,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
@@ -36,8 +37,6 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable {
 
     public AnimationFactory factory = new AnimationFactory(this);
-
-    protected Quaternion[] EquipmentRotation;
 
     protected enums.shipClass validclass;
 
@@ -53,6 +52,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public ItemRiggingBase(Properties properties, int HP) {
         super(properties, HP);
+        this.addHardPoints();
     }
 
     @Override
@@ -63,6 +63,10 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         if(worldIn != null && worldIn.isRemote) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
         }
+    }
+
+    public void addHardPoints(){
+
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -107,10 +111,6 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
             }
         }
         return super.onItemRightClick(worldIn, playerIn, handIn);
-    }
-
-    public Quaternion[] getEquipmentRotation() {
-        return this.EquipmentRotation;
     }
 
     public enums.shipClass getValidclass() {
@@ -175,5 +175,5 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public ResourceLocation getTexture(){
             return this.getModel().getTextureLocation(null);
-    };
+    }
 }

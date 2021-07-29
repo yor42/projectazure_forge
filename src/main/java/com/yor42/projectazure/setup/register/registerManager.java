@@ -107,10 +107,6 @@ public class registerManager {
     public static final EntityType<EntityF4fWildcat> PLANEF4FWildCat = EntityType.Builder.<EntityF4fWildcat>create(EntityF4fWildcat::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString());
     public static final RegistryObject<EntityType<EntityF4fWildcat>> F4FWildCat = ENTITIES.register("planef4fwildcat", () -> PLANEF4FWildCat);
 
-    //Biomes
-    public static final RegistryObject<Biome> MIRROR_SEA = registerManager.BIOMES.register("mirror_sea", registerBiomes::makeMirrorSea);
-
-
     public static void register() {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
         ENTITIES.register(eventbus);

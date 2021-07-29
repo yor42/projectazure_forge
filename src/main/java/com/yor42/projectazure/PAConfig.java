@@ -78,6 +78,12 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue COPPER_MINHEIGHT;
         public final ForgeConfigSpec.IntValue COPPER_MAXHEIGHT;
 
+        public final ForgeConfigSpec.BooleanValue ENABLE_ZINC;
+        public final ForgeConfigSpec.IntValue ZINC_VEINSIZE;
+        public final ForgeConfigSpec.IntValue ZINC_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue ZINC_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue ZINC_MAXHEIGHT;
+
         public final ForgeConfigSpec.BooleanValue ENABLE_TIN;
         public final ForgeConfigSpec.IntValue TIN_VEINSIZE;
         public final ForgeConfigSpec.IntValue TIN_VEINSPERCHUNK;
@@ -169,12 +175,18 @@ public class PAConfig {
             builder.pop().push("Worldgen").comment("Options about worldgen like ores");
             ENABLE_COPPER = builder.define("Enable Copper Generation", true);
             COPPER_VEINSPERCHUNK = builder.defineInRange("Count of copper vein in single chunk", 8,0,128);
-            COPPER_VEINSIZE = builder.defineInRange("Count of copper vein in single chunk", 7,0,512);
+            COPPER_VEINSIZE = builder.defineInRange("Count of copper vein in single chunk", 4,0,512);
             COPPER_MINHEIGHT = builder.defineInRange("Minimum Y axis value that copper can generate", 0,0,256);
             COPPER_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that copper can generate", 60,0,256);
 
+            ENABLE_ZINC = builder.define("Enable Zinc Generation", true);
+            ZINC_VEINSPERCHUNK = builder.defineInRange("Count of Zinc vein in single chunk", 3,0,128);
+            ZINC_VEINSIZE = builder.defineInRange("Count of Zinc vein in single chunk", 5,0,512);
+            ZINC_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Zinc can generate", 0,0,256);
+            ZINC_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Zinc can generate", 40,0,256);
+
             ENABLE_TIN = builder.define("Enable Tin Generation", true);
-            TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 8,0,128);
+            TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 4,0,128);
             TIN_VEINSIZE = builder.defineInRange("Count of Tin vein in single chunk", 7,0,512);
             TIN_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Tin can generate", 0,0,256);
             TIN_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Tin can generate", 60,0,256);

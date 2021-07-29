@@ -577,6 +577,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return false;
     }
 
+    public ItemStack getRigging(){
+        return ItemStack.EMPTY;
+    }
+
     public boolean shouldUseGun() {
         ItemStack gunstack = this.getGunStack();
         if (gunstack.getItem() instanceof ItemGunBase) {
