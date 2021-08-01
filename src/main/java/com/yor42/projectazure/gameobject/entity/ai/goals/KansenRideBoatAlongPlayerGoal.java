@@ -116,7 +116,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
             if (this.boat != null && this.boat instanceof BoatEntity && this.entity.getOwner() != null) {
                 if (this.boat.getPassengers().size()<2 && this.sameBoatWithOwner) {
                     double distanceSq = this.entity.getDistanceSq(this.boat.getPosX(), this.boat.getPosY(), this.boat.getPosZ());
-                    if (distanceSq <= 3.0 && !this.entity.isRidingOrBeingRiddenBy(this.boat)) {
+                    if (distanceSq <= 3.0 && !this.entity.isRidingSameEntity(this.boat)) {
                         this.entity.startRiding(this.boat);
                     } else {
                         this.entity.getLookController().setLookPositionWithEntity(this.boat, 30.0F, 30.0F);
