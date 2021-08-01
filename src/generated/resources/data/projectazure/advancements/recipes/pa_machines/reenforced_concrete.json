@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:reenforced_concrete"
+    ]
+  },
+  "criteria": {
+    "has_concrete_powder": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:gray_concrete_powder"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:reenforced_concrete"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_concrete_powder",
+      "has_the_recipe"
+    ]
+  ]
+}
