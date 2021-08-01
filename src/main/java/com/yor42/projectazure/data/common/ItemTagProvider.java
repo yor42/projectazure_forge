@@ -1,7 +1,7 @@
 package com.yor42.projectazure.data.common;
 
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 
 public class ItemTagProvider extends ItemTagsProvider {
     public ItemTagProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(dataGenerator, blockTagProvider, defined.MODID, existingFileHelper);
+        super(dataGenerator, blockTagProvider, Constants.MODID, existingFileHelper);
     }
 
     @Override

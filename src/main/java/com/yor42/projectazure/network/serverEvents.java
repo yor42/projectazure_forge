@@ -1,7 +1,7 @@
 package com.yor42.projectazure.network;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.EntityType;
@@ -11,7 +11,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class serverEvents {
     public static void spawnStarter(ServerPlayerEntity player, int StarterID){
@@ -21,12 +20,16 @@ public class serverEvents {
         if(!world.isRemote)
         {
             switch (StarterID){
-                case defined.STARTER_SAKURA: {
+                case Constants.STARTER_SAKURA: {
                     entitytype = registerManager.AYANAMI.get();
                     break;
                 }
-                case defined.STARTER_ROYAL:{
+                case Constants.STARTER_ROYAL:{
                     entitytype = registerManager.JAVELIN.get();
+                    break;
+                }
+                case Constants.STARTER_IRONBLOOD:{
+                    entitytype = registerManager.Z23.get();
                     break;
                 }
                 default:{

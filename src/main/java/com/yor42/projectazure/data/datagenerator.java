@@ -6,14 +6,14 @@ import com.yor42.projectazure.data.common.BlockTagProvider;
 import com.yor42.projectazure.data.common.ItemTagProvider;
 import com.yor42.projectazure.data.common.RecipeProvider;
 import com.yor42.projectazure.data.common.loot.LootTableProvider;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 
-@Mod.EventBusSubscriber(modid = defined.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class datagenerator {
     private datagenerator() {}
 

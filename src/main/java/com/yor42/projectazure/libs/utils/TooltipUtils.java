@@ -1,6 +1,5 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.yor42.projectazure.libs.defined;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;

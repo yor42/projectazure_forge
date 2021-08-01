@@ -11,25 +11,18 @@ import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectile
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
-import com.yor42.projectazure.intermod.ModCompatibilities;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -46,10 +39,9 @@ import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
 
-import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import static com.yor42.projectazure.libs.defined.MODID;
+import static com.yor42.projectazure.libs.Constants.MODID;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MODID)
@@ -124,7 +116,7 @@ public class Main
     private void processIMC(final InterModProcessEvent event)
     {
 
-        Stream<InterModComms.IMCMessage> messageStream = InterModComms.getMessages(defined.MODID);
+        Stream<InterModComms.IMCMessage> messageStream = InterModComms.getMessages(Constants.MODID);
         messageStream.forEach((msg)->{
         });
     }

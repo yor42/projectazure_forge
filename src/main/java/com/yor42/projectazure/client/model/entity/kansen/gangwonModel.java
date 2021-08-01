@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityGangwon;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -9,7 +9,6 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
@@ -32,7 +31,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityGangwon entityGangwon) {
-        return new ResourceLocation(defined.MODID,"animations/entity/kansen/gangwon.animation.json");
+        return new ResourceLocation(Constants.MODID,"animations/entity/kansen/gangwon.animation.json");
     }
 
     @Override

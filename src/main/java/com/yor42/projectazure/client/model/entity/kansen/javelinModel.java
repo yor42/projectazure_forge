@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityJavelin;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -19,17 +19,17 @@ public class javelinModel extends AnimatedGeoModel<EntityJavelin> {
 
     @Override
     public ResourceLocation getModelLocation(EntityJavelin object) {
-        return new ResourceLocation(defined.MODID, "geo/entity/modeljavelin.geo.json");
+        return new ResourceLocation(Constants.MODID, "geo/entity/modeljavelin.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityJavelin object) {
-        return new ResourceLocation(defined.MODID, "textures/entity/entityjavelin.png");
+        return new ResourceLocation(Constants.MODID, "textures/entity/entityjavelin.png");
     }
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityJavelin animatable) {
-        return new ResourceLocation(defined.MODID, "animations/entity/kansen/javelin.animation.json");
+        return new ResourceLocation(Constants.MODID, "animations/entity/kansen/javelin.animation.json");
     }
 
     @Override

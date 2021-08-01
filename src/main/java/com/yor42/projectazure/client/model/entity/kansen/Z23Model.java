@@ -1,8 +1,7 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityJavelin;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityZ23;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -19,17 +18,17 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
 
     @Override
     public ResourceLocation getModelLocation(EntityZ23 object) {
-        return new ResourceLocation(defined.MODID, "geo/entity/modelnimi.geo.json");
+        return new ResourceLocation(Constants.MODID, "geo/entity/modelnimi.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityZ23 object) {
-        return new ResourceLocation(defined.MODID, "textures/entity/entitynimi.png");
+        return new ResourceLocation(Constants.MODID, "textures/entity/entitynimi.png");
     }
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityZ23 animatable) {
-        return new ResourceLocation(defined.MODID, "animations/entity/kansen/nimi.animation.json");
+        return new ResourceLocation(Constants.MODID, "animations/entity/kansen/nimi.animation.json");
     }
 
     @Override

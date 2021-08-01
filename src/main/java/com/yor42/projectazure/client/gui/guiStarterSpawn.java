@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.buttons.buttonStarterSelect;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.Minecraft;
@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class guiStarterSpawn extends Screen {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(defined.MODID, "textures/gui/rainbow_cube_gui.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/rainbow_cube_gui.png");
 
     private boolean notYetPopulated = true;
 
@@ -35,7 +35,8 @@ public class guiStarterSpawn extends Screen {
 
     private final EntityType<?>[] entityList = {
             registerManager.AYANAMI.get(),
-            registerManager.JAVELIN.get()
+            registerManager.JAVELIN.get(),
+            registerManager.Z23.get()
     };
 
     public guiStarterSpawn(ITextComponent titleIn) {
@@ -135,7 +136,7 @@ public class guiStarterSpawn extends Screen {
     }
 
     private buttonStarterSelect createButton(int x, int y, int width, int height, int idx, EntityType type, Button.IPressable onPress) {
-        ResourceLocation TEXTURE1 = new ResourceLocation(defined.MODID, "textures/gui/rainbow_cube_overlay.png");
+        ResourceLocation TEXTURE1 = new ResourceLocation(Constants.MODID, "textures/gui/rainbow_cube_overlay.png");
         return new buttonStarterSelect(x, y, width, height, 0, 0, this.buttonWidth , TEXTURE1, idx, type, onPress);
     }
 }

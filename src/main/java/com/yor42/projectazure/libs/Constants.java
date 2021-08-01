@@ -1,0 +1,12 @@
+package com.yor42.projectazure.libs;
+
+public class Constants {
+
+    public static final String MODID = "projectazure";
+
+    //Starter ID
+    public static final int STARTER_SAKURA = 0;
+    public static final int STARTER_ROYAL = 1;
+    public static final int STARTER_IRONBLOOD = 2;
+
+}

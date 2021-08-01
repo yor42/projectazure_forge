@@ -1,6 +1,6 @@
 package com.yor42.projectazure.data.client;
 
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -10,7 +10,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 public class itemModelProvider extends ItemModelProvider {
 
     public itemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, defined.MODID, existingFileHelper);
+        super(generator, Constants.MODID, existingFileHelper);
     }
 
 

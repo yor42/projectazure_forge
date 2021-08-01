@@ -1,12 +1,12 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 
 public class ResourceUtils {
 
     public static ResourceLocation ModResourceLocation(String Location){
-        return new ResourceLocation(defined.MODID, Location);
+        return new ResourceLocation(Constants.MODID, Location);
     }
 
     public static ResourceLocation GeoModelEntityLocation(String FileName){

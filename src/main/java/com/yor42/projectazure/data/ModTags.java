@@ -1,6 +1,6 @@
 package com.yor42.projectazure.data;
 
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
@@ -23,7 +23,7 @@ public class ModTags {
         }
 
         private static ITag.INamedTag<Block> mod(String path) {
-            return BlockTags.makeWrapperTag(new ResourceLocation(defined.MODID, path).toString());
+            return BlockTags.makeWrapperTag(new ResourceLocation(Constants.MODID, path).toString());
         }
 
         private static ITag.INamedTag<Block> mc(String path) {
@@ -109,7 +109,7 @@ public class ModTags {
         }
 
         private static ITag.INamedTag<Item> mod(String path) {
-            return ItemTags.makeWrapperTag(new ResourceLocation(defined.MODID, path).toString());
+            return ItemTags.makeWrapperTag(new ResourceLocation(Constants.MODID, path).toString());
         }
     }
 }

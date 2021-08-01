@@ -3,7 +3,7 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.gameobject.crafting.ReloadRecipes;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.item.crafting.*;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -12,8 +12,8 @@ import java.util.function.Supplier;
 public class registerRecipes {
 
     public static class Types{
-        public static final IRecipeType<PressingRecipe> PRESSING = IRecipeType.register(defined.MODID+"pressing");
-        public static final IRecipeType<AlloyingRecipe> ALLOYING = IRecipeType.register(defined.MODID+"alloying");
+        public static final IRecipeType<PressingRecipe> PRESSING = IRecipeType.register(Constants.MODID+"pressing");
+        public static final IRecipeType<AlloyingRecipe> ALLOYING = IRecipeType.register(Constants.MODID+"alloying");
         public static void register(){}
     }
 

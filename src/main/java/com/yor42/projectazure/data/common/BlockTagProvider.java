@@ -1,7 +1,7 @@
 package com.yor42.projectazure.data.common;
 
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.BlockTagsProvider;
@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 public class BlockTagProvider extends BlockTagsProvider {
 
     public BlockTagProvider(DataGenerator generatorIn, @Nullable ExistingFileHelper existingFileHelper) {
-        super(generatorIn, defined.MODID, existingFileHelper);
+        super(generatorIn, Constants.MODID, existingFileHelper);
     }
 
     @Override

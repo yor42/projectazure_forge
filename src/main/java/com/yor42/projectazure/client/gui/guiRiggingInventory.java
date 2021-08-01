@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -16,7 +16,7 @@ import net.minecraft.util.text.ITextComponent;
 
 public class guiRiggingInventory extends ContainerScreen<RiggingContainer> implements IHasContainer<RiggingContainer> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(defined.MODID, "textures/gui/rigging_inventory.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/rigging_inventory.png");
 
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;

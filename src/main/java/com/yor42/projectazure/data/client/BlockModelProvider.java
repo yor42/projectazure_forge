@@ -1,13 +1,13 @@
 package com.yor42.projectazure.data.client;
 
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockModelProvider extends net.minecraftforge.client.model.generators.BlockStateProvider {
     public BlockModelProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, defined.MODID, exFileHelper);
+        super(gen, Constants.MODID, exFileHelper);
     }
 
     @Override

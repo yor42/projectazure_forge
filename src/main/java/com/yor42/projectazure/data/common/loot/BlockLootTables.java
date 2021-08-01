@@ -1,12 +1,10 @@
 package com.yor42.projectazure.data.common.loot;
 
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Items;
 import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.conditions.TableBonus;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -38,7 +36,7 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
     @Override
     protected Iterable<Block> getKnownBlocks() {
         return ForgeRegistries.BLOCKS.getValues().stream()
-                .filter(block -> defined.MODID.equals(block.getRegistryName().getNamespace()))
+                .filter(block -> Constants.MODID.equals(block.getRegistryName().getNamespace()))
                 .collect(Collectors.toSet());
     }
 }

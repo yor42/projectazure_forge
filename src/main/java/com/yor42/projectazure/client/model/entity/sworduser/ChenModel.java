@@ -1,8 +1,7 @@
 package com.yor42.projectazure.client.model.entity.sworduser;
 
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
-import com.yor42.projectazure.libs.defined;
-import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -32,7 +31,7 @@ public class ChenModel extends AnimatedGeoModel<EntityChen> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityChen entityChen) {
-        return new ResourceLocation(defined.MODID,"animations/entity/sworduser/chen.animation.json");
+        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/chen.animation.json");
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.yor42.projectazure.client.model.entity.kansen.ayanamiModel;
 import com.yor42.projectazure.client.renderer.layer.AyanamiRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.libs.defined;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -14,11 +14,8 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
-import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
@@ -54,7 +51,7 @@ public class entityAyanamiRenderer extends GeoEntityRenderer<EntityAyanami> {
 
     @Override
     public ResourceLocation getEntityTexture(EntityAyanami entity) {
-        return new ResourceLocation(defined.MODID, "textures/entity/modelayanami.png");
+        return new ResourceLocation(Constants.MODID, "textures/entity/modelayanami.png");
     }
 
     @Override

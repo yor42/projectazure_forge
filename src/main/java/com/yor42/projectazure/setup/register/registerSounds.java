@@ -5,7 +5,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-import static com.yor42.projectazure.libs.defined.MODID;
+import static com.yor42.projectazure.libs.Constants.MODID;
 
 public final class registerSounds {
 

@@ -1,6 +1,5 @@
 package com.yor42.projectazure.network.packets;
 
-import com.yor42.projectazure.libs.defined;
 import com.yor42.projectazure.libs.utils.ParticleUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -11,7 +10,6 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nullable;
-import javax.swing.text.html.parser.Entity;
 import java.util.function.Supplier;
 
 public class spawnParticlePacket {

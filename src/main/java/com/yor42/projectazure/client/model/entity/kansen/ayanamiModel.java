@@ -1,17 +1,14 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
-import com.yor42.projectazure.libs.defined;
-import net.minecraft.util.Hand;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
@@ -22,17 +19,17 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
 
     @Override
     public ResourceLocation getModelLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "geo/entity/modelayanami.geo.json");
+        return new ResourceLocation(Constants.MODID, "geo/entity/modelayanami.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "textures/entity/modelayanami.png");
+        return new ResourceLocation(Constants.MODID, "textures/entity/modelayanami.png");
     }
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityAyanami entityAyanami) {
-        return new ResourceLocation(defined.MODID, "animations/entity/kansen/ayanami.animation.json");
+        return new ResourceLocation(Constants.MODID, "animations/entity/kansen/ayanami.animation.json");
     }
 
     @Override
