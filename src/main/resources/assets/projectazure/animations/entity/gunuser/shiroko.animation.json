@@ -488,7 +488,40 @@
 			}
 		},
 		"animation.shiroko.idle": {
-			"loop": true
+			"loop": true,
+			"animation_length": 4.16,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.08": {
+							"vector": [0, 0, -5],
+							"easing": "easeInOutSine"
+						},
+						"4.16": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.08": {
+							"vector": [0, 0, 5],
+							"easing": "easeInOutSine"
+						},
+						"4.16": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
 		},
 		"animation.shiroko.melee": {
 			"animation_length": 1.04,

@@ -125,7 +125,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
                 } else {
                     double distanceSq = this.entity.getDistanceSq(this.boat.getPosX(), this.boat.getPosY(), this.boat.getPosZ());
                     if (distanceSq <= 3.0 && this.entity.getRidingEntity() != this.boat) {
-                        if (!this.entity.isRidingOrBeingRiddenBy(this.boat)) {
+                        if (!this.entity.isRidingSameEntity(this.boat)) {
                             this.entity.startRiding(this.boat);
                         }
                         if (this.entity == this.boat.getControllingPassenger()) {
