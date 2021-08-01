@@ -100,11 +100,13 @@ public class EntityShiroko extends EntityGunUserBase {
                     if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
                         event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_idle_twohanded", true));
                     }
+                    else{
+                        event.getController().setAnimation(builder.addAnimation("animation.shiroko.idle_arm", true));
+                    }
                     return PlayState.CONTINUE;
                 }
             }
         }
-        event.getController().setAnimation(builder.addAnimation("animation.shiroko.idle_arm", true));
         return PlayState.CONTINUE;
     }
 

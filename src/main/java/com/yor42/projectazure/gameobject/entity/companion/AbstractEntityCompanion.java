@@ -885,11 +885,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         this.updateArmSwingProgress();
 
-        if(this.ticksExisted-this.getLastAttackedEntityTime()>100 && this.getGunAmmoCount() <= 0){
-
-            this.setReloadDelay();
-        }
-
         if(this.getDataManager().get(SITTING) != this.isSitting()) {
             this.func_233687_w_(this.getDataManager().get(SITTING));
         }
@@ -964,9 +959,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         int mainhandDelay = this.getDataManager().get(RELOAD_TIMER_MAINHAND);
         if(mainhandDelay>0){
             this.getDataManager().set(RELOAD_TIMER_MAINHAND, mainhandDelay - 1);
-            if(this.getDataManager().get(RELOAD_TIMER_MAINHAND) == 0 && this.ticksExisted - this.getLastAttackedEntityTime()>200 && this.getGunStack().getItem() instanceof ItemGunBase){
+            if(this.getDataManager().get(RELOAD_TIMER_MAINHAND) == 0 && this.getGunStack().getItem() instanceof ItemGunBase){
                 this.reloadAmmo();
             }
+        }
+
+        ItemStack gunstack = this.getGunStack();
+        if(this.ticksExisted-this.getLastAttackedEntityTime()>200 && gunstack.getItem() instanceof ItemGunBase &&  this.getGunAmmoCount() <= ((ItemGunBase) gunstack.getItem()).getMaxAmmo()){
+            this.setReloadDelay();
         }
 
         if(this.ticksExisted%10==0){

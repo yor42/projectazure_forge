@@ -46,7 +46,7 @@ public class MachineRecruitBeaconRenderer extends GeoBlockRenderer<TileEntityRec
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if(this.entity.getWorld() != null) {
+        if(this.entity.getWorld() != null && this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(RecruitBeaconBlock.POWERED)) {
             if (Objects.equals(bone.getName(), "on")) {
                 bone.setHidden(!this.entity.getWorld().getBlockState(this.entity.getPos()).get(RecruitBeaconBlock.POWERED));
             } else if (Objects.equals(bone.getName(), "off")) {

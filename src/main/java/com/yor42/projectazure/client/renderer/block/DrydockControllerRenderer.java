@@ -64,10 +64,11 @@ public class DrydockControllerRenderer extends GeoBlockRenderer<MultiblockDrydoc
                     bone.setHidden(true);
                 }
             }
-
-            if (bone.getName().contains("activelight") || bone.getName().contains("activeeffect")) {
-                boolean flag = !(this.entity.getWorld().getBlockState(this.entity.getPos()).get(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).get(POWERED));
-                bone.setHidden(flag);
+            if(this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(POWERED)) {
+                if (bone.getName().contains("activelight") || bone.getName().contains("activeeffect")) {
+                    boolean flag = !(this.entity.getWorld().getBlockState(this.entity.getPos()).get(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).get(POWERED));
+                    bone.setHidden(flag);
+                }
             }
         }
 
