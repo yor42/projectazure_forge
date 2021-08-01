@@ -99,7 +99,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isSitting() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_leg", true));

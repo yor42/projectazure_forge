@@ -127,6 +127,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelWisdomCube("spawngangwon");
         buildModelWisdomCube("spawnenterprise");
         buildModelWisdomCube("spawnnagato");
+        buildModelWisdomCube("spawnz23");
 
         buildModelArknights("spawnchen");
 

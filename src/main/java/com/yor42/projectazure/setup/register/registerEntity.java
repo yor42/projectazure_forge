@@ -21,6 +21,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.SHIROKO_ENTITY_TYPE, EntityShiroko.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_NAGATO, EntityNagato.MutableAttribute().create());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CHEN, EntityChen.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITY_Z23, EntityZ23.MutableAttribute().create());
     }
 
 /*

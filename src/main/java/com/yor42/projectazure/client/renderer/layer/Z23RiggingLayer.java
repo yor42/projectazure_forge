@@ -2,8 +2,8 @@ package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityAyanami;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityJavelin;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityZ23;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingDD;
@@ -29,7 +29,7 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
-public class JavelinRiggingLayer extends GeoLayerRenderer<EntityJavelin> implements IGeoRenderer {
+public class Z23RiggingLayer extends GeoLayerRenderer<EntityZ23> implements IGeoRenderer {
 
     private AnimatedGeoModel<?> modelRiggingProvider;
 
@@ -44,12 +44,13 @@ public class JavelinRiggingLayer extends GeoLayerRenderer<EntityJavelin> impleme
         });
     }
 
-    public JavelinRiggingLayer(IGeoRenderer<EntityJavelin> entityRendererIn) {
+    public Z23RiggingLayer(IGeoRenderer<EntityZ23> entityRendererIn) {
         super(entityRendererIn);
     }
 
+
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityJavelin entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityZ23 entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         Item item = entitylivingbaseIn.getRigging().getItem();
 
         boolean flag = item instanceof ItemRiggingBase;
@@ -96,8 +97,8 @@ public class JavelinRiggingLayer extends GeoLayerRenderer<EntityJavelin> impleme
 
 
                     GeoModel EquipmentModel = ((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(1).getItem()).getEquipmentModel().getModelLocation(null));
-                    EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
-                    EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead()-entitylivingbaseIn.renderYawOffset), 7.5F, -12.5F, false, true));
+                    EquipmentModel.getBone("MountX").ifPresent((bone)-> bone.setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch)));
+                    EquipmentModel.getBone("Barrel").ifPresent((bone)-> bone.setRotationX(-MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead()-entitylivingbaseIn.renderYawOffset), 7.5F, -12.5F, false, true)));
                     render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
                     matrixStackIn.pop();
                 }
@@ -133,7 +134,7 @@ public class JavelinRiggingLayer extends GeoLayerRenderer<EntityJavelin> impleme
 
 
                         GeoModel EquipmentModel = ((ItemEquipmentBase) Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) Equipments.getStackInSlot(4).getItem()).getEquipmentModel().getModelLocation(null));
-                        EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead() - entitylivingbaseIn.renderYawOffset), 45F, -45F, false, true)));
+                        EquipmentModel.getBone("MountX").ifPresent((bone)-> bone.setRotationY((MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead() - entitylivingbaseIn.renderYawOffset), 45F, -45F, false, true))));
 
                         int AmmoCount = getRemainingAmmo(Equipments.getStackInSlot(4));
                         EquipmentModel.getBone("torpedo4").ifPresent((bone)-> bone.setHidden(AmmoCount<4));
@@ -180,4 +181,5 @@ public class JavelinRiggingLayer extends GeoLayerRenderer<EntityJavelin> impleme
     public ResourceLocation getTextureLocation(Object o) {
         return this.modelRiggingProvider.getTextureLocation(null);
     }
+
 }

@@ -2,13 +2,13 @@ package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -19,9 +19,8 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable, IAzurLaneKansen {
-
-    public EntityJavelin(EntityType<? extends EntityJavelin> type, World worldIn) {
+public class EntityZ23 extends EntityKansenDestroyer{
+    public EntityZ23(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -39,8 +38,8 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat", true));
+        else if(this.isSitting() || this.getRidingEntity() != null) {
+            event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
@@ -92,13 +91,12 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
         return PlayState.CONTINUE;
     }
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
-
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
         }
@@ -109,7 +107,7 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isSitting() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("sit", true));
+            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
@@ -132,6 +130,16 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
         return PlayState.CONTINUE;
     }
 
+    @Override
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.STAR_4;
+    }
+
+    @Override
+    public int getRiggingOffset() {
+        return 0;
+    }
+
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.func_233666_p_()
@@ -143,13 +151,4 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
                 ;
     }
 
-    @Override
-    public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_4;
-    }
-
-    @Override
-    public int getRiggingOffset() {
-        return 0;
-    }
 }

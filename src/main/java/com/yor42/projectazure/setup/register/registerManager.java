@@ -78,6 +78,9 @@ public class registerManager {
     public static final EntityType<EntityJavelin> ENTITY_JAVELIN = EntityType.Builder.create(EntityJavelin::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());
     public static final RegistryObject<EntityType<EntityJavelin>> JAVELIN = ENTITIES.register("entityjavelin", () -> ENTITY_JAVELIN);
 
+    public static final EntityType<EntityZ23> ENTITY_Z23 = EntityType.Builder.create(EntityZ23::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityz23").toString());
+    public static final RegistryObject<EntityType<EntityZ23>> Z23 = ENTITIES.register("entityz23", () -> ENTITY_Z23);
+
     public static final EntityType<EntityGangwon> ENTITYGANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.35F).build(ModResourceLocation("entitygandwon").toString());
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYGANGWON);
 

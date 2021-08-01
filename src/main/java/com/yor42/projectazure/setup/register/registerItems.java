@@ -276,6 +276,8 @@ public class registerItems {
             .group(PA_SHIPS)));
     public static final RegistryObject<Item> SPAWM_JAVELIN = registerManager.ITEMS.register("spawnjavelin", () -> new ItemKansenSpawnEgg(ENTITY_JAVELIN, new Item.Properties()
             .group(PA_SHIPS)));
+    public static final RegistryObject<Item> SPAWN_Z23 = registerManager.ITEMS.register("spawnz23", () -> new ItemKansenSpawnEgg(ENTITY_Z23, new Item.Properties()
+            .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(ENTITYGANGWON, new Item.Properties()
             .group(PA_SHIPS)));
