@@ -121,7 +121,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
         }
 
         if(this.isSitting() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit", true));
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_start").addAnimation("animation.gangwon.sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_leg", true));

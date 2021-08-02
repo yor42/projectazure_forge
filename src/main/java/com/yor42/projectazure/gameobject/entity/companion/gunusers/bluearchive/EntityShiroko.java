@@ -40,7 +40,7 @@ public class EntityShiroko extends EntityGunUserBase {
 
     @Override
     protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui((ServerPlayerEntity) player, new ContainerBAInventory.Supplier(this));
+        NetworkHooks.openGui(player, new ContainerBAInventory.Supplier(this));
     }
 
     @Override
@@ -139,7 +139,7 @@ public class EntityShiroko extends EntityGunUserBase {
         }
 
         if(this.isSitting() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit", true));
+            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_start").addAnimation("animation.shiroko.sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.swim_leg", true));
