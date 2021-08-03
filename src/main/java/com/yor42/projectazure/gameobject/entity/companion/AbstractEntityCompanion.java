@@ -1013,7 +1013,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
 
 
-        if(!this.getEntityWorld().isRemote() && (this.getEntityWorld().isNightTime() && this.isSitting() && this.isInHomeRangefromCurrenPos() && this.getNavigator().getPathToPos(this.getHOMEPOS().get(), 0) != null && this.getNavigator().getPathToPos(this.getHOMEPOS().get(), 0).reachesTarget())){
+        if(!this.getEntityWorld().isRemote() && this.isFreeRoaming() && (this.getEntityWorld().isNightTime() && this.isSitting() && this.isInHomeRangefromCurrenPos() && this.getNavigator().getPathToPos(this.getHOMEPOS().get(), 0) != null && this.getNavigator().getPathToPos(this.getHOMEPOS().get(), 0).reachesTarget())){
+            this.shouldBeSitting = this.isSitting();
             this.func_233687_w_(false);
         }
 
@@ -1589,7 +1590,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void func_233687_w_(boolean val) {
         this.getDataManager().set(SITTING, val);
-        this.shouldBeSitting = val;
         super.func_233687_w_(val);
         this.recalculateSize();
     }
