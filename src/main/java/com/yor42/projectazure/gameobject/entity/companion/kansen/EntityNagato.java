@@ -128,7 +128,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
-
+        event.getController().markNeedsReload();
         return PlayState.STOP;
     }
 

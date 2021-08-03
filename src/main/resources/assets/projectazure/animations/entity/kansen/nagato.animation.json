@@ -563,6 +563,7 @@
 			}
 		},
 		"sit_start": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 2.728,
 			"bones": {
 				"Skirt1": {
@@ -701,6 +702,7 @@
 			}
 		},
 		"sit_start_arm": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 3.44,
 			"bones": {
 				"RightArm": {
@@ -1231,6 +1233,31 @@
 						"0.48": {
 							"vector": [0, 0, 0]
 						}
+					}
+				}
+			}
+		},
+		"idle_leg": {
+			"loop": true,
+			"bones": {
+				"RightLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"RightLowerLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"LeftLowerLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
 					}
 				}
 			}

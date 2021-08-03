@@ -255,6 +255,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected int patTimer;
     protected boolean isSwimmingUp;
+    protected boolean shouldBeSitting;
     protected boolean isMeleeing;
     protected boolean isOpeningDoor;
     public boolean isMovingtoRecruitStation = false;
@@ -377,6 +378,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             compound.putDouble("HomePosY", this.dataManager.get(HOMEPOS).get().getY());
             compound.putDouble("HomePosZ", this.dataManager.get(HOMEPOS).get().getZ());
         }
+        compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
         compound.putBoolean("isforcewokenup", this.dataManager.get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.dataManager.get(EXP));
         compound.putInt("level", this.getDataManager().get(LEVEL));
@@ -464,6 +466,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.dataManager.set(HOMEPOS, Optional.of(new BlockPos(compound.getDouble("HomePosX"), compound.getDouble("HomePosY"), compound.getDouble("HomePosZ"))));
         }
         this.dataManager.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
+        this.shouldBeSitting = compound.getBoolean("shouldbeSitting");
         this.getDataManager().set(LEVEL, compound.getInt("level"));
         this.dataManager.set(EXP, compound.getFloat("exp"));
         this.dataManager.set(MORALE, compound.getFloat("morale"));
@@ -1000,9 +1003,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.addMorale(-0.0001);
         }
         if(!this.world.isRemote() && this.getEntityWorld().isDaytime()) {
-
             if (this.isSleeping()) {
                 this.wakeUp();
+                if(this.shouldBeSitting){
+                    this.func_233687_w_(true);
+                }
             }
         }
 
@@ -1297,17 +1302,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     else if(heldstacks.getItem() instanceof ItemBandage){
                         if(this.getHealth()<this.getMaxHealth()){
                             if(!this.world.isRemote) {
-                                this.heal(1.0f);
+                                this.doHeal(1.0f);
                                 if (!player.isCreative()) {
                                     if (heldstacks.attemptDamageItem(1, MathUtil.getRand(), (ServerPlayerEntity) player)) {
                                         heldstacks.shrink(1);
                                     }
                                 }
-                            }
-                            this.addAffection(0.12F);
-                            this.getDataManager().set(HEAL_TIMER, 50);
-                            if(!this.getEntityWorld().isRemote()) {
-                                Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
                             }
                             return ActionResultType.SUCCESS;
                         }
@@ -1372,14 +1372,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    public void doHeal(){
-        this.heal(1.0f);
+    public void doHeal(float amount) {
+        this.heal(amount);
         this.addAffection(0.12F);
         this.getDataManager().set(HEAL_TIMER, 50);
-        double d0 = this.rand.nextGaussian() * 0.02D;
-        double d1 = this.rand.nextGaussian() * 0.02D;
-        double d2 = this.rand.nextGaussian() * 0.02D;
-        this.world.addParticle(ParticleTypes.HEART, this.getPosXRandom(1.0D), this.getPosYRandom() + 0.5D, this.getPosZRandom(1.0D), d0, d1, d2);
+        if(!this.getEntityWorld().isRemote()) {
+            Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
+        }
     }
 
     @Override
@@ -1481,6 +1480,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void forceWakeup(){
         if(this.isSleeping()) {
+            this.shouldBeSitting = false;
             this.wakeUp();
             this.setForceWaken(true);
         }
@@ -1587,9 +1587,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.getSize(poseIn);
     }
 
-    public void func_233687_w_(boolean p_233687_1_) {
-        this.getDataManager().set(SITTING, p_233687_1_);
-        super.func_233687_w_(p_233687_1_);
+    public void func_233687_w_(boolean val) {
+        this.getDataManager().set(SITTING, val);
+        this.shouldBeSitting = val;
+        super.func_233687_w_(val);
         this.recalculateSize();
     }
 

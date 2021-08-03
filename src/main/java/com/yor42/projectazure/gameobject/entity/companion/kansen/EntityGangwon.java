@@ -140,7 +140,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             }
             return PlayState.CONTINUE;
         }
-
+        event.getController().markNeedsReload();
         return PlayState.STOP;
     }
 

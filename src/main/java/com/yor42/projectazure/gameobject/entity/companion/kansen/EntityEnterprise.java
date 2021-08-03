@@ -49,7 +49,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             return PlayState.CONTINUE;
         }
-
+        event.getController().markNeedsReload();
         return PlayState.STOP;
     }
 

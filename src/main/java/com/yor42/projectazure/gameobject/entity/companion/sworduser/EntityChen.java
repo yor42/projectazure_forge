@@ -70,7 +70,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
         else if(this.isMeleeing() || this.isSleeping()){
             return PlayState.STOP;
         }
-
+        event.getController().markNeedsReload();
         return PlayState.STOP;
     }
 

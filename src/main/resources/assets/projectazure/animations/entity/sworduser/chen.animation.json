@@ -946,6 +946,31 @@
 				}
 			}
 		},
+		"idle_leg": {
+			"loop": true,
+			"bones": {
+				"waist": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"RightLowerLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"LeftLowerLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
 		"sit_tail_start": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 0.92,
