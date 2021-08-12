@@ -2,12 +2,14 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerAlloyFurnace;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.*;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
@@ -59,6 +61,10 @@ public class registerManager {
     public static final ContainerType<ContainerAKNInventory> AKN_INVENTORY_TYPE = new ContainerType<>(ContainerAKNInventory::new);
     public static final RegistryObject<ContainerType<ContainerAKNInventory>> AKN_CONTAINER = CONTAINER.register("arknights_inventory", () -> AKN_INVENTORY_TYPE);
 
+    public static final ContainerType<ContainerGFLInventory> GFL_INVENTORY_TYPE = new ContainerType<>(ContainerGFLInventory::new);
+    public static final RegistryObject<ContainerType<ContainerGFLInventory>> GFL_CONTAINER = CONTAINER.register("girlsfrontline_inventory", () -> GFL_INVENTORY_TYPE);
+
+
     public static final ContainerType<ContainerMetalPress> METAL_PRESS_CONTAINER_TYPE = IForgeContainerType.create(ContainerMetalPress::new);
     public static final RegistryObject<ContainerType<ContainerMetalPress>> METAL_PRESS_CONTAINER = CONTAINER.register("metal_press_container", () -> METAL_PRESS_CONTAINER_TYPE);
 
@@ -72,23 +78,26 @@ public class registerManager {
     public static final RegistryObject<ContainerType<ContainerDryDock>> DRYDOCK_CONTAINER = CONTAINER.register("drydock_container", () -> DRYDOCK_CONTAINER_TYPE);
 
     //entity
-    public static final EntityType<EntityAyanami> ENTITY_AYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());
-    public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> ENTITY_AYANAMI);
+    public static final EntityType<EntityAyanami> ENTITYTYPE_AYANAMI = EntityType.Builder.create(EntityAyanami::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());
+    public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> ENTITYTYPE_AYANAMI);
 
-    public static final EntityType<EntityJavelin> ENTITY_JAVELIN = EntityType.Builder.create(EntityJavelin::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());
-    public static final RegistryObject<EntityType<EntityJavelin>> JAVELIN = ENTITIES.register("entityjavelin", () -> ENTITY_JAVELIN);
+    public static final EntityType<EntityJavelin> ENTITYTYPE_JAVELIN = EntityType.Builder.create(EntityJavelin::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());
+    public static final RegistryObject<EntityType<EntityJavelin>> JAVELIN = ENTITIES.register("entityjavelin", () -> ENTITYTYPE_JAVELIN);
 
-    public static final EntityType<EntityZ23> ENTITY_Z23 = EntityType.Builder.create(EntityZ23::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityz23").toString());
-    public static final RegistryObject<EntityType<EntityZ23>> Z23 = ENTITIES.register("entityz23", () -> ENTITY_Z23);
+    public static final EntityType<EntityZ23> ENTITYTYPE_Z23 = EntityType.Builder.create(EntityZ23::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityz23").toString());
+    public static final RegistryObject<EntityType<EntityZ23>> Z23 = ENTITIES.register("entityz23", () -> ENTITYTYPE_Z23);
 
-    public static final EntityType<EntityGangwon> ENTITYGANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.35F).build(ModResourceLocation("entitygandwon").toString());
-    public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYGANGWON);
+    public static final EntityType<EntityGangwon> ENTITYTYPE_GANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.35F).build(ModResourceLocation("entitygandwon").toString());
+    public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYTYPE_GANGWON);
 
-    public static final EntityType<EntityEnterprise> ENTERPRISE_ENTITY_TYPE = EntityType.Builder.create(EntityEnterprise::new, EntityClassification.CREATURE).size(1F, 1.825F).build(ModResourceLocation("entityenterprise").toString());
-    public static final RegistryObject<EntityType<EntityEnterprise>> ENTERPRISE = ENTITIES.register("entityenterprise", () -> ENTERPRISE_ENTITY_TYPE);
+    public static final EntityType<EntityEnterprise> ENTITYTYPE_ENTERPRISE = EntityType.Builder.create(EntityEnterprise::new, EntityClassification.CREATURE).size(1F, 1.825F).build(ModResourceLocation("entityenterprise").toString());
+    public static final RegistryObject<EntityType<EntityEnterprise>> ENTERPRISE = ENTITIES.register("entityenterprise", () -> ENTITYTYPE_ENTERPRISE);
 
-    public static final EntityType<EntityShiroko> SHIROKO_ENTITY_TYPE = EntityType.Builder.create(EntityShiroko::new, EntityClassification.CREATURE).size(0.572F, 1.575F).build(ModResourceLocation("entityshiroko").toString());
-    public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> SHIROKO_ENTITY_TYPE);
+    public static final EntityType<EntityM4A1> ENTITYTYPE_M4A1 = EntityType.Builder.create(EntityM4A1::new, EntityClassification.CREATURE).size(1F, 1.825F).build(ModResourceLocation("entitym4a1").toString());
+    public static final RegistryObject<EntityType<EntityM4A1>> M4A1 = ENTITIES.register("entitym4a1", () -> ENTITYTYPE_M4A1);
+
+    public static final EntityType<EntityShiroko> ENTITYTYPE_SHIROKO = EntityType.Builder.create(EntityShiroko::new, EntityClassification.CREATURE).size(0.572F, 1.575F).build(ModResourceLocation("entityshiroko").toString());
+    public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> ENTITYTYPE_SHIROKO);
 
     public static final EntityType<EntityNagato> ENTITYTYPE_NAGATO = EntityType.Builder.create(EntityNagato::new, EntityClassification.CREATURE).size(0.572F, 1.32F).build(ModResourceLocation("entitynagato").toString());
     public static final RegistryObject<EntityType<EntityNagato>> NAGATO = ENTITIES.register("entitynagato", () -> ENTITYTYPE_NAGATO);

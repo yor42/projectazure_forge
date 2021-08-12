@@ -129,9 +129,11 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelWisdomCube("spawnnagato");
         buildModelWisdomCube("spawnz23");
 
-        buildModelArknights("spawnchen");
+        buildModelGFL("spawnm4a1");
 
-        buildModelBlueArchive("spawnshiroko");
+        buildModelAKN("spawnchen");
+
+        buildModelBA("spawnshiroko");
         buildSimpleBlockModel("reenforced_concrete");
 
     }
@@ -162,11 +164,15 @@ public class itemModelProvider extends ItemModelProvider {
         return buildModelWithSingleTex(ItemName, "wisdomcube");
     }
 
-    private ItemModelBuilder buildModelBlueArchive(String ItemName){
+    private ItemModelBuilder buildModelBA(String ItemName){
         return buildModelWithSingleTex(ItemName, "spawn_bluearchive");
     }
 
-    private ItemModelBuilder buildModelArknights(String ItemName){
+    private ItemModelBuilder buildModelGFL(String ItemName){
+        return buildModelWithSingleTex(ItemName, "gfl_manufacture_contract");
+    }
+
+    private ItemModelBuilder buildModelAKN(String ItemName){
         return buildModelWithSingleTex(ItemName, "akn_document");
     }
 }

@@ -1,6 +1,8 @@
-package com.yor42.projectazure.client.model.entity.kansen;
+package com.yor42.projectazure.client.model.entity.gunUser;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -8,93 +10,78 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
-import static com.yor42.projectazure.libs.utils.ResourceUtils.*;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.AnimationLocation;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class nagatoModel extends AnimatedGeoModel<EntityNagato> {
+public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
 
     private int blinkinterval = 0;
     private long LastBlinkTime = 0;
 
     @Override
-    public ResourceLocation getModelLocation(EntityNagato entity) {
-        return GeoModelEntityLocation("modelnagato");
+    public ResourceLocation getModelLocation(EntityM4A1 Entity) {
+        return ResourceUtils.GeoModelEntityLocation("modelm4a1");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityNagato entity) {
-        return TextureEntityLocation("modelnagato");
+    public ResourceLocation getTextureLocation(EntityM4A1 Entity) {
+        return TextureEntityLocation("entitym4a1");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityNagato entity) {
-        return ModResourceLocation("animations/entity/kansen/nagato.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntityM4A1 Entity) {
+        return AnimationLocation("entity/gunuser/m4a1");
     }
 
     @Override
-    public void setLivingAnimations(EntityNagato entity, Integer uniqueID, @Nullable AnimationEvent customPredicate)
-    {
-
+    public void setLivingAnimations(EntityM4A1 entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
-        IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
+        IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
-        IBone PoutFace = this.getAnimationProcessor().getBone("Tsun");
-        IBone Flustered = this.getAnimationProcessor().getBone("Fluster");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
-        IBone SleepFace = this.getAnimationProcessor().getBone("Sleep");
+        IBone SleepFace = this.getAnimationProcessor().getBone("Sleeping");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
-
         if(entity.isBeingPatted()){
-                NormalFace.setHidden(true);
-                PatFace.setHidden(true);
-                EyeclosedFace.setHidden(true);
-                PoutFace.setHidden(true);
-                PoutFace.setHidden(true);
-                Flustered.setHidden(true);
-                ExcitedFace.setHidden(false);
-                SleepFace.setHidden(true);
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(false);
+            SleepFace.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
-            PatFace.setHidden(true);
-            EyeclosedFace.setHidden(true);
-            PoutFace.setHidden(true);
-            Flustered.setHidden(true);
             ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
             SleepFace.setHidden(false);
 
             body.setPositionY(-45);
-            body.setPositionZ(-10);
+            body.setPositionZ(-5);
         }
         else {
-
             if(this.LastBlinkTime == 0){
                 this.LastBlinkTime = System.currentTimeMillis();
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
                 if(EyeclosedFace.isHidden()){
                     NormalFace.setHidden(true);
-                    PatFace.setHidden(true);
-                    EyeclosedFace.setHidden(false);
-                    PoutFace.setHidden(true);
-                    Flustered.setHidden(true);
                     ExcitedFace.setHidden(true);
+                    EyeclosedFace.setHidden(false);
+                    PatFace.setHidden(true);
                     SleepFace.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
                     NormalFace.setHidden(false);
-                    PatFace.setHidden(true);
-                    EyeclosedFace.setHidden(true);
-                    PoutFace.setHidden(true);
-                    Flustered.setHidden(true);
                     ExcitedFace.setHidden(true);
+                    EyeclosedFace.setHidden(true);
+                    PatFace.setHidden(true);
                     SleepFace.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
@@ -104,11 +91,10 @@ public class nagatoModel extends AnimatedGeoModel<EntityNagato> {
 
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if(!(entity.isBeingPatted() || entity.isSleeping())) {
+        if(!(entity.isBeingPatted()||entity.isSleeping())) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
         }
     }
-
 
 }

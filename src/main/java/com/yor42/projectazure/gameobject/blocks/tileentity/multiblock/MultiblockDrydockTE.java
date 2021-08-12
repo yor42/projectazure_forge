@@ -156,11 +156,11 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
 
     @Override
     public void registerRollEntry() {
-        addEntry(registerManager.ENTERPRISE_ENTITY_TYPE);
-        addEntry(registerManager.ENTITY_AYANAMI);
-        addEntry(registerManager.ENTITYGANGWON);
+        addEntry(registerManager.ENTITYTYPE_ENTERPRISE);
+        addEntry(registerManager.ENTITYTYPE_AYANAMI);
+        addEntry(registerManager.ENTITYTYPE_GANGWON);
         addEntry(registerManager.ENTITYTYPE_NAGATO);
-        addEntry(registerManager.ENTITY_JAVELIN);
+        addEntry(registerManager.ENTITYTYPE_JAVELIN);
     }
 
     @Override

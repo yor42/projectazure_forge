@@ -1,7 +1,7 @@
 package com.yor42.projectazure.intermod.jei;
 
 import com.yor42.projectazure.client.gui.guiBAInventory;
-import com.yor42.projectazure.client.gui.guiShipInventory;
+import com.yor42.projectazure.client.gui.GuiALInventory;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
@@ -44,9 +44,9 @@ public class Jei implements IModPlugin {
             }
         });
 
-        registration.addGuiContainerHandler(guiShipInventory.class, new IGuiContainerHandler<guiShipInventory>() {
+        registration.addGuiContainerHandler(GuiALInventory.class, new IGuiContainerHandler<GuiALInventory>() {
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(guiShipInventory containerScreen) {
+            public List<Rectangle2d> getGuiExtraAreas(GuiALInventory containerScreen) {
                 List<Rectangle2d> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getX();
                 int guiTop = containerScreen.getY();

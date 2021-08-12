@@ -22,7 +22,6 @@ import net.minecraft.item.Rarity;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nullable;
@@ -272,17 +271,17 @@ public class registerItems {
             .group(PA_GROUP).maxStackSize(1), (int) WildcatHP));
 
 
-    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(ENTITY_AYANAMI, new Item.Properties()
+    public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(ENTITYTYPE_AYANAMI, new Item.Properties()
             .group(PA_SHIPS)));
-    public static final RegistryObject<Item> SPAWM_JAVELIN = registerManager.ITEMS.register("spawnjavelin", () -> new ItemKansenSpawnEgg(ENTITY_JAVELIN, new Item.Properties()
+    public static final RegistryObject<Item> SPAWM_JAVELIN = registerManager.ITEMS.register("spawnjavelin", () -> new ItemKansenSpawnEgg(ENTITYTYPE_JAVELIN, new Item.Properties()
             .group(PA_SHIPS)));
-    public static final RegistryObject<Item> SPAWN_Z23 = registerManager.ITEMS.register("spawnz23", () -> new ItemKansenSpawnEgg(ENTITY_Z23, new Item.Properties()
-            .group(PA_SHIPS)));
-
-    public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(ENTITYGANGWON, new Item.Properties()
+    public static final RegistryObject<Item> SPAWN_Z23 = registerManager.ITEMS.register("spawnz23", () -> new ItemKansenSpawnEgg(ENTITYTYPE_Z23, new Item.Properties()
             .group(PA_SHIPS)));
 
-    public static final RegistryObject<Item> SPAWM_ENTERPRISE = registerManager.ITEMS.register("spawnenterprise", ()-> new ItemKansenSpawnEgg(ENTERPRISE_ENTITY_TYPE, new Item.Properties().group(PA_SHIPS)));
+    public static final RegistryObject<Item> SPAWN_GANGWON = registerManager.ITEMS.register("spawngangwon", () -> new ItemKansenSpawnEgg(ENTITYTYPE_GANGWON, new Item.Properties()
+            .group(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWM_ENTERPRISE = registerManager.ITEMS.register("spawnenterprise", ()-> new ItemKansenSpawnEgg(ENTITYTYPE_ENTERPRISE, new Item.Properties().group(PA_SHIPS)));
 
 
     public static final RegistryObject<Item> SPAWN_NAGATO = registerManager.ITEMS.register("spawnnagato", () -> new ItemKansenSpawnEgg(ENTITYTYPE_NAGATO, new Item.Properties()
@@ -291,8 +290,11 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWN_CHEN = registerManager.ITEMS.register("spawnchen", () -> new ItemKansenSpawnEgg(ENTITYTYPE_CHEN, new Item.Properties()
             .group(PA_SHIPS)));
 
+    public static final RegistryObject<Item> SPAWN_M4A1 = registerManager.ITEMS.register("spawnm4a1", () -> new ItemKansenSpawnEgg(ENTITYTYPE_M4A1, new Item.Properties()
+            .group(PA_SHIPS)));
 
-    public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(SHIROKO_ENTITY_TYPE, new Item.Properties()
+
+    public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SHIROKO, new Item.Properties()
             .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> BANDAGE_ROLL = registerManager.ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()

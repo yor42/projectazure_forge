@@ -232,12 +232,12 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     @Override
     public void registerRollEntry() {
         addEntry(registerManager.ENTITYTYPE_CHEN);
-        addEntry(registerManager.SHIROKO_ENTITY_TYPE);
+        addEntry(registerManager.ENTITYTYPE_SHIROKO);
         if(PAConfig.CONFIG.shouldRecruitBeaconSpawnAllCompanions.get()){
-            addEntry(registerManager.ENTERPRISE_ENTITY_TYPE);
-            addEntry(registerManager.ENTITY_AYANAMI);
-            addEntry(registerManager.ENTITY_JAVELIN);
-            addEntry(registerManager.ENTITYGANGWON);
+            addEntry(registerManager.ENTITYTYPE_ENTERPRISE);
+            addEntry(registerManager.ENTITYTYPE_AYANAMI);
+            addEntry(registerManager.ENTITYTYPE_JAVELIN);
+            addEntry(registerManager.ENTITYTYPE_GANGWON);
             addEntry(registerManager.ENTITYTYPE_NAGATO);
         }
     }

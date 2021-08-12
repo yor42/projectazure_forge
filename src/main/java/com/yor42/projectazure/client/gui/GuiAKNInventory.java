@@ -6,11 +6,14 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
+import com.yor42.projectazure.network.proxy.ClientProxy;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -169,12 +172,12 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
     }
 
     private void renderEntity(int mousex, int mousey){
-        AbstractEntityCompanion entity = this.host;
-
-        if (entity != null) {
+        Entity entity = this.host.getType().create(ClientProxy.getClientWorld());
+        if(entity instanceof AbstractEntityCompanion) {
+            entity.copyDataFromOld(this.host);
             int entityWidth = (int) entity.getWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(this.guiLeft+(53-(entityWidth/2)), this.guiTop+75, 30,  mousex*-1+guiLeft+(53-entityWidth/2), mousey*-1+this.guiTop+70, entity);
+                InventoryScreen.drawEntityOnScreen(this.guiLeft + (46 - (entityWidth / 2)), this.guiTop + 75, 30, mousex * -1 + guiLeft + (53 - (float)entityWidth / 2), mousey * -1 + this.guiTop + 70, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }

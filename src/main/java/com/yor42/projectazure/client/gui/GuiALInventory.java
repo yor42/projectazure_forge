@@ -4,14 +4,18 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.network.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +24,7 @@ import net.minecraft.util.text.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> implements IHasContainer<ContainerKansenInventory> {
+public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> implements IHasContainer<ContainerKansenInventory> {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/ship_inventory.png");
 
@@ -33,7 +37,7 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
 
     private int x, y;
 
-    public guiShipInventory(ContainerKansenInventory container, PlayerInventory playerinventory, ITextComponent titleIn) {
+    public GuiALInventory(ContainerKansenInventory container, PlayerInventory playerinventory, ITextComponent titleIn) {
         super(container, playerinventory, titleIn);
         this.host = (EntityKansenBase) Main.PROXY.getSharedMob();
         this.affection = this.host.getAffection();
@@ -209,12 +213,12 @@ public class guiShipInventory extends ContainerScreen<ContainerKansenInventory> 
     }
 
     private void renderEntity(int mousex, int mousey){
-        EntityKansenBase entity = this.host;
-
-        if (entity != null) {
+        Entity entity = this.host.getType().create(ClientProxy.getClientWorld());
+        if(entity instanceof AbstractEntityCompanion) {
+            entity.copyDataFromOld(this.host);
             int entityWidth = (int) entity.getWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(113+(entityWidth/2), 90, 25, (float)(this.x + 51) - mousex, (float)(this.y + 75 - 50) - mousey, entity);
+                InventoryScreen.drawEntityOnScreen(this.guiLeft + (46 - (entityWidth / 2)), this.guiTop + 75, 30, mousex * -1 + guiLeft + (53 - entityWidth / 2), mousey * -1 + this.guiTop + 70, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }

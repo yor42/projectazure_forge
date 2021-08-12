@@ -131,6 +131,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.ENTERPRISE.get(), entityEnterpriseRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.NAGATO.get(), entityNagatoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.CHEN.get(), EntityChenRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.M4A1.get(), EntityM4A1Renderer::new);
 
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
@@ -152,7 +153,7 @@ CREDIT
 -----------------------------------------------
 
 Original Game by
-Kadokawa games, Moe Fantasy, Shanghai Manjuu, Hyperglyph, NAT GAMES
+Kadokawa games, Moe Fantasy, Shanghai Manjuu, Hyperglyph, NAT GAMES, MICA TEAM
 
 Original Concept by
 Waisse, yor42, guri, necrom, Aoichi
@@ -164,7 +165,7 @@ Modeling by
 yor42
 
 Texture by
-yor42
+yor42, malcolmriley
 
 Thanks to
 Domi, Rongmario, Nali_, Alex the 666, Tiviacz1337, Mojang studio, Gecko#5075, Pinkalulan, Dane Kenect
