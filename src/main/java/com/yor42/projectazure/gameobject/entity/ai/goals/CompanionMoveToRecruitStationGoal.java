@@ -1,16 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.client.renderer.model.BlockPart;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
-import org.lwjgl.system.CallbackI;
-import org.objectweb.asm.tree.AbstractInsnNode;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;

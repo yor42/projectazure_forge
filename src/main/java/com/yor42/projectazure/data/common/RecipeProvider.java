@@ -12,7 +12,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.tags.ITag;
@@ -20,7 +19,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Mod;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;

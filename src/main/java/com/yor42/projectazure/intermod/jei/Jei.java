@@ -1,7 +1,7 @@
 package com.yor42.projectazure.intermod.jei;
 
-import com.yor42.projectazure.client.gui.guiBAInventory;
 import com.yor42.projectazure.client.gui.GuiALInventory;
+import com.yor42.projectazure.client.gui.guiBAInventory;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
 import com.yor42.projectazure.libs.utils.ResourceUtils;

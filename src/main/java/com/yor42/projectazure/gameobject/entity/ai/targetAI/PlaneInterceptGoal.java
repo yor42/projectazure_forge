@@ -2,10 +2,7 @@ package com.yor42.projectazure.gameobject.entity.ai.targetAI;
 
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
 
 public class PlaneInterceptGoal extends NearestAttackableTargetGoal<AbstractEntityPlanes> {
 

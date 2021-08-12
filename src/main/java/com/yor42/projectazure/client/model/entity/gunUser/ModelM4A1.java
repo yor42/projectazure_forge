@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.entity.gunUser;
 
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

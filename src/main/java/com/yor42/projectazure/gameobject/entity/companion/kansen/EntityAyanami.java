@@ -4,7 +4,6 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;

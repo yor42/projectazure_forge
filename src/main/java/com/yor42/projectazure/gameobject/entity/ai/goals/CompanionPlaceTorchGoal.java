@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
-import com.chaosthedude.realistictorches.RealisticTorches;
 import com.chaosthedude.realistictorches.blocks.RealisticTorchBlock;
 import com.chaosthedude.realistictorches.items.MatchboxItem;
 import com.chaosthedude.realistictorches.items.UnlitTorchItem;

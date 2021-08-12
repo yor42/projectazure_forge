@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
-import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.Entity;

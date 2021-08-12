@@ -4,7 +4,6 @@ import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.EnchantedGoldenAppleItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
 

@@ -1,23 +1,16 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.interfaces.IArknightOperator;
-import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;

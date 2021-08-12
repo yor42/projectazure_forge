@@ -4,7 +4,10 @@ import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.gameobject.crafting.ReloadRecipes;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.util.function.Supplier;

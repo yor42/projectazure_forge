@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
-import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

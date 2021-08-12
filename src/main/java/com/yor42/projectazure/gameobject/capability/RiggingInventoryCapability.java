@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.capability;
 
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.interfaces.IRiggingContainerSupplier;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.interfaces.IRiggingContainerSupplier;
 import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;

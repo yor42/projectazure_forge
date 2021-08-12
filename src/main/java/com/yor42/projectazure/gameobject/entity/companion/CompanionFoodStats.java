@@ -1,12 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.FoodStats;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameRules;
 import net.minecraftforge.api.distmarker.Dist;

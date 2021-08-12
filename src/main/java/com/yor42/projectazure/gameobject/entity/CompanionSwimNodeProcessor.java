@@ -1,12 +1,8 @@
 package com.yor42.projectazure.gameobject.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.pathfinding.*;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.pathfinding.SwimNodeProcessor;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
 
 public class CompanionSwimNodeProcessor extends SwimNodeProcessor {
     public CompanionSwimNodeProcessor(boolean p_i48927_1_) {

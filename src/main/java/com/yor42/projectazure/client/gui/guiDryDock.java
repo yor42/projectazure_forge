@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
-import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.network.packets.StartRecruitPacket;

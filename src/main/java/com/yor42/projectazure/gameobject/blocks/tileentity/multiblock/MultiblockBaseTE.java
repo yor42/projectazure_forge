@@ -8,7 +8,6 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMultiBlockBase;
-import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractAnimatedTileEntityMachines;
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;

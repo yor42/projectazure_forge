@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.block;
 
 import com.yor42.projectazure.gameobject.blocks.blockMultiblockDryDockController;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockDrydockTE;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.block.BlockState;

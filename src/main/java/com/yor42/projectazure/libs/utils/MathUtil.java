@@ -1,13 +1,9 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.PAConfig;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -16,10 +12,8 @@ import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.raid.Raid;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 import static net.minecraft.util.math.MathHelper.clamp;

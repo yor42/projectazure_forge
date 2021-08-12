@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion.gunusers;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;

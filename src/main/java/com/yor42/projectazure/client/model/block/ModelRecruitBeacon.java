@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.block;
 
 import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.util.ResourceLocation;
@@ -10,7 +9,6 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class ModelRecruitBeacon extends AnimatedGeoModel<TileEntityRecruitBeacon> {
 

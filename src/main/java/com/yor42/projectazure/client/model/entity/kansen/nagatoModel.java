@@ -8,7 +8,6 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.*;

@@ -1,8 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
-import com.yor42.projectazure.network.serverEvents;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;

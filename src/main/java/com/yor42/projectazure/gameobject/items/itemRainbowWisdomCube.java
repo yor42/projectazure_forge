@@ -11,7 +11,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
 
 public class itemRainbowWisdomCube extends Item {
     public itemRainbowWisdomCube(Properties properties) {

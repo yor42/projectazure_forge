@@ -3,11 +3,8 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.monster.DrownedEntity;
-import net.minecraft.entity.passive.SquidEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
@@ -15,7 +12,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
 
 import java.util.List;
 

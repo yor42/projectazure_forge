@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
-import com.yor42.projectazure.gameobject.entity.PlaneFlyMovementController;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -11,9 +10,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
