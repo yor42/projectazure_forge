@@ -86,7 +86,6 @@ public class EntityM4A1 extends EntityGunUserBase{
                     } else {
                         event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
                     }
-                    return PlayState.CONTINUE;
                 }
                 else {
                     if (this.isSprinting()) {
@@ -94,8 +93,8 @@ public class EntityM4A1 extends EntityGunUserBase{
                     } else {
                         event.getController().setAnimation(builder.addAnimation("walk_hand", true));
                     }
-                    return PlayState.CONTINUE;
                 }
+                return PlayState.CONTINUE;
             }
             else{
                 if(this.isSitting() || this.getRidingEntity() != null){

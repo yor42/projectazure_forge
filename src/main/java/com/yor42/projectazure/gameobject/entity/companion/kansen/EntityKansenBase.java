@@ -228,11 +228,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Override
-    protected boolean canOpenDoor() {
-        return !this.isInWater() && !this.isSitting() && !this.isSleeping();
-    }
-
-    @Override
     public boolean hasNoGravity() {
         boolean flag = this.isSailing();
 

@@ -131,7 +131,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
                         this.entity.getLookController().setLookPositionWithEntity(this.entity.getOwner(), 30.0F, 30.0F);
                         this.entity.setPathPriority(PathNodeType.WATER, 1.0F);
                         this.entity.setPathPriority(PathNodeType.WALKABLE, -1F);
-                        Path path = this.entity.getNavigator().getPathToEntity(this.entity.getOwner(), 0);
+                        Path path = this.entity.getNavigator().getPathToEntity(this.entity.getOwner(), 3);
                         controlBoat((BoatEntity) this.boat, this.entity, path);
                     } else {
                         this.entity.getNavigator().tryMoveToEntityLiving(this.boat, this.movespeed);
@@ -154,7 +154,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
                             path.incrementPathIndex();
                         }
                         else{
-                            path = controller.getNavigator().getPathToEntity(controller.getOwner(), 0);
+                            path = controller.getNavigator().getPathToEntity(controller.getOwner(), 3);
                         }
                     }
 

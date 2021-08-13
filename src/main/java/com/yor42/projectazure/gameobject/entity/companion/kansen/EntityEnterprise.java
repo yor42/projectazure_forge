@@ -49,8 +49,8 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             return PlayState.CONTINUE;
         }
-        event.getController().markNeedsReload();
-        return PlayState.STOP;
+        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        return PlayState.CONTINUE;
     }
 
     public EntityEnterprise(EntityType<? extends TameableEntity> type, World worldIn) {

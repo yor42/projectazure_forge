@@ -70,7 +70,7 @@ public class EntityM4A1Renderer extends GeoEntityRenderer<EntityM4A1> {
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
             ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-            stack.translate(0.6F, 0.1, 1.35F);
+            stack.translate(0.7F, 0.1, 1.7F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
@@ -81,13 +81,19 @@ public class EntityM4A1Renderer extends GeoEntityRenderer<EntityM4A1> {
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
             ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
-            stack.translate(-0.6F, 0.1, 1.35F);
+            float xvalue = -0.7F;
+            if(mainHandStack.isShield(this.entity)){
+                stack.rotate(Vector3f.ZP.rotationDegrees(180));
+                xvalue = 0.7F;
+            }
+            stack.translate(xvalue, 0.2F, 1.7F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
-                Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
+                Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
             }
             stack.pop();
         }
+
         bufferIn = rtb.getBuffer(RenderType.getEntitySmoothCutout(texture));
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }

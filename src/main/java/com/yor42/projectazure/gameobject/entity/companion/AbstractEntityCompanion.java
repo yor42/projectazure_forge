@@ -23,6 +23,9 @@ import net.minecraft.block.material.PushReaction;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -80,12 +83,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
-
+    private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.25D, AttributeModifier.Operation.ADDITION);
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
 
         private final EquipmentSlotType[] EQUIPMENTSLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
@@ -255,7 +259,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected int patTimer;
+    protected int patTimer, shieldCoolDown;
     protected boolean isSwimmingUp;
     protected boolean shouldBeSitting;
     protected boolean isMeleeing;
@@ -394,6 +398,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putLong("lastwoken", this.lastWokenup);
         compound.putBoolean("isMovingtoRecruitStation", this.isMovingtoRecruitStation);
         compound.put("inventory", this.getInventory().serializeNBT());
+        compound.putInt("shieldcooldown", this.shieldCoolDown);
         compound.put("ammostorage", this.getAmmoStorage().serializeNBT());
         this.foodStats.write(compound);
     }
@@ -475,6 +480,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(SITTING, compound.getBoolean("issitting"));
         this.dataManager.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.dataManager.set(PAT_ANIMATION_TIME, compound.getInt("pat_animation"));
+        this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.awakeningLevel = compound.getInt("awaken");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
         this.setFreeRoaming(compound.getBoolean("freeroaming"));
@@ -601,6 +607,66 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public boolean isSailing(){
         return false;
+    }
+
+    public void disableShield(boolean increase) {
+        float chance = 0.25F + (float) EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
+        if (increase)
+            chance += 0.75;
+        if (this.rand.nextFloat() < chance) {
+            this.shieldCoolDown = 100;
+            this.stopActiveHand();
+            this.world.setEntityState(this, (byte) 30);
+        }
+    }
+
+    @Override
+    protected void damageShield(float damage) {
+        if (this.activeItemStack.isShield(this)) {
+            if (damage >= 3.0F) {
+                int i = (int) (1 + Math.floor(damage));
+                Hand hand = this.getActiveHand();
+                this.activeItemStack.damageItem(i, this, (entity) -> entity.sendBreakAnimation(hand));
+                if (this.activeItemStack.isEmpty()) {
+                    if (hand == Hand.MAIN_HAND) {
+                        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                    } else {
+                        this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                    }
+                    this.activeItemStack = ItemStack.EMPTY;
+                    this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                }
+            }
+        }
+    }
+
+    public int getShieldCoolDown(){
+        return this.shieldCoolDown;
+    }
+
+    @Override
+    protected void blockUsingShield(LivingEntity entityIn) {
+        super.blockUsingShield(entityIn);
+        if (entityIn.getHeldItemMainhand().canDisableShield(this.activeItemStack, this, entityIn))
+            this.disableShield(true);
+    }
+
+    @Override
+    public void setActiveHand(Hand hand) {
+        ItemStack itemstack = this.getHeldItem(hand);
+        if (itemstack.isShield(this)) {
+            ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+            modifiableattributeinstance.removeModifier(USE_ITEM_SPEED_PENALTY);
+            modifiableattributeinstance.applyNonPersistentModifier(USE_ITEM_SPEED_PENALTY);
+        }
+        super.setActiveHand(hand);
+    }
+
+    @Override
+    public void stopActiveHand() {
+        if (this.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(USE_ITEM_SPEED_PENALTY))
+            this.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(USE_ITEM_SPEED_PENALTY);
+        super.stopActiveHand();
     }
 
     public boolean isPushedByWater() {
@@ -865,6 +931,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.foodStats.setFoodLevel(this.foodStats.getFoodLevel() + 1);
             }
         }
+        if (this.shieldCoolDown > 0) {
+            --this.shieldCoolDown;
+        }
 
         if(!this.getEntityWorld().isRemote() && this.ticksExisted % 200 == 0&& !this.getHOMEPOS().isPresent()){
             Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getEntityWorld(), this);
@@ -1122,7 +1191,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(1, new CompanionMoveToRecruitStationGoal(this));
         this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
         this.goalSelector.addGoal(3, new SitGoal(this));
-        this.goalSelector.addGoal(6, new CompanionUseGunGoal(this, 40, 0.6));
+        this.goalSelector.addGoal(6, new CompanionUseShieldGoal(this));
+        this.goalSelector.addGoal(7, new CompanionUseGunGoal(this, 40, 0.6));
         this.goalSelector.addGoal(8, new KansenRideBoatAlongPlayerGoal(this, 1.0));
         this.goalSelector.addGoal(9, new CompanionMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(10, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
@@ -1183,7 +1253,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     protected boolean canOpenDoor() {
-        return true;
+        return !this.isInWater() && !this.isSitting() && !this.isSleeping() && !this.isFreeRoaming();
     }
 
     public boolean ShouldPlayReloadAnim(){
