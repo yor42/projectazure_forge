@@ -84,7 +84,7 @@ public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
                 xvalue = 0.6F;
             }
             stack.translate(xvalue, 0.2F, 1.7F);
-            stack.scale(2F, 2F, 2F);
+            stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
             }

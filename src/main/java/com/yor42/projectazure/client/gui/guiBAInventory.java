@@ -113,7 +113,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
             entity.copyDataFromOld(this.host);
             int entityWidth = (int) entity.getWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(this.guiLeft + (46 - (entityWidth / 2)), this.guiTop + 75, 30, mousex * -1 + guiLeft + (53 - entityWidth / 2), mousey * -1 + this.guiTop + 70, (LivingEntity) entity);
+                InventoryScreen.drawEntityOnScreen((48 - (entityWidth / 2)), 70, 30, mousex * -1 + guiLeft + (53 - entityWidth / 2), mousey * -1 + this.guiTop + 70, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }

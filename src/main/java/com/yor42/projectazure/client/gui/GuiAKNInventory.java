@@ -177,7 +177,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
             entity.copyDataFromOld(this.host);
             int entityWidth = (int) entity.getWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(this.guiLeft + (46 - (entityWidth / 2)), this.guiTop + 75, 30, mousex * -1 + guiLeft + (53 - (float)entityWidth / 2), mousey * -1 + this.guiTop + 70, (LivingEntity) entity);
+                InventoryScreen.drawEntityOnScreen(this.guiLeft + (48 - (entityWidth / 2)), this.guiTop + 75, 30, mousex * -1 + guiLeft + (53 - (float)entityWidth / 2), mousey * -1 + this.guiTop + 70, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }
