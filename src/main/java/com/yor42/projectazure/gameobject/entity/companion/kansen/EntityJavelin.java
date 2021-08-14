@@ -35,6 +35,10 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
+        else if(this.isActiveItemStackBlocking()){
+            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            return PlayState.CONTINUE;
+        }
         else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;

@@ -30,7 +30,7 @@ public class CompanionMeleeGoal extends MeleeAttackGoal {
         }
         else{
             if(this.entity instanceof EntityKansenBase) {
-                boolean flag = !hasAttackableCannon(((EntityKansenBase) this.entity).getRigging()) && !((EntityKansenBase) this.entity).canUseShell(((EntityKansenBase) this.entity).getActiveShellCategory());
+                boolean flag = !hasAttackableCannon(this.entity.getRigging()) && !((EntityKansenBase) this.entity).canUseShell(((EntityKansenBase) this.entity).getActiveShellCategory());
                 return flag && super.shouldExecute();
             }
             else{

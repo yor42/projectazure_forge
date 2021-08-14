@@ -116,6 +116,22 @@
 				}
 			}
 		},
+		"shield_block": {
+			"loop": true,
+			"animation_length": 0.835,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": [-80, 22.5, 0]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 57.5]
+					}
+				}
+			}
+		},
 		"animation.ayanami.sleep": {
 			"loop": true,
 			"animation_length": 3.485,

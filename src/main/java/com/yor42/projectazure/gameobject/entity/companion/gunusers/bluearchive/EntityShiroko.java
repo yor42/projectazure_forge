@@ -71,10 +71,15 @@ public class EntityShiroko extends EntityGunUserBase {
             }
             return PlayState.CONTINUE;
         }
-        else if(this.swingProgressInt>0){
+        else if(this.isSwingInProgress){
             event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
-        }else if(this.isGettingHealed()){
+        }
+        else if(this.isActiveItemStackBlocking()){
+            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isGettingHealed()){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal_arm", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {

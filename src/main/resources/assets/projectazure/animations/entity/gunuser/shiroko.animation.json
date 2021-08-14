@@ -1968,6 +1968,22 @@
 					}
 				}
 			}
+		},
+		"shield_block": {
+			"loop": true,
+			"animation_length": 0.835,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": [-85, 30, 0]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 60]
+					}
+				}
+			}
 		}
 	}
 }

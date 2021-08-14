@@ -1644,6 +1644,21 @@
 					}
 				}
 			}
+		},
+		"shield_block": {
+			"loop": true,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": [-80, 22.5, 0]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 62.5]
+					}
+				}
+			}
 		}
 	}
 }

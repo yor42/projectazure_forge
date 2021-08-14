@@ -1471,6 +1471,21 @@
 		},
 		"idle_leg": {
 			"loop": true
+		},
+		"shield_block": {
+			"loop": true,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": [-82.5, 27.5, 0]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 65]
+					}
+				}
+			}
 		}
 	}
 }

@@ -26,7 +26,14 @@ public class CompanionUseShieldGoal extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return this.shouldExecute();
+
+        boolean bool = this.shouldExecute();
+
+        if(!bool){
+            this.resetTask();
+        }
+
+        return bool;
     }
 
     @Override

@@ -34,12 +34,19 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
+        if(this.isSleeping()) {
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep_arm", true));
             return PlayState.CONTINUE;
         }
-
-        if(this.isBeingPatted()){
+        else if(this.isSwingInProgress){
+            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isActiveItemStackBlocking()){
+            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
             if(this.isSitting())
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));
             else
@@ -64,10 +71,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }
-        else if(this.swingProgress>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
-            return PlayState.CONTINUE;
-        }else if(this.isSwimming()) {
+        else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_arm", true));
             return PlayState.CONTINUE;
         }else {

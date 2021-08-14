@@ -50,10 +50,7 @@ import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -89,7 +86,8 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
-    private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.25D, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
+    private static final AttributeModifier LEVELUP_HP_BONUS = new AttributeModifier(UUID.fromString("19EH82GE-YEET-0421-6942-1893MDW82MD2"), "Levelup HP Bonus", 2, AttributeModifier.Operation.ADDITION);
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
 
         private final EquipmentSlotType[] EQUIPMENTSLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
@@ -335,6 +333,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setLevel(this.getLevel() + deltaLevel);
     }
 
+    public void onLevelup(){
+        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
+        modifiableattributeinstance.applyPersistentModifier(LEVELUP_HP_BONUS);
+    }
+
     public boolean isPVPenabled(){
         return PAConfig.CONFIG.EnablePVP.get();
     }
@@ -358,6 +361,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return this.isActiveItemStackBlocking()? SoundEvents.ITEM_SHIELD_BLOCK:super.getHurtSound(damageSourceIn);
     }
 
     @Override
@@ -892,6 +901,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
             while(this.getExp()>this.getMaxExp() && this.getLevel() <= this.getMaxLevel()){
                 this.addLevel(1);
+                this.onLevelup();
                 this.setExp(this.getExp()-this.getMaxExp());
             }
         }
