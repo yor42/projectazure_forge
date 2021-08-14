@@ -18,7 +18,7 @@ public class CompanionPickupItemGoal extends Goal {
     public CompanionPickupItemGoal(AbstractEntityCompanion host) {
         this.host = host;
         this.range = 5;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.TARGET));
     }
 
     @Override

@@ -23,9 +23,7 @@ import net.minecraft.block.material.PushReaction;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -87,7 +85,6 @@ import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_A
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
-    private static final AttributeModifier LEVELUP_HP_BONUS = new AttributeModifier(UUID.fromString("19EH82GE-YEET-0421-6942-1893MDW82MD2"), "Levelup HP Bonus", 2, AttributeModifier.Operation.ADDITION);
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
 
         private final EquipmentSlotType[] EQUIPMENTSLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
@@ -335,7 +332,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void onLevelup(){
         ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
-        modifiableattributeinstance.applyPersistentModifier(LEVELUP_HP_BONUS);
+        modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH)+2);
     }
 
     public boolean isPVPenabled(){
@@ -1676,4 +1673,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.recalculateSize();
     }
 
+    @Nullable
+    @Override
+    public ModifiableAttributeInstance getAttribute(Attribute attribute) {
+        return super.getAttribute(attribute);
+    }
 }
