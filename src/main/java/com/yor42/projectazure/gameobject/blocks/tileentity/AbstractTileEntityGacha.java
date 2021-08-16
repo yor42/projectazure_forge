@@ -104,30 +104,30 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
 
     protected abstract boolean canStartProcess();
 
-    public void StartMachine(ServerPlayerEntity starter){
+    public void StartMachine(ServerPlayerEntity starter) {
+        if (starter != null) {
+            if (this.canStartProcess() || starter.isCreative()) {
 
-        if(this.canStartProcess()) {
-
-            EntityType<? extends AbstractEntityCompanion> result = this.getRollResult();
-            AbstractEntityCompanion Entity = result.create(this.world);
-            if(Entity != null) {
-                int expectedProcessTime = this.getProcessTimePerEntity(Entity);
-                if (expectedProcessTime > 0) {
-                    //Convert Second to Tick
-                    this.totalProcessTime = expectedProcessTime * 20;
-                    this.RollResult = result;
-                    Main.LOGGER.debug("Roll Result:" + Entity.getName().toString() + " with " + expectedProcessTime + "second Recruit Time");
-                    this.shouldProcess = true;
-                    this.nextTaskStarter = starter;
-                    this.UseGivenResource();
-                } else {
-                    Main.LOGGER.error("Next Spawn Delay time is 0! Is entry valid?");
+                EntityType<? extends AbstractEntityCompanion> result = this.getRollResult();
+                AbstractEntityCompanion Entity = result.create(this.world);
+                if (Entity != null) {
+                    int expectedProcessTime = this.getProcessTimePerEntity(Entity);
+                    if (expectedProcessTime > 0) {
+                        //Convert Second to Tick
+                        this.totalProcessTime = expectedProcessTime * 20;
+                        this.RollResult = result;
+                        Main.LOGGER.debug("Roll Result:" + Entity.getName().toString() + " with " + expectedProcessTime + "second Recruit Time");
+                        this.shouldProcess = true;
+                        this.nextTaskStarter = starter;
+                        this.UseGivenResource();
+                    } else {
+                        Main.LOGGER.error("Next Spawn Delay time is 0! Is entry valid?");
+                    }
                 }
+            } else {
+                starter.sendMessage(new TranslationTextComponent("machine.notenoughresource"), starter.getUniqueID());
             }
-        }else{
-            starter.sendMessage(new TranslationTextComponent("machine.notenoughresource"),starter.getUniqueID());
         }
-
     }
 
     public boolean isPowered(){

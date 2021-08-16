@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class KansenRideBoatAlongPlayerGoal extends Goal {
@@ -25,6 +26,7 @@ public class KansenRideBoatAlongPlayerGoal extends Goal {
     public KansenRideBoatAlongPlayerGoal(AbstractEntityCompanion entity, double speed){
         this.entity = entity;
         this.movespeed = speed;
+        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
     }
 
     @Override

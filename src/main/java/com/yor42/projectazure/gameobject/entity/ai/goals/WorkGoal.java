@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -10,6 +11,8 @@ import net.minecraft.item.*;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
+
+import java.util.EnumSet;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
@@ -27,6 +30,7 @@ public class WorkGoal extends MoveEntityForWorkGoal {
 
     public WorkGoal(AbstractEntityCompanion entity, double speed){
         super(entity, speed);
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK, Flag.JUMP));
     }
 
     @Override

@@ -15,7 +15,7 @@ public class CompanionMoveToRecruitStationGoal extends Goal {
 
     public CompanionMoveToRecruitStationGoal(AbstractEntityCompanion companion){
         this.host = companion;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Flag.JUMP));
     }
 
     @Override

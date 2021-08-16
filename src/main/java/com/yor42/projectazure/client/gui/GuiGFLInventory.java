@@ -83,7 +83,7 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         float scalerate = 0.75F;
         matrixStack.scale(scalerate,scalerate,scalerate);
 
-        String AffectionString = this.host.getAffection()+"/"+this.host.getmaxAffection();
+        String AffectionString = String.format("%,.2f", this.host.getAffection())+"/"+this.host.getmaxAffection();
         int affectionwidth = (int) ((this.font.getStringWidth(AffectionString)+8)*scalerate);
         this.font.func_243248_b(matrixStack, new StringTextComponent(AffectionString), (140-((float)affectionwidth/2))/scalerate, 77/scalerate, 0x242424);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);

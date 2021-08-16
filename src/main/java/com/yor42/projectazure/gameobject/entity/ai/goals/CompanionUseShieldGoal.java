@@ -49,6 +49,11 @@ public class CompanionUseShieldGoal extends Goal {
 
     protected boolean raiseShield() {
         LivingEntity target = companion.getAttackTarget();
+
+        if(this.companion.isSailing()){
+            return false;
+        }
+
         if (target != null && companion.getShieldCoolDown() == 0) {
             boolean ranged = companion.getHeldItemMainhand().getItem() instanceof CrossbowItem || companion.getHeldItemMainhand().getItem() instanceof BowItem || companion.getHeldItemMainhand().getItem() instanceof ItemGunBase;
             return companion.getDistance(target) <= 4.0D || target instanceof CreeperEntity || target instanceof IRangedAttackMob && target.getDistance(companion) >= 5.0D && !ranged || target instanceof RavagerEntity;

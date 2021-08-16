@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.RayTraceContext;
 
@@ -21,7 +22,7 @@ public class ItemBandage extends ItemBaseTooltip {
      * How long it takes to use or consume an item
      */
     public int getUseDuration(ItemStack stack) {
-        return 72000;
+        return 80;
     }
 
     /**
@@ -33,18 +34,10 @@ public class ItemBandage extends ItemBaseTooltip {
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        if(player instanceof PlayerEntity) {
-
-            PlayerEntity playerEntity = (PlayerEntity) player;
-            RayTraceContext lookEyetrace = new RayTraceContext(playerEntity.getEyePosition(1.0f), playerEntity.getLook(1.0F), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, playerEntity);
-
-            if (player.isSneaking()&&playerEntity.getHealth() < playerEntity.getMaxHealth() && count % 20 == 0 && !player.getEntityWorld().isRemote) {
-                playerEntity.heal(1.0f);
-                if(stack.attemptDamageItem(1, MathUtil.getRand(), (ServerPlayerEntity) playerEntity)){
-                    stack.shrink(1);
-                }
-                player.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f, 1.0f);
-            }
+        if (player.getHealth() < player.getMaxHealth() && count % 20 == 0 && !player.getEntityWorld().isRemote) {
+            player.heal(1.0f);
+            stack.damageItem(1, player, (entity) -> entity.sendBreakAnimation(player.getActiveHand()));
+            player.getEntityWorld().playSound(null, player.getPosition(), SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, SoundCategory.PLAYERS, 1.0f, 1.0f);
         }
     }
 

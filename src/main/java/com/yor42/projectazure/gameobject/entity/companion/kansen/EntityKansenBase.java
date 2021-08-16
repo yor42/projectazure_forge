@@ -129,8 +129,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public boolean isSailing(){
-        boolean flag = this.isInWater() && this.Hasrigging();
-        return flag;
+        return this.isInWater() && this.Hasrigging();
         //return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
     }
 

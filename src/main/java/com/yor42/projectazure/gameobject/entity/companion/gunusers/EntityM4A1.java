@@ -171,6 +171,11 @@ public class EntityM4A1 extends EntityGunUserBase{
     }
 
     @Override
+    protected float getSitHeight() {
+        return 1.35F;
+    }
+
+    @Override
     protected void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerGFLInventory.Supplier(this));
     }

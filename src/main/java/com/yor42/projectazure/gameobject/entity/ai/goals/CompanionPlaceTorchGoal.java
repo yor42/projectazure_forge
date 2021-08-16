@@ -14,6 +14,8 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraftforge.fml.ModList;
 
+import java.util.EnumSet;
+
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 
@@ -26,6 +28,7 @@ public class CompanionPlaceTorchGoal extends Goal {
 
     public CompanionPlaceTorchGoal(AbstractEntityCompanion companion){
         this.companion = companion;
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     @Override

@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import java.util.EnumSet;
+
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public class CompanionFreeroamGoal extends RandomWalkingGoal {
@@ -20,6 +22,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
         super(entity, 0.6D, moveChance, shouldStopBeforeMove);
         this.entityCompanion = entity;
         this.shouldStopBeforeMove = shouldStopBeforeMove;
+        this.setMutexFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override

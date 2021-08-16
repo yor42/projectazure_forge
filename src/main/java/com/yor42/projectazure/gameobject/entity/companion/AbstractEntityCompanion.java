@@ -17,6 +17,7 @@ import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
@@ -56,6 +57,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -255,12 +258,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     };
 
     protected int patTimer, shieldCoolDown;
+    private int ItemSwapIndexOffhand = -1;
+    private int ItemSwapIndexMainHand = -1;
     protected boolean isSwimmingUp;
     protected boolean shouldBeSitting;
     protected boolean isMeleeing;
     protected boolean isOpeningDoor;
     public boolean isMovingtoRecruitStation = false;
     protected int awakeningLevel;
+    @Nullable
+    public BlockPos RECRUIT_BEACON_POS;
     private final MovementController SwimController;
     private final MovementController MoveController;
     protected final SwimmerPathNavigator swimmingNav;
@@ -270,7 +277,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected long lastSlept, lastWokenup;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
-
+    protected static final DataParameter<Boolean> EATING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Float> MORALE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> EXP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Integer> LIMITBREAKLEVEL = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
@@ -288,7 +295,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Boolean> PICKUP_ITEM = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISFREEROAMING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Optional<BlockPos>> STAYPOINT = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
-    protected static final DataParameter<Optional<BlockPos>> RecruitStationPos = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Optional<BlockPos>> HOMEPOS = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -333,6 +339,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void onLevelup(){
         ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
         modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH)+2);
+        this.heal(this.getMaxHealth());
     }
 
     public boolean isPVPenabled(){
@@ -360,10 +367,37 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return ItemStack.EMPTY;
     }
 
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+        if(capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && this.getInventory() != null){
+            return LazyOptional.of(this::getInventory).cast();
+        }
+        return super.getCapability(capability, facing);
+    }
+
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
         return this.isActiveItemStackBlocking()? SoundEvents.ITEM_SHIELD_BLOCK:super.getHurtSound(damageSourceIn);
+    }
+
+    @Override
+    protected void damageArmor(DamageSource damageSource, float damage) {
+        if (damage >= 0.0F) {
+            damage = damage / 4.0F;
+            if (damage < 1.0F) {
+                damage = 1.0F;
+            }
+            for (int i = 0; i < this.getInventory().getSlots(); ++i) {
+                ItemStack itemstack = this.getInventory().getStackInSlot(i);
+                if ((!damageSource.isFireDamage() || !itemstack.getItem().isImmuneToFire()) && itemstack.getItem() instanceof ArmorItem) {
+                    int j = i;
+                    itemstack.damageItem((int) damage, this, (p_214023_1_) -> {
+                        p_214023_1_.sendBreakAnimation(EquipmentSlotType.fromSlotTypeAndIndex(EquipmentSlotType.Group.ARMOR, j));
+                    });
+                }
+            }
+        }
     }
 
     @Override
@@ -380,16 +414,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             compound.putDouble("stayY", this.dataManager.get(STAYPOINT).get().getY());
             compound.putDouble("stayZ", this.dataManager.get(STAYPOINT).get().getZ());
         }
-        if(this.dataManager.get(RecruitStationPos).isPresent()) {
-            compound.putDouble("RecruitStationPosX", this.dataManager.get(RecruitStationPos).get().getX());
-            compound.putDouble("RecruitStationPosY", this.dataManager.get(RecruitStationPos).get().getY());
-            compound.putDouble("RecruitStationPosZ", this.dataManager.get(RecruitStationPos).get().getZ());
+        if(this.RECRUIT_BEACON_POS != null) {
+            compound.putDouble("RecruitStationPosX", this.RECRUIT_BEACON_POS.getX());
+            compound.putDouble("RecruitStationPosY", this.RECRUIT_BEACON_POS.getY());
+            compound.putDouble("RecruitStationPosZ", this.RECRUIT_BEACON_POS.getZ());
         }
         if(this.dataManager.get(HOMEPOS).isPresent()) {
             compound.putDouble("HomePosX", this.dataManager.get(HOMEPOS).get().getX());
             compound.putDouble("HomePosY", this.dataManager.get(HOMEPOS).get().getY());
             compound.putDouble("HomePosZ", this.dataManager.get(HOMEPOS).get().getZ());
         }
+        compound.putBoolean("eating", this.dataManager.get(EATING));
         compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
         compound.putBoolean("isforcewokenup", this.dataManager.get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.dataManager.get(EXP));
@@ -407,6 +442,67 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("shieldcooldown", this.shieldCoolDown);
         compound.put("ammostorage", this.getAmmoStorage().serializeNBT());
         this.foodStats.write(compound);
+        compound.putInt("SwapIndexMainHand", this.ItemSwapIndexMainHand);
+        compound.putInt("SwapIndexOffHand", this.ItemSwapIndexOffhand);
+    }
+
+    public void readAdditional(@Nonnull CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.dataManager.set(AFFECTION, compound.getFloat("affection"));
+        this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
+        this.dataManager.set(OATHED, compound.getBoolean("oathed"));
+        this.dataManager.set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
+        this.func_233687_w_(compound.getBoolean("isSitting"));
+        boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
+        if(hasStayPos) {
+            this.dataManager.set(STAYPOINT, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
+        }
+        this.dataManager.set(VALID_HOME_DISTANCE, compound.getFloat("home_distance"));
+        boolean hasRecruitBeaconPos = compound.contains("RecruitStationPosX") && compound.contains("RecruitStationPosY") && compound.contains("RecruitStationPosZ");
+        if(hasRecruitBeaconPos) {
+            this.RECRUIT_BEACON_POS = new BlockPos(compound.getDouble("RecruitStationPosX"), compound.getDouble("RecruitStationPosY"), compound.getDouble("RecruitStationPosZ"));
+        }
+
+        boolean hasHomePos = compound.contains("HomePosX") && compound.contains("HomePosY") && compound.contains("HomePosZ");
+        if(hasHomePos) {
+            this.dataManager.set(HOMEPOS, Optional.of(new BlockPos(compound.getDouble("HomePosX"), compound.getDouble("HomePosY"), compound.getDouble("HomePosZ"))));
+        }
+        this.dataManager.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
+        this.shouldBeSitting = compound.getBoolean("shouldbeSitting");
+        this.getDataManager().set(LEVEL, compound.getInt("level"));
+        this.dataManager.set(EXP, compound.getFloat("exp"));
+        this.dataManager.set(MORALE, compound.getFloat("morale"));
+        this.dataManager.set(SITTING, compound.getBoolean("issitting"));
+        this.dataManager.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
+        this.dataManager.set(PAT_ANIMATION_TIME, compound.getInt("pat_animation"));
+        this.dataManager.set(EATING, compound.getBoolean("eating"));
+        this.shieldCoolDown = compound.getInt("shieldcooldown");
+        this.awakeningLevel = compound.getInt("awaken");
+        this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
+        this.setFreeRoaming(compound.getBoolean("freeroaming"));
+        this.getInventory().deserializeNBT(compound.getCompound("inventory"));
+        this.lastSlept = compound.getLong("lastslept");
+        this.lastWokenup = compound.getLong("lastwoken");
+        this.getAmmoStorage().deserializeNBT(compound.getCompound("ammostorage"));
+        this.getFoodStats().read(compound);
+        this.ItemSwapIndexMainHand = compound.getInt("SwapIndexMainHand");
+        this.ItemSwapIndexOffhand = compound.getInt("SwapIndexOffHand");
+    }
+
+    public int getItemSwapIndexMainHand(){
+        return this.ItemSwapIndexMainHand;
+    }
+
+    public void setItemSwapIndexMainHand(int value) {
+        this.ItemSwapIndexMainHand = value;
+    }
+
+    public int getItemSwapIndexOffHand(){
+        return this.ItemSwapIndexOffhand;
+    }
+
+    public void setItemSwapIndexOffHand(int value) {
+        this.ItemSwapIndexOffhand = value;
     }
 
     public void setHomeposAndDistance(BlockPos pos, float validDistance){
@@ -419,12 +515,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(VALID_HOME_DISTANCE, -1.0f);
     }
 
+
     public Optional<BlockPos> getRecruitStationPos() {
-        return this.getDataManager().get(RecruitStationPos);
+        return Optional.ofNullable(this.RECRUIT_BEACON_POS);
     }
 
     public void setRecruitStationPos(BlockPos pos){
-        this.getDataManager().set(RecruitStationPos, Optional.of(pos));
+        this.RECRUIT_BEACON_POS= pos;
     }
 
     public float getHomeDistance(){
@@ -455,46 +552,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public boolean isInHomeRangefromCurrenPos(){
         return this.isInHomeRange(this.getPosition());
-    }
-
-    public void readAdditional(@Nonnull CompoundNBT compound) {
-        super.readAdditional(compound);
-        this.dataManager.set(AFFECTION, compound.getFloat("affection"));
-        this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
-        this.dataManager.set(OATHED, compound.getBoolean("oathed"));
-        this.dataManager.set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
-        this.func_233687_w_(compound.getBoolean("isSitting"));
-        boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
-        if(hasStayPos) {
-            this.dataManager.set(RecruitStationPos, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
-        }
-        this.dataManager.set(VALID_HOME_DISTANCE, compound.getFloat("home_distance"));
-        boolean hasRecruitBeaconPos = compound.contains("RecruitStationPosX") && compound.contains("RecruitStationPosY") && compound.contains("RecruitStationPosZ");
-        if(hasRecruitBeaconPos) {
-            this.dataManager.set(RecruitStationPos, Optional.of(new BlockPos(compound.getDouble("RecruitStationPosX"), compound.getDouble("RecruitStationPosY"), compound.getDouble("RecruitStationPosZ"))));
-        }
-
-        boolean hasHomePos = compound.contains("HomePosX") && compound.contains("HomePosY") && compound.contains("HomePosZ");
-        if(hasHomePos) {
-            this.dataManager.set(HOMEPOS, Optional.of(new BlockPos(compound.getDouble("HomePosX"), compound.getDouble("HomePosY"), compound.getDouble("HomePosZ"))));
-        }
-        this.dataManager.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
-        this.shouldBeSitting = compound.getBoolean("shouldbeSitting");
-        this.getDataManager().set(LEVEL, compound.getInt("level"));
-        this.dataManager.set(EXP, compound.getFloat("exp"));
-        this.dataManager.set(MORALE, compound.getFloat("morale"));
-        this.dataManager.set(SITTING, compound.getBoolean("issitting"));
-        this.dataManager.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
-        this.dataManager.set(PAT_ANIMATION_TIME, compound.getInt("pat_animation"));
-        this.shieldCoolDown = compound.getInt("shieldcooldown");
-        this.awakeningLevel = compound.getInt("awaken");
-        this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
-        this.setFreeRoaming(compound.getBoolean("freeroaming"));
-        this.getInventory().deserializeNBT(compound.getCompound("inventory"));
-        this.lastSlept = compound.getLong("lastslept");
-        this.lastWokenup = compound.getLong("lastwoken");
-        this.getAmmoStorage().deserializeNBT(compound.getCompound("ammostorage"));
-        this.getFoodStats().read(compound);
     }
 
     public ItemStackHandler getInventory(){
@@ -549,11 +606,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return stack1.getItem() == stack2.getItem() && ItemStack.areItemStackTagsEqual(stack1, stack2);
     }
 
+    public boolean isEating(){
+        return this.getDataManager().get(EATING);
+    }
+
+    public void setEating(boolean value){
+        this.dataManager.set(EATING, value);
+    }
+
     public boolean isFreeRoaming() {
         return this.dataManager.get(ISFREEROAMING);
     }
 
     public void setFreeRoaming(boolean value) {
+        this.getNavigator().clearPath();
         this.dataManager.set(ISFREEROAMING, value);
         if(value) {
             this.setStayCenterPos(this.getPosition());
@@ -718,6 +784,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(EXP, 0.0F);
         this.dataManager.register(LIMITBREAKLEVEL, 0);
         this.dataManager.register(MORALE, 0.0F);
+        this.dataManager.register(EATING, false);
         this.dataManager.register(LEVEL, 0);
         this.dataManager.register(AFFECTION, 0.0F);
         this.dataManager.register(SITTING, false);
@@ -730,7 +797,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(OATHED, false);
         this.dataManager.register(USINGBOW, false);
         this.dataManager.register(STAYPOINT, Optional.empty());
-        this.dataManager.register(RecruitStationPos, Optional.empty());
         this.dataManager.register(HOMEPOS, Optional.empty());
         this.dataManager.register(ISFORCEWOKENUP, false);
         this.dataManager.register(ISUSINGGUN, false);
@@ -784,7 +850,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void stopMovingtoRecruitStation(){
         this.getNavigator().clearPath();
         this.isMovingtoRecruitStation = false;
-        this.dataManager.set(RecruitStationPos, Optional.empty());
+        this.RECRUIT_BEACON_POS= null;
     }
 
     public boolean canEat(boolean ignoreHunger) {
@@ -946,6 +1012,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getEntityWorld(), this);
             optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 20));
         }
+        /*
         int val = this.getLastAttackedEntityTime();
         if(this.ticksExisted-val > 160 && this.ticksExisted%100 == 0 && this.getHealth() < this.getMaxHealth()){
             ItemStack Foodstack = ItemStack.EMPTY;
@@ -963,6 +1030,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.getInventory().setStackInSlot(foodindex, Foodstack);
             }
         }
+
+         */
 
         this.updateArmSwingProgress();
 
@@ -1204,12 +1273,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(9, new CompanionMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(10, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
         this.goalSelector.addGoal(11, new WorkGoal(this, 1.0D));
-       this.goalSelector.addGoal(12, new CompanionOpenDoorGoal(this, true));
-       this.goalSelector.addGoal(13, new CompanionFreeroamGoal(this, 60, true));
-       this.goalSelector.addGoal(14, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(15, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(16, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(12, new CompanionsUseTotem(this));
+        this.goalSelector.addGoal(13, new CompanionOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(14, new CompanionHealandEatFoodGoal(this));
+        this.goalSelector.addGoal(15, new CompanionFreeroamGoal(this, 60, true));
+        this.goalSelector.addGoal(16, new CompanionPickupItemGoal(this));
         this.goalSelector.addGoal(17, new CompanionPlaceTorchGoal(this));
+        this.goalSelector.addGoal(18, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(19, new LookRandomlyGoal(this));
         //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));

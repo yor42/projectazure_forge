@@ -6,12 +6,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
+
 public class CompanionSleepGoal extends Goal {
 
     private final AbstractEntityCompanion companion;
 
     public CompanionSleepGoal(AbstractEntityCompanion companion){
         this.companion = companion;
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK));
     }
 
     @Override
