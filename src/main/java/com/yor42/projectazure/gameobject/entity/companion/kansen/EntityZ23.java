@@ -34,6 +34,15 @@ public class EntityZ23 extends EntityKansenDestroyer{
             event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
+        else if(this.isEating()){
+            if(this.getActiveHand() == Hand.MAIN_HAND){
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+            }
+            else if(this.getActiveHand() == Hand.OFF_HAND){
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+            }
+            return PlayState.CONTINUE;
+        }
         else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;

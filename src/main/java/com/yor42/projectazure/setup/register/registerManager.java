@@ -90,10 +90,10 @@ public class registerManager {
     public static final EntityType<EntityGangwon> ENTITYTYPE_GANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.35F).build(ModResourceLocation("entitygandwon").toString());
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYTYPE_GANGWON);
 
-    public static final EntityType<EntityEnterprise> ENTITYTYPE_ENTERPRISE = EntityType.Builder.create(EntityEnterprise::new, EntityClassification.CREATURE).size(1F, 1.825F).build(ModResourceLocation("entityenterprise").toString());
+    public static final EntityType<EntityEnterprise> ENTITYTYPE_ENTERPRISE = EntityType.Builder.create(EntityEnterprise::new, EntityClassification.CREATURE).size(0.65F, 1.825F).build(ModResourceLocation("entityenterprise").toString());
     public static final RegistryObject<EntityType<EntityEnterprise>> ENTERPRISE = ENTITIES.register("entityenterprise", () -> ENTITYTYPE_ENTERPRISE);
 
-    public static final EntityType<EntityM4A1> ENTITYTYPE_M4A1 = EntityType.Builder.create(EntityM4A1::new, EntityClassification.CREATURE).size(1F, 1.825F).build(ModResourceLocation("entitym4a1").toString());
+    public static final EntityType<EntityM4A1> ENTITYTYPE_M4A1 = EntityType.Builder.create(EntityM4A1::new, EntityClassification.CREATURE).size(0.65F, 1.825F).build(ModResourceLocation("entitym4a1").toString());
     public static final RegistryObject<EntityType<EntityM4A1>> M4A1 = ENTITIES.register("entitym4a1", () -> ENTITYTYPE_M4A1);
 
     public static final EntityType<EntityShiroko> ENTITYTYPE_SHIROKO = EntityType.Builder.create(EntityShiroko::new, EntityClassification.CREATURE).size(0.572F, 1.575F).build(ModResourceLocation("entityshiroko").toString());

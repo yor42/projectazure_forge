@@ -46,7 +46,9 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
@@ -1016,26 +1018,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getEntityWorld(), this);
             optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 20));
         }
-        /*
-        int val = this.getLastAttackedEntityTime();
-        if(this.ticksExisted-val > 160 && this.ticksExisted%100 == 0 && this.getHealth() < this.getMaxHealth()){
-            ItemStack Foodstack = ItemStack.EMPTY;
-            int foodindex = -1;
-            for(int i = 0; i<this.getInventory().getSlots(); i++){
-                Item canBeFood = this.getInventory().getStackInSlot(i).getItem();
-                if(canBeFood.isFood() && canBeFood != registerItems.ORIGINIUM_PRIME.get()){
-                    Foodstack = this.getInventory().getStackInSlot(i);
-                    foodindex = i;
-                    break;
-                }
-            }
-            if(Foodstack != ItemStack.EMPTY && Foodstack.getItem().isFood() && this.canEat(Foodstack.getItem().getFood().canEatWhenFull())){
-                Foodstack = this.onFoodEaten(this.getEntityWorld(), Foodstack);
-                this.getInventory().setStackInSlot(foodindex, Foodstack);
+
+        if(this.isPotionActive(Effects.HUNGER)){
+            EffectInstance hunger = this.getActivePotionEffect(Effects.HUNGER);
+            if(hunger.getDuration()>0 && hunger.getPotion().isReady(hunger.getDuration(), hunger.getAmplifier())){
+                this.addExhaustion(0.005F * (float)(hunger.getAmplifier() + 1));
             }
         }
 
-         */
+        if(this.isPotionActive(Effects.SATURATION)){
+            EffectInstance Saturation = this.getActivePotionEffect(Effects.SATURATION);
+            if(Saturation.getDuration()>0 && Saturation.getPotion().isReady(Saturation.getDuration(), Saturation.getAmplifier())){
+                this.getFoodStats().addStats(Saturation.getAmplifier() + 1, 1.0F);
+            }
+        }
 
         this.updateArmSwingProgress();
 

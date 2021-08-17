@@ -69,7 +69,20 @@ public class EntityM4A1 extends EntityGunUserBase{
             }
             return PlayState.CONTINUE;
         }
-        else if(this.swingProgressInt>0){
+        else if(this.isEating()){
+            if(this.getActiveHand() == Hand.MAIN_HAND){
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+            }
+            else if(this.getActiveHand() == Hand.OFF_HAND){
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
+            event.getController().setAnimation(builder.addAnimation("pat", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSwingInProgress){
             event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }else if(this.isGettingHealed()){

@@ -1486,6 +1486,126 @@
 					}
 				}
 			}
+		},
+		"eat_offhand": {
+			"loop": true,
+			"animation_length": 0.5,
+			"bones": {
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [20, 0, 0]
+						},
+						"0.125": {
+							"vector": [15, 0, 0],
+							"easing": "easeOutSine"
+						},
+						"0.25": {
+							"vector": [20, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.375": {
+							"vector": [15, 0, 0],
+							"easing": "easeOutSine"
+						},
+						"0.5": {
+							"vector": [20, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-60, 12.5, 7.5]
+						},
+						"0.125": {
+							"vector": [-57.5, 12.5, 7.5],
+							"easing": "easeInOutSine"
+						},
+						"0.25": {
+							"vector": [-60, 12.5, 7.5],
+							"easing": "easeInOutSine"
+						},
+						"0.375": {
+							"vector": [-57.5, 12.5, 7.5],
+							"easing": "easeInOutSine"
+						},
+						"0.5": {
+							"vector": [-60, 12.5, 7.5],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [-20, 0, 122.5]
+					},
+					"position": {
+						"vector": [-5, -4, 0]
+					}
+				}
+			}
+		},
+		"eat_mainhand": {
+			"loop": true,
+			"animation_length": 0.502,
+			"bones": {
+				"Head": {
+					"rotation": {
+						"0.0": {
+							"vector": [20, 0, 0]
+						},
+						"0.125": {
+							"vector": [15, 0, 0],
+							"easing": "easeOutSine"
+						},
+						"0.25": {
+							"vector": [20, 0, 0],
+							"easing": "easeInSine"
+						},
+						"0.375": {
+							"vector": [15, 0, 0],
+							"easing": "easeOutSine"
+						},
+						"0.5": {
+							"vector": [20, 0, 0],
+							"easing": "easeInSine"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-60, -12.5, -7.5]
+						},
+						"0.125": {
+							"vector": [-57.5, -12.5, -7.5],
+							"easing": "easeInOutSine"
+						},
+						"0.25": {
+							"vector": [-60, -12.5, -7.5],
+							"easing": "easeInOutSine"
+						},
+						"0.375": {
+							"vector": [-57.5, -12.5, -7.5],
+							"easing": "easeInOutSine"
+						},
+						"0.5": {
+							"vector": [-60, -12.5, -7.5],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [-20, 0, -122.5]
+					},
+					"position": {
+						"vector": [5, -4, 0]
+					}
+				}
+			}
 		}
 	}
 }
