@@ -76,7 +76,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }else {
 
-            if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+            if (isMoving()) {
                 if (this.isSailing()) {
                     event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", true));
                 } else if (this.isSprinting()) {
@@ -132,7 +132,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail", true));
             }
@@ -157,11 +157,6 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
                 .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.GangwonHealth.get())
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.GangwonAttackDamage.get())
                 ;
-    }
-
-    @Override
-    public int getRiggingOffset() {
-        return 28;
     }
 
     //Warship girls doesnt have rarity system. WHAT?

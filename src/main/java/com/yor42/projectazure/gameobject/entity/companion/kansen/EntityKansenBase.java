@@ -16,6 +16,7 @@ import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerSounds;
+import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -55,7 +56,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
     private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",5F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
-    private static final DataParameter<CompoundNBT> STORAGE = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.COMPOUND_NBT);
+    private static final DataParameter<Integer> SHIP_FIRE_TICK = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
     private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
 
     public ItemStackHandler RiggingSlot = new ItemStackHandler(1) {
@@ -92,19 +93,45 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(STORAGE, new CompoundNBT());
+        this.dataManager.register(SHIP_FIRE_TICK, 0);
         this.dataManager.register(ITEM_RIGGING,ItemStack.EMPTY);
     }
-    public abstract int getRiggingOffset();
+
+    public boolean isShipOnFire(){
+        return this.getShipFireTicks()>0;
+    }
+
+    public int getShipFireTicks(){
+        return this.dataManager.get(SHIP_FIRE_TICK);
+    }
+
+    public void ForceShipFireTicks(int tick){
+        this.dataManager.set(SHIP_FIRE_TICK, tick);
+    }
+
+    public void setShipFire(int seconds) {
+        int i = seconds * 20;
+        i = ProtectionEnchantment.getFireTimeForEntity((LivingEntity)this, i);
+
+        if (this.getShipFireTicks() < i) {
+            this.ForceShipFireTicks(i);
+        }
+    }
+
+    public void ExtinguishShipfire(){
+        this.ForceShipFireTicks(0);
+    }
 
     @Override
     public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
+        compound.putInt("shipfire", this.getShipFireTicks());
         compound.put("rigging",this.RiggingSlot.serializeNBT());
     }
 
     public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
+        this.ForceShipFireTicks(compound.getInt("shipfire"));
         if(compound.contains("rigging"))
             this.RiggingSlot.deserializeNBT(compound.getCompound("rigging"));
     }
@@ -224,6 +251,19 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         if(this.getRigging().getItem() instanceof ItemRiggingBase){
             ((ItemRiggingBase) this.getRigging().getItem()).onUpdate(this.getRigging());
         }
+
+        if(this.isShipOnFire()){
+            if (this.getShipFireTicks() % 20 == 0) {
+                this.attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
+            }
+
+            this.ForceShipFireTicks(this.getShipFireTicks() - 1);
+        }
+    }
+
+    @Override
+    public boolean canRenderOnFire() {
+        return super.canRenderOnFire() || this.isShipOnFire();
     }
 
     @Override

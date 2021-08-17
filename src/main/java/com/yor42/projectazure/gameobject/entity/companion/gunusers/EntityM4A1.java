@@ -79,7 +79,7 @@ public class EntityM4A1 extends EntityGunUserBase{
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }else{
-            if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+            if (isMoving()) {
                 if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
                     if (this.isSprinting()) {
                         event.getController().setAnimation(builder.addAnimation("gun_run_twohanded", true));
@@ -141,7 +141,7 @@ public class EntityM4A1 extends EntityGunUserBase{
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        if (isMoving()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run", true));
             }

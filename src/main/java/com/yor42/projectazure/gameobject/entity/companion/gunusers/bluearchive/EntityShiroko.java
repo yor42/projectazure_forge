@@ -86,7 +86,7 @@ public class EntityShiroko extends EntityGunUserBase {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.swim_arm", true));
             return PlayState.CONTINUE;
         }else{
-            if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+            if (isMoving()) {
                 if(this.isSprinting()){
                     event.getController().setAnimation(builder.addAnimation("animation.shiroko.run_arm", true));
                 }
@@ -151,7 +151,7 @@ public class EntityShiroko extends EntityGunUserBase {
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        if (isMoving()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("animation.shiroko.run", true));
             }

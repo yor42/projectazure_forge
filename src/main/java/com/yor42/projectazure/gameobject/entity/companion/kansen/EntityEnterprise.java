@@ -37,7 +37,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail", true));
             }
@@ -113,7 +113,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail_arm", true));
             }
@@ -140,10 +140,6 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         return PlayState.CONTINUE;
     }
 
-    @Override
-    public int getRiggingOffset() {
-        return 0;
-    }
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_5;

@@ -44,8 +44,9 @@ public class CompanionsUseTotem extends Goal {
     @Override
     public boolean shouldContinueExecuting() {
         boolean flag1 = (this.companion.getFireTimer() > 0 || this.companion.isPotionActive(Effects.WITHER) || this.companion.ticksExisted - this.companion.getRevengeTimer()<400);
-        boolean value = this.companion.getHealth()<6 && flag1;
-        return value;
+        boolean value = this.companion.getHealth()<8;
+        boolean canuseTotem = this.companion.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING || this.hasTotem().getKey() != ItemStack.EMPTY;
+        return value && flag1 && canuseTotem;
     }
 
     @Override

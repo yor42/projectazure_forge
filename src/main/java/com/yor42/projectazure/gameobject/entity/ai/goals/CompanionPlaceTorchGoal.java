@@ -57,7 +57,7 @@ public class CompanionPlaceTorchGoal extends Goal {
 
         if(mainHandStack.getItem() instanceof BlockItem && ((BlockItem) mainHandStack.getItem()).getBlock() instanceof TorchBlock){
 
-            boolean isTorchUseable = false;
+            boolean isTorchUseable;
 
             if(ModList.get().isLoaded("realistictorches")){
                 isTorchUseable = this.isRealisticTorchReady(mainHandStack ,MAIN_HAND);

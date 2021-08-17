@@ -66,7 +66,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_arm", true));
             return PlayState.CONTINUE;
         }
-        else if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        else if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_arm", true));
             }
@@ -109,7 +109,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
             }
@@ -135,11 +135,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
                 .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.AyanamiHealth.get())
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.AyanamiAttackDamage.get())
                 ;
-    }
-
-    @Override
-    public int getRiggingOffset() {
-        return 0;
     }
 
     @Override

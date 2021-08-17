@@ -367,6 +367,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return ItemStack.EMPTY;
     }
 
+    protected boolean isMoving(){
+        return  !(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F) && !this.isSitting();
+    }
+
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         if(capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && this.getInventory() != null){
@@ -1268,20 +1272,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
         this.goalSelector.addGoal(3, new SitGoal(this));
         this.goalSelector.addGoal(6, new CompanionUseShieldGoal(this));
-        this.goalSelector.addGoal(7, new CompanionUseGunGoal(this, 40, 0.6));
-        this.goalSelector.addGoal(8, new KansenRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(9, new CompanionMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(10, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(11, new WorkGoal(this, 1.0D));
-        this.goalSelector.addGoal(12, new CompanionsUseTotem(this));
-        this.goalSelector.addGoal(13, new CompanionOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(14, new CompanionHealandEatFoodGoal(this));
+        this.goalSelector.addGoal(7, new CompanionHealandEatFoodGoal(this));
+        this.goalSelector.addGoal(8, new CompanionsUseTotem(this));
+        this.goalSelector.addGoal(9, new CompanionUseGunGoal(this, 40, 0.6));
+        this.goalSelector.addGoal(10, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(11, new CompanionMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(12, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(13, new WorkGoal(this, 1.0D));
+        this.goalSelector.addGoal(14, new CompanionOpenDoorGoal(this, true));
         this.goalSelector.addGoal(15, new CompanionFreeroamGoal(this, 60, true));
         this.goalSelector.addGoal(16, new CompanionPickupItemGoal(this));
         this.goalSelector.addGoal(17, new CompanionPlaceTorchGoal(this));
         this.goalSelector.addGoal(18, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(19, new LookRandomlyGoal(this));
-        //this.goalSelector.addGoal(9, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setCallsForHelp());

@@ -68,7 +68,7 @@ public class EntityZ23 extends EntityKansenDestroyer{
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
-        else if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        else if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("sail_arm", true));
             }
@@ -114,7 +114,7 @@ public class EntityZ23 extends EntityKansenDestroyer{
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("sail", true));
             }
@@ -133,11 +133,6 @@ public class EntityZ23 extends EntityKansenDestroyer{
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_4;
-    }
-
-    @Override
-    public int getRiggingOffset() {
-        return 0;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

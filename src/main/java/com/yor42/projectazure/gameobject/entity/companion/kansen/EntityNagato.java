@@ -121,7 +121,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)) {
+        if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("sail", true));
             }
@@ -153,8 +153,4 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
         return enums.CompanionRarity.STAR_5;
     }
 
-    @Override
-    public int getRiggingOffset() {
-        return 0;
-    }
 }
