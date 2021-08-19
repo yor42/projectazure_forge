@@ -55,7 +55,7 @@ public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnim
         return this.firedelay;
     }
 
-    public abstract void onUpdate(ItemStack stack);
+    public abstract void onUpdate(ItemStack EquipmentStack, ItemStack RiggingStack);
 
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         return PlayState.STOP;

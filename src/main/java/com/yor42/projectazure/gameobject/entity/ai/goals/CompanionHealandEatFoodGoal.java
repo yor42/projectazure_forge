@@ -12,10 +12,8 @@ import net.minecraft.item.UseAction;
 import net.minecraft.potion.*;
 import net.minecraft.util.Hand;
 import net.minecraftforge.items.ItemStackHandler;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +35,7 @@ public class CompanionHealandEatFoodGoal extends Goal {
         if(this.FoodCooldown > 0){
             this.FoodCooldown--;
         }
-        Pair<ItemStack, Integer> InventoryFood = this.getFood(true);
+        int InventoryFood = this.getFoodIndex(true);
         if(this.companion.isEating()){
             return true;
         }
@@ -48,8 +46,8 @@ public class CompanionHealandEatFoodGoal extends Goal {
                     this.FoodHand = this.getFoodHand(true).get();
                     boolean val = this.companion.isEating() || !this.companion.isAggressive() && this.companion.getAttackTarget() == null;
                     return val;
-                } else if (InventoryFood.getKey() != ItemStack.EMPTY && this.companion.getItemSwapIndexOffHand() == -1) {
-                    this.ChangeItem(InventoryFood.getKey(), InventoryFood.getValue());
+                } else if (InventoryFood >-1 && this.companion.getItemSwapIndexOffHand() == -1) {
+                    this.ChangeItem(InventoryFood);
                     this.FoodCooldown = 15;
                 }
             }
@@ -57,13 +55,13 @@ public class CompanionHealandEatFoodGoal extends Goal {
         else if(this.companion.getFoodStats().getFoodLevel()<10){
             if(this.FoodCooldown == 0) {
                 if (this.companion.ticksExisted % 10 == 0) {
-                    InventoryFood = this.getFood(false);
+                    InventoryFood = this.getFoodIndex(false);
                 }
                 if (this.getFoodHand(false).isPresent()) {
                     this.FoodHand = this.getFoodHand(false).get();
                     return this.companion.isEating() || !this.companion.isAggressive() && this.companion.getAttackTarget() == null || this.companion.getFoodStats().getFoodLevel()<7;
-                } else if (InventoryFood.getKey() != ItemStack.EMPTY && this.companion.getItemSwapIndexOffHand() == -1) {
-                    this.ChangeItem(InventoryFood.getKey(), InventoryFood.getValue());
+                } else if (InventoryFood >-1&& this.companion.getItemSwapIndexOffHand() == -1) {
+                    this.ChangeItem(InventoryFood);
                     this.FoodCooldown = 15;
                 }
             }
@@ -84,9 +82,9 @@ public class CompanionHealandEatFoodGoal extends Goal {
         this.companion.stopActiveHand();
     }
 
-    private void ChangeItem(ItemStack food, int index){
+    private void ChangeItem(int index){
         ItemStack Buffer = this.companion.getHeldItemOffhand();
-        this.companion.setHeldItem(OFF_HAND, food);
+        this.companion.setHeldItem(OFF_HAND, this.companion.getInventory().getStackInSlot(index));
         this.companion.getInventory().setStackInSlot(index, Buffer);
         this.companion.setItemSwapIndexOffHand(index);
     }
@@ -103,15 +101,15 @@ public class CompanionHealandEatFoodGoal extends Goal {
         }
     }
 
-    private Pair<ItemStack, Integer> getFood(boolean includeHealingPotion){
+    private int getFoodIndex(boolean includeHealingPotion){
         ItemStackHandler Inventory = this.companion.getInventory();
         for(int i = 0; i<Inventory.getSlots(); i++){
             ItemStack stack = Inventory.getStackInSlot(i);
             if(shouldEat(stack, includeHealingPotion)){
-                return new Pair<>(stack, i);
+                return i;
             }
         }
-        return new Pair<>(ItemStack.EMPTY, -1);
+        return -1;
     }
 
     private boolean shouldEat(ItemStack stack, boolean IncludeHealingPotion){

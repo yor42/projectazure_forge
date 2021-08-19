@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.items.equipment;
 
+import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.network.proxy.ClientProxy;
@@ -29,8 +30,9 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void onUpdate(ItemStack stack) {
-        CompoundNBT compound = stack.getOrCreateTag();
+    public void onUpdate(ItemStack EquipmentStack, ItemStack RiggingStack) {
+        CompoundNBT compound = EquipmentStack.getOrCreateTag();
+        RiggingInventoryCapability capability = new RiggingInventoryCapability(RiggingStack);
         int currentFuel = compound.getInt("fuel");
         currentFuel = Math.min(currentFuel+FuelPerTick(), this.getMaxOperativeTime());
 

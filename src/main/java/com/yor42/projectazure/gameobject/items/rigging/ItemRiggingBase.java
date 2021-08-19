@@ -172,14 +172,14 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
             for(int j = 0; j<equipment.getSlots(); j++){
                 if(equipment.getStackInSlot(j).getItem() instanceof ItemEquipmentBase) {
                     ItemEquipmentBase item = (ItemEquipmentBase) equipment.getStackInSlot(j).getItem();
-                    item.onUpdate(equipment.getStackInSlot(j));
+                    item.onUpdate(equipment.getStackInSlot(j), stack);
                 }
             }
             if(hanger!=null){
                 for(int i = 0; i<hanger.getSlots(); i++) {
                     if (hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
                         ItemEquipmentBase item = (ItemEquipmentBase) hanger.getStackInSlot(i).getItem();
-                        item.onUpdate(hanger.getStackInSlot(i));
+                        item.onUpdate(hanger.getStackInSlot(i), stack);
                     }
                 }
             }

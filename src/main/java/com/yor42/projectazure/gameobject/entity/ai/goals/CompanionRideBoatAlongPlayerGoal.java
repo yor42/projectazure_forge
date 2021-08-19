@@ -16,14 +16,14 @@ import net.minecraft.util.math.vector.Vector3d;
 import java.util.EnumSet;
 import java.util.List;
 
-public class KansenRideBoatAlongPlayerGoal extends Goal {
+public class CompanionRideBoatAlongPlayerGoal extends Goal {
 
     private final AbstractEntityCompanion entity;
     private Entity boat;
     private boolean sameBoatWithOwner;
     private final double movespeed;
 
-    public KansenRideBoatAlongPlayerGoal(AbstractEntityCompanion entity, double speed){
+    public CompanionRideBoatAlongPlayerGoal(AbstractEntityCompanion entity, double speed){
         this.entity = entity;
         this.movespeed = speed;
         this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));

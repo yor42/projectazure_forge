@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.equipment;
 
 import com.yor42.projectazure.client.model.equipments.ModelMaingun127mm;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -19,8 +20,8 @@ public class ItemEquipmentGun127Mm extends ItemEquipmentGun{
     }
 
     @Override
-    public void onUpdate(ItemStack stack) {
-        CompoundNBT tags = stack.getOrCreateTag();
+    public void onUpdate(ItemStack EquipmentStack, ItemStack RiggingStack) {
+        CompoundNBT tags = EquipmentStack.getOrCreateTag();
         int delay = tags.getInt("delay");
         if(delay>0)
             delay--;

@@ -17,7 +17,6 @@ import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
@@ -46,7 +45,6 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
@@ -86,6 +84,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
+import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
@@ -511,6 +511,40 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.ItemSwapIndexOffhand = value;
     }
 
+    public int getItemSwapIndex(Hand hand){
+        return hand == MAIN_HAND? this.getItemSwapIndexMainHand() : this.getItemSwapIndexOffHand();
+    }
+
+    public void setItemswapIndex(Hand hand, int value){
+        if (hand == MAIN_HAND) {
+            setItemSwapIndexMainHand(value);
+        } else {
+            setItemSwapIndexOffHand(value);
+        }
+    }
+
+    public Optional<Hand> getFreeHand(){
+        if(this.getItemSwapIndexMainHand() == -1){
+            return Optional.of(MAIN_HAND);
+        }
+        else if (this.getItemSwapIndexOffHand() == -1){
+            return Optional.of(OFF_HAND);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean shouldAttackEntity(LivingEntity target, LivingEntity owner) {
+
+        if(target instanceof TameableEntity){
+            if(((TameableEntity) target).isOwner(owner)){
+                return false;
+            }
+        }
+
+        return super.shouldAttackEntity(target, owner);
+    }
+
     public void setHomeposAndDistance(BlockPos pos, float validDistance){
         this.setHOMEPOS(pos);
         this.dataManager.set(VALID_HOME_DISTANCE, validDistance);
@@ -706,7 +740,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 Hand hand = this.getActiveHand();
                 this.activeItemStack.damageItem(i, this, (entity) -> entity.sendBreakAnimation(hand));
                 if (this.activeItemStack.isEmpty()) {
-                    if (hand == Hand.MAIN_HAND) {
+                    if (hand == MAIN_HAND) {
                         this.setItemStackToSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
                     } else {
                         this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
@@ -1225,10 +1259,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     private Hand getValidGunHand(){
         if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-            return Hand.MAIN_HAND;
+            return MAIN_HAND;
         }
         else
-            return Hand.OFF_HAND;
+            return OFF_HAND;
     }
 
     public enums.GunClass getGunSpecialty(){
@@ -1271,16 +1305,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(7, new CompanionHealandEatFoodGoal(this));
         this.goalSelector.addGoal(8, new CompanionsUseTotem(this));
         this.goalSelector.addGoal(9, new CompanionUseGunGoal(this, 40, 0.6));
-        this.goalSelector.addGoal(10, new KansenRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(10, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
         this.goalSelector.addGoal(11, new CompanionMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(12, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
         this.goalSelector.addGoal(13, new WorkGoal(this, 1.0D));
-        this.goalSelector.addGoal(14, new CompanionOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(15, new CompanionFreeroamGoal(this, 60, true));
-        this.goalSelector.addGoal(16, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(17, new CompanionPlaceTorchGoal(this));
-        this.goalSelector.addGoal(18, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(19, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(14, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
+        this.goalSelector.addGoal(15, new CompanionOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(16, new CompanionFreeroamGoal(this, 60, true));
+        this.goalSelector.addGoal(17, new CompanionPickupItemGoal(this));
+        this.goalSelector.addGoal(18, new CompanionPlaceTorchGoal(this));
+        this.goalSelector.addGoal(19, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(20, new LookRandomlyGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
