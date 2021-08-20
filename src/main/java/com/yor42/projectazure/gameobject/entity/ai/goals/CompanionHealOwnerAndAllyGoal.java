@@ -66,7 +66,7 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
         if(this.companion.getOwner() != null && !this.companion.isSleeping() && !this.companion.isSitting() && this.ItemSwapDelay == 0) {
 
             Optional<Hand> PotionHand = this.getPotioninHand();
-            List<LivingEntity> EntityAround = this.companion.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.companion.getBoundingBox().expand(10, 3, 10));
+              List<LivingEntity> EntityAround = this.companion.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.companion.getBoundingBox().expand(20, 3, 20));
             Optional<Pair<Hand, LivingEntity>> Target = Optional.empty();
             PlayerEntity Owner = this.companion.getEntityWorld().getClosestPlayer(this.playerPredicate, this.companion);
             if (PotionHand.isPresent()) {
@@ -102,6 +102,7 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
                         }
                     }
                 }
+
                 if(inventoryoindex > -1){
                     if(this.companion.getFreeHand().isPresent()){
                         this.ChangeItem(this.companion.getFreeHand().get(), inventoryoindex, false);
@@ -132,7 +133,7 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
         ItemStack Buffer = this.companion.getHeldItem(hand);
         this.companion.setHeldItem(hand, this.companion.getInventory().getStackInSlot(index));
         this.companion.getInventory().setStackInSlot(index, Buffer);
-        this.ItemSwapDelay = 15;
+        this.ItemSwapDelay = 10;
         this.companion.setItemswapIndex(hand, isResetting? -1 : index);
         this.SwappedHand = isResetting? null : hand;
     }
@@ -153,10 +154,20 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
     }
 
     @Override
+    public void startExecuting() {
+        if(this.TargeToHeal != null) {
+            this.companion.getLookController().setLookPositionWithEntity(this.TargeToHeal, 10F, 10F);
+        }
+    }
+
+    @Override
     public void tick() {
         if(this.PotionHand != null) {
             if (this.TargeToHeal == null)
                 return;
+
+            this.companion.getLookController().setLookPositionWithEntity(this.TargeToHeal, 10F, 10F);
+
             double d0 = this.companion.getDistanceSq(this.companion.getPosX(), this.companion.getPosY(), this.companion.getPosZ());
             boolean flag = this.companion.getEntitySenses().canSee(this.TargeToHeal);
             if (flag) {
@@ -164,7 +175,6 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
             } else {
                 this.tickInSight = 0;
             }
-            this.companion.getLookController().setLookPositionWithEntity(this.TargeToHeal, 10F, 10F);
             if (!(d0 > this.maxAttackDistance) && this.tickInSight >= 5) {
                 this.companion.getNavigator().clearPath();
             } else {

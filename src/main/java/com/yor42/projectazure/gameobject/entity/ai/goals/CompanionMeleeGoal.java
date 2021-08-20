@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -46,8 +47,17 @@ public class CompanionMeleeGoal extends MeleeAttackGoal {
     }
 
     @Override
+    protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+
+        this.entity.setSprinting(this.entity.getNavigator().hasPath() && this.entity.getDistance(enemy)>4F);
+
+        super.checkAndPerformAttack(enemy, distToEnemySqr);
+    }
+
+    @Override
     public void resetTask() {
         super.resetTask();
         this.entity.setMeleeing(false);
+        this.entity.setSprinting(false);
     }
 }

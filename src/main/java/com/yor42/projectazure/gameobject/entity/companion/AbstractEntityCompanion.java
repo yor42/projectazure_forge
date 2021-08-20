@@ -340,7 +340,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void onLevelup(){
         ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
-        modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH)+2);
+        modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH)+this.getLevel());
         this.heal(this.getMaxHealth());
     }
 
@@ -493,6 +493,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getFoodStats().read(compound);
         this.ItemSwapIndexMainHand = compound.getInt("SwapIndexMainHand");
         this.ItemSwapIndexOffhand = compound.getInt("SwapIndexOffHand");
+
+        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
+        if(modifiableattributeinstance != null) {
+            modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH) + this.getLevel());
+        }
     }
 
     public int getItemSwapIndexMainHand(){
