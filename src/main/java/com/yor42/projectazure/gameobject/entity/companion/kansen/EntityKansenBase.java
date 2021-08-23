@@ -175,8 +175,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
 
     public boolean hasRigging(){
-
-        return this.getRigging().getItem() instanceof ItemRiggingBase;
+        return this.getRigging().getItem() instanceof ItemRiggingBase && ((ItemRiggingBase) this.getRigging().getItem()).getValidclass() == this.getShipClass();
     }
 
     @Nullable
@@ -219,9 +218,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(4, new KansenLaunchPlaneGoal(this, 20, 40, 50));
-        this.goalSelector.addGoal(5, new KansenRangedAttackGoal(this, 1.0F, 10,20, 100F, 160F));
-
     }
 
 
@@ -268,9 +264,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     @Override
     public boolean hasNoGravity() {
-        boolean flag = this.isSailing();
 
-        return flag;
+        return this.isSailing();
     }
 
     public ItemStack findAmmo(enums.AmmoCategory category){
@@ -358,5 +353,10 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         else if (vec3d.y>0){
             this.setVelocity(vec3d.x, vec3d.y - 0.10, vec3d.z);
         }
+    }
+
+    @Override
+    public boolean canUseSkill() {
+        return this.canUseCannonOrTorpedo() && this.isSailing();
     }
 }

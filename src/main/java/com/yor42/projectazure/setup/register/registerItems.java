@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.*;
@@ -8,6 +9,7 @@ import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun127Mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo533Mm;
 import com.yor42.projectazure.gameobject.items.equipment.ItemPlanef4Fwildcat;
 import com.yor42.projectazure.gameobject.items.gun.ItemAbydos550;
+import com.yor42.projectazure.gameobject.items.materials.ModMaterials;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
@@ -15,10 +17,7 @@ import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.MusicDiscItem;
-import net.minecraft.item.Rarity;
+import net.minecraft.item.*;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
@@ -225,7 +224,7 @@ public class registerItems {
 
     //You know the rules and so do I
     public static final RegistryObject<Item> DISC_RICKROLL = registerManager.ITEMS.register("disc_rickroll", () -> new MusicDiscItem(15, registerSounds.DISC_RICKROLL, new Item.Properties()
-            .group(PA_GROUP).maxStackSize(1))
+            .group(PA_WEAPONS).maxStackSize(1))
     {
         @Override
         public ITextComponent getDisplayName(ItemStack stack) {
@@ -235,40 +234,43 @@ public class registerItems {
 
     public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.BLOCK_LEVER_CLICK, 0, (float) 0.3, new Item.Properties()
             .setISTER(() -> ItemAbydos550Renderer::new)
-            .group(PA_GROUP).maxStackSize(1), true, MAGAZINE_5_56.get()));
+            .group(PA_WEAPONS).maxStackSize(1), true, MAGAZINE_5_56.get()));
 
+    public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 5, -1.7F, new Item.Properties().group(PA_WEAPONS)));
+
+    public static final RegistryObject<Item> COMPOUNDBOW = registerManager.ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().group(PA_WEAPONS).maxDamage(1000)));
 
 
     public static final RegistryObject<Item> BONKBAT = registerManager.ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
-            .group(PA_GROUP)
+            .group(PA_WEAPONS)
             .rarity(Rarity.EPIC)
             .maxStackSize(1)));
 
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = registerManager.ITEMS.register("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
     .setISTER(() -> DDDefaultRiggingRenderer::new)
-    .group(PA_GROUP).maxStackSize(1), 500));
+    .group(PA_WEAPONS).maxStackSize(1), 500));
 
     public static final RegistryObject<Item> CV_DEFAULT_RIGGING = registerManager.ITEMS.register("cv_default_rigging", () -> new ItemRiggingCVDefault(new Item.Properties()
             .setISTER(() -> CVDefaultRiggingRenderer::new)
-            .group(PA_GROUP).maxStackSize(1), 750));
+            .group(PA_WEAPONS).maxStackSize(1), 750));
 
     public static final RegistryObject<Item> BB_DEFAULT_RIGGING = registerManager.ITEMS.register("bb_default_rigging", () -> new ItemRiggingBBDefault(new Item.Properties()
             .setISTER(() -> BBDefaultRiggingRenderer::new)
-            .group(PA_GROUP).maxStackSize(1), 1200));
+            .group(PA_WEAPONS).maxStackSize(1), 1200));
 
     public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = registerManager.ITEMS.register("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533Mm(new Item.Properties()
             .setISTER(() -> equipment533mmTorpedoRenderer::new)
-            .group(PA_GROUP).maxStackSize(1), 40));
+            .group(PA_WEAPONS).maxStackSize(1), 40));
 
     public static final RegistryObject<Item> EQUIPMENT_GUN_127MM = registerManager.ITEMS.register("equipment_gun_127mm", () -> new ItemEquipmentGun127Mm(new Item.Properties()
             .setISTER(() -> Equipment127mmGunRenderer::new)
-            .group(PA_GROUP).maxStackSize(1), 40));
+            .group(PA_WEAPONS).maxStackSize(1), 40));
 
     public static float WildcatHP = 30;
 
     public static final RegistryObject<Item> EQUIPMENT_PLANE_F4FWildcat = registerManager.ITEMS.register("equipment_plane_f4fwildcat", () -> new ItemPlanef4Fwildcat(new Item.Properties()
             .setISTER(() -> ItemPlanef4fWildcatRenderer::new)
-            .group(PA_GROUP).maxStackSize(1), (int) WildcatHP));
+            .group(PA_WEAPONS).maxStackSize(1), (int) WildcatHP));
 
 
     public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(ENTITYTYPE_AYANAMI, new Item.Properties()

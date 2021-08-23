@@ -5,6 +5,8 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
@@ -279,6 +281,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected long lastSlept, lastWokenup;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
+    protected static final DataParameter<Integer> SKILLDELAYTICK = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> EATING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Float> MORALE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> EXP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
@@ -546,7 +549,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 return false;
             }
         }
-
+        else if(target instanceof PlayerEntity){
+            return !this.isOwner(target) && this.isPVPenabled();
+        }
         return super.shouldAttackEntity(target, owner);
     }
 
@@ -757,6 +762,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+
+        if(source.getTrueSource() instanceof TameableEntity && this.getOwner() != null && ((TameableEntity) source.getTrueSource()).isOwner(this.getOwner())){
+            return false;
+        }
+
+        return super.attackEntityFrom(source, amount);
+    }
+
     public int getShieldCoolDown(){
         return this.shieldCoolDown;
     }
@@ -826,6 +841,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected void registerData() {
         super.registerData();
+        this.dataManager.register(SKILLDELAYTICK, 0);
         this.dataManager.register(EXP, 0.0F);
         this.dataManager.register(LIMITBREAKLEVEL, 0);
         this.dataManager.register(MORALE, 0.0F);
@@ -1060,19 +1076,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         if(this.isPotionActive(Effects.HUNGER)){
             EffectInstance hunger = this.getActivePotionEffect(Effects.HUNGER);
-            if(hunger.getDuration()>0 && hunger.getPotion().isReady(hunger.getDuration(), hunger.getAmplifier())){
+            if((hunger != null ? hunger.getDuration() : 0) >0 && hunger.getPotion().isReady(hunger.getDuration(), hunger.getAmplifier())){
                 this.addExhaustion(0.005F * (float)(hunger.getAmplifier() + 1));
             }
         }
 
         if(this.isPotionActive(Effects.SATURATION)){
             EffectInstance Saturation = this.getActivePotionEffect(Effects.SATURATION);
-            if(Saturation.getDuration()>0 && Saturation.getPotion().isReady(Saturation.getDuration(), Saturation.getAmplifier())){
+            if((Saturation != null ? Saturation.getDuration() : 0) >0 && Saturation.getPotion().isReady(Saturation.getDuration(), Saturation.getAmplifier())){
                 this.getFoodStats().addStats(Saturation.getAmplifier() + 1, 1.0F);
             }
         }
 
         this.updateArmSwingProgress();
+        this.updateSkillDelay();
 
         if(this.getDataManager().get(SITTING) != this.isSitting()) {
             this.func_233687_w_(this.getDataManager().get(SITTING));
@@ -1301,11 +1318,42 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return ItemStack.EMPTY;
     }
 
+    public int getSkillDelayTick(){
+        return this.getDataManager().get(SKILLDELAYTICK);
+    }
+
+    public void setSkillDelayTick(int value){
+        this.getDataManager().set(SKILLDELAYTICK, value);
+    }
+
+    public void setSkillDelaySeconds(int value){
+        this.getDataManager().set(SKILLDELAYTICK, value*20);
+    }
+
+    public void updateSkillDelay(){
+        int skilldelay = this.getDataManager().get(SKILLDELAYTICK);
+        if(skilldelay>0){
+            this.getDataManager().set(SKILLDELAYTICK, skilldelay-1);
+        }
+    }
+
+    public void performSkill(LivingEntity target){
+
+    }
+
+    public boolean canUseSkill(){
+        return false;
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new CompanionMoveToRecruitStationGoal(this));
         this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
         this.goalSelector.addGoal(3, new SitGoal(this));
+        if(this instanceof EntityKansenBase){
+            this.goalSelector.addGoal(4, new KansenLaunchPlaneGoal((EntityKansenBase) this, 20, 40, 50));
+            this.goalSelector.addGoal(5, new KansenRangedAttackGoal((EntityKansenBase) this, 1.0F, 10,20, 100F, 160F));
+        }
         this.goalSelector.addGoal(6, new CompanionUseShieldGoal(this));
         this.goalSelector.addGoal(7, new CompanionHealandEatFoodGoal(this));
         this.goalSelector.addGoal(8, new CompanionsUseTotem(this));
@@ -1422,6 +1470,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public PushReaction getPushReaction() {
         return this.isSleeping()? PushReaction.IGNORE:super.getPushReaction();
     }
+
 
     @Nonnull
     @Override

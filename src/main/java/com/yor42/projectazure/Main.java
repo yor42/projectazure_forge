@@ -80,6 +80,13 @@ public class Main
         }
     };
 
+    public static ItemGroup PA_WEAPONS = new ItemGroup("pa_weapons") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(registerItems.BONKBAT.get());
+        }
+    };
+
     public Main() {
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, PAConfig.CONFIG_SPEC, "projectazure.toml");
