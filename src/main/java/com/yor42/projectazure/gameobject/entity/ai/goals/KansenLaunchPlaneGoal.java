@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
@@ -20,21 +21,19 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 
 public class KansenLaunchPlaneGoal extends Goal {
 
-    private EntityKansenBase entity;
+    private EntityKansenAircraftCarrier entity;
     private LivingEntity targetEntity;
 
     private int PlaneDelay;
     private int seeTime;
     private final int maxRangedAttackTime;
     private final float attackRadius;
-    private final float maxAttackDistance;
 
     private final int attackIntervalMin;
 
-    public KansenLaunchPlaneGoal(EntityKansenBase entity, float maxAttackDistanceIn, int minDelayPerPlane, int maxDelayPerPlane){
+    public KansenLaunchPlaneGoal(EntityKansenAircraftCarrier entity, float maxAttackDistanceIn, int minDelayPerPlane, int maxDelayPerPlane){
         this.entity = entity;
         this.attackRadius = maxAttackDistanceIn;
-        this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 
         this.attackIntervalMin = minDelayPerPlane;
@@ -98,33 +97,29 @@ public class KansenLaunchPlaneGoal extends Goal {
                 ItemStackHandler hanger = ((ItemRiggingBase) this.entity.getRigging().getItem()).getHangers(this.entity.getRigging());
 
                 if (hanger != null) {
-                    ItemStack planestack = getPreparedPlane(this.entity, hanger);
+                    int hangerIndex = getPreparedPlane(this.entity, hanger);
+                    if(hangerIndex>=0) {
+                        ItemStack planestack = hanger.getStackInSlot(hangerIndex);
 
-                    this.entity.getLookController().setLookPositionWithEntity(this.targetEntity, 30.0F, 30.0F);
+                        this.entity.getLookController().setLookPositionWithEntity(this.targetEntity, 30.0F, 30.0F);
 
-                    boolean flag3 = --this.PlaneDelay == 0 && planestack.getItem() instanceof ItemEquipmentPlaneBase;
-                    if (flag3) {
-                        if (!flag) {
-                            return;
+                        boolean flag3 = --this.PlaneDelay == 0 && planestack.getItem() instanceof ItemEquipmentPlaneBase;
+                        if (flag3) {
+                            if (!flag) {
+                                return;
+                            }
+                            EntityType<? extends AbstractEntityPlanes> planetype = ((ItemEquipmentPlaneBase) planestack.getItem()).getEntityType();
+
+                            AbstractEntityPlanes planeEntity = planetype.create(this.entity.getEntityWorld());
+                            if (planeEntity != null) {
+                                this.entity.LaunchPlane(planestack, planeEntity, this.targetEntity, hanger, hangerIndex);
+                            }
+                            float f = MathHelper.sqrt(d0) / this.attackRadius;
+                            this.PlaneDelay = MathHelper.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
+                        } else if (this.PlaneDelay < 0) {
+                            float f2 = MathHelper.sqrt(d0) / this.attackRadius;
+                            this.PlaneDelay = MathHelper.floor(f2 * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
                         }
-                        EntityType<? extends AbstractEntityPlanes> planetype = ((ItemEquipmentPlaneBase) planestack.getItem()).getEntityType();
-
-                        AbstractEntityPlanes planeEntity = planetype.create(this.entity.getEntityWorld());
-                        if (planeEntity != null) {
-                            planeEntity.setOwner(this.entity);
-                            planeEntity.setPosition(this.entity.getPosX(), this.entity.getPosY() + 2, this.entity.getPosZ());
-                            planeEntity.setHealth(getCurrentHP(planestack));
-                            planeEntity.setPayloads(planestack.getOrCreateTag().getInt("armDelay") <= 0);
-                            planeEntity.setMaxOperativetime(getPlaneFuel(planestack));
-                            planeEntity.setAttackTarget(this.targetEntity);
-                            this.entity.getEntityWorld().addEntity(planeEntity);
-                            usePlane(this.entity, planestack, hanger);
-                        }
-                        float f = MathHelper.sqrt(d0) / this.attackRadius;
-                        this.PlaneDelay = MathHelper.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
-                    } else if (this.PlaneDelay < 0) {
-                        float f2 = MathHelper.sqrt(d0) / this.attackRadius;
-                        this.PlaneDelay = MathHelper.floor(f2 * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
                     }
                 }
             }

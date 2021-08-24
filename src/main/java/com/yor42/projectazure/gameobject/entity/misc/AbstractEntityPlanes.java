@@ -37,6 +37,7 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     private int maxOperativetime;
     private boolean isReturningToOwner;
     private boolean isLifeLimited;
+    protected float attackdamage;
     private final boolean hasRadar;
 
     protected AbstractEntityPlanes(EntityType<? extends CreatureEntity> type, World worldIn) {
@@ -48,6 +49,15 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         this.isReturningToOwner = false;
         this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
         this.setPathPriority(PathNodeType.WATER, -1.0F);
+        this.attackdamage = this.getPlaneItem().getAttackDamage();
+    }
+
+    public float getAttackDamage() {
+        return this.attackdamage;
+    }
+
+    public void setAttackDamage(float attackDamage) {
+        this.attackdamage = attackDamage;
     }
 
     protected final AnimationFactory factory = new AnimationFactory(this);

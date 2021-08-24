@@ -49,7 +49,7 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
     @Override
     protected void doAttack(LivingEntity entity) {
 
-        float damage = this.getPlaneItem().getAttackDamage();
+        float damage = this.getAttackDamage();
 
         if(entity instanceof EntityKansenBase){
             if (((EntityKansenBase) entity).getOwner() == this.getOwner().getOwner()){

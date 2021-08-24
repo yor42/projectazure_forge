@@ -122,7 +122,7 @@ public class ItemStackUtils {
 
 
 
-    public static ItemStack getPreparedPlane(EntityKansenBase entity, ItemStackHandler hanger){
+    public static int getPreparedPlane(EntityKansenBase entity, ItemStackHandler hanger){
         if(entity.getRigging().getItem() instanceof ItemRiggingBase) {
 
             if(hanger != null) {
@@ -133,32 +133,15 @@ public class ItemStackUtils {
 
                             //check if its ready to go out, etc... yada yada
                             if (hanger.getStackInSlot(i).getOrCreateTag().getInt("armDelay") <= 0 && hanger.getStackInSlot(i).getOrCreateTag().getInt("fuel") >= getRequiredMinimumFuel(entity, (ItemEquipmentPlaneBase) hanger.getStackInSlot(i).getItem())) {
-                                return hanger.getStackInSlot(i);
+                                return i;
                             }
                         }
                     }
                 }
             }
         }
-        return ItemStack.EMPTY;
+        return -1;
     }
-
-    public static void usePlane(EntityKansenBase entity, ItemStack plane, ItemStackHandler hanger){
-        if(entity.getRigging().getItem() instanceof ItemRiggingBase) {
-            ItemRiggingBase riggingItem = (ItemRiggingBase) entity.getRigging().getItem();
-
-            if(hanger != null) {
-                for (int i = 0; i < hanger.getSlots(); i++) {
-                    if(hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase) {
-                        if (hanger.getStackInSlot(i) == plane) {
-                            hanger.setStackInSlot(i, ItemStack.EMPTY);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
     public static boolean hasPlanes(ItemStack rigging){
         if(rigging.getItem() instanceof ItemRiggingBase) {

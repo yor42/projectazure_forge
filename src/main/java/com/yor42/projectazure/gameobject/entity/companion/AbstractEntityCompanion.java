@@ -5,6 +5,7 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
@@ -252,7 +253,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected final ItemStackHandler Inventory = new ItemStackHandler(12);
+    protected final ItemStackHandler Inventory = new ItemStackHandler(13){
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+
+            if(slot == 12){
+                return AbstractEntityCompanion.this.isSkillItem(stack);
+            }
+
+            return super.isItemValid(slot, stack);
+        }
+    };
     public ItemStackHandler AmmoStorage = new ItemStackHandler(0){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
@@ -1337,12 +1348,36 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    public void performSkill(LivingEntity target){
+    public boolean performOneTimeSkill(LivingEntity target){
+        return true;
+    }
+
+    public boolean performSkillTick(LivingEntity target, int Timer){
+        return true;
+    }
+
+    public void resetSkill(){
 
     }
 
     public boolean canUseSkill(){
         return false;
+    }
+
+    public void setSkillDelay(){
+        this.setSkillDelayTick(2400);
+    }
+
+    public ItemStack getSkillItem(){
+        return this.getInventory().getStackInSlot(12);
+    }
+
+    public boolean isSkillItem(ItemStack stack){
+        return false;
+    }
+
+    public boolean hasSkillItem(){
+        return this.isSkillItem(this.getSkillItem());
     }
 
     @Override
@@ -1351,7 +1386,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
         this.goalSelector.addGoal(3, new SitGoal(this));
         if(this instanceof EntityKansenBase){
-            this.goalSelector.addGoal(4, new KansenLaunchPlaneGoal((EntityKansenBase) this, 20, 40, 50));
+            if(this instanceof EntityKansenAircraftCarrier) {
+                this.goalSelector.addGoal(4, new KansenLaunchPlaneGoal((EntityKansenAircraftCarrier) this, 20, 40, 50));
+            }
             this.goalSelector.addGoal(5, new KansenRangedAttackGoal((EntityKansenBase) this, 1.0F, 10,20, 100F, 160F));
         }
         this.goalSelector.addGoal(6, new CompanionUseShieldGoal(this));

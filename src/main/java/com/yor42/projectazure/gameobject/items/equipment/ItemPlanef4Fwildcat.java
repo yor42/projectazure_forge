@@ -8,12 +8,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class ItemPlanef4Fwildcat extends ItemEquipmentPlaneBase{
     public ItemPlanef4Fwildcat(Properties properties, int maxHP) {
-        super(properties, maxHP);
-    }
-
-    @Override
-    public float getAttackDamage() {
-        return 15;
+        super(properties, maxHP, 15);
     }
 
     @Override

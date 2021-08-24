@@ -24,9 +24,12 @@ import java.util.UUID;
 
 public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
 
-    public ItemEquipmentPlaneBase(Properties properties, int maxHP) {
+    protected float damage;
+
+    public ItemEquipmentPlaneBase(Properties properties, int maxHP, float damage) {
         super(properties, maxHP);
         this.slot = enums.SLOTTYPE.PLANE;
+        this.damage = damage;
     }
 
     @Override
@@ -54,7 +57,9 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
         stack.getOrCreateTag().putString("planeUUID", UUID.randomUUID().toString());
     }
 
-    public abstract float getAttackDamage();
+    public float getAttackDamage(){
+        return this.damage;
+    };
 
     public abstract EntityType<? extends AbstractEntityPlanes> getEntityType();
 

@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IArknightOperator;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -200,5 +201,15 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
     @Override
     public enums.OperatorClass getOperatorClass() {
         return enums.OperatorClass.GUARD;
+    }
+
+    @Override
+    public boolean canUseSkill() {
+        return this.hasSkillItem();
+    }
+
+    @Override
+    public boolean isSkillItem(ItemStack stack) {
+        return stack.getItem() == registerItems.CHIXIAO.get();
     }
 }
