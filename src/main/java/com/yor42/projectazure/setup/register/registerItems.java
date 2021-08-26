@@ -272,6 +272,9 @@ public class registerItems {
             .setISTER(() -> ItemPlanef4fWildcatRenderer::new)
             .group(PA_WEAPONS).maxStackSize(1), (int) WildcatHP));
 
+    public static final RegistryObject<Item> DRONE_BAMISSILE = registerManager.ITEMS.register("missiledrone", () -> new ItemMissleDrone(new Item.Properties()
+            .setISTER(() -> ItemMissileDroneRenderer::new)
+            .group(PA_WEAPONS).maxStackSize(1),10, 20000));
 
     public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(ENTITYTYPE_AYANAMI, new Item.Properties()
             .group(PA_SHIPS)));

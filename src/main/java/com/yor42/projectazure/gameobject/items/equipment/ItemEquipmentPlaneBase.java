@@ -35,7 +35,6 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     @Override
     public void onUpdate(ItemStack EquipmentStack, ItemStack RiggingStack) {
         CompoundNBT compound = EquipmentStack.getOrCreateTag();
-        RiggingInventoryCapability capability = new RiggingInventoryCapability(RiggingStack);
         int currentFuel = compound.getInt("fuel");
         currentFuel = Math.min(currentFuel+FuelPerTick(), this.getMaxOperativeTime());
 

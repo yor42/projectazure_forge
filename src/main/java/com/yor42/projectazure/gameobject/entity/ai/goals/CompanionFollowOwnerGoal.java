@@ -31,7 +31,7 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
         this.speed = speed;
         this.host = tameable;
         this.mindist = minDist;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK, Flag.JUMP));
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK));
     }
 
     public boolean shouldExecute() {

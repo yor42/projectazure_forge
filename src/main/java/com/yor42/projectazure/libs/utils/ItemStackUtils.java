@@ -63,6 +63,12 @@ public class ItemStackUtils {
         stack.getOrCreateTag().putInt("currentdamage", value);
     }
 
+    public static void setCurrentHP(ItemStack stack, int HP){
+        if(stack.getItem() instanceof ItemDestroyable) {
+            stack.getOrCreateTag().putInt("currentdamage", ((ItemDestroyable) stack.getItem()).getMaxHP() - HP);
+        }
+    }
+
     public static int getCurrentDamage(ItemStack stack){
         return stack.getOrCreateTag().getInt("currentdamage");
     }
