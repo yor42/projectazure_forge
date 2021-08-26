@@ -1,0 +1,171 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.missiledrone",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "Body",
+					"pivot": [0, 9, 0],
+					"cubes": [
+						{"origin": [-11.5, 0, -9.5], "size": [2, 4, 2], "uv": [20, 16]},
+						{"origin": [6, 5, -15], "size": [9, 9, 30], "uv": [1, 44]},
+						{"origin": [-3.5, 10, -8.5], "size": [7, 1, 18], "uv": [53, 0]},
+						{"origin": [-1, 12, -9.5], "size": [2, 1, 5], "uv": [0, 0]},
+						{"origin": [-3, 11, -8.5], "size": [6, 1, 18], "uv": [53, 0]},
+						{"origin": [-2, 10, -9.5], "size": [4, 1, 20], "uv": [131, 138]},
+						{"origin": [-0.5, 10, 10.5], "size": [1, 1, 2], "uv": [131, 138]},
+						{"origin": [-0.5, 7, 12.5], "size": [1, 7, 2], "uv": [142, 140]},
+						{"origin": [-0.5, 14, 12.5], "size": [1, 1, 1], "uv": [132, 143]},
+						{"origin": [-0.5, 6, 12.5], "size": [1, 1, 1], "uv": [132, 149]},
+						{"origin": [-4, 9.5, -10], "size": [2, 2, 21], "uv": [126, 111]},
+						{"origin": [2, 9.5, -10], "size": [2, 2, 21], "uv": [126, 111]},
+						{"origin": [-3.5, 10, -10.25], "size": [1, 1, 21.5], "uv": [1, 166]},
+						{"origin": [2.5, 10, -10.25], "size": [1, 1, 21.5], "uv": [1, 166]},
+						{"origin": [-1.5, 8, -8.5], "size": [3, 2, 11], "uv": [1, 44]},
+						{"origin": [-1, 7, -7.5], "size": [2, 1, 10], "uv": [3, 60]},
+						{"origin": [-3.5, 5, -9.5], "size": [7, 2, 19], "uv": [2, 89]},
+						{"origin": [2, 7, -9.5], "size": [1.5, 1.5, 19], "uv": [64, 67]},
+						{"origin": [-3.5, 7, -9.5], "size": [1.5, 1.5, 19], "uv": [64, 88]},
+						{"origin": [2.25, 8.5, -8.5], "size": [1, 1.5, 1], "uv": [105, 26]},
+						{"origin": [-3.25, 8.5, -8.5], "size": [1, 1.5, 1], "uv": [69, 26]},
+						{"origin": [-2.5, 7, 1.5], "size": [5, 3, 8], "uv": [56, 54]},
+						{"origin": [-15, 5, -15], "size": [9, 9, 30], "uv": [1, 44]},
+						{"origin": [-15, 14, -15], "size": [9, 1, 30], "uv": [174, 63]},
+						{"origin": [-15, 4, -15], "size": [9, 1, 30], "uv": [169, 19]},
+						{"origin": [6, 4, -15], "size": [9, 1, 30], "uv": [121, 75]},
+						{"origin": [6, 14, -15], "size": [9, 1, 30], "uv": [113, 5]},
+						{"origin": [-16, 5, -15], "size": [1, 9, 30], "uv": [0, 0]},
+						{"origin": [5, 5, -15], "size": [1, 9, 30], "uv": [1, 125]},
+						{"origin": [-6, 5, -15], "size": [1, 9, 30], "uv": [65, 124], "mirror": true},
+						{"origin": [15, 5, -15], "size": [1, 9, 30], "uv": [0, 0], "mirror": true},
+						{"origin": [9.5, 0, -9.5], "size": [2, 4, 2], "uv": [20, 16], "mirror": true},
+						{"origin": [9.5, 0, 9.5], "size": [2, 4, 2], "uv": [20, 16], "mirror": true},
+						{"origin": [-11.5, 0, 9.5], "size": [2, 4, 2], "uv": [20, 16]},
+						{"origin": [-5, 4, 5], "size": [2, 9, 2], "uv": [88, 66]},
+						{"origin": [3, 4, 5], "size": [2, 9, 2], "uv": [98, 66], "mirror": true},
+						{"origin": [3, 4, -7], "size": [2, 9, 2], "uv": [88, 53], "mirror": true},
+						{"origin": [-5, 4, -7], "size": [2, 9, 2], "uv": [98, 53]},
+						{"origin": [-14.5, 14.5, -4], "size": [8, 1, 8], "uv": [86, 89]},
+						{"origin": [-11.5, 15.5, -1], "size": [2, 3, 2], "uv": [61, 99]},
+						{"origin": [9.5, 15.5, -1], "size": [2, 3, 2], "uv": [97, 100], "mirror": true},
+						{"origin": [6.5, 14.5, -4], "size": [8, 1, 8], "uv": [50, 88], "mirror": true}
+					]
+				},
+				{
+					"name": "propellerL",
+					"parent": "Body",
+					"pivot": [10.5, 17, 0],
+					"cubes": [
+						{"origin": [9, 16.5, -9], "size": [3, 1, 6], "uv": [59, 112], "mirror": true},
+						{"origin": [9, 16.5, -9], "size": [3, 1, 6], "pivot": [10.5, 17, 0], "rotation": [0, -90, 0], "uv": [59, 112], "mirror": true},
+						{"origin": [9, 16.5, -10], "size": [2, 1, 1], "uv": [56, 111], "mirror": true},
+						{"origin": [9, 16.5, -10], "size": [2, 1, 1], "pivot": [10.5, 17, 0], "rotation": [0, -90, 0], "uv": [56, 111], "mirror": true},
+						{"origin": [9.5, 16.5, -3], "size": [2, 1, 6], "uv": [25, 114], "mirror": true},
+						{"origin": [9.5, 16.5, -3], "size": [2, 1, 6], "pivot": [10.5, 17, 0], "rotation": [0, -90, 0], "uv": [25, 114], "mirror": true},
+						{"origin": [9, 16.5, 3], "size": [3, 1, 6], "uv": [101, 112], "mirror": true},
+						{"origin": [9, 16.5, 3], "size": [3, 1, 6], "pivot": [10.5, 17, 0], "rotation": [0, -90, 0], "uv": [101, 112], "mirror": true},
+						{"origin": [10, 16.5, 9], "size": [2, 1, 1], "uv": [74, 114], "mirror": true},
+						{"origin": [10, 16.5, 9], "size": [2, 1, 1], "pivot": [10.5, 17, 0], "rotation": [0, -90, 0], "uv": [74, 114], "mirror": true}
+					]
+				},
+				{
+					"name": "propellerR",
+					"parent": "Body",
+					"pivot": [-10.5, 17, 0],
+					"cubes": [
+						{"origin": [-12, 16.5, -9], "size": [3, 1, 6], "uv": [59, 112], "mirror": true},
+						{"origin": [-12, 16.5, -9], "size": [3, 1, 6], "pivot": [-10.5, 17, 0], "rotation": [0, -90, 0], "uv": [59, 112], "mirror": true},
+						{"origin": [-12, 16.5, -10], "size": [2, 1, 1], "uv": [56, 111], "mirror": true},
+						{"origin": [-12, 16.5, -10], "size": [2, 1, 1], "pivot": [-10.5, 17, 0], "rotation": [0, -90, 0], "uv": [56, 111], "mirror": true},
+						{"origin": [-11.5, 16.5, -3], "size": [2, 1, 6], "uv": [25, 114], "mirror": true},
+						{"origin": [-11.5, 16.5, -3], "size": [2, 1, 6], "pivot": [-10.5, 17, 0], "rotation": [0, -90, 0], "uv": [25, 114], "mirror": true},
+						{"origin": [-12, 16.5, 3], "size": [3, 1, 6], "uv": [101, 112], "mirror": true},
+						{"origin": [-12, 16.5, 3], "size": [3, 1, 6], "pivot": [-10.5, 17, 0], "rotation": [0, -90, 0], "uv": [101, 112], "mirror": true},
+						{"origin": [-11, 16.5, 9], "size": [2, 1, 1], "uv": [74, 114], "mirror": true},
+						{"origin": [-11, 16.5, 9], "size": [2, 1, 1], "pivot": [-10.5, 17, 0], "rotation": [0, -90, 0], "uv": [74, 114], "mirror": true}
+					]
+				},
+				{
+					"name": "missile3",
+					"parent": "Body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-14.5, 10.5, -17], "size": [3, 3, 1], "uv": [21, 25]},
+						{"origin": [-15, 10, -16], "size": [4, 4, 1], "uv": [10, 24]}
+					]
+				},
+				{
+					"name": "missile1",
+					"parent": "Body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-9.5, 10.5, -17], "size": [3, 3, 1], "uv": [21, 25]},
+						{"origin": [-10, 10, -16], "size": [4, 4, 1], "uv": [10, 24]}
+					]
+				},
+				{
+					"name": "missile7",
+					"parent": "Body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-14.5, 5.5, -17], "size": [3, 3, 1], "uv": [21, 25]},
+						{"origin": [-15, 5, -16], "size": [4, 4, 1], "uv": [10, 24]}
+					]
+				},
+				{
+					"name": "missile5",
+					"parent": "Body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-9.5, 5.5, -17], "size": [3, 3, 1], "uv": [21, 25]},
+						{"origin": [-10, 5, -16], "size": [4, 4, 1], "uv": [10, 24]}
+					]
+				},
+				{
+					"name": "missile8",
+					"parent": "Body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [11, 5, -16], "size": [4, 4, 1], "uv": [10, 24]},
+						{"origin": [11.5, 5.5, -17], "size": [3, 3, 1], "uv": [21, 25]}
+					]
+				},
+				{
+					"name": "missile6",
+					"parent": "Body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [6.5, 5.5, -17], "size": [3, 3, 1], "uv": [21, 25]},
+						{"origin": [6, 5, -16], "size": [4, 4, 1], "uv": [10, 24]}
+					]
+				},
+				{
+					"name": "missile2",
+					"parent": "Body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [6.5, 10.5, -17], "size": [3, 3, 1], "uv": [21, 25]},
+						{"origin": [6, 10, -16], "size": [4, 4, 1], "uv": [10, 24]}
+					]
+				},
+				{
+					"name": "missile4",
+					"parent": "Body",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [11.5, 10.5, -17], "size": [3, 3, 1], "uv": [21, 25]},
+						{"origin": [11, 10, -16], "size": [4, 4, 1], "uv": [10, 24]}
+					]
+				}
+			]
+		}
+	]
+}
