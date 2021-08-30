@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.util.text.Color;
 import net.minecraft.util.text.StringTextComponent;
@@ -161,6 +162,23 @@ public class MathUtil {
             pos.setPos(originPos.getX(),originPos.getY(), originPos.getZ());
         }
         return pos;
+    }
+
+    public static Vector3d rotateVector(Vector3d vec, Vector3d axis, double theta) {
+        double u = axis.x;
+        double v = axis.y;
+        double w = axis.z;
+
+        double xPrime = u*(u*vec.x + v*vec.y + w*vec.z)*(1d - Math.cos(theta))
+                + vec.x*Math.cos(theta)
+                + (-w*vec.y + v*vec.z)*Math.sin(theta);
+        double yPrime = v*(u*vec.x + v*vec.y + w*vec.z)*(1d - Math.cos(theta))
+                + vec.y*Math.cos(theta)
+                + (w*vec.x - u*vec.z)*Math.sin(theta);
+        double zPrime = w*(u*vec.x + v*vec.y + w*vec.z)*(1d - Math.cos(theta))
+                + vec.z*Math.cos(theta)
+                + (-v*vec.x + u*vec.y)*Math.sin(theta);
+        return new Vector3d(xPrime, yPrime, zPrime);
     }
 
 }

@@ -1,6 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.PlaneFlyMovementController;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.BlockState;
@@ -15,6 +17,7 @@ import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.BeeEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,7 +29,9 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -45,6 +50,8 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
+
+import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
 
 public abstract class AbstractEntityDrone extends CreatureEntity implements IAnimatable {
     public AnimationFactory factory = new AnimationFactory(this);
@@ -77,20 +84,35 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         return this.dataManager.get(OWNER_UUID);
     }
 
+    public boolean hasOwner(){
+        return this.getOwnerUUID().isPresent();
+    }
+
+    public boolean shouldAttackEntity(LivingEntity targetEntity, LivingEntity owner){
+
+        if(this.getOwner().isPresent()) {
+            if (targetEntity instanceof TameableEntity) {
+
+                if(targetEntity instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) targetEntity).getOwner() != null){
+                    return PAConfig.CONFIG.EnablePVP.get();
+                }
+
+                return !((TameableEntity) targetEntity).isOwner((LivingEntity) this.getOwner().get());
+            }
+        }
+        return true;
+    }
+
     public void setOwner(@Nullable LivingEntity owner) {
         this.getDataManager().set(OWNER_UUID, owner == null? Optional.empty() : Optional.of(owner.getUniqueID()));
     }
 
-    public boolean isOwner(LivingEntity owner){
-        return this.getOwnerUUID().isPresent() && this.getOwnerUUID().get() == owner.getUniqueID();
+    public void setOwnerFromUUID(@Nullable UUID ownerUUID) {
+        this.getDataManager().set(OWNER_UUID, ownerUUID == null? Optional.empty() : Optional.of(ownerUUID));
     }
 
-    @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
-        if (!this.getEntityWorld().isRemote()) {
-            this.getOwnerUUID().ifPresent((UUID)-> compound.putUniqueId("owner", UUID));
-        }
+    public boolean isOwner(LivingEntity owner){
+        return this.getOwnerUUID().isPresent() && this.getOwnerUUID().get() == owner.getUniqueID();
     }
 
     public boolean isOutofFuel() {
@@ -98,14 +120,20 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     }
 
     @Override
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        if(this.getOwnerUUID().isPresent()) {
+            UUID OwnerID = this.getOwnerUUID().get();
+            compound.putUniqueId("owner", OwnerID);
+        }
+    }
+
+    @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        if (!this.getEntityWorld().isRemote()) {
-            if (compound.contains("owner")) {
-                Entity entity = ((ServerWorld) this.getEntityWorld()).getEntityByUuid(compound.getUniqueId("owner"));
-                if (entity instanceof LivingEntity) {
-                    this.setOwner((LivingEntity) entity);
-                }
+        if (this.getServer() != null) {
+            if (compound.hasUniqueId("owner")) {
+                this.setOwnerFromUUID(compound.getUniqueId("owner"));
             }
         }
     }
@@ -118,6 +146,9 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
                 this.serializePlane(this.getEntityWorld());
                 return ActionResultType.SUCCESS;
             }
+        }
+        else if(!this.getOwner().isPresent()){
+            this.remove();
         }
 
         return super.applyPlayerInteraction(player, vec, hand);
@@ -192,7 +223,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
     class FlyRandomlyGoal extends Goal {
         FlyRandomlyGoal() {
-            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+            this.setMutexFlags(EnumSet.of(MOVE));
         }
 
         /**
@@ -239,6 +270,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     class DroneFollowOwnerGoal extends Goal {
 
         public DroneFollowOwnerGoal() {
+            this.setMutexFlags(EnumSet.of(MOVE));
         }
 
         @Override
@@ -259,7 +291,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
 
             if (AbstractEntityDrone.this.getOwner().isPresent()) {
-                boolean cond1 = AbstractEntityDrone.this.getDistance(AbstractEntityDrone.this.getOwner().get()) >= 5.0D;
+                boolean cond1 = AbstractEntityDrone.this.getDistance(AbstractEntityDrone.this.getOwner().get()) >= 20.0D;
                 boolean cond2 = !AbstractEntityDrone.this.getLeashed();
                 boolean cond3 = !AbstractEntityDrone.this.isPassenger();
 
@@ -269,7 +301,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
                     AbstractEntityDrone.this.getNavigator().tryMoveToEntityLiving(AbstractEntityDrone.this.getOwner().get(), 1);
                 }
 
-                if (AbstractEntityDrone.this.getDistance(AbstractEntityDrone.this.getOwner().get()) > 20) {
+                if (AbstractEntityDrone.this.getDistance(AbstractEntityDrone.this.getOwner().get()) > 32) {
                     this.tryToTeleportNearEntity();
                 }
 
@@ -329,5 +361,14 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
                 }
             }
         }
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float p_70097_2_) {
+        if(source.getTrueSource() == this){
+            return false;
+        }
+
+        return super.attackEntityFrom(source, p_70097_2_);
     }
 }

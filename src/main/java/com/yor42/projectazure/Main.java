@@ -9,10 +9,12 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRend
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityGunBulletRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectileTorpedoRenderer;
+import com.yor42.projectazure.client.renderer.entity.projectile.MissileDroneMissileRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
@@ -146,6 +148,7 @@ public class Main
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.GUN_BULLET.get(), EntityGunBulletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(registerTE.METAL_PRESS.get(), MachineMetalPressRenderer::new);
         ClientRegistry.bindTileEntityRenderer(registerTE.DRYDOCK.get(), DrydockControllerRenderer::new);

@@ -4,6 +4,7 @@ import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.Hand;
@@ -54,6 +55,12 @@ public class EntityProjectileBullet extends ThrowableEntity {
             super.onEntityHit(rayTraceResult);
             this.remove();
         }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        ProjectileHelper.rotateTowardsMovement(this, 0.5F);
     }
 
     @Override

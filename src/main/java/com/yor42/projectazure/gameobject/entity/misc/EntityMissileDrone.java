@@ -1,12 +1,22 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
+import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.entity.ai.goals.DroneRangedAttackGoal;
+import com.yor42.projectazure.gameobject.entity.ai.targetAI.DroneOwnerAttackedTargetGoal;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -21,6 +31,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.setup.register.registerItems.DRONE_BAMISSILE;
 import static com.yor42.projectazure.setup.register.registerItems.WildcatHP;
+import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_DRONE_MISSILE;
 
 public class EntityMissileDrone extends AbstractEntityDrone{
 
@@ -29,9 +40,13 @@ public class EntityMissileDrone extends AbstractEntityDrone{
 
     private static final int MAX_AMMO = 8;
 
-    public EntityMissileDrone(EntityType<? extends CreatureEntity> type, World worldIn) {
+    public EntityMissileDrone(EntityType<? extends EntityMissileDrone> type, World worldIn) {
 
         super(type, worldIn);
+    }
+
+    public boolean hasAmmo(){
+        return this.getammo()>0;
     }
 
     @Override
@@ -80,12 +95,17 @@ public class EntityMissileDrone extends AbstractEntityDrone{
         return this.getDataManager().get(FireTick);
     }
 
+    public int getFiredelay(){
+        return 40;
+    }
+
     public void setFiringTick(int value){
         this.getDataManager().set(FireTick, value);
     }
 
     public int getammo() {
-        return this.dataManager.get(AMMO);
+        return 8;
+        //return this.dataManager.get(AMMO);
     }
 
     public void setAmmo(int value){
@@ -100,11 +120,32 @@ public class EntityMissileDrone extends AbstractEntityDrone{
         return 0;
     }
 
+    public void FireMissile(LivingEntity target){
+        double x = target.getPosX() - (this.getPosX());
+        double y = target.getPosY() - (0.5D + this.getPosYHeight(0.5D));
+        double z = target.getPosZ() - (this.getPosZ());
+
+        EntityMissileDroneMissile droneMissile = PROJECTILE_DRONE_MISSILE.create(this.getEntityWorld());
+        if(droneMissile != null){
+            droneMissile.shoot(this, target, x,y,z);
+            this.setFiringTick(this.getFireingTick());
+            this.setAmmo(this.getammo()-1);
+        }
+    }
+
     @Override
     protected void registerData() {
         super.registerData();
         this.dataManager.register(FireTick, 0);
         this.dataManager.register(AMMO, 0);
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new DroneRangedAttackGoal(this));
+        super.registerGoals();
+
+        this.targetSelector.addGoal(1, new DroneOwnerAttackedTargetGoal(this));
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

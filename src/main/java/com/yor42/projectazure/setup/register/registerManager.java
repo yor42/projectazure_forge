@@ -16,6 +16,7 @@ import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import com.yor42.projectazure.libs.Constants;
@@ -116,12 +117,15 @@ public class registerManager {
     public static final EntityType<EntityProjectileBullet> PROJECTILE_GUN_BULLET = EntityType.Builder.<EntityProjectileBullet>create(EntityProjectileBullet::new, EntityClassification.MISC).size(0.2F, 0.2F).build(ModResourceLocation("projectilebullet").toString());
     public static final RegistryObject<EntityType<EntityProjectileBullet>> GUN_BULLET = ENTITIES.register("entitybullet", () -> PROJECTILE_GUN_BULLET);
 
+    public static final EntityType<EntityMissileDroneMissile> PROJECTILE_DRONE_MISSILE = EntityType.Builder.create(EntityMissileDroneMissile::new, EntityClassification.MISC).size(0.2F, 0.2F).build(ModResourceLocation("projectiledrone_missile").toString());
+    public static final RegistryObject<EntityType<EntityMissileDroneMissile>> DRONE_MISSILE = ENTITIES.register("projectiledrone_missile", () -> PROJECTILE_DRONE_MISSILE);
+
     //Planes
     public static final EntityType<EntityF4fWildcat> PLANEF4FWildCat = EntityType.Builder.<EntityF4fWildcat>create(EntityF4fWildcat::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString());
     public static final RegistryObject<EntityType<EntityF4fWildcat>> F4FWildCat = ENTITIES.register("planef4fwildcat", () -> PLANEF4FWildCat);
 
-    public static final EntityType<EntityMissileDrone> ENTITYTYPE_MISSILEDRONE = EntityType.Builder.<EntityMissileDrone>create(EntityMissileDrone::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString());
-    public static final RegistryObject<EntityType<EntityMissileDrone>> MISSILEDRONE = ENTITIES.register("missile_drone", () -> ENTITYTYPE_MISSILEDRONE);
+    public static final EntityType<EntityMissileDrone> ENTITYTYPE_MISSILEDRONE = EntityType.Builder.<EntityMissileDrone>create(EntityMissileDrone::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("missiledrone").toString());
+    public static final RegistryObject<EntityType<EntityMissileDrone>> MISSILEDRONE = ENTITIES.register("missiledrone", () -> ENTITYTYPE_MISSILEDRONE);
 
     public static void register() {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
