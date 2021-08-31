@@ -14,10 +14,14 @@ import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.items.SlotItemHandler;
+
+import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -63,6 +67,11 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         matrixStack.push();
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+
+        for(int l = 0; l<host.getSkillItemCount(); l++){
+            this.blit(matrixStack, this.guiLeft + 96, this.guiTop + 4+l*18, 153, 189, 16,16);
+        }
+
         this.blit(matrixStack, this.guiLeft + 93, this.guiTop + 75, 173, 88, (int) (76*(this.affection/this.host.getmaxAffection())), 9);
         this.blit(matrixStack, this.guiLeft+43, this.guiTop+89, 173, 85,  (int) (45*(this.host.getExp()/this.host.getMaxExp())), 2);
         matrixStack.pop();

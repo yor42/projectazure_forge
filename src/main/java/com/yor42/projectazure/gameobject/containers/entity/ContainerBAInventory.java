@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,80 +25,27 @@ import static com.yor42.projectazure.setup.register.registerManager.BA_CONTAINER
 public class ContainerBAInventory extends Container {
 
     private ItemStackHandler AmmoStack;
-    private IItemHandlerModifiable equipment;
+    private final AbstractEntityCompanion companion;
 
 
     public ContainerBAInventory(int ID, PlayerInventory inventory) {
-        super(BA_CONTAINER.get(), ID);
-        ItemStackHandler dummyStackHandler = new ItemStackHandler(12);
-        ItemStackHandler dummyEquipmentHandler = new ItemStackHandler(6);
-        ItemStackHandler dummyAmmoHandler = new ItemStackHandler(8);
-
-        //mainhand
-        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 0, 10, 30));
-
-        //Offhands
-        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 1, 10, 12));
-
-        //armor(head/chest/legging/boots)
-        for (int l = 0; l < 4; l++) {
-            int finalL = l;
-            this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 2 + finalL, 85, 16 + finalL * 18) {
-                public int getSlotStackLimit() {
-                    return 1;
-                }
-
-                @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
-                    return stack.getItem() instanceof ArmorItem;
-                }
-            });
-        }
-
-        for (int m = 0; m < 4; m++) {
-            for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(dummyStackHandler, n + 3 * m, 113 + n * 18, 27 + m * 18));
-            }
-        }
-
-        for (int m = 0; m < 4; m++) {
-            for (int n = 0; n < 2; n++) {
-                this.addSlot(new SlotItemHandler(dummyAmmoHandler, n + 2 * m, 180 + n * 18, 15 + m * 18){
-                    @Override
-                    public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemMagazine;
-                    }
-                });
-            }
-        }
-
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
-            }
-        }
-
-        for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inventory, k, 8 + k * 18, 168));
-        }
+        this(ID, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), Main.PROXY.getSharedMob());
     }
 
-    public ContainerBAInventory(int ID, PlayerInventory inventory, EntityGunUserBase companion) {
+    public ContainerBAInventory(int ID, PlayerInventory inventory, ItemStackHandler Inventory, IItemHandlerModifiable Equipments, ItemStackHandler Ammo, AbstractEntityCompanion companion) {
         super(BA_CONTAINER.get(), ID);
-        ItemStackHandler stack = companion.getInventory();
-        this.equipment = companion.getEquipment();
-        this.AmmoStack = companion.getAmmoStorage();
-
+        this.AmmoStack = Ammo;
+        this.companion = companion;
         //mainhand
-        this.addSlot(new SlotItemHandler(this.equipment, 0, 10, 30));
+        this.addSlot(new SlotItemHandler(Equipments, 0, 10, 30));
 
         //Offhands
-        this.addSlot(new SlotItemHandler(this.equipment, 1, 10, 12));
+        this.addSlot(new SlotItemHandler(Equipments, 1, 10, 12));
 
         //armor(head/chest/legging/boots)
         for (int l = 0; l < 4; l++) {
             int finalL = l;
-            this.addSlot(new SlotItemHandler(this.equipment, 2 + finalL, 85, 16 + finalL * 18) {
+            this.addSlot(new SlotItemHandler(Equipments, 2 + finalL, 85, 16 + finalL * 18) {
                 public int getSlotStackLimit() {
                     return 1;
                 }
@@ -109,9 +57,18 @@ public class ContainerBAInventory extends Container {
             });
         }
 
+        for(int l = 0; l<companion.getSkillItemCount(); l++){
+            this.addSlot(new SlotItemHandler(Inventory, 12+l, 67, 34+l*18){
+                @Override
+                public boolean isItemValid(@Nonnull ItemStack stack) {
+                    return ContainerBAInventory.this.companion.isSkillItem(stack);
+                }
+            });
+        }
+
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(stack, n + 3 * m, 113 + n * 18, 27 + m * 18));
+                this.addSlot(new SlotItemHandler(Inventory, n + 3 * m, 113 + n * 18, 27 + m * 18));
             }
         }
 
@@ -231,7 +188,7 @@ public class ContainerBAInventory extends Container {
         @Nullable
         @Override
         public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerBAInventory(openContainerId, inventory, this.companion);
+            return new ContainerBAInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), this.companion);
         }
     }
 }

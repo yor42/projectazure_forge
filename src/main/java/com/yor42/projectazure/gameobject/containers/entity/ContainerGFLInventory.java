@@ -23,14 +23,16 @@ import static com.yor42.projectazure.setup.register.registerManager.GFL_INVENTOR
 
 public class ContainerGFLInventory extends Container {
 
+    private final AbstractEntityCompanion companion;
+
     public ContainerGFLInventory(int id, PlayerInventory inventory) {
-        this(id, inventory, new ItemStackHandler(12), new ItemStackHandler(6), new ItemStackHandler(8));
+        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), Main.PROXY.getSharedMob());
     }
 
 
-    public ContainerGFLInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo) {
+    public ContainerGFLInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(GFL_INVENTORY_TYPE, id);
-        final AbstractEntityCompanion entity = Main.PROXY.getSharedMob();
+        this.companion = companion;
         //ZA HANDO
         for(int k = 0; k<2; k++) {
             this.addSlot(new SlotItemHandler(EntityEquipment, k, 96, 40+(18*k)));
@@ -64,6 +66,15 @@ public class ContainerGFLInventory extends Container {
                     }
                 });
             }
+        }
+
+        for(int l = 0; l<companion.getSkillItemCount(); l++){
+            this.addSlot(new SlotItemHandler(entityInventory, 12+l, 96, 4+l*18){
+                @Override
+                public boolean isItemValid(@Nonnull ItemStack stack) {
+                    return ContainerGFLInventory.this.companion.isSkillItem(stack);
+                }
+            });
         }
 
         for (int i = 0; i < 3; ++i) {
@@ -104,7 +115,7 @@ public class ContainerGFLInventory extends Container {
         @Nullable
         @Override
         public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerGFLInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage());
+            return new ContainerGFLInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), this.companion);
         }
     }
 

@@ -26,82 +26,26 @@ import javax.annotation.Nullable;
 public class ContainerKansenInventory extends Container {
 
     private static final EquipmentSlotType[] EQUIPMENT = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-    private EntityKansenBase host;
-    private ItemStackHandler Stack, AmmoStack;
-    private IItemHandlerModifiable equipment;
+    private final EntityKansenBase host;
+    private final ItemStackHandler AmmoStack;
+    private final IItemHandlerModifiable equipment;
 
     //client
     public ContainerKansenInventory(int id, PlayerInventory playerInventory) {
-        super(registerManager.SHIP_CONTAINER.get(), id);
-
-        ItemStackHandler dummyStackHandler = new ItemStackHandler(1);
-        ItemStackHandler dummyInventory = new ItemStackHandler(12);
-        ItemStackHandler dummyEquipmentHandler = new ItemStackHandler(19);
-        ItemStackHandler dummyAmmoHandler = new ItemStackHandler(8);
-
-        //rigging
-        this.addSlot(new SlotRigging(dummyStackHandler, 0, 152, 35, (EntityKansenBase) Main.PROXY.getSharedMob()));
-
-        //mainhand
-        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 0, 152, 89));
-
-        //Offhands
-        this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 1, 134, 89));
-
-        //armor(head/chest/legging/boots)
-        for (int l = 0; l < 4; l++) {
-            int finalL = l;
-            this.addSlot(new SlotItemHandler(dummyEquipmentHandler, 3 + finalL, 75, 35 + finalL * 18) {
-                public int getSlotStackLimit() {
-                    return 1;
-                }
-
-                @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
-                    return stack.getItem() instanceof ArmorItem;
-                }
-            });
-        }
-
-        for (int m = 0; m < 4; m++) {
-            for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(dummyInventory, n + 3 * m, 11 + n * 18, 19 + m * 18));
-            }
-        }
-
-        for (int m = 0; m < 4; m++) {
-            for (int n = 0; n < 2; n++) {
-                this.addSlot(new SlotItemHandler(dummyAmmoHandler, n + 2 * m, 180 + n * 18, 15 + m * 18){
-                    @Override
-                    public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemCannonshell;
-                    }
-                });
-            }
-        }
-
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
-            }
-        }
-
-        for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 168));
-        }
+        this(id, playerInventory, (EntityKansenBase) Main.PROXY.getSharedMob());
     }
 
     //constructor for actual use
     public ContainerKansenInventory(int id, PlayerInventory playerInventory, EntityKansenBase entity) {
         super(registerManager.SHIP_CONTAINER.get(), id);
         this.host = entity;
-        this.Stack = entity.getShipRiggingStorage();
+        ItemStackHandler stack = entity.getShipRiggingStorage();
         this.equipment = this.host.getEquipment();
         this.AmmoStack = this.host.getCannonShellStorage();
 
 
         //rigging
-        this.addSlot(new SlotRigging(this.Stack, 0, 152, 35, entity));
+        this.addSlot(new SlotRigging(stack, 0, 152, 35, entity));
 
         //mainhand
         this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));

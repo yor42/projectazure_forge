@@ -81,10 +81,7 @@ import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static net.minecraft.util.Hand.MAIN_HAND;
@@ -253,7 +250,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected final ItemStackHandler Inventory = new ItemStackHandler(13){
+    protected final ItemStackHandler Inventory = new ItemStackHandler(12+this.getSkillItemCount()){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 
@@ -1341,6 +1338,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getDataManager().set(SKILLDELAYTICK, value*20);
     }
 
+    public int getSkillItemCount(){
+        return 1;
+    }
+
     public void updateSkillDelay(){
         int skilldelay = this.getDataManager().get(SKILLDELAYTICK);
         if(skilldelay>0){
@@ -1368,8 +1369,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setSkillDelayTick(2400);
     }
 
-    public ItemStack getSkillItem(){
-        return this.getInventory().getStackInSlot(12);
+    public List<ItemStack> getSkillItem(){
+        List<ItemStack> itemstack = new ArrayList<>();
+        for(int k = 0; k<this.getSkillItemCount(); k++){
+            itemstack.add(this.getInventory().getStackInSlot(12+k));
+        }
+        return itemstack;
     }
 
     public boolean isSkillItem(ItemStack stack){
@@ -1377,7 +1382,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean hasSkillItem(){
-        return this.isSkillItem(this.getSkillItem());
+        List<ItemStack> itemstack = getSkillItem();
+        for (ItemStack itemStack : itemstack) {
+            if (!this.isSkillItem(itemStack)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

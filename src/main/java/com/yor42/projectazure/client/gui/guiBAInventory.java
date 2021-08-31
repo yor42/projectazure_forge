@@ -336,6 +336,9 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        for(int i = 0; i<this.host.getSkillItemCount(); i++) {
+            this.blit(matrixStack, this.x + 67, this.y + 34+i*18, 1, 194, 17, 17);
+        }
         this.blit(matrixStack, this.x+backgroundWidth, this.y, 176, 104, 43, 90);
         this.blit(matrixStack, this.x+26, this.y+87, 176, 44, expVal, 2);
         matrixStack.pop();

@@ -25,7 +25,7 @@ public class ContainerAKNInventory extends Container {
 
     //C l i e n t
     public ContainerAKNInventory(int id, PlayerInventory inventory) {
-        this(id, inventory, new ItemStackHandler(12), new ItemStackHandler(6), new ItemStackHandler(8));
+        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8));
     }
 
     public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo) {
