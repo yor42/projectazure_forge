@@ -12,6 +12,7 @@ import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectile
 import com.yor42.projectazure.client.renderer.entity.projectile.MissileDroneMissileRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
 import com.yor42.projectazure.events.ModBusEventHandler;
+import com.yor42.projectazure.events.ModBusEventHandlerClient;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
@@ -154,6 +155,8 @@ public class Main
         ClientRegistry.bindTileEntityRenderer(registerTE.DRYDOCK.get(), DrydockControllerRenderer::new);
         ClientRegistry.bindTileEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
 
+        ModBusEventHandlerClient.setup();
+
         RenderingRegistry.registerEntityRenderingHandler(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
         ClientRegisterManager.registerScreen();
     }
@@ -188,9 +191,10 @@ and YOU <3
 This mod contains codes from these dev/mods:
 Botania by Vazkii on Shift-Tooltip
 Techgun by pWn3d1337 on gun related stuff
-Code by Fakedomi for Container Server<>Client sync
+Fakedomi for Container Server<>Client sync
+MrCrayfich/Ocelot on Gun related Stuff
 
 Are you missing from this credit? Let me know on:
 yor42#0420
-Issue tab of this project:
+Issue tab of this project
  */

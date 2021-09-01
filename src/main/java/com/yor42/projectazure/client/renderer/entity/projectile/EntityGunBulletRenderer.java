@@ -31,8 +31,8 @@ public class EntityGunBulletRenderer extends EntityRenderer<EntityProjectileBull
         Model model = new modelProjectileGunBullet();
         IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
         matrixStackIn.push();
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw)));
-        matrixStackIn.rotate(Vector3f.XP.rotationDegrees(-MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
+        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
+        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
         model.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
         matrixStackIn.pop();
     }

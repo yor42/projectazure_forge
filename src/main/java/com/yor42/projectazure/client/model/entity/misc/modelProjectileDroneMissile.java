@@ -8,6 +8,8 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 
 public class modelProjectileDroneMissile extends EntityModel<EntityMissileDroneMissile> {
 	private final ModelRenderer Body;
@@ -40,9 +42,6 @@ public class modelProjectileDroneMissile extends EntityModel<EntityMissileDroneM
 
 	@Override
 	public void setRotationAngles(EntityMissileDroneMissile entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		//previously the render function, render code was moved to a method below
-		Body.rotateAngleX = headPitch * 0.017453292F;
-		Body.rotateAngleY = netHeadYaw * 0.017453292F;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
+import com.yor42.projectazure.events.GunFireEvent;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import net.minecraft.entity.Entity;
@@ -9,6 +10,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -65,8 +67,11 @@ public class DoGunAnimationPacket {
                             controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
                         }
                         else{
+                            if(MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(playerEntity, offStack)))
+                                return;
                             controller.markNeedsReload();
                             controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
+                            MinecraftForge.EVENT_BUS.post(new GunFireEvent.PostFire(playerEntity, offStack));
                         }
 
 
@@ -75,7 +80,6 @@ public class DoGunAnimationPacket {
                 else{
                     if(mainstck.getItem() instanceof ItemGunBase){
                         AnimationController controller = GeckoLibUtil.getControllerForStack(((ItemGunBase) mainstck.getItem()).getFactory(), mainstck, ((ItemGunBase) mainstck.getItem()).getFactoryName());
-                        ((ItemGunBase) mainstck.getItem()).shootGun(mainstck, clientWorld, playerEntity, message.isZooming, Hand.MAIN_HAND, null);
 
                         if(message.shouldPlayReloadAnimation) {
                             controller.markNeedsReload();
@@ -83,7 +87,10 @@ public class DoGunAnimationPacket {
                         }
                         else{
                             controller.markNeedsReload();
+                            if(MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(playerEntity, mainstck)))
+                                return;
                             controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
+                            MinecraftForge.EVENT_BUS.post(new GunFireEvent.PostFire(playerEntity, mainstck));
                         }
                     }
                 }

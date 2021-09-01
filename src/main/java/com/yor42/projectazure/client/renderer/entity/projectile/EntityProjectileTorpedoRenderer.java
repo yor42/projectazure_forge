@@ -6,6 +6,7 @@ import com.yor42.projectazure.client.renderer.GeoProjectileRenderer;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 
@@ -19,8 +20,8 @@ public class EntityProjectileTorpedoRenderer extends GeoProjectileRenderer<Entit
     public void render(EntityProjectileTorpedo entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         matrixStackIn.scale(0.4F, 0.4F, 0.4F);
         matrixStackIn.translate(0,0.75,0);
-        matrixStackIn.rotate(new Quaternion(Vector3f.XP, entityYaw, false));
-        matrixStackIn.rotate(new Quaternion(Vector3f.YP, entityIn.rotationPitch, false));
+        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
+        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 }

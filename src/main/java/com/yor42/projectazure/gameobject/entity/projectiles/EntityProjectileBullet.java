@@ -60,7 +60,7 @@ public class EntityProjectileBullet extends ThrowableEntity {
     @Override
     public void tick() {
         super.tick();
-        ProjectileHelper.rotateTowardsMovement(this, 0.5F);
+        ProjectileHelper.rotateTowardsMovement(this, 0F);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class EntityProjectileBullet extends ThrowableEntity {
 
     public void ShootFromPlayer(Entity Shooter, float pitch, float yaw, float offset, float velocity, float inAccuracy, Hand firingHand) {
 
-        this.setPosition(Shooter.getPosX(), Shooter.getPosYEye(), Shooter.getPosZ());
+        this.setPosition(Shooter.getPosX(), Shooter.getPosYEye()-0.3F, Shooter.getPosZ());
 
         float f = -MathHelper.sin(yaw * ((float)Math.PI / 180F)) * MathHelper.cos(pitch * ((float)Math.PI / 180F));
         float f1 = -MathHelper.sin((pitch + offset) * ((float)Math.PI / 180F));

@@ -1,6 +1,7 @@
 package com.yor42.projectazure.events;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.network.packets.GunFiredPacket;
 import com.yor42.projectazure.network.proxy.ClientProxy;
@@ -16,6 +17,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -59,7 +61,15 @@ public class ForgeBusEventHandlerClient {
                     if (!MainStack.isEmpty() && MainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) MainStack.getItem()).ShouldFireWithLeftClick()) {
                         if (client.keyFirePressedMainhand) {
                             ItemGunBase gun = ((ItemGunBase) MainStack.getItem());
-                            Main.NETWORK.sendToServer(new GunFiredPacket(false, false));
+                            ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(event.player);
+                            int mainDelay = capability.getMainHandFireDelay();
+                            int offDelay = capability.getOffHandFireDelay();
+                            if(mainDelay <= 0) {
+                                if(MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(event.player, event.player.getHeldItemMainhand())))
+                                    return;
+                                Main.NETWORK.sendToServer(new GunFiredPacket(false, false));
+                                MinecraftForge.EVENT_BUS.post(new GunFireEvent.PostFire(event.player, event.player.getHeldItemMainhand()));
+                            }
 
                             if (gun.isSemiAuto()) {
                                 client.keyFirePressedMainhand = false;

@@ -62,6 +62,8 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     private final int roundsPerReload;
     protected final String controllerName = "gunController";
 
+    private float recoil = 1.0F;
+
     public static final int FIRING = 1;
     public static final int RELOADING = 2;
 
@@ -82,6 +84,14 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
         this.MagItem = MagItem;
         this.GunClass = gunclass;
         GeckoLibNetwork.registerSyncable(this);
+    }
+
+    public void setRecoil(float recoil){
+        this.recoil = recoil;
+    }
+
+    public float getRecoil(){
+        return 5F;
     }
 
     public SoundEvent getFireSound() {
@@ -335,7 +345,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return false;
+        return slotChanged;
     }
 
     @Override

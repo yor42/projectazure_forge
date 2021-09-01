@@ -49,14 +49,6 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     public void shoot(LivingEntity shooter, LivingEntity targetEntity, double x, double y, double z){
         this.setTarget(targetEntity);
         this.setShooter(shooter);
-        double leanght = (double) MathHelper.sqrt(x * x + y * y + z * z);
-        if (leanght != 0.0D) {
-            /*
-            this.accelerationX = x / leanght * 0.1D;
-            this.accelerationY = y / leanght * 0.1D;
-            this.accelerationZ = z / leanght * 0.1D;
-            */
-        }
         this.setMotion(shooter.getLookVec().scale(0.5));
         BlockPos blockpos = shooter.getPosition().offset(shooter.getHorizontalFacing());
         double d0 = (double)blockpos.getX() + 0.5D;
@@ -120,11 +112,23 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
         } else {
             this.remove();
         }
+        /*
+        Vector3d vector3d = this.getMotion();
+        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
+            float f = MathHelper.sqrt(horizontalMag(vector3d));
+            this.rotationYaw = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
+            this.rotationPitch = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
+            this.prevRotationYaw = this.rotationYaw;
+            this.prevRotationPitch = this.rotationPitch;
+        }
+
+         */
+
         if(!this.getEntityWorld().isRemote()){
 
             if(this.targetEntity != null){
                 Vector3d motion = this.getMotion();
-                double speed = motion.length();
+                double speed = motion.length()*0.5;
 
                 Vector3d v2 = new Vector3d(this.targetEntity.getPosX(), this.targetEntity.getPosY()+0.5, this.targetEntity.getPosZ()).subtract(new Vector3d(this.getPosX(), this.getPosY(), this.getPosZ())).normalize();
                 Vector3d v1 = motion.normalize();
@@ -135,6 +139,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
                 //angle = Math.min(angle, MAX_TURN_ANGLE);
 
                 if (angle < TURNLIMIT) {
+                    motion = v2.scale(speed);
                     motion = v2.scale(speed);
                 }else {
                     motion = MathUtil.rotateVector(v1, axis, TURNLIMIT).scale(speed);
@@ -159,8 +164,18 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
             }
 
         }
-        ProjectileHelper.rotateTowardsMovement(this, 0);
         Vector3d vector3d = this.getMotion();
+        /*
+
+        double d4 = vector3d.y;
+        float f1 = MathHelper.sqrt(horizontalMag(vector3d));
+        this.rotationPitch = (float)(MathHelper.atan2(d4, f1) * (double)(180F / (float)Math.PI));
+        this.rotationPitch = func_234614_e_(this.prevRotationPitch, this.rotationPitch);
+        this.rotationYaw = func_234614_e_(this.prevRotationYaw, this.rotationYaw);
+
+         */
+
+        ProjectileHelper.rotateTowardsMovement(this, 0);
         if(this.getEntityWorld().isRemote()){
             this.world.addParticle(ParticleTypes.FLAME, this.getPosX() - vector3d.x, this.getPosY() - vector3d.y + 0.15D, this.getPosZ() - vector3d.z, 0.0D, 0.0D, 0.0D);
         }

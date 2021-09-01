@@ -38,6 +38,8 @@ public class MissileDroneMissileRenderer extends EntityRenderer<EntityMissileDro
         IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
         matrixStackIn.push();
         matrixStackIn.translate(0,-0.7,0);
+        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
+        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
         matrixStackIn.scale(0.5F,0.5F,0.5F);
         model.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
         matrixStackIn.pop();
