@@ -295,8 +295,10 @@ public class ItemStackUtils {
     }
 
     public static void setAmmoFull(ItemStack stack){
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
-        compoundNBT.putInt("Ammo", ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo());
+        if(stack.getItem() instanceof ICraftingTableReloadable) {
+            CompoundNBT compoundNBT = stack.getOrCreateTag();
+            compoundNBT.putInt("Ammo", ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo());
+        }
     }
 
     public static ItemStack addAmmo(ItemStack stack, int count) {

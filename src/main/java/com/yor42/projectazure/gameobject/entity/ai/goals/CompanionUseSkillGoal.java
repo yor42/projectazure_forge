@@ -27,6 +27,7 @@ public class CompanionUseSkillGoal extends Goal {
     @Override
     public void startExecuting() {
         if(this.companion.getAttackTarget() != null && !this.isSkillFinished) {
+            this.companion.setUsingSkill(false);
             if(this.companion.performOneTimeSkill(this.companion.getAttackTarget())){
                 this.isSkillFinished = true;
             }

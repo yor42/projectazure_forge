@@ -261,7 +261,8 @@ public class enums {
         AMMO_5_56,
         AMMO_45,
         AMMO_9MM,
-        TORPEDO
+        TORPEDO,
+        DRONE_MISSILE
     }
 
     public enum Morale{

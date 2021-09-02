@@ -36,17 +36,12 @@ import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_D
 public class EntityMissileDrone extends AbstractEntityDrone{
 
     protected static final DataParameter<Integer> FireTick = EntityDataManager.createKey(EntityMissileDrone.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> AMMO = EntityDataManager.createKey(EntityMissileDrone.class, DataSerializers.VARINT);
 
     private static final int MAX_AMMO = 8;
 
     public EntityMissileDrone(EntityType<? extends EntityMissileDrone> type, World worldIn) {
 
         super(type, worldIn);
-    }
-
-    public boolean hasAmmo(){
-        return this.getammo()>0;
     }
 
     @Override
@@ -103,23 +98,6 @@ public class EntityMissileDrone extends AbstractEntityDrone{
         this.getDataManager().set(FireTick, value);
     }
 
-    public int getammo() {
-        return 8;
-        //return this.dataManager.get(AMMO);
-    }
-
-    public void setAmmo(int value){
-        this.dataManager.set(AMMO, value);
-    }
-
-    public int useAmmo(){
-        if(this.getammo()>0) {
-            int ammoAfterUse = Math.min(this.getammo() - 1,0);
-            this.setAmmo(ammoAfterUse);
-        }
-        return 0;
-    }
-
     public void FireMissile(LivingEntity target){
         double x = target.getPosX() - (this.getPosX());
         double y = target.getPosY() - (0.5D + this.getPosYHeight(0.5D));
@@ -137,7 +115,6 @@ public class EntityMissileDrone extends AbstractEntityDrone{
     protected void registerData() {
         super.registerData();
         this.dataManager.register(FireTick, 0);
-        this.dataManager.register(AMMO, 0);
     }
 
     @Override

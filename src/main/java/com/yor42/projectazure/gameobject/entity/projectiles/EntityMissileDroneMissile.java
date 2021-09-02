@@ -128,7 +128,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
 
             if(this.targetEntity != null){
                 Vector3d motion = this.getMotion();
-                double speed = motion.length()*0.5;
+                double speed = motion.length();
 
                 Vector3d v2 = new Vector3d(this.targetEntity.getPosX(), this.targetEntity.getPosY()+0.5, this.targetEntity.getPosZ()).subtract(new Vector3d(this.getPosX(), this.getPosY(), this.getPosZ())).normalize();
                 Vector3d v1 = motion.normalize();

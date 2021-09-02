@@ -55,7 +55,9 @@ import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
 
 public abstract class AbstractEntityDrone extends CreatureEntity implements IAnimatable {
     public AnimationFactory factory = new AnimationFactory(this);
-    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.createKey(EntityMissileDrone.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+
+    protected static final DataParameter<Integer> AMMO = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.VARINT);
+    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
     protected AbstractEntityDrone(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -162,10 +164,31 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
             this.writeAdditional(planedata);
             nbt.put("planedata", planedata);
             ItemStackUtils.setCurrentHP(stack, (int) this.getHealth());
+            ItemStackUtils.setAmmo(stack, (int) this.getammo());
             ItemEntity entity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), stack);
             world.addEntity(entity);
             this.remove();
         }
+    }
+
+    public boolean hasAmmo(){
+        return this.getammo()>0;
+    }
+
+    public int getammo() {
+        return this.dataManager.get(AMMO);
+    }
+
+    public void setAmmo(int value){
+        this.dataManager.set(AMMO, value);
+    }
+
+    public int useAmmo(){
+        if(this.getammo()>0) {
+            int ammoAfterUse = Math.min(this.getammo() - 1,0);
+            this.setAmmo(ammoAfterUse);
+        }
+        return 0;
     }
 
     @Override
@@ -219,6 +242,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     protected void registerData() {
         super.registerData();
         this.dataManager.register(OWNER_UUID, Optional.empty());
+        this.dataManager.register(AMMO, 0);
     }
 
     class FlyRandomlyGoal extends Goal {

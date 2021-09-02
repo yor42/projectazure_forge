@@ -291,6 +291,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
     protected static final DataParameter<Integer> SKILLDELAYTICK = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> EATING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> USING_SKILL = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Float> MORALE = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> EXP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Integer> LIMITBREAKLEVEL = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
@@ -865,6 +866,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(PAT_ANIMATION_TIME, 0);
         this.dataManager.register(OATHED, false);
         this.dataManager.register(USINGBOW, false);
+        this.dataManager.register(USING_SKILL, false);
         this.dataManager.register(STAYPOINT, Optional.empty());
         this.dataManager.register(HOMEPOS, Optional.empty());
         this.dataManager.register(ISFORCEWOKENUP, false);
@@ -1358,7 +1360,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void resetSkill(){
+        this.setUsingSkill(false);
+    }
 
+    public boolean isUsingSKill(){
+        return this.getDataManager().get(USING_SKILL);
+    }
+
+    public void setUsingSkill(boolean value){
+        this.getDataManager().set(USING_SKILL, value);
     }
 
     public boolean canUseSkill(){
