@@ -410,9 +410,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 ItemStack itemstack = this.getInventory().getStackInSlot(i);
                 if ((!damageSource.isFireDamage() || !itemstack.getItem().isImmuneToFire()) && itemstack.getItem() instanceof ArmorItem) {
                     int j = i;
-                    itemstack.damageItem((int) damage, this, (p_214023_1_) -> {
-                        p_214023_1_.sendBreakAnimation(EquipmentSlotType.fromSlotTypeAndIndex(EquipmentSlotType.Group.ARMOR, j));
-                    });
+                    itemstack.damageItem((int) damage, this, (p_214023_1_) -> p_214023_1_.sendBreakAnimation(EquipmentSlotType.fromSlotTypeAndIndex(EquipmentSlotType.Group.ARMOR, j)));
                 }
             }
         }
@@ -934,6 +932,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
+    @MethodsReturnNonnullByDefault
     public ItemStack onFoodEaten(World WorldIn, ItemStack foodStack) {
         this.getFoodStats().consume(foodStack.getItem(), foodStack);
         if(!this.getEntityWorld().isRemote()) {
