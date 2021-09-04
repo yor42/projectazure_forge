@@ -6,6 +6,7 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -14,6 +15,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public abstract class AbstractItemPlaceableDrone extends ItemDestroyable implements IAnimatable, ICraftingTableReloadable {
@@ -48,7 +50,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
 
     public int getFuelCapacity(){
         return this.maxFuel;
-    };
+    }
 
     public void AddInfotoDrone(ItemStack droneItem, AbstractEntityDrone drone){
         CompoundNBT stackCompound = droneItem.getOrCreateTag();
@@ -57,25 +59,33 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
         }
     }
 
+    @Nullable
+    public AbstractEntityDrone CreateDrone(World world, ItemStack stack, LivingEntity owner){
+        AbstractEntityDrone DroneEntity = this.getEntityType().create(world);
+        if(DroneEntity != null) {
+            this.AddInfotoDrone(stack, DroneEntity);
+            DroneEntity.setOwner(owner);
+            DroneEntity.setPosition(owner.getPosX(), owner.getPosY(), owner.getPosZ());
+            DroneEntity.setHealth(ItemStackUtils.getCurrentHP(stack));
+            DroneEntity.setAmmo(this.getMaxAmmo());
+            return DroneEntity;
+        }
+        return null;
+    }
+
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
 
         if(!context.getWorld().isRemote() && context.getPlayer() != null && context.getPlayer().isSneaking()){
-            AbstractEntityDrone DroneEntity = this.getEntityType().create(context.getWorld());
-            ItemStack stack = context.getItem();
-            CompoundNBT stackCompound = stack.getOrCreateTag();
-            if(DroneEntity != null){
-                this.AddInfotoDrone(stack, DroneEntity);
-                DroneEntity.setOwner(context.getPlayer());
-                DroneEntity.setPosition(context.getPos().getX(), context.getPos().getY()+1, context.getPos().getZ());
-                DroneEntity.setHealth(ItemStackUtils.getCurrentHP(stack));
-                DroneEntity.setAmmo(this.getMaxAmmo());
+            AbstractEntityDrone DroneEntity = this.CreateDrone(context.getWorld(), context.getItem(), context.getPlayer());
+            if(DroneEntity != null) {
+                ItemStack stack = context.getItem();
                 context.getWorld().addEntity(DroneEntity);
-                if(!context.getPlayer().isCreative()){
+                if (!context.getPlayer().isCreative()) {
                     stack.shrink(1);
                 }
-                return ActionResultType.CONSUME;
             }
+            return ActionResultType.CONSUME;
         }
 
         return super.onItemUse(context);

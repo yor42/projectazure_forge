@@ -3,10 +3,13 @@ package com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.gameobject.items.ItemMissleDrone;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -184,5 +187,18 @@ public class EntityShiroko extends EntityGunUserBase {
                 ;
     }
 
+    @Override
+    public boolean performOneTimeSkill(LivingEntity target) {
 
+        ItemStack stack = this.getSkillItem().get(0);
+        if(stack.getItem() instanceof ItemMissleDrone){
+            AbstractEntityDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getEntityWorld(), stack, this);
+            if(drone != null){
+                this.getEntityWorld().addEntity(drone);
+                stack.shrink(1);
+            }
+        }
+
+        return super.performOneTimeSkill(target);
+    }
 }

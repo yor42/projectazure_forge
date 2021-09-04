@@ -32,6 +32,10 @@ public class DroneRangedAttackGoal extends Goal {
 
         boolean hastarget = this.drone.getAttackTarget() != null;
 
+        if(drone.isReturningToOwner()){
+            return false;
+        }
+
         if(hastarget&&this.drone.hasAmmo() && this.drone.getAttackTarget().isAlive()) {
             this.target = this.drone.getAttackTarget();
             return true;
@@ -48,6 +52,11 @@ public class DroneRangedAttackGoal extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
+
+        if(drone.isReturningToOwner()){
+            return false;
+        }
+
         return this.shouldExecute() || !this.drone.getNavigator().noPath();
     }
 

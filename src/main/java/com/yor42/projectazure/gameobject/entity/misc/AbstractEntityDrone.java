@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.misc;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.PlaneFlyMovementController;
+import com.yor42.projectazure.gameobject.entity.ai.goals.DroneReturntoOwnerGoal;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.block.AirBlock;
@@ -55,6 +56,7 @@ import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
 
 public abstract class AbstractEntityDrone extends CreatureEntity implements IAnimatable {
     public AnimationFactory factory = new AnimationFactory(this);
+    private boolean isReturningToOwner = false;
 
     protected static final DataParameter<Integer> AMMO = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.VARINT);
     protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.OPTIONAL_UNIQUE_ID);
@@ -76,6 +78,14 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     protected abstract <T extends IAnimatable> PlayState body_predicate(AnimationEvent<T> tAnimationEvent);
 
     protected abstract PlayState propeller_predicate(AnimationEvent<AbstractEntityDrone> abstractEntityDroneAnimationEvent);
+
+    public void setReturningtoOwner(boolean value) {
+        this.isReturningToOwner = value;
+    }
+
+    public boolean isReturningToOwner() {
+        return this.isReturningToOwner;
+    }
 
     @Override
     public AnimationFactory getFactory() {
@@ -124,6 +134,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
+        compound.putBoolean("isreturning", this.isReturningToOwner());
         if(this.getOwnerUUID().isPresent()) {
             UUID OwnerID = this.getOwnerUUID().get();
             compound.putUniqueId("owner", OwnerID);
@@ -133,6 +144,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
+        this.setReturningtoOwner(compound.getBoolean("isreturning"));
         if (this.getServer() != null) {
             if (compound.hasUniqueId("owner")) {
                 this.setOwnerFromUUID(compound.getUniqueId("owner"));
@@ -158,17 +170,21 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
     public void serializePlane(World world) {
         if (!world.isRemote()) {
-            ItemStack stack = new ItemStack(this.getDroneItem());
-            CompoundNBT nbt = stack.getOrCreateTag();
-            CompoundNBT planedata = new CompoundNBT();
-            this.writeAdditional(planedata);
-            nbt.put("planedata", planedata);
-            ItemStackUtils.setCurrentHP(stack, (int) this.getHealth());
-            ItemStackUtils.setAmmo(stack, (int) this.getammo());
-            ItemEntity entity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), stack);
+            ItemEntity entity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), turnPlanetoItemStack());
             world.addEntity(entity);
             this.remove();
         }
+    }
+
+    public ItemStack turnPlanetoItemStack(){
+        ItemStack stack = new ItemStack(this.getDroneItem());
+        CompoundNBT nbt = stack.getOrCreateTag();
+        CompoundNBT planedata = new CompoundNBT();
+        this.writeAdditional(planedata);
+        nbt.put("planedata", planedata);
+        ItemStackUtils.setCurrentHP(stack, (int) this.getHealth());
+        ItemStackUtils.setAmmo(stack, this.getammo());
+        return stack;
     }
 
     public boolean hasAmmo(){
@@ -234,6 +250,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(2, new DroneReturntoOwnerGoal(this));
         this.goalSelector.addGoal(3, new DroneFollowOwnerGoal());
         this.goalSelector.addGoal(4, new FlyRandomlyGoal());
     }
