@@ -30,6 +30,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -85,7 +86,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     }
 
     @Override
-    public void readAdditional(CompoundNBT compoundNBT) {
+    public void readAdditional(@ParametersAreNonnullByDefault CompoundNBT compoundNBT) {
         super.readAdditional(compoundNBT);
         if(compoundNBT.contains("target")){
             this.getDataManager().set(TARGET, Optional.of(compoundNBT.getUniqueId("target")));
@@ -216,7 +217,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     }
 
     private void Detonate(){
-        this.world.createExplosion(this, this.getPosX(), getPosY(), getPosZ(), 2F, Explosion.Mode.BREAK);
+        this.world.createExplosion(this, this.getPosX(), getPosY(), getPosZ(), 1F, Explosion.Mode.BREAK);
         this.remove();
     }
 

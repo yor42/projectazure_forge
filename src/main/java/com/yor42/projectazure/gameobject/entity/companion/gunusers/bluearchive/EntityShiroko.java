@@ -4,9 +4,11 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.items.ItemMissleDrone;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -191,14 +193,32 @@ public class EntityShiroko extends EntityGunUserBase {
     public boolean performOneTimeSkill(LivingEntity target) {
 
         ItemStack stack = this.getSkillItem().get(0);
-        if(stack.getItem() instanceof ItemMissleDrone){
+        if(stack.getItem() instanceof ItemMissleDrone && this.getAttackTarget() != null){
             AbstractEntityDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getEntityWorld(), stack, this);
             if(drone != null){
+                drone.setAttackTarget(this.getAttackTarget());
                 this.getEntityWorld().addEntity(drone);
                 stack.shrink(1);
+                return true;
             }
         }
+        return false;
+    }
 
-        return super.performOneTimeSkill(target);
+    @Override
+    public boolean canUseSkill() {
+        ItemStack droneStack = this.getInventory().getStackInSlot(12);
+        if(droneStack.getItem() instanceof ItemMissleDrone) {
+            boolean hasSkillItem = this.isSkillItem(droneStack);
+            boolean isDroneReady = ItemStackUtils.getCurrentHP(droneStack) > 2;
+            boolean isDroneArmed = ItemStackUtils.getRemainingAmmo(droneStack) > 0;
+            return hasSkillItem && isDroneArmed && isDroneReady;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isSkillItem(ItemStack stack) {
+        return stack.getItem() instanceof ItemMissleDrone;
     }
 }

@@ -332,7 +332,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
 
             if (AbstractEntityDrone.this.getOwner().isPresent()) {
-                boolean cond1 = AbstractEntityDrone.this.getDistance(AbstractEntityDrone.this.getOwner().get()) >= 20.0D;
+                boolean cond1 = AbstractEntityDrone.this.getDistance(AbstractEntityDrone.this.getOwner().get()) >= 10.0D;
                 boolean cond2 = !AbstractEntityDrone.this.getLeashed();
                 boolean cond3 = !AbstractEntityDrone.this.isPassenger();
 

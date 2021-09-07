@@ -8,6 +8,7 @@ import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
@@ -559,6 +560,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         else if(target instanceof PlayerEntity){
             return !this.isOwner(target) && this.isPVPenabled();
         }
+        if(target instanceof AbstractEntityDrone && ((AbstractEntityDrone)target).getOwner().isPresent() && (((AbstractEntityDrone) target).getOwner().get() == this ||  (((AbstractEntityDrone) target).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) target).getOwner().get()).isOwner(this.getOwner())))){
+            return false;
+        }
+
         return super.shouldAttackEntity(target, owner);
     }
 
@@ -773,6 +778,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public boolean attackEntityFrom(DamageSource source, float amount) {
 
         if(source.getTrueSource() instanceof TameableEntity && this.getOwner() != null && ((TameableEntity) source.getTrueSource()).isOwner(this.getOwner())){
+            return false;
+        }
+
+        if(source.getTrueSource() instanceof AbstractEntityDrone && ((AbstractEntityDrone) source.getTrueSource()).getOwner().isPresent() && (((AbstractEntityDrone) source.getTrueSource()).getOwner().get() == this ||  (((AbstractEntityDrone) source.getTrueSource()).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) source.getTrueSource()).getOwner().get()).isOwner(this.getOwner())))){
             return false;
         }
 
@@ -1546,7 +1555,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 Main.PROXY.setSharedMob(this);
                 return ActionResultType.SUCCESS;
             }
-            else if(player.getHeldItem(hand).getItem() != registerItems.ORIGINIUM_PRIME.get() && player.getHeldItem(hand).getItem().isFood() && this.canEat(player.getHeldItem(hand).getItem().getFood().canEatWhenFull())){
+            else if(player.getHeldItem(hand).getItem() != registerItems.ORIGINIUM_PRIME.get() && player.getHeldItem(hand).getItem().getFood() != null && this.canEat(player.getHeldItem(hand).getItem().getFood().canEatWhenFull())){
                 ItemStack stack = this.onFoodEaten(this.getEntityWorld(), player.getHeldItem(hand));
                 this.addAffection(0.03);
                 if(!player.isCreative()){
