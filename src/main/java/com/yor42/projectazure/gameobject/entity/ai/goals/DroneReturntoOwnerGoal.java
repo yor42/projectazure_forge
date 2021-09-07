@@ -24,7 +24,11 @@ public class DroneReturntoOwnerGoal extends Goal {
             return false;
         }
 
-        return this.entity.getammo() == 0 || this.entity.getHealth()<5|| this.entity.isReturningToOwner();
+        boolean outofammo = this.entity.getammo() == 0;
+        boolean needRepair = this.entity.getHealth()<3;
+        boolean returningtoOwner = this.entity.isReturningToOwner();
+
+        return outofammo || needRepair|| returningtoOwner;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class DroneReturntoOwnerGoal extends Goal {
                 this.entity.getNavigator().tryMoveToEntityLiving(owner, 1);
             }
 
-            if(this.entity.getDistance(owner)>4 && this.entity.ticksExisted%20 ==0){
+            if(this.entity.getDistance(owner)>3){
                 ItemStack stack = this.entity.turnPlanetoItemStack();
                 boolean ItemInserted = false;
                 if(owner instanceof PlayerEntity){

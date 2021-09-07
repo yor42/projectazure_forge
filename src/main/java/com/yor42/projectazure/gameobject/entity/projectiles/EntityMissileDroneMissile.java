@@ -113,17 +113,6 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
         } else {
             this.remove();
         }
-        /*
-        Vector3d vector3d = this.getMotion();
-        if (this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
-            float f = MathHelper.sqrt(horizontalMag(vector3d));
-            this.rotationYaw = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
-            this.rotationPitch = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
-            this.prevRotationYaw = this.rotationYaw;
-            this.prevRotationPitch = this.rotationPitch;
-        }
-
-         */
 
         if(!this.getEntityWorld().isRemote()){
 
@@ -157,6 +146,11 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
                 else if(TargetEntity instanceof LivingEntity) {
                     this.targetEntity = (LivingEntity) TargetEntity;
                 }
+            }
+
+            if(!this.targetEntity.isAlive()){
+                this.getEntityWorld().createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), 0, Explosion.Mode.NONE);
+                this.remove();
             }
 
             RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);

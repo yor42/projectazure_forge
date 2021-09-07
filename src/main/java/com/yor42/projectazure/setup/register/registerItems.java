@@ -232,7 +232,7 @@ public class registerItems {
         }
     });
 
-    public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.BLOCK_LEVER_CLICK, 0, (float) 0.3, new Item.Properties()
+    public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.BLOCK_LEVER_CLICK, 0, 0.5F, new Item.Properties()
             .setISTER(() -> ItemAbydos550Renderer::new)
             .group(PA_WEAPONS).maxStackSize(1), true, MAGAZINE_5_56.get()));
 

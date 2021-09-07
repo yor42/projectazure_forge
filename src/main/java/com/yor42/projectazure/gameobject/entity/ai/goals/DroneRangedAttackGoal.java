@@ -71,14 +71,14 @@ public class DroneRangedAttackGoal extends Goal {
             }
 
 
-            if (this.drone.getDistance(this.target) > 6 && this.seeTime >= 5) {
+            if (this.drone.getDistance(this.target) < 6 && this.seeTime >= 5) {
                 this.drone.getNavigator().clearPath();
             } else {
                 this.drone.getNavigator().tryMoveToXYZ(this.target.getPosX(), this.target.getPosYEye() + 0.5, this.target.getPosZ(), 1);
             }
 
             if (this.drone.getDistance(this.target) <= 3.0D) {
-                this.drone.getMoveHelper().strafe(-0.5F, 0);
+                this.drone.getMoveHelper().strafe(-1F, 0);
             }
 
             this.drone.getLookController().setLookPositionWithEntity(this.target, 30.0F, 30.0F);
