@@ -23,6 +23,8 @@ import javax.annotation.Nullable;
 
 public class ContainerAKNInventory extends Container {
 
+    public final AbstractEntityCompanion companion;
+
     //C l i e n t
     public ContainerAKNInventory(int id, PlayerInventory inventory) {
         this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8));
@@ -31,6 +33,7 @@ public class ContainerAKNInventory extends Container {
     public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo) {
         super(registerManager.AKN_CONTAINER.get(), id);
         final AbstractEntityCompanion entity = Main.PROXY.getSharedMob();
+        this.companion = entity;
         //mainhand
         this.addSlot(new SlotItemHandler(EntityEquipment, 0, 75, 80));
 
@@ -69,6 +72,15 @@ public class ContainerAKNInventory extends Container {
                     });
                 }
             }
+        }
+
+        for(int l = 0; l<entity.getSkillItemCount(); l++){
+            this.addSlot(new SlotItemHandler(entityInventory, 12+l, 70, 58-l*18){
+                @Override
+                public boolean isItemValid(@Nonnull ItemStack stack) {
+                    return ContainerAKNInventory.this.companion.isSkillItem(stack);
+                }
+            });
         }
 
         for (int i = 0; i < 3; ++i) {

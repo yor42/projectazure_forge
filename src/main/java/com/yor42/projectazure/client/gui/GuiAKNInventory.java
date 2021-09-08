@@ -15,10 +15,13 @@ import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
+import net.minecraftforge.items.SlotItemHandler;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,9 +112,15 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.renderEntity(x, y);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+        this.blit(matrixStack, this.guiLeft+68, this.host.getSkillItemCount() == 1? this.guiTop+56: this.guiTop+38, 21, 201, 20, this.host.getSkillItemCount() == 1? 20: 38);
         if(this.host instanceof EntityGunUserBase) {
             this.blit(matrixStack, this.guiLeft + this.xSize + 4, this.guiTop + 9, 178, 102, 39, 87);
         }
+
+        for(int l = 0; l<this.host.getSkillItemCount(); l++){
+            this.blit(matrixStack, this.guiLeft+70, this.guiTop+58-(18*l), 41, 201, 16, 16);
+        }
+
         matrixStack.pop();
     }
 
