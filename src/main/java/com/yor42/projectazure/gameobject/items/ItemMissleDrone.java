@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -50,19 +52,12 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone{
 
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        if(group == this.getGroup()) {
-            ItemStack stack = new ItemStack(this);
-            ItemStackUtils.setCurrentHP(stack, this.getMaxHP());
-            ItemStackUtils.setAmmoFull(stack);
-            items.add(stack);
-        }
-    }
-
-    @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new StringTextComponent(ItemStackUtils.getRemainingAmmo(stack)+"/"+this.getMaxAmmo()));
+        int ammo = ItemStackUtils.getRemainingAmmo(stack);
+        float ammopercent = (float) ammo/this.getMaxAmmo();
+        TextFormatting color = ammopercent>=0.33? ammopercent>= 0.66? TextFormatting.DARK_GREEN:TextFormatting.GOLD:TextFormatting.DARK_RED;
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(ammo+"/"+this.getMaxAmmo()).mergeStyle(color)));
     }
 
     @Override

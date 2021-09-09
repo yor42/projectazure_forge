@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.items.equipment;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
@@ -73,6 +74,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
             items.add(stack.copy());
             stack.getOrCreateTag().putInt("fuel", this.getMaxOperativeTime());
             stack.getOrCreateTag().putBoolean("isArmed", true);
+            ItemStackUtils.setAmmoFull(stack);
             items.add(stack);
         }
     }
@@ -83,17 +85,16 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
         int currentFuel = stack.getOrCreateTag().getInt("fuel");
         boolean isArmed = stack.getOrCreateTag().getBoolean("isArmed");
         float fuelPercent = (float) currentFuel/this.getMaxOperativeTime();
-        TextFormatting color = TextFormatting.GREEN;
-
+        TextFormatting color = TextFormatting.DARK_GREEN;
         if(fuelPercent<0.6){
-            color = TextFormatting.YELLOW;
+            color = TextFormatting.GOLD;
         }
         else if(fuelPercent<0.3){
-            color = TextFormatting.RED;
+            color = TextFormatting.DARK_RED;
         }
-        tooltip.add(isArmed? new TranslationTextComponent("item.tooltip.plane_armed").mergeStyle(TextFormatting.GREEN):new TranslationTextComponent("item.tooltip.plane_not_armed").mergeStyle(TextFormatting.RED));
-        tooltip.add(new TranslationTextComponent("item.tooltip.plane_fuel_level").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(currentFuel+"/"+this.getMaxOperativeTime()).mergeStyle(color)));
-        tooltip.add(new TranslationTextComponent("item.tooltip.plane_type").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.getType().getName()).mergeStyle(TextFormatting.YELLOW)));
+        tooltip.add(isArmed? new TranslationTextComponent("item.tooltip.plane_armed").mergeStyle(TextFormatting.DARK_GREEN):new TranslationTextComponent("item.tooltip.plane_not_armed").mergeStyle(TextFormatting.DARK_RED));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(currentFuel+"/"+this.getMaxOperativeTime()).mergeStyle(color)));
+        tooltip.add(new TranslationTextComponent("item.tooltip.plane_type").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.getType().getName()).mergeStyle(TextFormatting.GOLD)));
     }
 
     public abstract int getreloadTime();

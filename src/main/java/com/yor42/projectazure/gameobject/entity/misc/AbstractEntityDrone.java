@@ -59,6 +59,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     private boolean isReturningToOwner = false;
 
     protected static final DataParameter<Integer> AMMO = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> FUEL = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.VARINT);
     protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
     protected AbstractEntityDrone(EntityType<? extends CreatureEntity> type, World worldIn) {
@@ -139,6 +140,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
             UUID OwnerID = this.getOwnerUUID().get();
             compound.putUniqueId("owner", OwnerID);
         }
+        compound.putInt("fuel", this.getRemainingFuel());
     }
 
     @Override
@@ -150,6 +152,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
                 this.setOwnerFromUUID(compound.getUniqueId("owner"));
             }
         }
+        this.setRemainingFuel(compound.getInt("fuel"));
     }
 
     @Override
@@ -168,6 +171,14 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         return super.applyPlayerInteraction(player, vec, hand);
     }
 
+    public int getRemainingFuel(){
+        return this.dataManager.get(FUEL);
+    }
+
+    public void setRemainingFuel(int value){
+        this.dataManager.set(FUEL, value);
+    }
+
     public void serializePlane(World world) {
         if (!world.isRemote()) {
             ItemEntity entity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), turnPlanetoItemStack());
@@ -182,6 +193,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         CompoundNBT planedata = new CompoundNBT();
         this.writeAdditional(planedata);
         nbt.put("planedata", planedata);
+        nbt.putInt("fuel", this.getRemainingFuel());
         ItemStackUtils.setCurrentHP(stack, (int) this.getHealth());
         ItemStackUtils.setAmmo(stack, this.getammo());
         return stack;
@@ -260,6 +272,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         super.registerData();
         this.dataManager.register(OWNER_UUID, Optional.empty());
         this.dataManager.register(AMMO, 0);
+        this.dataManager.register(FUEL, 0);
     }
 
     class FlyRandomlyGoal extends Goal {

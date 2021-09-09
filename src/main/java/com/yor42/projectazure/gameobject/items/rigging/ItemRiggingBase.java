@@ -71,7 +71,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         }
 
         tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remaining_fuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fueltank.getFluid().getAmount()+"/"+fueltank.getTankCapacity(0)).appendString("mb").mergeStyle(color)));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fueltank.getFluid().getAmount()+"/"+fueltank.getTankCapacity(0)).appendString("mb").mergeStyle(color)));
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331))));
         if(worldIn != null && worldIn.isRemote) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn, capability));

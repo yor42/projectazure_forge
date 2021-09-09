@@ -4,19 +4,27 @@ import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.UUID;
+
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
 public abstract class AbstractItemPlaceableDrone extends ItemDestroyable implements IAnimatable, ICraftingTableReloadable {
     private final int AmmoCount;
@@ -59,6 +67,34 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
         }
     }
 
+    @Override
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+        if(group == this.getGroup()) {
+            ItemStack stack = new ItemStack(this);
+            ItemStackUtils.setCurrentHP(stack, this.getMaxHP());
+            stack.getOrCreateTag().putInt("fuel", this.getFuelCapacity());
+            ItemStackUtils.setAmmoFull(stack);
+            items.add(stack);
+        }
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        int currentFuel = stack.getOrCreateTag().getInt("fuel");
+        float fuelPercent = (float) currentFuel/this.getFuelCapacity();
+        TextFormatting color = TextFormatting.DARK_GREEN;
+        if(fuelPercent<0.6){
+            color = TextFormatting.GOLD;
+        }
+        else if(fuelPercent<0.3){
+            color = TextFormatting.DARK_RED;
+        }
+        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(currentFuel+"/"+this.getFuelCapacity()).mergeStyle(color)));
+
+    }
+
     @Nullable
     public AbstractEntityDrone CreateDrone(World world, ItemStack stack, LivingEntity owner){
         AbstractEntityDrone DroneEntity = this.getEntityType().create(world);
@@ -67,7 +103,8 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
             DroneEntity.setOwner(owner);
             DroneEntity.setPosition(owner.getPosX(), owner.getPosY(), owner.getPosZ());
             DroneEntity.setHealth(ItemStackUtils.getCurrentHP(stack));
-            DroneEntity.setAmmo(this.getMaxAmmo());
+            DroneEntity.setAmmo(ItemStackUtils.getRemainingAmmo(stack));
+            DroneEntity.setRemainingFuel(stack.getOrCreateTag().getInt("fuel"));
             return DroneEntity;
         }
         return null;
