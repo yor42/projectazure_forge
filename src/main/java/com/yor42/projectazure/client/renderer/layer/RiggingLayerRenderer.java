@@ -8,6 +8,7 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingDD;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -65,8 +66,8 @@ public class RiggingLayerRenderer<T extends AbstractEntityCompanion> extends Geo
 
             if (this.modelProvider != null) {
 
-                if(getEntityModel().getModel(getEntityModel().getModelLocation(entitylivingbaseIn)).getBone("Body").isPresent()){
-                    IBone hostbone = getEntityModel().getModel(getEntityModel().getModelLocation(entitylivingbaseIn)).getBone("Body").get();
+                if(getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").isPresent()){
+                    IBone hostbone = getEntityModel().getModel(getEntityModel().getModelLocation(null)).getBone("Body").get();
                     matrixStackIn.translate(hostbone.getPositionX()/16, (hostbone.getPositionY()+36.6)/16, hostbone.getPositionZ()/16);
                 }
 
