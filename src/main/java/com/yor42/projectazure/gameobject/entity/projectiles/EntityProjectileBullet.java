@@ -74,6 +74,12 @@ public class EntityProjectileBullet extends ThrowableEntity {
         super.func_230299_a_(blockRayTraceResult);
     }
 
+    @Override
+    protected void onImpact(RayTraceResult result) {
+        super.onImpact(result);
+        this.remove();
+    }
+
     private void addBlockHitEffects(BlockRayTraceResult result){
         Minecraft.getInstance().particles.addBlockHitEffects(result.getPos(), result);
     }
