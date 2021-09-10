@@ -279,10 +279,10 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
             double d2 = d0 - entity.getPosY();
             double d3 = target.getPosZ() - Shooter.getPosZ();
             float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
-            entity.shoot(d1, d2 + (double)f, d3, 2.0f, Accuracy);
+            entity.shoot(d1, d2 + (double)f, d3, 5.0f, Accuracy);
         }
         else{
-            entity.ShootFromPlayer(Shooter, Shooter.rotationPitch, Shooter.rotationYaw, 0.0f, 2.0F, Accuracy, hand);
+            entity.ShootFromPlayer(Shooter, Shooter.rotationPitch, Shooter.rotationYaw, 0.0f, 5.0F, Accuracy, hand);
 
         }
         worldIn.addEntity(entity);
@@ -317,7 +317,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
             color = TextFormatting.GREEN;
         }
 
-        tooltip.add(new TranslationTextComponent("item.tooltip.remaining_ammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.magCap).mergeStyle(color)));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.magCap).mergeStyle(color)));
     }
 
     @Override

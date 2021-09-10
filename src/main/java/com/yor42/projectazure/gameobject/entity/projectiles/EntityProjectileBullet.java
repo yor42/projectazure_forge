@@ -1,6 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.setup.register.registerManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -8,6 +10,7 @@ import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -64,14 +67,20 @@ public class EntityProjectileBullet extends ThrowableEntity {
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
-        super.onImpact(result);
-        this.remove();
+    protected void func_230299_a_(BlockRayTraceResult blockRayTraceResult) {
+        if(this.getEntityWorld().isRemote()){
+            this.addBlockHitEffects(blockRayTraceResult);
+        }
+        super.func_230299_a_(blockRayTraceResult);
+    }
+
+    private void addBlockHitEffects(BlockRayTraceResult result){
+        Minecraft.getInstance().particles.addBlockHitEffects(result.getPos(), result);
     }
 
     public void ShootFromPlayer(Entity Shooter, float pitch, float yaw, float offset, float velocity, float inAccuracy, Hand firingHand) {
 
-        this.setPosition(Shooter.getPosX(), Shooter.getPosYEye()-0.3F, Shooter.getPosZ());
+        this.setPosition(Shooter.getPosX(), Shooter.getPosYEye()-0.1F, Shooter.getPosZ());
 
         float f = -MathHelper.sin(yaw * ((float)Math.PI / 180F)) * MathHelper.cos(pitch * ((float)Math.PI / 180F));
         float f1 = -MathHelper.sin((pitch + offset) * ((float)Math.PI / 180F));
