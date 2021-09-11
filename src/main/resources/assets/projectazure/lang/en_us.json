@@ -3,6 +3,7 @@
   "itemGroup.pa_machines": "Project: Azure - Machines",
   "itemGroup.pa_resources": "Project: Azure - Resources",
   "itemGroup.pa_ship": "Project: Azure - Companions",
+  "itemGroup.pa_weapons": "Project: Azure - Weapons",
 
   "item.projectazure.rainbow_wisdomcube": "Rainbow Wisdom Cube",
   "item.projectazure.wisdomcube": "Wisdom Cube",
@@ -65,6 +66,8 @@
 
   "item.projectazure.abydos550": "Abydos 550",
 
+  "item.projectazure.missiledrone": "Missile Drone",
+
   "item.projectazure.dd_default_rigging.tooltip": "Basic Rigging for destroyer KANSEN.",
   "item.projectazure.cv_default_rigging.tooltip": "Basic Rigging for Aircraft Carrier KANSEN.",
   "item.projectazure.bb_default_rigging.tooltip": "Basic Rigging for Battleship KANSEN.",
@@ -90,6 +93,8 @@
 
   "item.tooltip.equipmenttype": "Equipment Type",
   "item.tooltip.plane_type": "Plane Type",
+  "item.tooltip.plane_armed": "Armed",
+  "item.tooltip.plane_not_armed": "Not Armed",
   "item.tooltip.torpedo_not_reloadable": "Does not support automatic reloading",
 
   "tooltip.companion.rarity": "Rarity",
@@ -148,8 +153,8 @@
   "gui.shipinventory": "KANSEN Inv.",
   "gui.companioninventory": "Inventory",
 
-  "gui.current_morale_level": "Current Affection",
-  "gui.current_morale_value": "Affection",
+  "gui.current_morale_level": "Current Morale",
+  "gui.current_morale_value": "Morale",
   "gui.current_affection_level": "Current Affection",
   "gui.current_affection_value": "Affection",
   "gui.entity.level": "Lv",
@@ -214,6 +219,8 @@
   "entity.projectazure.entityshiroko": "Shiroko",
 
   "entity.projectazure.entitychen": "Ch'en",
+
+  "entity.projectazure.missiledrone": "Missile Drone",
 
   "guntype.assault_rifle": "Assault Rifle",
   "guntype.shotgun": "Shotgun",
