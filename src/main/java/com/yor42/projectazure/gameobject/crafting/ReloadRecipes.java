@@ -17,87 +17,63 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.RELOADING;
 
 public class ReloadRecipes extends SpecialRecipe {
+
+    private final List<ItemStack> AmmoList = Lists.newArrayList();
+    private ItemStack ReloadTarget;
+
     public ReloadRecipes(ResourceLocation idIn) {
         super(idIn);
     }
 
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
-
-        List<ItemStack> AmmoList = Lists.newArrayList();
-        ItemStack ReloadTarget = ItemStack.EMPTY;
+        this.ReloadTarget = ItemStack.EMPTY;
         ICraftingTableReloadable ReloadTargetItem = null;
         for(int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
                 if(itemstack.getItem() instanceof ICraftingTableReloadable){
-                    ReloadTarget = itemstack;
+                    this.ReloadTarget = itemstack;
                     ReloadTargetItem = (ICraftingTableReloadable) itemstack.getItem();
                     break;
                 }
             }
         }
 
-        int remaingAmmo = getRemainingAmmo(ReloadTarget);
+        int remaingAmmo = getRemainingAmmo(this.ReloadTarget);
         //No Reloadable Item
-        if(ReloadTarget == ItemStack.EMPTY || remaingAmmo<0 || ReloadTargetItem.getMaxAmmo() - remaingAmmo<=0){
+        if(this.ReloadTarget == ItemStack.EMPTY || remaingAmmo<0 || ReloadTargetItem.getMaxAmmo() - remaingAmmo<=0){
             return false;
         }
+
+        if(!this.AmmoList.isEmpty()){
+            this.AmmoList.clear();
+        }
+
         for(int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
                 if(itemstack.getItem() instanceof ItemAmmo){
-                    if(((ItemAmmo) itemstack.getItem()).getCalibur() == ReloadTargetItem.getCalibur()){
-                        AmmoList.add(itemstack);
+                    if(((ItemAmmo) itemstack.getItem()).getCalibur() == ReloadTargetItem.getAmmoType()){
+                        this.AmmoList.add(itemstack);
                     }
                 }
             }
         }
 
-        return !AmmoList.isEmpty();
+        return !this.AmmoList.isEmpty();
     }
 
     @Override
     public ItemStack getCraftingResult(CraftingInventory inv) {
-        List<ItemStack> AmmoList = Lists.newArrayList();
-        ItemStack ReloadTarget = ItemStack.EMPTY;
-        ICraftingTableReloadable ReloadTargetItem = null;
-        for(int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
-            if (!itemstack.isEmpty()) {
-                if(itemstack.getItem() instanceof ICraftingTableReloadable){
-                    ReloadTarget = itemstack;
-                    ReloadTargetItem = (ICraftingTableReloadable) itemstack.getItem();
-                    break;
-                }
-            }
-        }
-        int remaingAmmo = getRemainingAmmo(ReloadTarget);
-        //No Reloadable Item or Magazine is Full
-        if(ReloadTarget == ItemStack.EMPTY || remaingAmmo<0 || ReloadTargetItem.getMaxAmmo() - remaingAmmo<=0){
-            return ItemStack.EMPTY;
-        }
-        for(int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
-            if (!itemstack.isEmpty()) {
-                if(itemstack.getItem() instanceof ItemAmmo){
-                    if(((ItemAmmo) itemstack.getItem()).getCalibur() == ReloadTargetItem.getCalibur()){
-                        AmmoList.add(itemstack);
-                    }
-                }
-            }
-        }
-
-        ItemStack stackToReturn = ReloadTarget.copy();
-
+        ItemStack stackToReturn = this.ReloadTarget.copy();
         int AmmoToAdd = 0;
-        for (ItemStack stack : AmmoList) {
+        for (ItemStack stack : this.AmmoList) {
             if (stack.getItem() instanceof ItemAmmo) {
                 int ammocount = ((ItemAmmo) stack.getItem()).getAmmoCount()*stack.getCount();
                 AmmoToAdd = AmmoToAdd+ammocount;
             }
         }
-
         return addAmmo(stackToReturn, AmmoToAdd);
     }
 

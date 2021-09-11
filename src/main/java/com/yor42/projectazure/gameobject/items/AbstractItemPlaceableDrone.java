@@ -52,7 +52,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public enums.AmmoCalibur getCalibur() {
+    public enums.AmmoCalibur getAmmoType() {
         return enums.AmmoCalibur.DRONE_MISSILE;
     }
 

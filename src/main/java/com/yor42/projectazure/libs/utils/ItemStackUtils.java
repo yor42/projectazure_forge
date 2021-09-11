@@ -24,7 +24,7 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rollDamagingRiggingCoun
 
 public class ItemStackUtils {
 
-    public static void DamageRiggingorEquipment(float amount, ItemStack stack){
+    public static void DamageItem(float amount, ItemStack stack){
         if(stack.getItem() instanceof ItemDestroyable) {
             int damage = getCurrentDamage(stack);
             int maxDamage = ((ItemDestroyable) stack.getItem()).getMaxHP();
@@ -43,6 +43,11 @@ public class ItemStackUtils {
                     "You wouldn't get this from any other guy");
         }
 
+    }
+
+    public static void RepairItem(ItemStack stack, int amount){
+        int damage = getCurrentDamage(stack);
+        setCurrentDamage(stack, Math.max(damage - amount, 0));
     }
 
     public static boolean isDestroyed(ItemStack stack){
@@ -86,7 +91,7 @@ public class ItemStackUtils {
 
             ItemStack MainStack = riggingItem.getEquipments(riggingStack).getStackInSlot(MainDamageIndex);
             if (MainStack.getItem() instanceof ItemEquipmentBase) {
-                DamageRiggingorEquipment(damage,MainStack);
+                DamageItem(damage,MainStack);
             }
 
             if(DamageRiggingCount>1){
@@ -102,7 +107,7 @@ public class ItemStackUtils {
                 for (Integer integer : intArray) {
                     ItemStack equipmentStack = riggingItem.getEquipments(riggingStack).getStackInSlot(integer);
                     if (equipmentStack.getItem() instanceof ItemEquipmentBase) {
-                        DamageRiggingorEquipment((float) (damage*0.4),equipmentStack);
+                        DamageItem((float) (damage*0.4),equipmentStack);
                     }
                 }
             }

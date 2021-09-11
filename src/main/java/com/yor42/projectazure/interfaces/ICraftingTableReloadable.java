@@ -4,7 +4,7 @@ import com.yor42.projectazure.libs.enums;
 
 public interface ICraftingTableReloadable {
 
-    enums.AmmoCalibur getCalibur();
+    enums.AmmoCalibur getAmmoType();
     int getMaxAmmo();
 
 }

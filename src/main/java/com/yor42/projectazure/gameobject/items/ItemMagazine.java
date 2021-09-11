@@ -43,7 +43,7 @@ public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloa
         return this.Ammocount;
     }
 
-    public enums.AmmoCalibur getCalibur() {
+    public enums.AmmoCalibur getAmmoType() {
         return this.calibur;
     }
 

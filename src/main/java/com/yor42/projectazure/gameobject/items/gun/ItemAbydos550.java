@@ -20,7 +20,7 @@ public class ItemAbydos550 extends ItemGunBase{
     }
 
     @Override
-    public enums.AmmoCalibur getCalibur() {
+    public enums.AmmoCalibur getAmmoType() {
         return enums.AmmoCalibur.AMMO_5_56;
     }
 

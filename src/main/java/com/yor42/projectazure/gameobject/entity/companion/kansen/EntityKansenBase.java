@@ -3,8 +3,6 @@ package com.yor42.projectazure.gameobject.entity.companion.kansen;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
-import com.yor42.projectazure.gameobject.entity.ai.goals.KansenLaunchPlaneGoal;
-import com.yor42.projectazure.gameobject.entity.ai.goals.KansenRangedAttackGoal;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
@@ -194,7 +192,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public boolean attackEntityFromCannon(DamageSource source, AmmoProperties property, double distanceMultiplier) {
         if(rollBooleanRNG((float) (property.getRawhitChance()*distanceMultiplier))) {
             if (this.hasRigging()) {
-                DamageRiggingorEquipment(property.getDamage(enums.DamageType.RIGGING), this.getRigging());
+                DamageItem(property.getDamage(enums.DamageType.RIGGING), this.getRigging());
                 DamageComponent(property.getDamage(enums.DamageType.COMPONENT), this.getRigging(), property.ShouldDamageMultipleComponent());
             }
             return super.attackEntityFrom(source, property.getDamage(enums.DamageType.ENTITY));
@@ -209,7 +207,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         float ignoreArmorChance = RangedFloatRandom(0.05F, 0.1F);
         if(this.hasRigging()&& (!(source==DamageSource.FALL)||!(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance)))){
             DamageMultiplier = getRiggingedDamageModifier();
-            DamageRiggingorEquipment(amount, this.getRigging());
+            DamageItem(amount, this.getRigging());
             this.playSound(SoundEvents.ENTITY_IRON_GOLEM_HURT, 1.0F, 1.0f);
         }
         return super.attackEntityFrom(source, amount*DamageMultiplier);

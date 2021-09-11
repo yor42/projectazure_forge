@@ -456,6 +456,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .build(consumer);
 
         CustomRecipeBuilder.customRecipe((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).build(consumer, "reloading_items");
+        CustomRecipeBuilder.customRecipe((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).build(consumer, "repairing_items");
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.DD_DEFAULT_RIGGING.get(), 1)
                 .key('A', ModTags.Items.PLATE_ALUMINIUM)

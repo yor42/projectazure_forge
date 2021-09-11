@@ -269,7 +269,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
         }
     }
 
-    public abstract enums.AmmoCalibur getCalibur();
+    public abstract enums.AmmoCalibur getAmmoType();
 
     private void spawnProjectile(LivingEntity Shooter, World worldIn, ItemStack gunStack, float Accuracy, float Damage, Entity target, Hand hand) {
         EntityProjectileBullet entity = new EntityProjectileBullet(Shooter, worldIn, Damage);

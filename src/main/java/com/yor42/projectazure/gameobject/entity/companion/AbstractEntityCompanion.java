@@ -7,7 +7,6 @@ import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -375,7 +374,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public ItemStack getMagazine(enums.AmmoCalibur calibur){
         for(int i=0; i<this.getAmmoStorage().getSlots();i++){
-            if(this.getAmmoStorage().getStackInSlot(i).getItem() instanceof ItemMagazine && ((ItemMagazine) this.getAmmoStorage().getStackInSlot(i).getItem()).getCalibur() == calibur){
+            if(this.getAmmoStorage().getStackInSlot(i).getItem() instanceof ItemMagazine && ((ItemMagazine) this.getAmmoStorage().getStackInSlot(i).getItem()).getAmmoType() == calibur){
                 return this.getAmmoStorage().getStackInSlot(i);
             }
         }
@@ -730,7 +729,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         ItemStack gunstack = this.getGunStack();
         if (gunstack.getItem() instanceof ItemGunBase) {
             ItemGunBase gunitem = (ItemGunBase) gunstack.getItem();
-            return (!this.canUseCannonOrTorpedo() || !this.isSailing()) && this.getGunStack() != ItemStack.EMPTY && (this.HasRightMagazine(gunitem.getCalibur()) || getRemainingAmmo(gunstack)>0);
+            return (!this.canUseCannonOrTorpedo() || !this.isSailing()) && this.getGunStack() != ItemStack.EMPTY && (this.HasRightMagazine(gunitem.getAmmoType()) || getRemainingAmmo(gunstack)>0);
         }
         return false;
     }
@@ -1256,7 +1255,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         Item guncandidate = this.getGunStack().getItem();
         if(guncandidate instanceof ItemGunBase) {
             ItemGunBase gun = (ItemGunBase) guncandidate;
-            ItemStack MagStack = this.getMagazine(((ItemGunBase) this.getGunStack().getItem()).getCalibur());
+            ItemStack MagStack = this.getMagazine(((ItemGunBase) this.getGunStack().getItem()).getAmmoType());
             int i;
             if (gun.getRoundsPerReload() > 0) {
                 i = Math.min(gun.getRoundsPerReload(), getRemainingAmmo(MagStack));

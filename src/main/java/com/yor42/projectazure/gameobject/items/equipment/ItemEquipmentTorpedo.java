@@ -23,7 +23,7 @@ public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements 
     }
 
     @Override
-    public enums.AmmoCalibur getCalibur() {
+    public enums.AmmoCalibur getAmmoType() {
         return enums.AmmoCalibur.TORPEDO;
     }
 
