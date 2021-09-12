@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
@@ -49,7 +50,16 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone{
         return PlayState.CONTINUE;
     }
 
-
+    @Override
+    public int getRepairAmount(ItemStack candidateItem) {
+        if(candidateItem.getItem() == registerItems.PLATE_STEEL.get()){
+            return 2;
+        }
+        else if(candidateItem.getItem() == registerItems.ADVANCED_CIRCUIT.get()){
+            return 5;
+        }
+        return super.getRepairAmount(candidateItem);
+    }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {

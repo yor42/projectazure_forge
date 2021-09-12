@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.equipment;
 
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.*;
@@ -49,5 +50,16 @@ public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements 
         boolean isreloadable = this.isreloadable;
         tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.getMaxAmmo()).mergeStyle(color)));
         tooltip.add(new TranslationTextComponent(isreloadable? "item.tooltip.torpedo_reloadable": "item.tooltip.torpedo_not_reloadable" ).setStyle(Style.EMPTY.setColor(Color.fromInt(isreloadable? 0x00FF00:0xff0000))));
+    }
+
+    @Override
+    public int getRepairAmount(ItemStack candidateItem) {
+        if(candidateItem.getItem() == registerItems.PLATE_STEEL.get()){
+            return 2;
+        }
+        else if(candidateItem.getItem() == registerItems.MECHANICAL_PARTS.get()){
+            return 4;
+        }
+        return super.getRepairAmount(candidateItem);
     }
 }

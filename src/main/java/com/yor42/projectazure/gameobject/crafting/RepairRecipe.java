@@ -24,14 +24,14 @@ public class RepairRecipe extends SpecialRecipe {
 
     @Override
     public boolean matches(CraftingInventory inv, World worldIn) {
-        IItemDestroyable ReloadTargetItem = null;
+        IItemDestroyable RepairTargetItem = null;
         this.RepairTarget = ItemStack.EMPTY;
         for(int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
                 if(itemstack.getItem() instanceof IItemDestroyable){
                     this.RepairTarget = itemstack;
-                    ReloadTargetItem = (IItemDestroyable) itemstack.getItem();
+                    RepairTargetItem = (IItemDestroyable) itemstack.getItem();
                     break;
                 }
             }
@@ -39,7 +39,7 @@ public class RepairRecipe extends SpecialRecipe {
 
         int remaingHP = getCurrentHP(this.RepairTarget);
         //No Reloadable Item
-        if(this.RepairTarget == ItemStack.EMPTY || ReloadTargetItem == null || remaingHP<0 || ReloadTargetItem.getMaxHP() <= remaingHP){
+        if(this.RepairTarget == ItemStack.EMPTY || RepairTargetItem == null || remaingHP<0 || RepairTargetItem.getMaxHP() <= remaingHP){
             return false;
         }
 
@@ -50,7 +50,10 @@ public class RepairRecipe extends SpecialRecipe {
         for(int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (!itemstack.isEmpty()) {
-                this.repairvalue+=ReloadTargetItem.getRepairAmount(itemstack);
+                this.repairvalue+=RepairTargetItem.getRepairAmount(itemstack);
+                if(this.repairvalue>=RepairTargetItem.getMaxHP()){
+                    break;
+                }
             }
         }
 
