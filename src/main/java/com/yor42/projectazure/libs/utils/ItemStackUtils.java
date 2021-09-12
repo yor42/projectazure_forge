@@ -309,7 +309,7 @@ public class ItemStackUtils {
     public static ItemStack addAmmo(ItemStack stack, int count) {
         int currentAmmo = getRemainingAmmo(stack);
         if (stack.getItem() instanceof ICraftingTableReloadable) {
-            setAmmo(stack, Math.max(currentAmmo+count, ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo()));
+            setAmmo(stack, Math.min(currentAmmo+count, ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo()));
         }
         return stack;
     }

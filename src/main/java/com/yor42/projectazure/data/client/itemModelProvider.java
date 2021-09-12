@@ -77,6 +77,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("resistor_primitive");
         buildModel("5_56_ammo");
         buildModel("torpedo_ammo");
+        buildModel("missile_ammo");
         buildModel("copper_wire");
         buildModel("copper_coil");
         buildModel("steel_cutter");

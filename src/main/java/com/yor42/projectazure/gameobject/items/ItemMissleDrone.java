@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
@@ -23,7 +24,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemMissleDrone extends AbstractItemPlaceableDrone{
+public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraftingTableReloadable {
 
     public AnimationFactory factory = new AnimationFactory(this);
 
