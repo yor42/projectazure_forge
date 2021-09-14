@@ -108,6 +108,9 @@
   "item.projectazure.spawnegg.spawn": "Spawn: ",
 
   "item.projectazure.bonk_bat.tooltip": "Sends every being in existence who dares to cross this bat's path to horny jail. AND THERES NO EXCEPTION.",
+  "item.projectazure.rainbowcube.tooltip1": "Mysterious cube you found in your pocket. It's emitting weird aura with rainbow light.",
+  "item.projectazure.rainbowcube.tooltip2": "maybe you should grab it more firmly...?",
+
 
   "item.tooltip.firerate": "Fire Rate",
   "item.tooltip.remainingammo" : "Remaining Ammo",

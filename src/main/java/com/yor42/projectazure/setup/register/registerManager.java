@@ -23,6 +23,7 @@ import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -45,6 +46,7 @@ public class registerManager {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
+    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, Constants.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Constants.MODID);
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
     public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MODID);
@@ -131,6 +133,7 @@ public class registerManager {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
         ENTITIES.register(eventbus);
         BIOMES.register(eventbus);
+        FLUIDS.register(eventbus);
         BLOCKS.register(eventbus);
         ITEMS.register(eventbus);
         CONTAINER.register(eventbus);
@@ -141,6 +144,7 @@ public class registerManager {
         registerBiomes.register();
         registerItems.register();
         registerTE.register();
+        registerFluids.register();
         registerRecipes.Serializers.register();
         registerRecipes.Types.register();
         RegisterPotionEffects.register();

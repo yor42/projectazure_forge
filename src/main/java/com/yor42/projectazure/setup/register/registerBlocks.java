@@ -10,6 +10,7 @@ import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -22,6 +23,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
@@ -37,6 +39,9 @@ public class registerBlocks {
     public static final RegistryObject<Block> LEAD_ORE = registerMetalOre_Stone("lead");
     public static final RegistryObject<Block> ZINC_ORE = registerMetalOre_Stone("zinc");
     public static final RegistryObject<Block> ORIROCK = register("orirock",() -> new OreBlock(AbstractBlock.Properties.create(Material.ROCK).harvestLevel(0).hardnessAndResistance(1.5F, 3F)), Main.PA_RESOURCES);
+
+    public static final RegistryObject<Block> CRUDE_OIL = register_noblock("crude_oil", ()->new FlowingFluidBlock(()->registerFluids.CRUDE_OIL_SOURCE, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
+
     public static final RegistryObject<Block> REENFORCED_PLANK = register("reenforced_plank",() -> new Block(AbstractBlock.Properties.create(Material.WOOD).harvestLevel(2).hardnessAndResistance(4F, 6F)), Main.PA_RESOURCES);
 
 
