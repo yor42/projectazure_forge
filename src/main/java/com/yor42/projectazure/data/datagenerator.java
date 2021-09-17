@@ -3,6 +3,7 @@ package com.yor42.projectazure.data;
 import com.yor42.projectazure.data.client.BlockModelProvider;
 import com.yor42.projectazure.data.client.itemModelProvider;
 import com.yor42.projectazure.data.common.BlockTagProvider;
+import com.yor42.projectazure.data.common.FluidTagProvider;
 import com.yor42.projectazure.data.common.ItemTagProvider;
 import com.yor42.projectazure.data.common.RecipeProvider;
 import com.yor42.projectazure.data.common.loot.LootTableProvider;
@@ -27,6 +28,10 @@ public class datagenerator {
 
         BlockTagProvider blockTagProvider = new BlockTagProvider(gen, filehelper);
         gen.addProvider(blockTagProvider);
+
+        FluidTagProvider fluidTagProvider = new FluidTagProvider(gen, filehelper);
+        gen.addProvider(fluidTagProvider);
+
         gen.addProvider(new ItemTagProvider(gen, blockTagProvider, filehelper));
         gen.addProvider(new LootTableProvider(gen));
         gen.addProvider(new RecipeProvider(gen));
