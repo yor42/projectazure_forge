@@ -2,6 +2,7 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.blocks.fluid.CrudeOilFluid;
 import com.yor42.projectazure.gameobject.blocks.fluid.DieselFluid;
+import com.yor42.projectazure.gameobject.blocks.fluid.FuelOilFluid;
 import com.yor42.projectazure.gameobject.blocks.fluid.GasolineFluid;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
@@ -23,6 +24,11 @@ public class registerFluids {
     public static final RegistryObject<Fluid> DIESEL_SOURCE_REGISTRY = registerManager.FLUIDS.register("diesel_source", ()->DIESEL_SOURCE);
     public static final FlowingFluid DIESEL_FLOWING = new DieselFluid.Flowing();
     public static final RegistryObject<Fluid> DIESEL_FLOWING_REGISTRY = registerManager.FLUIDS.register("diesel_flowing", ()->DIESEL_FLOWING);
+
+    public static final FlowingFluid FUEL_OIL_SOURCE = new FuelOilFluid.Source();
+    public static final RegistryObject<Fluid> FUEL_OIL_SOURCE_REGISTRY = registerManager.FLUIDS.register("fuel_oil_source", ()->FUEL_OIL_SOURCE);
+    public static final FlowingFluid FUEL_OIL_FLOWING = new FuelOilFluid.Flowing();
+    public static final RegistryObject<Fluid> FUEL_OIL_FLOWING_REGISTRY = registerManager.FLUIDS.register("fuel_oil_flowing", ()->FUEL_OIL_FLOWING);
 
 
     public static void register(){

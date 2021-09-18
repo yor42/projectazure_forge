@@ -43,6 +43,7 @@ public class registerBlocks {
     public static final RegistryObject<Block> CRUDE_OIL = register_noblock("crude_oil", ()->new FlowingFluidBlock(()->registerFluids.CRUDE_OIL_SOURCE, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
     public static final RegistryObject<Block> GASOLINE = register_noblock("gasoline", ()->new FlowingFluidBlock(()->registerFluids.GASOLINE_SOURCE, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
     public static final RegistryObject<Block> DIESEL = register_noblock("diesel", ()->new FlowingFluidBlock(()->registerFluids.DIESEL_SOURCE, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
+    public static final RegistryObject<Block> FUEL_OIL = register_noblock("fuel_oil", ()->new FlowingFluidBlock(()->registerFluids.FUEL_OIL_SOURCE, AbstractBlock.Properties.create(Material.WATER).doesNotBlockMovement().hardnessAndResistance(100.0F).noDrops()));
 
 
     public static final RegistryObject<Block> REENFORCED_PLANK = register("reenforced_plank",() -> new Block(AbstractBlock.Properties.create(Material.WOOD).harvestLevel(2).hardnessAndResistance(4F, 6F)), Main.PA_RESOURCES);

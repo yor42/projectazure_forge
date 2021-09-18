@@ -23,16 +23,16 @@ import net.minecraftforge.fluids.FluidAttributes;
 
 import static com.yor42.projectazure.setup.register.registerFluids.*;
 
-public abstract class DieselFluid extends FlowingFluid {
+public abstract class FuelOilFluid extends FlowingFluid {
 
     @Override
     public Fluid getFlowingFluid() {
-        return DIESEL_FLOWING;
+        return FUEL_OIL_FLOWING;
     }
 
     @Override
     public Fluid getStillFluid() {
-        return DIESEL_SOURCE;
+        return FUEL_OIL_SOURCE;
     }
 
     @Override
@@ -58,7 +58,7 @@ public abstract class DieselFluid extends FlowingFluid {
 
     @Override
     public Item getFilledBucket() {
-        return registerItems.DIESEL_BUCKET.get();
+        return registerItems.FUEL_OIL_BUCKET.get();
     }
 
     @Override
@@ -72,8 +72,8 @@ public abstract class DieselFluid extends FlowingFluid {
                         new ResourceLocation("block/water_still"),
                         new ResourceLocation("block/water_flow"))
                 .overlay(new ResourceLocation("block/water_overlay"))
-                .translationKey("block.projectazure.diesel")
-                .color(0x88aa7d00).density(2000).viscosity(2000)
+                .translationKey("block.projectazure.fuel_oil")
+                .color(0x88694d00).density(2000).viscosity(2000)
                 .sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY)
                 .build(this);
     }
@@ -90,15 +90,15 @@ public abstract class DieselFluid extends FlowingFluid {
 
     @Override
     protected BlockState getBlockState(FluidState state) {
-        return registerBlocks.DIESEL.get().getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+        return registerBlocks.FUEL_OIL.get().getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
     }
 
     @Override
     public boolean isEquivalentTo(Fluid fluidIn) {
-        return fluidIn == DIESEL_SOURCE || fluidIn == DIESEL_FLOWING;
+        return fluidIn == FUEL_OIL_SOURCE || fluidIn == FUEL_OIL_FLOWING;
     }
 
-    public static class Flowing extends DieselFluid {
+    public static class Flowing extends FuelOilFluid {
         protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
             super.fillStateContainer(builder);
             builder.add(LEVEL_1_8);
@@ -113,7 +113,7 @@ public abstract class DieselFluid extends FlowingFluid {
         }
     }
 
-    public static class Source extends DieselFluid {
+    public static class Source extends FuelOilFluid {
         public int getLevel(FluidState state) {
             return 8;
         }

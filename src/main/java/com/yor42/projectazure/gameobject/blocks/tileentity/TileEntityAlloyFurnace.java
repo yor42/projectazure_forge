@@ -169,7 +169,6 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     public ItemStack decrStackSize(int index, int count) {
         ItemStack stack = this.inventory.getStackInSlot(index);
         stack.shrink(count);
-        this.inventory.setStackInSlot(index, stack);
         return stack;
     }
 

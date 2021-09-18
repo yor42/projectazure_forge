@@ -65,6 +65,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("crude_oil_bucket");
         buildModel("gasoline_bucket");
         buildModel("diesel_bucket");
+        buildModel("fuel_oil_bucket");
 
         buildModel("polymer_plate");
 
