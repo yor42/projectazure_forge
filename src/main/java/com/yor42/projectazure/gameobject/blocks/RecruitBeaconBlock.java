@@ -15,7 +15,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class RecruitBeaconBlock extends AbstractAnimatedBlockMachines{
+public class RecruitBeaconBlock extends AbstractElectricMachineBlock {
 
     public RecruitBeaconBlock() {
         super((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid()));

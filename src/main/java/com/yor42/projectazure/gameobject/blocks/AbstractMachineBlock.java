@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
@@ -23,15 +22,13 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractAnimatedBlockMachines extends AbstractContainerBlock {
+public abstract class AbstractMachineBlock extends AbstractContainerBlock{
+    public AbstractMachineBlock(Properties properties) {
+        super(properties);
+    }
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
-
-    public AbstractAnimatedBlockMachines(Properties properties) {
-        super(properties);
-    }
 
     @Override
     public boolean hasTileEntity(BlockState state) {
@@ -64,11 +61,6 @@ public abstract class AbstractAnimatedBlockMachines extends AbstractContainerBlo
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
-    @Override
     public boolean shouldNotifyBlockChange() {
         return true;
     }
@@ -81,7 +73,7 @@ public abstract class AbstractAnimatedBlockMachines extends AbstractContainerBlo
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(ACTIVE, false).with(POWERED, false);
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite()).with(ACTIVE, false);
     }
 
     @Override
@@ -97,6 +89,7 @@ public abstract class AbstractAnimatedBlockMachines extends AbstractContainerBlo
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(FACING, ACTIVE, POWERED);
+        builder.add(FACING, ACTIVE);
     }
+
 }

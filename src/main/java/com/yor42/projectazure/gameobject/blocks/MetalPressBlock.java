@@ -15,7 +15,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class MetalPressBlock extends AbstractAnimatedBlockMachines {
+public class MetalPressBlock extends AbstractElectricMachineBlock {
 
 
     public MetalPressBlock() {

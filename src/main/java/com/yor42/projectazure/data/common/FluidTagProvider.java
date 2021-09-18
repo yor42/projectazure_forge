@@ -16,7 +16,6 @@ public class FluidTagProvider extends FluidTagsProvider {
 
     @Override
     protected void registerTags() {
-        this.getOrCreateBuilder(FluidTags.WATER).add(registerFluids.CRUDE_OIL_SOURCE);
-        this.getOrCreateBuilder(FluidTags.WATER).add(registerFluids.CRUDE_OIL_FLOWING);
+        this.getOrCreateBuilder(FluidTags.WATER).add(registerFluids.CRUDE_OIL_SOURCE).add(registerFluids.CRUDE_OIL_FLOWING).add(registerFluids.GASOLINE_SOURCE).add(registerFluids.GASOLINE_FLOWING).add(registerFluids.DIESEL_FLOWING).add(registerFluids.DIESEL_SOURCE);
     }
 }

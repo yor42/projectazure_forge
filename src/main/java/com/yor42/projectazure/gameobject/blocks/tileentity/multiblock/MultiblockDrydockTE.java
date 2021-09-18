@@ -24,8 +24,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.gameobject.blocks.AbstractAnimatedBlockMachines.ACTIVE;
-import static com.yor42.projectazure.gameobject.blocks.AbstractAnimatedBlockMachines.POWERED;
+import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.ACTIVE;
+import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;
 import static com.yor42.projectazure.setup.register.registerTE.DRYDOCK;
 
 public class MultiblockDrydockTE extends MultiblockBaseTE{

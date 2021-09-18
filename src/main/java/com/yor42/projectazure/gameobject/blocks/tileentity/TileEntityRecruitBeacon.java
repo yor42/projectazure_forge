@@ -34,7 +34,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static com.yor42.projectazure.gameobject.blocks.AbstractAnimatedBlockMachines.FACING;
+import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.FACING;
 import static com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock.POWERED;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRandomBlockposInRadius2D;
 

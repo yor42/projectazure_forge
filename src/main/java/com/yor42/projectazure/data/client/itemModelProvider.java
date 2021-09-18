@@ -63,6 +63,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("dust_brass");
 
         buildModel("crude_oil_bucket");
+        buildModel("gasoline_bucket");
+        buildModel("diesel_bucket");
 
         buildModel("polymer_plate");
 
