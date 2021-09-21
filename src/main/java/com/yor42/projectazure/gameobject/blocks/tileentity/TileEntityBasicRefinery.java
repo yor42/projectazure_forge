@@ -16,10 +16,12 @@ import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.loot.conditions.BlockStateProperty;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -27,10 +29,13 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -40,6 +45,10 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class TileEntityBasicRefinery extends LockableTileEntity implements INamedContainerProvider, ISidedInventory, IRecipeHelperPopulator, ITickableTileEntity {
+
+
+    private int burnTime;
+    private int bitumentick;
 
     /*
     Index:
@@ -52,15 +61,19 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     6: Fuel Oil Bucket in
     7: Fuel Oil Bucket out
     8: Bitumen out
+    9: Fuel
      */
 
 
-    public ItemStackHandler ITEMHANDLER = new ItemStackHandler(9){
+    public ItemStackHandler ITEMHANDLER = new ItemStackHandler(10){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             if(slot%2 == 0 && slot<8){
                 Item item = stack.getItem();
                 return item instanceof BucketItem;
+            }
+            else if(slot == 9){
+                return ForgeHooks.getBurnTime(stack, IRecipeType.SMELTING)>0;
             }
             return false;
         }
@@ -69,55 +82,49 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         protected void onContentsChanged(int slot) {
             ItemStack stack = this.getStackInSlot(slot);
             Item item = stack.getItem();
-            switch(slot){
-                case 0:{
-                    if(item instanceof BucketItem){
-                        Consumer<FluidStack> TransferLiquids = (fluidstack)->{
+            if(FluidUtil.getFluidContained(stack).isPresent()) {
+                switch (slot) {
+                    case 0: {
+                        Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
                             FluidTank tank = TileEntityBasicRefinery.this.CrudeOilTank;
-                            if(tank.fill(fluidstack, IFluidHandler.FluidAction.SIMULATE)>=fluidstack.getAmount()) {
+                            if (tank.fill(fluidstack, IFluidHandler.FluidAction.SIMULATE) >= fluidstack.getAmount()) {
                                 tank.fill(fluidstack, IFluidHandler.FluidAction.EXECUTE);
                             }
-                            if(item.hasContainerItem(stack)) {
+                            if (item.hasContainerItem(stack)) {
                                 TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(1, item.getContainerItem(stack));
                             }
                             stack.shrink(1);
                         };
                         FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
+                        break;
                     }
-                    break;
-                }
-                case 2:{
-                    if(item instanceof BucketItem){
+                    case 2: {
                         FluidTank tank = TileEntityBasicRefinery.this.GasolineTank;
-                        if(FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()){
+                        if (FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()) {
                             FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, true);
                             TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(3, stack.copy());
                             stack.shrink(1);
                         }
+                        break;
                     }
-                    break;
-                }
-                case 4:{
-                    if(item instanceof BucketItem){
+                    case 4: {
                         FluidTank tank = TileEntityBasicRefinery.this.DieselTank;
-                        if(FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()){
+                        if (FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()) {
                             FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, true);
                             TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(5, stack.copy());
                             stack.shrink(1);
                         }
+                        break;
                     }
-                    break;
-                }
-                case 6:{
-                    if(item instanceof BucketItem){
+                    case 6: {
                         FluidTank tank = TileEntityBasicRefinery.this.FuelOilTank;
-                        if(FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()){
+                        if (FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()) {
                             FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, true);
                             TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(7, stack.copy());
                             stack.shrink(1);
                         }
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -165,7 +172,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
     @Override
     public boolean canExtractItem(int i, ItemStack itemStack, Direction direction) {
-        return false;
+        return direction == Direction.DOWN;
     }
 
     @Override
@@ -211,7 +218,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
     @Override
     public void setInventorySlotContents(int i, ItemStack itemStack) {
-
+        this.ITEMHANDLER.setStackInSlot(i, itemStack);
     }
 
     @Override
@@ -233,9 +240,63 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         }
     }
 
+
+    private boolean isBurning() {
+        return this.burnTime > 0;
+    }
+
     @Override
     public void tick() {
+        if(this.world != null) {
+            boolean flag = this.isBurning();
+            boolean flag1 = false;
+            if (this.isBurning()) {
+                --this.burnTime;
+            }
 
+            if (!this.world.isRemote) {
+                ItemStack itemstack = this.ITEMHANDLER.getStackInSlot(9);
+                if(this.isBurning() || this.CrudeOilTank.getFluidAmount()>100 && !itemstack.isEmpty()){
+                    if (!this.isBurning() && this.CrudeOilTank.getFluidAmount()>100) {
+                        this.burnTime = ForgeHooks.getBurnTime(itemstack, IRecipeType.SMELTING);
+                        if (this.isBurning()) {
+                            flag1 = true;
+                            if (itemstack.hasContainerItem())
+                                this.ITEMHANDLER.setStackInSlot(9, itemstack.getContainerItem());
+                            else if (!itemstack.isEmpty()) {
+                                Item item = itemstack.getItem();
+                                itemstack.shrink(1);
+                                if (itemstack.isEmpty()) {
+                                    this.ITEMHANDLER.setStackInSlot(1, itemstack.getContainerItem());
+                                }
+                            }
+                        }
+                    }
+
+                    if (this.isBurning() && this.CrudeOilTank.getFluidAmount()>100) {
+                        //Do process
+                        this.bitumentick++;
+                        FluidStack stack = this.CrudeOilTank.drain(10, IFluidHandler.FluidAction.EXECUTE);
+                        int drainedAmount = stack.getAmount();
+                        int FuelOilAmount = (int) (drainedAmount*0.3);
+                        int GasolineAmount = (int) (drainedAmount*0.46);
+                        int DieselAmount = (int) (drainedAmount*0.3);
+                        this.DieselTank.fill(new FluidStack(registerFluids.DIESEL_SOURCE, DieselAmount), IFluidHandler.FluidAction.EXECUTE);
+                        this.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE, GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
+                        this.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
+                        if(this.bitumentick%600==0){
+
+                        }
+                    }
+
+                }
+            }
+
+            if (flag1) {
+                this.markDirty();
+            }
+
+        }
     }
 
     @Override
