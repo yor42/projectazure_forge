@@ -105,6 +105,9 @@ public class registerItems {
     public static final RegistryObject<Item> TREE_SAP = registerManager.ITEMS.register("tree_sap", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
 
+    public static final RegistryObject<Item> BITUMEN = registerManager.ITEMS.register("bitumen", () -> new Item(new Item.Properties()
+            .group(PA_GROUP)));
+
     public static final RegistryObject<Item> PLATE_POLYMER = registerManager.ITEMS.register("polymer_plate", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
 

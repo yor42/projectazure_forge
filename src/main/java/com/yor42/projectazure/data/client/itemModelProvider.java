@@ -102,6 +102,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("originite");
         buildModel("originium_prime");
 
+        buildModel("bitumen");
+
         /*
         Build Ore Block Item model
          */

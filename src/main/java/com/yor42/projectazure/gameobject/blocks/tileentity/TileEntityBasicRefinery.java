@@ -3,6 +3,8 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import com.yor42.projectazure.setup.register.registerFluids;
+import com.yor42.projectazure.setup.register.registerItems;
+import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -43,6 +45,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 
 public class TileEntityBasicRefinery extends LockableTileEntity implements INamedContainerProvider, ISidedInventory, IRecipeHelperPopulator, ITickableTileEntity {
 
@@ -247,14 +251,14 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
     @Override
     public void tick() {
-        if(this.world != null) {
+        if(this.getWorld() != null) {
             boolean flag = this.isBurning();
             boolean flag1 = false;
             if (this.isBurning()) {
                 --this.burnTime;
             }
 
-            if (!this.world.isRemote) {
+            if (!this.getWorld().isRemote) {
                 ItemStack itemstack = this.ITEMHANDLER.getStackInSlot(9);
                 if(this.isBurning() || this.CrudeOilTank.getFluidAmount()>100 && !itemstack.isEmpty()){
                     if (!this.isBurning() && this.CrudeOilTank.getFluidAmount()>100) {
@@ -264,7 +268,6 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                             if (itemstack.hasContainerItem())
                                 this.ITEMHANDLER.setStackInSlot(9, itemstack.getContainerItem());
                             else if (!itemstack.isEmpty()) {
-                                Item item = itemstack.getItem();
                                 itemstack.shrink(1);
                                 if (itemstack.isEmpty()) {
                                     this.ITEMHANDLER.setStackInSlot(1, itemstack.getContainerItem());
@@ -273,7 +276,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                         }
                     }
 
-                    if (this.isBurning() && this.CrudeOilTank.getFluidAmount()>100) {
+                    if (this.isBurning() && this.CrudeOilTank.getFluidAmount()>100 && (this.ITEMHANDLER.getStackInSlot(8).isEmpty() || this.ITEMHANDLER.getStackInSlot(8).getCount()<64)) {
                         //Do process
                         this.bitumentick++;
                         FluidStack stack = this.CrudeOilTank.drain(10, IFluidHandler.FluidAction.EXECUTE);
@@ -285,11 +288,21 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                         this.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE, GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
                         this.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
                         if(this.bitumentick%600==0){
-
+                            if(this.ITEMHANDLER.getStackInSlot(8).isEmpty()){
+                                this.ITEMHANDLER.setStackInSlot(8, new ItemStack(registerItems.BITUMEN.get()));
+                            }
+                            else {
+                                this.ITEMHANDLER.getStackInSlot(8).grow(1);
+                            }
                         }
                     }
-
                 }
+
+                if (flag != this.isBurning() && this.getWorld().getBlockState(this.getPos()).hasProperty(ACTIVE)) {
+                    flag1 = true;
+                    this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(this.pos).with(ACTIVE, this.isBurning()), 3);
+                }
+
             }
 
             if (flag1) {
@@ -307,6 +320,8 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         compound.put("gasolinetank", this.GasolineTank.writeToNBT(new CompoundNBT()));
         compound.put("dieseltank", this.DieselTank.writeToNBT(new CompoundNBT()));
         compound.put("fueloiltank", this.FuelOilTank.writeToNBT(new CompoundNBT()));
+        compound.putInt("bitumentick", this.bitumentick);
+        compound.putInt("burntime", this.burnTime);
         return compound;
     }
 
@@ -318,5 +333,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         this.GasolineTank.readFromNBT(compound.getCompound("gasolinetank"));
         this.DieselTank.readFromNBT(compound.getCompound("dieseltank"));
         this.FuelOilTank.readFromNBT(compound.getCompound("fueloiltank"));
+        this.bitumentick = compound.getInt("bitumentick");
+        this.burnTime = compound.getInt("burntime");
     }
 }
