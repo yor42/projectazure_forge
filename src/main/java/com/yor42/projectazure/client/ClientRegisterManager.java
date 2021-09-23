@@ -17,6 +17,7 @@ public class ClientRegisterManager {
         ScreenManager.registerFactory(registerManager.ALLOY_FURNACE_CONTAINER.get(), guiAlloyFurnace::new);
         ScreenManager.registerFactory(registerManager.RECRUIT_BEACON_CONTAINER.get(), guiRecruitBeacon::new);
         ScreenManager.registerFactory(registerManager.DRYDOCK_CONTAINER.get(), guiDryDock::new);
+        ScreenManager.registerFactory(registerManager.BASIC_REFINERY_CONTAINER.get(), guiBasicRefinery::new);
     }
 
 }
