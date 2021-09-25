@@ -1,16 +1,12 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.RayTraceContext;
 
 public class ItemBandage extends ItemBaseTooltip {
 

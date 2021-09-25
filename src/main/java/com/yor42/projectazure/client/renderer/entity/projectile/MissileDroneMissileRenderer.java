@@ -3,7 +3,6 @@ package com.yor42.projectazure.client.renderer.entity.projectile;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.misc.modelProjectileDroneMissile;
-import com.yor42.projectazure.client.model.entity.misc.modelProjectileGunBullet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;

@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

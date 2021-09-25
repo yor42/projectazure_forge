@@ -4,7 +4,6 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
-import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.items.ItemMissleDrone;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;

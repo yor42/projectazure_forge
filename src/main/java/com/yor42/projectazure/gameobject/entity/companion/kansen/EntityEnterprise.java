@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
@@ -12,7 +11,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;

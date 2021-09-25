@@ -231,12 +231,12 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
             if (this.isBurning() || !FuelStack.isEmpty() && !this.inventory.getStackInSlot(0).isEmpty()&& !this.inventory.getStackInSlot(1).isEmpty()) {
                 IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe(this.recipeType, this, this.world).orElse(null);
 
-                if(irecipe != null && irecipe instanceof AlloyingRecipe){
+                if(irecipe != null){
                     this.cookTimeTotal = this.getCookTime();
                 }
 
                 if (!this.isBurning() && this.canSmelt(irecipe)) {
-                    this.burnTime = ForgeHooks.getBurnTime(FuelStack);
+                    this.burnTime = ForgeHooks.getBurnTime(FuelStack, IRecipeType.BLASTING);
                     this.totalBurntime = this.burnTime;
                     if (this.isBurning()) {
                         flag1 = true;

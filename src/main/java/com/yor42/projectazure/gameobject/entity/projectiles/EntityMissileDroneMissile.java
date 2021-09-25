@@ -1,15 +1,11 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
-import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.entity.projectile.ShulkerBulletEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -17,10 +13,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
@@ -33,8 +27,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_DRONE_MISSILE;
 
 public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     @Nullable

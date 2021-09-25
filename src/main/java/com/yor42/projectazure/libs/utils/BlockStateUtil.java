@@ -2,8 +2,6 @@ package com.yor42.projectazure.libs.utils;
 
 import net.minecraft.util.Direction;
 
-import javax.annotation.Nullable;
-
 public class BlockStateUtil {
     public static RelativeDirection getRelativeDirection(Direction direction, Direction MachineFacings) {
         switch (MachineFacings) {

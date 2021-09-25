@@ -5,7 +5,6 @@ import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

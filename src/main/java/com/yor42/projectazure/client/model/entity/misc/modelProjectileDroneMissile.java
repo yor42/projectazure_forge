@@ -8,8 +8,6 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
 
 public class modelProjectileDroneMissile extends EntityModel<EntityMissileDroneMissile> {
 	private final ModelRenderer Body;

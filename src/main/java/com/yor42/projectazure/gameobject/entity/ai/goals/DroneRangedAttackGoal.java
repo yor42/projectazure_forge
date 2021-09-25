@@ -1,11 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.RangedAttackGoal;
-import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;

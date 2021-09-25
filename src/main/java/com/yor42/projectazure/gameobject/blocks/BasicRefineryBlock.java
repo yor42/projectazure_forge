@@ -1,14 +1,10 @@
 package com.yor42.projectazure.gameobject.blocks;
 
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;

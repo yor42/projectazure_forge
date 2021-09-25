@@ -14,8 +14,6 @@ import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPell
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.events.ModBusEventHandlerClient;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
-import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;

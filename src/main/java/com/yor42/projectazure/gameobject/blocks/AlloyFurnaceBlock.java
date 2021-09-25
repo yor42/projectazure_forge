@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
+import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -35,7 +36,7 @@ public class AlloyFurnaceBlock extends Block {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public AlloyFurnaceBlock() {
-        super((AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.STONE)));
+        super((AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).harvestLevel(2).setLightLevel(registerBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
     }
 
     @Override
@@ -121,6 +122,7 @@ public class AlloyFurnaceBlock extends Block {
         super.fillStateContainer(builder);
         builder.add(FACING,ACTIVE);
     }
+
 
 
 }

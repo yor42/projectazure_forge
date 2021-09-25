@@ -9,7 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getPlaneFuel;
 
 public abstract class EntityKansenAircraftCarrier extends EntityKansenBase {
     protected EntityKansenAircraftCarrier(EntityType<? extends TameableEntity> type, World worldIn) {

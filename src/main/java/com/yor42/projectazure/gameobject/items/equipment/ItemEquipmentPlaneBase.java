@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.items.equipment;
 
-import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;

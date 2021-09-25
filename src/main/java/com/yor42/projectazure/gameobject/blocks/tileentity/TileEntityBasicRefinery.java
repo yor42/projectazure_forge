@@ -6,43 +6,32 @@ import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.IRecipeHolder;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.loot.conditions.BlockStateProperty;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -53,24 +42,25 @@ import java.util.function.Predicate;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 
-public class TileEntityBasicRefinery extends LockableTileEntity implements INamedContainerProvider, ISidedInventory, IRecipeHelperPopulator, ITickableTileEntity {
+public class TileEntityBasicRefinery extends LockableTileEntity implements INamedContainerProvider, IRecipeHelperPopulator, ITickableTileEntity {
 
 
     private int burnTime = 0;
     private int totalBurntime = 0;
     private int bitumentick;
+    private int isActive = 0;
 
     private final Predicate<FluidStack> CrudeOilPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.CRUDE_OIL_SOURCE;
     private final Predicate<FluidStack> GasolinePredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.GASOLINE_SOURCE;
     private final Predicate<FluidStack> DieselPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.DIESEL_SOURCE;
     private final Predicate<FluidStack> FuelOilPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.FUEL_OIL_SOURCE;
 
-    public FluidTank CrudeOilTank = new FluidTank(2000,this.CrudeOilPredicate);
-    public FluidTank GasolineTank = new FluidTank(1000,this.GasolinePredicate);
-    public FluidTank DieselTank = new FluidTank(1000,this.DieselPredicate);
-    public FluidTank FuelOilTank = new FluidTank(1000,this.FuelOilPredicate);
+    public FluidTank CrudeOilTank = new FluidTank(4000,this.CrudeOilPredicate);
+    public FluidTank GasolineTank = new FluidTank(2000,this.GasolinePredicate);
+    public FluidTank DieselTank = new FluidTank(2000,this.DieselPredicate);
+    public FluidTank FuelOilTank = new FluidTank(2000,this.FuelOilPredicate);
 
-    private final int[] FieldArray = {this.burnTime,this.totalBurntime,this.CrudeOilTank.getFluidAmount(), this.CrudeOilTank.getCapacity(),this.GasolineTank.getFluidAmount(), this.GasolineTank.getCapacity(),this.DieselTank.getFluidAmount(),this.DieselTank.getCapacity(),this.FuelOilTank.getFluidAmount(),this.FuelOilTank.getCapacity()};
+    private final int[] FieldArray = {this.burnTime,this.totalBurntime,this.CrudeOilTank.getFluidAmount(), this.CrudeOilTank.getCapacity(),this.GasolineTank.getFluidAmount(), this.GasolineTank.getCapacity(),this.DieselTank.getFluidAmount(),this.DieselTank.getCapacity(),this.FuelOilTank.getFluidAmount(),this.FuelOilTank.getCapacity(), this.isActive};
 
     private final IIntArray fields = new IIntArray() {
         @Override
@@ -86,6 +76,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                 case 7: return TileEntityBasicRefinery.this.DieselTank.getCapacity();
                 case 8: return TileEntityBasicRefinery.this.FuelOilTank.getFluidAmount();
                 case 9: return TileEntityBasicRefinery.this.FuelOilTank.getCapacity();
+                case 10: return TileEntityBasicRefinery.this.isActive;
             }
         }
 
@@ -100,7 +91,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
         @Override
         public int size() {
-            return 10;
+            return 11;
         }
     };
 
@@ -123,19 +114,8 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             if(slot<8){
-                if(slot%2 == 0) {
+                if(slot == 0) {
                     FluidTank tank = TileEntityBasicRefinery.this.CrudeOilTank;
-                    switch (slot) {
-                        case 2:
-                            tank = TileEntityBasicRefinery.this.GasolineTank;
-                            break;
-                        case 4:
-                            tank = TileEntityBasicRefinery.this.DieselTank;
-                            break;
-                        case 6:
-                            tank = TileEntityBasicRefinery.this.FuelOilTank;
-                            break;
-                    }
                     return FluidUtil.getFluidContained(stack).isPresent() && tank.isFluidValid(FluidUtil.getFluidContained(stack).get());
                 }
                 else{
@@ -147,100 +127,11 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
             }
             return false;
         }
-
-        @Override
-        protected void onContentsChanged(int slot) {
-            ItemStack stack = this.getStackInSlot(slot);
-            Item item = stack.getItem();
-            if(FluidUtil.getFluidContained(stack).isPresent()) {
-                switch (slot) {
-                    case 0: {
-                        Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
-                            FluidTank tank = TileEntityBasicRefinery.this.CrudeOilTank;
-                            int simulated = tank.fill(fluidstack, IFluidHandler.FluidAction.SIMULATE);
-                            if (simulated >= fluidstack.getAmount()) {
-                                tank.fill(fluidstack, IFluidHandler.FluidAction.EXECUTE);
-                                if (item.hasContainerItem(stack)) {
-                                    ItemStack OutputSlot = TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(1);
-                                    if(TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(1).isEmpty()){
-                                        TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(1, item.getContainerItem(stack));
-                                        stack.shrink(1);
-                                    }
-                                    else if(OutputSlot.getItem() == item.getContainerItem(stack).getItem() && OutputSlot.getItem().getMaxStackSize()>=OutputSlot.getCount()+item.getContainerItem(stack).getCount()){
-                                        TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(1).grow(item.getContainerItem(stack).getCount());
-                                        stack.shrink(1);
-                                    };
-                                }
-                            }
-                        };
-                        FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
-                        break;
-                    }
-                    case 2: {
-                        FluidTank tank = TileEntityBasicRefinery.this.GasolineTank;
-                        if (FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()) {
-                            FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, true);
-                            TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(3, stack.copy());
-                            stack.shrink(1);
-                        }
-                        break;
-                    }
-                    case 4: {
-                        FluidTank tank = TileEntityBasicRefinery.this.DieselTank;
-                        if (FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()) {
-                            FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, true);
-                            TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(5, stack.copy());
-                            stack.shrink(1);
-                        }
-                        break;
-                    }
-                    case 6: {
-                        FluidTank tank = TileEntityBasicRefinery.this.FuelOilTank;
-                        if (FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, false).isSuccess()) {
-                            FluidUtil.tryFillContainerAndStow(stack, tank, null, 1000, null, true);
-                            TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(7, stack.copy());
-                            stack.shrink(1);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
     };
 
 
     public TileEntityBasicRefinery() {
         super(registerTE.BASIC_REFINERY.get());
-    }
-
-    @Override
-    public int[] getSlotsForFace(Direction direction) {
-        if(this.getWorld().getBlockState(this.getPos()).hasProperty(AbstractMachineBlock.FACING)) {
-            Direction blockfacing = this.getWorld().getBlockState(this.getPos()).get(AbstractMachineBlock.FACING);
-            BlockStateUtil.RelativeDirection relativeDirection = BlockStateUtil.getRelativeDirection(direction, blockfacing);
-            switch (relativeDirection) {
-                case LEFT: {
-                    return new int[]{0};
-                }
-                case UP: {
-                    return new int[]{2,4,6};
-                }
-                case RIGHT: {
-                    return new int[]{8};
-                }
-            }
-        }
-        return new int[] {1,3,5,7};
-    }
-
-    @Override
-    public boolean canInsertItem(int i, ItemStack itemStack, @Nullable Direction direction) {
-        return this.ITEMHANDLER.isItemValid(i, itemStack);
-    }
-
-    @Override
-    public boolean canExtractItem(int i, ItemStack itemStack, Direction direction) {
-        return direction == Direction.DOWN;
     }
 
     @Override
@@ -325,6 +216,61 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                 --this.burnTime;
             }
 
+
+            for(int slot = 0; slot<7; slot+=2){
+                ItemStack stack = this.getStackInSlot(slot);
+                Item item = stack.getItem();
+                if(slot == 0){
+                    int finalSlot = slot;
+                    Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
+                        FluidTank tank = this.CrudeOilTank;
+                        FluidActionResult actionresult = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
+                        if (actionresult.isSuccess()) {
+                            ItemStack result = actionresult.getResult();
+                            if (TileEntityBasicRefinery.this.ITEMHANDLER.insertItem(1, result, true).isEmpty()) {
+                                if (TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(1).isEmpty()){
+                                    TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(1, result);
+                                }
+                                else {
+                                    TileEntityBasicRefinery.this.ITEMHANDLER.insertItem(1, result, false);
+                                }
+                                stack.shrink(1);
+                                TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
+                            }
+
+                        }
+                    };
+                    FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
+                }
+                else {
+                    FluidTank tank;
+                    switch (slot) {
+                        default: {
+                            tank = TileEntityBasicRefinery.this.GasolineTank;
+                            break;
+                        }
+                        case 4: {
+                            tank = TileEntityBasicRefinery.this.DieselTank;
+                            break;
+                        }
+                        case 6: {
+                            tank = TileEntityBasicRefinery.this.FuelOilTank;
+                            break;
+                        }
+                    }
+                    if (FluidUtil.getFluidHandler(stack).isPresent()) {
+                        if (TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(slot+1).isEmpty()) {
+                            FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
+                            if(result.isSuccess()) {
+                                TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(slot + 1, result.getResult());
+                                stack.shrink(1);
+                                this.ITEMHANDLER.setStackInSlot(slot, stack);
+                            }
+                        }
+                    }
+                }
+            }
+
             if (!this.getWorld().isRemote) {
                 ItemStack itemstack = this.ITEMHANDLER.getStackInSlot(9);
                 if(this.isBurning() || this.CrudeOilTank.getFluidAmount()>100 && !itemstack.isEmpty()){
@@ -347,6 +293,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                     if (this.isBurning() && this.CrudeOilTank.getFluidAmount()>100 && (this.ITEMHANDLER.getStackInSlot(8).isEmpty() || this.ITEMHANDLER.getStackInSlot(8).getCount()<64)) {
                         //Do process
                         this.bitumentick++;
+                        this.isActive = 1;
                         FluidStack stack = this.CrudeOilTank.drain(10, IFluidHandler.FluidAction.EXECUTE);
                         int drainedAmount = stack.getAmount();
                         int FuelOilAmount = (int) (drainedAmount*0.3);
@@ -364,6 +311,8 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                             }
                         }
                     }
+                }else {
+                    this.isActive = 0;
                 }
 
                 if (flag != this.isBurning() && this.getWorld().getBlockState(this.getPos()).hasProperty(ACTIVE)) {
@@ -391,6 +340,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         compound.putInt("bitumentick", this.bitumentick);
         compound.putInt("totalburntime", this.totalBurntime);
         compound.putInt("burntime", this.burnTime);
+        compound.putInt("activestate", this.isActive);
         return compound;
     }
 
@@ -405,6 +355,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         this.bitumentick = compound.getInt("bitumentick");
         this.totalBurntime = compound.getInt("totalburntime");
         this.burnTime = compound.getInt("burntime");
+        this.isActive = compound.getInt("activestate");
     }
 
     public void encodeExtraData(PacketBuffer buffer) {
@@ -413,5 +364,32 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         buffer.writeFluidStack(this.GasolineTank.getFluid());
         buffer.writeFluidStack(this.DieselTank.getFluid());
         buffer.writeFluidStack(this.FuelOilTank.getFluid());
+    }
+
+    private final LazyOptional<FluidTank> crudeTankCap = LazyOptional.of(()->this.CrudeOilTank);
+    private final LazyOptional<FluidTank> gasolineTankCap = LazyOptional.of(()->this.GasolineTank);
+    private final LazyOptional<FluidTank> dieselTankCap = LazyOptional.of(()->this.DieselTank);
+    private final LazyOptional<FluidTank> fueloilTankCap = LazyOptional.of(()->this.FuelOilTank);
+
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction direction) {
+
+        if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return LazyOptional.of(()->this.ITEMHANDLER).cast();
+        }
+        else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+            if(this.getBlockState().hasProperty(AbstractMachineBlock.FACING))
+            switch (BlockStateUtil.getRelativeDirection(direction, this.getWorld().getBlockState(this.getPos()).get(AbstractMachineBlock.FACING))){
+                case LEFT:
+                    return this.crudeTankCap.cast();
+                case FRONT:
+                    return this.gasolineTankCap.cast();
+                case BACK:
+                    return this.dieselTankCap.cast();
+                case RIGHT:
+                    return this.fueloilTankCap.cast();
+            }
+        }
+        return super.getCapability(capability, direction);
     }
 }

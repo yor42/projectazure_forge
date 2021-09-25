@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.passive.TameableEntity;
 
 import java.util.EnumSet;
 

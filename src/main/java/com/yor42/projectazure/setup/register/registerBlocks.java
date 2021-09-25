@@ -10,7 +10,6 @@ import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -23,13 +22,13 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.function.ToIntFunction;
 
 public class registerBlocks {
 
@@ -60,7 +59,7 @@ public class registerBlocks {
 
     public static final RegistryObject<Block> METAL_PRESS = register_blockWithToolTiponItem("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> ALLOY_FURNACE = register_blockWithToolTiponItem("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);
-    public static final RegistryObject<Block> BASIC_REFINERY = register_blockWithToolTiponItem("basic_refinery", ()->new BasicRefineryBlock(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.STONE).notSolid()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> BASIC_REFINERY = register_blockWithToolTiponItem("basic_refinery", ()->new BasicRefineryBlock(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).setLightLevel(registerBlocks.getLightValueLit(8)).harvestLevel(2).sound(SoundType.STONE).notSolid()), Main.PA_MACHINES);
 
     public static final RegistryObject<Block> DRYDOCKCONTROLLER = register_blockWithToolTiponItem("drydock_controller",()-> new blockMultiblockDryDockController(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid()), Main.PA_MACHINES);
     public static final RegistryObject<Block> REENFORCEDCONCRETE = register_blockWithToolTiponItem("reenforced_concrete",()-> new MultiblockStructureBlocks(AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.STONE).notSolid()), Main.PA_MACHINES);
@@ -116,6 +115,12 @@ public class registerBlocks {
         RegistryObject<Block> ret = register_noblock(registryName, () -> new PAOreBlock(materialName));
         registerManager.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName));
         return ret;
+    }
+
+    public static ToIntFunction<BlockState> getLightValueLit(int lightValue) {
+        return (state) -> {
+            return state.get(AbstractMachineBlock.ACTIVE) ? lightValue : 0;
+        };
     }
 
     public static void register(){}

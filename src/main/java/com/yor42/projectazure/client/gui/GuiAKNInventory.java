@@ -15,13 +15,10 @@ import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
-import net.minecraftforge.items.SlotItemHandler;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 

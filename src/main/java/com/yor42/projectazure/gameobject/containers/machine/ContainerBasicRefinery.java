@@ -1,19 +1,15 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.setup.register.registerFluids;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.*;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -22,9 +18,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.setup.register.registerFluids.*;
 import static com.yor42.projectazure.setup.register.registerManager.BASIC_REFINERY_CONTAINER_TYPE;
 
 public class ContainerBasicRefinery extends Container {
@@ -64,6 +58,7 @@ public class ContainerBasicRefinery extends Container {
         this.fueloilstack = fueloilstack;
 
 
+
         this.addSlot(new FuelSlot(Inventory, 9, 37, 63));
         this.addSlot(new SlotItemHandler(Inventory, 8, 142, 35){
             @Override
@@ -98,6 +93,18 @@ public class ContainerBasicRefinery extends Container {
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return true;
+    }
+
+    public boolean isBurning() {
+        return this.field.get(0)>0;
+    }
+
+    public float getBurnLeftScaled(){
+        return (float)this.field.get(0)/this.field.get(1)* 12;
+    }
+
+    public boolean isActive(){
+        return this.field.get(10)>0;
     }
 
     private static class FuelSlot extends SlotItemHandler{
@@ -148,7 +155,7 @@ public class ContainerBasicRefinery extends Container {
 
         @Override
         public boolean isItemValid(@Nonnull ItemStack stack) {
-            return false;
+            return FluidUtil.getFluidHandler(stack).isPresent();
         }
     }
 

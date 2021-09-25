@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import javafx.util.Pair;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effects;

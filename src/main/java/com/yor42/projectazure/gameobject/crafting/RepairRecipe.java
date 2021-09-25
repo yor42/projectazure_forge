@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.crafting;
 
-import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.interfaces.IItemDestroyable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.inventory.CraftingInventory;

@@ -21,7 +21,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.*;
+import static com.yor42.projectazure.setup.register.registerFluids.DIESEL_FLOWING;
+import static com.yor42.projectazure.setup.register.registerFluids.DIESEL_SOURCE;
 
 public abstract class DieselFluid extends FlowingFluid {
 

@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -17,7 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.EntityUtils.EntityHasPlanes;
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getPreparedPlane;
 
 public class KansenLaunchPlaneGoal extends Goal {
 

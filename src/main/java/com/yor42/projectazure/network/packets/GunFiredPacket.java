@@ -1,7 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.events.GunFireEvent;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 

@@ -1,6 +1,5 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.*;

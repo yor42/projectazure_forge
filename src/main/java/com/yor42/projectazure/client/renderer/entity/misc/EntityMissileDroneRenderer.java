@@ -3,7 +3,6 @@ package com.yor42.projectazure.client.renderer.entity.misc;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.planes.ModelMissileDroneEntity;
-import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -11,7 +10,6 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;

@@ -5,7 +5,6 @@ import javafx.util.Pair;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.AbstractRaiderEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PotionEntity;

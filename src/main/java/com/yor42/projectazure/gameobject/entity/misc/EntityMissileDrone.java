@@ -1,27 +1,18 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
-import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.ai.goals.DroneRangedAttackGoal;
 import com.yor42.projectazure.gameobject.entity.ai.targetAI.DroneOwnerAttackedTargetGoal;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
-import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -30,7 +21,6 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.setup.register.registerItems.DRONE_BAMISSILE;
-import static com.yor42.projectazure.setup.register.registerItems.WildcatHP;
 import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_DRONE_MISSILE;
 
 public class EntityMissileDrone extends AbstractEntityDrone{
