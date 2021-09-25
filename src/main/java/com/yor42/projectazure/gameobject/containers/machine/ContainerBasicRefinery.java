@@ -1,17 +1,21 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.setup.register.registerFluids;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -26,6 +30,8 @@ import static com.yor42.projectazure.setup.register.registerManager.BASIC_REFINE
 public class ContainerBasicRefinery extends Container {
 
     private final IIntArray field;
+
+    public final FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
 
     public ContainerBasicRefinery(int id, PlayerInventory inventory, PacketBuffer buffer) {
         this(id, inventory, new ItemStackHandler(10), new IIntArray() {
@@ -46,12 +52,17 @@ public class ContainerBasicRefinery extends Container {
             public int size() {
                 return values.length;
             }
-        });
+        }, buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack());
     }
 
-    public ContainerBasicRefinery(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
+    public ContainerBasicRefinery(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {
         super(BASIC_REFINERY_CONTAINER_TYPE, id);
         this.field = field;
+        this.crudeoilstack = CrudeOilStack;
+        this.gasolinestack = gasolinestack;
+        this.dieselstack=dieselstack;
+        this.fueloilstack = fueloilstack;
+
 
         this.addSlot(new FuelSlot(Inventory, 9, 37, 63));
         this.addSlot(new SlotItemHandler(Inventory, 8, 142, 35){
@@ -67,13 +78,12 @@ public class ContainerBasicRefinery extends Container {
             }
         }
 
-        this.addSlot(new BucketInSlot(Inventory, 0, 8, 7, registerFluids.CRUDE_OIL_SOURCE));
+        this.addSlot(new CrudeOilBucketInSlot(Inventory, 0, 8, 7, registerFluids.CRUDE_OIL_SOURCE));
         this.addSlot(new BucketOutSlot(Inventory, 1, 8, 63));
 
-        Fluid[] fluid = {GASOLINE_SOURCE, DIESEL_SOURCE, FUEL_OIL_SOURCE};
         for(int i=0; i<3; i++){
             int xval = 67+(23*i);
-            this.addSlot(new BucketInSlot(Inventory, 2+(i*2), xval, 7, fluid[i]));
+            this.addSlot(new BucketInSlot(Inventory, 2+(i*2), xval, 7));
             this.addSlot(new BucketOutSlot(Inventory, 3+(i*2), xval, 63));
         }
 
@@ -103,11 +113,11 @@ public class ContainerBasicRefinery extends Container {
         }
     }
 
-    private static class BucketInSlot extends SlotItemHandler{
+    private static class CrudeOilBucketInSlot extends SlotItemHandler{
 
         private final Fluid fluid;
 
-        public BucketInSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Fluid fluid) {
+        public CrudeOilBucketInSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition, Fluid fluid) {
             super(itemHandler, index, xPosition, yPosition);
             this.fluid = fluid;
         }
@@ -115,6 +125,18 @@ public class ContainerBasicRefinery extends Container {
         @Override
         public boolean isItemValid(@Nonnull ItemStack stack) {
             return FluidUtil.getFluidContained(stack).isPresent() && FluidUtil.getFluidContained(stack).get().getFluid() == this.fluid;
+        }
+    }
+
+    private static class BucketInSlot extends SlotItemHandler{
+
+        public BucketInSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean isItemValid(@Nonnull ItemStack stack) {
+            return FluidUtil.getFluidHandler(stack).isPresent();
         }
     }
 
@@ -128,5 +150,30 @@ public class ContainerBasicRefinery extends Container {
         public boolean isItemValid(@Nonnull ItemStack stack) {
             return false;
         }
+    }
+
+    public int getCrudeOilTankCapacity(){
+        return this.field.get(3);
+    }
+    public int getCrudeOilTankAmount(){
+        return this.field.get(2);
+    }
+    public int getGasolineTankCapacity(){
+        return this.field.get(5);
+    }
+    public int getGasolineTankAmount(){
+        return this.field.get(4);
+    }
+    public int getDieselTankCapacity(){
+        return this.field.get(7);
+    }
+    public int getDieselTankAmount(){
+        return this.field.get(6);
+    }
+    public int getFuelOilTankCapacity(){
+        return this.field.get(9);
+    }
+    public int getFuelOilTankAmount(){
+        return this.field.get(8);
     }
 }

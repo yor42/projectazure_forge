@@ -14,6 +14,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BucketItem;
@@ -55,48 +56,45 @@ import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTI
 public class TileEntityBasicRefinery extends LockableTileEntity implements INamedContainerProvider, ISidedInventory, IRecipeHelperPopulator, ITickableTileEntity {
 
 
-    private int burnTime;
+    private int burnTime = 0;
     private int totalBurntime = 0;
     private int bitumentick;
+
+    private final Predicate<FluidStack> CrudeOilPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.CRUDE_OIL_SOURCE;
+    private final Predicate<FluidStack> GasolinePredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.GASOLINE_SOURCE;
+    private final Predicate<FluidStack> DieselPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.DIESEL_SOURCE;
+    private final Predicate<FluidStack> FuelOilPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.FUEL_OIL_SOURCE;
+
+    public FluidTank CrudeOilTank = new FluidTank(2000,this.CrudeOilPredicate);
+    public FluidTank GasolineTank = new FluidTank(1000,this.GasolinePredicate);
+    public FluidTank DieselTank = new FluidTank(1000,this.DieselPredicate);
+    public FluidTank FuelOilTank = new FluidTank(1000,this.FuelOilPredicate);
+
+    private final int[] FieldArray = {this.burnTime,this.totalBurntime,this.CrudeOilTank.getFluidAmount(), this.CrudeOilTank.getCapacity(),this.GasolineTank.getFluidAmount(), this.GasolineTank.getCapacity(),this.DieselTank.getFluidAmount(),this.DieselTank.getCapacity(),this.FuelOilTank.getFluidAmount(),this.FuelOilTank.getCapacity()};
 
     private final IIntArray fields = new IIntArray() {
         @Override
         public int get(int index) {
-            switch (index) {
-                case 0:
-                    return TileEntityBasicRefinery.this.burnTime;
-                case 1:
-                    return TileEntityBasicRefinery.this.totalBurntime;
-                case 2:
-                    return TileEntityBasicRefinery.this.CrudeOilTank.getFluidAmount();
-                case 3:
-                    return TileEntityBasicRefinery.this.CrudeOilTank.getCapacity();
-                case 4:
-                    return TileEntityBasicRefinery.this.GasolineTank.getFluidAmount();
-                case 5:
-                    return TileEntityBasicRefinery.this.GasolineTank.getCapacity();
-                case 6:
-                    return TileEntityBasicRefinery.this.DieselTank.getFluidAmount();
-                case 7:
-                    return TileEntityBasicRefinery.this.DieselTank.getCapacity();
-                case 8:
-                    return TileEntityBasicRefinery.this.FuelOilTank.getFluidAmount();
-                case 9:
-                    return TileEntityBasicRefinery.this.FuelOilTank.getCapacity();
-                default:
-                    return 0;
+            switch(index){
+                default: return TileEntityBasicRefinery.this.burnTime;
+                case 1: return TileEntityBasicRefinery.this.totalBurntime;
+                case 2: return TileEntityBasicRefinery.this.CrudeOilTank.getFluidAmount();
+                case 3: return TileEntityBasicRefinery.this.CrudeOilTank.getCapacity();
+                case 4: return TileEntityBasicRefinery.this.GasolineTank.getFluidAmount();
+                case 5: return TileEntityBasicRefinery.this.GasolineTank.getCapacity();
+                case 6: return TileEntityBasicRefinery.this.DieselTank.getFluidAmount();
+                case 7: return TileEntityBasicRefinery.this.DieselTank.getCapacity();
+                case 8: return TileEntityBasicRefinery.this.FuelOilTank.getFluidAmount();
+                case 9: return TileEntityBasicRefinery.this.FuelOilTank.getCapacity();
             }
         }
 
         @Override
         public void set(int index, int value) {
-            switch (index) {
-                case 0:
-                    TileEntityBasicRefinery.this.burnTime = value;
-                    break;
-                case 1:
-                    TileEntityBasicRefinery.this.totalBurntime = value;
-                    break;
+            if (index == 1) {
+                TileEntityBasicRefinery.this.totalBurntime = value;
+            } else {
+                TileEntityBasicRefinery.this.burnTime = value;
             }
         }
 
@@ -124,21 +122,25 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     public ItemStackHandler ITEMHANDLER = new ItemStackHandler(10){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if(slot%2 == 0 && slot<8){
-                FluidTank tank = TileEntityBasicRefinery.this.CrudeOilTank;
-                switch (slot){
-                    case 2:
-                        tank = TileEntityBasicRefinery.this.GasolineTank;
-                        break;
-                    case 4:
-                        tank = TileEntityBasicRefinery.this.DieselTank;
-                        break;
-                    case 6:
-                        tank = TileEntityBasicRefinery.this.FuelOilTank;
-                        break;
+            if(slot<8){
+                if(slot%2 == 0) {
+                    FluidTank tank = TileEntityBasicRefinery.this.CrudeOilTank;
+                    switch (slot) {
+                        case 2:
+                            tank = TileEntityBasicRefinery.this.GasolineTank;
+                            break;
+                        case 4:
+                            tank = TileEntityBasicRefinery.this.DieselTank;
+                            break;
+                        case 6:
+                            tank = TileEntityBasicRefinery.this.FuelOilTank;
+                            break;
+                    }
+                    return FluidUtil.getFluidContained(stack).isPresent() && tank.isFluidValid(FluidUtil.getFluidContained(stack).get());
                 }
-                return FluidUtil.getFluidContained(stack).isPresent() && tank.isFluidValid(FluidUtil.getFluidContained(stack).get());
-
+                else{
+                    return FluidUtil.getFluidHandler(stack).isPresent();
+                }
             }
             else if(slot == 9){
                 return ForgeHooks.getBurnTime(stack, IRecipeType.SMELTING)>0;
@@ -155,13 +157,21 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                     case 0: {
                         Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
                             FluidTank tank = TileEntityBasicRefinery.this.CrudeOilTank;
-                            if (tank.fill(fluidstack, IFluidHandler.FluidAction.SIMULATE) >= fluidstack.getAmount()) {
+                            int simulated = tank.fill(fluidstack, IFluidHandler.FluidAction.SIMULATE);
+                            if (simulated >= fluidstack.getAmount()) {
                                 tank.fill(fluidstack, IFluidHandler.FluidAction.EXECUTE);
+                                if (item.hasContainerItem(stack)) {
+                                    ItemStack OutputSlot = TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(1);
+                                    if(TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(1).isEmpty()){
+                                        TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(1, item.getContainerItem(stack));
+                                        stack.shrink(1);
+                                    }
+                                    else if(OutputSlot.getItem() == item.getContainerItem(stack).getItem() && OutputSlot.getItem().getMaxStackSize()>=OutputSlot.getCount()+item.getContainerItem(stack).getCount()){
+                                        TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(1).grow(item.getContainerItem(stack).getCount());
+                                        stack.shrink(1);
+                                    };
+                                }
                             }
-                            if (item.hasContainerItem(stack)) {
-                                TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(1, item.getContainerItem(stack));
-                            }
-                            stack.shrink(1);
                         };
                         FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
                         break;
@@ -197,16 +207,6 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
             }
         }
     };
-
-    private final Predicate<FluidStack> CrudeOilPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.CRUDE_OIL_SOURCE;
-    private final Predicate<FluidStack> GasolinePredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.GASOLINE_SOURCE;
-    private final Predicate<FluidStack> DieselPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.DIESEL_SOURCE;
-    private final Predicate<FluidStack> FuelOilPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.FUEL_OIL_SOURCE;
-
-    public FluidTank CrudeOilTank = new FluidTank(2000,this.CrudeOilPredicate);
-    public FluidTank GasolineTank = new FluidTank(1000,this.GasolinePredicate);
-    public FluidTank DieselTank = new FluidTank(1000,this.DieselPredicate);
-    public FluidTank FuelOilTank = new FluidTank(1000,this.FuelOilPredicate);
 
 
     public TileEntityBasicRefinery() {
@@ -250,7 +250,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return new ContainerBasicRefinery(id, player, this.ITEMHANDLER, this.fields);
+        return new ContainerBasicRefinery(id, player, this.ITEMHANDLER, this.fields, this.CrudeOilTank.getFluid(), this.GasolineTank.getFluid(), this.DieselTank.getFluid(), this.FuelOilTank.getFluid());
     }
 
     @Override
@@ -408,8 +408,10 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     public void encodeExtraData(PacketBuffer buffer) {
-        int[] var = {this.burnTime,this.totalBurntime,this.CrudeOilTank.getFluidAmount(),this.CrudeOilTank.getCapacity(),this.GasolineTank.getFluidAmount(),
-                this.GasolineTank.getCapacity(),this.DieselTank.getFluidAmount(),this.DieselTank.getCapacity(),this.FuelOilTank.getFluidAmount(),this.FuelOilTank.getCapacity()};
-        buffer.writeVarIntArray(var);
+        buffer.writeVarIntArray(this.FieldArray);
+        buffer.writeFluidStack(this.CrudeOilTank.getFluid());
+        buffer.writeFluidStack(this.GasolineTank.getFluid());
+        buffer.writeFluidStack(this.DieselTank.getFluid());
+        buffer.writeFluidStack(this.FuelOilTank.getFluid());
     }
 }
