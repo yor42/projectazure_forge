@@ -311,8 +311,9 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                             }
                         }
                     }
-                }else {
-                    this.isActive = 0;
+                    else {
+                        this.isActive = 0;
+                    }
                 }
 
                 if (flag != this.isBurning() && this.getWorld().getBlockState(this.getPos()).hasProperty(ACTIVE)) {
