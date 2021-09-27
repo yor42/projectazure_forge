@@ -31,6 +31,11 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
     }
 
     @Override
+    public int getFuelTankCapacity() {
+        return 5000;
+    }
+
+    @Override
     public AnimatedGeoModel getModel() {
         return new modelBBRiggingDefault();
     }

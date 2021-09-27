@@ -15,16 +15,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static com.yor42.projectazure.libs.utils.FluidPredicates.FuelOilPredicate;
 
 //fallback class for new common(dynamic) rigging inventory
 public class RiggingInventoryCapability implements INamedContainerProvider, IRiggingContainerSupplier {
-
     protected final LivingEntity entity;
     protected final ItemStack stack;
 
@@ -44,9 +47,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     protected final ItemStackHandler hangar = new ItemStackHandler(){
         @Override
         protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
             RiggingInventoryCapability.this.saveAll();
-
         }
 
         @Override
@@ -60,6 +61,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     public RiggingInventoryCapability(ItemStack stack){
         this(stack, null);
     }
+
     public RiggingInventoryCapability(ItemStack stack, LivingEntity entity){
         this.stack = stack;
         this.entity = entity;
@@ -67,7 +69,12 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         this.getEquipments().setSize(slotCount);
 
         int fuelCapacity = ((ItemRiggingBase) stack.getItem()).getFuelTankCapacity();
-        this.fuelTank = new FluidHandlerItemStack(stack, fuelCapacity);
+        this.fuelTank = new FluidHandlerItemStack(stack, fuelCapacity){
+            @Override
+            public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+                return FuelOilPredicate.test(stack);
+            }
+        };
 
         int HangerSlots = ((ItemRiggingBase) stack.getItem()).getHangerSlots();
 

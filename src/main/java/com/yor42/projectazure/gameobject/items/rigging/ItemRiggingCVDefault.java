@@ -35,6 +35,11 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
     }
 
     @Override
+    public int getFuelTankCapacity() {
+        return 5000;
+    }
+
+    @Override
     public AnimatedGeoModel getModel() {
         return new modelCVRiggingDefault();
     }

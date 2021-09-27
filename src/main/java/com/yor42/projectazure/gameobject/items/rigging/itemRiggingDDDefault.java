@@ -41,6 +41,11 @@ public class itemRiggingDDDefault extends ItemRiggingDD implements IAnimatable {
     }
 
     @Override
+    public int getFuelTankCapacity() {
+        return 5000;
+    }
+
+    @Override
     public int getTorpedoSlotCount() {
         return 3;
     }

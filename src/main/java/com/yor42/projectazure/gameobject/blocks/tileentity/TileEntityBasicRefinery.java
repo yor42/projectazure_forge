@@ -41,6 +41,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
+import static com.yor42.projectazure.libs.utils.FluidPredicates.*;
 
 public class TileEntityBasicRefinery extends LockableTileEntity implements INamedContainerProvider, IRecipeHelperPopulator, ITickableTileEntity {
 
@@ -50,15 +51,10 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     private int bitumentick;
     private int isActive = 0;
 
-    private final Predicate<FluidStack> CrudeOilPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.CRUDE_OIL_SOURCE;
-    private final Predicate<FluidStack> GasolinePredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.GASOLINE_SOURCE;
-    private final Predicate<FluidStack> DieselPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.DIESEL_SOURCE;
-    private final Predicate<FluidStack> FuelOilPredicate = (fluidStack)-> fluidStack.getFluid() == registerFluids.FUEL_OIL_SOURCE;
-
-    public FluidTank CrudeOilTank = new FluidTank(4000,this.CrudeOilPredicate);
-    public FluidTank GasolineTank = new FluidTank(2000,this.GasolinePredicate);
-    public FluidTank DieselTank = new FluidTank(2000,this.DieselPredicate);
-    public FluidTank FuelOilTank = new FluidTank(2000,this.FuelOilPredicate);
+    public FluidTank CrudeOilTank = new FluidTank(4000, CrudeOilPredicate);
+    public FluidTank GasolineTank = new FluidTank(2000,GasolinePredicate);
+    public FluidTank DieselTank = new FluidTank(2000,DieselPredicate);
+    public FluidTank FuelOilTank = new FluidTank(2000,FuelOilPredicate);
 
     private final int[] FieldArray = {this.burnTime,this.totalBurntime,this.CrudeOilTank.getFluidAmount(), this.CrudeOilTank.getCapacity(),this.GasolineTank.getFluidAmount(), this.GasolineTank.getCapacity(),this.DieselTank.getFluidAmount(),this.DieselTank.getCapacity(),this.FuelOilTank.getFluidAmount(),this.FuelOilTank.getCapacity(), this.isActive};
 
