@@ -4,6 +4,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.interfaces.IRiggingContainerSupplier;
+import com.yor42.projectazure.libs.utils.FluidPredicates;
 import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,10 +14,16 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
@@ -27,7 +34,7 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.utils.FluidPredicates.FuelOilPredicate;
 
 //fallback class for new common(dynamic) rigging inventory
-public class RiggingInventoryCapability implements INamedContainerProvider, IRiggingContainerSupplier {
+public class RiggingInventoryCapability implements INamedContainerProvider, IRiggingContainerSupplier, ICapabilityProvider {
     protected final LivingEntity entity;
     protected final ItemStack stack;
 
@@ -56,7 +63,12 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         }
     };
 
-    protected final FluidHandlerItemStack fuelTank;
+    protected final FluidTank fuelTank = new FluidTank(5000, FuelOilPredicate){
+        @Override
+        protected void onContentsChanged() {
+            RiggingInventoryCapability.this.saveAll();
+        }
+    };
 
     public RiggingInventoryCapability(ItemStack stack){
         this(stack, null);
@@ -69,12 +81,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         this.getEquipments().setSize(slotCount);
 
         int fuelCapacity = ((ItemRiggingBase) stack.getItem()).getFuelTankCapacity();
-        this.fuelTank = new FluidHandlerItemStack(stack, fuelCapacity){
-            @Override
-            public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-                return FuelOilPredicate.test(stack);
-            }
-        };
+        this.fuelTank.setCapacity(fuelCapacity);
 
         int HangerSlots = ((ItemRiggingBase) stack.getItem()).getHangerSlots();
 
@@ -87,15 +94,17 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
 
     public void saveAll(){
         this.saveEquipments(this.getNBT(this.stack));
-
         this.saveHanger(this.getNBT(this.stack));
-
+        this.saveFuel(this.getNBT(this.stack));
         this.sendpacket();
     }
 
     private void saveHanger(CompoundNBT nbt) {
-
         nbt.put("hanger", this.hangar.serializeNBT());
+    }
+
+    private void saveFuel(CompoundNBT nbt) {
+        nbt.put("fuels", this.fuelTank.writeToNBT(new CompoundNBT()));
     }
 
     public void sendpacket() {
@@ -130,6 +139,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     public void loadEquipments(CompoundNBT nbt){
         this.equipments.deserializeNBT(nbt.getCompound("Inventory"));
         this.hangar.deserializeNBT(nbt.getCompound("hanger"));
+        this.fuelTank.readFromNBT(nbt.getCompound("fuels"));
     }
 
     @Override
@@ -137,7 +147,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         return this.equipments;
     }
 
-    public FluidHandlerItemStack getFuelTank() {
+    public FluidTank getFuelTank() {
         return this.fuelTank;
     }
 
@@ -153,5 +163,28 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     @Override
     public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity entity) {
         return new RiggingContainer(windowID, playerInventory, this);
+    }
+
+
+    private final LazyOptional<ItemStackHandler> ITEMHANDLERCAP = LazyOptional.of(()->this.equipments);
+    private final LazyOptional<FluidTank> FUELTANKCAP = LazyOptional.of(()->this.fuelTank);
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+        if(cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+            return ITEMHANDLERCAP.cast();
+        }
+        else if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+            return FUELTANKCAP.cast();
+        }
+        else{
+            return LazyOptional.empty();
+        }
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+        return this.getCapability(cap, null);
     }
 }

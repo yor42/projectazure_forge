@@ -82,21 +82,6 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     @Override
-    public int[] getSlotsForFace(Direction side) {
-        return new int[0];
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return this.isItemValidForSlot(index, itemStackIn);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return false;
-    }
-
-    @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         if (index == 0){
             return true;

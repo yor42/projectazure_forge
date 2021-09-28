@@ -29,11 +29,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityAlloyFurnace extends LockableTileEntity implements INamedContainerProvider, ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public class TileEntityAlloyFurnace extends LockableTileEntity implements INamedContainerProvider, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
 
     ItemStackHandler inventory = new ItemStackHandler(4);
     private int burnTime;
@@ -121,21 +123,6 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     @Override
-    public int[] getSlotsForFace(Direction side) {
-        return new int[0];
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return this.inventory.isItemValid(index, itemStackIn);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return false;
-    }
-
-    @Override
     protected ITextComponent getDefaultName() {
         return new TranslationTextComponent("alloy_furnace");
     }
@@ -143,6 +130,16 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
         return new ContainerAlloyFurnace(id, player, this.inventory, this.machineInfo);
+    }
+    private final LazyOptional<ItemStackHandler> INVENTORY = LazyOptional.of(()->this.inventory);
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+
+        if(cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+            return this.INVENTORY.cast();
+        }
+
+        return super.getCapability(cap, side);
     }
 
     @Override

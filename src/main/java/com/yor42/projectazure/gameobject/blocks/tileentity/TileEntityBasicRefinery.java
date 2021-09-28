@@ -367,12 +367,13 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     private final LazyOptional<FluidTank> gasolineTankCap = LazyOptional.of(()->this.GasolineTank);
     private final LazyOptional<FluidTank> dieselTankCap = LazyOptional.of(()->this.DieselTank);
     private final LazyOptional<FluidTank> fueloilTankCap = LazyOptional.of(()->this.FuelOilTank);
+    private final LazyOptional<ItemStackHandler> INVENTORY = LazyOptional.of(()->this.ITEMHANDLER);
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction direction) {
 
         if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return LazyOptional.of(()->this.ITEMHANDLER).cast();
+            return this.INVENTORY.cast();
         }
         else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
             if(this.getBlockState().hasProperty(AbstractMachineBlock.FACING))

@@ -187,21 +187,6 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     }
 
     @Override
-    public int[] getSlotsForFace(Direction side) {
-        return new int[0];
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, @Nullable Direction direction) {
-        return false;
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
-        return false;
-    }
-
-    @Override
     protected ITextComponent getDefaultName() {
         return new TranslationTextComponent("tile.drydock");
     }

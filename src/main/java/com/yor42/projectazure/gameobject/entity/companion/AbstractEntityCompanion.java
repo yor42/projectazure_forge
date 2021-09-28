@@ -330,6 +330,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.MoveController = new MovementController(this);
     }
 
+
+
     public void setOathed(boolean bool){
         this.dataManager.set(OATHED, bool);
     }

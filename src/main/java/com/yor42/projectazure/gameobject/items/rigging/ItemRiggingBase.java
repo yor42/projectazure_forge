@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +18,9 @@ import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -58,12 +61,12 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack,worldIn,tooltip,flagIn);
         RiggingInventoryCapability capability = new RiggingInventoryCapability(stack);
-        FluidHandlerItemStack fueltank = capability.getFuelTank();
+        FluidTank fueltank = capability.getFuelTank();
         TextFormatting color;
-        if(((float)fueltank.getFluid().getAmount()/fueltank.getTankCapacity(0))<0.3F){
+        if(((float)fueltank.getFluidAmount()/fueltank.getTankCapacity(0))<0.3F){
             color = TextFormatting.RED;
         }
-        else if(((float)fueltank.getFluid().getAmount()/fueltank.getTankCapacity(0))<0.3F){
+        else if(((float)fueltank.getFluidAmount()/fueltank.getTankCapacity(0))<0.3F){
             color = TextFormatting.YELLOW;
         }
         else{
@@ -71,7 +74,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         }
 
         tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fueltank.getFluid().getAmount()+"/"+fueltank.getTankCapacity(0)).appendString("mb").mergeStyle(color)));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fueltank.getFluidAmount()+"/"+fueltank.getTankCapacity(0)).appendString("mb").mergeStyle(color)));
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331))));
         if(worldIn != null && worldIn.isRemote) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn, capability));
@@ -155,6 +158,12 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public ItemStackHandler getEquipments(ItemStack riggingStack){
         return new RiggingInventoryCapability(riggingStack).getEquipments();
     };
+
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+        return new RiggingInventoryCapability(stack);
+    }
 
     @Nullable
     public ItemStackHandler getHangers(ItemStack riggingStack){

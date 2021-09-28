@@ -26,7 +26,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ISidedInventory, ITickableTileEntity {
+public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ITickableTileEntity {
     protected final AnimationFactory factory = new AnimationFactory(this);
     protected CustomEnergyStorage energyStorage = new CustomEnergyStorage(15000);
     protected ItemStackHandler inventory = new ItemStackHandler(1);
