@@ -24,10 +24,10 @@ public class registerNetwork {
                 .consumer(selectedStarterPacket::handle)
                 .add();
 
-        channel.messageBuilder(syncRiggingInventoryPacket.class, 2)
-                .decoder(syncRiggingInventoryPacket::decode)
-                .encoder(syncRiggingInventoryPacket::encode)
-                .consumer(syncRiggingInventoryPacket::handle)
+        channel.messageBuilder(syncRiggingCapabilityPacket.class, 2)
+                .decoder(syncRiggingCapabilityPacket::decode)
+                .encoder(syncRiggingCapabilityPacket::encode)
+                .consumer(syncRiggingCapabilityPacket::handle)
                 .add();
 
         channel.messageBuilder(spawnParticlePacket.class, 3)

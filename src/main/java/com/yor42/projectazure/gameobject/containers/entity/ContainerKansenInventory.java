@@ -32,7 +32,63 @@ public class ContainerKansenInventory extends Container {
 
     //client
     public ContainerKansenInventory(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, (EntityKansenBase) Main.PROXY.getSharedMob());
+        super(registerManager.SHIP_CONTAINER.get(), id);
+        this.host = (EntityKansenBase) Main.PROXY.getSharedMob();
+        ItemStackHandler stack =  new ItemStackHandler(1);
+        this.equipment = new ItemStackHandler(6);
+        this.AmmoStack = new ItemStackHandler(8);
+
+
+        //rigging
+        this.addSlot(new SlotRigging(stack, 0, 152, 35,  this.host));
+
+        //mainhand
+        this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));
+        //Offhand
+        this.addSlot(new SlotItemHandler(this.equipment, 1, 134, 89));
+
+        //armor(head/chest/legging/boots)
+        for (int l = 0; l < 4; l++) {
+            int finalL = l;
+            this.addSlot(new SlotItemHandler(this.equipment, 2 + finalL, 75, 35 + finalL * 18) {
+                public int getSlotStackLimit() {
+                    return 1;
+                }
+
+                @Override
+                public boolean isItemValid(@Nonnull ItemStack stack) {
+                    return stack.getItem() instanceof ArmorItem && stack.canEquip(EQUIPMENT[finalL],  ContainerKansenInventory.this.host);
+                }
+            });
+        }
+
+        for (int m = 0; m < 4; m++) {
+            for (int n = 0; n < 3; n++) {
+                this.addSlot(new SlotItemHandler(this.host.getInventory(), n + 3 * m, 11 + n * 18, 19 + m * 18));
+            }
+        }
+
+        for (int m = 0; m < 4; m++) {
+            for (int n = 0; n < 2; n++) {
+                this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
+                    @Override
+                    public boolean isItemValid(@Nonnull ItemStack stack) {
+                        return stack.getItem() instanceof ItemCannonshell;
+                    }
+                });
+            }
+        }
+
+
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
+            }
+        }
+
+        for (int k = 0; k < 9; ++k) {
+            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 168));
+        }
     }
 
     //constructor for actual use

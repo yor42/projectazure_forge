@@ -40,7 +40,12 @@ public class CompanionSwimPathFinder extends MovementController {
             boolean isTargetHigher = livingentity != null && livingentity.isInWater() && livingentity.getPosY() > this.companion.getPosY();
             double f = this.companion.getEyeHeight()-0.2;
             double waterheight = this.companion.func_233571_b_(WATER);
-            boolean shouldswim = waterheight > f && !this.companion.getOwner().areEyesInFluid(WATER);
+            boolean shouldswim;
+            if(this.companion.getOwner()!= null){
+                shouldswim= waterheight > f && !this.companion.getOwner().areEyesInFluid(WATER);
+            }else {
+                shouldswim = waterheight > f;
+            }
             boolean isJumping = this.action == Action.JUMPING;
             if((shouldswim || this.companion.isInLava()) || isTargetHigher || this.companion.isSwimmingUp() || obstructed || isOwnerHigherinWater || isJumping || this.companion.collidedHorizontally && !this.companion.canUseRigging()){
                 Vector3d vec3d = this.companion.getMotion();

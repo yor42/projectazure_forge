@@ -1695,7 +1695,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void tick() {
         super.tick();
-        this.setPathPriority(PathNodeType.WATER, this.getOwner() != null && this.getOwner().isInWater()? 0.0F:-1.0F);
         if(this.getHOMEPOS().isPresent()&&this.ticksExisted%30==0){
             BlockState blockstate = this.world.getBlockState(this.getHOMEPOS().get());
             if(!blockstate.isBed(this.getEntityWorld(),this.getHOMEPOS().get(), this)) {
@@ -1708,9 +1707,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void updateSwimming() {
-        if (!this.world.isRemote &&!this.canUseRigging()&& this.ticksExisted%10 == 0) {
+        if (!this.world.isRemote && this.ticksExisted%10 == 0) {
             double waterheight = this.func_233571_b_(FluidTags.WATER);
-            if (this.isServerWorld() && this.isInWater() && (!this.isOnGround() || this.eyesInWater) && waterheight > 0.9) {
+            boolean rigging = !this.canUseRigging();
+            if (this.isServerWorld() && waterheight > 0.9&&rigging) {
                 this.navigator = this.swimmingNav;
                 this.moveController = this.SwimController;
                 this.setSwimming(true);

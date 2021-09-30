@@ -34,6 +34,9 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
@@ -144,7 +147,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     public boolean canUseRigging(){
         if(this.getRigging().getItem() instanceof ItemRiggingBase)
-            return !isDestroyed(this.getRigging());
+            return true;
         else
             return false;
     }
@@ -154,8 +157,14 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public boolean isSailing(){
-        return this.isInWater() && this.Hasrigging();
-        //return this.isInWater() && this.func_233571_b_(FluidTags.WATER) > (double)f && this.Hasrigging();
+        if(this.isInWater() && this.canUseRigging()){
+            ItemStack rigging = this.getRigging();
+            boolean hasfuel = rigging.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).map((fluidtank)-> {
+                int amount =fluidtank.getFluidInTank(0).getAmount();
+                return amount>0;}).orElse(false);
+            return hasfuel;
+        }
+        return false;
     }
 
     public ItemStack getRigging(){
@@ -237,6 +246,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             if(!(vector3d.x == 0 || vector3d.z == 0)) {
                 this.world.addParticle(ParticleTypes.CLOUD, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             }
+            this.getRigging().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent((fluidtank)->{
+                fluidtank.drain(1, IFluidHandler.FluidAction.EXECUTE);
+            });
         }
         else if(modifiableattributeinstance != null){
             modifiableattributeinstance.removeModifier(SAILING_SPEED_BOOST);
@@ -345,11 +357,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     private void kansenFloat() {
         Vector3d vec3d = this.getMotion();
-        float f = this.getEyeHeight() - 1.25F;
-        if(this.func_233571_b_(FluidTags.WATER)>f)
-            this.setMotion(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-4F : 0.0F), vec3d.z);
+        boolean water = this.isInWater();
+        if(this.func_233571_b_(FluidTags.WATER)>0.2)
+            this.setMotion(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-3F : 0.0F), vec3d.z);
         else if (vec3d.y>0){
-            this.setVelocity(vec3d.x, vec3d.y - 0.10, vec3d.z);
+            this.setVelocity(vec3d.x, vec3d.y - 0.0001, vec3d.z);
         }
     }
 

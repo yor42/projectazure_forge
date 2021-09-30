@@ -4,8 +4,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.interfaces.IRiggingContainerSupplier;
-import com.yor42.projectazure.libs.utils.FluidPredicates;
-import com.yor42.projectazure.network.packets.syncRiggingInventoryPacket;
+import com.yor42.projectazure.network.packets.syncRiggingCapabilityPacket;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,10 +19,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
@@ -63,7 +59,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         }
     };
 
-    protected final FluidTank fuelTank = new FluidTank(5000, FuelOilPredicate){
+    protected final RiggintFuelTank fuelTank = new RiggintFuelTank(null , 5000, FuelOilPredicate){
         @Override
         protected void onContentsChanged() {
             RiggingInventoryCapability.this.saveAll();
@@ -79,8 +75,8 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         this.entity = entity;
         int slotCount = ((ItemRiggingBase) stack.getItem()).getTotalSlotCount();
         this.getEquipments().setSize(slotCount);
-
         int fuelCapacity = ((ItemRiggingBase) stack.getItem()).getFuelTankCapacity();
+        this.fuelTank.setItemStack(stack);
         this.fuelTank.setCapacity(fuelCapacity);
 
         int HangerSlots = ((ItemRiggingBase) stack.getItem()).getHangerSlots();
@@ -96,7 +92,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         this.saveEquipments(this.getNBT(this.stack));
         this.saveHanger(this.getNBT(this.stack));
         this.saveFuel(this.getNBT(this.stack));
-        this.sendpacket();
+        this.sendpacket(this.getNBT(this.stack));
     }
 
     private void saveHanger(CompoundNBT nbt) {
@@ -107,9 +103,9 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         nbt.put("fuels", this.fuelTank.writeToNBT(new CompoundNBT()));
     }
 
-    public void sendpacket() {
+    public void sendpacket(CompoundNBT nbt) {
         if(this.entity instanceof PlayerEntity){
-            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new syncRiggingInventoryPacket(this.getEquipments().serializeNBT(), this.stack));
+            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new syncRiggingCapabilityPacket(this));
         }
     }
 
@@ -147,7 +143,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         return this.equipments;
     }
 
-    public FluidTank getFuelTank() {
+    public RiggintFuelTank getFuelTank() {
         return this.fuelTank;
     }
 
@@ -165,16 +161,19 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         return new RiggingContainer(windowID, playerInventory, this);
     }
 
+    public ItemStack getItemStack(){
+        return this.stack;
+    }
 
     private final LazyOptional<ItemStackHandler> ITEMHANDLERCAP = LazyOptional.of(()->this.equipments);
-    private final LazyOptional<FluidTank> FUELTANKCAP = LazyOptional.of(()->this.fuelTank);
+    private final LazyOptional<RiggintFuelTank> FUELTANKCAP = LazyOptional.of(()->this.fuelTank);
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if(cap == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
             return ITEMHANDLERCAP.cast();
         }
-        else if(cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+        else if(cap == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY){
             return FUELTANKCAP.cast();
         }
         else{
