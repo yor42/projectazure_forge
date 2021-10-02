@@ -37,7 +37,6 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
     protected final ItemStackHandler equipments = new ItemStackHandler(){
         @Override
         protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
             RiggingInventoryCapability.this.saveAll();
 
         }
@@ -63,6 +62,7 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         @Override
         protected void onContentsChanged() {
             RiggingInventoryCapability.this.saveAll();
+            Main.LOGGER.debug("Saving Fluid in Rigging...");
         }
     };
 

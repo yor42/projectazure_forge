@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -66,11 +66,11 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
 
             Optional<Hand> PotionHand = this.getPotioninHand();
               List<LivingEntity> EntityAround = this.companion.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.companion.getBoundingBox().expand(20, 3, 20));
-            Optional<Pair<Hand, LivingEntity>> Target = Optional.empty();
+            Optional<ImmutablePair<Hand, LivingEntity>> Target = Optional.empty();
             PlayerEntity Owner = this.companion.getEntityWorld().getClosestPlayer(this.playerPredicate, this.companion);
             if (PotionHand.isPresent()) {
                 if(Owner != null && this.companion.isOwner(Owner) && this.shouldHealEntity(Owner)){
-                    Target = Optional.of(new Pair<>(PotionHand.get(), Owner));
+                    Target = Optional.of(new ImmutablePair<>(PotionHand.get(), Owner));
                 }
                 else {
                     for (LivingEntity entity : EntityAround) {
@@ -78,7 +78,7 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
                         if (entity.isEntityUndead()) {
                             return false;
                         } else if (this.shouldHealEntity(entity)) {
-                            Target = Optional.of(new Pair<>(PotionHand.get(), entity));
+                            Target = Optional.of(new ImmutablePair<>(PotionHand.get(), entity));
                         }
                     }
                 }

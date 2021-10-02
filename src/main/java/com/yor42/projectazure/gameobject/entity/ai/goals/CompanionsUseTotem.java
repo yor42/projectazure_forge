@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -12,7 +12,7 @@ import static net.minecraft.util.Hand.OFF_HAND;
 public class CompanionsUseTotem extends Goal {
 
     private final AbstractEntityCompanion companion;
-    private Pair<ItemStack, Integer> TotemStack = new Pair<>(ItemStack.EMPTY, -1);
+    private ImmutablePair<ItemStack, Integer> TotemStack = new ImmutablePair<>(ItemStack.EMPTY, -1);
 
     public CompanionsUseTotem(AbstractEntityCompanion companion){
         this.companion = companion;
@@ -63,13 +63,13 @@ public class CompanionsUseTotem extends Goal {
         }
     }
 
-    private Pair<ItemStack, Integer> hasTotem(){
+    private ImmutablePair<ItemStack, Integer> hasTotem(){
         for(int i = 0; i < this.companion.getInventory().getSlots(); i++){
             ItemStack stack = this.companion.getInventory().getStackInSlot(i);
             if(stack.getItem() == Items.TOTEM_OF_UNDYING){
-                return new Pair<>(stack, i);
+                return new ImmutablePair<>(stack, i);
             }
         }
-        return new Pair<>(ItemStack.EMPTY, -1);
+        return new ImmutablePair<>(ItemStack.EMPTY, -1);
     }
 }
