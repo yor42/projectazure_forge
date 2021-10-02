@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -149,9 +150,19 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         return this.stack;
     }
 
-    private final LazyOptional<ItemStackHandler> ITEMHANDLERCAP = LazyOptional.of(()->this.equipments);
+    @Nullable
+    public ItemRiggingBase getItem(){
+        if(this.getItemStack().getItem() instanceof ItemRiggingBase){
+            return (ItemRiggingBase) this.getItemStack().getItem();
+        }
+        else{
+            return null;
+        }
+    }
 
-    private final LazyOptional<IFluidHandlerItem> fuelTank = LazyOptional.of(() -> new FluidHandlerItemStack(stack, 5000) {
+    private final LazyOptional<IItemHandler> ITEMHANDLERCAP = LazyOptional.of(()->new ItemStackHandlerItemStack(stack, this.getItem() == null? 1: ((ItemRiggingBase) stack.getItem()).getTotalSlotCount()));
+    //set 5000mb as Fallback value
+    private final LazyOptional<IFluidHandlerItem> fuelTank = LazyOptional.of(() -> new FluidHandlerItemStack(stack, this.getItem() == null? 5000: this.getItem().getFuelTankCapacity()) {
         @Override
         public boolean canFillFluidType(FluidStack fluid) {
             return FuelOilPredicate.test(fluid);
