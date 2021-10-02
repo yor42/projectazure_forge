@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingCont
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.interfaces.IRiggingContainerSupplier;
 import com.yor42.projectazure.network.packets.syncRiggingCapabilityPacket;
+import mekanism.api.annotations.NonNull;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -38,6 +39,8 @@ import static com.yor42.projectazure.libs.utils.FluidPredicates.FuelOilPredicate
 public class RiggingInventoryCapability implements INamedContainerProvider, IRiggingContainerSupplier, ICapabilityProvider {
     protected final LivingEntity entity;
     protected ItemStack stack;
+    private int EquipmentSlots;
+    private int FuelTankCapacity;
 
     protected final ItemStackHandler equipments = new ItemStackHandler(){
         @Override
@@ -63,16 +66,17 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         }
     };
 
-    public RiggingInventoryCapability(ItemStack stack){
-        this(stack, null);
+    public RiggingInventoryCapability(ItemStack stack, int FuelTankCapacity, int EquipmentSlots){
+        this(stack, null, FuelTankCapacity, EquipmentSlots);
     }
 
-    public RiggingInventoryCapability(ItemStack stack, LivingEntity entity){
+    public RiggingInventoryCapability(ItemStack stack, @Nullable LivingEntity entity, int FuelTankCapacity, int EquipmentSlots){
+        this.FuelTankCapacity = FuelTankCapacity;
+        this.EquipmentSlots = EquipmentSlots;
         this.stack = stack;
         this.entity = entity;
         int slotCount = ((ItemRiggingBase) stack.getItem()).getTotalSlotCount();
         this.getEquipments().setSize(slotCount);
-
         int HangerSlots = ((ItemRiggingBase) stack.getItem()).getHangerSlots();
 
         if(this.getHangar() != null) {
@@ -115,12 +119,6 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         return stack.getOrCreateTag();
     }
 
-    public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack) {
-        if (!serverPlayerEntity.world.isRemote) {
-            NetworkHooks.openGui(serverPlayerEntity, new RiggingInventoryCapability(stack, serverPlayerEntity));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
-        }
-        Main.PROXY.setSharedStack(stack);
-    }
 
     public void loadEquipments(CompoundNBT nbt){
         this.equipments.deserializeNBT(nbt.getCompound("Inventory"));
@@ -150,19 +148,19 @@ public class RiggingInventoryCapability implements INamedContainerProvider, IRig
         return this.stack;
     }
 
-    @Nullable
+    @NonNull
     public ItemRiggingBase getItem(){
         if(this.getItemStack().getItem() instanceof ItemRiggingBase){
             return (ItemRiggingBase) this.getItemStack().getItem();
         }
         else{
-            return null;
+            throw new RuntimeException("Errrr..... Why this rigging Item isnt instance of ItemRiggingBase?");
         }
     }
 
-    private final LazyOptional<IItemHandler> ITEMHANDLERCAP = LazyOptional.of(()->new ItemStackHandlerItemStack(stack, this.getItem() == null? 1: ((ItemRiggingBase) stack.getItem()).getTotalSlotCount()));
+    private final LazyOptional<IItemHandler> ITEMHANDLERCAP = LazyOptional.of(()->new ItemStackHandlerItemStack(stack, this.EquipmentSlots));
     //set 5000mb as Fallback value
-    private final LazyOptional<IFluidHandlerItem> fuelTank = LazyOptional.of(() -> new FluidHandlerItemStack(stack, this.getItem() == null? 5000: this.getItem().getFuelTankCapacity()) {
+    private final LazyOptional<IFluidHandlerItem> fuelTank = LazyOptional.of(() -> new FluidHandlerItemStack(stack, this.FuelTankCapacity) {
         @Override
         public boolean canFillFluidType(FluidStack fluid) {
             return FuelOilPredicate.test(fluid);
