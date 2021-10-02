@@ -18,7 +18,7 @@ public class syncRiggingCapabilityPacket {
 
     public syncRiggingCapabilityPacket(RiggingInventoryCapability capability) {
         this.InventoryCompound = capability.getEquipments().serializeNBT();
-        this.FuelTankCompound = capability.getFuelTank().writeToNBT(new CompoundNBT());
+        this.FuelTankCompound = null;//capability.writeToNBT(new CompoundNBT());
         this.itemStack = capability.getItemStack();
     }
 

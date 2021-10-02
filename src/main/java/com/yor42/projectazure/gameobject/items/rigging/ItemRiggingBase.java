@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
-import com.yor42.projectazure.gameobject.capability.RiggintFuelTank;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
@@ -20,12 +19,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -35,7 +30,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -65,24 +59,26 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack,worldIn,tooltip,flagIn);
-        RiggingInventoryCapability capability = new RiggingInventoryCapability(stack);
-        RiggintFuelTank fueltank = capability.getFuelTank();
+        super.addInformation(stack, worldIn, tooltip, flagIn);
+        if (worldIn == null) return; // thanks JEI very cool
+
+        IFluidHandlerItem tank = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElse(null);
+        int fluidAmount = tank.getFluidInTank(0).getAmount();
+        int fluidCapacity = tank.getTankCapacity(0);
+        float fillRatio = (float) fluidAmount / fluidCapacity;
         TextFormatting color;
-        if(((float)fueltank.getFluidAmount()/fueltank.getTankCapacity(0))<0.3F){
+        if (fillRatio < 0.3F) {
             color = TextFormatting.RED;
-        }
-        else if(((float)fueltank.getFluidAmount()/fueltank.getTankCapacity(0))<0.3F){
+        } else if (fillRatio < 0.6F) {
             color = TextFormatting.YELLOW;
-        }
-        else{
+        } else {
             color = TextFormatting.GREEN;
         }
-        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fueltank.getFluidAmount()+"/"+fueltank.getTankCapacity(0)).appendString("mb").mergeStyle(color)));
+        tooltip.add(new StringTextComponent("HP: " + getCurrentHP(stack) + "/" + this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fluidAmount + "/" + fluidCapacity).appendString("mb").mergeStyle(color)));
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331))));
-        if(worldIn != null && worldIn.isRemote) {
-            TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn, capability));
+        if (worldIn.isRemote) {
+            TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
         }
     }
 
@@ -91,8 +87,9 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn, RiggingInventoryCapability capability){
-        ItemStackHandler Equipments = capability.getEquipments();
+    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
+        //TODO: kek
+        ItemStackHandler Equipments = null;
         Color CategoryColor = Color.fromHex("#6bb82d");
         for(int i = 0; i<Equipments.getSlots(); i++){
             if(this.getMainGunSlotCount()>0) {
