@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvEquipmentHandler;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandler;
 import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
@@ -165,11 +166,11 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public MultiInvStackHandler[] createInventories(ItemStack container) {
         return new MultiInvStackHandler[]{
-                new MultiInvStackHandler(container, "MainGun", getMainGunSlotCount()),
-                new MultiInvStackHandler(container, "SubGun", getSubGunSlotCount()),
-                new MultiInvStackHandler(container, "AA", getAASlotCount()),
-                new MultiInvStackHandler(container, "Torpedo", getTorpedoSlotCount()),
-                new MultiInvStackHandler(container, "Hangar", getHangerSlots())
+                new MultiInvEquipmentHandler(container, "MainGun", getMainGunSlotCount(), enums.SLOTTYPE.MAIN_GUN),
+                new MultiInvEquipmentHandler(container, "SubGun", getSubGunSlotCount(), enums.SLOTTYPE.SUB_GUN),
+                new MultiInvEquipmentHandler(container, "AA", getAASlotCount(), enums.SLOTTYPE.AA),
+                new MultiInvEquipmentHandler(container, "Torpedo", getTorpedoSlotCount(), enums.SLOTTYPE.TORPEDO),
+                new MultiInvEquipmentHandler(container, "Hangar", getHangerSlots(), enums.SLOTTYPE.PLANE)
         };
     }
 

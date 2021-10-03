@@ -14,8 +14,8 @@ public class MultiInvStackHandler extends ItemStackHandler {
         this.container = container;
         this.id = id;
 
-        if (container.getOrCreateTag().contains("Inventory" + id)) {
-            this.deserializeNBT(container.getOrCreateTag().getCompound("Inventory" + id));
+        if (container.getOrCreateTag().contains("Inventory_" + id)) {
+            this.deserializeNBT(container.getOrCreateTag().getCompound("Inventory_" + id));
         }
     }
 
@@ -26,6 +26,6 @@ public class MultiInvStackHandler extends ItemStackHandler {
 
     @Override
     protected void onContentsChanged(int slot) {
-        container.getOrCreateTag().put("Inventory" + id, this.serializeNBT());
+        container.getOrCreateTag().put("Inventory_" + id, this.serializeNBT());
     }
 }

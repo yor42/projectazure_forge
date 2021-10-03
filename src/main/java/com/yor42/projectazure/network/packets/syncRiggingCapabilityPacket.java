@@ -11,7 +11,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class syncRiggingCapabilityPacket {
-
+/*
     private final CompoundNBT InventoryCompound, FuelTankCompound;
     private final ItemStack itemStack;
 
@@ -54,6 +54,8 @@ public class syncRiggingCapabilityPacket {
 
         ctx.get().setPacketHandled(true);
     }
+
+ */
 
 
 }

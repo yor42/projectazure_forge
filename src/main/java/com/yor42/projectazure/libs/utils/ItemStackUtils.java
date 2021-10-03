@@ -180,27 +180,28 @@ public class ItemStackUtils {
 
 
     public static ItemStack getPreparedWeapon(ItemStack rigging, enums.SLOTTYPE slottype, MobEntity Shooter){
-        if(rigging.getItem() instanceof ItemRiggingBase){
-            ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
-            ItemStackHandler equipments = riggingItem.getEquipments(rigging);
+
+        int inventory = slottype.ordinal();
+
+        return rigging.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).map(inventories -> {
+            IItemHandler equipments = inventories.getInventory(inventory);
             for(int i = 0; i<equipments.getSlots(); i++){
-                if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
-                    if (((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == slottype) {
-                        if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0 && !isDestroyed(equipments.getStackInSlot(i))) {
-                            if(slottype == enums.SLOTTYPE.TORPEDO){
-                                if (!isOutOfAmmo(equipments.getStackInSlot(i))){
-                                    return equipments.getStackInSlot(i);
-                                }
-                            }
-                            else {
+                if (slottype.testPredicate(equipments.getStackInSlot(i))) {
+                    if (getDelayofEquipment(equipments.getStackInSlot(i)) <= 0 && !isDestroyed(equipments.getStackInSlot(i))) {
+                        if(slottype == enums.SLOTTYPE.TORPEDO){
+                            if (!isOutOfAmmo(equipments.getStackInSlot(i))){
                                 return equipments.getStackInSlot(i);
                             }
                         }
+                        else {
+                            return equipments.getStackInSlot(i);
+                        }
                     }
                 }
+
             }
-        }
-        return ItemStack.EMPTY;
+            return ItemStack.EMPTY;
+        }).orElse(ItemStack.EMPTY);
     }
 
     public static boolean isPlaneFuelReady(MobEntity entity, ItemStack planeStack){
@@ -230,6 +231,7 @@ public class ItemStackUtils {
 
 
     public static boolean hasAttackableCannon(ItemStack rigging){
+
         if(rigging.getItem() instanceof ItemRiggingBase){
             ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
             ItemStackHandler equipments = riggingItem.getEquipments(rigging);

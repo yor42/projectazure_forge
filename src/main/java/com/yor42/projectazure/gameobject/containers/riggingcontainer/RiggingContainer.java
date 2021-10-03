@@ -36,11 +36,11 @@ public class RiggingContainer extends Container {
 
         IMultiInventory inventories = this.riggingStack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
 
-        this.addSlots(inventories.getInventory(RiggingInventories.MAIN_GUN), i -> 7, i -> 34 + 18 * i, enums.SLOTTYPE.MAIN_GUN);
-        this.addSlots(inventories.getInventory(RiggingInventories.SUB_GUN), i -> 31 + 18 * i, i -> 34, enums.SLOTTYPE.SUB_GUN);
-        this.addSlots(inventories.getInventory(RiggingInventories.AA), i -> 151, i -> 34 + 18 * i, enums.SLOTTYPE.AA);
-        this.addSlots(inventories.getInventory(RiggingInventories.TORPEDO), i -> 30 + 18 * i, i -> 77, enums.SLOTTYPE.TORPEDO);
-        this.addSlots(inventories.getInventory(RiggingInventories.HANGAR), i -> 30 + 18 * i, i -> 30, enums.SLOTTYPE.PLANE);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal()), i -> 7, i -> 34 + 18 * i, enums.SLOTTYPE.MAIN_GUN);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal()), i -> 31 + 18 * i, i -> 34, enums.SLOTTYPE.SUB_GUN);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.AA.ordinal()), i -> 151, i -> 34 + 18 * i, enums.SLOTTYPE.AA);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.TORPEDO.ordinal()), i -> 30 + 18 * i, i -> 77, enums.SLOTTYPE.TORPEDO);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.PLANE.ordinal()), i -> 30 + 18 * i, i -> 30, enums.SLOTTYPE.PLANE);
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -59,11 +59,11 @@ public class RiggingContainer extends Container {
 
         IMultiInventory inventories = this.riggingStack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
 
-        this.addSlots(inventories.getInventory(RiggingInventories.MAIN_GUN), i -> 7, i -> 34 + 18 * i, enums.SLOTTYPE.MAIN_GUN);
-        this.addSlots(inventories.getInventory(RiggingInventories.SUB_GUN), i -> 31 + 18 * i, i -> 34, enums.SLOTTYPE.SUB_GUN);
-        this.addSlots(inventories.getInventory(RiggingInventories.AA), i -> 151, i -> 34 + 18 * i, enums.SLOTTYPE.AA);
-        this.addSlots(inventories.getInventory(RiggingInventories.TORPEDO), i -> 30 + 18 * i, i -> 77, enums.SLOTTYPE.TORPEDO);
-        this.addSlots(inventories.getInventory(RiggingInventories.HANGAR), i -> 30 + 18 * i, i -> 30, enums.SLOTTYPE.PLANE);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal()), i -> 7, i -> 34 + 18 * i, enums.SLOTTYPE.MAIN_GUN);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal()), i -> 31 + 18 * i, i -> 34, enums.SLOTTYPE.SUB_GUN);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.AA.ordinal()), i -> 151, i -> 34 + 18 * i, enums.SLOTTYPE.AA);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.TORPEDO.ordinal()), i -> 30 + 18 * i, i -> 77, enums.SLOTTYPE.TORPEDO);
+        this.addSlots(inventories.getInventory(enums.SLOTTYPE.PLANE.ordinal()), i -> 30 + 18 * i, i -> 30, enums.SLOTTYPE.PLANE);
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {

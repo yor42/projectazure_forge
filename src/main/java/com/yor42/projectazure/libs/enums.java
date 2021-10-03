@@ -1,5 +1,8 @@
 package com.yor42.projectazure.libs;
 
+import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
+import net.minecraft.item.ItemStack;
+
 import static com.yor42.projectazure.libs.utils.MathUtil.rand;
 
 public class enums {
@@ -7,10 +10,10 @@ public class enums {
     public enum SLOTTYPE{
         MAIN_GUN("equiment.main_gun"),
         SUB_GUN("equiment.sub_gun"),
-        TORPEDO("equiment.torpedo"),
-        UTILITY("equiment.utility"),
         AA("equiment.antiair"),
-        PLANE("equiment.plane");
+        TORPEDO("equiment.torpedo"),
+        PLANE("equiment.plane"),
+        UTILITY("equipment.utility");
 
         private final String name;
         SLOTTYPE(String name) {
@@ -19,6 +22,10 @@ public class enums {
 
         public String getName(){
             return this.name;
+        }
+
+        public boolean testPredicate(ItemStack stack){
+            return stack.getItem() instanceof ItemEquipmentBase && ((ItemEquipmentBase)stack.getItem()).getSlot() == this;
         }
 
     }
