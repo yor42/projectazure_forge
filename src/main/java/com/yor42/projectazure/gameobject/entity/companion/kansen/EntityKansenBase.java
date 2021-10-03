@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
@@ -38,6 +38,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
@@ -185,9 +186,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Nullable
-    public ItemStackHandler getHanger() {
+    public IItemHandler getHanger() {
         if (this.hasRigging()) {
-            ItemStackHandler hangar = this.getRigging().getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack")).getInventory(enums.SLOTTYPE.PLANE.ordinal());
+            IItemHandler hangar = MultiInvUtil.getCap(this.getRigging()).getInventory(enums.SLOTTYPE.PLANE.ordinal());
             if (hangar.getSlots() > 0) {
                 return hangar;
             }

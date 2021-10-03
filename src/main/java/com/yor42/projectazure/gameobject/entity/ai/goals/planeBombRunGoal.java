@@ -6,7 +6,7 @@ import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import java.util.EnumSet;
 
@@ -89,7 +89,7 @@ public class planeBombRunGoal extends Goal {
             this.entity.getMoveHelper().setMoveTo(this.entity.getOwner().getPosX(), this.entity.getOwner().getPosY(), this.entity.getOwner().getPosZ(), 1.0F);
             if(this.entity.getDistanceSq(this.entity.getOwner())<1.5F) {
                 if (((EntityKansenAircraftCarrier) this.entity.getOwner()).hasRigging()) {
-                    ItemStackHandler Hanger = ((EntityKansenAircraftCarrier) this.entity.getOwner()).getHanger();
+                    IItemHandler Hanger = ((EntityKansenAircraftCarrier) this.entity.getOwner()).getHanger();
                     if(Hanger != null){
                         ItemStack PlaneStack = serializePlane(this.entity);
                         for(int i = 0; i<Hanger.getSlots(); i++){

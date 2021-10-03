@@ -1,8 +1,8 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
@@ -83,7 +83,7 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
 
             if (entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingBBDefault){
 
-                IMultiInventory inventories = entitylivingbaseIn.getRigging().getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+                IMultiInventory inventories = MultiInvUtil.getCap(entitylivingbaseIn.getRigging());
 
                 //gun Renderer
                 IItemHandler inventory = inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal());

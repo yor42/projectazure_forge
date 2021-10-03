@@ -1,11 +1,11 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public interface IMultiInventory {
 
     int getInventoryCount();
-    ItemStackHandler getInventory(int index);
+    IItemHandler getInventory(int index);
 
     class Impl implements IMultiInventory {
 
@@ -21,7 +21,7 @@ public interface IMultiInventory {
         }
 
         @Override
-        public ItemStackHandler getInventory(int index) {
+        public IItemHandler getInventory(int index) {
             if (index < 0 || index >= inventories.length) {
                 throw new IllegalArgumentException(String.format("Argument 'index' out of bounds, value %d", index));
             }

@@ -22,7 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -200,7 +200,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
     }
 
     @Override
-    public void LaunchPlane(ItemStack planestack, AbstractEntityPlanes plane, LivingEntity target, ItemStackHandler hanger, int hangerIndex) {
+    public void LaunchPlane(ItemStack planestack, AbstractEntityPlanes plane, LivingEntity target, IItemHandlerModifiable hanger, int hangerIndex) {
         if(this.getRNG().nextFloat()<0.4F){
             this.setInvincibleTimer(240);
             plane.setAttackDamage(plane.getAttackDamage()*2);

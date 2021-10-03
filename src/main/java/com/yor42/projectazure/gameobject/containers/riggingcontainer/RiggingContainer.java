@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.containers.riggingcontainer;
 
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.containers.slots.slotEquipment;
 import com.yor42.projectazure.gameobject.containers.slots.slotInventory;
 import com.yor42.projectazure.libs.enums;
@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;
@@ -28,7 +28,7 @@ public class RiggingContainer extends Container {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = data.readItemStack();
 
-        IMultiInventory inventories = this.riggingStack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+        IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
 
         this.addSlots(inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal()), i -> 7, i -> 34 + 18 * i, enums.SLOTTYPE.MAIN_GUN);
         this.addSlots(inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal()), i -> 31 + 18 * i, i -> 34, enums.SLOTTYPE.SUB_GUN);
@@ -51,7 +51,7 @@ public class RiggingContainer extends Container {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = riggingStack;
 
-        IMultiInventory inventories = this.riggingStack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+        IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
 
         this.addSlots(inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal()), i -> 7, i -> 34 + 18 * i, enums.SLOTTYPE.MAIN_GUN);
         this.addSlots(inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal()), i -> 31 + 18 * i, i -> 34, enums.SLOTTYPE.SUB_GUN);
@@ -143,7 +143,7 @@ public class RiggingContainer extends Container {
         return true;
     }
 
-    private void addSlots(ItemStackHandler inventory, Function<Integer, Integer> x, Function<Integer, Integer> y, enums.SLOTTYPE slotType) {
+    private void addSlots(IItemHandler inventory, Function<Integer, Integer> x, Function<Integer, Integer> y, enums.SLOTTYPE slotType) {
         if (inventory.getSlots() > 0) {
             for (int i = 0; i < inventory.getSlots(); i++) {
                 this.addSlot(new slotEquipment(inventory, i, x.apply(i), y.apply(i), slotType));

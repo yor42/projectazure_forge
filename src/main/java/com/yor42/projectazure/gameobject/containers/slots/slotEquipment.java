@@ -4,7 +4,7 @@ import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
@@ -12,12 +12,12 @@ import javax.annotation.Nonnull;
 public class slotEquipment extends SlotItemHandler {
 
     private final enums.SLOTTYPE slottype;
-    private final ItemStackHandler handler;
+    private final IItemHandler handler;
     private ItemStack stack;
     private LivingEntity host;
 
     //clientDummy
-    public slotEquipment(ItemStackHandler itemHandler, int index, int xPosition, int yPosition, enums.SLOTTYPE type) {
+    public slotEquipment(IItemHandler itemHandler, int index, int xPosition, int yPosition, enums.SLOTTYPE type) {
         super(itemHandler, index, xPosition, yPosition);
         this.slottype = type;
         this.handler = itemHandler;

@@ -4,7 +4,7 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAir
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import java.util.EnumSet;
 
@@ -37,7 +37,7 @@ public class PlaneReturntoOwnerGoal extends Goal {
             this.entity.setReturningtoOwner(true);
             if(this.entity.getDistanceSq(this.entity.getOwner())<4F) {
                 if (((EntityKansenAircraftCarrier) this.entity.getOwner()).hasRigging()) {
-                    ItemStackHandler Hanger = ((EntityKansenAircraftCarrier) this.entity.getOwner()).getHanger();
+                    IItemHandler Hanger = ((EntityKansenAircraftCarrier) this.entity.getOwner()).getHanger();
                     if(Hanger != null){
                         ItemStack PlaneStack = serializePlane(this.entity);
                         for(int i = 0; i<Hanger.getSlots(); i++){

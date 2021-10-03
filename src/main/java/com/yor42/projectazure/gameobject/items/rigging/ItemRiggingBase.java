@@ -1,10 +1,10 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvEquipmentHandler;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandler;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
@@ -28,7 +28,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -71,7 +70,6 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         if (worldIn == null) return; // thanks JEI very cool
 
         IFluidHandlerItem tank = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(() -> new RuntimeException("Can't get the fuel tank of non rigging item!"));
-        IMultiInventory inventories = stack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("Can't get the fuel tank of non rigging item!"));
         int fluidAmount = tank.getFluidInTank(0).getAmount();
         int fluidCapacity = tank.getTankCapacity(0);
         float fillRatio = (float) fluidAmount / fluidCapacity;
@@ -87,7 +85,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fluidAmount + "/" + fluidCapacity).appendString("mb").mergeStyle(color)));
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331))));
         if (worldIn.isRemote) {
-            TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, inventories, worldIn, tooltip, flagIn));
+            TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, MultiInvUtil.getCap(stack), worldIn, tooltip, flagIn));
         }
 
         if (flagIn.isAdvanced()) {
@@ -103,7 +101,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public void addInformationAfterShift(ItemStack stack, IMultiInventory inventories, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
         Color CategoryColor = Color.fromHex("#6bb82d");
         for(int i = 0; i< inventories.getInventoryCount(); i++){
-            ItemStackHandler Equipments = inventories.getInventory(i);
+            IItemHandler Equipments = inventories.getInventory(i);
             enums.SLOTTYPE slottype = enums.SLOTTYPE.values()[i];
             tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
             for(int j=0; j<Equipments.getSlots(); j++){
@@ -171,7 +169,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     public void onUpdate(ItemStack stack) {
-        IMultiInventory inventories = stack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+        IMultiInventory inventories = MultiInvUtil.getCap(stack);
         for (int invIndex = 0; invIndex < inventories.getInventoryCount(); invIndex++) {
             IItemHandler inventory = inventories.getInventory(invIndex);
             for (int slot = 0; slot < inventory.getSlots(); slot++) {

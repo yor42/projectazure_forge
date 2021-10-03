@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
@@ -37,7 +37,7 @@ public abstract class ItemRiggingCV extends ItemRiggingBase implements IAnimatab
     }
 
     private int getPlaneCount(ItemStack riggingStack) {
-        IItemHandler hangar = riggingStack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack")).getInventory(enums.SLOTTYPE.PLANE.ordinal());
+        IItemHandler hangar = MultiInvUtil.getCap(riggingStack).getInventory(enums.SLOTTYPE.PLANE.ordinal());
         int count = 0;
         for (int i = 0; i < hangar.getSlots(); i++) {
             if (hangar.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase) {

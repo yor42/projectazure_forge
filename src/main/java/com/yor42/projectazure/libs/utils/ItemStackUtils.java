@@ -133,7 +133,7 @@ public class ItemStackUtils {
 
 
 
-    public static int getPreparedPlane(EntityKansenBase entity, ItemStackHandler hanger){
+    public static int getPreparedPlane(EntityKansenBase entity, IItemHandler hanger){
         if(entity.getRigging().getItem() instanceof ItemRiggingBase) {
 
             if(hanger != null) {
@@ -226,7 +226,7 @@ public class ItemStackUtils {
     public static boolean hasAttackableCannon(ItemStack rigging) {
         //TODO: check for correctness
         if (rigging.getItem() instanceof ItemRiggingBase) {
-            IItemHandler mainGuns = rigging.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack")).getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal());
+            IItemHandler mainGuns = MultiInvUtil.getCap(rigging).getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal());
             for (int i = 0; i < mainGuns.getSlots(); i++) {
                 return !isDestroyed(mainGuns.getStackInSlot(i));
             }
@@ -236,7 +236,7 @@ public class ItemStackUtils {
 
     public static boolean hasGunOrTorpedo(ItemStack riggingStack) {
         if (riggingStack.getItem() instanceof ItemRiggingBase) {
-            IMultiInventory inventories = riggingStack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+            IMultiInventory inventories = MultiInvUtil.getCap(riggingStack);
             IItemHandler torpedos = inventories.getInventory(enums.SLOTTYPE.TORPEDO.ordinal());
             for (int i = 0; i < torpedos.getSlots(); i++) {
                 if (torpedos.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {

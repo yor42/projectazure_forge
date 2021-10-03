@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
@@ -12,7 +12,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.EnumSet;
 
@@ -94,7 +95,7 @@ public class KansenLaunchPlaneGoal extends Goal {
             }
 
             if (entity.getRigging().getItem() instanceof ItemRiggingBase) {
-                ItemStackHandler hanger = entity.getRigging().getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack")).getInventory(enums.SLOTTYPE.PLANE.ordinal());
+                IItemHandler hanger = MultiInvUtil.getCap(entity.getRigging()).getInventory(enums.SLOTTYPE.PLANE.ordinal());
 
                 if (hanger != null) {
                     int hangerIndex = getPreparedPlane(this.entity, hanger);
@@ -112,7 +113,7 @@ public class KansenLaunchPlaneGoal extends Goal {
 
                             AbstractEntityPlanes planeEntity = planetype.create(this.entity.getEntityWorld());
                             if (planeEntity != null) {
-                                this.entity.LaunchPlane(planestack, planeEntity, this.targetEntity, hanger, hangerIndex);
+                                this.entity.LaunchPlane(planestack, planeEntity, this.targetEntity, (IItemHandlerModifiable) hanger, hangerIndex);
                             }
                             float f = MathHelper.sqrt(d0) / this.attackRadius;
                             this.PlaneDelay = MathHelper.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();

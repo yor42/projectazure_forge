@@ -1,8 +1,8 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -64,7 +64,7 @@ public class EnterpriseRiggingLayer extends GeoLayerRenderer<EntityEnterprise> i
 
             if (entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingCVDefault){
 
-                IMultiInventory inventories = entitylivingbaseIn.getRigging().getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+                IMultiInventory inventories = MultiInvUtil.getCap(entitylivingbaseIn.getRigging());
 
                 //gun Renderer
                 IItemHandler inventory = inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal());
