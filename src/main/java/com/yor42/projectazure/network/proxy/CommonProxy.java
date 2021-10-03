@@ -4,14 +4,11 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
-    ItemStack Sharedstack;
-
     public boolean keyFirePressedMainhand;
     public boolean keyFirePressedOffhand;
 
@@ -20,13 +17,6 @@ public class CommonProxy {
 
     public AbstractEntityCompanion getSharedMob(){
         return null;
-    }
-
-    public void setSharedStack(ItemStack stack){
-        this.Sharedstack = stack;
-    }
-    public ItemStack getSharedStack() {
-        return this.Sharedstack;
     }
 
     public PlayerEntity getPlayerClient() {

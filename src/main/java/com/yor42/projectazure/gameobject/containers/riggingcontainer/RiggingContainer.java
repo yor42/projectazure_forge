@@ -22,7 +22,7 @@ import static com.yor42.projectazure.setup.register.registerManager.RIGGING_INVE
 
 public class RiggingContainer extends Container {
 
-    private ItemStack riggingStack;
+    public ItemStack riggingStack;
 
     public RiggingContainer(int id, PlayerInventory playerInv, PacketBuffer data) {
         super(RIGGING_INVENTORY.get(), id);

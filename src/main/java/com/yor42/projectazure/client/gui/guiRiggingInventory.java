@@ -2,7 +2,6 @@ package com.yor42.projectazure.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.Constants;
@@ -22,11 +21,11 @@ public class guiRiggingInventory extends ContainerScreen<RiggingContainer> imple
     private final int backgroundHeight = 193;
 
     private int x, y;
-    private ItemStack RiggingStack;
+    private ItemStack riggingStack;
 
     public guiRiggingInventory(RiggingContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.RiggingStack = Main.PROXY.getSharedStack();
+        this.riggingStack = screenContainer.riggingStack;
     }
 
     @Override
@@ -65,31 +64,31 @@ public class guiRiggingInventory extends ContainerScreen<RiggingContainer> imple
         this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 14085119);
     }
     private void renderSlotBackgrounds(MatrixStack matrixStack){
-        if(this.RiggingStack.getItem() instanceof ItemRiggingBase) {
-            if(((ItemRiggingBase) this.RiggingStack.getItem()).getMainGunSlotCount()>0) {
+        if(this.riggingStack.getItem() instanceof ItemRiggingBase) {
+            if(((ItemRiggingBase) this.riggingStack.getItem()).getMainGunSlotCount()>0) {
                 this.blit(matrixStack, this.x+6, this.y+26, 176, 59, 18, 7);
-                for(int i = 0; i<((ItemRiggingBase) this.RiggingStack.getItem()).getMainGunSlotCount(); i++){
+                for(int i = 0; i<((ItemRiggingBase) this.riggingStack.getItem()).getMainGunSlotCount(); i++){
                     this.blit(matrixStack, this.x+6, this.y+33+18*i, 176, 0, 18, 18);
                 }
             }
 
-            if(((ItemRiggingBase) this.RiggingStack.getItem()).getSubGunSlotCount()>0) {
+            if(((ItemRiggingBase) this.riggingStack.getItem()).getSubGunSlotCount()>0) {
                 this.blit(matrixStack, this.x+30, this.y+26, 194, 59, 18, 7);
-                for(int i = 0; i<((ItemRiggingBase) this.RiggingStack.getItem()).getSubGunSlotCount(); i++){
+                for(int i = 0; i<((ItemRiggingBase) this.riggingStack.getItem()).getSubGunSlotCount(); i++){
                     this.blit(matrixStack, this.x+30+18*i, this.y+33, 176, 0, 18, 18);
                 }
             }
 
-            if(((ItemRiggingBase) this.RiggingStack.getItem()).getAASlotCount()>0) {
+            if(((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount()>0) {
                 this.blit(matrixStack, this.x+150, this.y+26, 176, 52, 18, 7);
-                for(int i=0; i<((ItemRiggingBase) this.RiggingStack.getItem()).getAASlotCount(); i++){
+                for(int i = 0; i<((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount(); i++){
                     this.blit(matrixStack, this.x+150, this.y+33+18*i, 176, 0, 18, 18);
                 }
             }
 
-            if(((ItemRiggingBase) this.RiggingStack.getItem()).getTorpedoSlotCount()>0) {
+            if(((ItemRiggingBase) this.riggingStack.getItem()).getTorpedoSlotCount()>0) {
                 this.blit(matrixStack, this.x+29, this.y+69, 194, 52, 18, 7);
-                for(int i=0; i<((ItemRiggingBase) this.RiggingStack.getItem()).getTorpedoSlotCount(); i++){
+                for(int i = 0; i<((ItemRiggingBase) this.riggingStack.getItem()).getTorpedoSlotCount(); i++){
                     this.blit(matrixStack, this.x+29+18*i, this.y+76, 176, 0, 18, 18);
                 }
             }
