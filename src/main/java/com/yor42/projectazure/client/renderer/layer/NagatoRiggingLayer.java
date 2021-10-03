@@ -1,11 +1,14 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityNagato;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingDD;
+import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -15,7 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.IItemHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -64,8 +67,6 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
             render(this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(this.modelRiggingProvider)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
 
-            ItemStackHandler Equipments = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getEquipments(entitylivingbaseIn.getRigging());
-
             //TODO: Clean this shit up with loop
                 /*
                 for(int i = 0; i<Equipments.getSlots(); i++){
@@ -82,12 +83,14 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
 
             if (entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingBBDefault){
 
+                IMultiInventory inventories = entitylivingbaseIn.getRigging().getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+
                 //gun Renderer
+                IItemHandler inventory = inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal());
+                ItemStack stack = inventory.getStackInSlot(0);
+                if(stack != ItemStack.EMPTY){
 
-
-                if(Equipments.getStackInSlot(0) != ItemStack.EMPTY){
-
-                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(0).getItem());
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)stack.getItem());
 
                     matrixStackIn.push();
                     RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
@@ -101,9 +104,10 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
                     matrixStackIn.pop();
                 }
 
-                if(Equipments.getStackInSlot(1) != ItemStack.EMPTY){
+                stack = inventory.getStackInSlot(1);
+                if(stack != ItemStack.EMPTY){
 
-                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(1).getItem());
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)stack.getItem());
 
                     matrixStackIn.push();
                     RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
@@ -117,9 +121,10 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
                     matrixStackIn.pop();
                 }
 
-                if(Equipments.getStackInSlot(2) != ItemStack.EMPTY){
+                stack = inventory.getStackInSlot(2);
+                if(stack != ItemStack.EMPTY){
 
-                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(2).getItem());
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)stack.getItem());
 
                     matrixStackIn.push();
                     RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
@@ -133,9 +138,11 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
                     matrixStackIn.pop();
                 }
 
-                if(Equipments.getStackInSlot(3) != ItemStack.EMPTY){
+                inventory = inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal());
+                stack = inventory.getStackInSlot(0);
+                if(stack != ItemStack.EMPTY){
 
-                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(3).getItem());
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)stack.getItem());
 
                     matrixStackIn.push();
                     RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
@@ -149,9 +156,10 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
                     matrixStackIn.pop();
                 }
 
-                if(Equipments.getStackInSlot(4) != ItemStack.EMPTY){
+                stack = inventory.getStackInSlot(1);
+                if(stack != ItemStack.EMPTY){
 
-                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(4).getItem());
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)stack.getItem());
 
                     matrixStackIn.push();
                     RenderType renderType = RenderType.getEntitySmoothCutout(EquipmentItem.getTexture());
@@ -165,17 +173,18 @@ public class NagatoRiggingLayer extends GeoLayerRenderer<EntityNagato> implement
                     matrixStackIn.pop();
                 }
 
-
-                if(Equipments.getStackInSlot(8) != ItemStack.EMPTY){
-                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)Equipments.getStackInSlot(8).getItem());
+                inventory = inventories.getInventory(enums.SLOTTYPE.TORPEDO.ordinal());
+                stack = inventory.getStackInSlot(0);
+                if(stack != ItemStack.EMPTY){
+                    ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase)stack.getItem());
                     if(EquipmentItem == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
                         matrixStackIn.push();
-                        RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) Equipments.getStackInSlot(3).getItem()).getTexture());
+                        RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                         matrixStackIn.translate((0 + hostbone.getPositionX()) / 16, (-10 + hostbone.getPositionY() + riggingoffset) / 16, (26.75 + hostbone.getPositionZ()) / 16);
                         matrixStackIn.rotate(new Quaternion(90, 180, 0, true));
                         GeoModel EquipmentModel = ((ItemEquipmentBase) EquipmentItem).getEquipmentModel().getModel(((ItemEquipmentBase) EquipmentItem).getEquipmentModel().getModelLocation(null));
                         EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-entitylivingbaseIn.getRotationYawHead() + entitylivingbaseIn.prevRotationYaw, 45F, -45F, false, true)));
-                        int AmmoCount = getRemainingAmmo(Equipments.getStackInSlot(4));
+                        int AmmoCount = getRemainingAmmo(stack);
                         EquipmentModel.getBone("torpedo4").get().setHidden(AmmoCount<4);
                         EquipmentModel.getBone("torpedo3").get().setHidden(AmmoCount<3);
                         EquipmentModel.getBone("torpedo2").get().setHidden(AmmoCount<2);

@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
+import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
@@ -185,10 +185,12 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Nullable
-    public ItemStackHandler getHanger(){
-        if(this.hasRigging()) {
-            if (((ItemRiggingBase) this.getRigging().getItem()).getHangerSlots() > 0)
-                return new RiggingItemCapabilityProvider(this.getRigging(), this, 0, 0).getHangar(); //TODO
+    public ItemStackHandler getHanger() {
+        if (this.hasRigging()) {
+            ItemStackHandler hangar = this.getRigging().getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack")).getInventory(enums.SLOTTYPE.PLANE.ordinal());
+            if (hangar.getSlots() > 0) {
+                return hangar;
+            }
         }
         return null;
     }

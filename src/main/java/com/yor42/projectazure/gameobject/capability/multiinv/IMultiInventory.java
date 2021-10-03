@@ -29,5 +29,4 @@ public interface IMultiInventory {
             return inventories[index];
         }
     }
-
 }

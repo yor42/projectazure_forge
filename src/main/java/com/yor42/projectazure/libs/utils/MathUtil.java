@@ -62,8 +62,12 @@ public class MathUtil {
         return rand.nextFloat()<=chance;
     }
 
-    public static int generateRandomInt(int bound){
+    public static int generateRandomIntIncluding(int bound){
         return rand.nextInt(bound+1);
+    }
+
+    public static int generateRandomInt(int bound) {
+        return rand.nextInt(bound);
     }
 
     public static int rollDamagingRiggingCount(int RiggingCount){

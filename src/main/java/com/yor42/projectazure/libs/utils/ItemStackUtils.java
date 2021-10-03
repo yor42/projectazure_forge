@@ -1,9 +1,9 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
@@ -18,12 +18,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.Color;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.LinkedHashSet;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.generateRandomInt;
@@ -85,42 +83,39 @@ public class ItemStackUtils {
         return stack.getOrCreateTag().getInt("currentdamage");
     }
 
-    public static boolean DamageComponent(float damage, ItemStack riggingStack, boolean shouldDamageMultiple){
-        if(riggingStack.getItem() instanceof ItemRiggingBase){
+    public static boolean DamageComponent(float damage, ItemStack riggingStack, boolean shouldDamageMultiple) {
+        if (riggingStack.getItem() instanceof ItemRiggingBase) {
             ItemRiggingBase riggingItem = (ItemRiggingBase) riggingStack.getItem();
-            int EquipmentCount = riggingItem.getEquipments(riggingStack).getSlots();
-            int DamageRiggingCount = 1;
 
-            if(shouldDamageMultiple)
-                DamageRiggingCount = rollDamagingRiggingCount(EquipmentCount);
+            IMultiInventory inventories = MultiInvUtil.getCap(riggingStack);
+            int[] indices = new int[]{enums.SLOTTYPE.MAIN_GUN.ordinal(), enums.SLOTTYPE.SUB_GUN.ordinal(), enums.SLOTTYPE.AA.ordinal(), enums.SLOTTYPE.TORPEDO.ordinal()};
+            int slotCount = MultiInvUtil.getSlotCount(inventories, indices);
+            int toDamage = shouldDamageMultiple ? rollDamagingRiggingCount(slotCount) : 1;
+            Set<Integer> slotsToDamage = new HashSet<>();
 
-            int MainDamageIndex = generateRandomInt(EquipmentCount-1);
-
-            ItemStack MainStack = riggingItem.getEquipments(riggingStack).getStackInSlot(MainDamageIndex);
-            if (MainStack.getItem() instanceof ItemEquipmentBase) {
-                DamageItem(damage,MainStack);
+            int mainDamagedSlot = generateRandomInt(slotCount);
+            ItemStack mainDamageStack = MultiInvUtil.getStack(inventories, mainDamagedSlot);
+            if (mainDamageStack.getItem() instanceof ItemEquipmentBase) {
+                DamageItem(damage, mainDamageStack);
             }
+            toDamage--;
 
-            if(DamageRiggingCount>1){
-                Set<Integer> equipmentIndex = new LinkedHashSet<>();
-                while (equipmentIndex.size()<DamageRiggingCount-1){
-                    int random = generateRandomInt(EquipmentCount);
-                    if(random!=MainDamageIndex) {
-                        equipmentIndex.add(random);
-                    }
-                }
-                Integer[] intArray = new Integer[equipmentIndex.size()];
-                intArray =  equipmentIndex.toArray(intArray);
-                for (Integer integer : intArray) {
-                    ItemStack equipmentStack = riggingItem.getEquipments(riggingStack).getStackInSlot(integer);
-                    if (equipmentStack.getItem() instanceof ItemEquipmentBase) {
-                        DamageItem((float) (damage*0.4),equipmentStack);
-                    }
+            while (slotsToDamage.size() < toDamage) {
+                int slot = generateRandomInt(slotCount);
+                if (slot != mainDamagedSlot) {
+                    slotsToDamage.add(slot);
                 }
             }
+
+            for (int slot : slotsToDamage) {
+                ItemStack stackToDamage = MultiInvUtil.getStack(inventories, slot);
+                if (stackToDamage.getItem() instanceof ItemEquipmentBase) {
+                    DamageItem(damage * 0.4f, stackToDamage);
+                }
+            }
+
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -230,30 +225,30 @@ public class ItemStackUtils {
 
 
 
-    public static boolean hasAttackableCannon(ItemStack rigging){
-
-        if(rigging.getItem() instanceof ItemRiggingBase){
-            ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
-            ItemStackHandler equipments = riggingItem.getEquipments(rigging);
-            for(int i = 0; i<equipments.getSlots(); i++){
-                if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
-                    if(((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.MAIN_GUN){
-                        return !isDestroyed(equipments.getStackInSlot(i));
-                    }
-                }
+    public static boolean hasAttackableCannon(ItemStack rigging) {
+        //TODO: check for correctness
+        if (rigging.getItem() instanceof ItemRiggingBase) {
+            IItemHandler mainGuns = rigging.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack")).getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal());
+            for (int i = 0; i < mainGuns.getSlots(); i++) {
+                return !isDestroyed(mainGuns.getStackInSlot(i));
             }
         }
         return false;
     }
 
-    public static boolean hasGunOrTorpedo(ItemStack riggingStack){
-        if(riggingStack.getItem() instanceof ItemRiggingBase) {
-            ItemStackHandler equipments = ((ItemRiggingBase) riggingStack.getItem()).getEquipments(riggingStack);
-            for(int i = 0; i<equipments.getSlots(); i++){
-                if(equipments.getStackInSlot(i).getItem() instanceof ItemEquipmentBase){
-                    if(((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.TORPEDO || ((ItemEquipmentBase) equipments.getStackInSlot(i).getItem()).getSlot() == enums.SLOTTYPE.MAIN_GUN){
-                        return true;
-                    }
+    public static boolean hasGunOrTorpedo(ItemStack riggingStack) {
+        if (riggingStack.getItem() instanceof ItemRiggingBase) {
+            IMultiInventory inventories = riggingStack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+            IItemHandler torpedos = inventories.getInventory(enums.SLOTTYPE.TORPEDO.ordinal());
+            for (int i = 0; i < torpedos.getSlots(); i++) {
+                if (torpedos.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
+                    return true;
+                }
+            }
+            IItemHandler mainGuns = inventories.getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal());
+            for (int i = 0; i < mainGuns.getSlots(); i++) {
+                if (mainGuns.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
+                    return true;
                 }
             }
         }

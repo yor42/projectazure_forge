@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
+import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
@@ -93,7 +94,7 @@ public class KansenLaunchPlaneGoal extends Goal {
             }
 
             if (entity.getRigging().getItem() instanceof ItemRiggingBase) {
-                ItemStackHandler hanger = ((ItemRiggingBase) this.entity.getRigging().getItem()).getHangers(this.entity.getRigging());
+                ItemStackHandler hanger = entity.getRigging().getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack")).getInventory(enums.SLOTTYPE.PLANE.ordinal());
 
                 if (hanger != null) {
                     int hangerIndex = getPreparedPlane(this.entity, hanger);

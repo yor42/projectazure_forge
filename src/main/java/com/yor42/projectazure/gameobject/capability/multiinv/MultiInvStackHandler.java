@@ -3,8 +3,6 @@ package com.yor42.projectazure.gameobject.capability.multiinv;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nonnull;
-
 public class MultiInvStackHandler extends ItemStackHandler {
     private final ItemStack container;
     private final String id;
@@ -20,12 +18,7 @@ public class MultiInvStackHandler extends ItemStackHandler {
     }
 
     @Override
-    public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-        super.setStackInSlot(slot, stack);
-    }
-
-    @Override
     protected void onContentsChanged(int slot) {
-        container.getOrCreateTag().put("Inventory_" + id, this.serializeNBT());
+        container.getOrCreateTag().put("Inventory_" + this.id, this.serializeNBT());
     }
 }

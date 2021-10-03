@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingDD;
@@ -9,7 +8,6 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -75,7 +73,7 @@ public class RiggingLayerRenderer<T extends AbstractEntityCompanion> extends Geo
                 render(model, entitylivingbaseIn, partialTicks, RenderType.getEntitySmoothCutout(this.getTextureLocation(entitylivingbaseIn)), matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
                 matrixStackIn.pop();
 
-                ItemStackHandler Equipments = new RiggingItemCapabilityProvider(entitylivingbaseIn.getRigging(), entitylivingbaseIn, 10, 10).getEquipments();
+                //ItemStackHandler Equipments = new RiggingItemCapabilityProvider(entitylivingbaseIn.getRigging(), entitylivingbaseIn, 10, 10).getEquipments();
 
 
             }
