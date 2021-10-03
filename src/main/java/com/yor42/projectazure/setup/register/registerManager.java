@@ -20,10 +20,12 @@ import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.biome.Biome;
@@ -31,6 +33,7 @@ import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -53,7 +56,7 @@ public class registerManager {
     private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<>(ContainerKansenInventory::new);
     public static final RegistryObject<ContainerType<ContainerKansenInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> SHIP_INVENTORY);
 
-    private static final ContainerType<RiggingContainer> RIGGING_INVENTORY_TYPE = new ContainerType<>(RiggingContainer::new);
+    private static final ContainerType<RiggingContainer> RIGGING_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<RiggingContainer>)RiggingContainer::new);
     public static final RegistryObject<ContainerType<RiggingContainer>> RIGGING_INVENTORY = CONTAINER.register("rigging_inventory", () -> RIGGING_INVENTORY_TYPE);
 
     public static final ContainerType<ContainerBAInventory> BA_INVENTORY_TYPE = new ContainerType<>(ContainerBAInventory::new);

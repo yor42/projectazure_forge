@@ -1,6 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
-import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
+import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -16,7 +16,7 @@ public class syncRiggingCapabilityPacket {
     private final ItemStack itemStack;
 
 
-    public syncRiggingCapabilityPacket(RiggingInventoryCapability capability) {
+    public syncRiggingCapabilityPacket(RiggingItemCapabilityProvider capability) {
         this.InventoryCompound = capability.getEquipments().serializeNBT();
         this.FuelTankCompound = null;//capability.writeToNBT(new CompoundNBT());
         this.itemStack = capability.getItemStack();

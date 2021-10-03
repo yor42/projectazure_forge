@@ -1,22 +1,29 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
+import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
+import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.gameobject.misc.RiggingInventories;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.Color;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.generateRandomInt;
@@ -154,26 +161,17 @@ public class ItemStackUtils {
         return -1;
     }
 
-    public static boolean hasPlanes(ItemStack rigging){
-        if(rigging.getItem() instanceof ItemRiggingBase) {
-            ItemRiggingBase riggingItem = (ItemRiggingBase) rigging.getItem();
-            ItemStackHandler hanger = new RiggingInventoryCapability(rigging).getHangar();
-            if(hanger != null) {
-                if (hanger.getSlots() > 0) {
-                    for (int i = 0; i < hanger.getSlots(); i++) {
-                        boolean flag = hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentBase;
-
-                        if(flag) {
-                            ItemEquipmentBase item = (ItemEquipmentBase) hanger.getStackInSlot(i).getItem();
-                            if (item.getSlot() == enums.SLOTTYPE.PLANE) {
-                                return true;
-                            }
-                        }
-                    }
+    public static boolean hasPlanes(ItemStack rigging) {
+        return rigging.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).map(inventories -> {
+            IItemHandler hangar = inventories.getInventory(RiggingInventories.HANGAR);
+            for (int slot = 0; slot < hangar.getSlots(); slot++) {
+                Item item = hangar.getStackInSlot(slot).getItem();
+                if (item instanceof ItemEquipmentBase && ((ItemEquipmentBase) item).getSlot() == enums.SLOTTYPE.PLANE) {
+                    return true;
                 }
             }
-        }
-        return false;
+            return false;
+        }).orElse(false);
     }
 
     public static void serializeInventory(ItemStack TargetStack, ItemStackHandler inventory){

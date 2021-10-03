@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
+import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityEnterprise;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -58,7 +58,7 @@ public class EnterpriseRiggingLayer extends GeoLayerRenderer<EntityEnterprise> i
             GeoModel riggingmodel = this.modelRiggingProvider.getModel(this.modelRiggingProvider.getModelLocation(null));
             render(riggingmodel, entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
-            ItemStackHandler Equipments = new RiggingInventoryCapability(entitylivingbaseIn.getRigging(), entitylivingbaseIn).getEquipments();
+            ItemStackHandler Equipments = new RiggingItemCapabilityProvider(entitylivingbaseIn.getRigging(), entitylivingbaseIn, 10, 10).getEquipments();
 
             if (entitylivingbaseIn.getRigging().getItem() instanceof ItemRiggingCVDefault){
 

@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
+import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
@@ -34,7 +34,6 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -189,7 +188,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public ItemStackHandler getHanger(){
         if(this.hasRigging()) {
             if (((ItemRiggingBase) this.getRigging().getItem()).getHangerSlots() > 0)
-                return new RiggingInventoryCapability(this.getRigging(), this).getHangar();
+                return new RiggingItemCapabilityProvider(this.getRigging(), this, 0, 0).getHangar(); //TODO
         }
         return null;
     }

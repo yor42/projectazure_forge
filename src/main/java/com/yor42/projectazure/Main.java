@@ -13,6 +13,7 @@ import com.yor42.projectazure.client.renderer.entity.projectile.MissileDroneMiss
 import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.events.ModBusEventHandlerClient;
+import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.proxy.ClientProxy;
@@ -115,6 +116,7 @@ public class Main
     private void setup(final FMLCommonSetupEvent event)
     {
         ProjectAzurePlayerCapability.registerCapability();
+        CapabilityMultiInventory.register();
         registerEntity.RegisterAttributes();
     }
 

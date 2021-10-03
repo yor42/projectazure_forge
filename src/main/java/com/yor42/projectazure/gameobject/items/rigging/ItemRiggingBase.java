@@ -1,11 +1,13 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
-import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.capability.RiggingInventoryCapability;
+import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandler;
+import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
+import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -34,6 +36,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -66,7 +69,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         super.addInformation(stack, worldIn, tooltip, flagIn);
         if (worldIn == null) return; // thanks JEI very cool
 
-        IFluidHandlerItem tank = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(()->new RuntimeException("Can't get the fuel tank of non rigging item!"));
+        IFluidHandlerItem tank = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(() -> new RuntimeException("Can't get the fuel tank of non rigging item!"));
         int fluidAmount = tank.getFluidInTank(0).getAmount();
         int fluidCapacity = tank.getTankCapacity(0);
         float fillRatio = (float) fluidAmount / fluidCapacity;
@@ -83,6 +86,10 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331))));
         if (worldIn.isRemote) {
             //TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
+        }
+
+        if (flagIn.isAdvanced()) {
+            tooltip.add(new StringTextComponent(stack.getOrCreateTag().toString()));
         }
     }
 
@@ -121,19 +128,17 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         }
     }
 
+    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        if(!worldIn.isRemote()) {
-            if (playerIn.isSneaking()) {
-                if (!playerIn.world.isRemote) {
-                    NetworkHooks.openGui((ServerPlayerEntity)playerIn, new RiggingInventoryCapability(playerIn.getHeldItem(handIn), playerIn, this.getFuelTankCapacity(), this.getTotalSlotCount()));//packetBuffer.writeItemStack(stack, false).writeByte(screenID));
-                }
-                Main.PROXY.setSharedStack(playerIn.getHeldItem(handIn));
-                return ActionResult.resultSuccess(itemstack);
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, @Nonnull Hand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if(!world.isRemote()) {
+            if (player.isSneaking()) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, new RiggingContainer.Provider(stack), buf -> buf.writeItemStack(stack));
+                return ActionResult.resultSuccess(stack);
             }
         }
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return super.onItemRightClick(world, player, hand);
     }
 
     public enums.shipClass getValidclass() {
@@ -158,47 +163,33 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public int getFuelTankCapacity(){return 50000;}
 
-    public int getTotalSlotCount(){
-        return this.getAASlotCount()+ this.getMainGunSlotCount()+this.getSubGunSlotCount()+this.getTorpedoSlotCount();
+    public MultiInvStackHandler[] createInventories(ItemStack container) {
+        return new MultiInvStackHandler[]{
+                new MultiInvStackHandler(container, "MainGun", getMainGunSlotCount()),
+                new MultiInvStackHandler(container, "SubGun", getSubGunSlotCount()),
+                new MultiInvStackHandler(container, "AA", getAASlotCount()),
+                new MultiInvStackHandler(container, "Torpedo", getTorpedoSlotCount()),
+                new MultiInvStackHandler(container, "Hangar", getHangerSlots())
+        };
     }
 
     public abstract AnimatedGeoModel getModel();
 
-    public ItemStackHandler getEquipments(ItemStack riggingStack){
-        return new RiggingInventoryCapability(riggingStack, this.getFuelTankCapacity(), this.getTotalSlotCount()).getEquipments();
-    };
-
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new RiggingInventoryCapability(stack, this.getFuelTankCapacity(), this.getTotalSlotCount());
-    }
-
-    @Nullable
-    public ItemStackHandler getHangers(ItemStack riggingStack){
-        return this.getHangerSlots()==0? null:new RiggingInventoryCapability(riggingStack, this.getFuelTankCapacity(), this.getTotalSlotCount()).getHangar();
+        return new RiggingItemCapabilityProvider(stack, null, this.getFuelTankCapacity(), this.createInventories(stack));
     }
 
     public void onUpdate(ItemStack stack) {
-        if(stack.getItem() instanceof ItemRiggingBase){
-
-            RiggingInventoryCapability rigginginv = new RiggingInventoryCapability(stack, this.getFuelTankCapacity(), this.getTotalSlotCount());
-
-            IItemHandler equipment = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElseThrow(()->new RuntimeException("Can't update the content of non-rigging Item!"));
-            ItemStackHandler hanger = rigginginv.getHangar();
-
-            for(int j = 0; j<equipment.getSlots(); j++){
-                if(equipment.getStackInSlot(j).getItem() instanceof ItemEquipmentBase) {
-                    ItemEquipmentBase item = (ItemEquipmentBase) equipment.getStackInSlot(j).getItem();
-                    item.onUpdate(equipment.getStackInSlot(j), stack);
-                }
-            }
-            if(hanger!=null){
-                for(int i = 0; i<hanger.getSlots(); i++) {
-                    if (hanger.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
-                        ItemEquipmentBase item = (ItemEquipmentBase) hanger.getStackInSlot(i).getItem();
-                        item.onUpdate(hanger.getStackInSlot(i), stack);
-                    }
+        IMultiInventory inventories = stack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
+        for (int invIndex = 0; invIndex < inventories.getInventoryCount(); invIndex++) {
+            IItemHandler inventory = inventories.getInventory(invIndex);
+            for (int slot = 0; slot < inventory.getSlots(); slot++) {
+                ItemStack stackInSlot = inventory.getStackInSlot(0);
+                Item item = stackInSlot.getItem();
+                if (item instanceof ItemEquipmentBase) {
+                    ((ItemEquipmentBase) item).onUpdate(stackInSlot, stack);
                 }
             }
         }
