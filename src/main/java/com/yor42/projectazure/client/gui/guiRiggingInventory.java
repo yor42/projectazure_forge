@@ -47,8 +47,8 @@ public class guiRiggingInventory extends ContainerScreen<RiggingContainer> imple
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override

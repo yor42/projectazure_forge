@@ -105,13 +105,16 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         for(int i = 0; i< inventories.getInventoryCount(); i++){
             ItemStackHandler Equipments = inventories.getInventory(i);
             enums.SLOTTYPE slottype = enums.SLOTTYPE.values()[i];
-            tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-            for(int j=0; j<Equipments.getSlots(); j++){
-                ItemStack currentstack = Equipments.getStackInSlot(j);
-                if(currentstack.getItem() instanceof ItemEquipmentBase)
-                    tooltip.add(currentstack.getDisplayName().copyRaw().appendString("("+getCurrentHP(currentstack)+"/"+((ItemEquipmentBase)currentstack.getItem()).getMaxHP()+")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
-                else {
-                    tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
+            //not really needed but its here to make mc to not add header of equipment that isnt supported by rigging
+            if(Equipments.getSlots()>0) {
+                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+                for (int j = 0; j < Equipments.getSlots(); j++) {
+                    ItemStack currentstack = Equipments.getStackInSlot(j);
+                    if (currentstack.getItem() instanceof ItemEquipmentBase)
+                        tooltip.add(currentstack.getDisplayName().copyRaw().appendString("(" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
+                    else {
+                        tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
+                    }
                 }
             }
         }

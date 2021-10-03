@@ -22,9 +22,9 @@ public class guiBasicRefinery extends ContainerScreen<ContainerBasicRefinery> {
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTanks(matrixStack, partialTicks, mouseX, mouseY);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override

@@ -30,9 +30,6 @@ public class guiDryDock extends ContainerScreen<ContainerDryDock> {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
-        if(isPointInRegion(157, 6,10,72,mouseX,mouseY)){
-            this.renderTooltip(matrixStack, new StringTextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), mouseX,mouseY);
-        }
     }
 
     @Override
@@ -62,6 +59,9 @@ public class guiDryDock extends ContainerScreen<ContainerDryDock> {
         this.font.func_243248_b(matrixStack, RemainingTime, 51/renderScale,46/renderScale, 0x00FF00);
         matrixStack.pop();
         this.renderButtons();
+        if(isPointInRegion(157, 6,10,72,x,y)){
+            this.renderTooltip(matrixStack, new StringTextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), x,y);
+        }
     }
 
     private void renderButtons() {
