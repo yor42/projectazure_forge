@@ -1,14 +1,15 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
+import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvEquipmentHandler;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandler;
-import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -26,7 +27,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -71,6 +71,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         if (worldIn == null) return; // thanks JEI very cool
 
         IFluidHandlerItem tank = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(() -> new RuntimeException("Can't get the fuel tank of non rigging item!"));
+        IMultiInventory inventories = stack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("Can't get the fuel tank of non rigging item!"));
         int fluidAmount = tank.getFluidInTank(0).getAmount();
         int fluidCapacity = tank.getTankCapacity(0);
         float fillRatio = (float) fluidAmount / fluidCapacity;
@@ -86,7 +87,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fluidAmount + "/" + fluidCapacity).appendString("mb").mergeStyle(color)));
         tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331))));
         if (worldIn.isRemote) {
-            //TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
+            TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, inventories, worldIn, tooltip, flagIn));
         }
 
         if (flagIn.isAdvanced()) {
@@ -99,32 +100,19 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-        //TODO: kek
-        ItemStackHandler Equipments = null;
+    public void addInformationAfterShift(ItemStack stack, IMultiInventory inventories, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
         Color CategoryColor = Color.fromHex("#6bb82d");
-        for(int i = 0; i<Equipments.getSlots(); i++){
-            if(this.getMainGunSlotCount()>0) {
-                if (i == 0)
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("equiment.main_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-            }
-            if(this.getSubGunSlotCount()>0) {
-                if (i == this.getMainGunSlotCount())
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("equiment.sub_gun").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-            }
-            if(this.getAASlotCount()>0) {
-                if (i == this.getMainGunSlotCount()+this.getSubGunSlotCount())
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("equiment.anti_air").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-            }
-            if(this.getTorpedoSlotCount()>0) {
-                if (i == this.getMainGunSlotCount()+this.getSubGunSlotCount() + this.getAASlotCount())
-                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent("equiment.torpedo").append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
-            }
-            ItemStack currentstack = Equipments.getStackInSlot(i);
-            if(currentstack != ItemStack.EMPTY && currentstack.getItem() instanceof ItemEquipmentBase)
-                tooltip.add(currentstack.getDisplayName().copyRaw().appendString("("+getCurrentHP(currentstack)+"/"+((ItemEquipmentBase)currentstack.getItem()).getMaxHP()+")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
-            else {
-                tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
+        for(int i = 0; i< inventories.getInventoryCount(); i++){
+            ItemStackHandler Equipments = inventories.getInventory(i);
+            enums.SLOTTYPE slottype = enums.SLOTTYPE.values()[i];
+            tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+            for(int j=0; j<Equipments.getSlots(); j++){
+                ItemStack currentstack = Equipments.getStackInSlot(j);
+                if(currentstack.getItem() instanceof ItemEquipmentBase)
+                    tooltip.add(currentstack.getDisplayName().copyRaw().appendString("("+getCurrentHP(currentstack)+"/"+((ItemEquipmentBase)currentstack.getItem()).getMaxHP()+")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
+                else {
+                    tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
+                }
             }
         }
     }

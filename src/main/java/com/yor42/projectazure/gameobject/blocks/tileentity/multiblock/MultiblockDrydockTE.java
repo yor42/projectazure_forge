@@ -9,7 +9,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,8 +20,6 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-
-import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.ACTIVE;
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;

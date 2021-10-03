@@ -85,8 +85,6 @@ public class ItemStackUtils {
 
     public static boolean DamageComponent(float damage, ItemStack riggingStack, boolean shouldDamageMultiple) {
         if (riggingStack.getItem() instanceof ItemRiggingBase) {
-            ItemRiggingBase riggingItem = (ItemRiggingBase) riggingStack.getItem();
-
             IMultiInventory inventories = MultiInvUtil.getCap(riggingStack);
             int[] indices = new int[]{enums.SLOTTYPE.MAIN_GUN.ordinal(), enums.SLOTTYPE.SUB_GUN.ordinal(), enums.SLOTTYPE.AA.ordinal(), enums.SLOTTYPE.TORPEDO.ordinal()};
             int slotCount = MultiInvUtil.getSlotCount(inventories, indices);

@@ -62,10 +62,6 @@ public class MathUtil {
         return rand.nextFloat()<=chance;
     }
 
-    public static int generateRandomIntIncluding(int bound){
-        return rand.nextInt(bound+1);
-    }
-
     public static int generateRandomInt(int bound) {
         return rand.nextInt(bound);
     }
@@ -94,7 +90,7 @@ public class MathUtil {
     }
 
 
-    //happy valentine day i guess
+    //happy valentine day I guess
     public boolean Valentine(){
         int you = 2;
         int me = 2;
