@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.buttons.buttonStarterSelect;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
 import com.yor42.projectazure.setup.register.registerManager;
@@ -135,7 +136,7 @@ public class guiStarterSpawn extends Screen {
         return "Hello World";
     }
 
-    private buttonStarterSelect createButton(int x, int y, int width, int height, int idx, EntityType type, Button.IPressable onPress) {
+    private buttonStarterSelect createButton(int x, int y, int width, int height, int idx, EntityType<?> type, Button.IPressable onPress) {
         ResourceLocation TEXTURE1 = new ResourceLocation(Constants.MODID, "textures/gui/rainbow_cube_overlay.png");
         return new buttonStarterSelect(x, y, width, height, 0, 0, this.buttonWidth , TEXTURE1, idx, type, onPress);
     }

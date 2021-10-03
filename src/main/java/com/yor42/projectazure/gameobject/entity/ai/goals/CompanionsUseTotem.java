@@ -1,11 +1,11 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Effects;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import static net.minecraft.util.Hand.OFF_HAND;
 

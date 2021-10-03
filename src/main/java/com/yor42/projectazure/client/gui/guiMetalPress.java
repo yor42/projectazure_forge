@@ -25,13 +25,13 @@ public class guiMetalPress extends ContainerScreen<ContainerMetalPress> implemen
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
 
         if(isPointInRegion(157, 6,10,72,mouseX,mouseY)){
             this.renderTooltip(matrixStack, new StringTextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), mouseX,mouseY);
         }
 
         super.render(matrixStack, mouseX, mouseY, partialTicks);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override

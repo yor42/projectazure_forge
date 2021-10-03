@@ -38,6 +38,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 import static com.yor42.projectazure.libs.utils.FluidPredicates.*;
