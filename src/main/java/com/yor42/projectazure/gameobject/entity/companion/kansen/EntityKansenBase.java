@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -248,9 +249,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             if(!(vector3d.x == 0 || vector3d.z == 0)) {
                 this.world.addParticle(ParticleTypes.CLOUD, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             }
-            this.getRigging().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent((fluidtank)->{
-                fluidtank.drain(1, IFluidHandler.FluidAction.EXECUTE);
-            });
+            if(!PAConfig.CONFIG.RiggingInfiniteFuel.get() && this.ticksExisted%2 == 0) {
+                this.getRigging().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent((fluidtank) -> {
+                    fluidtank.drain(1, IFluidHandler.FluidAction.EXECUTE);
+                });
+            }
         }
         else if(modifiableattributeinstance != null){
             modifiableattributeinstance.removeModifier(SAILING_SPEED_BOOST);
@@ -359,8 +362,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     private void kansenFloat() {
         Vector3d vec3d = this.getMotion();
-        boolean water = this.isInWater();
-        if(this.func_233571_b_(FluidTags.WATER)>0.2)
+        if(this.func_233571_b_(FluidTags.WATER)>0.3)
             this.setMotion(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-3F : 0.0F), vec3d.z);
         else if (vec3d.y>0){
             this.setVelocity(vec3d.x, vec3d.y - 0.0001, vec3d.z);

@@ -2,6 +2,8 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementController;
+import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
@@ -324,9 +326,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         super(type, worldIn);
         this.setAffection(40F);
         this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
-        this.groundNav = new GroundPathNavigator(this, worldIn);
+        this.groundNav = new CompanionGroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
-        this.MoveController = new MovementController(this);
+        this.MoveController = new CompanionDefaultMovementController(this);
     }
 
 

@@ -108,6 +108,8 @@ public class PAConfig {
 
         public final ForgeConfigSpec.BooleanValue shouldRecruitBeaconSpawnAllCompanions;
 
+        public final ForgeConfigSpec.BooleanValue RiggingInfiniteFuel;
+
         private PAModConfig(ForgeConfigSpec.Builder builder){
 
             builder.push("General");
@@ -209,6 +211,10 @@ public class PAConfig {
 
             builder.pop().push("Misc").comment("Other Thingys");
             shouldRecruitBeaconSpawnAllCompanions = builder.define("Should Recruit Beacon Spawn ALL Companion?", false);
+            builder.pop();
+
+            builder.push("Cheats");
+            RiggingInfiniteFuel = builder.define("Rigging does not require fuel", false);
             builder.pop();
         }
     }

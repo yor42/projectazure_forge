@@ -79,7 +79,7 @@ public class EntityZ23 extends EntityKansenDestroyer{
         }
         else if (isMoving()) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("sail_arm", true));
+                event.getController().setAnimation(builder.addAnimation("sail_hand", true));
             }
             else if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
