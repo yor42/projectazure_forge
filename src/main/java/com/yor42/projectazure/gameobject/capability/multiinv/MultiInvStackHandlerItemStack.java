@@ -126,28 +126,10 @@ public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
         }
     }
 
-    @Override
-    public int getSlotLimit(int slot) {
-        return 64;
-    }
-
-    protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-        return Math.min(getSlotLimit(slot), stack.getMaxStackSize());
-    }
-
-    @Override
-    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return true;
-    }
-
     protected void validateSlotIndex(int slot) {
         NonNullList<ItemStack> stacks = this.stacks.get();
         if (slot < 0 || slot >= stacks.size())
             throw new RuntimeException("Slot " + slot + " not in valid range - [0," + stacks.size() + ")");
-    }
-
-    protected void onLoad() {
-
     }
 
     protected void onContentsChanged(int slot) {
