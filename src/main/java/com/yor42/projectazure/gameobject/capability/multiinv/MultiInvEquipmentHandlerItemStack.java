@@ -5,10 +5,10 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class MultiInvEquipmentHandler extends MultiInvStackHandler{
+public class MultiInvEquipmentHandlerItemStack extends MultiInvStackHandlerItemStack {
     @Nonnull
     private final enums.SLOTTYPE slotType;
-    public MultiInvEquipmentHandler(ItemStack container, String id, int size, @Nonnull enums.SLOTTYPE EquipmentType) {
+    public MultiInvEquipmentHandlerItemStack(ItemStack container, String id, int size, @Nonnull enums.SLOTTYPE EquipmentType) {
         super(container, id, size);
         this.slotType = EquipmentType;
     }

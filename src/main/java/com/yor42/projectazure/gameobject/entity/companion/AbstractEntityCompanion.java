@@ -393,7 +393,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if(capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && this.getInventory() != null){
+        if(capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
             return LazyOptional.of(this::getInventory).cast();
         }
         return super.getCapability(capability, facing);
@@ -621,6 +621,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.isInHomeRange(this.getPosition());
     }
 
+    @Nonnull
     public ItemStackHandler getInventory(){
         return this.Inventory;
     }

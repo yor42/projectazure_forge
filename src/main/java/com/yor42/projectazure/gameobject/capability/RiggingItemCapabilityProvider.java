@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.capability;
 
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
-import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandler;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandlerItemStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -24,9 +24,9 @@ public class RiggingItemCapabilityProvider implements ICapabilityProvider {
     protected ItemStack stack;
     protected final LivingEntity entity;
     private int fuelTankCapacity;
-    private MultiInvStackHandler[] inventories;
+    private MultiInvStackHandlerItemStack[] inventories;
 
-    public RiggingItemCapabilityProvider(ItemStack stack, @Nullable LivingEntity entity, int FuelTankCapacity, MultiInvStackHandler... inventories){
+    public RiggingItemCapabilityProvider(ItemStack stack, @Nullable LivingEntity entity, int FuelTankCapacity, MultiInvStackHandlerItemStack... inventories){
         this.fuelTankCapacity = FuelTankCapacity;
         this.stack = stack;
         this.entity = entity;

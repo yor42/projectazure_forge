@@ -11,13 +11,28 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 
-public class MultiInvStackHandler implements IItemHandlerModifiable {
-    private final String id;
-    protected final Lazy<NonNullList<ItemStack>> stacks;
+public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
+    private final ItemStack container;
+    private final Lazy<NonNullList<ItemStack>> stacks;
 
-    public MultiInvStackHandler(String ID, int size){
-        this.id = ID;
-        this.stacks = Lazy.of(() -> NonNullList.withSize(size, ItemStack.EMPTY));
+    public MultiInvStackHandlerItemStack(ItemStack container, String id, int size) {
+        super(id, size);
+        this.container = container;
+        this.stacks = Lazy.of(() -> {
+            NonNullList<ItemStack> stacks = NonNullList.withSize(size, ItemStack.EMPTY);
+            CompoundNBT nbt = container.getOrCreateTag();
+            if (nbt.contains("Inventory_" + id)) {
+                ListNBT items = nbt.getCompound("Inventory_" + id).getList("Items", Constants.NBT.TAG_COMPOUND);
+                for (int i = 0; i < items.size(); i++) {
+                    CompoundNBT item = items.getCompound(i);
+                    int slot = item.getInt("Slot");
+                    if (slot >= 0 && slot < stacks.size()) {
+                        stacks.set(slot, ItemStack.read(item));
+                    }
+                }
+            }
+            return stacks;
+        });
     }
 
     @Override
@@ -136,24 +151,6 @@ public class MultiInvStackHandler implements IItemHandlerModifiable {
     }
 
     protected void onContentsChanged(int slot) {
-
-    }
-
-    public CompoundNBT serializeNBT(CompoundNBT compound) {
-        NonNullList<ItemStack> stacks = this.stacks.get();
-        ListNBT items = new ListNBT();
-
-        for (int i = 0; i < stacks.size(); i++) {
-            if (!stacks.get(i).isEmpty()) {
-                CompoundNBT item = new CompoundNBT();
-                item.putInt("Slot", i);
-                stacks.get(i).write(item);
-                items.add(item);
-            }
-        }
-        CompoundNBT nbt = new CompoundNBT();
-        nbt.put("Items", items);
-        compound.put("Inventory_"+this.id, nbt);
-        return compound;
+        this.serializeNBT(container.getOrCreateTag());
     }
 }

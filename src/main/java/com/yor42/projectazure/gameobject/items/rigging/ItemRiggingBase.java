@@ -2,8 +2,8 @@ package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
-import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvEquipmentHandler;
-import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandler;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvEquipmentHandlerItemStack;
+import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandlerItemStack;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
@@ -153,13 +153,13 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     public int getFuelTankCapacity(){return 50000;}
 
-    public MultiInvStackHandler[] createInventories(ItemStack container) {
-        return new MultiInvStackHandler[]{
-                new MultiInvEquipmentHandler(container, "MainGun", getMainGunSlotCount(), enums.SLOTTYPE.MAIN_GUN),
-                new MultiInvEquipmentHandler(container, "SubGun", getSubGunSlotCount(), enums.SLOTTYPE.SUB_GUN),
-                new MultiInvEquipmentHandler(container, "AA", getAASlotCount(), enums.SLOTTYPE.AA),
-                new MultiInvEquipmentHandler(container, "Torpedo", getTorpedoSlotCount(), enums.SLOTTYPE.TORPEDO),
-                new MultiInvEquipmentHandler(container, "Hangar", getHangerSlots(), enums.SLOTTYPE.PLANE)
+    public MultiInvStackHandlerItemStack[] createInventories(ItemStack container) {
+        return new MultiInvStackHandlerItemStack[]{
+                new MultiInvEquipmentHandlerItemStack(container, "MainGun", getMainGunSlotCount(), enums.SLOTTYPE.MAIN_GUN),
+                new MultiInvEquipmentHandlerItemStack(container, "SubGun", getSubGunSlotCount(), enums.SLOTTYPE.SUB_GUN),
+                new MultiInvEquipmentHandlerItemStack(container, "AA", getAASlotCount(), enums.SLOTTYPE.AA),
+                new MultiInvEquipmentHandlerItemStack(container, "Torpedo", getTorpedoSlotCount(), enums.SLOTTYPE.TORPEDO),
+                new MultiInvEquipmentHandlerItemStack(container, "Hangar", getHangerSlots(), enums.SLOTTYPE.PLANE)
         };
     }
 
