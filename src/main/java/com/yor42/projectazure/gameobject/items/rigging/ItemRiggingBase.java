@@ -109,7 +109,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
                 for (int j = 0; j < Equipments.getSlots(); j++) {
                     ItemStack currentstack = Equipments.getStackInSlot(j);
                     if (currentstack.getItem() instanceof ItemEquipmentBase)
-                        tooltip.add(currentstack.getDisplayName().copyRaw().appendString("(" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
+                        tooltip.add(currentstack.getDisplayName().copyRaw().appendString(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
                     else {
                         tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
                     }

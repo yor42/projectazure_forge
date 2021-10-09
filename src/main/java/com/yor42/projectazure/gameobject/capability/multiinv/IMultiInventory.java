@@ -5,7 +5,7 @@ import net.minecraftforge.items.IItemHandler;
 public interface IMultiInventory {
 
     int getInventoryCount();
-    IItemHandler getInventory(int index);
+    MultiInvStackHandler getInventory(int index);
 
     class Impl implements IMultiInventory {
 
@@ -21,7 +21,7 @@ public interface IMultiInventory {
         }
 
         @Override
-        public IItemHandler getInventory(int index) {
+        public MultiInvStackHandler getInventory(int index) {
             if (index < 0 || index >= inventories.length) {
                 throw new IllegalArgumentException(String.format("Argument 'index' out of bounds, value %d", index));
             }

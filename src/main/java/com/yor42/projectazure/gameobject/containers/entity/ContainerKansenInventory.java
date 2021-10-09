@@ -16,6 +16,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -26,82 +27,24 @@ import javax.annotation.Nullable;
 public class ContainerKansenInventory extends Container {
 
     private static final EquipmentSlotType[] EQUIPMENT = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
-    private final EntityKansenBase host;
-    private final ItemStackHandler AmmoStack;
-    private final IItemHandlerModifiable equipment;
+    private final IItemHandler AmmoStack;
+    private final IItemHandler equipment;
+    @Nullable
+    private final EntityKansenBase entity;
 
     //client
     public ContainerKansenInventory(int id, PlayerInventory playerInventory) {
-        super(registerManager.SHIP_CONTAINER.get(), id);
-        this.host = (EntityKansenBase) Main.PROXY.getSharedMob();
-        ItemStackHandler stack =  new ItemStackHandler(1);
-        this.equipment = new ItemStackHandler(6);
-        this.AmmoStack = new ItemStackHandler(8);
-
-
-        //rigging
-        this.addSlot(new SlotRigging(stack, 0, 152, 35,  this.host));
-
-        //mainhand
-        this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));
-        //Offhand
-        this.addSlot(new SlotItemHandler(this.equipment, 1, 134, 89));
-
-        //armor(head/chest/legging/boots)
-        for (int l = 0; l < 4; l++) {
-            int finalL = l;
-            this.addSlot(new SlotItemHandler(this.equipment, 2 + finalL, 75, 35 + finalL * 18) {
-                public int getSlotStackLimit() {
-                    return 1;
-                }
-
-                @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
-                    return stack.getItem() instanceof ArmorItem && stack.canEquip(EQUIPMENT[finalL],  ContainerKansenInventory.this.host);
-                }
-            });
-        }
-
-        for (int m = 0; m < 4; m++) {
-            for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(this.host.getInventory(), n + 3 * m, 11 + n * 18, 19 + m * 18));
-            }
-        }
-
-        for (int m = 0; m < 4; m++) {
-            for (int n = 0; n < 2; n++) {
-                this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
-                    @Override
-                    public boolean isItemValid(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemCannonshell;
-                    }
-                });
-            }
-        }
-
-
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 110 + i * 18));
-            }
-        }
-
-        for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 168));
-        }
+        this(id, playerInventory, new ItemStackHandler(12),  new ItemStackHandler(1), new ItemStackHandler(6), new ItemStackHandler(8), null);
     }
 
     //constructor for actual use
-    public ContainerKansenInventory(int id, PlayerInventory playerInventory, EntityKansenBase entity) {
+    public ContainerKansenInventory(int id, PlayerInventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
         super(registerManager.SHIP_CONTAINER.get(), id);
-        this.host = entity;
-        ItemStackHandler stack = entity.getShipRiggingStorage();
-        this.equipment = this.host.getEquipment();
-        this.AmmoStack = this.host.getCannonShellStorage();
-
-
-        //rigging
-        this.addSlot(new SlotRigging(stack, 0, 152, 35, entity));
+        this.equipment = Equipments;
+        this.AmmoStack = AmmoStorage;
+        this.entity = entity;
+//rigging
+        this.addSlot(new SlotRigging(Rigging, 0, 152, 35, this.entity));
 
         //mainhand
         this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));
@@ -118,14 +61,14 @@ public class ContainerKansenInventory extends Container {
 
                 @Override
                 public boolean isItemValid(@Nonnull ItemStack stack) {
-                    return stack.getItem() instanceof ArmorItem && stack.canEquip(EQUIPMENT[finalL], entity);
+                    return stack.getItem() instanceof ArmorItem && stack.canEquip(EQUIPMENT[finalL],  ContainerKansenInventory.this.entity);
                 }
             });
         }
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(this.host.getInventory(), n + 3 * m, 11 + n * 18, 19 + m * 18));
+                this.addSlot(new SlotItemHandler(Inventory, n + 3 * m, 11 + n * 18, 19 + m * 18));
             }
         }
 
@@ -245,7 +188,7 @@ public class ContainerKansenInventory extends Container {
         @Nullable
         @Override
         public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerKansenInventory(openContainerId, inventory, this.kansenEntity);
+            return new ContainerKansenInventory(openContainerId, inventory, this.kansenEntity.getInventory(), this.kansenEntity.getShipRiggingStorage(), this.kansenEntity.getEquipment(), this.kansenEntity.getAmmoStorage(), this.kansenEntity);
         }
     }
 }
