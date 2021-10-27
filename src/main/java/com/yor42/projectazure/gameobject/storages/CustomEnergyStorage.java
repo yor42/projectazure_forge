@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.energy;
+package com.yor42.projectazure.gameobject.storages;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.energy.EnergyStorage;

@@ -4,7 +4,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
-import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
+import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.intermod.ModCompatibilities;
 import com.yor42.projectazure.setup.register.registerManager;
@@ -164,7 +164,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                     this.world.addParticle(ParticleTypes.PORTAL, pos.getX(), pos.getY() + rand.nextDouble() * 2.0D, pos.getZ(), rand.nextGaussian(), 0.0D, rand.nextGaussian());
                 }
                 entityCompanion.setPosition(pos.getX(), pos.getY(), pos.getZ());
-                entityCompanion.getNavigator().tryMoveToXYZ((double) this.getPos().getX()+0.5, (double) this.getPos().getY(), (double) this.getPos().getZ()+0.5, 1.0F);
+                entityCompanion.getNavigator().tryMoveToXYZ((double) this.getPos().getX()+0.5, this.getPos().getY(), (double) this.getPos().getZ()+0.5, 1.0F);
                 entityCompanion.setMovingtoRecruitStation(this.getPos());
                 entityCompanion.setTamedBy(owner);
                 if(spawn_sitting) {
@@ -175,7 +175,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                 entityCompanion.MaxFillHunger();
                 this.world.addEntity(entityCompanion);
 
-                Main.LOGGER.debug("Entity is Spawned at:" + pos.toString());
+                Main.LOGGER.debug("Entity is Spawned at:" + pos);
             }
         }
     }

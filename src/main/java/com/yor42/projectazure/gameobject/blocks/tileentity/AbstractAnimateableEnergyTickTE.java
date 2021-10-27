@@ -1,10 +1,9 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
+import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;

@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
-import com.yor42.projectazure.gameobject.energy.CustomEnergyStorage;
+import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.entity.player.PlayerInventory;

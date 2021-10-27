@@ -215,7 +215,6 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
             for(int slot = 0; slot<7; slot+=2){
                 ItemStack stack = this.getStackInSlot(slot);
-                Item item = stack.getItem();
                 if(slot == 0){
                     int finalSlot = slot;
                     Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
