@@ -104,19 +104,23 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     public void tick() {
         if(!this.world.isRemote()){
             for(int i = 1; i<3; i++){
-
+                if(this.tryFillingCrystalChamber(i)){
+                    break;
+                }
             }
         }
     }
 
-    public void tryFillingCrystalChamber(int index2try){
+    public boolean tryFillingCrystalChamber(int index2try){
         ItemStack stack = this.inventory.getStackInSlot(index2try);
         Item item = stack.getItem();
         FluidStack FluidToAdd = this.getAmountfromItem(item);
         if(this.growthChamberLiquid.fill(FluidToAdd, IFluidHandler.FluidAction.SIMULATE)>0){
             this.growthChamberLiquid.fill(FluidToAdd, IFluidHandler.FluidAction.EXECUTE);
             stack.shrink(1);
+            return true;
         }
+        return false;
     }
 
     public FluidStack getAmountfromItem(Item item){
