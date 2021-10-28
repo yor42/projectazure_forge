@@ -1,9 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.blocks.fluid.CrudeOilFluid;
-import com.yor42.projectazure.gameobject.blocks.fluid.DieselFluid;
-import com.yor42.projectazure.gameobject.blocks.fluid.FuelOilFluid;
-import com.yor42.projectazure.gameobject.blocks.fluid.GasolineFluid;
+import com.yor42.projectazure.gameobject.blocks.fluid.*;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraftforge.fml.RegistryObject;
@@ -29,6 +26,15 @@ public class registerFluids {
     public static final RegistryObject<Fluid> FUEL_OIL_SOURCE_REGISTRY = registerManager.FLUIDS.register("fuel_oil_source", ()->FUEL_OIL_SOURCE);
     public static final FlowingFluid FUEL_OIL_FLOWING = new FuelOilFluid.Flowing();
     public static final RegistryObject<Fluid> FUEL_OIL_FLOWING_REGISTRY = registerManager.FLUIDS.register("fuel_oil_flowing", ()->FUEL_OIL_FLOWING);
+
+    public static final FlowingFluid ORIGINIUM_SOLUTION_SOURCE = new CrystalChamberAqueousSolution.OriginiumSolution.Source();
+    public static final RegistryObject<Fluid> ORIGINIUM_SOLUTION_SOURCE_REGISTRY = registerManager.FLUIDS.register("originium_solution_source", ()->ORIGINIUM_SOLUTION_SOURCE);
+    public static final FlowingFluid ORIGINIUM_SOLUTION_FLOWING = new CrystalChamberAqueousSolution.OriginiumSolution.Source();
+    public static final RegistryObject<Fluid> ORIGINIUM_SOLUTION_FLOWING_REGISTRY = registerManager.FLUIDS.register("originium_solution_flowing", ()->ORIGINIUM_SOLUTION_FLOWING);
+    public static final FlowingFluid NETHER_QUARTZ_SOLUTION_FLOWING = new CrystalChamberAqueousSolution.NetherQuartzSolution.Source();
+    public static final RegistryObject<Fluid> NETHER_QUARTZ_SOLUTION_REGISTRY = registerManager.FLUIDS.register("nether_quartz_solution_source", ()->NETHER_QUARTZ_SOLUTION_FLOWING);
+    public static final FlowingFluid NETHER_QUARTZ_SOLUTION_SOURCE = new CrystalChamberAqueousSolution.OriginiumSolution.Source();
+    public static final RegistryObject<Fluid> NETHER_QUARTZ_SOLUTION_FLOWING_REGISTRY = registerManager.FLUIDS.register("nether_quartz_solution_flowing", ()->NETHER_QUARTZ_SOLUTION_SOURCE);
 
 
     public static void register(){

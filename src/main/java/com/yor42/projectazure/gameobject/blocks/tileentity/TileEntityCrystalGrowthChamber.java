@@ -1,32 +1,33 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
-import com.yor42.projectazure.gameobject.storages.DissolvedMaterial;
+import com.yor42.projectazure.setup.register.registerFluids;
+import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
-
-import javax.annotation.Nullable;
 
 public class TileEntityCrystalGrowthChamber extends LockableTileEntity implements INamedContainerProvider, IRecipeHelperPopulator, ITickableTileEntity {
 
     public FluidTank waterTank = new FluidTank(4000, (fluidStack)->fluidStack.getFluid() == Fluids.WATER);
+    public FluidTank growthChamberLiquid = new FluidTank(4000);
     public ItemStackHandler inventory = new ItemStackHandler(6);
-    public DissolvedMaterial dissolvedMaterial = new DissolvedMaterial(1200);
-
+   private int growthProgress = 0;
+    private int MaxGrowthProgress;
     protected TileEntityCrystalGrowthChamber(TileEntityType<?> typeIn) {
         super(typeIn);
     }
@@ -97,10 +98,31 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         for(int i=0;i<this.inventory.getSlots();i++) {
             helper.accountStack(this.inventory.getStackInSlot(i));
         }
-    }
+    }r
 
     @Override
     public void tick() {
+        if(!this.world.isRemote()){
+            for(int i = 1; i<3; i++){
 
+            }
+        }
+    }
+
+    public void tryFillingCrystalChamber(int index2try){
+        ItemStack stack = this.inventory.getStackInSlot(index2try);
+        Item item = stack.getItem();
+        FluidStack FluidToAdd = this.getAmountfromItem(item);
+        if(this.growthChamberLiquid.fill(FluidToAdd, IFluidHandler.FluidAction.SIMULATE)>0){
+            this.growthChamberLiquid.fill(FluidToAdd, IFluidHandler.FluidAction.EXECUTE);
+            stack.shrink(1);
+        }
+    }
+
+    public FluidStack getAmountfromItem(Item item){
+        if(item == registerItems.ORIGINITE.get()){
+            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 500);
+        }
+        return FluidStack.EMPTY;
     }
 }
