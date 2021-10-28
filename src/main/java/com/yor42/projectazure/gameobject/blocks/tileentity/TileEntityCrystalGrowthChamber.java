@@ -11,6 +11,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -107,6 +108,10 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
                 if(this.tryFillingCrystalChamber(i)){
                     break;
                 }
+            }
+            ItemStack SeedStack = this.inventory.getStackInSlot(0);
+            if(!SeedStack.isEmpty()){
+
             }
         }
     }
