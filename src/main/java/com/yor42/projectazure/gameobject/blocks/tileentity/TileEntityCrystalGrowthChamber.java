@@ -98,7 +98,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         for(int i=0;i<this.inventory.getSlots();i++) {
             helper.accountStack(this.inventory.getStackInSlot(i));
         }
-    }r
+    }
 
     @Override
     public void tick() {
