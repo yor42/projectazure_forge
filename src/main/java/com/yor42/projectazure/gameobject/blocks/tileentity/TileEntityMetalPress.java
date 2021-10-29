@@ -97,7 +97,6 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     private final LazyOptional<ItemStackHandler> Invhandler = LazyOptional.of(this::getInventory);
     private final LazyOptional<CustomEnergyStorage> Energyhandler = LazyOptional.of(this::getEnergyStorage);
 
-
     @Override
     public <T> net.minecraftforge.common.util.LazyOptional<T> getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable Direction facing) {
         if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {

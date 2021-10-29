@@ -1,9 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
-import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
-import com.yor42.projectazure.gameobject.crafting.ReloadRecipes;
-import com.yor42.projectazure.gameobject.crafting.RepairRecipe;
+import com.yor42.projectazure.gameobject.crafting.*;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -18,6 +15,7 @@ public class registerRecipes {
     public static class Types{
         public static final IRecipeType<PressingRecipe> PRESSING = IRecipeType.register(Constants.MODID+"pressing");
         public static final IRecipeType<AlloyingRecipe> ALLOYING = IRecipeType.register(Constants.MODID+"alloying");
+        public static final IRecipeType<CrystalizingRecipe> CRYSTALIZING = IRecipeType.register(Constants.MODID+"crystalizing");
         public static void register(){}
     }
 
@@ -25,6 +23,7 @@ public class registerRecipes {
 
         public static final RegistryObject<IRecipeSerializer<PressingRecipe>> PRESSING = register("pressing", PressingRecipe.Serializer::new);
         public static final RegistryObject<IRecipeSerializer<AlloyingRecipe>> ALLOYING = register("alloying", AlloyingRecipe.Serializer::new);
+        public static final RegistryObject<IRecipeSerializer<CrystalizingRecipe>> CRYSTALIZING = register("alloying", CrystalizingRecipe.Serializer::new);
 
         //Special Crafting Recipe
         public static final RegistryObject<IRecipeSerializer<ReloadRecipes>> RELOADING = register("reloading", ()-> new SpecialRecipeSerializer<>(ReloadRecipes::new));

@@ -2,10 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
-import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
-import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandler;
-import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandlerItemStack;
 import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
@@ -73,7 +69,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -92,7 +87,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
-import static com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;

@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.buttons.buttonStarterSelect;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
 import com.yor42.projectazure.setup.register.registerManager;

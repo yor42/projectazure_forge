@@ -12,7 +12,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
@@ -38,7 +37,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 import static com.yor42.projectazure.libs.utils.FluidPredicates.*;

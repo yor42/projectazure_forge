@@ -1,7 +1,5 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import net.minecraftforge.items.IItemHandler;
-
 public interface IMultiInventory {
 
     int getInventoryCount();

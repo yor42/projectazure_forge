@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.entity;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.pathfinding.NodeProcessor;

@@ -5,7 +5,6 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
