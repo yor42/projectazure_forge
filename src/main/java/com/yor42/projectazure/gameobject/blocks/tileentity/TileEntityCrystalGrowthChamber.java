@@ -19,15 +19,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -35,6 +39,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class TileEntityCrystalGrowthChamber extends LockableTileEntity implements INamedContainerProvider, IRecipeHelperPopulator, IInventory, ITickableTileEntity {
 
@@ -58,6 +63,37 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
    private int growthProgress = 0;
     private int MaxGrowthProgress;
     protected final IRecipeType<? extends CrystalizingRecipe> recipeType;
+
+    private final int[] FieldArray = {this.growthProgress,this.MaxGrowthProgress,this.waterTank.getFluidAmount(), this.waterTank.getCapacity(),this.SolutionTank.getFluidAmount(), this.SolutionTank.getCapacity()};
+
+    private final IIntArray fields = new IIntArray() {
+        @Override
+        public int get(int index) {
+            switch(index){
+                default: return TileEntityCrystalGrowthChamber.this.growthProgress;
+                case 1: return TileEntityCrystalGrowthChamber.this.MaxGrowthProgress;
+                case 2: return TileEntityCrystalGrowthChamber.this.waterTank.getFluidAmount();
+                case 3: return TileEntityCrystalGrowthChamber.this.waterTank.getCapacity();
+                case 4: return TileEntityCrystalGrowthChamber.this.SolutionTank.getFluidAmount();
+                case 5: return TileEntityCrystalGrowthChamber.this.SolutionTank.getCapacity();
+            }
+        }
+
+        @Override
+        public void set(int index, int value) {
+            if (index == 1) {
+                TileEntityCrystalGrowthChamber.this.MaxGrowthProgress = value;
+            } else if(index == 0){
+                TileEntityCrystalGrowthChamber.this.growthProgress = value;
+            }
+        }
+
+        @Override
+        public int size() {
+            return 6;
+        }
+    };
+
     protected TileEntityCrystalGrowthChamber(TileEntityType<?> typeIn) {
         super(typeIn);
         this.recipeType = registerRecipes.Types.CRYSTALIZING;
@@ -145,6 +181,28 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
                     break;
                 }
             }
+
+            ItemStack stack = this.getStackInSlot(5);
+            Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
+                FluidTank tank = this.waterTank;
+                FluidActionResult actionresult = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
+                if (actionresult.isSuccess()) {
+                    ItemStack result = actionresult.getResult();
+                    if (TileEntityCrystalGrowthChamber.this.inventory.insertItem(6, result, true).isEmpty()) {
+                        if (TileEntityCrystalGrowthChamber.this.inventory.getStackInSlot(6).isEmpty()){
+                            TileEntityCrystalGrowthChamber.this.inventory.setStackInSlot(6, result);
+                        }
+                        else {
+                            TileEntityCrystalGrowthChamber.this.inventory.insertItem(6, result, false);
+                        }
+                        stack.shrink(1);
+                        TileEntityCrystalGrowthChamber.this.inventory.setStackInSlot(0, stack);
+                    }
+
+                }
+            };
+            FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
+
             ItemStack SeedStack = this.inventory.getStackInSlot(0);
             if(!SeedStack.isEmpty() && !this.SolutionTank.isEmpty()){
                 IRecipe<? extends IInventory> recipe = this.world.getRecipeManager().getRecipe((IRecipeType<? extends CrystalizingRecipe>)this.recipeType, this, this.world).orElse(null);
@@ -267,5 +325,11 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
             return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 500);
         }
         return FluidStack.EMPTY;
+    }
+
+    public void encodeExtraData(PacketBuffer buffer) {
+        buffer.writeVarIntArray(this.FieldArray);
+        buffer.writeFluidStack(this.waterTank.getFluid());
+        buffer.writeFluidStack(this.SolutionTank.getFluid());
     }
 }

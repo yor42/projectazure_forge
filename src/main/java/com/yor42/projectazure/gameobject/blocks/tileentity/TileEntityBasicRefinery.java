@@ -78,7 +78,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         public void set(int index, int value) {
             if (index == 1) {
                 TileEntityBasicRefinery.this.totalBurntime = value;
-            } else {
+            } else if(index == 0){
                 TileEntityBasicRefinery.this.burnTime = value;
             }
         }
