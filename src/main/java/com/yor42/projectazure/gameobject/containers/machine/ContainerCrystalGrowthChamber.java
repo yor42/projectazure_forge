@@ -67,6 +67,29 @@ public class ContainerCrystalGrowthChamber extends Container {
         this.trackIntArray(this.field);
     }
 
+    public FluidStack getWaterTank() {
+        return waterTank;
+    }
+
+    public FluidStack getSolutionTank() {
+        return SolutionTank;
+    }
+
+    public int getWaterTankCapacity(){
+        return this.field.get(3);
+    }
+    public int getWaterTankAmount(){
+        return this.field.get(2);
+    }
+    public int getSolutionTankCapacity(){
+        return this.field.get(5);
+    }
+    public int getSolutionTankAmount(){
+        return this.field.get(4);
+    }
+    public int getprogressScaled(int pixels){
+        return (int)((float)this.field.get(0)/this.field.get(1))*pixels;
+    }
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return true;

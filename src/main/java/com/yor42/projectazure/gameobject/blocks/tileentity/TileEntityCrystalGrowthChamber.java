@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
+import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
 import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.libs.utils.BlockStateUtil;
@@ -107,7 +108,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     //TODO
     @Override
     protected Container createMenu(int id, PlayerInventory player) {
-        return null;
+        return new ContainerCrystalGrowthChamber(id, player, this.inventory, this.fields, this.getWaterTank().getFluid(), this.getSolutionTank().getFluid());
     }
 
     @Override
