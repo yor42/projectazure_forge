@@ -19,9 +19,6 @@ public class GuiCrystalGrowthChamber extends ContainerScreen<ContainerCrystalGro
 
     public GuiCrystalGrowthChamber(ContainerCrystalGrowthChamber screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        int width = this.font.getStringWidth(this.title.getString());
-        this.titleX = 6;
-        this.titleY = 166-width;
     }
 
     @Override
@@ -35,27 +32,26 @@ public class GuiCrystalGrowthChamber extends ContainerScreen<ContainerCrystalGro
     protected void renderTanks(MatrixStack matrixStack, float partialTicks, int x, int y){
         IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
         FluidStack stack = this.container.getWaterTank();
-        float height = 32*((float)this.container.getWaterTankAmount()/this.container.getWaterTankCapacity());
-        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+10,this.guiTop+27+(32-height), 12, height);
+        float height = 34*((float)this.container.getWaterTankAmount()/this.container.getWaterTankCapacity());
+        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+12,this.guiTop+26+(34-height), 16, height);
         buffer.finish();
         stack = this.container.getSolutionTank();
-        height = 32*((float)this.container.getSolutionTankAmount()/this.container.getSolutionTankCapacity());
-        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+69,this.guiTop+27+(32-height), 12, height);
+        height = 34*((float)this.container.getSolutionTankAmount()/this.container.getSolutionTankCapacity());
+        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+58,this.guiTop+26+(34-height), 16, height);
         buffer.finish();
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
-        this.blit(matrixStack, this.guiLeft + 9, this.guiTop + 26, 176, 31, 14, 34);
-        this.blit(matrixStack, this.guiLeft + 68, this.guiTop + 26, 176, 31, 14, 34);
-        this.blit(matrixStack, this.guiLeft + 91, this.guiTop + 26, 176, 31, 14, 34);
-        this.blit(matrixStack, this.guiLeft + 114, this.guiTop + 26, 176, 31, 14, 34);
 
         this.blit(matrixStack, this.guiLeft + 57, this.guiTop + 25, 176, 49, 18, 36);
-        this.blit(matrixStack, this.guiLeft + 12, this.guiTop + 25, 176, 85, 18, 36);
+        this.blit(matrixStack, this.guiLeft + 11, this.guiTop + 25, 176, 85, 18, 36);
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+        int width = this.font.getStringWidth(this.title.getString());
+        this.titleY = 6;
+        this.titleX = 166-width;
         this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
     }
 

@@ -42,6 +42,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import static com.yor42.projectazure.setup.register.registerTE.CRYSTAL_GROWTH_CHAMBER;
+
 public class TileEntityCrystalGrowthChamber extends LockableTileEntity implements INamedContainerProvider, IRecipeHelperPopulator, IInventory, ITickableTileEntity {
 
     public FluidTank waterTank = new FluidTank(4000, (fluidStack)->fluidStack.getFluid() == Fluids.WATER);
@@ -95,14 +97,14 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         }
     };
 
-    protected TileEntityCrystalGrowthChamber(TileEntityType<?> typeIn) {
-        super(typeIn);
+    public TileEntityCrystalGrowthChamber() {
+        super(CRYSTAL_GROWTH_CHAMBER.get());
         this.recipeType = registerRecipes.Types.CRYSTALIZING;
     }
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("block.projectazure.crystalgrowthchamber");
+        return new TranslationTextComponent("block.projectazure.crystal_chamber");
     }
 
     //TODO

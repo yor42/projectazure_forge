@@ -2,13 +2,17 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.AbstractFurnaceContainer;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+
+import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.setup.register.registerManager.GROWTH_CHAMBER_CONTAINER_TYPE;
 
@@ -45,11 +49,13 @@ public class ContainerCrystalGrowthChamber extends Container {
         this.waterTank = waterTank;
         this.SolutionTank = solutionTank;
 
-        this.addSlot(new SlotItemHandler(itemStackHandler, 0, 57,5));
+        this.addSlot(new SlotItemHandler(itemStackHandler, 0, 58,6));
 
         for(int i=0;i<3;i++){
-            this.addSlot(new SlotItemHandler(itemStackHandler, i+1, 30,16+18*i));
+            this.addSlot(new SlotItemHandler(itemStackHandler, i+1, 31,17+18*i));
         }
+
+        this.addSlot(new SlotItemHandler(itemStackHandler, 4, 116,35));
 
         for(int i = 0; i < 3; ++i) {
             for(int j = 0; j < 9; ++j) {
@@ -57,8 +63,13 @@ public class ContainerCrystalGrowthChamber extends Container {
             }
         }
 
-        this.addSlot(new SlotItemHandler(itemStackHandler, 4, 11,5));
-        this.addSlot(new SlotItemHandler(itemStackHandler, 5, 11,63));
+        this.addSlot(new SlotItemHandler(itemStackHandler, 5, 12,6));
+        this.addSlot(new SlotItemHandler(itemStackHandler, 6, 12,64){
+            @Override
+            public boolean isItemValid(@Nonnull ItemStack stack) {
+                return false;
+            }
+        });
 
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));

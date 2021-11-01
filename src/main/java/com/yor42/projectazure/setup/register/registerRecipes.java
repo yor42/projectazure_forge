@@ -23,7 +23,7 @@ public class registerRecipes {
 
         public static final RegistryObject<IRecipeSerializer<PressingRecipe>> PRESSING = register("pressing", PressingRecipe.Serializer::new);
         public static final RegistryObject<IRecipeSerializer<AlloyingRecipe>> ALLOYING = register("alloying", AlloyingRecipe.Serializer::new);
-        public static final RegistryObject<IRecipeSerializer<CrystalizingRecipe>> CRYSTALIZING = register("alloying", CrystalizingRecipe.Serializer::new);
+        public static final RegistryObject<IRecipeSerializer<CrystalizingRecipe>> CRYSTALIZING = register("crystalizing", CrystalizingRecipe.Serializer::new);
 
         //Special Crafting Recipe
         public static final RegistryObject<IRecipeSerializer<ReloadRecipes>> RELOADING = register("reloading", ()-> new SpecialRecipeSerializer<>(ReloadRecipes::new));

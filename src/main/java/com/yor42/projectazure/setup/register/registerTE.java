@@ -1,9 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
+import com.yor42.projectazure.gameobject.blocks.tileentity.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiBlockReenforcedConcrete;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockDrydockTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockSteelFrame;
@@ -20,6 +17,7 @@ public class registerTE {
     public static final RegistryObject<TileEntityType<TileEntityAlloyFurnace>> ALLOY_FURNACE = register("alloy_furnace", TileEntityAlloyFurnace::new, registerBlocks.ALLOY_FURNACE);
     public static final RegistryObject<TileEntityType<TileEntityBasicRefinery>> BASIC_REFINERY = register("basic_refinery", TileEntityBasicRefinery::new, registerBlocks.BASIC_REFINERY);
     public static final RegistryObject<TileEntityType<TileEntityRecruitBeacon>> RECRUIT_BEACON = register("recruit_beacon", TileEntityRecruitBeacon::new, registerBlocks.RECRUIT_BEACON);
+    public static final RegistryObject<TileEntityType<TileEntityCrystalGrowthChamber>> CRYSTAL_GROWTH_CHAMBER = register("crystal_growth_chamber", TileEntityCrystalGrowthChamber::new, registerBlocks.CRYSTAL_GROWTH_CHAMBER);
     public static final RegistryObject<TileEntityType<MultiblockDrydockTE>> DRYDOCK = register("drydock", MultiblockDrydockTE::new, registerBlocks.DRYDOCKCONTROLLER);
     public static final RegistryObject<TileEntityType<MultiBlockReenforcedConcrete>> MULTIBLOCKSTRUCTURE_CONCRETE = register("multiblock_structure_concrete", MultiBlockReenforcedConcrete::new, registerBlocks.REENFORCEDCONCRETE);
     public static final RegistryObject<TileEntityType<MultiblockSteelFrame>> MULTIBLOCKSTRUCTURE_STEELFRAME = register("multiblock_structure_steel", MultiblockSteelFrame::new, registerBlocks.MACHINE_FRAME);
