@@ -2,9 +2,11 @@ package com.yor42.projectazure.data.common;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.data.recipebuilder.AlloyingRecipeBuilder;
+import com.yor42.projectazure.data.recipebuilder.CrystalizingRecipeBuilder;
 import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
@@ -196,6 +198,10 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.fromTag(ItemTags.LOGS), Ingredient.fromItems(registerItems.MOLD_EXTRACTION.get()), 1, 200)
                 .addCriterion("hasmold", hasItem(registerItems.MOLD_EXTRACTION.get()))
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
+
+        CrystalizingRecipeBuilder.addRecipe(registerItems.ORIGINIUM_PRIME.get(), Ingredient.fromItems(registerItems.ORIGINIUM_SEED.get()), registerFluids.ORIGINIUM_SOLUTION_SOURCE, 3000)
+                .addCriterion("hasseed", hasItem(registerItems.ORIGINIUM_SEED.get()))
+                .build(consumer, new ResourceLocation("originium_crystalizing"));
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.TREE_SAP.get(),2)
                 .key('L', ItemTags.LOGS)

@@ -29,6 +29,7 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.registerLootTable(registerBlocks.BASIC_REFINERY.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
         this.registerLootTable(registerBlocks.ALLOY_FURNACE.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
         this.registerLootTable(registerBlocks.RECRUIT_BEACON.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
+        this.registerLootTable(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
         this.registerLootTable(registerBlocks.ORIROCK.get(), (orirock) -> droppingWithSilkTouch(orirock, withSurvivesExplosion(orirock, ItemLootEntry.builder(registerItems.ORIGINITE.get()).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).alternatively(ItemLootEntry.builder(orirock)))));
 
     }

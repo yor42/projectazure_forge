@@ -8,6 +8,7 @@ import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluids;
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
@@ -297,7 +299,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         FluidStack FluidToAdd = this.getAmountfromItem(item);
         int fillableAmount = this.SolutionTank.fill(FluidToAdd, IFluidHandler.FluidAction.SIMULATE);
         int drainableAmount = this.waterTank.drain(FluidToAdd.getAmount(), IFluidHandler.FluidAction.SIMULATE).getAmount();
-        if(fillableAmount>FluidToAdd.getAmount() && drainableAmount>0){
+        if(fillableAmount>=FluidToAdd.getAmount() && drainableAmount>0){
             int amount2Add = Math.min(fillableAmount, drainableAmount);
             FluidToAdd.setAmount(amount2Add);
             this.SolutionTank.fill(FluidToAdd, IFluidHandler.FluidAction.EXECUTE);
@@ -324,8 +326,8 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     public FluidStack getAmountfromItem(Item item){
-        if(item == registerItems.ORIGINITE.get()){
-            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 500);
+        if(item == registerItems.DUST_ORIGINIUM.get()){
+            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 200);
         }
         return FluidStack.EMPTY;
     }
@@ -334,5 +336,26 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         buffer.writeVarIntArray(this.FieldArray);
         buffer.writeFluidStack(this.waterTank.getFluid());
         buffer.writeFluidStack(this.SolutionTank.getFluid());
+    }
+
+    @Override
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
+        this.growthProgress = nbt.getInt("progress");
+        this.MaxGrowthProgress = nbt.getInt("maxprogress");
+        this.inventory.deserializeNBT(nbt.getCompound("inventory"));
+        this.waterTank.readFromNBT(nbt.getCompound("water"));
+        this.SolutionTank.readFromNBT(nbt.getCompound("solution"));
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT compound) {
+        super.write(compound);
+        compound.putInt("progress", this.growthProgress);
+        compound.putInt("maxprogress", this.MaxGrowthProgress);
+        compound.put("inventory", this.inventory.serializeNBT());
+        compound.put("water", this.waterTank.writeToNBT(new CompoundNBT()));
+        compound.put("solution", this.SolutionTank.writeToNBT(new CompoundNBT()));
+        return compound;
     }
 }
