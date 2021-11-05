@@ -99,7 +99,12 @@ public class ContainerCrystalGrowthChamber extends Container {
         return this.field.get(4);
     }
     public int getprogressScaled(int pixels){
-        return (int)((float)this.field.get(0)/this.field.get(1))*pixels;
+
+        int progress = this.field.get(0);
+        int maxProgress = this.field.get(1);
+
+        float length = (float)progress/maxProgress;
+        return (int)(length*pixels);
     }
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {

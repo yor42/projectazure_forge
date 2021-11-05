@@ -67,6 +67,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     };
    private int growthProgress = 0;
     private int MaxGrowthProgress;
+    private IRecipe<? extends IInventory> currentRecipe;
     protected final IRecipeType<? extends CrystalizingRecipe> recipeType;
 
     private final int[] FieldArray = {this.growthProgress,this.MaxGrowthProgress,this.waterTank.getFluidAmount(), this.waterTank.getCapacity(),this.SolutionTank.getFluidAmount(), this.SolutionTank.getCapacity()};
@@ -201,7 +202,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
                             TileEntityCrystalGrowthChamber.this.inventory.insertItem(6, result, false);
                         }
                         stack.shrink(1);
-                        TileEntityCrystalGrowthChamber.this.inventory.setStackInSlot(0, stack);
+                        TileEntityCrystalGrowthChamber.this.inventory.setStackInSlot(5, stack);
                     }
 
                 }
@@ -209,26 +210,36 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
             FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
 
             ItemStack SeedStack = this.inventory.getStackInSlot(0);
-            if(!SeedStack.isEmpty() && !this.SolutionTank.isEmpty()){
-                IRecipe<? extends IInventory> recipe = this.world.getRecipeManager().getRecipe((IRecipeType<? extends CrystalizingRecipe>)this.recipeType, this, this.world).orElse(null);
-                if(this.isProcessable(recipe)){
-                    if(!this.isProcessing()) {
-                        shouldsave = true;
-                        this.growthProgress++;
-                        this.MaxGrowthProgress = this.getGrowthTime();
-                    }
-                    else{
-                        this.growthProgress++;
-                        if(this.growthProgress == this.MaxGrowthProgress){
-                            this.growthProgress=0;
-                            this.MaxGrowthProgress = this.getGrowthTime();
-                            this.process(recipe);
-                            shouldsave = true;
+            if(!this.SolutionTank.isEmpty()) {
+                if (!SeedStack.isEmpty()) {
+                    IRecipe<? extends IInventory> recipe = this.world.getRecipeManager().getRecipe((IRecipeType<? extends CrystalizingRecipe>) this.recipeType, this, this.world).orElse(null);
+                    if (this.isProcessable(recipe)) {
+                        if (this.currentRecipe == null) {
+                            this.currentRecipe = recipe;
                         }
+                        if (this.MaxGrowthProgress == 0) {
+                            this.MaxGrowthProgress = this.getGrowthTime();
+                        }
+
+                        if (!this.isProcessing()) {
+                            shouldsave = true;
+                            this.growthProgress++;
+                            this.MaxGrowthProgress = this.getGrowthTime();
+                        } else {
+                            this.growthProgress++;
+                            if (this.MaxGrowthProgress != 0 && this.growthProgress == this.MaxGrowthProgress) {
+                                this.growthProgress = 0;
+                                this.MaxGrowthProgress = this.getGrowthTime();
+                                this.process(recipe);
+                                shouldsave = true;
+                            }
+                        }
+                        this.getSolutionTank().drain(1, IFluidHandler.FluidAction.EXECUTE);
+                    } else if (recipe != this.currentRecipe || this.inventory.getStackInSlot(0).isEmpty()) {
+                        this.growthProgress = 0;
                     }
-                    this.getSolutionTank().drain(1, IFluidHandler.FluidAction.EXECUTE);
                 }
-                else if(!this.SolutionTank.isEmpty()){
+                else{
                     this.growthProgress = 0;
                 }
             }

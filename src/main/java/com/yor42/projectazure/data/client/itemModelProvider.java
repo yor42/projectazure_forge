@@ -100,6 +100,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("orundum");
         buildModel("headhunting_pcb");
 
+        buildModel("originium_seed");
         buildModel("originite");
         buildModel("originium_prime");
 
