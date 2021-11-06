@@ -110,4 +110,10 @@ public class ContainerCrystalGrowthChamber extends Container {
     public boolean canInteractWith(PlayerEntity playerIn) {
         return true;
     }
+
+    @Override
+    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+        Slot slot = this.inventorySlots.get(index);
+        return slot.getStack();
+    }
 }
