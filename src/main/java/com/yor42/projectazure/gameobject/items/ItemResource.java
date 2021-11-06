@@ -23,6 +23,10 @@ public class ItemResource extends Item {
         this.resourceType = resourceType;
     }
 
+    public enums.ResourceType getResourceType(){
+        return this.resourceType;
+    }
+
     @Override
     public ITextComponent getDisplayName(ItemStack stack) {
         return new TranslationTextComponent(material).appendString(" ").append(new TranslationTextComponent(resourceType.getName()));

@@ -29,12 +29,8 @@ public class registerFluids {
 
     public static final FlowingFluid ORIGINIUM_SOLUTION_SOURCE = new CrystalChamberAqueousSolution.OriginiumSolution.Source();
     public static final RegistryObject<Fluid> ORIGINIUM_SOLUTION_SOURCE_REGISTRY = registerManager.FLUIDS.register("originium_solution_source", ()->ORIGINIUM_SOLUTION_SOURCE);
-    public static final FlowingFluid ORIGINIUM_SOLUTION_FLOWING = new CrystalChamberAqueousSolution.OriginiumSolution.Source();
-    public static final RegistryObject<Fluid> ORIGINIUM_SOLUTION_FLOWING_REGISTRY = registerManager.FLUIDS.register("originium_solution_flowing", ()->ORIGINIUM_SOLUTION_FLOWING);
-    public static final FlowingFluid NETHER_QUARTZ_SOLUTION_FLOWING = new CrystalChamberAqueousSolution.NetherQuartzSolution.Source();
-    public static final RegistryObject<Fluid> NETHER_QUARTZ_SOLUTION_REGISTRY = registerManager.FLUIDS.register("nether_quartz_solution_source", ()->NETHER_QUARTZ_SOLUTION_FLOWING);
-    public static final FlowingFluid NETHER_QUARTZ_SOLUTION_SOURCE = new CrystalChamberAqueousSolution.OriginiumSolution.Source();
-    public static final RegistryObject<Fluid> NETHER_QUARTZ_SOLUTION_FLOWING_REGISTRY = registerManager.FLUIDS.register("nether_quartz_solution_flowing", ()->NETHER_QUARTZ_SOLUTION_SOURCE);
+    public static final FlowingFluid NETHER_QUARTZ_SOLUTION_SOURCE = new CrystalChamberAqueousSolution.NetherQuartzSolution.Source();
+    public static final RegistryObject<Fluid> NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY = registerManager.FLUIDS.register("nether_quartz_solution_source", ()->NETHER_QUARTZ_SOLUTION_SOURCE);
 
 
     public static void register(){

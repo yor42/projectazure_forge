@@ -27,7 +27,7 @@ public abstract class CrystalChamberAqueousSolution extends FlowingFluid {
             new ResourceLocation("block/water_still"),
             new ResourceLocation("block/water_flow"))
             .overlay(new ResourceLocation("block/water_overlay"))
-            .density(2000).viscosity(2000).translationKey(this.getTranslationKey()).color(this.getColor())
+            .density(2000).viscosity(2000).translationKey(this.getTranslationKey())
             .sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY);
 
     @Override
@@ -83,14 +83,7 @@ public abstract class CrystalChamberAqueousSolution extends FlowingFluid {
 
     protected abstract String getTranslationKey();
 
-    protected abstract int getColor();
-
     public abstract static class OriginiumSolution extends CrystalChamberAqueousSolution {
-
-        @Override
-        protected int getColor() {
-            return 0x8832180b;
-        }
 
         @Override
         protected String getTranslationKey() {
@@ -99,7 +92,7 @@ public abstract class CrystalChamberAqueousSolution extends FlowingFluid {
 
         @Override
         public Fluid getFlowingFluid() {
-            return registerFluids.ORIGINIUM_SOLUTION_FLOWING;
+            return registerFluids.ORIGINIUM_SOLUTION_SOURCE;
         }
 
         @Override
@@ -118,28 +111,13 @@ public abstract class CrystalChamberAqueousSolution extends FlowingFluid {
                 return 8;
             }
         }
-
-        public static class flowing extends OriginiumSolution {
-            protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
-                super.fillStateContainer(builder);
-                builder.add(LEVEL_1_8);
-            }
-
-            public int getLevel(FluidState state) {
-                return state.get(LEVEL_1_8);
-            }
-
-            public boolean isSource(FluidState state) {
-                return false;
-            }
-        }
     }
 
     public abstract static class NetherQuartzSolution extends CrystalChamberAqueousSolution {
 
         @Override
         public Fluid getFlowingFluid() {
-            return registerFluids.NETHER_QUARTZ_SOLUTION_FLOWING;
+            return registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE;
         }
 
         @Override
@@ -147,27 +125,12 @@ public abstract class CrystalChamberAqueousSolution extends FlowingFluid {
             return registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE;
         }
 
-            @Override
-        protected int getColor() {
-            return 0xFFeae5de;
-        }
-
-        @Override
-        protected FluidAttributes createAttributes() {
-            return net.minecraftforge.fluids.FluidAttributes.builder(
-                            new ResourceLocation("block/water_still"),
-                            new ResourceLocation("block/water_flow"))
-                    .overlay(new ResourceLocation("block/water_overlay"))
-                    .density(2000).viscosity(2000).translationKey(this.getTranslationKey()).color(0xFFeae5de)
-                    .sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY).build(this);
-        }
-
         @Override
         protected String getTranslationKey() {
             return "block.projectazure.nether_quartz_solution";
         }
 
-        public static class Source extends OriginiumSolution {
+        public static class Source extends NetherQuartzSolution {
             @Override
             public boolean isSource(FluidState state) {
                 return true;
@@ -177,20 +140,15 @@ public abstract class CrystalChamberAqueousSolution extends FlowingFluid {
             public int getLevel(FluidState state) {
                 return 8;
             }
-        }
 
-        public static class flowing extends OriginiumSolution {
-            protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
-                super.fillStateContainer(builder);
-                builder.add(LEVEL_1_8);
-            }
-
-            public int getLevel(FluidState state) {
-                return state.get(LEVEL_1_8);
-            }
-
-            public boolean isSource(FluidState state) {
-                return false;
+            @Override
+            protected FluidAttributes createAttributes() {
+                return net.minecraftforge.fluids.FluidAttributes.builder(
+                                new ResourceLocation("block/water_still"),
+                                new ResourceLocation("block/water_flow"))
+                        .overlay(new ResourceLocation("block/water_overlay"))
+                        .density(2000).viscosity(2000).translationKey(this.getTranslationKey()).color(0xFFeae5de)
+                        .sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY).build(this);
             }
         }
     }
