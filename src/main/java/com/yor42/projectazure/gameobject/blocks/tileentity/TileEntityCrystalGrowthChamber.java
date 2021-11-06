@@ -1,10 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
-import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
 import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
-import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
-import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
@@ -25,7 +22,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;
@@ -338,10 +334,10 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
 
     public FluidStack getAmountfromItem(Item item){
         if(item == registerItems.DUST_ORIGINIUM.get()){
-            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 400);
+            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION, 400);
         }
         else if(item == registerItems.DUST_NETHER_QUARTZ.get()){
-            return new FluidStack(registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 800);
+            return new FluidStack(registerFluids.NETHER_QUARTZ_SOLUTION, 800);
         }
         return FluidStack.EMPTY;
     }
