@@ -59,6 +59,7 @@ public class registerItems {
     public static final RegistryObject<Item> DUST_STEEL = registerManager.ITEMS.register("dust_steel", () -> new ItemResource("steel", enums.ResourceType.DUST));
     public static final RegistryObject<Item> DUST_BRASS = registerManager.ITEMS.register("dust_brass", () -> new ItemResource("brass", enums.ResourceType.DUST));
     public static final RegistryObject<Item> DUST_ORIGINIUM = registerManager.ITEMS.register("dust_originium", () -> new ItemResource("originium", enums.ResourceType.DUST));
+    public static final RegistryObject<Item> DUST_NETHER_QUARTZ = registerManager.ITEMS.register("dust_quartz", () -> new ItemResource("nether_quartz", enums.ResourceType.DUST));
 
     public static final RegistryObject<Item> PLATE_COPPER = registerManager.ITEMS.register("plate_copper", () -> new ItemResource("copper", enums.ResourceType.PLATE));
     public static final RegistryObject<Item> PLATE_LEAD = registerManager.ITEMS.register("plate_lead", () -> new ItemResource("lead", enums.ResourceType.PLATE));
@@ -113,6 +114,8 @@ public class registerItems {
 
     //Originium Engineering
     public static final RegistryObject<Item> ORIGINIUM_SEED = registerManager.ITEMS.register("originium_seed", () -> new Item(new Item.Properties()
+            .group(PA_RESOURCES)));
+    public static final RegistryObject<Item> NETHER_QUARTZ_SEED = registerManager.ITEMS.register("quartz_seed", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));
     public static final RegistryObject<Item> ORIGINITE = registerManager.ITEMS.register("originite", () -> new Item(new Item.Properties()
             .group(PA_RESOURCES)));

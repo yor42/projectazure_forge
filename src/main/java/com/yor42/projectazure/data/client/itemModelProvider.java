@@ -62,6 +62,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("dust_steel");
         buildModel("dust_brass");
         buildModel("dust_originium");
+        buildModel("dust_quartz");
 
         buildModel("crude_oil_bucket");
         buildModel("gasoline_bucket");
@@ -101,6 +102,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("headhunting_pcb");
 
         buildModel("originium_seed");
+        buildModel("quartz_seed");
         buildModel("originite");
         buildModel("originium_prime");
 

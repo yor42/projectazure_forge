@@ -89,7 +89,7 @@ public abstract class CrystalChamberAqueousSolution extends FlowingFluid {
 
         @Override
         protected int getColor() {
-            return 0x32180b;
+            return 0x8832180b;
         }
 
         @Override
@@ -149,7 +149,17 @@ public abstract class CrystalChamberAqueousSolution extends FlowingFluid {
 
             @Override
         protected int getColor() {
-            return 0xf8f2e3;
+            return 0xFFeae5de;
+        }
+
+        @Override
+        protected FluidAttributes createAttributes() {
+            return net.minecraftforge.fluids.FluidAttributes.builder(
+                            new ResourceLocation("block/water_still"),
+                            new ResourceLocation("block/water_flow"))
+                    .overlay(new ResourceLocation("block/water_overlay"))
+                    .density(2000).viscosity(2000).translationKey(this.getTranslationKey()).color(0xFFeae5de)
+                    .sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY).build(this);
         }
 
         @Override

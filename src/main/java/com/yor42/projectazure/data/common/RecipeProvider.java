@@ -203,6 +203,10 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("hasseed", hasItem(registerItems.ORIGINIUM_SEED.get()))
                 .build(consumer, new ResourceLocation("originium_crystalizing"));
 
+        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.fromItems(registerItems.NETHER_QUARTZ_SEED.get()), registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 400)
+                .addCriterion("hasseed", hasItem(registerItems.NETHER_QUARTZ_SEED.get()))
+                .build(consumer, new ResourceLocation("quartz_crystalizing"));
+
         ShapedRecipeBuilder.shapedRecipe(registerItems.TREE_SAP.get(),2)
                 .key('L', ItemTags.LOGS)
                 .patternLine("LLL")
