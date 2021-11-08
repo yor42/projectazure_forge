@@ -480,6 +480,36 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         CustomRecipeBuilder.customRecipe((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).build(consumer, "reloading_items");
         CustomRecipeBuilder.customRecipe((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).build(consumer, "repairing_items");
 
+        ShapedRecipeBuilder.shapedRecipe(registerItems.NETHER_QUARTZ_SEED.get(), 4)
+                .key('S', ItemTags.SAND)
+                .key('Q', Tags.Items.GEMS_QUARTZ)
+                .patternLine("SQ")
+                .patternLine("QS")
+                .addCriterion("has_quartz", hasItem(Tags.Items.GEMS_QUARTZ))
+                .addCriterion("has_sand", hasItem(ItemTags.SAND))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.ORIGINIUM_SEED.get(), 4)
+                .key('S', ItemTags.SAND)
+                .key('O', registerItems.DUST_ORIGINIUM.get())
+                .patternLine("SO")
+                .patternLine("OS")
+                .addCriterion("has_originium", hasItem(registerItems.DUST_ORIGINIUM.get()))
+                .addCriterion("has_sand", hasItem(ItemTags.SAND))
+                .build(consumer);
+
+        ShapelessRecipeBuilder.shapelessRecipe(registerItems.DUST_ORIGINIUM.get(), 3)
+                .addIngredient(registerItems.ORIGINITE.get())
+                .addIngredient(registerItems.HAMMER_IRON.get())
+                .addCriterion("has_originite", hasItem(registerItems.ORIGINITE.get()))
+                .build(consumer, new ResourceLocation("originium_dust_from_originite"));
+
+        ShapelessRecipeBuilder.shapelessRecipe(registerItems.DUST_NETHER_QUARTZ.get(), 2)
+                .addIngredient(Items.QUARTZ)
+                .addIngredient(registerItems.HAMMER_IRON.get())
+                .addCriterion("has_quartz", hasItem(Items.QUARTZ))
+                .build(consumer, new ResourceLocation("quartz_dust_from_quartz"));
+
         ShapedRecipeBuilder.shapedRecipe(registerItems.DD_DEFAULT_RIGGING.get(), 1)
                 .key('A', ModTags.Items.PLATE_ALUMINIUM)
                 .key('S', ModTags.Items.INGOT_STEEL)

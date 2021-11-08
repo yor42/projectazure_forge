@@ -3,7 +3,7 @@
   "seed": {
     "item": "projectazure:quartz_seed"
   },
-  "solution": "projectazure:nether_quartz_solution_flowing",
+  "solution": "projectazure:nether_quartz_solution_source",
   "growthtime": 400,
   "result": "minecraft:quartz"
 }
