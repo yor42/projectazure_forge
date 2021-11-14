@@ -76,6 +76,18 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
         return nonnulllist;
     }
 
+    public NonNullList<ItemStack> getIngredientStack() {
+        NonNullList<ItemStack> nonnulllist = NonNullList.create();
+        nonnulllist.add(this.seed.getMatchingStacks()[0]);
+        return nonnulllist;
+    }
+
+    public NonNullList<FluidStack> getFluid() {
+        NonNullList<FluidStack> nonnulllist = NonNullList.create();
+        nonnulllist.add(new FluidStack(this.solution, this.growthTime));
+        return nonnulllist;
+    }
+
     @Override
     public IRecipeSerializer<?> getSerializer() {
         return CRYSTALIZING.get();

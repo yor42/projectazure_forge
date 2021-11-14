@@ -44,6 +44,9 @@
   "item.projectazure.mortar_iron": "Iron Mortar",
   "item.projectazure.steel_cutter": "Steel Cutter",
 
+  "item.projectazure.originium_seed": "Originium Seed",
+  "item.projectazure.quartz_seed": "Nether Quartz Seed",
+
   "item.projectazure.torpedo_ammo": "Torpedo Round",
   "item.projectazure.5_56_ammo": "5.56mm Bullets",
 
@@ -263,6 +266,8 @@
   "steel": "Steel",
   "coal": "Coal",
   "lead": "Lead",
+  "nether_quartz": "Nether Quartz",
+  "originium": "Originium",
 
   "recruit_beacon": "Recruit Beacon",
   "tile.drydock": "Dry Dock",
@@ -274,7 +279,7 @@
 
   "death.attack.ate_originium_prime_0": "%1$s Literally ate pure originium. ...oh my god",
   "death.attack.ate_originium_prime_1": "%1$s discovered the delicious taste of originium",
-  "death.attack.ate_originium_prime_2": "%1$s tried to get arts abilty. little did he know was this mod doesn't have that.",
+  "death.attack.ate_originium_prime_2": "%1$s tried to get arts ability. little did he know was this mod doesn't have that.",
   "death.attack.ate_originium_prime_3": "%1$s tasted the s p i c y  r o c c",
   "death.attack.ate_originium_prime_4": "%1$s died from acute originium poisoning"
 }

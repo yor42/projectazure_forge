@@ -3,6 +3,7 @@ package com.yor42.projectazure.intermod.jei;
 import com.yor42.projectazure.client.gui.GuiALInventory;
 import com.yor42.projectazure.client.gui.guiBAInventory;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
+import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
@@ -62,17 +63,20 @@ public class Jei implements IModPlugin {
         RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
         registration.addRecipes(recipeManager.getRecipesForType(registerRecipes.Types.PRESSING), JEIRecipeCategoryPressing.UID);
         registration.addRecipes(recipeManager.getRecipesForType(registerRecipes.Types.ALLOYING), JEIRecipeCategoryAlloying.UID);
+        registration.addRecipes(recipeManager.getRecipesForType(registerRecipes.Types.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(registerBlocks.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.UID);
         registration.addRecipeCatalyst(new ItemStack(registerBlocks.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.UID);
+        registration.addRecipeCatalyst(new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.UID);
     }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new JEIRecipeCategoryPressing(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new JEIRecipeCategoryAlloying(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new JEIRecipeCategoryCrystalizing(registration.getJeiHelpers().getGuiHelper()));
     }
 }

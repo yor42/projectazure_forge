@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe> {
 
-    private IDrawable icon;
+    private final IDrawable icon;
     private final IDrawable background;
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_alloying");
 

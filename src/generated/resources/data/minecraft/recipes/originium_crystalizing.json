@@ -3,7 +3,7 @@
   "seed": {
     "item": "projectazure:originium_seed"
   },
-  "solution": "projectazure:originium_solution_source",
+  "solution": "projectazure:originium_solution",
   "growthtime": 3000,
   "result": "projectazure:originium_prime"
 }
