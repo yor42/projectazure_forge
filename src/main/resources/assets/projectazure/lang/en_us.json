@@ -142,6 +142,8 @@
   "block.projectazure.reenforced_concrete": "Reenforced Concrete",
   "block.projectazure.reenforced_concrete.tooltip":"Concrete Reenforced with steel; part of multiblock Structure.",
   "block.projectazure.orirock": "Orirock",
+  "block.projectazure.nether_quartz_solution": "Nether Quartz Solution",
+  "block.projectazure.originium_solution": "Originium Solution",
 
 
   "rigging_valid_on.tooltip": "Useable On:",

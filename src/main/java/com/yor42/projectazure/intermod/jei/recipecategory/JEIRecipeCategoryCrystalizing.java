@@ -69,7 +69,8 @@ public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<Crystalizi
         itemStacks.init(0, true, 53, 2);
         itemStacks.init(4, false, 111, 31);
         IGuiFluidStackGroup fluid = recipeLayout.getFluidStacks();
-        fluid.init(0, true, 53, 22, 16, 34, CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY, true, Tank_Overlay);
+        fluid.init(0, true, 53, 22, 18, 36, CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY, true, Tank_Overlay);
+        fluid.set(0, recipe.getFluid());
 
         itemStacks.set(ingredients);
     }

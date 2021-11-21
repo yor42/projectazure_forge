@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "CPC",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:smooth_stone_slab"
+    },
+    "C": {
+      "item": "minecraft:cauldron"
+    },
+    "P": {
+      "item": "projectazure:steel_pipe"
+    },
+    "I": {
+      "tag": "forge:plates/steel"
+    }
+  },
+  "result": {
+    "item": "projectazure:crystal_growth_chamber"
+  }
+}

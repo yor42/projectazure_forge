@@ -480,6 +480,18 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         CustomRecipeBuilder.customRecipe((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).build(consumer, "reloading_items");
         CustomRecipeBuilder.customRecipe((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).build(consumer, "repairing_items");
 
+        ShapedRecipeBuilder.shapedRecipe(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), 1)
+                .key('S', Blocks.SMOOTH_STONE_SLAB)
+                .key('C', Blocks.CAULDRON)
+                .key('P', registerItems.STEEL_PIPE.get())
+                .key('I', ModTags.Items.PLATE_STEEL)
+                .patternLine("III")
+                .patternLine("CPC")
+                .patternLine("SSS")
+                .addCriterion("has_quartz", hasItem(Tags.Items.GEMS_QUARTZ))
+                .addCriterion("has_sand", hasItem(ItemTags.SAND))
+                .build(consumer);
+
         ShapedRecipeBuilder.shapedRecipe(registerItems.NETHER_QUARTZ_SEED.get(), 4)
                 .key('S', ItemTags.SAND)
                 .key('Q', Tags.Items.GEMS_QUARTZ)
