@@ -71,7 +71,7 @@ public class TileEntityBoundingBox extends TileEntity {
     }
 
 
-    public void setMaster(MultiblockBaseTE master)
+    public void setMaster(TileEntity master)
     {
         if (master != null && !master.isRemoved())
         {
