@@ -20,7 +20,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: "com.wynprice.cursemaven"
 
-version = '0.3.5'
+version = '0.3.7'
 group = 'com.yor42.projecrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = project.archive_basename
 

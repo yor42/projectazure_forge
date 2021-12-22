@@ -27,13 +27,12 @@ public class ContainerAKNInventory extends Container {
 
     //C l i e n t
     public ContainerAKNInventory(int id, PlayerInventory inventory) {
-        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8));
+        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), Main.PROXY.getSharedMob());
     }
 
-    public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo) {
+    public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(registerManager.AKN_CONTAINER.get(), id);
-        final AbstractEntityCompanion entity = Main.PROXY.getSharedMob();
-        this.companion = entity;
+        this.companion = companion;
         //mainhand
         this.addSlot(new SlotItemHandler(EntityEquipment, 0, 75, 80));
 
@@ -61,7 +60,7 @@ public class ContainerAKNInventory extends Container {
         }
 
         //TODO Change this check to Class check
-        if(entity instanceof EntityGunUserBase) {
+        if(this.companion instanceof EntityGunUserBase) {
             for (int m = 0; m < 4; m++) {
                 for (int n = 0; n < 2; n++) {
                     this.addSlot(new SlotItemHandler(EntityAmmo, n + 2 * m, 180 + n * 18, 13 + m * 18) {
@@ -74,7 +73,7 @@ public class ContainerAKNInventory extends Container {
             }
         }
 
-        for(int l = 0; l<entity.getSkillItemCount(); l++){
+        for(int l = 0; l<this.companion.getSkillItemCount(); l++){
             this.addSlot(new SlotItemHandler(entityInventory, 12+l, 70, 58-l*18){
                 @Override
                 public boolean isItemValid(@Nonnull ItemStack stack) {
@@ -121,7 +120,7 @@ public class ContainerAKNInventory extends Container {
         @Nullable
         @Override
         public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerAKNInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage());
+            return new ContainerAKNInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), companion);
         }
     }
 
