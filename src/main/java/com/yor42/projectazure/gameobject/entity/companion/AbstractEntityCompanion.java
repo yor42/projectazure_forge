@@ -38,6 +38,7 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -1122,6 +1123,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         if(this.expdelay>0){
             this.expdelay--;
+        }
+
+        if(this.isSprinting() && !this.isMoving()){
+            this.setSprinting(false);
         }
 
         if(this.nearbyExpList == null || this.ticksExisted%5 == 0){

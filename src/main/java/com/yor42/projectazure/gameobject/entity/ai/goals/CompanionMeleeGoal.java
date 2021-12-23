@@ -20,13 +20,10 @@ public class CompanionMeleeGoal extends MeleeAttackGoal {
 
     @Override
     public boolean shouldExecute() {
-        //TODO: check if they can attack with gun first
-
         Item item = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem();
-
         boolean isEquippingsword = item instanceof SwordItem;
 
-        if(!isEquippingsword) {
+        if(!isEquippingsword || this.entity.shouldUseGun()) {
             return false;
         }
         else{

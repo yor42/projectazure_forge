@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
+import com.yor42.projectazure.Main;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -135,9 +136,7 @@ public class MultiInvStackHandler implements IItemHandlerModifiable {
 
     }
 
-    protected void onContentsChanged(int slot) {
-
-    }
+    protected void onContentsChanged(int slot) {}
 
     public CompoundNBT serializeNBT() {
         return this.serializeNBT(new CompoundNBT());

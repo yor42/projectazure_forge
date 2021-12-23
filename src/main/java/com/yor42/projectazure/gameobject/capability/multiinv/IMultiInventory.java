@@ -1,8 +1,11 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
+import net.minecraft.item.ItemStack;
+
 public interface IMultiInventory {
 
     int getInventoryCount();
+    void DeserializeNBT(ItemStack stack);
     MultiInvStackHandler getInventory(int index);
 
     class Impl implements IMultiInventory {
@@ -16,6 +19,13 @@ public interface IMultiInventory {
         @Override
         public int getInventoryCount() {
             return inventories.length;
+        }
+
+        @Override
+        public void DeserializeNBT(ItemStack stack) {
+            for(MultiInvStackHandler inventory:inventories){
+                inventory.deserializeNBT(stack.getOrCreateTag());
+            }
         }
 
         @Override
