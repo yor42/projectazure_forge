@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -86,10 +87,11 @@ public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
             } else {
                 existing.grow(reachedLimit ? limit : stack.getCount());
             }
+            this.serializeNBT(container.getOrCreateTag());
             onContentsChanged(slot);
         }
-
-        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
+        ItemStack stack1 = reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
+        return stack1;
     }
 
     @Override
