@@ -146,8 +146,8 @@ public class registerManager {
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
         registerBlocks.register();
-        registerBiomes.register();
         registerItems.register();
+        registerBiomes.register();
         registerTE.register();
         registerFluids.register();
         registerRecipes.Serializers.register();

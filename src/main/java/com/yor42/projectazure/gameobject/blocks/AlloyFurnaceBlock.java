@@ -30,10 +30,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class AlloyFurnaceBlock extends Block {
-
-    public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+public class AlloyFurnaceBlock extends AbstractMachineBlock {
 
     public AlloyFurnaceBlock() {
         super((AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 10).harvestLevel(2).setLightLevel(registerBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
@@ -50,7 +47,6 @@ public class AlloyFurnaceBlock extends Block {
         return new TileEntityAlloyFurnace();
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (worldIn.isRemote) {
@@ -115,12 +111,6 @@ public class AlloyFurnaceBlock extends Block {
             }
             super.onReplaced(state, worldIn, pos, newState, isMoving);
         }
-    }
-
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
-        builder.add(FACING,ACTIVE);
     }
 
 
