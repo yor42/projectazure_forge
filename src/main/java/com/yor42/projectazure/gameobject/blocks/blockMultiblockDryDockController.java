@@ -25,4 +25,10 @@ public class blockMultiblockDryDockController extends MultiblockStructureBlocks{
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return super.getStateForPlacement(context).with(ACTIVE, false).with(POWERED, false);
+    }
 }

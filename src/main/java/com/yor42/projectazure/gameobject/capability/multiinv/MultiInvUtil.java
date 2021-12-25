@@ -5,9 +5,7 @@ import net.minecraft.item.ItemStack;
 public class MultiInvUtil {
     public static IMultiInventory getCap(ItemStack stack) {
 
-        IMultiInventory inventory = stack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
-        inventory.DeserializeNBT(stack);
-        return inventory;
+        return stack.getCapability(CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY).orElseThrow(() -> new RuntimeException("MultiInventory capability not present on stack"));
     }
 
     public static int getSlotCount(IMultiInventory inventories, int[] indices) {

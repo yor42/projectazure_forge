@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 
 public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
     private final ItemStack container;
-    private final Lazy<NonNullList<ItemStack>> stacks;
 
     public MultiInvStackHandlerItemStack(ItemStack container, String id, int size) {
         super(id, size);
@@ -87,7 +86,6 @@ public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
             } else {
                 existing.grow(reachedLimit ? limit : stack.getCount());
             }
-            this.serializeNBT(container.getOrCreateTag());
             onContentsChanged(slot);
         }
         ItemStack stack1 = reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
@@ -134,6 +132,6 @@ public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
     }
 
     protected void onContentsChanged(int slot) {
-        this.serializeNBT(container.getOrCreateTag());
+        container.getOrCreateTag().put("Inventory_" + this.id, this.serializeNBT());
     }
 }

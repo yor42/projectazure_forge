@@ -13,7 +13,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nonnull;
 
 public class MultiInvStackHandler implements IItemHandlerModifiable {
-    private final String id;
+    protected final String id;
     protected Lazy<NonNullList<ItemStack>> stacks;
 
     public MultiInvStackHandler(String ID, int size){
@@ -139,10 +139,6 @@ public class MultiInvStackHandler implements IItemHandlerModifiable {
     protected void onContentsChanged(int slot) {}
 
     public CompoundNBT serializeNBT() {
-        return this.serializeNBT(new CompoundNBT());
-    }
-
-    public CompoundNBT serializeNBT(CompoundNBT compound) {
         NonNullList<ItemStack> stacks = this.stacks.get();
         ListNBT items = new ListNBT();
 
@@ -156,26 +152,6 @@ public class MultiInvStackHandler implements IItemHandlerModifiable {
         }
         CompoundNBT nbt = new CompoundNBT();
         nbt.put("Items", items);
-        nbt.putInt("Size", stacks.size());
-        compound.put("Inventory_"+this.id, nbt);
-        return compound;
-    }
-
-    public void deserializeNBT(CompoundNBT compound) {
-        this.stacks = Lazy.of(()-> {
-            CompoundNBT nbt = compound.getCompound("Inventory_" + this.id);
-            ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
-            int size = nbt.getInt("Size");
-            NonNullList<ItemStack> stacks = NonNullList.withSize(size, ItemStack.EMPTY);
-            for (int i = 0; i < tagList.size(); i++) {
-                CompoundNBT itemTags = tagList.getCompound(i);
-                int slot = itemTags.getInt("Slot");
-
-                if (slot >= 0 && slot < stacks.size()) {
-                    stacks.set(slot, ItemStack.read(itemTags));
-                }
-            }
-            return stacks;
-        });
+        return nbt;
     }
 }

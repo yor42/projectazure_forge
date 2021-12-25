@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.block.BedBlock;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -26,7 +27,9 @@ public class CompanionSleepGoal extends Goal {
                 boolean flag3 = this.companion.isInHomeRangefromCurrenPos();
                 boolean flag4 = (this.companion.isFreeRoaming()||(this.companion.getOwner()!=null && this.companion.getOwner().isSleeping()) || this.companion.getMorale()<=30) || (this.companion.isFreeRoaming() && (this.companion.getEntityWorld().isThundering() || this.companion.getEntityWorld().isNightTime()));
                 boolean flag2 = !this.companion.isSleeping();
-                return flag2 && flag3 && flag4;
+                BlockPos pos = this.companion.getHOMEPOS().get();
+                boolean flag5 = this.companion.getEntityWorld().getBlockState(pos).isBed(this.companion.getEntityWorld(), pos, this.companion) && !this.companion.getEntityWorld().getBlockState(pos).get(BedBlock.OCCUPIED);
+                return flag2 && flag3 && flag4 && flag5;
             }
         }
         return false;
