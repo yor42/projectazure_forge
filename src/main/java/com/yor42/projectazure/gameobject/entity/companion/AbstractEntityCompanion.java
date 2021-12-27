@@ -1554,7 +1554,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Nonnull
     @Override
     public ActionResultType applyPlayerInteraction(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
-        if(this.isOwner(player) && !(player.getHeldItem(hand).getItem() instanceof ItemRiggingBase)){
+        if(this.isOwner(player) && !(this instanceof EntityKansenBase && player.getHeldItem(hand).getItem() instanceof ItemRiggingBase)){
 
             if(this.getRidingEntity() != null){
                 this.stopRiding();
@@ -1566,6 +1566,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
                 Main.PROXY.setSharedMob(this);
                 return ActionResultType.SUCCESS;
+            }
+            else if(player.getHeldItem(hand).getItem() instanceof ArmorItem){
+                ItemStack stack = player.getHeldItem(hand);
+                ArmorItem item = (ArmorItem) stack.getItem();
+                EquipmentSlotType type = getSlotForItemStack(stack);
+                if(item.canEquip(stack, type, this)){
+                    this.setItemStackToSlot(type, stack);
+                    stack.shrink(1);
+                    return ActionResultType.CONSUME;
+                }
             }
             else if(player.getHeldItem(hand).getItem() != registerItems.ORIGINIUM_PRIME.get() && player.getHeldItem(hand).getItem().getFood() != null && this.canEat(player.getHeldItem(hand).getItem().getFood().canEatWhenFull())){
                 ItemStack stack = this.onFoodEaten(this.getEntityWorld(), player.getHeldItem(hand));

@@ -202,10 +202,17 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
                     }
                 }
 
-                if (!AmmoStack.isEmpty()) {
+                if (!AmmoStack.isEmpty() || entity.isCreative()) {
 
                     int i;
-                    if (this.roundsPerReload > 0) {
+                    if(entity.isCreative()){
+                        if(this.roundsPerReload > 0){
+                            i=this.roundsPerReload;
+                        }
+                        else{
+                            i=this.magCap;
+                        }
+                    }else if (this.roundsPerReload > 0) {
                         i = Math.min(this.roundsPerReload, getRemainingAmmo(AmmoStack));
                     } else {
                         i = Math.min(this.magCap, getRemainingAmmo(AmmoStack));

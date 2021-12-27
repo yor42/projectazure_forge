@@ -199,11 +199,11 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("hasmold", hasItem(registerItems.MOLD_EXTRACTION.get()))
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
 
-        CrystalizingRecipeBuilder.addRecipe(registerItems.ORIGINIUM_PRIME.get(), Ingredient.fromItems(registerItems.ORIGINIUM_SEED.get()), registerFluids.ORIGINIUM_SOLUTION, 3000)
+        CrystalizingRecipeBuilder.addRecipe(registerItems.ORIGINIUM_PRIME.get(), Ingredient.fromItems(registerItems.ORIGINIUM_SEED.get()), registerFluids.ORIGINIUM_SOLUTION_SOURCE, 3000)
                 .addCriterion("hasseed", hasItem(registerItems.ORIGINIUM_SEED.get()))
                 .build(consumer, new ResourceLocation("originium_crystalizing"));
 
-        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.fromItems(registerItems.NETHER_QUARTZ_SEED.get()), registerFluids.NETHER_QUARTZ_SOLUTION, 400)
+        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.fromItems(registerItems.NETHER_QUARTZ_SEED.get()), registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 400)
                 .addCriterion("hasseed", hasItem(registerItems.NETHER_QUARTZ_SEED.get()))
                 .build(consumer, new ResourceLocation("quartz_crystalizing"));
 

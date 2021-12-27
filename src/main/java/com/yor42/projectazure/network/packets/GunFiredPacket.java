@@ -49,9 +49,7 @@ public class GunFiredPacket{
                     if(!message.offHand) {
                         if (mainDelay <= 0) {
                             boolean shouldDoReloadAnim = ((ItemGunBase) heldStack.getItem()).shootGun(heldStack, playerEntity.getEntityWorld(), playerEntity, message.isZooming, hand, null);
-                            if(shouldDoReloadAnim || getAmmo(heldStack)>0) {
-                                Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getEntityId(), shouldDoReloadAnim));
-                            }
+                            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getEntityId(), shouldDoReloadAnim));
                         }
                     }
                 }

@@ -23,6 +23,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
@@ -64,11 +65,13 @@ public class ForgeBusEventHandlerClient {
                             ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(event.player);
                             int mainDelay = capability.getMainHandFireDelay();
                             int offDelay = capability.getOffHandFireDelay();
+                            boolean hasAmmo = getRemainingAmmo(MainStack)>0;
                             if(mainDelay <= 0) {
-                                if(MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(event.player, event.player.getHeldItemMainhand())))
-                                    return;
+                                if(hasAmmo) {
+                                    if (MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(event.player, event.player.getHeldItemMainhand())))
+                                        return;
+                                }
                                 Main.NETWORK.sendToServer(new GunFiredPacket(false, false));
-                                MinecraftForge.EVENT_BUS.post(new GunFireEvent.PostFire(event.player, event.player.getHeldItemMainhand()));
                             }
 
                             if (gun.isSemiAuto()) {

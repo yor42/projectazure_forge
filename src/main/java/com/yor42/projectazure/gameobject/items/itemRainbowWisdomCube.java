@@ -18,6 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 public class itemRainbowWisdomCube extends Item {
     public itemRainbowWisdomCube(Properties properties) {
@@ -26,6 +27,13 @@ public class itemRainbowWisdomCube extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+
+        ItemStack cube = playerIn.getHeldItem(handIn);
+        if(cube.getOrCreateTag().getUniqueId("owner") != playerIn.getUniqueID()){
+            playerIn.sendMessage(new TranslationTextComponent("message.rainbow_cube.notowner"), UUID.randomUUID());
+            return ActionResult.resultFail(cube);
+        }
+
         if(worldIn.isRemote){
             //openGui
             this.openGUI();

@@ -21,8 +21,10 @@ import java.util.function.Supplier;
 
 public class DoGunAnimationPacket {
 
-    private boolean isOffHand, isZooming, shouldPlayReloadAnimation;
-    private int PlayerID;
+    private final boolean isOffHand;
+    private final boolean isZooming;
+    private final boolean shouldPlayReloadAnimation;
+    private final int PlayerID;
 
     public DoGunAnimationPacket(boolean isOffHand, boolean isZooming, int playerID, boolean shouldPlayReloadAnimation){
         this.isOffHand = isOffHand;
@@ -48,7 +50,7 @@ public class DoGunAnimationPacket {
     }
 
     public static void handle(final DoGunAnimationPacket message, final Supplier<NetworkEvent.Context> ctx){
-        ctx.get().enqueueWork(() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> {
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             World clientWorld = ClientProxy.getClientWorld();;
             Entity entity =  clientWorld.getEntityByID(message.PlayerID);
 
@@ -62,34 +64,12 @@ public class DoGunAnimationPacket {
 
                         AnimationController controller = GeckoLibUtil.getControllerForStack(((ItemGunBase) offStack.getItem()).getFactory(), offStack, ((ItemGunBase) offStack.getItem()).getFactoryName());
                         ((ItemGunBase) offStack.getItem()).shootGun(offStack, clientWorld, playerEntity, message.isZooming, Hand.OFF_HAND, null);
-                        if(message.shouldPlayReloadAnimation) {
-                            controller.markNeedsReload();
-                            controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
-                        }
-                        else{
-                            if(MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(playerEntity, offStack)))
-                                return;
-                            controller.markNeedsReload();
-                            controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
-                            MinecraftForge.EVENT_BUS.post(new GunFireEvent.PostFire(playerEntity, offStack));
-                        }
-
-
+                        controller.markNeedsReload();
                     }
                 }
                 else{
                     if(mainstck.getItem() instanceof ItemGunBase){
-                        AnimationController controller = GeckoLibUtil.getControllerForStack(((ItemGunBase) mainstck.getItem()).getFactory(), mainstck, ((ItemGunBase) mainstck.getItem()).getFactoryName());
-
-                        if(message.shouldPlayReloadAnimation) {
-                            controller.markNeedsReload();
-                            controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.reload", false));
-                        }
-                        else{
-                            controller.markNeedsReload();
-                            if(MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(playerEntity, mainstck)))
-                                return;
-                            controller.setAnimation(new AnimationBuilder().addAnimation("animation.abydos550.fire", false));
+                        if(!message.shouldPlayReloadAnimation){
                             MinecraftForge.EVENT_BUS.post(new GunFireEvent.PostFire(playerEntity, mainstck));
                         }
                     }

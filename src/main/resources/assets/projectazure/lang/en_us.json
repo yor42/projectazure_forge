@@ -275,6 +275,8 @@
   "tile.drydock": "Dry Dock",
   "metal_press": "Hydraulic Press",
 
+  "message.rainbow_cube.notowner": "Seems like this cube is refusing your hand. maybe because its not yours?",
+
   "effect.projectazure.acute_oripathy": "Acute Oripathy",
 
   "death.attack.bonk": "%1$s was sent to horny jail",

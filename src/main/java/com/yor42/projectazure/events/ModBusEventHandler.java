@@ -40,7 +40,11 @@ public class ModBusEventHandler {
                 PlayerEntity player = event.getPlayer();
                 UUID yorUUID = UUID.fromString("d45160dc-ae0b-4f7c-b44a-b535a48182d2");
                 boolean isDev = player.getUniqueID().equals(yorUUID);
-                player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.Rainbow_Wisdom_Cube.get()));
+
+                ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
+                CompoundNBT nbt = cubeStack.getOrCreateTag();
+                nbt.putUniqueId("owner", player.getUniqueID());
+                player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), cubeStack);
                 if (isDev) {
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_NAGATO.get()));
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWM_ENTERPRISE.get()));
