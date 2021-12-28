@@ -26,11 +26,13 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.NonNullConsumer;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -215,25 +217,20 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                 ItemStack stack = this.getStackInSlot(slot);
                 if(slot == 0){
                     int finalSlot = slot;
-                    Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
+                    NonNullConsumer<IFluidHandlerItem> TransferLiquids = (fluidHandler) -> {
                         FluidTank tank = this.CrudeOilTank;
-                        FluidActionResult actionresult = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
-                        if (actionresult.isSuccess()) {
+                        FluidStack trandferResult = FluidUtil.tryFluidTransfer(tank,fluidHandler, tank.getCapacity(), false);
+
+                        if (trandferResult.isEmpty()) {
+                            FluidActionResult actionresult = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
                             ItemStack result = actionresult.getResult();
-                            if (TileEntityBasicRefinery.this.ITEMHANDLER.insertItem(1, result, true).isEmpty()) {
-                                if (TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(1).isEmpty()){
-                                    TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(1, result);
-                                }
-                                else {
-                                    TileEntityBasicRefinery.this.ITEMHANDLER.insertItem(1, result, false);
-                                }
-                                stack.shrink(1);
-                                TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
-                            }
+                            TileEntityBasicRefinery.this.ITEMHANDLER.insertItem(1, result, false);
+                            stack.shrink(1);
+                            TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
 
                         }
                     };
-                    FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
+                    FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquids);
                 }
                 else {
                     FluidTank tank;
@@ -253,8 +250,9 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                     }
                     if (FluidUtil.getFluidHandler(stack).isPresent()) {
                         if (TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(slot+1).isEmpty()) {
-                            FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
+                            FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, false);
                             if(result.isSuccess()) {
+                                FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
                                 TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(slot + 1, result.getResult());
                                 stack.shrink(1);
                                 this.ITEMHANDLER.setStackInSlot(slot, stack);
