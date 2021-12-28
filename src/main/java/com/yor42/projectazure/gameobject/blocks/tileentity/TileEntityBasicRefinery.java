@@ -219,15 +219,14 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                     int finalSlot = slot;
                     NonNullConsumer<IFluidHandlerItem> TransferLiquids = (fluidHandler) -> {
                         FluidTank tank = this.CrudeOilTank;
-                        FluidStack trandferResult = FluidUtil.tryFluidTransfer(tank,fluidHandler, tank.getCapacity(), false);
-
-                        if (trandferResult.isEmpty()) {
-                            FluidActionResult actionresult = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
-                            ItemStack result = actionresult.getResult();
-                            TileEntityBasicRefinery.this.ITEMHANDLER.insertItem(1, result, false);
-                            stack.shrink(1);
-                            TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
-
+                        ItemStack outputstack = this.ITEMHANDLER.insertItem(1, fluidHandler.getContainer(), false);
+                        if(outputstack.isEmpty()) {
+                            FluidActionResult result = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
+                            if (result.isSuccess()) {
+                                this.ITEMHANDLER.insertItem(1, result.getResult(), false);
+                                stack.shrink(1);
+                                this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
+                            }
                         }
                     };
                     FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquids);
@@ -285,14 +284,16 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                         //Do process
                         this.bitumentick++;
                         this.isActive = 1;
-                        FluidStack stack = this.CrudeOilTank.drain(10, IFluidHandler.FluidAction.EXECUTE);
+                        FluidStack stack = this.CrudeOilTank.drain(10, IFluidHandler.FluidAction.SIMULATE);
                         int drainedAmount = stack.getAmount();
                         int FuelOilAmount = (int) (drainedAmount*0.3);
                         int GasolineAmount = (int) (drainedAmount*0.46);
                         int DieselAmount = (int) (drainedAmount*0.3);
-                        this.DieselTank.fill(new FluidStack(registerFluids.DIESEL_SOURCE, DieselAmount), IFluidHandler.FluidAction.EXECUTE);
-                        this.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE, GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
-                        this.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int DieselFill = this.DieselTank.fill(new FluidStack(registerFluids.DIESEL_SOURCE, DieselAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int GasolineFill = this.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE, GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int FuelFill = this.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int MaxFill = Math.max(Math.max(DieselFill, GasolineFill), FuelFill);
+                        this.CrudeOilTank.drain(MaxFill == 0? 0: 10, IFluidHandler.FluidAction.EXECUTE);
                         if(this.bitumentick%600==0){
                             if(this.ITEMHANDLER.getStackInSlot(8).isEmpty()){
                                 this.ITEMHANDLER.setStackInSlot(8, new ItemStack(registerItems.BITUMEN.get()));
