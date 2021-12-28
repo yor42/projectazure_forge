@@ -249,6 +249,12 @@ public class ItemStackUtils {
                     return true;
                 }
             }
+            IItemHandler subGuns = inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal());
+            for (int i = 0; i < subGuns.getSlots(); i++) {
+                if (subGuns.getStackInSlot(i).getItem() instanceof ItemEquipmentBase) {
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -262,7 +268,7 @@ public class ItemStackUtils {
 
     public static boolean canUseCannon(ItemStack riggingStack){
         if(riggingStack.getItem() instanceof ItemRiggingBase) {
-            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.MAIN_GUN, null) != ItemStack.EMPTY;
+            return getPreparedWeapon(riggingStack, enums.SLOTTYPE.MAIN_GUN, null) != ItemStack.EMPTY || getPreparedWeapon(riggingStack, enums.SLOTTYPE.SUB_GUN, null) != ItemStack.EMPTY;
         }
         else return false;
     }

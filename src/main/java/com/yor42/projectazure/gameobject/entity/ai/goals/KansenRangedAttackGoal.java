@@ -45,7 +45,9 @@ public class KansenRangedAttackGoal extends Goal {
 
         if(this.entityHost != null) {
             if (target != null && target.isAlive() && this.entityHost.hasRigging()) {
-                if(hasGunOrTorpedo(this.entityHost.getRigging()) && this.entityHost.isSailing()) {
+                boolean isArmed = hasGunOrTorpedo(this.entityHost.getRigging());
+                boolean isSailing = this.entityHost.isSailing();
+                if(isArmed && isSailing) {
                     this.attackTarget = target;
                     return true;
                 }

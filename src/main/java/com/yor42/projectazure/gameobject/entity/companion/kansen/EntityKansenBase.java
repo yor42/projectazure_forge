@@ -49,6 +49,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 import java.util.UUID;
 
+import static com.yor42.projectazure.libs.enums.SLOTTYPE.MAIN_GUN;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.*;
 
@@ -318,7 +319,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     public void AttackUsingCannon(LivingEntity target, float distanceFactor){
         boolean shouldFire = this.canUseShell(getActiveShellCategory()) && this.canUseRigging() && canUseCannon(this.getRigging());
+
         if(shouldFire) {
+
+            enums.SLOTTYPE CannonType = getPreparedWeapon(this.getRigging(), MAIN_GUN, null) != ItemStack.EMPTY? MAIN_GUN : enums.SLOTTYPE.SUB_GUN;
+
             ItemStack Ammostack = this.findAmmo(this.getActiveShellCategory());
             if (Ammostack.getItem() instanceof ItemCannonshell) {
                 Vector3d vector3d = this.getLook(1.0F);
@@ -334,7 +339,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));
 
                 this.addExp(1.0F);
-                ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.MAIN_GUN, this);
+                ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), CannonType, this);
                 setEquipmentDelay(FiringCannon);
                 this.addMorale(-0.1);
             }
