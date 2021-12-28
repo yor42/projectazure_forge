@@ -216,16 +216,16 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
             for(int slot = 0; slot<7; slot+=2){
                 ItemStack stack = this.getStackInSlot(slot);
                 if(slot == 0){
-                    int finalSlot = slot;
+                    int finalSlot1 = slot;
                     NonNullConsumer<IFluidHandlerItem> TransferLiquids = (fluidHandler) -> {
                         FluidTank tank = this.CrudeOilTank;
-                        ItemStack outputstack = this.ITEMHANDLER.insertItem(1, fluidHandler.getContainer(), false);
+                        ItemStack outputstack = this.ITEMHANDLER.insertItem(1, fluidHandler.getContainer().getContainerItem(), true);
                         if(outputstack.isEmpty()) {
                             FluidActionResult result = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
                             if (result.isSuccess()) {
                                 this.ITEMHANDLER.insertItem(1, result.getResult(), false);
                                 stack.shrink(1);
-                                this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
+                                this.ITEMHANDLER.setStackInSlot(finalSlot1, stack);
                             }
                         }
                     };
@@ -247,17 +247,18 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                             break;
                         }
                     }
-                    if (FluidUtil.getFluidHandler(stack).isPresent()) {
-                        if (TileEntityBasicRefinery.this.ITEMHANDLER.getStackInSlot(slot+1).isEmpty()) {
-                            FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, false);
-                            if(result.isSuccess()) {
-                                FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
-                                TileEntityBasicRefinery.this.ITEMHANDLER.setStackInSlot(slot + 1, result.getResult());
+                    int finalSlot = slot;
+                    NonNullConsumer<IFluidHandlerItem> TransferLiquidtoStack = (FluidHandler)->{
+                        ItemStack outputstack = this.ITEMHANDLER.insertItem(finalSlot +1, FluidHandler.getContainer(), true);
+                        if(outputstack.isEmpty()) {
+                            FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
+                            if(result.isSuccess()){
                                 stack.shrink(1);
-                                this.ITEMHANDLER.setStackInSlot(slot, stack);
+                                this.ITEMHANDLER.setStackInSlot(finalSlot +1, result.getResult());
                             }
                         }
-                    }
+                    };
+                    FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquidtoStack);
                 }
             }
 
