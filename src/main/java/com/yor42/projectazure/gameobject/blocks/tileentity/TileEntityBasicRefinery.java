@@ -219,11 +219,18 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                     int finalSlot1 = slot;
                     NonNullConsumer<IFluidHandlerItem> TransferLiquids = (fluidHandler) -> {
                         FluidTank tank = this.CrudeOilTank;
-                        ItemStack outputstack = this.ITEMHANDLER.insertItem(1, fluidHandler.getContainer().getContainerItem(), true);
-                        if(outputstack.isEmpty()) {
+
+                        ItemStack existingStack = this.ITEMHANDLER.getStackInSlot(1);
+                        int existingStacklimit = Math.min(existingStack.getMaxStackSize(), 64);
+                        int Itemcount = existingStack.getCount()+fluidHandler.getContainer().getCount();
+                        if(existingStack.isEmpty() || existingStacklimit>=Itemcount) {
                             FluidActionResult result = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
                             if (result.isSuccess()) {
-                                this.ITEMHANDLER.insertItem(1, result.getResult(), false);
+                                if(existingStack.isEmpty()){
+                                    this.ITEMHANDLER.setStackInSlot(1, result.getResult());
+                                }else{
+                                    this.ITEMHANDLER.getStackInSlot(1).grow(result.getResult().getCount());
+                                }
                                 stack.shrink(1);
                                 this.ITEMHANDLER.setStackInSlot(finalSlot1, stack);
                             }
@@ -249,12 +256,19 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                     }
                     int finalSlot = slot;
                     NonNullConsumer<IFluidHandlerItem> TransferLiquidtoStack = (FluidHandler)->{
-                        ItemStack outputstack = this.ITEMHANDLER.insertItem(finalSlot +1, FluidHandler.getContainer(), true);
-                        if(outputstack.isEmpty()) {
+                        ItemStack existingStack = this.ITEMHANDLER.getStackInSlot(finalSlot+1);
+                        int existingStacklimit = Math.min(existingStack.getMaxStackSize(), 64);
+                        int Itemcount = existingStack.getCount()+FluidHandler.getContainer().getCount();
+                        if(existingStack.isEmpty() || Itemcount<=existingStacklimit) {
                             FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
                             if(result.isSuccess()){
                                 stack.shrink(1);
-                                this.ITEMHANDLER.setStackInSlot(finalSlot +1, result.getResult());
+                                if(existingStack.isEmpty()){
+                                    this.ITEMHANDLER.setStackInSlot(finalSlot+1, result.getResult());
+                                }else{
+                                    this.ITEMHANDLER.getStackInSlot(finalSlot+1).grow(result.getResult().getCount());
+                                }
+                                this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
                             }
                         }
                     };
@@ -295,13 +309,14 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                         int FuelFill = this.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
                         int MaxFill = Math.max(Math.max(DieselFill, GasolineFill), FuelFill);
                         this.CrudeOilTank.drain(MaxFill == 0? 0: 10, IFluidHandler.FluidAction.EXECUTE);
-                        if(this.bitumentick%600==0){
+                        if(this.bitumentick>=600){
                             if(this.ITEMHANDLER.getStackInSlot(8).isEmpty()){
                                 this.ITEMHANDLER.setStackInSlot(8, new ItemStack(registerItems.BITUMEN.get()));
                             }
                             else {
                                 this.ITEMHANDLER.getStackInSlot(8).grow(1);
                             }
+                            this.bitumentick = 0;
                         }
                     }
                     else {

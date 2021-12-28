@@ -2,13 +2,32 @@ package com.yor42.projectazure.data;
 
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 
 public class ModTags {
+
+    public static final class Fluids {
+
+        public static final ITag.INamedTag<Fluid> CRUDEOIL = forge("crude_oil");
+        public static final ITag.INamedTag<Fluid> DIESEL = forge("diesel");
+        public static final ITag.INamedTag<Fluid> FUELOIL = forge("heavy_fuel_oil");
+        public static final ITag.INamedTag<Fluid> GASOLINE = forge("gasoline");
+
+        private static ITag.INamedTag<Fluid> forge(String path) {
+            return FluidTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
+        }
+
+        private static ITag.INamedTag<Fluid> mc(String path) {
+            return FluidTags.makeWrapperTag(new ResourceLocation("minecraft", path).toString());
+        }
+    }
+
     public static final class Blocks {
 
         public static final ITag.INamedTag<Block> LOG = forge("logs");
@@ -20,10 +39,6 @@ public class ModTags {
 
         private static ITag.INamedTag<Block> forge(String path) {
             return BlockTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
-        }
-
-        private static ITag.INamedTag<Block> mod(String path) {
-            return BlockTags.makeWrapperTag(new ResourceLocation(Constants.MODID, path).toString());
         }
 
         private static ITag.INamedTag<Block> mc(String path) {

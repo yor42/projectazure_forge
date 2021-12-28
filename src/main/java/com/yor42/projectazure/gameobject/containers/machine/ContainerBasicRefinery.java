@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
+import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.setup.register.registerFluids;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -57,22 +58,6 @@ public class ContainerBasicRefinery extends Container {
         this.dieselstack=dieselstack;
         this.fueloilstack = fueloilstack;
 
-
-
-        this.addSlot(new FuelSlot(Inventory, 9, 37, 63));
-        this.addSlot(new SlotItemHandler(Inventory, 8, 142, 35){
-            @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
-                return false;
-            }
-        });
-
-        for(int i = 0; i < 3; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-            }
-        }
-
         this.addSlot(new CrudeOilBucketInSlot(Inventory, 0, 8, 7, registerFluids.CRUDE_OIL_SOURCE));
         this.addSlot(new BucketOutSlot(Inventory, 1, 8, 63));
 
@@ -82,6 +67,20 @@ public class ContainerBasicRefinery extends Container {
             this.addSlot(new BucketOutSlot(Inventory, 3+(i*2), xval, 63));
         }
 
+        this.addSlot(new SlotItemHandler(Inventory, 8, 142, 35){
+            @Override
+            public boolean isItemValid(@Nonnull ItemStack stack) {
+                return false;
+            }
+        });
+
+        this.addSlot(new FuelSlot(Inventory, 9, 37, 63));
+
+        for(int i = 0; i < 3; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                this.addSlot(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+            }
+        }
 
         for(int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));
@@ -155,8 +154,64 @@ public class ContainerBasicRefinery extends Container {
 
         @Override
         public boolean isItemValid(@Nonnull ItemStack stack) {
-            return FluidUtil.getFluidHandler(stack).isPresent();
+            return false;
         }
+    }
+
+    @Nonnull
+    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+        ItemStack CopyofStackinSlot = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(index);
+        if (slot != null && slot.getHasStack()) {
+            ItemStack StackinSlot = slot.getStack();
+            CopyofStackinSlot = StackinSlot.copy();
+            //Bucket outs
+            if (index < 10) {
+                if (!this.mergeItemStack(StackinSlot, 10, 46, false)) {
+                    return ItemStack.EMPTY;
+                }
+
+            } else {
+                if (FluidUtil.getFluidContained(StackinSlot).isPresent() && FluidUtil.getFluidContained(StackinSlot).get().getFluid().isIn(ModTags.Fluids.CRUDEOIL)) {
+                    if (!this.mergeItemStack(StackinSlot, 0, 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }
+                if (FluidUtil.getFluidContained(StackinSlot).isPresent() && FluidUtil.getFluidContained(StackinSlot).get().isEmpty()) {
+                    if (!this.mergeItemStack(StackinSlot, 2, 3, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                    else if (!this.mergeItemStack(StackinSlot, 4, 5, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                    else if (!this.mergeItemStack(StackinSlot, 6, 7, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                }else if (index < 37) {
+                    if (!this.mergeItemStack(StackinSlot, 37, 46, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index < 46 && !this.mergeItemStack(StackinSlot, 10, 37, false)) {
+                    return ItemStack.EMPTY;
+                }else if (!this.mergeItemStack(StackinSlot, 10, 37, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
+            if (StackinSlot.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
+            } else {
+                slot.onSlotChanged();
+            }
+
+            if (StackinSlot.getCount() == CopyofStackinSlot.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(playerIn, StackinSlot);
+        }
+
+        return CopyofStackinSlot;
     }
 
     public int getCrudeOilTankCapacity(){

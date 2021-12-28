@@ -126,6 +126,10 @@ a5cba2925bcf39f84f2c3109855bc1500e0eb0c4 assets/projectazure/models/item/torpedo
 fbdf03636db54e0e4afc163653fdf3b0259fb965 data/forge/tags/blocks/ores/copper.json
 6bac1a7679f4dbc3d1996049d087d51619b4dbb2 data/forge/tags/blocks/ores/lead.json
 041ded8d20af9073209d55dfbca50a919c9e943b data/forge/tags/blocks/ores/tin.json
+91e55e7054214b9e41fe709ecb68d2c9846096f6 data/forge/tags/fluids/crude_oil.json
+2afebd6433423e1c5087cb41f75e6facbfb61d7f data/forge/tags/fluids/diesel.json
+fca669af899b61fd03ca27a18cd442785d37d359 data/forge/tags/fluids/gasoline.json
+5dbf5dc3a2767ec58b0dfa4e6d8533e225ed822c data/forge/tags/fluids/heavy_fuel_oil.json
 741b537913a763aa07f92be3a6ceb13864f324c1 data/forge/tags/items/circuits.json
 fafc557c0ad4ef4178ae7eb6a890597d28b4dad8 data/forge/tags/items/circuits/advanced.json
 741b537913a763aa07f92be3a6ceb13864f324c1 data/forge/tags/items/circuits/basic.json
@@ -326,6 +330,7 @@ cd60b90addc2ce76966148695587a5a1a8f4e489 data/projectazure/advancements/recipes/
 fc58a196156210f008003bed3316337e441e654d data/projectazure/advancements/recipes/projectazure/wisdomcube.json
 63feb2414d76440a091ede945b586624a238b38a data/projectazure/loot_tables/blocks/alloy_furnace.json
 6b1aef715dd2c645cc7787d69f4f6479af7b1984 data/projectazure/loot_tables/blocks/basic_refinery.json
+374fc761ad454802cb3e7a484cfec94537b114d8 data/projectazure/loot_tables/blocks/boundingbox.json
 c8096e51d7637b3f81730bcb8974e864d882d93a data/projectazure/loot_tables/blocks/crystal_growth_chamber.json
 bd6173a95e5a67dcb4a394695a7840f1846e7ff5 data/projectazure/loot_tables/blocks/drydock_controller.json
 c198335976254503508473678cc2d6d371fa1a66 data/projectazure/loot_tables/blocks/machine_frame.json

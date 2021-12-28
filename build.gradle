@@ -73,7 +73,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
-                examplemod {
+                projectazure {
                     source sourceSets.main
                 }
             }
@@ -92,7 +92,7 @@ minecraft {
             args '--mod', 'projectazure', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/'), '--existing', file('src/generated/resources/')
 
             mods {
-                examplemod {
+                projectazure {
                     source sourceSets.main
                 }
             }
@@ -149,10 +149,8 @@ dependencies {
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
-    implementation fg.deobf('curse.maven:realistic-torches-235729:3191715')
-    implementation fg.deobf('curse.maven:performant-354143:3381890')
-
-    implementation fg.deobf('com.yor42:solarapocalypse:1.0')
+    compileOnly fg.deobf('curse.maven:realistic-torches-235729:3191715')
+    compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
 
     // JEI
     if (project.hasProperty('jei_version')) {
