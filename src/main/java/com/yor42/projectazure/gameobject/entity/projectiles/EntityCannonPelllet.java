@@ -11,6 +11,7 @@ import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
@@ -33,13 +34,6 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
         super(registerManager.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
         this.originPos = new BlockPos(shooter.getPosX(), shooter.getPosY(), shooter.getPosZ());
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public EntityCannonPelllet(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ, AmmoProperties properties) {
-        super(registerManager.PROJECTILECANNONSHELL, x, y, z, accelX, accelY, accelZ, worldIn);
-        this.properties = properties;
-        this.originPos = new BlockPos(x,y,z);
     }
 
     public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
@@ -95,6 +89,16 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
             } else target.attackEntityFrom(DamageSources.causeCannonDamage(this, this.func_234616_v_()), (float) (this.properties.getMaxDamage() * 1.2));
         }
         this.remove();
+    }
+
+    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+        Vector3d vector3d = (new Vector3d(x, y, z)).normalize().add(this.rand.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.rand.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.rand.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale((double)velocity);
+        this.setMotion(vector3d);
+        float f = MathHelper.sqrt(horizontalMag(vector3d));
+        this.rotationYaw = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
+        this.rotationPitch = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
+        this.prevRotationYaw = this.rotationYaw;
+        this.prevRotationPitch = this.rotationPitch;
     }
 
     @Override
