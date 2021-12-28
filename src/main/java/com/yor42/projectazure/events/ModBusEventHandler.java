@@ -44,6 +44,7 @@ public class ModBusEventHandler {
                 ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
                 CompoundNBT nbt = cubeStack.getOrCreateTag();
                 nbt.putUniqueId("owner", player.getUniqueID());
+                cubeStack.setTag(nbt);
                 player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), cubeStack);
                 if (isDev) {
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_NAGATO.get()));
