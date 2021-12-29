@@ -1567,16 +1567,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 Main.PROXY.setSharedMob(this);
                 return ActionResultType.SUCCESS;
             }
-            else if(player.getHeldItem(hand).getItem() instanceof ArmorItem){
-                ItemStack stack = player.getHeldItem(hand);
-                ArmorItem item = (ArmorItem) stack.getItem();
+            //armor
+            else if(player.getHeldItem(hand).getItem() instanceof ArmorItem || player.getHeldItem(hand).getItem() instanceof TieredItem){
+                ItemStack stack = player.getHeldItem(hand).copy();
+                @Nullable
+                ArmorItem item = stack.getItem() instanceof ArmorItem? (ArmorItem) stack.getItem():null;
                 EquipmentSlotType type = getSlotForItemStack(stack);
-                if(item.canEquip(stack, type, this)){
+                ItemStack EquippedStack = this.getItemStackFromSlot(type).copy();
+                if(stack.canEquip(type, this)){
                     this.setItemStackToSlot(type, stack);
-                    stack.shrink(1);
-                    return ActionResultType.CONSUME;
+                    if(stack == this.getItemStackFromSlot(type)) {
+                        player.setHeldItem(hand, EquippedStack);
+                        this.playSound(item == null? SoundEvents.ITEM_ARMOR_EQUIP_IRON : item.getArmorMaterial().getSoundEvent(), 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                        return ActionResultType.SUCCESS;
+                    }
                 }
             }
+            //food
             else if(player.getHeldItem(hand).getItem() != registerItems.ORIGINIUM_PRIME.get() && player.getHeldItem(hand).getItem().getFood() != null && this.canEat(player.getHeldItem(hand).getItem().getFood().canEatWhenFull())){
                 ItemStack stack = this.onFoodEaten(this.getEntityWorld(), player.getHeldItem(hand));
                 this.addAffection(0.03);
@@ -1595,6 +1602,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     this.addAffection(effectinstance.getPotion().isBeneficial()? 0.05:-0.075);
                 }
+                this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
                 if(!player.isCreative()) {
                     player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE));
                 }
@@ -1637,6 +1645,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                         heldstacks.shrink(1);
                                     }
                                 }
+                                this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
                             }
                             return ActionResultType.SUCCESS;
                         }
