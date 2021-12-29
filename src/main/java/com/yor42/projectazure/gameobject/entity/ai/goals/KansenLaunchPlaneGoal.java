@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
@@ -53,8 +54,9 @@ public class KansenLaunchPlaneGoal extends Goal {
         }
 
         boolean flag = !this.entity.isSitting()&&this.entity.hasRigging() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive();
+        boolean canFire = this.entity.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
 
-        if (flag){
+        if (flag && canFire){
             boolean flag2 =this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && EntityHasPlanes(this.entity);
 
             if(flag2) {
