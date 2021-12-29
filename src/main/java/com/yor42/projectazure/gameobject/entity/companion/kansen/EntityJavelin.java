@@ -68,7 +68,7 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
                 event.getController().setAnimation(builder.addAnimation("openDoorR", false));
             }
         }
-        else if(this.ShouldPlayReloadAnim()){
+        else if(this.isReloadingMainHand()){
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){

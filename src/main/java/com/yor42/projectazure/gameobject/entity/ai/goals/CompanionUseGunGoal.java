@@ -136,14 +136,14 @@ public class CompanionUseGunGoal extends Goal {
                     this.companion.resetActiveHand();
                     this.companion.setUsingGun(false);
                 } else if (canSee) {
-
+                    this.companion.setUsingGun(true);
                     boolean hasAmmo = getRemainingAmmo(this.getValidGunStack())>0;
-
+                    boolean reloadable = this.companion.HasRightMagazine(((ItemGunBase) this.getValidGunStack().getItem()).getAmmoType());
                     if(hasAmmo && --this.attackTime <= 0) {
                         this.companion.AttackUsingGun(target, this.getValidGunStack(), this.getValidGunHand());
                         this.attackTime = ((ItemGunBase) this.getValidGunStack().getItem()).getMinFireDelay();
                     }
-                    else if(this.getValidGunStack().getItem() instanceof ItemGunBase && getRemainingAmmo(this.getValidGunStack())<=0){
+                    else if(this.getValidGunStack().getItem() instanceof ItemGunBase && getRemainingAmmo(this.getValidGunStack())<=0 && !this.companion.isReloadingMainHand() && reloadable){
                         this.companion.setReloadDelay();
                     }
                 }

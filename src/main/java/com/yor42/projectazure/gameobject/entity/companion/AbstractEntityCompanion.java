@@ -1201,7 +1201,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
 
         ItemStack gunstack = this.getGunStack();
-        if(this.ticksExisted-this.getLastAttackedEntityTime()>200 && gunstack.getItem() instanceof ItemGunBase &&  this.getGunAmmoCount() <= ((ItemGunBase) gunstack.getItem()).getMaxAmmo()){
+        if(this.ticksExisted-this.getLastAttackedEntityTime()>200 && gunstack.getItem() instanceof ItemGunBase &&  this.getGunAmmoCount() <= ((ItemGunBase) gunstack.getItem()).getMaxAmmo() && !this.isReloadingMainHand()){
             this.setReloadDelay();
         }
 
@@ -1501,7 +1501,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return !this.isInWater() && !this.isSitting() && !this.isSleeping() && !this.isFreeRoaming();
     }
 
-    public boolean ShouldPlayReloadAnim(){
+    public boolean isReloadingMainHand(){
         return this.getDataManager().get(RELOAD_TIMER_MAINHAND)>0;
     }
 
@@ -1510,7 +1510,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public int Reload_Anim_Delay(){
-        return 0;
+        return 63;
     }
     @Override
     public void startSleeping(@Nonnull BlockPos pos) {

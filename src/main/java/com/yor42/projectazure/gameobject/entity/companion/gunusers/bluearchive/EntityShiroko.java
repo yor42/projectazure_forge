@@ -60,7 +60,7 @@ public class EntityShiroko extends EntityGunUserBase {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal", true));
             return PlayState.CONTINUE;
         }
-        else if(this.ShouldPlayReloadAnim()){
+        else if(this.isReloadingMainHand()){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_shoot_twohanded_reload"));
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){

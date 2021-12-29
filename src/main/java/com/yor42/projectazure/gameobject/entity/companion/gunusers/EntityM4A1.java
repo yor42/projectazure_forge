@@ -54,7 +54,7 @@ public class EntityM4A1 extends EntityGunUserBase{
             event.getController().setAnimation(builder.addAnimation("heal", true));
             return PlayState.CONTINUE;
         }
-        else if(this.ShouldPlayReloadAnim()){
+        else if(this.isReloadingMainHand()){
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){

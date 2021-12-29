@@ -70,6 +70,7 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
 
         this.blit(matrixStack, this.guiLeft + 93, this.guiTop + 75, 173, 88, (int) (76*(this.affection/this.host.getmaxAffection())), 9);
         this.blit(matrixStack, this.guiLeft+43, this.guiTop+89, 173, 85,  (int) (45*(this.host.getExp()/this.host.getMaxExp())), 2);
+        this.blit(matrixStack, this.guiLeft+176, this.guiTop+7, 173, 109, 42, 78);
         matrixStack.pop();
 
         matrixStack.push();
