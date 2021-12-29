@@ -1431,7 +1431,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             if(this instanceof EntityKansenAircraftCarrier) {
                 this.goalSelector.addGoal(5, new KansenLaunchPlaneGoal((EntityKansenAircraftCarrier) this, 20, 40, 50));
             }
-            this.goalSelector.addGoal(6, new KansenRangedAttackGoal((EntityKansenBase) this, 1.0F, 10,20, 100F, 160F));
+            this.goalSelector.addGoal(6, new KansenRangedAttackGoal((EntityKansenBase) this, 0.8F, 10,20, 80, 100));
         }
         this.goalSelector.addGoal(7, new CompanionUseShieldGoal(this));
         this.goalSelector.addGoal(8, new CompanionHealandEatFoodGoal(this));
@@ -1732,7 +1732,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.navigator = this.swimmingNav;
                 this.moveController = this.SwimController;
                 this.setSwimming(true);
-            } else {
+            }else {
                 this.navigator = this.groundNav;
                 this.moveController = this.MoveController;
                 this.setSwimming(false);

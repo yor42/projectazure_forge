@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -21,6 +22,9 @@ public class KansenRangedAttackGoal extends Goal {
     private final float CannonattackRadius, TorpedoAttackRadius;
     private final float maxCannonAttackDistance;
     private final float maxTorpedoAttackDistance;
+    private boolean strafingClockwise;
+    private boolean strafingBackwards;
+    private int strafingTime = -1;
     private int minAttackInterval;
     int torpedoAttackDelay;
 
@@ -46,7 +50,7 @@ public class KansenRangedAttackGoal extends Goal {
         if(this.entityHost != null) {
             if (target != null && target.isAlive() && this.entityHost.hasRigging()) {
                 boolean isArmed = hasGunOrTorpedo(this.entityHost.getRigging());
-                boolean isSailing = this.entityHost.isSailing();
+                boolean isSailing = this.entityHost.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
                 if(isArmed && isSailing) {
                     this.attackTarget = target;
                     return true;
@@ -86,8 +90,33 @@ public class KansenRangedAttackGoal extends Goal {
 
         if (distance <= (double)this.maxCannonAttackDistance && this.seeTime >= 5) {
             this.entityHost.getNavigator().clearPath();
+            ++this.strafingTime;
         } else {
             this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
+            this.strafingTime = -1;
+        }
+
+        if (this.strafingTime >= 20) {
+            if ((double)this.entityHost.getRNG().nextFloat() < 0.3D) {
+                this.strafingClockwise = !this.strafingClockwise;
+            }
+
+            if ((double)this.entityHost.getRNG().nextFloat() < 0.3D) {
+                this.strafingBackwards = !this.strafingBackwards;
+            }
+
+            this.strafingTime = 0;
+        }
+
+        if (this.strafingTime > -1) {
+            if (distance > (double)(this.maxCannonAttackDistance * 0.75F)) {
+                this.strafingBackwards = false;
+            } else if (distance < (double)(this.maxCannonAttackDistance * 0.25F)) {
+                this.strafingBackwards = true;
+            }
+
+            //this.entityHost.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+            this.entityHost.faceEntity(attackTarget, 30.0F, 30.0F);
         }
 
         this.entityHost.getLookController().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
