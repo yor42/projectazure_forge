@@ -4,6 +4,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
@@ -127,8 +128,9 @@ public class CompanionUseGunGoal extends Goal {
                 this.companion.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
                 this.companion.faceEntity(target, 30.0F, 30.0F);
             }
-            this.companion.getLookController().setLookPositionWithEntity(target, 30.0F, 30.0F);
-
+            else {
+                this.companion.getLookController().setLookPositionWithEntity(target, 30.0F, 30.0F);
+            }
             boolean flag = this.companion.isUsingGun();
 
             if (flag) {

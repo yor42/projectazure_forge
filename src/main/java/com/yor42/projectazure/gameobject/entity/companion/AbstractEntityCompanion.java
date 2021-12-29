@@ -17,6 +17,7 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.intermod.ModCompatibilities;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
@@ -381,12 +382,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public ItemStack getMagazine(enums.AmmoCalibur calibur){
+
+        ItemStack stack2Return = ItemStack.EMPTY;
+        int currentMaxAmmo = 0;
         for(int i=0; i<this.getAmmoStorage().getSlots();i++){
-            if(this.getAmmoStorage().getStackInSlot(i).getItem() instanceof ItemMagazine && ((ItemMagazine) this.getAmmoStorage().getStackInSlot(i).getItem()).getAmmoType() == calibur){
-                return this.getAmmoStorage().getStackInSlot(i);
+            ItemStack candidateStack = this.getAmmoStorage().getStackInSlot(i);
+            if(candidateStack.getItem() instanceof ItemMagazine && ((ItemMagazine) candidateStack.getItem()).getAmmoType() == calibur){
+                int AmmoInCandidate = ItemStackUtils.getRemainingAmmo(candidateStack);
+                if(AmmoInCandidate>currentMaxAmmo) {
+                    stack2Return = candidateStack;
+                    currentMaxAmmo = AmmoInCandidate;
+                }
             }
         }
-        return ItemStack.EMPTY;
+        return stack2Return;
     }
 
     protected boolean isMoving(){
@@ -744,7 +753,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean HasRightMagazine(enums.AmmoCalibur calibur){
-        return this.getMagazine(calibur).getItem() instanceof ItemMagazine;
+        return !this.getMagazine(calibur).isEmpty();
     }
 
     public boolean isSailing(){
@@ -1201,9 +1210,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
 
         ItemStack gunstack = this.getGunStack();
-        if(this.ticksExisted-this.getLastAttackedEntityTime()>200 && gunstack.getItem() instanceof ItemGunBase &&  this.getGunAmmoCount() <= ((ItemGunBase) gunstack.getItem()).getMaxAmmo() && !this.isReloadingMainHand()){
-            this.setReloadDelay();
-        }
 
         if(this.ticksExisted%10==0){
             this.setSneaking((this.getOwner()!= null && this.getOwner().isSneaking()) || this.getEntityWorld().getBlockState(this.getPosition().down()).getBlock() == Blocks.MAGMA_BLOCK);
@@ -1269,22 +1275,24 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(guncandidate instanceof ItemGunBase) {
             ItemGunBase gun = (ItemGunBase) guncandidate;
             ItemStack MagStack = this.getMagazine(((ItemGunBase) this.getGunStack().getItem()).getAmmoType());
-            int i;
-            if (gun.getRoundsPerReload() > 0) {
-                i = Math.min(gun.getRoundsPerReload(), getRemainingAmmo(MagStack));
-            } else {
-                i = Math.min(gun.getMaxAmmo(), getRemainingAmmo(MagStack));
-            }
-            addAmmo(this.getGunStack(), i);
-            MagStack.shrink(1);
-            ItemStack EmptyMag = new ItemStack(((ItemGunBase) this.getGunStack().getItem()).getMagItem());
-            emptyAmmo(EmptyMag);
+            if (!MagStack.isEmpty()) {
+                int i;
+                if (gun.getRoundsPerReload() > 0) {
+                    i = Math.min(gun.getRoundsPerReload(), getRemainingAmmo(MagStack));
+                } else {
+                    i = Math.min(gun.getMaxAmmo(), getRemainingAmmo(MagStack));
+                }
+                addAmmo(this.getGunStack(), i);
+                MagStack.shrink(1);
+                ItemStack EmptyMag = new ItemStack(((ItemGunBase) this.getGunStack().getItem()).getMagItem());
+                emptyAmmo(EmptyMag);
 
-            //Return Empty Magazine for Reloading
-            if (!this.addStackToInventory(EmptyMag)) {
-                if (!this.addStackToAmmoStorage(EmptyMag)) {
-                    ItemEntity itemEntity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), EmptyMag);
-                    this.getEntityWorld().addEntity(itemEntity);
+                //Return Empty Magazine for Reloading by player
+                if (!this.addStackToInventory(EmptyMag)) {
+                    if (!this.addStackToAmmoStorage(EmptyMag)) {
+                        ItemEntity itemEntity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), EmptyMag);
+                        this.getEntityWorld().addEntity(itemEntity);
+                    }
                 }
             }
         }
@@ -1502,7 +1510,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isReloadingMainHand(){
-        return this.getDataManager().get(RELOAD_TIMER_MAINHAND)>0;
+        int remainingTime = this.getDataManager().get(RELOAD_TIMER_MAINHAND);
+        return remainingTime>0;
     }
 
     public void setReloadDelay(){

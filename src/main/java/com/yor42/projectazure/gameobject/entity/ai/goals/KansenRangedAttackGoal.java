@@ -118,9 +118,9 @@ public class KansenRangedAttackGoal extends Goal {
             //this.entityHost.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
             this.entityHost.faceEntity(attackTarget, 30.0F, 30.0F);
         }
-
-        this.entityHost.getLookController().setLookPositionWithEntity(this.attackTarget, 30.0F, 30.0F);
-
+        else {
+            this.entityHost.getLookController().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+        }
         float f = MathHelper.sqrt(distance) / this.CannonattackRadius;
 
         if(--this.CannonAttackDelay == 0 && canSee && distance<=this.maxCannonAttackDistance) {
