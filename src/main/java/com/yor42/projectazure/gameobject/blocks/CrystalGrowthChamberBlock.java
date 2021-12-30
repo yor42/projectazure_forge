@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.blocks;
 
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

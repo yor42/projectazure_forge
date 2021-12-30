@@ -2,10 +2,10 @@ package com.yor42.projectazure.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.client.model.entity.kansen.Z23Model;
-import com.yor42.projectazure.client.renderer.layer.Z23RiggingLayer;
+import com.yor42.projectazure.client.model.entity.kansen.laffeyModel;
+import com.yor42.projectazure.client.renderer.layer.LaffeyRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityZ23;
+import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityLaffey;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.Minecraft;
@@ -23,42 +23,37 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
 
-public class entityZ23Renderer extends GeoEntityRenderer<EntityZ23> {
+public class EntityLaffeyRenderer extends GeoEntityRenderer<EntityLaffey> {
 
     private EntityKansenBase entity;
     private IRenderTypeBuffer rtb;
     private ResourceLocation texture;
 
     @Override
-    public void renderEarly(EntityZ23 animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+    public void renderEarly(EntityLaffey animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         this.rtb = renderTypeBuffer;
         this.entity = animatable;
         this.texture = this.getTextureLocation(animatable);
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
     }
 
-    public entityZ23Renderer(EntityRendererManager renderManager) {
-        super(renderManager, new Z23Model());
-        this.addLayer(new Z23RiggingLayer(this));
+    public EntityLaffeyRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new laffeyModel());
+        this.addLayer(new LaffeyRiggingLayer(this));
         this.shadowSize = 0.4F;
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityZ23 entity) {
-        return new ResourceLocation(Constants.MODID, "textures/entity/entitynimi.png");
+    public ResourceLocation getEntityTexture(EntityLaffey entity) {
+        return new ResourceLocation(Constants.MODID, "textures/entity/modellaffey.png");
     }
 
     @Override
-    public void render(EntityZ23 entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(EntityLaffey entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
         stack.push();
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
         stack.pop();
-    }
-
-    @Override
-    public RenderType getRenderType(EntityZ23 animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.getEntitySmoothCutout(textureLocation);
     }
 
     @Override

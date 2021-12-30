@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.blocks;
 
-import com.yor42.projectazure.gameobject.blocks.AbstractBigMachineBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBoundingBox;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.BlockState;
@@ -9,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 

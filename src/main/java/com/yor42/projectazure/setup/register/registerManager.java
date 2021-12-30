@@ -7,7 +7,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInvent
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive.EntityShiroko;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.*;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
@@ -95,6 +95,9 @@ public class registerManager {
 
     public static final EntityType<EntityZ23> ENTITYTYPE_Z23 = EntityType.Builder.create(EntityZ23::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entityz23").toString());
     public static final RegistryObject<EntityType<EntityZ23>> Z23 = ENTITIES.register("entityz23", () -> ENTITYTYPE_Z23);
+
+    public static final EntityType<EntityLaffey> ENTITYTYPE_LAFFEY = EntityType.Builder.create(EntityLaffey::new, EntityClassification.CREATURE).size(0.572F, 1.525F).build(ModResourceLocation("entitylaffey").toString());
+    public static final RegistryObject<EntityType<EntityLaffey>> LAFFEY = ENTITIES.register("entitylaffey", () -> ENTITYTYPE_LAFFEY);
 
     public static final EntityType<EntityGangwon> ENTITYTYPE_GANGWON = EntityType.Builder.create(EntityGangwon::new, EntityClassification.CREATURE).size(0.572F, 1.35F).build(ModResourceLocation("entitygandwon").toString());
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> ENTITYTYPE_GANGWON);

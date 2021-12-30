@@ -19,6 +19,8 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
+import javax.annotation.Nonnull;
+
 public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable, IAzurLaneKansen {
 
     public EntityJavelin(EntityType<? extends EntityJavelin> type, World worldIn) {
@@ -156,6 +158,7 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
                 ;
     }
 
+    @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_4;

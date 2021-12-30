@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;

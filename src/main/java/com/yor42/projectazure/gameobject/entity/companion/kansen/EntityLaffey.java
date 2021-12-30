@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion.kansen;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -22,8 +21,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 
-public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKansen {
-    public EntityNagato(EntityType<? extends TameableEntity> type, World worldIn) {
+public class EntityLaffey extends EntityKansenDestroyer{
+    public EntityLaffey(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -33,34 +32,8 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleeping_arm", true));
-            return PlayState.CONTINUE;
-        }
-
-        if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat_arm", true));
-            return PlayState.CONTINUE;
-        }
-
-        if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
-            }
-            else{
-                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
-            }
-            return PlayState.CONTINUE;
-        }
-        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
-            }
-            return PlayState.CONTINUE;
-        }
-        else if(this.isSwingInProgress){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+        if(this.isSwingInProgress){
+            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
@@ -70,6 +43,33 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             else if(this.getActiveHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
+            event.getController().setAnimation(builder.addAnimation("pat", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSitting() || this.getRidingEntity() != null) {
+            event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOpeningDoor()){
+            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
+            }
+            else{
+                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
+            }
+        }
+        else if(this.isReloadingMainHand()){
+            event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
+            return PlayState.CONTINUE;
+        }else if(this.isUsingGun()){
+            event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }
         else if(this.isActiveItemStackBlocking()){
@@ -83,31 +83,25 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
-
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        else if (isMoving()) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("sail_arm", true));
+                event.getController().setAnimation(builder.addAnimation("sail_hand", true));
             }
             else if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walking_arm", true));
+                event.getController().setAnimation(builder.addAnimation("walk_arm", true));
             }
             return PlayState.CONTINUE;
         }
-        if(this.isSitting()){
-            event.getController().setAnimation(builder.addAnimation("sit_start_arm").addAnimation("idle_sit", true));
-        }
-        else {
-            if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-                if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
-                    event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
-                }
-                return PlayState.CONTINUE;
+        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
-            event.getController().setAnimation(builder.addAnimation("idle", true));
+            return PlayState.CONTINUE;
         }
+        event.getController().setAnimation(builder.addAnimation("idle", true));
         return PlayState.CONTINUE;
     }
 
@@ -118,14 +112,17 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
-
         if(Minecraft.getInstance().isGamePaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSitting() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("sit_start").addAnimation("sit", true));
+        if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSitting() || this.getRidingEntity() != null){
+            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
@@ -140,29 +137,28 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
                 event.getController().setAnimation(builder.addAnimation("run", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walking_leg", true));
+                event.getController().setAnimation(builder.addAnimation("walk", true));
             }
             return PlayState.CONTINUE;
         }
-        event.getController().markNeedsReload();
-        return PlayState.STOP;
+        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        return PlayState.CONTINUE;
+    }
+
+    @Nonnull
+    @Override
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.STAR_4;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.NagatoMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.NagatoSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.NagatoHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.NagatoAttackDamage.get())
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.LaffeyMovementSpeed.get())
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.LaffeySwimSpeed.get())
+                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.LaffeyHealth.get())
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.LaffeyAttackDamage.get())
                 ;
     }
-
-    @Nonnull
-    @Override
-    public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_5;
-    }
-
 }

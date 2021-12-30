@@ -1,8 +1,7 @@
-package com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive;
+package com.yor42.projectazure.gameobject.entity.companion.gunusers;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemMissleDrone;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
@@ -26,6 +25,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+
+import javax.annotation.Nonnull;
 
 public class EntityShiroko extends EntityGunUserBase {
     @Override
@@ -139,6 +140,7 @@ public class EntityShiroko extends EntityGunUserBase {
         return 63;
     }
 
+    @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_5;

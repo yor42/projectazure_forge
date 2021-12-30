@@ -28,6 +28,8 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
+import javax.annotation.Nonnull;
+
 public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAzurLaneKansen {
 
     protected static final DataParameter<Integer> INVINCIBLE_TIMER = EntityDataManager.createKey(EntityEnterprise.class, DataSerializers.VARINT);
@@ -160,6 +162,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         return PlayState.CONTINUE;
     }
 
+    @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_5;

@@ -26,6 +26,8 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.Nonnull;
+
 public class EntityChen extends AbstractSwordUserBase implements IArknightOperator {
     @Override
     public enums.EntityType getEntityType() {
@@ -193,6 +195,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
         NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this));
     }
 
+    @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_6;

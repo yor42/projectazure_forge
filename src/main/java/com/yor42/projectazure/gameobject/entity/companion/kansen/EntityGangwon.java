@@ -19,6 +19,8 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
+import javax.annotation.Nonnull;
+
 public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
 
     public EntityGangwon(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -169,6 +171,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
     }
 
     //Warship girls doesnt have rarity system. WHAT?
+    @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_4;

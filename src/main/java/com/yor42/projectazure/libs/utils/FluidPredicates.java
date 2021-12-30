@@ -1,7 +1,6 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.setup.register.registerFluids;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.function.Predicate;

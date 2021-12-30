@@ -28,6 +28,21 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue AyanamiAttackDamage;
         public final ForgeConfigSpec.DoubleValue AyanamiMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue JavelinHealth;
+        public final ForgeConfigSpec.DoubleValue JavelinSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue JavelinAttackDamage;
+        public final ForgeConfigSpec.DoubleValue JavelinMovementSpeed;
+
+        public final ForgeConfigSpec.DoubleValue Z23Health;
+        public final ForgeConfigSpec.DoubleValue Z23SwimSpeed;
+        public final ForgeConfigSpec.DoubleValue Z23AttackDamage;
+        public final ForgeConfigSpec.DoubleValue Z23MovementSpeed;
+
+        public final ForgeConfigSpec.DoubleValue LaffeyHealth;
+        public final ForgeConfigSpec.DoubleValue LaffeySwimSpeed;
+        public final ForgeConfigSpec.DoubleValue LaffeyAttackDamage;
+        public final ForgeConfigSpec.DoubleValue LaffeyMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue GangwonHealth;
         public final ForgeConfigSpec.DoubleValue GangwonSwimSpeed;
         public final ForgeConfigSpec.DoubleValue GangwonAttackDamage;
@@ -47,6 +62,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue ShirokoSwimSpeed;
         public final ForgeConfigSpec.DoubleValue ShirokoAttackDamage;
         public final ForgeConfigSpec.DoubleValue ShirokoMovementSpeed;
+
+        public final ForgeConfigSpec.DoubleValue M4A1Health;
+        public final ForgeConfigSpec.DoubleValue M4A1SwimSpeed;
+        public final ForgeConfigSpec.DoubleValue M4A1AttackDamage;
+        public final ForgeConfigSpec.DoubleValue M4A1MovementSpeed;
 
         public final ForgeConfigSpec.DoubleValue ChenHealth;
         public final ForgeConfigSpec.DoubleValue ChenSwimSpeed;
@@ -117,11 +137,26 @@ public class PAConfig {
             EnablePVP = builder.define("Enable PVP Combat", false);
             EnableShipLandCombat = builder.define("Enable Ship Weapons on land", true);
 
-            builder.pop().push("Entity Stat").comment("Azur lane");
+            builder.pop().push("Entity Stat").push("Azur lane");
             AyanamiHealth = builder.defineInRange("Max Health of Ayanami", 40D, 1, 1024);
             AyanamiSwimSpeed = builder.defineInRange("Swim Speed of Ayanami", 2.5, 0, 1024);
             AyanamiAttackDamage = builder.defineInRange("Attack Damage of Ayanami", 2.0F, 0, 1024);
             AyanamiMovementSpeed = builder.defineInRange("Movement speed of Ayanami", 0.35F, 0, 2);
+
+            JavelinHealth = builder.defineInRange("Max Health of Javelin", 40D, 1, 1024);
+            JavelinSwimSpeed = builder.defineInRange("Swim Speed of Javelin", 2.5, 0, 1024);
+            JavelinAttackDamage = builder.defineInRange("Attack Damage of Javelin", 2.0F, 0, 1024);
+            JavelinMovementSpeed = builder.defineInRange("Movement speed of Javelin", 0.35F, 0, 2);
+
+            Z23Health = builder.defineInRange("Max Health of Z23", 40D, 1, 1024);
+            Z23SwimSpeed = builder.defineInRange("Swim Speed of Z23", 2.5, 0, 1024);
+            Z23AttackDamage = builder.defineInRange("Attack Damage of Z23", 2.0F, 0, 1024);
+            Z23MovementSpeed = builder.defineInRange("Movement speed of Z23", 0.35F, 0, 2);
+
+            LaffeyHealth = builder.defineInRange("Max Health of Laffey", 40D, 1, 1024);
+            LaffeySwimSpeed = builder.defineInRange("Swim Speed of Laffey", 2.5, 0, 1024);
+            LaffeyAttackDamage = builder.defineInRange("Attack Damage of Laffey", 2.0F, 0, 1024);
+            LaffeyMovementSpeed = builder.defineInRange("Movement speed of Laffey", 0.35F, 0, 2);
 
             EnterpriseHealth = builder.defineInRange("Max Health of Enterprise", 30D, 1, 1024);
             EnterpriseSwimSpeed = builder.defineInRange("Swim Speed of Enterprise", 2.5, 0, 1024);
@@ -133,25 +168,31 @@ public class PAConfig {
             NagatoAttackDamage = builder.defineInRange("Attack Damage of Nagato", 2.0F, 0, 1024);
             NagatoMovementSpeed = builder.defineInRange("Movement speed of Nagato", 0.35F, 0, 2);
 
-            builder.comment("Blue Archive");
+            builder.pop().push("Blue Archive");
             ShirokoHealth = builder.defineInRange("Max Health of Shiroko", 40D, 1, 1024);
             ShirokoSwimSpeed = builder.defineInRange("Swim Speed of Shiroko", 2.5, 0, 1024);
             ShirokoAttackDamage = builder.defineInRange("Attack Damage of Shiroko", 2.0F, 0, 1024);
             ShirokoMovementSpeed = builder.defineInRange("Movement speed of Shiroko", 0.4F, 0, 2);
 
-            builder.comment("Arknights");
+            builder.pop().push("Arknights");
             ChenHealth = builder.defineInRange("Max Health of Ch'en", 25D, 1, 1024);
             ChenSwimSpeed = builder.defineInRange("Swim Speed of Ch'en", 2.5, 0, 1024);
             ChenAttackDamage = builder.defineInRange("Attack Damage of Ch'en", 2.0F, 0, 1024);
             ChenMovementSpeed = builder.defineInRange("Movement speed of Ch'en", 0.4F, 0, 2);
 
-            builder.comment("Warship Girls");
+            builder.pop().push("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);
             GangwonSwimSpeed = builder.defineInRange("Swim Speed of Gangwon", 2.5, 0, 1024);
             GangwonAttackDamage = builder.defineInRange("Attack Damage of Gangwon", 2.0F, 0, 1024);
             GangwonMovementSpeed = builder.defineInRange("Movement speed of Gangwon", 0.35F, 0, 2);
 
-            builder.pop().push("Gacha Roll RNG").comment("Chance of Roll per rarity.").comment("1 star is most common, and 6 star is most rare.").comment("Higher the number is, Commoner the item is.");
+            builder.pop().push("Girl's Frontline");
+            M4A1Health = builder.defineInRange("Max Health of M4A1", 40D, 1, 1024);
+            M4A1SwimSpeed = builder.defineInRange("Swim Speed of M4A1", 2.5, 0, 1024);
+            M4A1AttackDamage = builder.defineInRange("Attack Damage of M4A1", 2.0F, 0, 1024);
+            M4A1MovementSpeed = builder.defineInRange("Movement speed of M4A1", 0.35F, 0, 2);
+
+            builder.pop().pop().push("Gacha Roll RNG").comment("Chance of Roll per rarity.").comment("1 star is most common, and 6 star is most rare.").comment("Higher the number is, Commoner the item is.");
             Star_1_Chance =  builder.defineInRange("1 Star Rarity", 60D, 0, Double.MAX_VALUE);
             Star_2_Chance = builder.defineInRange("2 Star Rarity", 20D, 0, Double.MAX_VALUE);
             Star_3_Chance = builder.defineInRange("3 Star Rarity", 10D, 0, Double.MAX_VALUE);

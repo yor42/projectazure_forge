@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.model.entity.gunUser;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.bluearchive.EntityShiroko;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;

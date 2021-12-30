@@ -19,6 +19,8 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
+import javax.annotation.Nonnull;
+
 public class EntityZ23 extends EntityKansenDestroyer{
     public EntityZ23(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -68,6 +70,10 @@ public class EntityZ23 extends EntityKansenDestroyer{
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isActiveItemStackBlocking()){
+            event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
         else if(this.isGettingHealed()){
@@ -139,6 +145,7 @@ public class EntityZ23 extends EntityKansenDestroyer{
         return PlayState.CONTINUE;
     }
 
+    @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
         return enums.CompanionRarity.STAR_4;
@@ -148,10 +155,10 @@ public class EntityZ23 extends EntityKansenDestroyer{
     {
         return MobEntity.func_233666_p_()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.AyanamiMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.AyanamiSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.AyanamiHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.AyanamiAttackDamage.get())
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.Z23MovementSpeed.get())
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.Z23SwimSpeed.get())
+                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.Z23Health.get())
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.Z23AttackDamage.get())
                 ;
     }
 

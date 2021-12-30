@@ -1,7 +1,5 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import net.minecraft.item.ItemStack;
-
 public interface IMultiInventory {
 
     int getInventoryCount();

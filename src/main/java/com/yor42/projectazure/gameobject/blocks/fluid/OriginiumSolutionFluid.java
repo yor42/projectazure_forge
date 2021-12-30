@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
 import com.yor42.projectazure.setup.register.registerBlocks;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
