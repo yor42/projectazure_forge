@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
@@ -12,6 +13,7 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBas
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
+import com.yor42.projectazure.gameobject.items.ItemCommandStick;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -67,6 +69,8 @@ import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.NonNullConsumer;
+import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -87,6 +91,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static net.minecraft.util.Hand.MAIN_HAND;
@@ -583,7 +589,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setHomeposAndDistance(BlockPos pos, float validDistance){
-        this.setHOMEPOS(pos);
+        this.getDataManager().set(HOMEPOS, Optional.of(pos));
         this.dataManager.set(VALID_HOME_DISTANCE, validDistance);
     }
 
@@ -618,8 +624,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.getDataManager().get(HOMEPOS);
     }
 
-    public void setHOMEPOS(BlockPos pos){
-        this.getDataManager().set(HOMEPOS, Optional.of(pos));
+    public void setHomePos(BlockPos pos){
+        this.setHomeposAndDistance(pos, 64);
     }
 
     @Override
@@ -1090,6 +1096,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void livingTick() {
         super.livingTick();
+
+        if(this.getOwner() != null && this.getOwner() instanceof PlayerEntity && this.isAlive()){
+            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
+            if(!cap.getCompanionList().contains(this)){
+                cap.addCompanion(this);
+            }
+        }
+
         if (this.world.getDifficulty() == Difficulty.PEACEFUL && this.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION)) {
             if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 20 == 0) {
                 this.heal(1.0F);
@@ -1105,7 +1119,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         if(!this.getEntityWorld().isRemote() && this.ticksExisted % 200 == 0&& !this.getHOMEPOS().isPresent()){
             Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getEntityWorld(), this);
-            optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 20));
+            optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 64));
         }
 
         if(this.isPotionActive(Effects.HUNGER)){
@@ -1545,6 +1559,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void setTamedBy(PlayerEntity player) {
         this.setTamed(true);
         this.setOwnerId(player.getUniqueID());
+        ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(player);
+        capability.addCompanion(this);
         //Triggering Tame Animal goal at the beginning of the world doesn't feel right.
     }
     @Override
@@ -1562,143 +1578,178 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Nonnull
     @Override
     public ActionResultType applyPlayerInteraction(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
-        if(this.isOwner(player) && !(this instanceof EntityKansenBase && player.getHeldItem(hand).getItem() instanceof ItemRiggingBase)){
 
-            if(this.getRidingEntity() != null){
+        ItemStack heldstacks = player.getHeldItemMainhand();
+        Item HeldItem = heldstacks.getItem();
+
+        if(this.isOwner(player) && !(this instanceof EntityKansenBase && HeldItem instanceof ItemRiggingBase)) {
+
+            if (this.getRidingEntity() != null) {
                 this.stopRiding();
             }
 
-            if(player.isSneaking() && !(player.getHeldItem(hand).getItem() instanceof ItemBandage)){
-                if(!this.world.isRemote) {
-                    this.openGUI((ServerPlayerEntity) player);
-                }
-                Main.PROXY.setSharedMob(this);
-                return ActionResultType.SUCCESS;
-            }
-            //armor
-            else if(player.getHeldItem(hand).getItem() instanceof ArmorItem || player.getHeldItem(hand).getItem() instanceof TieredItem){
+            if (HeldItem instanceof ArmorItem || HeldItem instanceof TieredItem) {
                 ItemStack stack = player.getHeldItem(hand).copy();
                 @Nullable
-                ArmorItem item = stack.getItem() instanceof ArmorItem? (ArmorItem) stack.getItem():null;
+                ArmorItem item = stack.getItem() instanceof ArmorItem ? (ArmorItem) stack.getItem() : null;
                 EquipmentSlotType type = getSlotForItemStack(stack);
                 ItemStack EquippedStack = this.getItemStackFromSlot(type).copy();
-                if(stack.canEquip(type, this)){
+                if (stack.canEquip(type, this)) {
                     this.setItemStackToSlot(type, stack);
-                    if(stack == this.getItemStackFromSlot(type)) {
+                    if (stack == this.getItemStackFromSlot(type)) {
                         player.setHeldItem(hand, EquippedStack);
-                        this.playSound(item == null? SoundEvents.ITEM_ARMOR_EQUIP_IRON : item.getArmorMaterial().getSoundEvent(), 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                        this.playSound(item == null ? SoundEvents.ITEM_ARMOR_EQUIP_IRON : item.getArmorMaterial().getSoundEvent(), 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
                         return ActionResultType.SUCCESS;
                     }
                 }
             }
             //food
-            else if(player.getHeldItem(hand).getItem() != registerItems.ORIGINIUM_PRIME.get() && player.getHeldItem(hand).getItem().getFood() != null && this.canEat(player.getHeldItem(hand).getItem().getFood().canEatWhenFull())){
+            else if (HeldItem != registerItems.ORIGINIUM_PRIME.get() && HeldItem.getFood() != null && this.canEat(HeldItem.getFood().canEatWhenFull())) {
                 ItemStack stack = this.onFoodEaten(this.getEntityWorld(), player.getHeldItem(hand));
                 this.addAffection(0.03);
-                if(!player.isCreative()){
+                if (!player.isCreative()) {
                     player.setHeldItem(hand, stack);
                 }
                 return ActionResultType.SUCCESS;
-            }
-            else if(player.getHeldItem(hand).getItem() instanceof PotionItem){
+                //Potion
+            } else if (HeldItem instanceof PotionItem) {
                 ItemStack stack = player.getHeldItem(hand);
-                for(EffectInstance effectinstance : PotionUtils.getEffectsFromStack(stack)) {
+                for (EffectInstance effectinstance : PotionUtils.getEffectsFromStack(stack)) {
                     if (effectinstance.getPotion().isInstant()) {
                         effectinstance.getPotion().affectEntity(player, player, this, effectinstance.getAmplifier(), 1.0D);
                     } else {
                         this.addPotionEffect(new EffectInstance(effectinstance));
                     }
-                    this.addAffection(effectinstance.getPotion().isBeneficial()? 0.05:-0.075);
+                    this.addAffection(effectinstance.getPotion().isBeneficial() ? 0.05 : -0.075);
                 }
                 this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
-                if(!player.isCreative()) {
+                if (!player.isCreative()) {
                     player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE));
                 }
                 return ActionResultType.SUCCESS;
-            }
-            else{
-
-                ItemStack heldstacks = player.getHeldItemMainhand();
-
-                if(heldstacks != ItemStack.EMPTY) {
-                    if (heldstacks.getItem() == registerItems.OATHRING.get()) {
-                        if (this.getAffection() < 100 && !player.isCreative()) {
-                            player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUniqueID());
-                            return ActionResultType.FAIL;
+            } else if (heldstacks.getItem() == registerItems.OATHRING.get()) {
+                if (this.getAffection() < 100 && !player.isCreative()) {
+                    player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUniqueID());
+                    return ActionResultType.FAIL;
+                } else {
+                    if (!this.isOathed()) {
+                        if (player.isCreative()) {
+                            this.setAffection(100);
+                        } else {
+                            player.getHeldItem(hand).shrink(1);
                         }
-                        else {
-                            if (!this.isOathed()) {
-                                if (player.isCreative()) {
-                                    this.setAffection(100);
-                                } else {
-                                    player.getHeldItem(hand).shrink(1);
-                                }
-                                this.setOathed(true);
-                                return ActionResultType.CONSUME;
-                            }
-                        }
-                    }
-                    else if(heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()){
-                        this.setMorale(150);
-                        if(!player.isCreative()){
-                            heldstacks.shrink(1);
-                        }
-                    }
-                    else if(heldstacks.getItem() instanceof ItemBandage){
-                        if(this.getHealth()<this.getMaxHealth()){
-                            if(!this.world.isRemote) {
-                                this.doHeal(1.0f);
-                                if (!player.isCreative()) {
-                                    if (heldstacks.attemptDamageItem(1, MathUtil.getRand(), (ServerPlayerEntity) player)) {
-                                        heldstacks.shrink(1);
-                                    }
-                                }
-                                this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
-                            }
-                            return ActionResultType.SUCCESS;
-                        }
-                    }
-                }else{
-
-                    //check is player is looking at Head
-                    Vector3d PlayerLook = player.getLook(1.0F).normalize();
-                    float eyeHeight = (float) this.getPosYEye();
-
-
-                    Vector3d EyeDelta = new Vector3d(this.getPosX() - player.getPosX(), eyeHeight - player.getPosYEye(), this.getPosZ() - player.getPosZ());
-                    double EyeDeltaLength = EyeDelta.length();
-                    EyeDelta = EyeDelta.normalize();
-                    double EyeCheckFinal = PlayerLook.dotProduct(EyeDelta);
-
-                    //check is player is looking at leg
-                    Vector3d LegDelta = new Vector3d(this.getPosX() - player.getPosX(), this.getPosY()+0.4 - player.getPosYEye(), this.getPosZ() - player.getPosZ());
-                    double LegDeltaLength = LegDelta.length();
-                    LegDelta = LegDelta.normalize();
-                    double LegCheckFinal = PlayerLook.dotProduct(LegDelta);
-
-                    if(this.isSleeping()){
-                        if(this.forceWakeupCounter>4){
-                            this.forceWakeup();
-                        }
-                        else{
-                            this.forceWakeupCounter++;
-                            this.forcewakeupExpireTimer = 20;
-                        }
-                        return ActionResultType.SUCCESS;
-                    }
-                    else if (EyeCheckFinal > 1.0D - 0.025D / EyeDeltaLength && player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player) < 4.0F) {
-                        if(this.getEntityWorld().isRemote()){
-                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getEntityId(), EntityInteractionPacket.EntityBehaviorType.PAT, true));
-                        }
-                        return ActionResultType.SUCCESS;
-                    } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
-                        this.SwitchSittingStatus();
-                        return ActionResultType.SUCCESS;
-                        //this.func_233687_w_(!this.isSitting());
+                        this.setOathed(true);
+                        return ActionResultType.CONSUME;
                     }
                 }
-                return ActionResultType.FAIL;
+            } else if (heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()) {
+                this.setMorale(150);
+                if (!player.isCreative()) {
+                    heldstacks.shrink(1);
+                }
+            } else if (heldstacks.getItem() instanceof ItemBandage) {
+                if (this.getHealth() < this.getMaxHealth()) {
+                    if (!this.world.isRemote) {
+                        this.doHeal(1.0f);
+                        if (!player.isCreative()) {
+                            if (heldstacks.attemptDamageItem(1, MathUtil.getRand(), (ServerPlayerEntity) player)) {
+                                heldstacks.shrink(1);
+                            }
+                        }
+                        this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                    }
+                    return ActionResultType.SUCCESS;
+                }
+            } else if (heldstacks.getItem() instanceof ItemCommandStick) {
+                CompoundNBT compound = heldstacks.getOrCreateTag();
+                if (player.isSneaking()) {
+                    if(!this.getEntityWorld().isRemote()) {
+                        if (compound.contains("BedX") && compound.contains("BedY") && compound.contains("BedZ")) {
+                            BlockPos BedPos = new BlockPos(compound.getInt("BedX"), compound.getInt("BedY"), compound.getInt("BedZ"));
+                            if (this.getEntityWorld().getBlockState(BedPos).isBed(this.getEntityWorld(), BedPos, this)) {
+                                if(this.getOwner() instanceof PlayerEntity) {
+
+                                    ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity)this.getOwner());
+                                    boolean isBedDuplicate = false;
+                                    @Nullable
+                                    AbstractEntityCompanion duplicatedComp = null;
+                                    for(AbstractEntityCompanion companion:cap.getCompanionList()){
+                                        if(companion.getDataManager().get(HOMEPOS).isPresent()){
+                                            BlockPos pos = companion.getDataManager().get(HOMEPOS).get();
+                                            if(pos.getX() == compound.getInt("BedX") && pos.getY() == compound.getInt("BedY") && pos.getZ() == compound.getInt("BedZ")){
+                                                isBedDuplicate = true;
+                                                duplicatedComp = companion;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if(duplicatedComp == this){
+                                        player.sendStatusMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_same_companion_same_bed", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]"), true);
+                                    }
+                                    else if(isBedDuplicate){
+                                        player.sendStatusMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed_duplicate", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]", this.getDisplayName(), duplicatedComp.getDisplayName()), true);
+                                    }
+                                    else {
+                                        this.clearHomePos();
+                                        this.setHomePos(BedPos);
+                                        player.sendStatusMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_applied", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]", this.getDisplayName()), true);
+                                    }
+                                }
+                            } else {
+                                player.sendStatusMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed", "["+ BedPos.getX()+", "+ BedPos.getY()+", "+ BedPos.getZ() +"]", this.getDisplayName()), true);
+                            }
+                        } else if (this.hasHomePos()) {
+                            this.clearHomePos();
+                            player.sendStatusMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_cleared", this.getDisplayName()), true);
+                        }
+                    }
+                    return ActionResultType.CONSUME;
+                }
+            } else {
+                if(player.isSneaking()) {
+                    if (!this.world.isRemote) {
+                        this.openGUI((ServerPlayerEntity) player);
+                    }
+                    Main.PROXY.setSharedMob(this);
+                    return ActionResultType.SUCCESS;
+                }
+
+                //check is player is looking at Head
+                Vector3d PlayerLook = player.getLook(1.0F).normalize();
+                float eyeHeight = (float) this.getPosYEye();
+
+
+                Vector3d EyeDelta = new Vector3d(this.getPosX() - player.getPosX(), eyeHeight - player.getPosYEye(), this.getPosZ() - player.getPosZ());
+                double EyeDeltaLength = EyeDelta.length();
+                EyeDelta = EyeDelta.normalize();
+                double EyeCheckFinal = PlayerLook.dotProduct(EyeDelta);
+
+                //check is player is looking at leg
+                Vector3d LegDelta = new Vector3d(this.getPosX() - player.getPosX(), this.getPosY() + 0.4 - player.getPosYEye(), this.getPosZ() - player.getPosZ());
+                double LegDeltaLength = LegDelta.length();
+                LegDelta = LegDelta.normalize();
+                double LegCheckFinal = PlayerLook.dotProduct(LegDelta);
+
+                if (this.isSleeping()) {
+                    if (this.forceWakeupCounter > 4) {
+                        this.forceWakeup();
+                    } else {
+                        this.forceWakeupCounter++;
+                        this.forcewakeupExpireTimer = 20;
+                    }
+                    return ActionResultType.SUCCESS;
+                } else if (EyeCheckFinal > 1.0D - 0.025D / EyeDeltaLength && player.getHeldItemMainhand() == ItemStack.EMPTY && getDistanceSq(player) < 4.0F) {
+                    if (this.getEntityWorld().isRemote()) {
+                        Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getEntityId(), EntityInteractionPacket.EntityBehaviorType.PAT, true));
+                    }
+                    return ActionResultType.SUCCESS;
+                } else if (LegCheckFinal > 1.0D - 0.015D / LegDeltaLength) {
+                    this.SwitchSittingStatus();
+                    return ActionResultType.SUCCESS;
+                    //this.func_233687_w_(!this.isSitting());
+                }
             }
+            return ActionResultType.FAIL;
         }
         else{
             if(player.getHeldItemMainhand().getItem() == registerItems.Rainbow_Wisdom_Cube.get()&&!this.isTamed()){
@@ -1708,6 +1759,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
         return super.applyPlayerInteraction(player, vec, hand);
+    }
+
+    private boolean hasHomePos() {
+        return this.getDataManager().get(HOMEPOS).isPresent() && this.getDataManager().get(VALID_HOME_DISTANCE)>0;
     }
 
     private void SwitchSittingStatus() {
@@ -1778,6 +1833,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 orbEntity.remove();
             }
         }
+    }
+
+    @Override
+    public boolean canBeLeashedTo(PlayerEntity player) {
+        if(this.getOwner() == player){
+            player.sendStatusMessage(new TranslationTextComponent("message.easteregg.leash"), true);
+        }
+        return false;
+    }
+
+    @Override
+    protected void setDead() {
+        if(this.getOwner() != null && this.getOwner() instanceof PlayerEntity){
+            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
+            cap.removeCompanion(this);
+        }
+        super.setDead();
     }
 
     protected abstract void openGUI(ServerPlayerEntity player);

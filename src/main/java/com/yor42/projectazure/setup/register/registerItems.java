@@ -263,6 +263,8 @@ public class registerItems {
             .rarity(Rarity.EPIC)
             .maxStackSize(1)));
 
+    public static final RegistryObject<Item> COMMANDING_STICK = registerManager.ITEMS.register("commanding_stick", ItemCommandStick::new);
+
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = registerManager.ITEMS.register("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
     .setISTER(() -> DDDefaultRiggingRenderer::new)
     .group(PA_WEAPONS).maxStackSize(1), 500));

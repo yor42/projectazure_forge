@@ -1,17 +1,24 @@
 package com.yor42.projectazure.gameobject.capability;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import java.util.ArrayList;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -19,6 +26,7 @@ public class ProjectAzurePlayerCapability {
 
     public int OffHandFireDelay = 0;
     public int MainHandFireDelay = 0;
+    public ArrayList<AbstractEntityCompanion> companionList = new ArrayList<>();
 
     public PlayerEntity player;
 
@@ -59,12 +67,24 @@ public class ProjectAzurePlayerCapability {
         }
     }
 
+    public ArrayList<AbstractEntityCompanion> getCompanionList(){
+        return this.companionList;
+    }
+
+    public void addCompanion(AbstractEntityCompanion companion){
+        this.companionList.add(companion);
+    }
+
+    public void removeCompanion(AbstractEntityCompanion companion){
+        this.companionList.remove(companion);
+    }
+
     public int getDelay(Hand handIn){
         return handIn == Hand.MAIN_HAND? this.getMainHandFireDelay():getOffHandFireDelay();
     }
 
     public static ProjectAzurePlayerCapability getCapability(@Nonnull PlayerEntity player){
-        return (ProjectAzurePlayerCapability) player.getCapability(PA_PLAYER_CAPABILITY).orElseThrow(() -> new IllegalStateException("Failed to get PA Player Capability for player " + player));
+        return player.getCapability(PA_PLAYER_CAPABILITY).orElseThrow(() -> new IllegalStateException("Failed to get PA Player Capability for player " + player));
     }
 
     public static LazyOptional<ProjectAzurePlayerCapability> getOptional(@Nonnull PlayerEntity entity){
@@ -103,21 +123,30 @@ public class ProjectAzurePlayerCapability {
         CompoundNBT nbt = new CompoundNBT();
         nbt.putInt("mainHandDelay", this.getMainHandFireDelay());
         nbt.putInt("offHandDelay", this.getOffHandFireDelay());
-        nbt.put("player", this.player.serializeNBT());
+        ListNBT entityList = new ListNBT();
+        for(AbstractEntityCompanion companion: this.companionList){
+            entityList.add(companion.serializeNBT());
+        }
+        nbt.put("companions", entityList);
         return nbt;
     }
 
     public void deserializeNBT(CompoundNBT compound){
-        this.player.deserializeNBT(compound.getCompound("player"));
         this.setMainHandFireDelay(compound.getInt("mainHandDelay"));
         this.setMainHandFireDelay(compound.getInt("offHandDelay"));
+        ListNBT entities = compound.getList("companions", 0);
+        for(int i=0; i<entities.size(); i++){
+            CompoundNBT nbt = entities.getCompound(i);
+            World world = this.player.getEntityWorld();
+            if(!world.isRemote()){
+                ServerWorld server = (ServerWorld) world;
+                Entity entity = server.getEntityByUuid(nbt.getUniqueId("UUID"));
+                if(entity instanceof AbstractEntityCompanion && ((AbstractEntityCompanion)entity).getOwner() == this.player){
+                    this.companionList.add((AbstractEntityCompanion) entity);
+                }
+            }
+        }
     }
-
-    public INBT Savedata(INBT compound){
-        return compound;
-    }
-
-    public void Loaddata(INBT compound){}
 
     public static void registerCapability() {
         CapabilityManager.INSTANCE.register(ProjectAzurePlayerCapability.class, new Inventory(), ProjectAzurePlayerCapability::new);
@@ -128,14 +157,13 @@ public class ProjectAzurePlayerCapability {
         @Nullable
         @Override
         public INBT writeNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side) {
-            CompoundNBT nbt = new CompoundNBT();
-            return instance.Savedata(nbt);
+            return instance.serializeNBT();
 
         }
 
         @Override
         public void readNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side, INBT nbt) {
-            instance.Loaddata(nbt);
+            instance.deserializeNBT((CompoundNBT) nbt);
         }
     }
 

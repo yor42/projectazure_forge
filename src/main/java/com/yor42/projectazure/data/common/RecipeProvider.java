@@ -21,6 +21,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.ForgeItemTagsProvider;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -387,6 +388,15 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .patternLine("MIM")
                 .patternLine("PPG")
                 .addCriterion("has_parts", hasItem(registerItems.MECHANICAL_PARTS.get()))
+                .build(consumer);
+
+        ShapedRecipeBuilder.shapedRecipe(registerItems.COMMANDING_STICK.get(), 1)
+                .key('S', Items.STICK)
+                .key('B', Tags.Items.DYES_BLACK)
+                .patternLine("  S")
+                .patternLine(" S ")
+                .patternLine("B  ")
+                .addCriterion("has_sticc", hasItem(Items.STICK))
                 .build(consumer);
 
         ShapedRecipeBuilder.shapedRecipe(registerItems.PISTOL_GRIP.get(), 1)

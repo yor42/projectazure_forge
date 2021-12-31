@@ -92,6 +92,8 @@
   "item.projectazure.energy_drink.desc1": "Instantly refills companion's morale to max",
   "item.projectazure.energy_drink.shiftinfo": "Press %s for more F U N N I Info",
 
+  "item.projectazure.commanding_stick": "Command Stick",
+
   "item.tooltip.gunclass": "Gun Category",
 
   "item.tooltip.equipmenttype": "Equipment Type",
@@ -99,6 +101,10 @@
   "item.tooltip.plane_armed": "Armed",
   "item.tooltip.plane_not_armed": "Not Armed",
   "item.tooltip.torpedo_not_reloadable": "Does not support automatic reloading",
+
+  "item.tooltip.shiftinfo": "Press %s for more info",
+
+  "item.tooltip.bed_position": "Saved Bed Position: %s",
 
   "tooltip.companion.rarity": "Rarity",
   "tooltip.companion.type": "Companion Type",
@@ -121,8 +127,6 @@
   "item.tooltip.hanger_slot_usage": "Hanger Usage",
 
   "item.projectazure.ammo_generic": "Generic Shell",
-
-  "item.tooltip.shiftinfo": "Press %s for more info",
 
   "block.projectazure.recruit_beacon": "Recruit Beacon",
   "block.projectazure.recruit_beacon.tooltip": "Machine for Recruiting companion",
@@ -188,6 +192,15 @@
 
   "gui.kansen_ammostorage_usage": "Ammo Storage Usage",
 
+  "message.commandstick.bedpos_saved": "Bed Location %s has been saved to your Command Stick.",
+  "message.commandstick.bedpos_cleared": "Saved Bed Location in your command stick has been cleared.",
+
+  "message.commandstick.entity_bedpos_applied": "Assigned bed at %s to %s.",
+  "message.commandstick.entity_bedpos_failed": "Failed to assign bed at %s to %s: Invalid Bed.",
+  "message.commandstick.entity_bedpos_failed_duplicate": "Failed to assign bed at %s to %s: Duplicated bed with %s",
+  "message.commandstick.entity_bedpos_cleared": "Cleared Bed Location of %s.",
+  "message.commandstick.entity_bedpos_same_companion_same_bed" : "This companion is already Assigned to bed at %s.",
+
   "destroyer": "Destroyer",
   "light_cruiser": "Light Cruiser",
   "battleship": "Battleship",
@@ -219,6 +232,7 @@
   "akn_operator": "Operator/Arknights",
   "bluearchive": "Gun User/Blue Archive",
   "al_kansen": "Shipgirl/Azur Lane",
+  "gfl_tdoll": "T-Doll/Girl's Frontline",
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entityjavelin": "HMS Javelin",

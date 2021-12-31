@@ -128,6 +128,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("ammo_generic");
         buildModel("disc_brainpower");
         buildModel("bonk_bat");
+        buildModel("commanding_stick");
         buildModel("disc_rickroll");
 
         buildModel("bandage_roll");
