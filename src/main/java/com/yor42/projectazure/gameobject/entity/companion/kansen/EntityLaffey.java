@@ -118,11 +118,11 @@ public class EntityLaffey extends EntityKansenDestroyer{
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
             return PlayState.CONTINUE;
         }
         else if(this.isSitting() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+            event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));

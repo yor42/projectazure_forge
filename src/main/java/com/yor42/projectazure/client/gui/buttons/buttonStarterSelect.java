@@ -75,6 +75,10 @@ public class buttonStarterSelect extends ImageButton {
                 logox = 55;
                 logoy = 127;
                 break;
+            case 3:
+                logox = 163;
+                logoy = 127;
+                break;
 
             default:
                 logox = 1;

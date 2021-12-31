@@ -49,10 +49,14 @@ public class GuiCrystalGrowthChamber extends ContainerScreen<ContainerCrystalGro
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+        matrixStack.push();
+        float renserscale = 0.9F;
         int width = this.font.getStringWidth(this.title.getString());
         this.titleY = 6;
-        this.titleX = 166-width;
-        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 4210752);
+        this.titleX = 180-width;
+        matrixStack.scale(renserscale, renserscale, renserscale);
+        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX/renserscale, (float)this.titleY/renserscale, 4210752);
+        matrixStack.pop();
     }
 
     @Override

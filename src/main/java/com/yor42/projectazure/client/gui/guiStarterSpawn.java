@@ -6,7 +6,6 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.buttons.buttonStarterSelect;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -17,6 +16,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import static com.yor42.projectazure.libs.Constants.StarterList;
+
 @OnlyIn(Dist.CLIENT)
 public class guiStarterSpawn extends Screen {
 
@@ -24,7 +25,7 @@ public class guiStarterSpawn extends Screen {
 
     private boolean notYetPopulated = true;
 
-    private final int backgroundWidth = 195;
+    private final int backgroundWidth = 253;
     private final int backgroundHeight = 162;
 
     private int x, y;
@@ -32,12 +33,6 @@ public class guiStarterSpawn extends Screen {
     private int scrollBarFarLeft, lastScrollX;
 
     private final int buttonWidth = 59;
-
-    private final EntityType<?>[] entityList = {
-            registerManager.AYANAMI.get(),
-            registerManager.JAVELIN.get(),
-            registerManager.Z23.get()
-    };
 
     public guiStarterSpawn(ITextComponent titleIn) {
         super(titleIn);
@@ -53,11 +48,11 @@ public class guiStarterSpawn extends Screen {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         //this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
-        for(int index = 0; index < this.entityList.length; index++) {
+        for(int index = 0; index < StarterList.length; index++) {
             int buttonHeight = 127;
             if (this.notYetPopulated) {
                 int finalIndex = index;
-                Button button = createButton(this.x+9+(index * buttonWidth), this.y+26, buttonWidth, buttonHeight, index, this.entityList[index], (action) -> {
+                Button button = createButton(this.x+9+(index * buttonWidth), this.y+26, buttonWidth, buttonHeight, index, StarterList[index], (action) -> {
                     Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex));
                     this.closeScreen();
                 });

@@ -33,17 +33,18 @@ public class itemRainbowWisdomCube extends Item {
 
         UUID PlayerUUID = playerIn.getUniqueID();
 
+        //openGui
         if(cube.getOrCreateTag().hasUniqueId("owner")){
             UUID OwnerUUID = cube.getOrCreateTag().getUniqueId("owner");
             if(!PlayerUUID.equals(OwnerUUID)) {
                 playerIn.sendMessage(new TranslationTextComponent("message.rainbow_cube.notowner"), UUID.randomUUID());
                 return ActionResult.resultFail(cube);
             }
-            if(worldIn.isRemote){
-                //openGui
-                this.openGUI();
-                return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
-            }
+        }
+        if(worldIn.isRemote){
+            //openGui
+            this.openGUI();
+            return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
         }
         return ActionResult.resultPass(playerIn.getHeldItem(handIn));
     }

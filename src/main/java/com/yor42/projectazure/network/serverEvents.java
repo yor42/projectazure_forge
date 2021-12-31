@@ -12,6 +12,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import static com.yor42.projectazure.libs.Constants.StarterList;
+
 public class serverEvents {
     public static void spawnStarter(ServerPlayerEntity player, int StarterID){
         World world = player.world;
@@ -19,24 +21,7 @@ public class serverEvents {
 
         if(!world.isRemote)
         {
-            switch (StarterID){
-                case Constants.STARTER_SAKURA: {
-                    entitytype = registerManager.AYANAMI.get();
-                    break;
-                }
-                case Constants.STARTER_ROYAL:{
-                    entitytype = registerManager.JAVELIN.get();
-                    break;
-                }
-                case Constants.STARTER_IRONBLOOD:{
-                    entitytype = registerManager.Z23.get();
-                    break;
-                }
-                default:{
-                    entitytype = null;
-                    break;
-                }
-            }
+            entitytype = StarterList[StarterID];
             if (entitytype == null){
                 player.sendMessage(new TranslationTextComponent("message.invalidstarter"), player.getUniqueID());
             }
