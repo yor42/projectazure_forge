@@ -118,7 +118,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     slottype = EquipmentSlotType.HEAD;
                     break;
                 case 3:
-
                     slottype = EquipmentSlotType.CHEST;
                     break;
                 case 4:

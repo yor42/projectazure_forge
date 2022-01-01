@@ -95,7 +95,7 @@ public class KansenRangedAttackGoal extends Goal {
             this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
             this.strafingTime = -1;
         }
-
+        this.entityHost.faceEntity(attackTarget, 30.0F, 30.0F);
         if (this.strafingTime >= 20) {
             if ((double)this.entityHost.getRNG().nextFloat() < 0.3D) {
                 this.strafingClockwise = !this.strafingClockwise;
@@ -124,8 +124,7 @@ public class KansenRangedAttackGoal extends Goal {
         float f = MathHelper.sqrt(distance) / this.CannonattackRadius;
 
         if(--this.CannonAttackDelay == 0 && canSee && distance<=this.maxCannonAttackDistance) {
-            float lvt_5_1_ = MathHelper.clamp(f, 0.1F, 1.0F);
-            this.entityHost.AttackUsingCannon(this.attackTarget, lvt_5_1_);
+            this.entityHost.AttackUsingCannon(this.attackTarget);
             this.CannonAttackDelay = MathHelper.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
         }
         else if(this.CannonAttackDelay <0){

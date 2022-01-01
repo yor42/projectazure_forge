@@ -32,6 +32,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -317,7 +318,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return AmmoCategory.GENERIC;
     }
 
-    public void AttackUsingCannon(LivingEntity target, float distanceFactor){
+    public void AttackUsingCannon(LivingEntity target){
         boolean shouldFire = this.canUseShell(getActiveShellCategory()) && this.canUseRigging() && canUseCannon(this.getRigging());
 
         if(shouldFire) {
@@ -328,13 +329,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             if (Ammostack.getItem() instanceof ItemCannonshell) {
                 Vector3d vector3d = this.getLook(1.0F);
                 double x = target.getPosX() - (this.getPosX());
-                double y = (target.getPosY()+1) - (0.5D + this.getPosYHeight(0.5D));
+                double y = this.getPosYHeight(0.5) - (this.getPosYHeight(0.5));
                 double z = target.getPosZ() - (this.getPosZ());
 
                 EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, 0, 0, 0, ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty());
-                shell.shoot(x,y,z, 0.5F, 0.05F);
+                shell.setPosition(this.getPosX(), this.getPosYHeight(0.5), shell.getPosZ());
+                shell.shoot(x,y,z, 0.8F, 0.05F);
                 this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                shell.setPosition(this.getPosX() + vector3d.x, this.getPosY()+0.5F, shell.getPosZ() + vector3d.z);
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);
                 Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));

@@ -258,7 +258,7 @@ public class PAConfig {
             shouldRecruitBeaconSpawnAllCompanions = builder.define("Should Recruit Beacon Spawn ALL Companion?", false);
             builder.pop();
 
-            builder.push("Cheats");
+            builder.push("Cheats").comment("wuss mode");
             RiggingInfiniteFuel = builder.define("Rigging does not require fuel", false);
             builder.pop();
         }
