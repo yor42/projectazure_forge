@@ -14,7 +14,7 @@ import software.bernie.geckolib3.core.IAnimatable;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class ItemRiggingCV extends ItemRiggingBase implements IAnimatable {
+public abstract class ItemRiggingCV extends ItemRiggingBase {
     public ItemRiggingCV(Properties properties, int HP) {
         super(properties, HP);
         this.validclass = enums.shipClass.AircraftCarrier;
@@ -23,7 +23,7 @@ public abstract class ItemRiggingCV extends ItemRiggingBase implements IAnimatab
     @Override
     public int getHangerSlots() {
         //minimum size
-        return 45;
+        return 3;
     }
 
     @Override

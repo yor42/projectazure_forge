@@ -1,15 +1,18 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvEquipmentHandlerItemStack;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandlerItemStack;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -35,6 +38,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +48,7 @@ import java.util.List;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
-public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable {
+public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable, IGeoRenderer {
 
     public AnimationFactory factory = new AnimationFactory(this);
 
@@ -188,4 +193,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public ResourceLocation getTexture(){
             return this.getModel().getTextureLocation(null);
     }
+
+    @OnlyIn(Dist.CLIENT)
+    public abstract void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch);
+
 }

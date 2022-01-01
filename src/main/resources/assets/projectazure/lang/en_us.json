@@ -48,6 +48,7 @@
   "item.projectazure.quartz_seed": "Nether Quartz Seed",
 
   "item.projectazure.torpedo_ammo": "Torpedo Round",
+  "item.projectazure.missile_ammo": "Missile Round",
   "item.projectazure.5_56_ammo": "5.56mm Bullets",
 
   "item.projectazure.5.56_magazine": "5.56mm Magazine",
@@ -93,6 +94,8 @@
   "item.projectazure.energy_drink.shiftinfo": "Press %s for more F U N N I Info",
 
   "item.projectazure.commanding_stick": "Command Stick",
+
+  "item.projectazure.bitumen": "Bitumen",
 
   "item.tooltip.gunclass": "Gun Category",
 
