@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.Entity;
@@ -115,9 +116,6 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
             float f = MathHelper.sqrt(Entity.horizontalMag(vector3d));
             this.rotationYaw = (float)(MathHelper.atan2(vector3d.z, vector3d.x) * (double)(180F / (float)Math.PI)) + 90.0F;
 
-            for(this.rotationPitch = (float)(MathHelper.atan2((double)f, vector3d.y) * (double)(180F / (float)Math.PI)) - 90.0F; this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-            }
-
             while(this.rotationPitch - this.prevRotationPitch >= 180.0F) {
                 this.prevRotationPitch += 360.0F;
             }
@@ -153,7 +151,7 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     }
 
     private void explode(){
-        this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), 3.5F, Explosion.Mode.BREAK);
+        this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), 3.5F, PAConfig.CONFIG.EnableTorpedoBlockDamage.get()? Explosion.Mode.DESTROY:Explosion.Mode.NONE);
     }
 
     private void selfDestruct(){

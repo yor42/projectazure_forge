@@ -8,6 +8,8 @@ import net.minecraft.item.ArrowItem;
 import net.minecraft.item.BowItem;
 import net.minecraft.util.Hand;
 
+import java.util.EnumSet;
+
 public class KansenAttackUsingBowGoal extends Goal {
     private EntityKansenBase host;
     private int seeTime;
@@ -24,6 +26,7 @@ public class KansenAttackUsingBowGoal extends Goal {
         this.moveSpeedAmp = moveSpeedAmpIn;
         this.maxAttackDistance = maxAttackDistanceIn;
         this.attackCooldown = attackCooldownIn;
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
@@ -66,6 +69,10 @@ public class KansenAttackUsingBowGoal extends Goal {
             double distance = this.host.getDistanceSq(targetEntity);
             boolean cansee = this.host.getEntitySenses().canSee(targetEntity);
             boolean isSeeing = this.seeTime>0;
+
+            if (cansee != isSeeing) {
+                this.seeTime = 0;
+            }
 
             if (cansee) {
                 ++this.seeTime;

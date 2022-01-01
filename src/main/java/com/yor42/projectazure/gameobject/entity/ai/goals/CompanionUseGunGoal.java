@@ -4,8 +4,11 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+
+import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
@@ -24,6 +27,7 @@ public class CompanionUseGunGoal extends Goal {
         this.companion = companion;
         this.moveSpeedAmp = speed;
         this.maxAttackDistance = maxAttackDistance;
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
 
@@ -85,7 +89,10 @@ public class CompanionUseGunGoal extends Goal {
         if(target != null){
             double distanceSq = this.companion.getDistanceSq(target.getPosX(), target.getPosY(), target.getPosZ());
             boolean canSee = this.companion.getEntitySenses().canSee(target);
-
+            boolean flag1 = this.seeTime > 0;
+            if (canSee != flag1) {
+                this.seeTime = 0;
+            }
 
             if (canSee) {
                 ++this.seeTime;

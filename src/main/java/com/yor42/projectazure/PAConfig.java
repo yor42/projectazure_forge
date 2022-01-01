@@ -22,6 +22,7 @@ public class PAConfig {
 
         public final ForgeConfigSpec.BooleanValue EnablePVP;
         public final ForgeConfigSpec.BooleanValue EnableShipLandCombat;
+        public final ForgeConfigSpec.BooleanValue EnableTorpedoBlockDamage;
 
         public final ForgeConfigSpec.DoubleValue AyanamiHealth;
         public final ForgeConfigSpec.DoubleValue AyanamiSwimSpeed;
@@ -136,6 +137,7 @@ public class PAConfig {
             builder.push("General");
             EnablePVP = builder.define("Enable PVP Combat", false);
             EnableShipLandCombat = builder.define("Enable Ship Weapons on land", true);
+            EnableTorpedoBlockDamage = builder.define("Enable Torpedo's block damage", true);
 
             builder.pop().push("Entity Stat").push("Azur lane");
             AyanamiHealth = builder.defineInRange("Max Health of Ayanami", 40D, 1, 1024);

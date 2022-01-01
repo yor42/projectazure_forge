@@ -11,12 +11,15 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.util.Hand;
 
+import java.util.EnumSet;
+
 public class CompanionUseShieldGoal extends Goal {
 
     private final AbstractEntityCompanion companion;
 
     public CompanionUseShieldGoal(AbstractEntityCompanion companion){
         this.companion = companion;
+        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
