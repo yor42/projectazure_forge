@@ -30,7 +30,7 @@ public class KansenRangedAttackGoal extends Goal {
 
     public KansenRangedAttackGoal(EntityKansenBase entity, double movespeed, int MinAttackInterval , int MaxAttackInterval, float maxCannonAttackDistanceIn, float MaxTorpedoAttackDistance){
         if (entity == null) {
-            throw new IllegalArgumentException("KansenRangedAttackGoal used here doesn't extend living entity. well what do you want me to do, dead bush shooting cannon and torpedo?");
+            throw new IllegalArgumentException("entity of this goal is null. We can't shoot guns and torpedo from thin air mate.");
         }
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         this.entityHost = entity;
@@ -70,12 +70,14 @@ public class KansenRangedAttackGoal extends Goal {
         this.CannonAttackDelay = -1;
         this.torpedoAttackDelay = -1;
         this.entityHost.setAggroed(false);
+        this.entityHost.getNavigator().clearPath();
     }
 
     @Override
     public void startExecuting() {
         super.startExecuting();
         this.entityHost.setAggroed(true);
+        this.entityHost.getNavigator().clearPath();
     }
 
     @Override

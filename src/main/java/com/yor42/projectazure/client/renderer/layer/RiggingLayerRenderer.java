@@ -3,14 +3,11 @@ package com.yor42.projectazure.client.renderer.layer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
-import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingDD;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -28,17 +25,6 @@ public class RiggingLayerRenderer<T extends AbstractEntityCompanion> extends Geo
 
     @Nullable
     private AnimatedGeoModel modelProvider;
-
-    static {
-        AnimationController.addModelFetcher((IAnimatable object) ->
-        {
-            if (object instanceof ItemRiggingDD) {
-                return ((ItemRiggingBase) object).getModel();
-            }
-            return null;
-        });
-    }
-
 
     public RiggingLayerRenderer(IGeoRenderer<T> entityRendererIn) {
         super(entityRendererIn);

@@ -10,6 +10,7 @@ import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -1213,6 +1214,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if (this.forcewakeupExpireTimer>0){
             this.forcewakeupExpireTimer--;
         }
+
         int mainhandDelay = this.getDataManager().get(RELOAD_TIMER_MAINHAND);
         if(mainhandDelay>0){
             this.getDataManager().set(RELOAD_TIMER_MAINHAND, mainhandDelay - 1);
@@ -1220,8 +1222,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.reloadAmmo();
             }
         }
-
-        ItemStack gunstack = this.getGunStack();
 
         if(this.ticksExisted%10==0){
             this.setSneaking((this.getOwner()!= null && this.getOwner().isSneaking()) || this.getEntityWorld().getBlockState(this.getPosition().down()).getBlock() == Blocks.MAGMA_BLOCK);
@@ -1261,8 +1261,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             }
         }
-
-
 
         if(!this.getEntityWorld().isRemote() && this.isFreeRoaming() && (this.getEntityWorld().isNightTime() && this.isSitting() && this.isInHomeRangefromCurrenPos() && this.getNavigator().getPathToPos(this.getHOMEPOS().get(), 0) != null && this.getNavigator().getPathToPos(this.getHOMEPOS().get(), 0).reachesTarget())){
             this.shouldBeSitting = this.isSitting();
@@ -1310,16 +1308,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    public short getGunAmmoCount(){
-        return getGunAmmo(this.getGunStack());
-    }
-
-    public static short getGunAmmo(ItemStack stack){
-        if(stack.getItem() instanceof ItemGunBase) {
-            CompoundNBT compound = stack.getOrCreateTag();
-            return compound.getShort("ammo");
-        }
-        else return 0;
+    public int getGunAmmoCount(){
+        return ItemStackUtils.getRemainingAmmo(this.getGunStack());
     }
 
     public ItemStack getGunStack(){
@@ -1453,21 +1443,24 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
             this.goalSelector.addGoal(6, new KansenRangedAttackGoal((EntityKansenBase) this, 0.8F, 10,20, 80, 100));
         }
-        this.goalSelector.addGoal(7, new CompanionUseShieldGoal(this));
-        this.goalSelector.addGoal(8, new CompanionHealandEatFoodGoal(this));
-        this.goalSelector.addGoal(9, new CompanionsUseTotem(this));
-        this.goalSelector.addGoal(10, new CompanionUseGunGoal(this, 40, 0.6));
-        this.goalSelector.addGoal(11, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(12, new CompanionMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(13, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(14, new WorkGoal(this, 1.0D));
-        this.goalSelector.addGoal(15, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
-        this.goalSelector.addGoal(16, new CompanionOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(17, new CompanionFreeroamGoal(this, 60, true));
-        this.goalSelector.addGoal(18, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(19, new CompanionPlaceTorchGoal(this));
-        this.goalSelector.addGoal(20, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(21, new LookRandomlyGoal(this));
+        if(this instanceof AbstractCompanionMagicUser){
+            this.goalSelector.addGoal(7, new CompanionSpellRangedAttackGoal((AbstractCompanionMagicUser) this, 10));
+        }
+        this.goalSelector.addGoal(8, new CompanionUseShieldGoal(this));
+        this.goalSelector.addGoal(9, new CompanionHealandEatFoodGoal(this));
+        this.goalSelector.addGoal(10, new CompanionsUseTotem(this));
+        this.goalSelector.addGoal(11, new CompanionUseGunGoal(this, 40, 0.6));
+        this.goalSelector.addGoal(12, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(13, new CompanionMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(14, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(15, new WorkGoal(this, 1.0D));
+        this.goalSelector.addGoal(16, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
+        this.goalSelector.addGoal(17, new CompanionOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(18, new CompanionFreeroamGoal(this, 60, true));
+        this.goalSelector.addGoal(19, new CompanionPickupItemGoal(this));
+        this.goalSelector.addGoal(20, new CompanionPlaceTorchGoal(this));
+        this.goalSelector.addGoal(21, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(22, new LookRandomlyGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));

@@ -227,11 +227,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return super.attackEntityFrom(source, amount*DamageMultiplier);
     }
 
-    @Override
-    protected void registerGoals() {
-        super.registerGoals();
-    }
-
 
 
     @Override

@@ -18,6 +18,7 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 public class ItemRiggingCVDefault extends ItemRiggingCV{
 
@@ -61,7 +62,7 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
     }
 
     @Override
-    public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void RenderRigging(IGeoRenderer renderer, GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         matrixStackIn.push();
         GeoModelProvider modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();
         IBone hostbone = entityModel.getModel(entityModel.getModelLocation(null)).getBone("Body").get();
@@ -70,7 +71,7 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
         }
         RenderType type = RenderType.getEntitySmoothCutout(((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getTexture());
         GeoModel riggingmodel = modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null));
-        render(riggingmodel, entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        renderer.render(riggingmodel, entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
         matrixStackIn.pop();
 
         IMultiInventory inventories = MultiInvUtil.getCap(entitylivingbaseIn.getRigging());
@@ -86,7 +87,7 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
             GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
             EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.rotationYawHead - entitylivingbaseIn.renderYawOffset));
             EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.rotationPitch, 7.5F, -12.5F, false, true));
-            render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            renderer.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
         }
 
@@ -99,20 +100,9 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
             GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
             EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.rotationYawHead - entitylivingbaseIn.renderYawOffset));
             EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.rotationPitch, 7.5F, -12.5F, false, true));
-            render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            renderer.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
         }
 
-    }
-
-
-    @Override
-    public GeoModelProvider getGeoModelProvider() {
-        return this.getModel();
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(Object instance) {
-        return this.getModel().getTextureLocation(instance);
     }
 }

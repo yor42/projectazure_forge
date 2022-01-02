@@ -66,6 +66,7 @@ public class CompanionUseGunGoal extends Goal {
     public void startExecuting() {
         super.startExecuting();
         this.companion.setAggroed(true);
+        this.companion.getNavigator().clearPath();
     }
 
     public void resetTask() {
