@@ -30,7 +30,7 @@ import java.util.List;
 public class Jei implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceUtils.ModResourceLocation("_jei");
+        return ResourceUtils.ModResourceLocation("jei_plugin");
     }
 
     @Override

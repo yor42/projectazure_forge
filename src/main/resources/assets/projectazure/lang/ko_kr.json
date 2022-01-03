@@ -306,17 +306,29 @@
 
   "effect.projectazure.acute_oripathy": "급성 광석병",
 
-  "death.attack.bonk": "%1$s이 %2$s에 의해 백병원으로 보내졌습니다.",
+  "death.attack.bonk": "%1$s이(가) 백병원으로 보내졌습니다.",
 
-  "death.attack.arts_0": "%1$s was murdered by arts from %2$s",
-  "death.attack.arts_1": "%1$s was cooked by %2$s's arts",
-  "death.attack.arts_2": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts. yikes.",
-  "death.attack.arts_3": "%1$s turned into pile of originium by %2$s's arts",
-  "death.attack.arts_4": "%2$s was suck at dodging %2$s's spicy magic ball",
+  "death.attack.arts_0": "%1$s이(가) %2$s의 오리지늄 아츠로 살해당했습니다.",
+  "death.attack.arts_1": "%1$s이(가) %2$s의 아츠로 잘게 썰렸습니다.",
+  "death.attack.arts_2": "%2$s이(가) 개나리 스텝을 시전하였으나, %2$s의 마법구가 더 빨랐습니다. X.",
+  "death.attack.arts_3": "%1$s이(가) %2$s의 오리지늄 아츠로 인해 오리지늄 덩어리로 변했습니다.",
+  "death.attack.arts_4": "%1$s이(가) %2$s와의 마법구 피구 시합에서 졌습니다.",
+
+  "death.attack.arts_0.item": "%1$s이(가) %3$s를 사용한 %2$s의 오리지늄 아츠로 살해당했습니다.",
+  "death.attack.arts_1.item": "%1$s이(가) %3$s를 사용한 %2$s의 오리지늄 아츠로 잘게 썰렸습니다.",
+  "death.attack.arts_2.item": "%2$s이(가) 개나리 스텝을 시전하였으나, %3$s를 사용한 %2$s의 마법구가 더 빨랐습니다. X.",
+  "death.attack.arts_3.item": "%1$s이(가) %3$s를 사용한 %2$s의 오리지늄 아츠로 인해 오리지늄 덩어리로 변했습니다.",
+  "death.attack.arts_4.item": "%1$s이(가) %3$s를 사용한 %2$s와의 마법구 피구 시합에서 졌습니다.",
 
   "death.attack.ate_originium_prime_0": "%1$s 가 방금 오리지늄을 먹었습니다. ..세상에나.",
   "death.attack.ate_originium_prime_1": "%1$s 이(가) 방금 오리지늄의 맛을 깨우쳤습니다.",
   "death.attack.ate_originium_prime_2": "%1$s 이(가) 아츠를 배우려고 시도했으나, 이 모드에는 구현되어 있지 않았습니다.",
   "death.attack.ate_originium_prime_3": "%1$s 이(가) 이성을 회복하려다 실패했습니다.",
-  "death.attack.ate_originium_prime_4": "%1$s 이(가) 급성 오리지늄 중독으로 사망했습니다."
+  "death.attack.ate_originium_prime_4": "%1$s 이(가) 급성 오리지늄 중독으로 사망했습니다.",
+
+  "top.companion_level.message": "레벨: %s",
+  "top.companion_limit_break.message": "한계 돌파: %s",
+  "top.companion_owner.message": "지휘관: %s"
+
+
 }

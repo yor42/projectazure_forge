@@ -314,9 +314,21 @@
   "death.attack.arts_3": "%1$s turned into pile of originium by %2$s's arts",
   "death.attack.arts_4": "%2$s was suck at dodging %2$s's spicy magic ball",
 
+  "death.attack.arts_0.item": "%1$s was murdered by arts from %2$s using %3$s",
+  "death.attack.arts_1.item": "%1$s was cooked by %2$s's arts casted using %3$s",
+  "death.attack.arts_2.item": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts casted by %3$s. yikes.",
+  "death.attack.arts_3.item": "%1$s turned into pile of originium by %2$s's arts cased by %3$s",
+  "death.attack.arts_4.item": "%2$s was suck at dodging %2$s's spicy magic ball from %3$s",
+
   "death.attack.ate_originium_prime_0": "%1$s Literally ate pure originium. ...oh my god",
   "death.attack.ate_originium_prime_1": "%1$s discovered the delicious taste of originium",
   "death.attack.ate_originium_prime_2": "%1$s tried to get arts ability. little did he know was this mod doesn't have that.",
   "death.attack.ate_originium_prime_3": "%1$s tasted the s p i c y  r o c c",
-  "death.attack.ate_originium_prime_4": "%1$s died from acute originium poisoning"
+  "death.attack.ate_originium_prime_4": "%1$s died from acute originium poisoning",
+
+  "top.companion_level.message": "Level: %s",
+  "top.companion_limit_break.message": "Limit break: %s",
+  "top.companion_owner.message": "Commander: %s"
+
+
 }

@@ -4,7 +4,7 @@ import com.yor42.solarapocalypse.utils.MathUtils;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.ModList;
 
-public class ModCompatibilities {
+public class SolarApocalypse {
 
     public static boolean isSolarApocalypseLoaded(){
         return ModList.get().isLoaded("solarapocalypse");

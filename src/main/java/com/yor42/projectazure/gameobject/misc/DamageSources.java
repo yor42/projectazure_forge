@@ -31,7 +31,7 @@ public class DamageSources {
     }
 
     public static DamageSource causeArtsDamage(EntityArtsProjectile projectile, @Nullable Entity indirectEntityIn) {
-        return (new IndirectEntityDamageSource("arts_projectile", projectile, indirectEntityIn)).setProjectile().setMagicDamage().setDamageBypassesArmor();
+        return (new IndirectDamageSourcewithRandomMessages("arts_projectile", projectile, indirectEntityIn, 5)).setProjectile().setMagicDamage().setDamageBypassesArmor();
     }
 
     public static DamageSource causeTorpedoDamage(EntityProjectileTorpedo torpedo, @Nullable Entity indirectEntityIn) {

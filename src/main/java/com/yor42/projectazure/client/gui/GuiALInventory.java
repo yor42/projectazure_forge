@@ -82,13 +82,13 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
         if(this.morale>=120.0D){
             return enums.Morale.REALLY_HAPPY;
         }
-        else if(this.morale>=70 && this.morale<120){
+        else if(this.morale>=70){
             return enums.Morale.HAPPY;
         }
-        else if(this.morale>=30 && this.morale<70){
+        else if(this.morale>=30){
             return enums.Morale.NEUTRAL;
         }
-        else if(this.morale>10 && this.morale<=30){
+        else if(this.morale>10){
             return enums.Morale.TIRED;
         }
         else{

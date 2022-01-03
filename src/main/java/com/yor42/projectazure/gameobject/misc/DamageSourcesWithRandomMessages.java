@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class DamageSourcesWithRandomMessages extends DamageSource {
 
-    public final int MessageCounts;
+    private final int MessageCounts;
 
     public DamageSourcesWithRandomMessages(String damageTypeIn, int DeathMessageCounts) {
         super(damageTypeIn);

@@ -6,7 +6,7 @@ import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
-import com.yor42.projectazure.intermod.ModCompatibilities;
+import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.block.BlockState;
@@ -142,7 +142,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         else if(worldReady) {
             BlockPos blockpos;
             //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
-            if(ModCompatibilities.isSunlightDangerous((ServerWorld) this.world)) {
+            if(SolarApocalypse.isSunlightDangerous((ServerWorld) this.world)) {
                 BlockPos.Mutable CandidatePos = this.pos.toMutable();
                 CandidatePos = CandidatePos.move(this.world.getBlockState(this.pos).get(FACING));
                 blockpos = CandidatePos;

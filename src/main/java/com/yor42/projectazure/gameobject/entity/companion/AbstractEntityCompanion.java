@@ -19,7 +19,7 @@ import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.interfaces.IAttributeable;
-import com.yor42.projectazure.intermod.ModCompatibilities;
+import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
@@ -62,6 +62,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.*;
@@ -707,11 +708,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-
     /*
-    looks like this is for getting a child entity.
-    we don't need these.
-     */
+        looks like this is for getting a child entity.
+        we don't need these.
+         */
     @Nullable
     @Override
     public AgeableEntity func_241840_a(@Nonnull ServerWorld p_241840_1_, @Nonnull AgeableEntity p_241840_2_) {
@@ -1265,7 +1265,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public float getBlockPathWeight(@Nonnull BlockPos pos, IWorldReader worldIn) {
-        if(!worldIn.isRemote() && ModCompatibilities.isSunlightDangerous((ServerWorld) worldIn)){
+        if(!worldIn.isRemote() && SolarApocalypse.isSunlightDangerous((ServerWorld) worldIn)){
             return 0.0F-worldIn.getLightFor(LightType.SKY, pos);
         }
         else {
@@ -1547,7 +1547,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setOwnerId(player.getUniqueID());
         ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(player);
         capability.addCompanion(this);
-        //Triggering Tame Animal goal at the beginning of the world doesn't feel right.
+        //Triggering Tame Animal goal at the beginning of the world doesn't feel right. :d
     }
     @Override
     public boolean canBePushed() {
@@ -1576,15 +1576,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
             if (HeldItem instanceof ArmorItem || HeldItem instanceof TieredItem) {
                 ItemStack stack = player.getHeldItem(hand).copy();
-                @Nullable
-                ArmorItem item = stack.getItem() instanceof ArmorItem ? (ArmorItem) stack.getItem() : null;
                 EquipmentSlotType type = getSlotForItemStack(stack);
                 ItemStack EquippedStack = this.getItemStackFromSlot(type).copy();
                 if (stack.canEquip(type, this)) {
                     this.setItemStackToSlot(type, stack);
                     if (stack == this.getItemStackFromSlot(type)) {
                         player.setHeldItem(hand, EquippedStack);
-                        this.playSound(item == null ? SoundEvents.ITEM_ARMOR_EQUIP_IRON : item.getArmorMaterial().getSoundEvent(), 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                        this.playEquipSound(stack);
                         return ActionResultType.SUCCESS;
                     }
                 }
