@@ -7,6 +7,7 @@ import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
@@ -21,8 +22,9 @@ public class IndirectDamageSourcewithRandomMessages extends IndirectEntityDamage
         this.indirectEntity = indirectEntityIn;
     }
 
+    @Nonnull
     @Override
-    public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
+    public ITextComponent getDeathMessage(@Nonnull LivingEntity entityLivingBaseIn) {
         int randomMessage = new Random().nextInt(MessageCounts-1);
         ITextComponent itextcomponent = this.indirectEntity == null ? this.damageSourceEntity.getDisplayName() : this.indirectEntity.getDisplayName();
         ItemStack itemstack = this.indirectEntity instanceof LivingEntity ? ((LivingEntity)this.indirectEntity).getHeldItemMainhand() : ItemStack.EMPTY;
