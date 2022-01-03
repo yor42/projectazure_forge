@@ -184,12 +184,12 @@ public class EntityAmiya extends AbstractCompanionMagicUser{
 
     @Override
     public int getInitialSpellDelay() {
-        return 32;
+        return 31;
     }
 
     @Override
     public int getProjectilePreAnimationDelay() {
-        return 11;
+        return 20;
     }
 
     @Override
@@ -211,11 +211,12 @@ public class EntityAmiya extends AbstractCompanionMagicUser{
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
         if(target.isAlive()){
             double x = target.getPosX() - (this.getPosX());
-            double y = this.getPosYHeight(0.5) - (this.getPosYHeight(0.5));
+            double y = target.getPosYHeight(0.5) - (this.getPosYHeight(0.7));
             double z = target.getPosZ() - (this.getPosZ());
 
-            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getEntityWorld(), target);
-            projectile.shoot(x,y,z, 0.8F, 0.05F);
+            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getEntityWorld(), this);
+            projectile.shoot(x,y,z, 1.1F, 0.05F);
+            projectile.setPosition(this.getPosX(), this.getPosYHeight(0.7), this.getPosZ());
             this.getEntityWorld().addEntity(projectile);
 
             this.addExp(0.2F);

@@ -95,9 +95,8 @@ public class AmiyaModel extends AnimatedGeoModel<EntityAmiya> {
             }
         }
 
-
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        if(!(entity.isBeingPatted() || entity.isSleeping())) {
+        if(!(entity.isBeingPatted() || entity.isSleeping() || entity.isUsingSpell())) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
         }

@@ -2,6 +2,7 @@ package com.yor42.projectazure.client.renderer.entity.projectile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.yor42.projectazure.client.model.entity.misc.ModelArtsProjectile;
 import com.yor42.projectazure.client.model.entity.misc.modelProjectileGunBullet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
@@ -37,9 +38,10 @@ public class EntityArtsProjectileRenderer extends EntityRenderer<EntityArtsProje
     @Override
     public void render(@Nonnull EntityArtsProjectile entityIn, float entityYaw, float partialTicks, @Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        Model model = new modelProjectileGunBullet();
+        Model model = new ModelArtsProjectile();
         IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
         matrixStackIn.push();
+        matrixStackIn.translate(0, -1.2, 0);
         matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
         matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
         model.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);

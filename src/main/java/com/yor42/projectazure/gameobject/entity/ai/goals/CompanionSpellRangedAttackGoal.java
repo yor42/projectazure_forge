@@ -60,31 +60,33 @@ public class CompanionSpellRangedAttackGoal extends Goal {
     @Override
     public void tick() {
         if(this.target != null) {
-            double distance = this.host.getDistanceSq(this.target.getPosX(), this.target.getPosY(), this.target.getPosZ());
+            double distance = this.host.getDistance(this.target);
             boolean canSee = this.host.getEntitySenses().canSee(this.target);
+
+            boolean isTooclose = distance <=this.maxAttackDistance*0.5;
+            boolean isTooFar = distance > (double)this.maxAttackDistance;
+
             if (canSee) {
                 ++this.seeTime;
             } else {
                 this.seeTime = 0;
             }
-
-            if (distance <= (double)this.maxAttackDistance && this.seeTime >= 5) {
-                this.host.getNavigator().clearPath();
-                this.host.setSprinting(false);
-            }
-            //Keep the distance from target
-            else if(distance <=this.maxAttackDistance*0.5){
-                this.host.getMoveHelper().strafe(-0.5F, 0);
-                this.host.setSprinting(false);
-            }
-            else {
-                this.host.setSprinting(distance>=this.maxAttackDistance*1.5);
-                this.host.getNavigator().tryMoveToEntityLiving(this.target, 1);
-            }
             this.host.faceEntity(this.target, 30.0F, 30.0F);
-
-            if(!this.host.isUsingSpell()){
-                this.host.StartShootingEntity(this.target);
+            if(!this.host.isUsingSpell()) {
+                if (isTooFar) {
+                    this.host.setSprinting(distance >= this.maxAttackDistance*1.5);
+                    this.host.getNavigator().tryMoveToEntityLiving(this.target, 1);
+                } else if (isTooclose) {
+                    this.host.getMoveHelper().strafe(-0.5F, 0);
+                    this.host.setSprinting(false);
+                } else if(this.seeTime >= 5){
+                    this.host.getNavigator().clearPath();
+                    this.host.setSprinting(false);
+                    this.host.StartShootingEntity(this.target);
+                }else {
+                    this.host.setSprinting(distance >= this.maxAttackDistance*1.5);
+                    this.host.getNavigator().tryMoveToEntityLiving(this.target, 1);
+                }
             }
 
         }

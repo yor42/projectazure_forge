@@ -19,6 +19,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion {
 
+    protected int StartedAttackTimeStamp = -1;
     protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
 
     public AbstractCompanionMagicUser(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -82,18 +83,19 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
     @Override
     public void livingTick() {
         super.livingTick();
-        int currentspelldelay = this.getSpellDelay();
-        @Nullable
-        LivingEntity target = this.getAttackTarget();
-        if(currentspelldelay>0){
-            if(target == null || !target.isAlive()){
-                this.setSpellDelay(0);
-            }
-            else {
-                this.getNavigator().clearPath();
-                setSpellDelay(currentspelldelay - 1);
-                if (this.getInitialSpellDelay() - currentspelldelay == getProjectilePreAnimationDelay()) {
-                    this.ShootProjectile(this.getEntityWorld(),target);
+        if(!this.getEntityWorld().isRemote()) {
+            int currentspelldelay = this.getSpellDelay();
+            @Nullable
+            LivingEntity target = this.getAttackTarget();
+            if (currentspelldelay > 0) {
+                if (target == null || !target.isAlive()) {
+                    this.setSpellDelay(0);
+                } else {
+                    this.getNavigator().clearPath();
+                    setSpellDelay(currentspelldelay - 1);
+                    if (this.ticksExisted - this.StartedAttackTimeStamp == getProjectilePreAnimationDelay()) {
+                        this.ShootProjectile(this.getEntityWorld(), target);
+                    }
                 }
             }
         }
@@ -101,5 +103,6 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
 
     public void StartShootingEntity(LivingEntity target) {
         this.setSpellDelay(this.getInitialSpellDelay());
+        this.StartedAttackTimeStamp = this.ticksExisted;
     }
 }

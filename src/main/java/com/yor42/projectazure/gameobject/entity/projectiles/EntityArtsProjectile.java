@@ -8,7 +8,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
@@ -16,17 +18,18 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.Random;
 
 public class EntityArtsProjectile extends DamagingProjectileEntity {
-    BlockPos originPos;
+    private BlockPos originPos;
     public EntityArtsProjectile(EntityType<? extends DamagingProjectileEntity> entityType, World worldin) {
         super(entityType, worldin);
     }
 
     public EntityArtsProjectile(World worldIn, LivingEntity shooter){
-        super(registerManager.PROJECTILECANNONSHELL, shooter, 0, 0, 0, worldIn);
+        super(registerManager.PROJECTILEARTS_ENTITYTYPE, shooter, 0, 0, 0, worldIn);
         this.originPos = new BlockPos(shooter.getPosX(), shooter.getPosYHeight(0.7F), shooter.getPosZ());
     }
 
@@ -50,10 +53,12 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
         BlockPos blockPosIn = this.getPosition();
         Random random = new Random();
         super.onImpact(result);
-        for(int i2 = 0; i2 < 8; ++i2) {
-            this.world.addParticle(ParticleTypes.LARGE_SMOKE, (double)blockPosIn.getX() + random.nextDouble(), (double)blockPosIn.getY() + 1.2D, (double)blockPosIn.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+        if(!this.getEntityWorld().getBlockState(blockPosIn).allowsMovement(this.getEntityWorld(), blockPosIn, PathType.AIR)) {
+            for (int i2 = 0; i2 < 8; ++i2) {
+                this.world.addParticle(ParticleTypes.LARGE_SMOKE, (double) blockPosIn.getX() + random.nextDouble(), (double) blockPosIn.getY() + 1.2D, (double) blockPosIn.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+            }
+            this.remove();
         }
-        this.remove();
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
@@ -75,11 +80,18 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
     }
 
     @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
+
+    @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity target = result.getEntity();
-        double DistanceMultiplier = Math.min(25/getDistanceSq(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
-        target.attackEntityFrom(DamageSources.causeArtsDamage(this, this.func_234616_v_()), (float) (5*DistanceMultiplier));
-        this.remove();
+        if(target != this.func_234616_v_()) {
+            double DistanceMultiplier = this.originPos != null ? Math.min(25 / getDistanceSq(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0) : 1;
+            target.attackEntityFrom(DamageSources.causeArtsDamage(this, this.func_234616_v_()), (float) (5 * DistanceMultiplier));
+            this.remove();
+        }
     }
 
 }
