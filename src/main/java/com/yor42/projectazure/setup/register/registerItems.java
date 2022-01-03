@@ -320,6 +320,8 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWN_M4A1 = registerManager.ITEMS.register("spawnm4a1", () -> new ItemKansenSpawnEgg(ENTITYTYPE_M4A1, new Item.Properties()
             .group(PA_SHIPS)));
 
+    public static final RegistryObject<Item> SPAWN_AMIYA = registerManager.ITEMS.register("spawnamiya", () -> new ItemKansenSpawnEgg(ENTITYTYPE_AMIYA, new Item.Properties()
+            .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SHIROKO, new Item.Properties()
             .group(PA_SHIPS)));

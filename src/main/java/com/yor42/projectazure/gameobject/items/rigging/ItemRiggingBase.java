@@ -48,7 +48,7 @@ import java.util.List;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
-public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable {
+public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable, IGeoRenderer {
 
     public AnimationFactory factory = new AnimationFactory(this);
 
@@ -190,11 +190,21 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         }
     }
 
+    @Override
+    public GeoModelProvider getGeoModelProvider() {
+        return this.getModel();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(Object instance) {
+        return this.getModel().getTextureLocation(null);
+    }
+
     public ResourceLocation getTexture(){
             return this.getModel().getTextureLocation(null);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public abstract void RenderRigging(IGeoRenderer renderer, GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch);
+    public abstract void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch);
 
 }

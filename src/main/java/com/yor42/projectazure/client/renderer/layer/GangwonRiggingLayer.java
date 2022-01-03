@@ -22,7 +22,7 @@ public class GangwonRiggingLayer extends GeoLayerRenderer<EntityGangwon> {
         Item item = rigging.getItem();
 
         if (item instanceof ItemRiggingBase) {
-            ((ItemRiggingBase)item).RenderRigging(this.getRenderer(), this.getEntityModel(), rigging, entitylivingbaseIn, matrixStackIn, bufferIn, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            ((ItemRiggingBase)item).RenderRigging(this.getEntityModel(), rigging, entitylivingbaseIn, matrixStackIn, bufferIn, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
         }
     }
 }

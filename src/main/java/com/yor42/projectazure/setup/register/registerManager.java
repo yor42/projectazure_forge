@@ -9,13 +9,11 @@ import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingCont
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.*;
+import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
+import com.yor42.projectazure.gameobject.entity.projectiles.*;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -117,9 +115,15 @@ public class registerManager {
     public static final EntityType<EntityChen> ENTITYTYPE_CHEN = EntityType.Builder.create(EntityChen::new, EntityClassification.CREATURE).size(0.572F, 1.68F).build(ModResourceLocation("entitychen").toString());
     public static final RegistryObject<EntityType<EntityChen>> CHEN = ENTITIES.register("entitychen", () -> ENTITYTYPE_CHEN);
 
+    public static final EntityType<EntityAmiya> ENTITYTYPE_AMIYA = EntityType.Builder.create(EntityAmiya::new, EntityClassification.CREATURE).size(0.572F, 1.42F).build(ModResourceLocation("entityamiya").toString());
+    public static final RegistryObject<EntityType<EntityAmiya>> AMIYA = ENTITIES.register("entityamiya", () -> ENTITYTYPE_AMIYA);
+
     //projectile
     public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString());
     public static final RegistryObject<EntityType<EntityCannonPelllet>> CANNONSHELL = ENTITIES.register("entitycannonshell", () -> PROJECTILECANNONSHELL);
+
+    public static final EntityType<EntityArtsProjectile> PROJECTILEARTS_ENTITYTYPE = EntityType.Builder.<EntityArtsProjectile>create(EntityArtsProjectile::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectilearts").toString());
+    public static final RegistryObject<EntityType<EntityArtsProjectile>> PROJECTILEARTS = ENTITIES.register("entityartsprojectile", () -> PROJECTILEARTS_ENTITYTYPE);
 
     public static final EntityType<EntityProjectileTorpedo> PROJECTILETORPEDO = EntityType.Builder.<EntityProjectileTorpedo>create(EntityProjectileTorpedo::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectiletorpedo").toString());
     public static final RegistryObject<EntityType<EntityProjectileTorpedo>> TORPEDO = ENTITIES.register("entitytorpedo", () -> PROJECTILETORPEDO);

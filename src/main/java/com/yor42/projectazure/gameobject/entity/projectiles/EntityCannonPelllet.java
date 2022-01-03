@@ -23,15 +23,15 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     AmmoProperties properties;
     BlockPos originPos;
 
-    public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn, AmmoProperties ammotype){
-        super(entityType,worldIn);
+    public EntityCannonPelllet(World worldIn, AmmoProperties ammotype){
+        super(registerManager.PROJECTILECANNONSHELL,worldIn);
         this.properties = ammotype;
     }
 
     public EntityCannonPelllet(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
         super(registerManager.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
-        this.originPos = new BlockPos(shooter.getPosX(), shooter.getPosY(), shooter.getPosZ());
+        this.originPos = new BlockPos(shooter.getPosX(), shooter.getPosYHeight(0.5), shooter.getPosZ());
     }
 
     public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
@@ -80,7 +80,7 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     @Override
     protected void onEntityHit(EntityRayTraceResult result) {
         Entity target = result.getEntity();
-        double DistanceMultiplier = Math.min(20/getDistanceSq(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
+        double DistanceMultiplier = Math.min(400/getDistanceSq(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
         if(this.properties != null) {
             if (target instanceof EntityKansenBase) {
                 ((EntityKansenBase) target).attackEntityFromCannon(DamageSources.causeCannonDamage(this, this.func_234616_v_()), this.properties, DistanceMultiplier);
@@ -109,10 +109,6 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
         if(this.ticksExisted == 600 || this.isInWater()){
             this.remove();
         }
-        Vector3d vector3d = this.getMotion();
-        //disables constant acceleration;
-        //this.setMotion(vector3d.add(-this.accelerationX, -this.accelerationY, -this.accelerationZ).scale(this.getMotionFactor()));
-
         super.tick();
     }
 }

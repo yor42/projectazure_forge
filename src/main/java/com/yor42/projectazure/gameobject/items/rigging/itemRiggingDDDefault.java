@@ -73,7 +73,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
     }
 
     @Override
-    public void RenderRigging(IGeoRenderer renderer, GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         matrixStackIn.push();
         GeoModelProvider modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();
         IBone hostbone = entityModel.getModel(entityModel.getModelLocation(null)).getBone("Body").get();
@@ -82,8 +82,8 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
         }
 
 
-        RenderType type = RenderType.getEntitySmoothCutout(((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getTexture());
-        renderer.render(modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        RenderType type = RenderType.getEntitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
+        this.render(modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
         matrixStackIn.pop();
         IMultiInventory inventories = MultiInvUtil.getCap(entitylivingbaseIn.getRigging());
 
@@ -101,7 +101,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
             GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
             EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
             EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead() - entitylivingbaseIn.renderYawOffset), 7.5F, -12.5F, false, true));
-            renderer.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
         }
 
@@ -117,7 +117,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
             GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
             EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
             EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead() - entitylivingbaseIn.renderYawOffset), 7.5F, -12.5F, false, true));
-            renderer.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.pop();
         }
 
@@ -141,7 +141,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
                 EquipmentModel.getBone("torpedo2").ifPresent((bone) -> bone.setHidden(AmmoCount < 2));
                 EquipmentModel.getBone("torpedo1").ifPresent((bone) -> bone.setHidden(AmmoCount < 1));
 
-                renderer.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
                 matrixStackIn.pop();
             }
         }
@@ -164,7 +164,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
                 EquipmentModel.getBone("torpedo2").ifPresent((bone) -> bone.setHidden(AmmoCount < 2));
                 EquipmentModel.getBone("torpedo1").ifPresent((bone) -> bone.setHidden(AmmoCount < 1));
 
-                renderer.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
                 matrixStackIn.pop();
             }
         }
@@ -187,7 +187,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
                 EquipmentModel.getBone("torpedo2").ifPresent((bone) -> bone.setHidden(AmmoCount < 2));
                 EquipmentModel.getBone("torpedo1").ifPresent((bone) -> bone.setHidden(AmmoCount < 1));
 
-                renderer.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
                 matrixStackIn.pop();
             }
         }

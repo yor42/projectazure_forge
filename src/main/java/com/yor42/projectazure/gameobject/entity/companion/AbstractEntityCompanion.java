@@ -18,6 +18,7 @@ import com.yor42.projectazure.gameobject.items.ItemCommandStick;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.interfaces.IAttributeable;
 import com.yor42.projectazure.intermod.ModCompatibilities;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
@@ -32,10 +33,7 @@ import net.minecraft.block.material.PushReaction;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -70,8 +68,6 @@ import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.common.util.NonNullConsumer;
-import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -92,15 +88,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
-public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable {
+public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable, IAttributeable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
@@ -857,8 +851,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<>(this, "controller_lowerbody", 1, this::predicate_lowerbody));
-        animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 1, this::predicate_upperbody));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_lowerbody", 7, this::predicate_lowerbody));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 7, this::predicate_upperbody));
         animationData.addAnimationController(new AnimationController<>(this, "controller_head", 1, this::predicate_head));
     }
 

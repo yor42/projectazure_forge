@@ -155,7 +155,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             return PlayState.CONTINUE;
         }
 
-        if(this.dataManager.get(SITTING)){
+        if(this.isSitting()){
             event.getController().setAnimation(builder.addAnimation("sit_arm", true));
 
         }

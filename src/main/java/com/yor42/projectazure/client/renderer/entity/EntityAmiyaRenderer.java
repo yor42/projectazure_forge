@@ -2,8 +2,9 @@ package com.yor42.projectazure.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.client.model.entity.sworduser.ChenModel;
+import com.yor42.projectazure.client.model.entity.magicuser.AmiyaModel;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.client.Minecraft;
@@ -17,25 +18,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
+public class EntityAmiyaRenderer extends GeoEntityRenderer<EntityAmiya> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;
     private ResourceLocation texture;
 
-    public EntityChenRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new ChenModel());
+    public EntityAmiyaRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new AmiyaModel());
         this.shadowSize = 0.4F;
     }
 
     @Override
-    public void renderEarly(EntityChen animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+    public void renderEarly(EntityAmiya animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
         this.rtb = renderTypeBuffer;
         this.entity = animatable;
@@ -43,7 +45,7 @@ public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
     }
 
     @Override
-    public void render(EntityChen entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(EntityAmiya entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
         stack.push();
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
@@ -51,13 +53,13 @@ public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityChen entity) {
-        return TextureEntityLocation("modelchen");
+    public RenderType getRenderType(EntityAmiya animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+        return RenderType.getEntitySmoothCutout(textureLocation);
     }
 
     @Override
-    public RenderType getRenderType(EntityChen animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.getEntitySmoothCutout(textureLocation);
+    public ResourceLocation getEntityTexture(EntityAmiya entity) {
+        return TextureEntityLocation("modelamiya");
     }
 
     @Override

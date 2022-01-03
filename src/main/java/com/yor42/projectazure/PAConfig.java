@@ -74,6 +74,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue ChenAttackDamage;
         public final ForgeConfigSpec.DoubleValue ChenMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue AmiyaHealth;
+        public final ForgeConfigSpec.DoubleValue AmiyaSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue AmiyaAttackDamage;
+        public final ForgeConfigSpec.DoubleValue AmiyaMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -133,6 +138,11 @@ public class PAConfig {
         public final ForgeConfigSpec.BooleanValue RiggingInfiniteFuel;
 
         private PAModConfig(ForgeConfigSpec.Builder builder){
+            builder.comment("As a Mod dev/modpack maker, I believe everything in mod should be configurable.");
+            builder.comment("Minecraft is after all, game that no one plays the same.");
+            builder.comment("So Nobody should tell you how to play the game.");
+            builder.comment("So here you go. Go crazy with it.");
+            builder.comment(" - yor42");
 
             builder.push("General");
             EnablePVP = builder.define("Enable PVP Combat", false);
@@ -181,6 +191,11 @@ public class PAConfig {
             ChenSwimSpeed = builder.defineInRange("Swim Speed of Ch'en", 2.5, 0, 1024);
             ChenAttackDamage = builder.defineInRange("Attack Damage of Ch'en", 2.0F, 0, 1024);
             ChenMovementSpeed = builder.defineInRange("Movement speed of Ch'en", 0.4F, 0, 2);
+
+            AmiyaHealth = builder.defineInRange("Max Health of Amiya", 20D, 1, 1024);
+            AmiyaSwimSpeed = builder.defineInRange("Swim Speed of Amiya", 2.5, 0, 1024);
+            AmiyaAttackDamage = builder.defineInRange("Attack Damage of Amiya", 2.0F, 0, 1024);
+            AmiyaMovementSpeed = builder.defineInRange("Movement speed of Amiya", 0.4F, 0, 2);
 
             builder.pop().push("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);

@@ -6,6 +6,8 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
@@ -21,7 +23,7 @@ public class EnterpriseRiggingLayer extends GeoLayerRenderer<EntityEnterprise> {
         Item item = rigging.getItem();
 
         if (item instanceof ItemRiggingBase) {
-            ((ItemRiggingBase)item).RenderRigging(this.getRenderer(), this.getEntityModel(), rigging, entitylivingbaseIn, matrixStackIn, bufferIn, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            ((ItemRiggingBase)item).RenderRigging(this.getEntityModel(), rigging, entitylivingbaseIn, matrixStackIn, bufferIn, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
         }
     }
 }

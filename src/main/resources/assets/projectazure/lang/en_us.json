@@ -299,6 +299,12 @@
 
   "death.attack.bonk": "%1$s was sent to horny jail",
 
+  "death.attack.arts_0": "%1$s was murdered by arts from %2$s",
+  "death.attack.arts_1": "%1$s was cooked by %2$s's arts",
+  "death.attack.arts_2": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts. yikes.",
+  "death.attack.arts_3": "%1$s turned into pile of originium by %2$s's arts",
+  "death.attack.arts_4": "%2$s was suck at dodging %2$s's spicy magic ball",
+
   "death.attack.ate_originium_prime_0": "%1$s Literally ate pure originium. ...oh my god",
   "death.attack.ate_originium_prime_1": "%1$s discovered the delicious taste of originium",
   "death.attack.ate_originium_prime_2": "%1$s tried to get arts ability. little did he know was this mod doesn't have that.",

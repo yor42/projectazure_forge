@@ -22,7 +22,7 @@ public class LaffeyRiggingLayer extends GeoLayerRenderer<EntityLaffey> {
 
         boolean flag = item instanceof ItemRiggingBase;
         if (flag) {
-            ((ItemRiggingBase)item).RenderRigging(this.getRenderer(), this.getEntityModel(), rigging, entitylivingbaseIn, matrixStackIn, bufferIn, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+            ((ItemRiggingBase)item).RenderRigging(this.getEntityModel(), rigging, entitylivingbaseIn, matrixStackIn, bufferIn, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
         }
     }
 }

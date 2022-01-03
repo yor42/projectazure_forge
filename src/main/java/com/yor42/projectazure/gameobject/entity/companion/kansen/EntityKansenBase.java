@@ -328,17 +328,16 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 double z = target.getPosZ() - (this.getPosZ());
 
                 EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, 0, 0, 0, ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty());
-                shell.setPosition(this.getPosX(), this.getPosYHeight(0.5), shell.getPosZ());
                 shell.shoot(x,y,z, 0.8F, 0.05F);
                 this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                 this.world.addEntity(shell);
                 Ammostack.shrink(1);
                 Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));
 
-                this.addExp(1.0F);
+                this.addExp(0.5F);
                 ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), CannonType, this);
                 setEquipmentDelay(FiringCannon);
-                this.addMorale(-0.1);
+                this.addMorale(-0.2);
             }
         }
     }

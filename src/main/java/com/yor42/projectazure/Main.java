@@ -7,10 +7,7 @@ import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer
 import com.yor42.projectazure.client.renderer.entity.*;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRenderer;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
-import com.yor42.projectazure.client.renderer.entity.projectile.EntityGunBulletRenderer;
-import com.yor42.projectazure.client.renderer.entity.projectile.EntityProjectileTorpedoRenderer;
-import com.yor42.projectazure.client.renderer.entity.projectile.MissileDroneMissileRenderer;
-import com.yor42.projectazure.client.renderer.entity.projectile.entityCannonPelletRenderer;
+import com.yor42.projectazure.client.renderer.entity.projectile.*;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.events.ModBusEventHandlerClient;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
@@ -144,11 +141,14 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.ENTERPRISE.get(), entityEnterpriseRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.NAGATO.get(), entityNagatoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.CHEN.get(), EntityChenRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.AMIYA.get(), EntityAmiyaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.M4A1.get(), EntityM4A1Renderer::new);
+
         RenderingRegistry.registerEntityRenderingHandler(registerManager.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.PROJECTILEARTS.get(), EntityArtsProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.GUN_BULLET.get(), EntityGunBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
 

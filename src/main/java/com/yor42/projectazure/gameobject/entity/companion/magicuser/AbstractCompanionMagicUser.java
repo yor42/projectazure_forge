@@ -59,14 +59,14 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
 
             return !(hasAmmo || reloadable);
         }
-        else return this.getHeldItem(getSpellUsingHand()).isEmpty();
+        else return this.getHeldItem(getSpellUsingHand()).isEmpty() && !this.isSwimming();
     }
 
     public boolean isUsingSpell(){
         return this.getSpellDelay()>0;
     }
 
-    public abstract void ShootProjectile(World world, LivingEntity target);
+    public abstract void ShootProjectile(World world, @Nonnull LivingEntity target);
 
     @Override
     public void readAdditional(@Nonnull CompoundNBT compound) {
@@ -100,7 +100,6 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
     }
 
     public void StartShootingEntity(LivingEntity target) {
-        this.setAttackTarget(target);
         this.setSpellDelay(this.getInitialSpellDelay());
     }
 }
