@@ -250,8 +250,17 @@
   "entity.projectazure.entityshiroko": "Shiroko",
 
   "entity.projectazure.entitychen": "Ch'en",
+  "entity.projectazure.entityamiya": "Amiya",
 
   "entity.projectazure.missiledrone": "Missile Drone",
+
+  "entity.projectazure.projectilecannonshell": "Cannon Shell",
+  "entity.projectazure.projectilearts": "Originium Arts",
+  "entity.projectazure.projectiletorpedo": "Torpedo",
+  "entity.projectazure.projectilebullet": "Bullet",
+  "entity.projectazure.projectiledrone_missile": "Drone Missile",
+
+  "entity.projectazure.entityplanef4fwildcat": "F4F Wildcat",
 
   "guntype.assault_rifle": "Assault Rifle",
   "guntype.shotgun": "Shotgun",

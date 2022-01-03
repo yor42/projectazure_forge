@@ -250,8 +250,17 @@
   "entity.projectazure.entityshiroko": "시로코",
 
   "entity.projectazure.entitychen": "첸",
+  "entity.projectazure.entityamiya": "아미야",
 
   "entity.projectazure.missiledrone": "미사일 드론",
+
+  "entity.projectazure.projectilecannonshell": "함포 탄환",
+  "entity.projectazure.projectilearts": "오리지늄 아츠",
+  "entity.projectazure.projectiletorpedo": "어뢰",
+  "entity.projectazure.projectilebullet": "총알",
+  "entity.projectazure.projectiledrone_missile": "드론 미사일",
+
+  "entity.projectazure.entityplanef4fwildcat": "F4F 와일드캣",
 
   "guntype.assault_rifle": "돌격소총",
   "guntype.shotgun": "산탄총",
@@ -298,6 +307,12 @@
   "effect.projectazure.acute_oripathy": "급성 광석병",
 
   "death.attack.bonk": "%1$s이 %2$s에 의해 백병원으로 보내졌습니다.",
+
+  "death.attack.arts_0": "%1$s was murdered by arts from %2$s",
+  "death.attack.arts_1": "%1$s was cooked by %2$s's arts",
+  "death.attack.arts_2": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts. yikes.",
+  "death.attack.arts_3": "%1$s turned into pile of originium by %2$s's arts",
+  "death.attack.arts_4": "%2$s was suck at dodging %2$s's spicy magic ball",
 
   "death.attack.ate_originium_prime_0": "%1$s 가 방금 오리지늄을 먹었습니다. ..세상에나.",
   "death.attack.ate_originium_prime_1": "%1$s 이(가) 방금 오리지늄의 맛을 깨우쳤습니다.",
