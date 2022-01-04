@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -10,6 +11,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -31,6 +33,12 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
     protected void registerData() {
         super.registerData();
         this.getDataManager().register(SPELLDELAY, -1);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return this.getAffection()>=75? registerSounds.CHIMERA_TALK_NORMAL: registerSounds.CHIMERA_TALK_HIGH_AFFECTION;
     }
 
     public int getSpellDelay(){

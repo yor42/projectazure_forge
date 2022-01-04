@@ -1767,6 +1767,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
+    public int getTalkInterval() {
+        return 3000;
+    }
+
+    @Override
     public void tick() {
         super.tick();
         if(this.getHOMEPOS().isPresent()&&this.ticksExisted%30==0){

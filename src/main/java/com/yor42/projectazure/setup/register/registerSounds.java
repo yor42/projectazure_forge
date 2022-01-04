@@ -14,6 +14,7 @@ public final class registerSounds {
 
     public static final ArrayList<SoundEvent> Sounds = new ArrayList<>();
 
+    //sound files are EXCLUDED from repo due to COPYRIGHT. Issue about these topic will be closed with no response.
     public static final SoundEvent CANON_FIRE_MEDIUM = registerSoundEvent("gun_fire_medium");
 
     public static final SoundEvent RIFLE_FIRE_SUPPRESSED = registerSoundEvent("rifle_suppressed");
@@ -29,6 +30,9 @@ public final class registerSounds {
 
     public static final SoundEvent CHIMERA_PROJECTILE_LAUNCH = registerSoundEvent("chimera_projectile_launch");
     public static final SoundEvent CHIMERA_PROJECTILE_HIT = registerSoundEvent("chimera_projectile_impact");
+
+    public static final SoundEvent CHIMERA_TALK_NORMAL = registerSoundEvent("chimera_talk_normal");
+    public static final SoundEvent CHIMERA_TALK_HIGH_AFFECTION = registerSoundEvent("chimera_talk_high_affection");
 
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);

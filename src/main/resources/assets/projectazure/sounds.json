@@ -78,5 +78,64 @@
         "stream": true
       }
     ]
+  },
+  "chimera_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice7"
+      }
+    ]
+  },
+  "chimera_talk_high_affection": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice_aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice_aff2"
+      },
+      {
+        "name": "projectazure:entity/akn/chimera/voice/voice_aff3"
+      }
+    ]
   }
 }
