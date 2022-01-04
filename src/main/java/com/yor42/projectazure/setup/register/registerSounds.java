@@ -2,12 +2,17 @@ package com.yor42.projectazure.setup.register;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+
+import java.util.ArrayList;
 
 import static com.yor42.projectazure.libs.Constants.MODID;
 
 public final class registerSounds {
+
+    public static final ArrayList<SoundEvent> Sounds = new ArrayList<>();
 
     public static final SoundEvent CANON_FIRE_MEDIUM = registerSoundEvent("gun_fire_medium");
 
@@ -22,20 +27,20 @@ public final class registerSounds {
 
     public static final SoundEvent PLANE_GUN = registerSoundEvent("plane_gun");
 
+    public static final SoundEvent CHIMERA_PROJECTILE_LAUNCH = registerSoundEvent("chimera_projectile_launch");
+    public static final SoundEvent CHIMERA_PROJECTILE_HIT = registerSoundEvent("chimera_projectile_impact");
+
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);
-        return new SoundEvent(soundID).setRegistryName(soundID);
+        SoundEvent sound = new SoundEvent(soundID).setRegistryName(soundID);
+        Sounds.add(sound);
+        return sound;
     }
 
     public static void register(RegistryEvent.Register<SoundEvent> evt) {
         IForgeRegistry<SoundEvent> registry = evt.getRegistry();
-        registry.register(DISC_FRIDAY_NIGHT);
-        registry.register(DISC_BRAINPOWER);
-        registry.register(WEAPON_BONK);
-        registry.register(CANON_FIRE_MEDIUM);
-        registry.register(PLANE_GUN);
-        registry.register(GUN_CLICK);
-        registry.register(DISC_RICKROLL);
-        registry.register(RIFLE_FIRE_SUPPRESSED);
+        for(SoundEvent sound:Sounds){
+            registry.register(sound);
+        }
     }
 }

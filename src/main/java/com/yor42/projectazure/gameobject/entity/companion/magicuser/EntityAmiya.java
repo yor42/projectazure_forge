@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -219,7 +220,9 @@ public class EntityAmiya extends AbstractCompanionMagicUser{
             projectile.setPosition(this.getPosX(), this.getPosYHeight(0.7), this.getPosZ());
             this.getEntityWorld().addEntity(projectile);
 
+            this.playSound(registerSounds.CHIMERA_PROJECTILE_LAUNCH, 1F, 0.8F + this.world.rand.nextFloat() * 0.4F);
             this.addExp(0.2F);
+            this.addExhaustion(0.05F);
             this.addMorale(-0.2);
         }
     }

@@ -1606,7 +1606,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     this.addAffection(effectinstance.getPotion().isBeneficial() ? 0.05 : -0.075);
                 }
-                this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1F, 0.8F + this.world.rand.nextFloat() * 0.4F);
                 if (!player.isCreative()) {
                     player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE));
                 }

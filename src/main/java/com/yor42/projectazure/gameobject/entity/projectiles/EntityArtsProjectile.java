@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.projectiles;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -59,6 +60,12 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
             }
             this.remove();
         }
+    }
+
+    @Override
+    public void remove() {
+        this.playSound(registerSounds.CHIMERA_PROJECTILE_HIT, 1F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+        super.remove();
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
