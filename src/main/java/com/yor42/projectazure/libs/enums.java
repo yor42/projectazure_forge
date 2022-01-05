@@ -30,6 +30,11 @@ public class enums {
 
     }
 
+    public enum MELEE_ATTACK_TYPE{
+        KNOCKBACK,
+        DAMAGE
+    }
+
     public enum PLANE_TYPE{
         FIGHTER("plane.fighter"),
         TORPEDO_BOMBER("plane.torpedo_bomber"),

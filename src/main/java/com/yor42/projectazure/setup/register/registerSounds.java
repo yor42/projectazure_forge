@@ -28,6 +28,9 @@ public final class registerSounds {
 
     public static final SoundEvent PLANE_GUN = registerSoundEvent("plane_gun");
 
+    public static final SoundEvent SHEATH_HIT = registerSoundEvent("sheath_hit");
+    public static final SoundEvent CHIXIAO_HIT = registerSoundEvent("chixiao_hit");
+
     public static final SoundEvent CHIMERA_PROJECTILE_LAUNCH = registerSoundEvent("chimera_projectile_launch");
     public static final SoundEvent CHIMERA_PROJECTILE_HIT = registerSoundEvent("chimera_projectile_impact");
 

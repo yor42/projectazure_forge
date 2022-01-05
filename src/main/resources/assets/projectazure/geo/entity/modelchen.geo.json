@@ -22,7 +22,7 @@
 				{
 					"name": "waist",
 					"parent": "Body",
-					"pivot": [0, 36.72151, 3.39286],
+					"pivot": [0, 36.72151, 0.39286],
 					"cubes": [
 						{"origin": [-8.25, 24.02013, -3.81055], "size": [16.5, 1, 8], "uv": [53, 177]},
 						{"origin": [-9, 27.52013, -4.81055], "size": [18, 7, 10], "uv": [2, 205]},
@@ -459,6 +459,14 @@
 					]
 				},
 				{
+					"name": "Sleeping",
+					"parent": "Faces",
+					"pivot": [-3, 38.75, -2.65],
+					"cubes": [
+						{"origin": [-6.5, 53.02013, -6.66055], "size": [13, 13, 0.5], "uv": [35, 226]}
+					]
+				},
+				{
 					"name": "RightArm",
 					"parent": "Chest",
 					"pivot": [-7.75, 50.75, 0],
@@ -480,7 +488,7 @@
 				{
 					"name": "itemMainHand",
 					"parent": "RightHand",
-					"pivot": [-8.83716, 17.74619, 0]
+					"pivot": [-8.83716, 27.74619, 0]
 				},
 				{
 					"name": "LeftArm",
@@ -505,7 +513,7 @@
 				{
 					"name": "itemOffHand",
 					"parent": "LeftHand",
-					"pivot": [8.83716, 17.74619, 0]
+					"pivot": [8.83716, 26.74619, 0]
 				}
 			]
 		}

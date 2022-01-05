@@ -253,7 +253,8 @@ public class registerItems {
             .setISTER(() -> ItemAbydos550Renderer::new)
             .group(PA_WEAPONS).maxStackSize(1), true, MAGAZINE_5_56.get()));
 
-    public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 5, -1.7F, new Item.Properties().group(PA_WEAPONS)));
+    public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 7, -1.7F, new Item.Properties().group(PA_WEAPONS)));
+    public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.CHIXIAO, 5, -1.5F, new Item.Properties().group(PA_WEAPONS)));
 
     public static final RegistryObject<Item> COMPOUNDBOW = registerManager.ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().group(PA_WEAPONS).maxDamage(1000)));
 

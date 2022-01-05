@@ -10,10 +10,10 @@ import net.minecraft.item.SwordItem;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
 
-public class CompanionMeleeGoal extends MeleeAttackGoal {
+public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
     private AbstractEntityCompanion entity;
 
-    public CompanionMeleeGoal(AbstractEntityCompanion creature, double speedIn, boolean useLongMemory) {
+    public CompanionVanillaMeleeGoal(AbstractEntityCompanion creature, double speedIn, boolean useLongMemory) {
         super(creature, speedIn, useLongMemory);
         this.entity = creature;
     }

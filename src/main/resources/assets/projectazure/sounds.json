@@ -137,5 +137,19 @@
         "name": "projectazure:entity/akn/chimera/voice/voice_aff3"
       }
     ]
+  },
+  "sheath_hit": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/chen/hit"
+      }
+    ]
+  },
+  "chixiao_hit": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/chen/hit_heavy"
+      }
+    ]
   }
 }

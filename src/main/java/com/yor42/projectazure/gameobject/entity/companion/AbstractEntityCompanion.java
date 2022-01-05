@@ -11,6 +11,7 @@ import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -62,7 +63,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.*;
@@ -784,7 +784,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         this.setItemStackToSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
                     }
                     this.activeItemStack = ItemStack.EMPTY;
-                    this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+                    this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.getRNG().nextFloat() * 0.4F);
                 }
             }
         }
@@ -1437,15 +1437,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
             this.goalSelector.addGoal(6, new KansenRangedAttackGoal((EntityKansenBase) this, 0.8F, 10,20, 80, 100));
         }
-        if(this instanceof AbstractCompanionMagicUser){
+        else if(this instanceof AbstractCompanionMagicUser){
             this.goalSelector.addGoal(7, new CompanionSpellRangedAttackGoal((AbstractCompanionMagicUser) this, 10));
+        }
+        else if(this instanceof AbstractSwordUserBase){
+            this.goalSelector.addGoal(7, new CompanionSwordUserMeleeAttack((AbstractSwordUserBase) this));
         }
         this.goalSelector.addGoal(8, new CompanionUseShieldGoal(this));
         this.goalSelector.addGoal(9, new CompanionHealandEatFoodGoal(this));
         this.goalSelector.addGoal(10, new CompanionsUseTotem(this));
         this.goalSelector.addGoal(11, new CompanionUseGunGoal(this, 40, 0.6));
         this.goalSelector.addGoal(12, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(13, new CompanionMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(13, new CompanionVanillaMeleeGoal(this, 1.0D, true));
         this.goalSelector.addGoal(14, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
         this.goalSelector.addGoal(15, new WorkGoal(this, 1.0D));
         this.goalSelector.addGoal(16, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
@@ -1595,8 +1598,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     player.setHeldItem(hand, stack);
                 }
                 return ActionResultType.SUCCESS;
-                //Potion
-            } else if (HeldItem instanceof PotionItem) {
+            }
+            //Potion
+            else if (HeldItem instanceof PotionItem && !(HeldItem instanceof ThrowablePotionItem)) {
                 ItemStack stack = player.getHeldItem(hand);
                 for (EffectInstance effectinstance : PotionUtils.getEffectsFromStack(stack)) {
                     if (effectinstance.getPotion().isInstant()) {
@@ -1769,6 +1773,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public int getTalkInterval() {
         return 3000;
+    }
+
+    @Override
+    protected float getSoundPitch() {
+        return 0.9F+(this.getRNG().nextFloat()*0.2F);
     }
 
     @Override

@@ -35,12 +35,6 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
         this.getDataManager().register(SPELLDELAY, -1);
     }
 
-    @Nullable
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return this.getAffection()>=75? registerSounds.CHIMERA_TALK_NORMAL: registerSounds.CHIMERA_TALK_HIGH_AFFECTION;
-    }
-
     public int getSpellDelay(){
         return this.getDataManager().get(SPELLDELAY);
     }

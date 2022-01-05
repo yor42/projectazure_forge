@@ -8,14 +8,22 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.TieredItem;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -27,6 +35,13 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static com.yor42.projectazure.setup.register.registerSounds.CHIXIAO_HIT;
+import static com.yor42.projectazure.setup.register.registerSounds.SHEATH_HIT;
 
 public class EntityChen extends AbstractSwordUserBase implements IArknightOperator {
     @Override
@@ -36,6 +51,40 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
 
     public EntityChen(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    @Override
+    public int getInitialAttackDelay() {
+        return 31;
+    }
+
+    @Override
+    public ArrayList<Integer> getAttackPreAnimationDelay() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(8);
+        list.add(24);
+        return list;
+    }
+
+    public SoundEvent getAttackSound(){
+        return this.getHeldItemMainhand().getItem() == registerItems.CHIXIAO.get()? CHIXIAO_HIT:SHEATH_HIT;
+    }
+
+    @Override
+    public ArrayList<Item> getMeleeItem() {
+        return new ArrayList<>(Arrays.asList(registerItems.SHEATH.get(), registerItems.CHIXIAO.get()));
+    }
+
+    @Override
+    public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
+        this.playSound(getAttackSound(), 1F, 0.8F + this.getRNG().nextFloat() * 0.4F);
+        if(AttackCount == 2){
+            target.attackEntityFrom(DamageSource.causeMobDamage(this), 5F);
+        }
+        else{
+            target.attackEntityFrom(DamageSource.causeMobDamage(this), 2);
+            target.applyKnockback(0.09F, MathHelper.sin(this.rotationYaw * ((float)Math.PI / 180F)), -MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F)));
+        }
     }
 
     @Override
@@ -59,8 +108,11 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
         }
-
-        if (isMoving()) {
+        else if(this.isAttacking()){
+            event.getController().setAnimation(builder.addAnimation("melee_attack_leg", true));
+            return PlayState.CONTINUE;
+        }
+        else if (isMoving()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_leg", true));
             }
@@ -69,10 +121,10 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isMeleeing() || this.isSleeping()){
+        else if(this.isSleeping()){
             return PlayState.STOP;
         }
-        event.getController().markNeedsReload();
+        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
         return PlayState.STOP;
     }
 
@@ -94,6 +146,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
         }
 
         return PlayState.CONTINUE;
+
     }
 
     @Override
@@ -105,12 +158,15 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
+        if(this.isAttacking()){
+            event.getController().setAnimation(builder.addAnimation("melee_attack_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep", true));
             return PlayState.CONTINUE;
         }
-
-        if(this.isBeingPatted()){
+        else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
         }
@@ -122,6 +178,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             else{
                 event.getController().setAnimation(builder.addAnimation("opendoorR", false));
             }
+            return PlayState.CONTINUE;
         }
         else if(this.isReloadingMainHand()){
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
@@ -145,6 +202,16 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
+
+        if(this.isSitting()){
+            if(this.getHeldItemMainhand().getItem() instanceof TieredItem){
+                event.getController().setAnimation(builder.addAnimation("sit_arm_toolmainhand", true));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_arm_emptymainhand", true));
+            }
+            return PlayState.CONTINUE;
+        }
         else if(this.isMoving()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
@@ -154,11 +221,6 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
             }
             return PlayState.CONTINUE;
         }
-
-        if(this.isSitting()){
-            event.getController().setAnimation(builder.addAnimation("sit_arm", true));
-
-        }
         else{
             if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
                 if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
@@ -167,9 +229,8 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
                 return PlayState.CONTINUE;
             }
             event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+            return PlayState.CONTINUE;
         }
-
-        return PlayState.CONTINUE;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
@@ -185,9 +246,7 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
-        AnimationBuilder builder = new AnimationBuilder();
-        event.getController().setAnimation(builder.addAnimation("idle_body", true));
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
     @Override

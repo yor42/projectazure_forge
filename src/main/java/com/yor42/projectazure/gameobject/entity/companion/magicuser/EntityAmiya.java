@@ -17,6 +17,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -26,6 +27,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EntityAmiya extends AbstractCompanionMagicUser{
     public EntityAmiya(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -181,6 +183,12 @@ public class EntityAmiya extends AbstractCompanionMagicUser{
         Supposed to be 5, but I dont think this entity should be THAT rare..
          */
         return enums.CompanionRarity.STAR_4;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return this.getAffection()>=75? registerSounds.CHIMERA_TALK_NORMAL: registerSounds.CHIMERA_TALK_HIGH_AFFECTION;
     }
 
     @Override

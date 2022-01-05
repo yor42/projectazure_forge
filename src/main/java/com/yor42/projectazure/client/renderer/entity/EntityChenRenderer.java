@@ -15,6 +15,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -66,7 +67,8 @@ public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
             ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-            stack.translate(0.7F, 0.1, 1.7F);
+            stack.translate(0.6F, 0.1, 1.5F);
+            stack.rotate(new Quaternion(bone.getRotationX(), bone.getRotationY(), bone.getRotationZ(),false));
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Item gunItem = this.entity.getGunStack().getItem();

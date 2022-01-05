@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
@@ -8,16 +9,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class CompanionSpellRangedAttackGoal extends Goal {
+public class CompanionSwordUserMeleeAttack extends Goal {
+
+    /*
+    Yea I Shamelessly reused Spell goal code for this.
+     */
+
     @Nonnull
-    private final AbstractCompanionMagicUser host;
+    private final AbstractSwordUserBase host;
     @Nullable private LivingEntity target;
-    private final float maxAttackDistance;
     private int seeTime;
 
-    public CompanionSpellRangedAttackGoal(@Nonnull AbstractCompanionMagicUser companion, float maxDistance){
+    public CompanionSwordUserMeleeAttack(@Nonnull AbstractSwordUserBase companion){
         this.host = companion;
-        this.maxAttackDistance = maxDistance;
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
@@ -29,8 +33,8 @@ public class CompanionSpellRangedAttackGoal extends Goal {
             return false;
         }
 
-
-        if(this.host.shouldUseSpell()) {
+        boolean shouldAttack = this.host.shouldAttack();
+        if(shouldAttack) {
             this.target = targetEntity;
             return true;
         }
@@ -45,9 +49,6 @@ public class CompanionSpellRangedAttackGoal extends Goal {
     public void startExecuting() {
         this.host.getNavigator().clearPath();
         this.host.setAggroed(true);
-        if(this.target != null) {
-            this.host.faceEntity(this.target, 30.0F, 30.0F);
-        }
     }
 
     @Override
@@ -63,8 +64,7 @@ public class CompanionSpellRangedAttackGoal extends Goal {
             double distance = this.host.getDistance(this.target);
             boolean canSee = this.host.getEntitySenses().canSee(this.target);
 
-            boolean isTooclose = distance <=this.maxAttackDistance*0.5;
-            boolean isTooFar = distance > (double)this.maxAttackDistance;
+            boolean isTooFar = distance > 3;
 
             if (canSee) {
                 ++this.seeTime;
@@ -72,19 +72,15 @@ public class CompanionSpellRangedAttackGoal extends Goal {
                 this.seeTime = 0;
             }
             this.host.faceEntity(this.target, 30.0F, 30.0F);
-            if(!this.host.isUsingSpell()) {
+            if(!this.host.isAttacking()) {
                 if (isTooFar) {
-                    this.host.setSprinting(distance >= this.maxAttackDistance*1.5);
+                    this.host.setSprinting(distance >= 8);
                     this.host.getNavigator().tryMoveToEntityLiving(this.target, 1);
-                } else if (isTooclose) {
-                    this.host.getMoveHelper().strafe(-0.5F, 0);
-                    this.host.setSprinting(false);
                 } else if(this.seeTime >= 5){
                     this.host.getNavigator().clearPath();
                     this.host.setSprinting(false);
-                    this.host.StartShootingEntity(this.target);
+                    this.host.StartAttackingEntity();
                 }else {
-                    this.host.setSprinting(distance >= this.maxAttackDistance*1.5);
                     this.host.getNavigator().tryMoveToEntityLiving(this.target, 1);
                 }
             }
