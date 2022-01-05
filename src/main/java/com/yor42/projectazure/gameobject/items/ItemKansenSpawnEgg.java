@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.interfaces.IArknightOperator;
+import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
@@ -84,8 +84,8 @@ public class ItemKansenSpawnEgg extends Item {
                 if(entity instanceof EntityKansenBase){
                     tooltip.add(new TranslationTextComponent("tooltip.companion.shipgirl_class").appendString(": ").append(new TranslationTextComponent(((EntityKansenBase) entity).getShipClass().getName()).mergeStyle(TextFormatting.YELLOW)).mergeStyle(TextFormatting.GRAY));
                 }
-                else if(entity instanceof IArknightOperator){
-                    tooltip.add(new TranslationTextComponent("tooltip.companion.operator_class").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(((IArknightOperator) entity).getOperatorClass().getName()).mergeStyle(TextFormatting.YELLOW)));
+                else if(entity instanceof IAknOp){
+                    tooltip.add(new TranslationTextComponent("tooltip.companion.operator_class").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(((IAknOp) entity).getOperatorClass().getName()).mergeStyle(TextFormatting.YELLOW)));
                 }
 
                 if(entity.getGunSpecialty() != enums.GunClass.NONE){

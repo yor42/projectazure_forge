@@ -1,9 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
+import com.google.common.collect.Lists;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import com.yor42.projectazure.interfaces.IArknightOperator;
+import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.Minecraft;
@@ -17,12 +18,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.SwordItem;
 import net.minecraft.item.TieredItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -37,13 +37,11 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
 
 import static com.yor42.projectazure.setup.register.registerSounds.CHIXIAO_HIT;
 import static com.yor42.projectazure.setup.register.registerSounds.SHEATH_HIT;
 
-public class EntityChen extends AbstractSwordUserBase implements IArknightOperator {
+public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     @Override
     public enums.EntityType getEntityType() {
         return enums.EntityType.OPERATOR;
@@ -66,25 +64,34 @@ public class EntityChen extends AbstractSwordUserBase implements IArknightOperat
         return list;
     }
 
+    public ArrayList<Item> getTalentedWeaponList(){
+        return new ArrayList<>(Arrays.asList(registerItems.CHIXIAO.get(), registerItems.SHEATH.get()));
+    }
+
     public SoundEvent getAttackSound(){
         return this.getHeldItemMainhand().getItem() == registerItems.CHIXIAO.get()? CHIXIAO_HIT:SHEATH_HIT;
     }
 
     @Override
-    public ArrayList<Item> getMeleeItem() {
-        return new ArrayList<>(Arrays.asList(registerItems.SHEATH.get(), registerItems.CHIXIAO.get()));
+    public float getAttackRange(boolean isUsingTalentedWeapon) {
+        return isUsingTalentedWeapon? 4:3;
     }
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         this.playSound(getAttackSound(), 1F, 0.8F + this.getRNG().nextFloat() * 0.4F);
         if(AttackCount == 2){
-            target.attackEntityFrom(DamageSource.causeMobDamage(this), 5F);
+            target.attackEntityFrom(DamageSource.causeMobDamage(this), damage+3);
         }
         else{
-            target.attackEntityFrom(DamageSource.causeMobDamage(this), 2);
+            target.attackEntityFrom(DamageSource.causeMobDamage(this), damage*0.3F);
             target.applyKnockback(0.09F, MathHelper.sin(this.rotationYaw * ((float)Math.PI / 180F)), -MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F)));
         }
+    }
+
+    @Override
+    public float getAttackSpeedModifier(boolean isUsingTalentedWeapon) {
+        return isUsingTalentedWeapon? 1:1.2F;
     }
 
     @Override

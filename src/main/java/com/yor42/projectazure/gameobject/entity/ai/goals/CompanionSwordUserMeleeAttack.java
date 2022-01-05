@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
-import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -33,7 +32,11 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             return false;
         }
 
-        boolean shouldAttack = this.host.shouldAttack();
+        if(this.host.getOwner() != null && (this.host.getDistance(this.host.getOwner())>=16 || targetEntity.getDistance(this.host.getOwner())>=16)){
+            return false;
+        }
+
+        boolean shouldAttack = this.host.shouldUseNonVanillaAttack();
         if(shouldAttack) {
             this.target = targetEntity;
             return true;
@@ -42,6 +45,15 @@ public class CompanionSwordUserMeleeAttack extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
+
+        if(this.target == null){
+            return false;
+        }
+
+        if(this.host.getOwner() != null && (this.host.getDistance(this.host.getOwner())>=16 || this.target.getDistance(this.host.getOwner())>=16)){
+            return false;
+        }
+
         return this.shouldExecute() || !this.host.getNavigator().noPath();
     }
 
@@ -64,7 +76,7 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             double distance = this.host.getDistance(this.target);
             boolean canSee = this.host.getEntitySenses().canSee(this.target);
 
-            boolean isTooFar = distance > 3;
+            boolean isTooFar = distance > this.host.getAttackRange(this.host.isUsingTalentedWeapon());
 
             if (canSee) {
                 ++this.seeTime;

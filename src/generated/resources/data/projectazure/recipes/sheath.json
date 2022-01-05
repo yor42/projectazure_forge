@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HSP",
+    "WPS",
+    "RWC"
+  ],
+  "key": {
+    "P": {
+      "tag": "forge:plates/steel"
+    },
+    "H": {
+      "item": "projectazure:hammer_iron"
+    },
+    "S": {
+      "tag": "forge:sandstone"
+    },
+    "R": {
+      "tag": "forge:ingots/steel"
+    },
+    "W": {
+      "item": "projectazure:polymer_plate"
+    },
+    "C": {
+      "item": "projectazure:steel_cutter"
+    }
+  },
+  "result": {
+    "item": "projectazure:sheath"
+  }
+}

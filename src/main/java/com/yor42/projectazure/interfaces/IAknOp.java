@@ -2,6 +2,6 @@ package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.libs.enums;
 
-public interface IArknightOperator {
+public interface IAknOp {
     enums.OperatorClass getOperatorClass();
 }

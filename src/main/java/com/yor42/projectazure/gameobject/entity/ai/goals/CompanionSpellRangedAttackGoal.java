@@ -28,7 +28,9 @@ public class CompanionSpellRangedAttackGoal extends Goal {
         if(targetEntity == null || !targetEntity.isAlive()){
             return false;
         }
-
+        if(this.host.getOwner() != null && (this.host.getDistance(this.host.getOwner())>=16 || targetEntity.getDistance(this.host.getOwner())>=16)){
+            return false;
+        }
 
         if(this.host.shouldUseSpell()) {
             this.target = targetEntity;
@@ -38,9 +40,12 @@ public class CompanionSpellRangedAttackGoal extends Goal {
     }
 
     public boolean shouldContinueExecuting() {
+        if(this.target == null || this.host.getOwner() != null && (this.host.getDistance(this.host.getOwner())>=16 || this.target.getDistance(this.host.getOwner())>=16)){
+            return false;
+        }
+
         return this.shouldExecute() || !this.host.getNavigator().noPath();
     }
-
     @Override
     public void startExecuting() {
         this.host.getNavigator().clearPath();

@@ -9,6 +9,7 @@ import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
+import mekanism.api.MekanismAPI;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
@@ -591,8 +592,23 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_part", hasItem(registerItems.MECHANICAL_PARTS.get()))
                 .addCriterion("has_motor", hasItem(registerItems.BASIC_MOTOR.get()))
                 .build(consumer);
-
-
+        /*
+        Because These weapons are SO OP
+        I'm nerfing this harder than TTFAF in guitar hero.
+        ...Okay that's maybe an overstatement.
+         */
+        ShapedRecipeBuilder.shapedRecipe(registerItems.SHEATH.get(), 1)
+                .key('P', ModTags.Items.PLATE_STEEL)
+                .key('H', registerItems.HAMMER_IRON.get())
+                .key('S', Tags.Items.SANDSTONE)
+                .key('R', ModTags.Items.INGOT_STEEL)
+                .key('W', registerItems.PLATE_POLYMER.get())
+                .key('C', registerItems.STEEL_CUTTER.get())
+                .patternLine("HSP")
+                .patternLine("WPS")
+                .patternLine("RWC")
+                .addCriterion("has_steel", hasItem(ModTags.Items.INGOT_STEEL))
+                .build(consumer);
 
     }
 
