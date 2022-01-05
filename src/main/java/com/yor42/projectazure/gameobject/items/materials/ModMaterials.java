@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.items.materials;
 
+import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
@@ -9,8 +10,11 @@ import java.util.function.Supplier;
 
 public enum ModMaterials implements IItemTier {
 
-    CHIXIAO(3, 1256, 7.5F, 7, 12, () -> {
-        return Ingredient.fromItems(registerItems.NUGGET_ZINC.get());});
+    CHIXIAO(3, 2500, 7.5F, 7, 8, () -> {
+        return Ingredient.fromTag(ModTags.Items.INGOT_TIN);}),
+
+    SHEATH(2, 1256, 5.5F, 5, 8, () -> {
+        return Ingredient.fromTag(ModTags.Items.INGOT_TIN);});
 
     private final int harvestLevel;
     private final int maxUses;

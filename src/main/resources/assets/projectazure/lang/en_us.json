@@ -68,6 +68,12 @@
   "item.projectazure.equipment_gun_127mm": "Single 127mm (SK C/34)",
   "item.projectazure.equipment_plane_f4fwildcat": "F4F Wildcat",
 
+  "item.projectazure.sheath": "Raythean Sword",
+  "item.projectazure.sheath.tooltip": "Black Sword made from steel.",
+  "item.projectazure.chixiao": "Chi Xiao",
+  "item.projectazure.chixiao.tooltip": "Red Sword made from mysterious material. its heavy.",
+
+
   "item.projectazure.abydos550": "Abydos 550",
 
   "item.projectazure.missiledrone": "Missile Drone",

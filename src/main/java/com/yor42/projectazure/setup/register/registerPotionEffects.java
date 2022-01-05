@@ -6,7 +6,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraftforge.fml.RegistryObject;
 
-public class RegisterPotionEffects {
+public class registerPotionEffects {
 
     public static Effect ACUTE_ORIPATHY = new AcuteOripathyEffect();
     public static RegistryObject<Effect> ACUTE_ORIPATHY_REGISTRY = registerManager.EFFECTS.register("acute_oripathy", ()->ACUTE_ORIPATHY);

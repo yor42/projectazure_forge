@@ -35,7 +35,16 @@ public final class registerSounds {
     public static final SoundEvent CHIMERA_PROJECTILE_HIT = registerSoundEvent("chimera_projectile_impact");
 
     public static final SoundEvent CHIMERA_TALK_NORMAL = registerSoundEvent("chimera_talk_normal");
-    public static final SoundEvent CHIMERA_TALK_HIGH_AFFECTION = registerSoundEvent("chimera_talk_high_affection");
+
+    //*jumps off cliff*
+    public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION1 = registerSoundEvent("chimera_talk_high_affection1");
+    public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION2 = registerSoundEvent("chimera_talk_high_affection2");
+    public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION3 = registerSoundEvent("chimera_talk_high_affection3");
+
+    public static final SoundEvent CHEN_TALK_NORMAL = registerSoundEvent("chen_talk_normal");
+    public static final SoundEvent CHEN_TALK_HIGH_AFFECTION1 = registerSoundEvent("chen_talk_high_affection1");
+    public static final SoundEvent CHEN_TALK_HIGH_AFFECTION2 = registerSoundEvent("chen_talk_high_affection2");
+    public static final SoundEvent CHEN_TALK_HIGH_AFFECTION3 = registerSoundEvent("chen_talk_high_affection3");
 
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);

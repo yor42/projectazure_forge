@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -23,6 +24,7 @@ import net.minecraft.item.TieredItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -270,6 +272,26 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     @Override
     public enums.OperatorClass getOperatorClass() {
         return enums.OperatorClass.GUARD;
+    }
+
+    @Override
+    public SoundEvent getNormalAmbientSounds() {
+        return registerSounds.CHEN_TALK_NORMAL;
+    }
+
+    @Override
+    public SoundEvent getAffection1AmbientSounds() {
+        return registerSounds.CHEN_TALK_HIGH_AFFECTION1;
+    }
+
+    @Override
+    public SoundEvent getAffection2AmbientSounds() {
+        return registerSounds.CHEN_TALK_HIGH_AFFECTION2;
+    }
+
+    @Override
+    public SoundEvent getAffection3AmbientSounds() {
+        return registerSounds.CHEN_TALK_HIGH_AFFECTION3;
     }
 
     @Override

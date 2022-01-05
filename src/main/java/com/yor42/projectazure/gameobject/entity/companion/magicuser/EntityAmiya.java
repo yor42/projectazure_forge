@@ -4,6 +4,7 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
@@ -29,7 +30,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class EntityAmiya extends AbstractCompanionMagicUser{
+public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     public EntityAmiya(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -185,12 +186,6 @@ public class EntityAmiya extends AbstractCompanionMagicUser{
         return enums.CompanionRarity.STAR_4;
     }
 
-    @Nullable
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return this.getAffection()>=75? registerSounds.CHIMERA_TALK_NORMAL: registerSounds.CHIMERA_TALK_HIGH_AFFECTION;
-    }
-
     @Override
     public int getInitialSpellDelay() {
         return 31;
@@ -233,5 +228,30 @@ public class EntityAmiya extends AbstractCompanionMagicUser{
             this.addExhaustion(0.05F);
             this.addMorale(-0.2);
         }
+    }
+
+    @Override
+    public enums.OperatorClass getOperatorClass() {
+        return enums.OperatorClass.CASTER;
+    }
+
+    @Override
+    public SoundEvent getNormalAmbientSounds() {
+        return registerSounds.CHIMERA_TALK_NORMAL;
+    }
+
+    @Override
+    public SoundEvent getAffection1AmbientSounds() {
+        return registerSounds.AMIYA_TALK_HIGH_AFFECTION1;
+    }
+
+    @Override
+    public SoundEvent getAffection2AmbientSounds() {
+        return registerSounds.AMIYA_TALK_HIGH_AFFECTION2;
+    }
+
+    @Override
+    public SoundEvent getAffection3AmbientSounds() {
+        return registerSounds.AMIYA_TALK_HIGH_AFFECTION3;
     }
 }

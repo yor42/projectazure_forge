@@ -159,7 +159,7 @@ public class registerManager {
         registerFluids.register();
         registerRecipes.Serializers.register();
         registerRecipes.Types.register();
-        RegisterPotionEffects.register();
+        registerPotionEffects.register();
     }
 
 

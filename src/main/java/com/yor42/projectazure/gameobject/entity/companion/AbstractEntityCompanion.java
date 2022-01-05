@@ -19,6 +19,7 @@ import com.yor42.projectazure.gameobject.items.ItemCommandStick;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.interfaces.IAttributeable;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
@@ -1005,7 +1006,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.addLimitBreak(1);
     }
 
-    public double getAffection() {
+    public float getAffection() {
         return this.getDataManager().get(AFFECTION);
     }
 
@@ -1014,7 +1015,33 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public double getmaxAffection(){
+        if(this instanceof IAknOp){
+            return 200;
+        }
         return this.isOathed()? 200:100;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+
+        if(this instanceof IAknOp){
+            float trust = this.getAffection();
+            if(trust>=100){
+                return ((IAknOp)this).getAffection3AmbientSounds();
+            }
+            else if(trust>=50){
+                return ((IAknOp)this).getAffection2AmbientSounds();
+            }
+            else if(trust>=25){
+                return ((IAknOp)this).getAffection1AmbientSounds();
+            }
+            else{
+                return ((IAknOp)this).getNormalAmbientSounds();
+            }
+        }
+
+        return super.getAmbientSound();
     }
 
     public void addAffection(double Delta){
