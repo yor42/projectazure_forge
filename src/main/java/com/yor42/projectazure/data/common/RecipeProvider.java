@@ -345,14 +345,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addCriterion("has_orundum", hasItem(registerItems.ORUNDUM.get()))
                 .build(consumer);
 
-        ShapedRecipeBuilder.shapedRecipe(registerItems.ORIGINIUM_PRIME.get(), 1)
-                .key('N', ModTags.Items.ORIGINITE)
-                .patternLine("NNN")
-                .patternLine("NNN")
-                .patternLine("NNN")
-                .addCriterion("has_originite", hasItem(ModTags.Items.ORIGINITE))
-                .build(consumer);
-
         ShapelessRecipeBuilder.shapelessRecipe(registerItems.ORIGINITE.get(), 9)
                 .addIngredient(ModTags.Items.ORIGINIUM_PRIME).addCriterion("hasoriginium", hasItem(registerItems.ORIGINIUM_PRIME.get()));
 
