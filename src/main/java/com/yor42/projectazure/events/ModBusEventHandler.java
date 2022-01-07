@@ -39,7 +39,9 @@ public class ModBusEventHandler {
             if (flag) {
                 PlayerEntity player = event.getPlayer();
                 UUID yorUUID = UUID.fromString("d45160dc-ae0b-4f7c-b44a-b535a48182d2");
+                UUID AoichiID = UUID.fromString("d189319f-ee53-4e80-9472-7c5e4711642e");
                 boolean isDev = player.getUniqueID().equals(yorUUID);
+                boolean isAoichi = player.getUniqueID().equals(AoichiID);
 
                 ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
                 CompoundNBT nbt = cubeStack.getOrCreateTag();
@@ -51,6 +53,10 @@ public class ModBusEventHandler {
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWM_ENTERPRISE.get()));
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_CHEN.get()));
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_SHIROKO.get()));
+                }
+                else if(isAoichi){
+                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_AMIYA.get()));
+                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_ROSMONTIS.get()));
                 }
                 data.putBoolean("PRJA:gotStarterCube", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);

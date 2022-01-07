@@ -51,6 +51,10 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
             return PlayState.CONTINUE;
         }
+        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd_chest", true));
+            return PlayState.CONTINUE;
+        }
         else if(this.isUsingSpell()){
             event.getController().setAnimation(builder.addAnimation("ranged_attack_arm", false));
 

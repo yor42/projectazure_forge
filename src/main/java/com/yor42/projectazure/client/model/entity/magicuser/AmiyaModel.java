@@ -40,6 +40,9 @@ public class AmiyaModel extends AnimatedGeoModel<EntityAmiya> {
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
+        IBone Angry = this.getAnimationProcessor().getBone("angry");
+        IBone Pout = this.getAnimationProcessor().getBone("Pout");
+        IBone Flushed = this.getAnimationProcessor().getBone("Flushed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone SleepFace = this.getAnimationProcessor().getBone("Sleep");
@@ -51,13 +54,45 @@ public class AmiyaModel extends AnimatedGeoModel<EntityAmiya> {
         diamond.setHidden(!entity.isUsingSpell());
 
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-
-        if(entity.isBeingPatted()){
+        if(entity.isAngry()){
+            NormalFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Pout.setHidden(true);
+            Angry.setHidden(false);
+            Flushed.setHidden(true);
+        }
+        else if(entity.getAngerWarningCount() == 2){
+            NormalFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Pout.setHidden(false);
+            Angry.setHidden(true);
+            Flushed.setHidden(true);
+        }
+        else if(entity.isinQinteraction()){
+            NormalFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Pout.setHidden(true);
+            Angry.setHidden(true);
+            Flushed.setHidden(false);
+        }
+        else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             ExcitedFace.setHidden(false);
             SleepFace.setHidden(true);
+            Pout.setHidden(true);
+            Angry.setHidden(true);
+            Flushed.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -65,7 +100,9 @@ public class AmiyaModel extends AnimatedGeoModel<EntityAmiya> {
             EyeclosedFace.setHidden(true);
             ExcitedFace.setHidden(true);
             SleepFace.setHidden(false);
-
+            Pout.setHidden(true);
+            Angry.setHidden(true);
+            Flushed.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-10);
         }
@@ -81,6 +118,9 @@ public class AmiyaModel extends AnimatedGeoModel<EntityAmiya> {
                     EyeclosedFace.setHidden(false);
                     ExcitedFace.setHidden(true);
                     SleepFace.setHidden(true);
+                    Pout.setHidden(true);
+                    Angry.setHidden(true);
+                    Flushed.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
@@ -89,6 +129,9 @@ public class AmiyaModel extends AnimatedGeoModel<EntityAmiya> {
                     EyeclosedFace.setHidden(true);
                     ExcitedFace.setHidden(true);
                     SleepFace.setHidden(true);
+                    Pout.setHidden(true);
+                    Angry.setHidden(true);
+                    Flushed.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();

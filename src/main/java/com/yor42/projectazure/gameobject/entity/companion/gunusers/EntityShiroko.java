@@ -57,6 +57,10 @@ public class EntityShiroko extends EntityGunUserBase {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat", true));
             return PlayState.CONTINUE;
         }
+        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            return PlayState.CONTINUE;
+        }
         else if(this.isGettingHealed()){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.heal", true));
             return PlayState.CONTINUE;

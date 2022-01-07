@@ -10,13 +10,13 @@ public class BlockStateUtil {
                     case UP:
                         return RelativeDirection.UP;
                     case NORTH:
-                        return RelativeDirection.FRONT;
+                        return RelativeDirection.BACK;
                     case EAST:
                         return RelativeDirection.RIGHT;
                     case WEST:
                         return RelativeDirection.LEFT;
                     case SOUTH:
-                        return RelativeDirection.BACK;
+                        return RelativeDirection.FRONT;
                     case DOWN:
                         return RelativeDirection.DOWN;
                 }
@@ -44,9 +44,9 @@ public class BlockStateUtil {
                     case NORTH:
                         return RelativeDirection.RIGHT;
                     case EAST:
-                        return RelativeDirection.BACK;
-                    case WEST:
                         return RelativeDirection.FRONT;
+                    case WEST:
+                        return RelativeDirection.BACK;
                     case SOUTH:
                         return RelativeDirection.LEFT;
                     case DOWN:

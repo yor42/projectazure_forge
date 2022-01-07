@@ -3,11 +3,14 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
+import com.yor42.projectazure.gameobject.misc.DamageSources;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 
 import javax.annotation.Nullable;
 
@@ -43,12 +46,12 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
         }
         else if(this.entity instanceof EntityKansenBase) {
             boolean flag = !hasAttackableCannon(this.entity.getRigging()) && !((EntityKansenBase) this.entity).canUseShell(((EntityKansenBase) this.entity).getActiveShellCategory());
-            if (flag) {
-                this.target = this.entity.getAttackTarget();
-                return true;
+            if (!flag) {
+                return false;
             }
         }
-        return false;
+        this.target = this.entity.getAttackTarget();
+        return true;
     }
 
     public boolean shouldContinueExecuting() {
@@ -71,9 +74,16 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
     @Override
     protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 
+        double d0 = this.getAttackReachSqr(enemy)+1;
         this.entity.setSprinting(this.entity.getNavigator().hasPath() && this.entity.getDistance(enemy)>4F);
-
-        super.checkAndPerformAttack(enemy, distToEnemySqr);
+        if(this.entity.isAngry() && this.entity.getOwner() == enemy && distToEnemySqr <= d0){
+            this.func_234039_g_();
+            this.attacker.swingArm(Hand.MAIN_HAND);
+            enemy.attackEntityFrom(DamageSources.causeRevengeDamage(this.entity), this.entity.getAttackDamage());
+        }
+        else{
+            super.checkAndPerformAttack(enemy, distToEnemySqr);
+        }
     }
 
     @Override

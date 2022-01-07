@@ -1,19 +1,25 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -21,9 +27,15 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 
-public class EntityZ23 extends EntityKansenDestroyer{
-    public EntityZ23(EntityType<? extends TameableEntity> type, World worldIn) {
+public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknOp {
+
+    public EntityRosmontis(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    @Override
+    public enums.EntityType getEntityType() {
+        return enums.EntityType.OPERATOR;
     }
 
     @Override
@@ -34,10 +46,16 @@ public class EntityZ23 extends EntityKansenDestroyer{
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isSwingInProgress){
             event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
+
             return PlayState.CONTINUE;
         }
         else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isUsingSpell()){
+            event.getController().setAnimation(builder.addAnimation("ranged_attack_arm", false));
+
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
@@ -47,14 +65,22 @@ public class EntityZ23 extends EntityKansenDestroyer{
             else if(this.getActiveHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
+
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", true));
+
+            return PlayState.CONTINUE;
+        }
+        else if(this.isGettingHealed()){
+            event.getController().setAnimation(builder.addAnimation("heal_arm", true));
+
             return PlayState.CONTINUE;
         }
         else if(this.isSitting() || this.getRidingEntity() != null) {
             event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
@@ -68,30 +94,28 @@ public class EntityZ23 extends EntityKansenDestroyer{
             else{
                 event.getController().setAnimation(builder.addAnimation("openDoorR", false));
             }
+
+            return PlayState.CONTINUE;
         }
         else if(this.isReloadingMainHand()){
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
+
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
+
             return PlayState.CONTINUE;
         }
         else if(this.isActiveItemStackBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isGettingHealed()){
-            event.getController().setAnimation(builder.addAnimation("heal_arm", true));
+
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
-            if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("sail_hand", true));
-            }
-            else if(this.isSprinting()){
+            if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }
             else {
@@ -105,7 +129,8 @@ public class EntityZ23 extends EntityKansenDestroyer{
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("idle", true));
+
+        event.getController().setAnimation(builder.addAnimation("idle_arm", true));
         return PlayState.CONTINUE;
     }
 
@@ -116,32 +141,32 @@ public class EntityZ23 extends EntityKansenDestroyer{
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
-        if(Minecraft.getInstance().isGamePaused()){
-            return PlayState.STOP;
-        }
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isSitting() || this.getRidingEntity() != null){
-            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+
+        if(this.isSitting() || this.getRidingEntity() != null){
+            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
             return PlayState.CONTINUE;
-        }else if(this.isSwimming()) {
+        }
+        else if(this.isUsingSpell()){
+            event.getController().setAnimation(builder.addAnimation("ranged_attack_leg", false));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
         }
 
         if (isMoving()) {
-            if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("sail", true));
-            }
-            else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run", true));
+            if(this.isSprinting()){
+                event.getController().setAnimation(builder.addAnimation("run_leg", true));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walk", true));
+                event.getController().setAnimation(builder.addAnimation("walk_leg", true));
             }
             return PlayState.CONTINUE;
         }
@@ -149,21 +174,82 @@ public class EntityZ23 extends EntityKansenDestroyer{
         return PlayState.CONTINUE;
     }
 
+    @Override
+    protected void openGUI(ServerPlayerEntity player) {
+        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this));
+    }
+
     @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_4;
+        return enums.CompanionRarity.STAR_6;
+    }
+
+    /*
+    WIP.
+     */
+    @Override
+    public boolean shouldUseSpell() {
+        return false;
+    }
+
+    @Override
+    public int getInitialSpellDelay() {
+        return 0;
+    }
+
+    @Override
+    public int getSkillItemCount() {
+        return 1;
+    }
+
+    @Override
+    public int getProjectilePreAnimationDelay() {
+        return 0;
+    }
+
+    @Override
+    public Hand getSpellUsingHand() {
+        return Hand.OFF_HAND;
+    }
+
+    @Override
+    public void ShootProjectile(World world, @Nonnull LivingEntity target) {
+
+    }
+
+    @Override
+    public enums.OperatorClass getOperatorClass() {
+        return enums.OperatorClass.SNIPER;
+    }
+
+    @Override
+    public SoundEvent getNormalAmbientSounds() {
+        return null;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.func_233666_p_()
-                //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.Z23MovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.Z23SwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.Z23Health.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.Z23AttackDamage.get())
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.RosmontisMovementSpeed.get())
+                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.RosmontisSwimSpeed.get())
+                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.RosmontisHealth.get())
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.RosmontisAttackDamage.get())
                 ;
     }
 
+    @Override
+    public SoundEvent getAffection1AmbientSounds() {
+        return null;
+    }
+
+    @Override
+    public SoundEvent getAffection2AmbientSounds() {
+        return null;
+    }
+
+    @Override
+    public SoundEvent getAffection3AmbientSounds() {
+        return null;
+    }
 }

@@ -146,6 +146,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelGFL("spawnm4a1");
 
         buildModelAKN("spawnchen");
+        buildModelAKN("spawnrosmontis");
         buildModelAKN("spawnamiya");
 
         buildModelBA("spawnshiroko");

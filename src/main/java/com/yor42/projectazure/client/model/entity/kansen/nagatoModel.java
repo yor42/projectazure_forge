@@ -40,24 +40,55 @@ public class nagatoModel extends AnimatedGeoModel<EntityNagato> {
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
-        IBone PoutFace = this.getAnimationProcessor().getBone("Tsun");
+        IBone PoutFace = this.getAnimationProcessor().getBone("Pout");
         IBone Flustered = this.getAnimationProcessor().getBone("Fluster");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone SleepFace = this.getAnimationProcessor().getBone("Sleep");
+        IBone Angry = this.getAnimationProcessor().getBone("Angry");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
-        if(entity.isBeingPatted()){
-                NormalFace.setHidden(true);
-                PatFace.setHidden(true);
-                EyeclosedFace.setHidden(true);
-                PoutFace.setHidden(true);
-                PoutFace.setHidden(true);
-                Flustered.setHidden(true);
-                ExcitedFace.setHidden(false);
-                SleepFace.setHidden(true);
+        if(entity.isAngry()){
+            NormalFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PoutFace.setHidden(true);
+            Flustered.setHidden(true);
+            ExcitedFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Angry.setHidden(false);
+        }
+        else if(entity.getAngerWarningCount() == 2){
+            NormalFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PoutFace.setHidden(false);
+            Flustered.setHidden(true);
+            ExcitedFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Angry.setHidden(true);
+        }
+        else if(entity.isinQinteraction()){
+            NormalFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PoutFace.setHidden(true);
+            Flustered.setHidden(false);
+            ExcitedFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Angry.setHidden(true);
+        }
+        else if(entity.isBeingPatted()) {
+            NormalFace.setHidden(true);
+            PatFace.setHidden(false);
+            EyeclosedFace.setHidden(true);
+            PoutFace.setHidden(true);
+            Flustered.setHidden(true);
+            ExcitedFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Angry.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -67,7 +98,7 @@ public class nagatoModel extends AnimatedGeoModel<EntityNagato> {
             Flustered.setHidden(true);
             ExcitedFace.setHidden(true);
             SleepFace.setHidden(false);
-
+            Angry.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-10);
         }
@@ -85,6 +116,7 @@ public class nagatoModel extends AnimatedGeoModel<EntityNagato> {
                     Flustered.setHidden(true);
                     ExcitedFace.setHidden(true);
                     SleepFace.setHidden(true);
+                    Angry.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
@@ -94,6 +126,7 @@ public class nagatoModel extends AnimatedGeoModel<EntityNagato> {
                     PoutFace.setHidden(true);
                     Flustered.setHidden(true);
                     ExcitedFace.setHidden(true);
+                    Angry.setHidden(true);
                     SleepFace.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }

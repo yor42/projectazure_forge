@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -83,10 +84,11 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         this.playSound(getAttackSound(), 1F, 0.8F + this.getRNG().nextFloat() * 0.4F);
         if(AttackCount == 2){
-            target.attackEntityFrom(DamageSource.causeMobDamage(this), damage+3);
+            target.attackEntityFrom(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.causeMobDamage(this), damage+3);
+            this.AttackCount = 0;
         }
         else{
-            target.attackEntityFrom(DamageSource.causeMobDamage(this), damage*0.3F);
+            target.attackEntityFrom(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.causeMobDamage(this), damage*0.5F);
             target.applyKnockback(0.09F, MathHelper.sin(this.rotationYaw * ((float)Math.PI / 180F)), -MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F)));
         }
     }
@@ -166,7 +168,14 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         }
 
         AnimationBuilder builder = new AnimationBuilder();
-
+        if(this.swingProgress>0){
+            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+            return PlayState.CONTINUE;
+        }
+        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            return PlayState.CONTINUE;
+        }
         if(this.isAttacking()){
             event.getController().setAnimation(builder.addAnimation("melee_attack_arm", true));
             return PlayState.CONTINUE;
@@ -194,10 +203,6 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
-            return PlayState.CONTINUE;
-        }
-        else if(this.swingProgress>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
         else if(this.isActiveItemStackBlocking()){

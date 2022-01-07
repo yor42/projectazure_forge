@@ -40,14 +40,44 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
+        IBone Angry = this.getAnimationProcessor().getBone("angry");
+        IBone Pout = this.getAnimationProcessor().getBone("pout");
+        IBone Flushed = this.getAnimationProcessor().getBone("flushed");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-
-        if(entity.isBeingPatted()){
+        if(entity.isAngry()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            Angry.setHidden(false);
+            Pout.setHidden(true);
+            Flushed.setHidden(true);
+        }
+        else if(entity.getAngerWarningCount() == 2){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(false);
             EyeclosedFace.setHidden(true);
+            Angry.setHidden(true);
+            Pout.setHidden(false);
+            Flushed.setHidden(true);
+        }
+        else if(entity.isinQinteraction()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            Angry.setHidden(true);
+            Pout.setHidden(true);
+            Flushed.setHidden(false);
+        }
+        else if(entity.isBeingPatted()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(false);
+            EyeclosedFace.setHidden(true);
+            Angry.setHidden(true);
+            Pout.setHidden(true);
+            Flushed.setHidden(true);
+
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -55,6 +85,9 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
             EyeclosedFace.setHidden(false);
             body.setPositionY(-45);
             body.setPositionZ(-10);
+            Angry.setHidden(true);
+            Pout.setHidden(true);
+            Flushed.setHidden(true);
         }
         else {
             if(this.LastBlinkTime == 0){
@@ -65,12 +98,18 @@ public class ayanamiModel extends AnimatedGeoModel<EntityAyanami> {
                     NormalFace.setHidden(true);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
+                    Angry.setHidden(true);
+                    Pout.setHidden(true);
+                    Flushed.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
                     NormalFace.setHidden(false);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
+                    Angry.setHidden(true);
+                    Pout.setHidden(true);
+                    Flushed.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();

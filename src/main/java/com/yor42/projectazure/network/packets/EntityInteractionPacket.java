@@ -56,6 +56,8 @@ public class EntityInteractionPacket {
                         case PAT:
                             ((AbstractEntityCompanion) entity).beingpatted();
                             break;
+                        case QUESTIONABLE:
+                            ((AbstractEntityCompanion) entity).startqinteraction();
                         case HEAL:
 
                     }
@@ -70,6 +72,7 @@ public class EntityInteractionPacket {
         HOMEMODE,
         PAT,
         HEAL,
-        ITEMPICKUP;
+        ITEMPICKUP,
+        QUESTIONABLE
     }
 }

@@ -39,21 +39,56 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
+        IBone Flushed = this.getAnimationProcessor().getBone("Flushed");
+        IBone Angry1 = this.getAnimationProcessor().getBone("Angry1");
+        IBone Angry2 = this.getAnimationProcessor().getBone("Angry2");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-
-        if(entity.isBeingPatted()){
+        if(entity.isAngry()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(false);
+        }
+        else if(entity.getAngerWarningCount() == 2){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(false);
+            Angry2.setHidden(true);
+        }
+        else if(entity.isinQinteraction()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            Flushed.setHidden(false);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+        }
+        else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             PatFace.setHidden(false);
             EyeclosedFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(false);
             PatFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-10);
         }
@@ -67,6 +102,9 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
                     PatFace.setHidden(true);
+                    Flushed.setHidden(true);
+                    Angry1.setHidden(true);
+                    Angry2.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
@@ -74,6 +112,9 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
                     PatFace.setHidden(true);
+                    Flushed.setHidden(true);
+                    Angry1.setHidden(true);
+                    Angry2.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();

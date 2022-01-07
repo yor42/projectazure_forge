@@ -1606,6 +1606,31 @@
 					}
 				}
 			}
+		},
+		"lewd": {
+			"loop": true,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"vector": [-19.2753, -18.09278, -12.62378]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -27.5]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-70.81754, 23.7695, 7.98205]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 62.5]
+					}
+				}
+			}
 		}
 	}
 }

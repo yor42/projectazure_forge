@@ -257,6 +257,7 @@
 
   "entity.projectazure.entitychen": "Ch'en",
   "entity.projectazure.entityamiya": "Amiya",
+  "entity.projectazure.entityrosmontis": "Rosmontis",
 
   "entity.projectazure.missiledrone": "Missile Drone",
 
@@ -314,17 +315,23 @@
 
   "death.attack.bonk": "%1$s was sent to horny jail",
 
-  "death.attack.arts_0": "%1$s was murdered by arts from %2$s",
-  "death.attack.arts_1": "%1$s was cooked by %2$s's arts",
-  "death.attack.arts_2": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts. yikes.",
-  "death.attack.arts_3": "%1$s turned into pile of originium by %2$s's arts",
-  "death.attack.arts_4": "%2$s was suck at dodging %2$s's spicy magic ball",
+  "death.attack.arts_projectile_0": "%1$s was murdered by arts from %2$s",
+  "death.attack.arts_projectile_1": "%1$s was cooked by %2$s's arts",
+  "death.attack.arts_projectile_2": "%1$s was not so good at dodgeball and got destroyed by %2$s's arts. yikes.",
+  "death.attack.arts_projectile_3": "%1$s turned into pile of originium by %2$s's arts",
+  "death.attack.arts_projectile_4": "%1$s was suck at dodging %2$s's spicy magic ball",
 
-  "death.attack.arts_0.item": "%1$s was murdered by arts from %2$s using %3$s",
-  "death.attack.arts_1.item": "%1$s was cooked by %2$s's arts casted using %3$s",
-  "death.attack.arts_2.item": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts casted by %3$s. yikes.",
-  "death.attack.arts_3.item": "%1$s turned into pile of originium by %2$s's arts cased by %3$s",
-  "death.attack.arts_4.item": "%2$s was suck at dodging %2$s's spicy magic ball from %3$s",
+  "death.attack.revenge_0": "%1$s \"provoked\" %2$s",
+  "death.attack.revenge_1": "%1$s tried to lewd %2$s. and got his justice served hot.",
+  "death.attack.revenge_2": "%1$s tried to lewd %2$s. DESERVED.",
+  "death.attack.revenge_3": "%1$s got slapped by %2$s while trying to lewd %2$s",
+  "death.attack.revenge_4": "%1$s got his justice served.",
+
+  "death.attack.arts_projectile_0.item": "%1$s was murdered by arts from %2$s using %3$s",
+  "death.attack.arts_projectile_1.item": "%1$s was cooked by %2$s's arts casted using %3$s",
+  "death.attack.arts_projectile_2.item": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts casted by %3$s. yikes.",
+  "death.attack.arts_projectile_3.item": "%1$s turned into pile of originium by %2$s's arts cased by %3$s",
+  "death.attack.arts_projectile_4.item": "%2$s was suck at dodging %2$s's spicy magic ball from %3$s",
 
   "death.attack.ate_originium_prime_0": "%1$s Literally ate pure originium. ...oh my god",
   "death.attack.ate_originium_prime_1": "%1$s discovered the delicious taste of originium",

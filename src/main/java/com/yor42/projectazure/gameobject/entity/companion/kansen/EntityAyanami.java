@@ -34,16 +34,20 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_body", true));
+            return PlayState.CONTINUE;
+        }
         else if(this.isActiveItemStackBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
+        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_body", true));
+        else if(this.isBeingPatted()){
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){

@@ -50,7 +50,9 @@ public class ItemKansenSpawnEgg extends Item {
             spawnedEntity.setPosition(context.getPos().getX()+0.5, context.getPos().getY() + 1.1F, context.getPos().getZ()+0.5);
             spawnedEntity.setTamedBy(context.getPlayer());
             spawnedEntity.setMorale(150);
-            spawnedEntity.setAffection(50);
+            if(!(spawnedEntity instanceof IAknOp)) {
+                spawnedEntity.setAffection(50);
+            }
             context.getWorld().addEntity(spawnedEntity);
 
 

@@ -1237,6 +1237,31 @@
 				}
 			}
 		},
+		"lewd": {
+			"loop": true,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"vector": [-83.70702, -37.33289, -3.82607]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -60]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-36.00521, 18.74724, 23.85865]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 60]
+					}
+				}
+			}
+		},
 		"idle_leg": {
 			"loop": true,
 			"bones": {

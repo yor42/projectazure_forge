@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -83,15 +84,6 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion {
     public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
         this.getDataManager().set(ATTACKDELAY, compound.getInt("attackdelay"));
-    }
-
-    public float getAttackDamage(){
-        ItemStack stack = this.getHeldItem(Hand.MAIN_HAND);
-        Item item = stack.getItem();
-        if(item instanceof TieredItem){
-            return ((TieredItem) item).getTier().getAttackDamage();
-        }
-        return 1F;
     }
 
     @Override

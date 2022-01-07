@@ -2206,6 +2206,36 @@
 					}
 				}
 			}
+		},
+		"new": {
+			"loop": true,
+			"bones": {
+				"Head": {
+					"rotation": {
+						"vector": [20, 0, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-41.15088, -11.72145, -13.0867]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -57.5]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-70.81754, 23.7695, 7.98205]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 62.5]
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

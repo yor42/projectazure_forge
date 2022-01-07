@@ -759,6 +759,37 @@
 				}
 			}
 		},
+		"lewd": {
+			"loop": true,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"vector": [-56.68786, -9.49653, -14.67718]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -70]
+					},
+					"position": {
+						"vector": [2, -3, 0]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-42.73421, 15.69986, 16.32495]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 67.5]
+					},
+					"position": {
+						"vector": [-1, -4, 0]
+					}
+				}
+			}
+		},
 		"animation.enterprise.swim_arm": {
 			"loop": true,
 			"animation_length": 2.08,

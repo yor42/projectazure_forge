@@ -253,8 +253,8 @@ public class registerItems {
             .setISTER(() -> ItemAbydos550Renderer::new)
             .group(PA_WEAPONS).maxStackSize(1), true, MAGAZINE_5_56.get()));
 
-    public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 7, -1.7F, new Item.Properties().group(PA_WEAPONS)));
-    public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 5, -1.5F, new Item.Properties().group(PA_WEAPONS)));
+    public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 10, -1.7F, new Item.Properties().group(PA_WEAPONS)));
+    public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 8, -1.5F, new Item.Properties().group(PA_WEAPONS)));
 
     public static final RegistryObject<Item> COMPOUNDBOW = registerManager.ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().group(PA_WEAPONS).maxDamage(1000)));
 
@@ -323,6 +323,10 @@ public class registerItems {
 
     public static final RegistryObject<Item> SPAWN_AMIYA = registerManager.ITEMS.register("spawnamiya", () -> new ItemKansenSpawnEgg(ENTITYTYPE_AMIYA, new Item.Properties()
             .group(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWN_ROSMONTIS = registerManager.ITEMS.register("spawnrosmontis", () -> new ItemKansenSpawnEgg(ENTITYTYPE_ROSMONTIS, new Item.Properties()
+            .group(PA_SHIPS)));
+
 
     public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SHIROKO, new Item.Properties()
             .group(PA_SHIPS)));

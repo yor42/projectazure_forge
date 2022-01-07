@@ -79,6 +79,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue AmiyaAttackDamage;
         public final ForgeConfigSpec.DoubleValue AmiyaMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue RosmontisHealth;
+        public final ForgeConfigSpec.DoubleValue RosmontisSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue RosmontisAttackDamage;
+        public final ForgeConfigSpec.DoubleValue RosmontisMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -196,6 +201,12 @@ public class PAConfig {
             AmiyaSwimSpeed = builder.defineInRange("Swim Speed of Amiya", 2.5, 0, 1024);
             AmiyaAttackDamage = builder.defineInRange("Attack Damage of Amiya", 2.0F, 0, 1024);
             AmiyaMovementSpeed = builder.defineInRange("Movement speed of Amiya", 0.4F, 0, 2);
+
+            RosmontisHealth = builder.defineInRange("Max Health of Rosmontis", 20D, 1, 1024);
+            RosmontisSwimSpeed = builder.defineInRange("Swim Speed of Rosmontis", 2.5, 0, 1024);
+            RosmontisAttackDamage = builder.defineInRange("Attack Damage of Rosmontis", 2.0F, 0, 1024);
+            RosmontisMovementSpeed = builder.defineInRange("Movement speed of Rosmontis", 0.4F, 0, 2);
+
 
             builder.pop().push("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);

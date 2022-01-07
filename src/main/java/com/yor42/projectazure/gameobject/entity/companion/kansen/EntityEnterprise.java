@@ -82,19 +82,29 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.sleep", true));
             return PlayState.CONTINUE;
-        }else if(this.isBeingPatted()){
-            if(this.isSitting())
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
-            else
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
+        }
+        else if(this.swingProgress>0){
+            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
-        } else if(this.isOpeningDoor()){
+        }
+        else if(this.isOpeningDoor()){
             if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorL", false));
             }
             else{
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorR", false));
             }
+            return PlayState.CONTINUE;
+        }
+        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
+            if(this.isSitting())
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
+            else
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
             return PlayState.CONTINUE;
         }
         else if(this.isReloadingMainHand()){
@@ -111,10 +121,6 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             else if(this.getActiveHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
-            return PlayState.CONTINUE;
-        }
-        else if(this.swingProgress>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
         else if(this.isActiveItemStackBlocking()){

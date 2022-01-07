@@ -48,7 +48,11 @@ public class EntityM4A1 extends EntityGunUserBase{
             event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
         }
-        if(this.isBeingPatted()){
+        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
         }

@@ -10,6 +10,7 @@ import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.*;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
+import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
@@ -117,6 +118,9 @@ public class registerManager {
 
     public static final EntityType<EntityAmiya> ENTITYTYPE_AMIYA = EntityType.Builder.create(EntityAmiya::new, EntityClassification.CREATURE).size(0.572F, 1.42F).build(ModResourceLocation("entityamiya").toString());
     public static final RegistryObject<EntityType<EntityAmiya>> AMIYA = ENTITIES.register("entityamiya", () -> ENTITYTYPE_AMIYA);
+
+    public static final EntityType<EntityRosmontis> ENTITYTYPE_ROSMONTIS = EntityType.Builder.create(EntityRosmontis::new, EntityClassification.CREATURE).size(0.572F, 1.42F).build(ModResourceLocation("entityamiya").toString());
+    public static final RegistryObject<EntityType<EntityRosmontis>> ROSMONTIS = ENTITIES.register("entityrosmontis", () -> ENTITYTYPE_ROSMONTIS);
 
     //projectile
     public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString());

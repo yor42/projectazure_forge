@@ -98,8 +98,6 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.font.func_243248_b(matrixStack, text, (64/scalerate)-textwidth, 81/scalerate, 0xffffff);
         this.font.func_243248_b(matrixStack, new StringTextComponent((int)this.host.getAffection()+"%"), 33/scalerate, 68/scalerate, 0x313131);
         matrixStack.pop();
-
-        this.font.drawStringWithShadow(matrixStack, this.host.getDisplayName().getString(), 11, 53, 16777215);
     }
 
     @Override
@@ -117,7 +115,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         for(int l = 0; l<this.host.getSkillItemCount(); l++){
             this.blit(matrixStack, this.guiLeft+70, this.guiTop+58-(18*l), 41, 201, 16, 16);
         }
-
+        this.font.drawStringWithShadow(matrixStack, this.host.getDisplayName().getString(), 11, 53, 16777215);
         matrixStack.pop();
     }
 

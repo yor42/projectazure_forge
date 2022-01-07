@@ -43,24 +43,65 @@ public class ChenModel extends AnimatedGeoModel<EntityChen> {
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
+        IBone anger1 = this.getAnimationProcessor().getBone("lewd1");
+        IBone anger2 = this.getAnimationProcessor().getBone("lewd2");
+        IBone anger3 = this.getAnimationProcessor().getBone("angry");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
+        IBone Sleep = this.getAnimationProcessor().getBone("Sleeping");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-
-        if(entity.isBeingPatted()){
+        if(entity.isAngry()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            anger1.setHidden(true);
+            anger2.setHidden(true);
+            anger3.setHidden(false);
+            Sleep.setHidden(true);
+        }
+        else if(entity.getAngerWarningCount() == 2){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            anger1.setHidden(true);
+            anger2.setHidden(false);
+            anger3.setHidden(true);
+            Sleep.setHidden(true);
+        }
+        else if(entity.isinQinteraction()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            anger1.setHidden(false);
+            anger2.setHidden(true);
+            anger3.setHidden(true);
+            Sleep.setHidden(true);
+        }
+        else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(false);
+            anger1.setHidden(true);
+            anger2.setHidden(true);
+            anger3.setHidden(true);
+            Sleep.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
-            EyeclosedFace.setHidden(false);
+            EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-10);
+            anger1.setHidden(true);
+            anger2.setHidden(true);
+            anger3.setHidden(true);
+            Sleep.setHidden(false);
         }
         else {
 
@@ -73,12 +114,20 @@ public class ChenModel extends AnimatedGeoModel<EntityChen> {
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
                     PatFace.setHidden(true);
+                    anger1.setHidden(true);
+                    anger2.setHidden(true);
+                    anger3.setHidden(true);
+                    Sleep.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
                     NormalFace.setHidden(false);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
+                    anger1.setHidden(true);
+                    anger2.setHidden(true);
+                    anger3.setHidden(true);
+                    Sleep.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();

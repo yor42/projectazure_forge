@@ -49,14 +49,49 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone body = this.getAnimationProcessor().getBone("Body");
         IBone HealFace = this.getAnimationProcessor().getBone("Heal");
+        IBone Flushed = this.getAnimationProcessor().getBone("flushed");
+        IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
+        IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
 
-        if(entity.isBeingPatted()){
+        if(entity.isAngry()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            Flushed.setHidden(true);
+            HealFace.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(false);
+        }
+        else if(entity.getAngerWarningCount() == 2){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            Flushed.setHidden(true);
+            HealFace.setHidden(true);
+            Angry1.setHidden(false);
+            Angry2.setHidden(true);
+        }
+        else if(entity.isinQinteraction()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            Flushed.setHidden(false);
+            HealFace.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+        }
+        else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             PatFace.setHidden(false);
             EyeclosedFace.setHidden(true);
             HealFace.setHidden(true);
-
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
         }
         else if(entity.isGettingHealed()){
             NormalFace.setHidden(true);
@@ -64,6 +99,9 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             HealFace.setHidden(false);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -71,7 +109,9 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(false);
             HealFace.setHidden(true);
-
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-5);
         }
@@ -86,6 +126,9 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
                     PatFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
                     HealFace.setHidden(true);
+                    Flushed.setHidden(true);
+                    Angry1.setHidden(true);
+                    Angry2.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
@@ -94,6 +137,10 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
                     HealFace.setHidden(true);
+                    Flushed.setHidden(true);
+                    Angry1.setHidden(true);
+                    Angry2.setHidden(true);
+
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();

@@ -40,8 +40,8 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep_arm", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isSwingInProgress){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
         else if(this.isActiveItemStackBlocking()){

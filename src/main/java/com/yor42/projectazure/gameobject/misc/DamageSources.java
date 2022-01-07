@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.misc;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
@@ -18,12 +19,18 @@ public class DamageSources {
 
     public static final DamageSource ARTS = new DamageSourcesWithRandomMessages("arts", 5).setMagicDamage().setDamageBypassesArmor().setProjectile();
 
+    public static final DamageSource Revenge = new DamageSourcesWithRandomMessages("revenge", 5);
+
     public static final DamageSource ACUTE_ORIPATHY = new DamageSourcesWithRandomMessages("ate_originium_prime", 5).setDamageBypassesArmor().setDamageIsAbsolute();
 
     public static final DamageSource PLANE_GUN = new DamageSource("plane_gun").setProjectile();
 
     public static DamageSource causeGunDamage(EntityProjectileBullet bullet, @Nullable Entity indirectEntityIn) {
         return (new IndirectEntityDamageSource("gun_bullet", bullet, indirectEntityIn)).setProjectile();
+    }
+
+    public static DamageSource causeRevengeDamage(AbstractEntityCompanion companion) {
+        return (new PACompanionAttackDamage("revenge", companion, 5));
     }
 
     public static DamageSource causeCannonDamage(EntityCannonPelllet cannonPelllet, @Nullable Entity indirectEntityIn) {

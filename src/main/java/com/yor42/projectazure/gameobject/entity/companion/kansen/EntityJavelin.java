@@ -46,6 +46,18 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
             }
             return PlayState.CONTINUE;
         }
+        else if(this.isOpeningDoor()){
+            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
+            }
+            else{
+                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
+            }
+        }
+        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            return PlayState.CONTINUE;
+        }
         else if(this.isActiveItemStackBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
@@ -61,14 +73,6 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
         else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
-            }
-            else{
-                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
-            }
         }
         else if(this.isReloadingMainHand()){
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));

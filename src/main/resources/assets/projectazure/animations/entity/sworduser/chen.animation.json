@@ -3253,6 +3253,29 @@
 					}
 				}
 			}
+		},
+		"lewd": {
+			"loop": true,
+			"bones": {
+				"Head": {
+					"rotation": {
+						"vector": [0, 0, 10]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-63.21865, -20.29348, -9.92926]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -67.5]
+					},
+					"position": {
+						"vector": [0, -2, 0]
+					}
+				}
+			}
 		}
 	}
 }
