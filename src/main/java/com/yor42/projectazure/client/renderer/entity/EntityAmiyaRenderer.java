@@ -68,7 +68,7 @@ public class EntityAmiyaRenderer extends GeoEntityRenderer<EntityAmiya> {
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
             ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-            stack.translate(0.7F, 0.1, 1.7F);
+            stack.translate(0.5F, 0.1, 1.3F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Item gunItem = this.entity.getGunStack().getItem();
@@ -83,12 +83,12 @@ public class EntityAmiyaRenderer extends GeoEntityRenderer<EntityAmiya> {
             stack.push();
             stack.rotate(Vector3f.XP.rotationDegrees(-90));
             ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
-            float xvalue = -0.7F;
+            float xvalue = -0.5F;
             if(mainHandStack.isShield(this.entity)){
                 stack.rotate(Vector3f.ZP.rotationDegrees(180));
-                xvalue = 0.7F;
+                xvalue = 0.5F;
             }
-            stack.translate(xvalue, 0.2F, 1.7F);
+            stack.translate(xvalue, 0.2F, 1.3F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
