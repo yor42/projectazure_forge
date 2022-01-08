@@ -24,12 +24,12 @@ public abstract class AbstractElectricMachineBlock extends AbstractMachineBlock 
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(POWERED);
+        builder.add(POWERED).add(ACTIVE);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(POWERED, false);
+        return this.getDefaultState().with(POWERED, false).with(ACTIVE, false);
     }
 }

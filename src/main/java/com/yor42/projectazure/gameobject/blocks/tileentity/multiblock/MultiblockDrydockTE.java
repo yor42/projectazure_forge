@@ -158,6 +158,8 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
         addEntry(registerManager.ENTITYTYPE_GANGWON);
         addEntry(registerManager.ENTITYTYPE_NAGATO);
         addEntry(registerManager.ENTITYTYPE_JAVELIN);
+        addEntry(registerManager.ENTITYTYPE_LAFFEY);
+        addEntry(registerManager.ENTITYTYPE_Z23);
     }
 
     @Override

@@ -38,31 +38,32 @@ public class DrydockControllerRenderer extends GeoBlockRenderer<MultiblockDrydoc
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-
-        if(this.entity.getWorld() != null && this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(POWERED)) {
-            if(this.LastLightSwitchTime == 0){
-                this.LastLightSwitchTime = System.currentTimeMillis();
-            }
-            boolean powered = this.entity.getWorld().getBlockState(this.entity.getPos()).get(POWERED) || this.entity.getEnergyStorage().getEnergyStored()>=this.entity.getPowerConsumption();
-            if (Objects.equals(bone.getName(), "poweredon")) {
-                bone.setHidden(!powered);
-            } else if (Objects.equals(bone.getName(), "poweredoff")) {
-                bone.setHidden(powered);
-            }else if(Objects.equals(bone.getName(), "blinker")) {
-                if(powered) {
-                    if (System.currentTimeMillis() - this.LastLightSwitchTime >= this.lightDelay) {
-                        bone.setHidden(!bone.isHidden());
-                        this.lightDelay = 1000;
-                        this.LastLightSwitchTime = System.currentTimeMillis();
+        if(this.entity.getWorld() != null) {
+            boolean hasProperty = this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(POWERED);
+            if(hasProperty) {
+                if (this.LastLightSwitchTime == 0) {
+                    this.LastLightSwitchTime = System.currentTimeMillis();
+                }
+                boolean powered = this.entity.getWorld().getBlockState(this.entity.getPos()).get(POWERED) || this.entity.getEnergyStorage().getEnergyStored() >= this.entity.getPowerConsumption();
+                if (Objects.equals(bone.getName(), "poweredon")) {
+                    bone.setHidden(!powered);
+                } else if (Objects.equals(bone.getName(), "poweredoff")) {
+                    bone.setHidden(powered);
+                } else if (Objects.equals(bone.getName(), "blinker")) {
+                    if (powered) {
+                        if (System.currentTimeMillis() - this.LastLightSwitchTime >= this.lightDelay) {
+                            bone.setHidden(!bone.isHidden());
+                            this.lightDelay = 1000;
+                            this.LastLightSwitchTime = System.currentTimeMillis();
+                        }
+                    } else {
+                        bone.setHidden(true);
                     }
                 }
-                else{
-                    bone.setHidden(true);
+                if (bone.getName().contains("activelight") || bone.getName().contains("activeeffect")) {
+                    boolean flag = !(this.entity.getWorld().getBlockState(this.entity.getPos()).get(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).get(POWERED));
+                    bone.setHidden(flag);
                 }
-            }
-            if (bone.getName().contains("activelight") || bone.getName().contains("activeeffect")) {
-                boolean flag = !(this.entity.getWorld().getBlockState(this.entity.getPos()).get(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).get(POWERED));
-                bone.setHidden(flag);
             }
         }
 
