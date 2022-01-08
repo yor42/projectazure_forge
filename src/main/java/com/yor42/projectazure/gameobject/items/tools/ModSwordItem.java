@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.tools;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.IItemTier;

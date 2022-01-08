@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.BBDefaultRiggingRenderer;
 import net.minecraft.block.BedBlock;

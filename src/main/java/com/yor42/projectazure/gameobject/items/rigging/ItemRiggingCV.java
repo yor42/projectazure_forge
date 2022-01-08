@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -9,7 +9,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
-import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nullable;
 import java.util.List;

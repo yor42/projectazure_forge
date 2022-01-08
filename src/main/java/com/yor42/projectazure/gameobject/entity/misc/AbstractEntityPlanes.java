@@ -6,7 +6,7 @@ import com.yor42.projectazure.gameobject.entity.ai.goals.PlaneWanderAroundCarrie
 import com.yor42.projectazure.gameobject.entity.ai.goals.planeBombRunGoal;
 import com.yor42.projectazure.gameobject.entity.ai.targetAI.PlaneInterceptGoal;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentPlaneBase;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;

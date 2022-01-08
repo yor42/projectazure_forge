@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

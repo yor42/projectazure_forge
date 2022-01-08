@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.items.equipment;
+package com.yor42.projectazure.gameobject.items.shipEquipment;
 
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.libs.enums;

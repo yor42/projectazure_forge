@@ -5,9 +5,9 @@ import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandle
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.containers.slots.slotEquipment;
 import com.yor42.projectazure.gameobject.containers.slots.slotInventory;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentBase;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentGun;
-import com.yor42.projectazure.gameobject.items.equipment.ItemEquipmentTorpedo;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentGun;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +20,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;

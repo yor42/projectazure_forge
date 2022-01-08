@@ -58,7 +58,7 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getDefaultState().with(FORMED, false);
+        return super.getStateForPlacement(context).with(FORMED, false);
     }
 
     @Override
