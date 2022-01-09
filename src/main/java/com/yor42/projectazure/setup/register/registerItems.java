@@ -14,6 +14,7 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import com.yor42.projectazure.gameobject.items.tools.ItemCommandStick;
+import com.yor42.projectazure.gameobject.items.tools.ItemSledgeHammer;
 import com.yor42.projectazure.gameobject.items.tools.ModSwordItem;
 import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.libs.enums;
@@ -258,14 +259,13 @@ public class registerItems {
 
     public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 10, -1.7F, new Item.Properties().group(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 8, -1.5F, new Item.Properties().group(PA_WEAPONS)));
-
     public static final RegistryObject<Item> COMPOUNDBOW = registerManager.ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().group(PA_WEAPONS).maxDamage(1000)));
-
-
     public static final RegistryObject<Item> BONKBAT = registerManager.ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
             .group(PA_WEAPONS)
             .rarity(Rarity.EPIC)
             .maxStackSize(1)));
+
+    public static final RegistryObject<Item> SLEDGEHAMMER = registerManager.ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -5F, ModMaterials.SLEDGEHAMMER, new Item.Properties().group(PA_WEAPONS).maxStackSize(1)));
 
     public static final RegistryObject<Item> COMMANDING_STICK = registerManager.ITEMS.register("commanding_stick", ItemCommandStick::new);
 
@@ -319,6 +319,9 @@ public class registerItems {
             .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_CHEN = registerManager.ITEMS.register("spawnchen", () -> new ItemKansenSpawnEgg(ENTITYTYPE_CHEN, new Item.Properties()
+            .group(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWN_MUDROCK = registerManager.ITEMS.register("spawnmudrock", () -> new ItemKansenSpawnEgg(ENTITYTYPE_MUDROCK, new Item.Properties()
             .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_M4A1 = registerManager.ITEMS.register("spawnm4a1", () -> new ItemKansenSpawnEgg(ENTITYTYPE_M4A1, new Item.Properties()

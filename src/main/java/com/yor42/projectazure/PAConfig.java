@@ -84,6 +84,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue RosmontisAttackDamage;
         public final ForgeConfigSpec.DoubleValue RosmontisMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue MudrockHealth;
+        public final ForgeConfigSpec.DoubleValue MudrockSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue MudrockAttackDamage;
+        public final ForgeConfigSpec.DoubleValue MudrockMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -207,6 +212,10 @@ public class PAConfig {
             RosmontisAttackDamage = builder.defineInRange("Attack Damage of Rosmontis", 2.0F, 0, 1024);
             RosmontisMovementSpeed = builder.defineInRange("Movement speed of Rosmontis", 0.4F, 0, 2);
 
+            MudrockHealth = builder.defineInRange("Max Health of Mudrock", 20D, 1, 1024);
+            MudrockSwimSpeed = builder.defineInRange("Swim Speed of Mudrock", 2.5, 0, 1024);
+            MudrockAttackDamage = builder.defineInRange("Attack Damage of Mudrock", 2.0F, 0, 1024);
+            MudrockMovementSpeed = builder.defineInRange("Movement speed of Mudrock", 0.4F, 0, 2);
 
             builder.pop().push("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);

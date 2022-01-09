@@ -12,6 +12,7 @@ import com.yor42.projectazure.gameobject.entity.companion.kansen.*;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityMudrock;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.entity.projectiles.*;
@@ -115,6 +116,9 @@ public class registerManager {
 
     public static final EntityType<EntityChen> ENTITYTYPE_CHEN = EntityType.Builder.create(EntityChen::new, EntityClassification.CREATURE).size(0.572F, 1.68F).build(ModResourceLocation("entitychen").toString());
     public static final RegistryObject<EntityType<EntityChen>> CHEN = ENTITIES.register("entitychen", () -> ENTITYTYPE_CHEN);
+
+    public static final EntityType<EntityMudrock> ENTITYTYPE_MUDROCK = EntityType.Builder.create(EntityMudrock::new, EntityClassification.CREATURE).size(0.572F, 1.63F).build(ModResourceLocation("entitymudrock").toString());
+    public static final RegistryObject<EntityType<EntityMudrock>> MUDROCK = ENTITIES.register("entitymudrock", () -> ENTITYTYPE_MUDROCK);
 
     public static final EntityType<EntityAmiya> ENTITYTYPE_AMIYA = EntityType.Builder.create(EntityAmiya::new, EntityClassification.CREATURE).size(0.572F, 1.42F).build(ModResourceLocation("entityamiya").toString());
     public static final RegistryObject<EntityType<EntityAmiya>> AMIYA = ENTITIES.register("entityamiya", () -> ENTITYTYPE_AMIYA);

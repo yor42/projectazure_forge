@@ -143,6 +143,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.ENTERPRISE.get(), entityEnterpriseRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.NAGATO.get(), entityNagatoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.CHEN.get(), EntityChenRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.MUDROCK.get(), EntityMudrockRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.ROSMONTIS.get(), EntityRosmontisRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.AMIYA.get(), EntityAmiyaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.M4A1.get(), EntityM4A1Renderer::new);

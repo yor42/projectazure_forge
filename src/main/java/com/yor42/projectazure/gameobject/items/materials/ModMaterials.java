@@ -5,6 +5,7 @@ import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
+import net.minecraftforge.common.Tags;
 
 import java.util.function.Supplier;
 
@@ -14,7 +15,10 @@ public enum ModMaterials implements IItemTier {
         return Ingredient.fromTag(ModTags.Items.INGOT_TIN);}),
 
     SHEATH(2, 1256, 5.5F, 5, 8, () -> {
-        return Ingredient.fromTag(ModTags.Items.INGOT_TIN);});
+        return Ingredient.fromTag(ModTags.Items.INGOT_TIN);}),
+
+    SLEDGEHAMMER(2, 600, 1F, 10, 3, () -> {
+        return Ingredient.fromTag(Tags.Items.INGOTS_IRON);});
 
     private final int harvestLevel;
     private final int maxUses;

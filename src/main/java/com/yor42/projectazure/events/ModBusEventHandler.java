@@ -55,7 +55,7 @@ public class ModBusEventHandler {
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_SHIROKO.get()));
                 }
                 else if(isAoichi){
-                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_AMIYA.get()));
+                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_MUDROCK.get()));
                     player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), new ItemStack(registerItems.SPAWN_ROSMONTIS.get()));
                 }
                 data.putBoolean("PRJA:gotStarterCube", true);

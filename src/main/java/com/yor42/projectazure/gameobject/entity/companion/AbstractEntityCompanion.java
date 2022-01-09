@@ -1062,6 +1062,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     protected SoundEvent getAmbientSound() {
 
+        if(this.isAngry()){
+            return null;
+        }
+
         if(this instanceof IAknOp){
             float trust = this.getAffection();
             if(trust>=100){
@@ -1266,6 +1270,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             if(this.getOwner() != null && this.getOwner().isAlive()){
                 if (this.getOwner() != null && this.getOwner().isAlive() && this.getDataManager().get(QUESTIONABLE_INTERACTION_ANIMATION_TIME) > 0) {
                     this.faceEntity(this.getOwner(), 30F, 30F);
+                    this.getLookController().setLookPositionWithEntity(this.getOwner(), 30, 30);
                     int interactionTime = this.getDataManager().get(QUESTIONABLE_INTERACTION_ANIMATION_TIME);
                     this.getDataManager().set(QUESTIONABLE_INTERACTION_ANIMATION_TIME, interactionTime - 1);
                     this.qinteractionTimer += 1;

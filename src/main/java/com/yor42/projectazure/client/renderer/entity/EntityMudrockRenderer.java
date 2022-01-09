@@ -2,9 +2,10 @@ package com.yor42.projectazure.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.client.model.entity.sworduser.ChenModel;
+import com.yor42.projectazure.client.model.entity.sworduser.ModelMudrock;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityMudrock;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -18,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nonnull;
@@ -25,19 +27,25 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
+public class EntityMudrockRenderer extends GeoEntityRenderer<EntityMudrock> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;
     private ResourceLocation texture;
 
-    public EntityChenRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new ChenModel());
+    public EntityMudrockRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new ModelMudrock());
         this.shadowSize = 0.4F;
     }
 
+    @Nonnull
     @Override
-    public void renderEarly(EntityChen animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+    public ResourceLocation getEntityTexture(@Nonnull EntityMudrock entity) {
+        return TextureEntityLocation("modelmudrock");
+    }
+
+    @Override
+    public void renderEarly(EntityMudrock animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
         this.rtb = renderTypeBuffer;
         this.entity = animatable;
@@ -45,21 +53,15 @@ public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
     }
 
     @Override
-    public void render(@Nonnull EntityChen entity, float entityYaw, float partialTicks, MatrixStack stack, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(@Nonnull EntityMudrock entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
         stack.push();
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
         stack.pop();
     }
 
-    @Nonnull
     @Override
-    public ResourceLocation getEntityTexture(@Nonnull EntityChen entity) {
-        return TextureEntityLocation("modelchen");
-    }
-
-    @Override
-    public RenderType getRenderType(EntityChen animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+    public RenderType getRenderType(EntityMudrock animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
         return RenderType.getEntitySmoothCutout(textureLocation);
     }
 
@@ -101,4 +103,5 @@ public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
         bufferIn = rtb.getBuffer(RenderType.getEntitySmoothCutout(texture));
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
+
 }
