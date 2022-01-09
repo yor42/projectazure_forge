@@ -3,13 +3,10 @@ package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public abstract class AbstractSwordUserBase extends AbstractEntityCompanion implements IMeleeAttacker {
 
@@ -31,7 +28,7 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
 
     public void StartMeleeAttackingEntity() {
         this.setMeleeAttackDelay((int) (this.getInitialAttackDelay() *this.getAttackSpeedModifier(this.isUsingTalentedWeapon())));
-        this.StartedAttackTimeStamp = this.ticksExisted;
+        this.StartedMeleeAttackTimeStamp = this.ticksExisted;
     }
 
     public abstract float getAttackSpeedModifier(boolean isUsingTalentedWeapon);

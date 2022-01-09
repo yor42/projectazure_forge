@@ -11,6 +11,7 @@ import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
+import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -299,8 +300,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected long lastSlept, lastWokenup;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
-    protected int StartedAttackTimeStamp = -1;
+    protected int StartedMeleeAttackTimeStamp = -1;
     protected int AttackCount = 0;
+    protected int StartedSpellAttackTimeStamp = -1;
+    protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> NONVANILLAMELEEATTACKDELAY = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> SKILLDELAYTICK = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> EATING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -445,6 +448,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void writeAdditional(@Nonnull CompoundNBT compound) {
         super.writeAdditional(compound);
+        compound.putInt("spelldelay", this.getDataManager().get(SPELLDELAY));
         compound.putFloat("affection", this.dataManager.get(AFFECTION));
         compound.putInt("patcooldown", this.dataManager.get(PATCOOLDOWN));
         compound.putInt("angrytimer", this.dataManager.get(ANGRYTIMER));
@@ -492,6 +496,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void readAdditional(@Nonnull CompoundNBT compound) {
         super.readAdditional(compound);
+        this.getDataManager().set(SPELLDELAY, compound.getInt("spelldelay"));
         this.dataManager.set(AFFECTION, compound.getFloat("affection"));
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
@@ -912,6 +917,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected void registerData() {
         super.registerData();
+        this.getDataManager().register(SPELLDELAY, 0);
         this.dataManager.register(SKILLDELAYTICK, 0);
         this.dataManager.register(EXP, 0.0F);
         this.dataManager.register(LIMITBREAKLEVEL, 0);
@@ -951,7 +957,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(OPENINGDOOR, this.isOpeningDoor);
     }
 
+    public int getSpellDelay(){
+        return this.getDataManager().get(SPELLDELAY);
+    }
 
+    public void setSpellDelay(int value) {
+        this.getDataManager().set(SPELLDELAY, value);
+    }
+
+    public boolean isUsingSpell(){
+        return this.getSpellDelay()>0;
+    }
 
     public boolean shouldPickupItem(){
         return this.dataManager.get(PICKUP_ITEM);
@@ -1317,7 +1333,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     } else {
                         this.AttackCount+=1;
                         this.setMeleeAttackDelay(currentspelldelay - 1);
-                        if (((IMeleeAttacker)this).getAttackPreAnimationDelay().contains(this.ticksExisted - this.StartedAttackTimeStamp) && this.getDistance(target)<=((IMeleeAttacker)this).getAttackRange(((IMeleeAttacker)this).isUsingTalentedWeapon())) {
+                        if (((IMeleeAttacker)this).getAttackPreAnimationDelay().contains(this.ticksExisted - this.StartedMeleeAttackTimeStamp) && this.getDistance(target)<=((IMeleeAttacker)this).getAttackRange(((IMeleeAttacker)this).isUsingTalentedWeapon())) {
                             ((IMeleeAttacker)this).PerformMeleeAttack(target, this.getAttackDamage(), this.AttackCount);
                         }
                     }
@@ -1326,6 +1342,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     this.AttackCount = 0;
                 }
             }
+            if(this instanceof ISpellUser) {
+                int currentspelldelay = this.getSpellDelay();
+                @Nullable
+                LivingEntity target = this.getAttackTarget();
+                if (currentspelldelay > 0) {
+                    if (target == null || !target.isAlive()) {
+                        this.setSpellDelay(0);
+                    } else {
+                        this.getNavigator().clearPath();
+                        setSpellDelay(currentspelldelay - 1);
+                        if (this.ticksExisted - this.StartedSpellAttackTimeStamp == ((ISpellUser)this).getProjectilePreAnimationDelay()) {
+                            ((ISpellUser)this).ShootProjectile(this.getEntityWorld(), target);
+                        }
+                    }
+                }
+            }
+
         }
 
         if(!this.getEntityWorld().isRemote() && this.isAngry()){
