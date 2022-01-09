@@ -61,7 +61,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
-        if(this.isAttacking()){
+        if(this.isNonVanillaMeleeAttacking()){
             event.getController().setAnimation(builder.addAnimation("meleeattack_arm", true));
             return PlayState.CONTINUE;
         }
@@ -152,7 +152,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isAttacking()){
+        else if(this.isNonVanillaMeleeAttacking()){
             event.getController().setAnimation(builder.addAnimation("meleeattack_leg", true));
             return PlayState.CONTINUE;
         }

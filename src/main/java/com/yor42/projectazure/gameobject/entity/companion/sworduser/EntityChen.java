@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
-import com.google.common.collect.Lists;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
@@ -20,12 +19,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.item.TieredItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -119,7 +116,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isAttacking()){
+        else if(this.isNonVanillaMeleeAttacking()){
             event.getController().setAnimation(builder.addAnimation("melee_attack_leg", true));
             return PlayState.CONTINUE;
         }
@@ -176,7 +173,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
-        if(this.isAttacking()){
+        if(this.isNonVanillaMeleeAttacking()){
             event.getController().setAnimation(builder.addAnimation("melee_attack_arm", true));
             return PlayState.CONTINUE;
         }

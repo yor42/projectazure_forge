@@ -11,7 +11,6 @@ import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -300,6 +299,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected long lastSlept, lastWokenup;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
+    protected int StartedAttackTimeStamp = -1;
+    protected int AttackCount = 0;
+    protected static final DataParameter<Integer> NONVANILLAMELEEATTACKDELAY = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> SKILLDELAYTICK = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Boolean> EATING = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> USING_SKILL = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -483,6 +485,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("shieldcooldown", this.shieldCoolDown);
         compound.put("ammostorage", this.getAmmoStorage().serializeNBT());
         this.foodStats.write(compound);
+        compound.putInt("attackdelay", this.getDataManager().get(NONVANILLAMELEEATTACKDELAY));
         compound.putInt("SwapIndexMainHand", this.ItemSwapIndexMainHand);
         compound.putInt("SwapIndexOffHand", this.ItemSwapIndexOffhand);
     }
@@ -492,6 +495,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.set(AFFECTION, compound.getFloat("affection"));
         this.dataManager.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.dataManager.set(OATHED, compound.getBoolean("oathed"));
+        this.getDataManager().set(NONVANILLAMELEEATTACKDELAY, compound.getInt("attackdelay"));
         this.dataManager.set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
         this.func_233687_w_(compound.getBoolean("isSitting"));
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
@@ -920,6 +924,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(MELEEATTACKING, false);
         this.dataManager.register(MAXPATEFFECTCOUNT, 0);
         this.dataManager.register(PATEFFECTCOUNT, 0);
+        this.getDataManager().register(NONVANILLAMELEEATTACKDELAY, 0);
         this.dataManager.register(PATCOOLDOWN, 0);
         this.dataManager.register(PAT_ANIMATION_TIME, 0);
         this.dataManager.register(OATHED, false);
@@ -1298,6 +1303,29 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.dataManager.set(INTERACTION_WARNING_COUNT,0);
                 this.dataManager.set(ANGRYTIMER,0);
             }
+
+
+            if(this instanceof IMeleeAttacker) {
+                int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
+                @Nullable
+                LivingEntity target = this.getAttackTarget();
+                if (currentspelldelay > 0) {
+                    this.getNavigator().clearPath();
+                    if (target == null || !target.isAlive()) {
+                        this.setMeleeAttackDelay(0);
+                        this.AttackCount = 0;
+                    } else {
+                        this.AttackCount+=1;
+                        this.setMeleeAttackDelay(currentspelldelay - 1);
+                        if (((IMeleeAttacker)this).getAttackPreAnimationDelay().contains(this.ticksExisted - this.StartedAttackTimeStamp) && this.getDistance(target)<=((IMeleeAttacker)this).getAttackRange(((IMeleeAttacker)this).isUsingTalentedWeapon())) {
+                            ((IMeleeAttacker)this).PerformMeleeAttack(target, this.getAttackDamage(), this.AttackCount);
+                        }
+                    }
+                }
+                else if(this.AttackCount>0){
+                    this.AttackCount = 0;
+                }
+            }
         }
 
         if(!this.getEntityWorld().isRemote() && this.isAngry()){
@@ -1375,6 +1403,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.func_233687_w_(false);
         }
 
+    }
+
+    public int getNonVanillaMeleeAttackDelay(){
+        return this.getDataManager().get(NONVANILLAMELEEATTACKDELAY);
+    }
+
+    public void setMeleeAttackDelay(int value) {
+        this.getDataManager().set(NONVANILLAMELEEATTACKDELAY, value);
+    }
+    public boolean isNonVanillaMeleeAttacking(){
+        return this.getNonVanillaMeleeAttackDelay()>0;
     }
 
     @Override
@@ -1554,8 +1593,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         else if(this instanceof AbstractCompanionMagicUser){
             this.goalSelector.addGoal(7, new CompanionSpellRangedAttackGoal((AbstractCompanionMagicUser) this, 10));
         }
-        else if(this instanceof AbstractSwordUserBase){
-            this.goalSelector.addGoal(7, new CompanionSwordUserMeleeAttack((AbstractSwordUserBase) this));
+        else if(this instanceof IMeleeAttacker){
+            this.goalSelector.addGoal(7, new CompanionSwordUserMeleeAttack((IMeleeAttacker) this));
         }
         this.goalSelector.addGoal(8, new CompanionUseShieldGoal(this));
         this.goalSelector.addGoal(9, new CompanionHealandEatFoodGoal(this));

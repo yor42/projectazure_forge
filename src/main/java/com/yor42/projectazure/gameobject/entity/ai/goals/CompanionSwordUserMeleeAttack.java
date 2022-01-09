@@ -1,5 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -15,24 +17,29 @@ public class CompanionSwordUserMeleeAttack extends Goal {
      */
 
     @Nonnull
-    private final AbstractSwordUserBase host;
+    private final AbstractEntityCompanion hostEntity;
+    private final IMeleeAttacker host;
     @Nullable private LivingEntity target;
     private int seeTime;
 
-    public CompanionSwordUserMeleeAttack(@Nonnull AbstractSwordUserBase companion){
+    public CompanionSwordUserMeleeAttack(@Nonnull IMeleeAttacker companion){
         this.host = companion;
+        if(!(companion instanceof AbstractEntityCompanion)){
+            throw new IllegalArgumentException("IMeleeAttacker companion is not instance of AbstractEntityCompanion!");
+        }
+        this.hostEntity = (AbstractEntityCompanion) companion;
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
     public boolean shouldExecute() {
         @Nullable
-        LivingEntity targetEntity = this.host.getAttackTarget();
+        LivingEntity targetEntity = this.hostEntity.getAttackTarget();
         if(targetEntity == null || !targetEntity.isAlive()){
             return false;
         }
 
-        if(this.host.getOwner() != null && (this.host.getDistance(this.host.getOwner())>=16 || targetEntity.getDistance(this.host.getOwner())>=16)){
+        if(this.hostEntity.getOwner() != null && (this.hostEntity.getDistance(this.hostEntity.getOwner())>=16 || targetEntity.getDistance(this.hostEntity.getOwner())>=16)){
             return false;
         }
 
@@ -50,31 +57,31 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             return false;
         }
 
-        if(this.host.getOwner() != null && (this.host.getDistance(this.host.getOwner())>=16 || this.target.getDistance(this.host.getOwner())>=16)){
+        if(this.hostEntity.getOwner() != null && (this.hostEntity.getDistance(this.hostEntity.getOwner())>=16 || this.target.getDistance(this.hostEntity.getOwner())>=16)){
             return false;
         }
 
-        return this.shouldExecute() || !this.host.getNavigator().noPath();
+        return this.shouldExecute() || !this.hostEntity.getNavigator().noPath();
     }
 
     @Override
     public void startExecuting() {
-        this.host.getNavigator().clearPath();
-        this.host.setAggroed(true);
+        this.hostEntity.getNavigator().clearPath();
+        this.hostEntity.setAggroed(true);
     }
 
     @Override
     public void resetTask() {
         this.target = null;
-        this.host.getNavigator().clearPath();
-        this.host.setAggroed(false);
+        this.hostEntity.getNavigator().clearPath();
+        this.hostEntity.setAggroed(false);
     }
 
     @Override
     public void tick() {
         if(this.target != null) {
-            double distance = this.host.getDistance(this.target);
-            boolean canSee = this.host.getEntitySenses().canSee(this.target);
+            double distance = this.hostEntity.getDistance(this.target);
+            boolean canSee = this.hostEntity.getEntitySenses().canSee(this.target);
 
             boolean isTooFar = distance > this.host.getAttackRange(this.host.isUsingTalentedWeapon());
 
@@ -83,17 +90,17 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             } else {
                 this.seeTime = 0;
             }
-            this.host.faceEntity(this.target, 30.0F, 30.0F);
-            if(!this.host.isAttacking()) {
+            this.hostEntity.faceEntity(this.target, 30.0F, 30.0F);
+            if(!this.hostEntity.isNonVanillaMeleeAttacking()) {
                 if (isTooFar) {
-                    this.host.setSprinting(distance >= 8);
-                    this.host.getNavigator().tryMoveToEntityLiving(this.target, 1);
+                    this.hostEntity.setSprinting(distance >= 8);
+                    this.hostEntity.getNavigator().tryMoveToEntityLiving(this.target, 1);
                 } else if(this.seeTime >= 5){
-                    this.host.getNavigator().clearPath();
-                    this.host.setSprinting(false);
-                    this.host.StartAttackingEntity();
+                    this.hostEntity.getNavigator().clearPath();
+                    this.hostEntity.setSprinting(false);
+                    this.host.StartMeleeAttackingEntity();
                 }else {
-                    this.host.getNavigator().tryMoveToEntityLiving(this.target, 1);
+                    this.hostEntity.getNavigator().tryMoveToEntityLiving(this.target, 1);
                 }
             }
 
