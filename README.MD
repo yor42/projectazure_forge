@@ -1,7 +1,5 @@
 Project: Azure
 =
-프로젝트: 애저
--
 
 Introduction(소개)
 -
