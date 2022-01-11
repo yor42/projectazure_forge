@@ -29,6 +29,10 @@ public interface IMeleeAttacker {
     boolean shouldUseNonVanillaAttack(LivingEntity target);
     boolean isUsingTalentedWeapon();
 
+    default ArrayList<Integer> getMeleeAnimationAudioCueDelay(){
+        return new ArrayList<>();
+    }
+
     void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount);
     default float getAttackSpeedModifier(boolean isUsingTalentedWeapon){
         return isUsingTalentedWeapon? 1:1.2F;

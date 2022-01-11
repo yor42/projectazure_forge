@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -29,11 +30,13 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
     public EntityMudrock(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -173,6 +176,11 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
         NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this));
     }
 
+    @Override
+    protected void soundListener(SoundKeyframeEvent event) {
+        this.playSound(registerSounds.HAMMER_SWING, 1, 0.8F+(0.4F*this.getRNG().nextFloat()));
+    }
+
     @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
@@ -191,12 +199,22 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Arrays.asList(registerItems.SLEDGEHAMMER.get()));
+        return new ArrayList<>(Collections.singletonList(registerItems.SLEDGEHAMMER.get()));
+    }
+
+    @Override
+    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
+        return new ArrayList<>(Collections.singletonList(12));
+    }
+
+    @Override
+    public void playMeleeAttackPreSound() {
+        this.playSound(registerSounds.HAMMER_SWING, 1, 0.8F+(0.2F*this.getRNG().nextFloat()));
     }
 
     @Override
     public float getAttackRange(boolean isUsingTalentedWeapon) {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -204,6 +222,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
         //this.playSound(getAttackSound(), 1F, 0.8F + this.getRNG().nextFloat() * 0.4F);
         target.attackEntityFrom(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.causeMobDamage(this), damage*0.5F);
         target.applyKnockback(0.15F, MathHelper.sin(this.rotationYaw * ((float)Math.PI / 180F)), -MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F)));
+        this.playSound(registerSounds.HAMMER_HIT, 1, 0.8F+(0.4F*this.getRNG().nextFloat()));
     }
 
     @Override
@@ -218,22 +237,22 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public SoundEvent getNormalAmbientSounds() {
-        return null;
+        return registerSounds.MUDROCK_TALK_NORMAL;
     }
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return null;
+        return registerSounds.MUDROCK_TALK_HIGH_AFFECTION1;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return null;
+        return registerSounds.MUDROCK_TALK_HIGH_AFFECTION2;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return null;
+        return registerSounds.MUDROCK_TALK_HIGH_AFFECTION3;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

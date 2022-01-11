@@ -82,6 +82,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.ParticleKeyFrameEvent;
+import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -895,9 +897,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<>(this, "controller_lowerbody", 7, this::predicate_lowerbody));
+        AnimationController UpperBodycontroller = new AnimationController<>(this, "controller_lowerbody", 7, this::predicate_lowerbody);
+        animationData.addAnimationController(UpperBodycontroller);
         animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 7, this::predicate_upperbody));
         animationData.addAnimationController(new AnimationController<>(this, "controller_head", 1, this::predicate_head));
+
+        UpperBodycontroller.registerSoundListener(this::soundListener);
+        UpperBodycontroller.registerParticleListener(this::particleListener);
+    }
+
+    protected void particleListener(ParticleKeyFrameEvent particleKeyFrameEvent) {
+    }
+
+    protected void soundListener(SoundKeyframeEvent event) {
     }
 
     protected abstract <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent);
@@ -1331,9 +1343,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         this.setMeleeAttackDelay(0);
                         this.AttackCount = 0;
                     } else {
-                        this.AttackCount+=1;
                         this.setMeleeAttackDelay(currentspelldelay - 1);
-                        if (((IMeleeAttacker)this).getAttackPreAnimationDelay().contains(this.ticksExisted - this.StartedMeleeAttackTimeStamp) && this.getDistance(target)<=((IMeleeAttacker)this).getAttackRange(((IMeleeAttacker)this).isUsingTalentedWeapon())) {
+                        int delay = this.ticksExisted - this.StartedMeleeAttackTimeStamp;
+                        if(!((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().isEmpty() && ((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().contains(delay)){
+                            this.playMeleeAttackPreSound();
+                        }
+                        if (((IMeleeAttacker)this).getAttackPreAnimationDelay().contains(delay) && this.getDistance(target)<=((IMeleeAttacker)this).getAttackRange(((IMeleeAttacker)this).isUsingTalentedWeapon())) {
+                            this.AttackCount+=1;
                             ((IMeleeAttacker)this).PerformMeleeAttack(target, this.getAttackDamage(), this.AttackCount);
                         }
                     }
@@ -1342,6 +1358,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     this.AttackCount = 0;
                 }
             }
+
             if(this instanceof ISpellUser) {
                 int currentspelldelay = this.getSpellDelay();
                 @Nullable
@@ -1438,6 +1455,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
 
     }
+
+    public void playMeleeAttackPreSound(){}
 
     public int getNonVanillaMeleeAttackDelay(){
         return this.getDataManager().get(NONVANILLAMELEEATTACKDELAY);

@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -225,7 +226,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
     @Override
     public SoundEvent getNormalAmbientSounds() {
-        return null;
+        return registerSounds.ROSMONTIS_TALK_NORMAL;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
@@ -240,16 +241,16 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return null;
+        return registerSounds.ROSMONTIS_TALK_HIGH_AFFECTION1;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return null;
+        return registerSounds.ROSMONTIS_TALK_HIGH_AFFECTION2;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return null;
+        return registerSounds.ROSMONTIS_TALK_HIGH_AFFECTION3;
     }
 }

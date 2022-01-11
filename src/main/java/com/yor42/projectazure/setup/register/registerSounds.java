@@ -32,12 +32,14 @@ public final class registerSounds {
     public static final SoundEvent SHEATH_HIT = registerSoundEvent("sheath_hit");
     public static final SoundEvent CHIXIAO_HIT = registerSoundEvent("chixiao_hit");
 
+    public static final SoundEvent HAMMER_SWING = registerSoundEvent("hammer_swing");
+    public static final SoundEvent HAMMER_HIT = registerSoundEvent("hammer_hit");
+
     public static final SoundEvent CHIMERA_PROJECTILE_LAUNCH = registerSoundEvent("chimera_projectile_launch");
     public static final SoundEvent CHIMERA_PROJECTILE_HIT = registerSoundEvent("chimera_projectile_impact");
 
-    public static final SoundEvent CHIMERA_TALK_NORMAL = registerSoundEvent("chimera_talk_normal");
-
     //*jumps off cliff*
+    public static final SoundEvent CHIMERA_TALK_NORMAL = registerSoundEvent("chimera_talk_normal");
     public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION1 = registerSoundEvent("chimera_talk_high_affection1");
     public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION2 = registerSoundEvent("chimera_talk_high_affection2");
     public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION3 = registerSoundEvent("chimera_talk_high_affection3");
@@ -46,6 +48,16 @@ public final class registerSounds {
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION1 = registerSoundEvent("chen_talk_high_affection1");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION2 = registerSoundEvent("chen_talk_high_affection2");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION3 = registerSoundEvent("chen_talk_high_affection3");
+
+    public static final SoundEvent MUDROCK_TALK_NORMAL = registerSoundEvent("mudrock_talk_normal");
+    public static final SoundEvent MUDROCK_TALK_HIGH_AFFECTION1 = registerSoundEvent("mudrock_talk_high_affection1");
+    public static final SoundEvent MUDROCK_TALK_HIGH_AFFECTION2 = registerSoundEvent("mudrock_talk_high_affection2");
+    public static final SoundEvent MUDROCK_TALK_HIGH_AFFECTION3 = registerSoundEvent("mudrock_talk_high_affection3");
+
+    public static final SoundEvent ROSMONTIS_TALK_NORMAL = registerSoundEvent("rosmontis_talk_normal");
+    public static final SoundEvent ROSMONTIS_TALK_HIGH_AFFECTION1 = registerSoundEvent("rosmontis_talk_high_affection1");
+    public static final SoundEvent ROSMONTIS_TALK_HIGH_AFFECTION2 = registerSoundEvent("rosmontis_talk_high_affection2");
+    public static final SoundEvent ROSMONTIS_TALK_HIGH_AFFECTION3 = registerSoundEvent("rosmontis_talk_high_affection3");
 
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);

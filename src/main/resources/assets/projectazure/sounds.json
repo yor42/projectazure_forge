@@ -80,6 +80,20 @@
       }
     ]
   },
+  "hammer_swing": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/mudrock/hammer_swing"
+      }
+    ]
+  },
+  "hammer_hit": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/mudrock/hammer_hit"
+      }
+    ]
+  },
   "chimera_talk_normal": {
     "sounds": [
       {
@@ -326,6 +340,233 @@
       },
       {
         "name": "projectazure:entity/akn/chen/voice/voice_aff3"
+      }
+    ]
+  },
+  "mudrock_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice7"
+      }
+    ]
+  },
+  "mudrock_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice_aff1"
+      }
+    ]
+  },
+  "mudrock_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice_aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice_aff2"
+      }
+    ]
+  },
+  "mudrock_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice_aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice_aff2"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice_aff3"
+      }
+    ]
+  },
+  "rosmontis_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice6"
+      }
+    ]
+  },
+  "rosmontis_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff1"
+      }
+    ]
+  },
+  "rosmontis_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice_aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/voice_aff2"
+      }
+    ]
+  },
+  "rosmontis_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff2"
+      },
+      {
+        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff3"
       }
     ]
   },
