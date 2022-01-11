@@ -33,6 +33,10 @@ public class DamageSources {
         return (new PACompanionAttackDamage("revenge", companion, 5));
     }
 
+    public static DamageSource causeArtsFireDamage(AbstractEntityCompanion companion) {
+        return (new PACompanionAttackDamage("fire_arts", companion, 5).setFireDamage().setMagicDamage());
+    }
+
     public static DamageSource causeCannonDamage(EntityCannonPelllet cannonPelllet, @Nullable Entity indirectEntityIn) {
         return (new IndirectEntityDamageSource("canon_shot_generic", cannonPelllet, indirectEntityIn)).setProjectile();
     }

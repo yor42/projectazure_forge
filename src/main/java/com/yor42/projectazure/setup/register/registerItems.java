@@ -12,10 +12,7 @@ import com.yor42.projectazure.gameobject.items.materials.ModMaterials;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
 import com.yor42.projectazure.gameobject.items.rigging.itemRiggingDDDefault;
-import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
-import com.yor42.projectazure.gameobject.items.tools.ItemCommandStick;
-import com.yor42.projectazure.gameobject.items.tools.ItemSledgeHammer;
-import com.yor42.projectazure.gameobject.items.tools.ModSwordItem;
+import com.yor42.projectazure.gameobject.items.tools.*;
 import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.gui.screen.Screen;
@@ -253,6 +250,21 @@ public class registerItems {
         }
     });
 
+    public static final RegistryObject<Item> DISC_ENTERTHEBEGINNING = registerManager.ITEMS.register("disc_enterthebeginning", () -> new MusicDiscItem(15, registerSounds.DISC_ENTERTHEBEGINNING, new Item.Properties()
+            .group(PA_GROUP).maxStackSize(1))
+    {
+        @Override
+        public ITextComponent getDisplayName(ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+
+        @Override
+        public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+            super.addInformation(stack, worldIn, tooltip, flagIn);
+            tooltip.add(new TranslationTextComponent("disc.enterthebeginning.desc1").setStyle(Style.EMPTY.setColor(Color.fromInt(7829367))));
+        }
+    });
+
     public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.BLOCK_LEVER_CLICK, 0, 0.5F, new Item.Properties()
             .setISTER(() -> ItemAbydos550Renderer::new)
             .group(PA_WEAPONS).maxStackSize(1), true, MAGAZINE_5_56.get()));
@@ -333,14 +345,17 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWN_ROSMONTIS = registerManager.ITEMS.register("spawnrosmontis", () -> new ItemKansenSpawnEgg(ENTITYTYPE_ROSMONTIS, new Item.Properties()
             .group(PA_SHIPS)));
 
+    public static final RegistryObject<Item> SPAWN_TALULAH = registerManager.ITEMS.register("spawntalulah", () -> new ItemKansenSpawnEgg(ENTITYTYPE_TALULAH, new Item.Properties()
+            .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SHIROKO, new Item.Properties()
             .group(PA_SHIPS)));
 
     public static final RegistryObject<Item> BANDAGE_ROLL = registerManager.ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()
-            .group(PA_GROUP)
-    .maxStackSize(1)
-    .maxDamage(7)));
+            .group(PA_GROUP)));
+
+    public static final RegistryObject<Item> DEVELOPER_BONUS = registerManager.ITEMS.register("developer_bonus", () -> new ItemContributorBonus(new Item.Properties()));
+    public static final RegistryObject<Item> CONTRIBUTOR_BONUS = registerManager.ITEMS.register("contributor_bonus", () -> new ItemContributorBonus(new Item.Properties()));
 
 
 

@@ -89,6 +89,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue MudrockAttackDamage;
         public final ForgeConfigSpec.DoubleValue MudrockMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue TalulahHealth;
+        public final ForgeConfigSpec.DoubleValue TalulahSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue TalulahAttackDamage;
+        public final ForgeConfigSpec.DoubleValue TalulahMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -215,7 +220,12 @@ public class PAConfig {
             MudrockHealth = builder.defineInRange("Max Health of Mudrock", 20D, 1, 1024);
             MudrockSwimSpeed = builder.defineInRange("Swim Speed of Mudrock", 2.5, 0, 1024);
             MudrockAttackDamage = builder.defineInRange("Attack Damage of Mudrock", 2.0F, 0, 1024);
-            MudrockMovementSpeed = builder.defineInRange("Movement speed of Mudrock", 0.4F, 0, 2);
+            MudrockMovementSpeed = builder.defineInRange("Movement speed of Mudrock", 0.5F, 0, 2);
+
+            TalulahHealth = builder.defineInRange("Max Health of Talulah", 40D, 1, 1024);
+            TalulahSwimSpeed = builder.defineInRange("Swim Speed of Talulah", 2.5, 0, 1024);
+            TalulahAttackDamage = builder.defineInRange("Attack Damage of Talulah", 2.0F, 0, 1024);
+            TalulahMovementSpeed = builder.defineInRange("Movement speed of Talulah", 0.5F, 0, 2);
 
             builder.pop().push("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);

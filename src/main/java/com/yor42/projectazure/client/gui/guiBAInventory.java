@@ -31,7 +31,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/bluearchive_inventory.png");
 
     private final EntityGunUserBase host;
-    private final enums.Affection affectionLevel;
+    private final enums.ALAffection affectionLevel;
     private final double affection, morale;
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;
@@ -74,24 +74,24 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         return this.backgroundHeight;
     }
 
-    private enums.Affection affectionValuetoLevel(){
+    private enums.ALAffection affectionValuetoLevel(){
         if(this.host.getAffection()>=100.0D){
             if(this.host.isOathed())
-                return enums.Affection.OATH;
+                return enums.ALAffection.OATH;
             else
-                return enums.Affection.LOVE;
+                return enums.ALAffection.LOVE;
         }
         else if(this.host.getAffection()>80 && this.host.getAffection()<100){
-            return enums.Affection.CRUSH;
+            return enums.ALAffection.CRUSH;
         }
         else if(this.host.getAffection()>60 && this.host.getAffection()<=80){
-            return enums.Affection.FRIENDLY;
+            return enums.ALAffection.FRIENDLY;
         }
         else if(this.host.getAffection()>30 && this.host.getAffection()<=60){
-            return enums.Affection.STRANGER;
+            return enums.ALAffection.STRANGER;
         }
         else{
-            return enums.Affection.DISAPPOINTED;
+            return enums.ALAffection.DISAPPOINTED;
         }
     }
 

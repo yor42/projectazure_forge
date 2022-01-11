@@ -10,7 +10,7 @@ public interface IMeleeAttacker {
     /*
     Delay between Each Attack
      */
-    int getInitialAttackDelay();
+    int getInitialMeleeAttackDelay();
     /*
     Delay of Pre animation before Actual Damage Deals
 
@@ -26,10 +26,12 @@ public interface IMeleeAttacker {
 
     float getAttackRange(boolean isUsingTalentedWeapon);
 
-    boolean shouldUseNonVanillaAttack();
+    boolean shouldUseNonVanillaAttack(LivingEntity target);
     boolean isUsingTalentedWeapon();
 
     void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount);
-    float getAttackSpeedModifier(boolean isUsingTalentedWeapon);
+    default float getAttackSpeedModifier(boolean isUsingTalentedWeapon){
+        return isUsingTalentedWeapon? 1:1.2F;
+    }
     void StartMeleeAttackingEntity();
 }

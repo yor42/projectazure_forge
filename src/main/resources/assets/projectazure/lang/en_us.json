@@ -35,6 +35,16 @@
   "item.projectazure.originite": "Originite",
   "item.projectazure.originium_prime": "Originium Prime",
 
+  "item.projectazure.developer_bonus": "Project:Azure Developer Supply Package",
+  "item.projectazure.developer_bonus.tooltip": "Supply Pack provided to Project:Azure Developer for live server debugging.",
+  "item.projectazure.developer_bonus.tooltip.owner": "Owner: ",
+  "item.projectazure.developer_bonus.tooltip.content": "Contents: ",
+
+  "item.projectazure.contributor_bonus": "Project:Azure Contributor Gift Package",
+  "item.projectazure.contributor_bonus.tooltip": "Thank-you gift for Contributor of Project:Azure and Something to flex others to.",
+  "item.projectazure.contributor_bonus.tooltip.owner": "Owner: ",
+  "item.projectazure.contributor_bonus.tooltip.content": "Contents: ",
+
   "item.projectazure.headhunting_pcb": "Beacon Amplifier Circuit",
 
   "item.projectazure.mold_plate": "Plate Mold",
@@ -63,6 +73,8 @@
   "disc.brainpower.desc1": "LET THE BASS KICK O-oooooooooo AAAA E A A I A U",
   "item.projectazure.disc_brainpower.desc": "Noma - Brain Power (Long Version)",
   "item.projectazure.disc_rickroll.desc": "Rick Astley - Never Gonna Give You Up",
+  "item.projectazure.disc_enterthebeginning.desc": "Edvard.S - Enter the Beginning",
+  "disc.enterthebeginning.desc1": "EZ2ON is good game. Buy it. Suffer with me. :gun: - Dev",
 
   "item.projectazure.equipment_torpedo_533mm": "533mm Quadruple Torpedo Mount",
   "item.projectazure.equipment_gun_127mm": "Single 127mm (SK C/34)",
@@ -74,7 +86,7 @@
   "item.projectazure.chixiao.tooltip": "Red Sword made from mysterious material. its heavy.",
 
 
-  "item.projectazure.abydos550": "Abydos 550",
+  "item.projectazure.abydos550": "WHITE FANG 465",
 
   "item.projectazure.missiledrone": "Missile Drone",
 
@@ -201,26 +213,17 @@
 
   "gui.kansen_ammostorage_usage": "Ammo Storage Usage",
 
-  "message.commandstick.bedpos_saved": "Bed Location %s has been saved to your Command Stick.",
-  "message.commandstick.bedpos_cleared": "Saved Bed Location in your command stick has been cleared.",
-
-  "message.commandstick.entity_bedpos_applied": "Assigned bed at %s to %s.",
-  "message.commandstick.entity_bedpos_failed": "Failed to assign bed at %s to %s: Invalid Bed.",
-  "message.commandstick.entity_bedpos_failed_duplicate": "Failed to assign bed at %s to %s: Duplicated bed with %s",
-  "message.commandstick.entity_bedpos_cleared": "Cleared Bed Location of %s.",
-  "message.commandstick.entity_bedpos_same_companion_same_bed" : "This companion is already Assigned to bed at %s.",
-
   "destroyer": "Destroyer",
   "light_cruiser": "Light Cruiser",
   "battleship": "Battleship",
   "aircraft_carrier": "Aircraft Carrier",
 
-  "disappointed":"Disappointed",
-  "stranger": "Stranger",
-  "friendly": "Friendly",
-  "crush": "Crush",
-  "love": "Love",
-  "oath": "Oath",
+  "affection.disappointed":"Disappointed",
+  "affection.stranger": "Stranger",
+  "affection.friendly": "Friendly",
+  "affection.crush": "Crush",
+  "affection.love": "Love",
+  "affection.oath": "Oath",
 
   "rarity.c": "Common",
   "rarity.uc": "Uncommon",
@@ -228,6 +231,7 @@
   "rarity.sr": "Super Rare",
   "rarity.ur": "Ultra Rare",
   "rarity.leg": "Legendary",
+  "rarity.sp": "Special",
 
   "operator.vanguard": "Vanguard",
   "operator.sniper": "Sniper",
@@ -237,8 +241,10 @@
   "operator.medic": "Medic",
   "operator.specialist": "Specialist",
   "operator.supporter": "Supporter",
+  "operator.reunion": "Reunion",
 
   "akn_operator": "Operator/Arknights",
+  "akn_reunion": "Reunion/Arknights",
   "bluearchive": "Gun User/Blue Archive",
   "al_kansen": "Shipgirl/Azur Lane",
   "gfl_tdoll": "T-Doll/Girl's Frontline",
@@ -259,6 +265,7 @@
   "entity.projectazure.entityamiya": "Amiya",
   "entity.projectazure.entityrosmontis": "Rosmontis",
   "entity.projectazure.entitymudrock": "Mudrock",
+  "entity.projectazure.entitytalulah": "Talulah",
 
   "entity.projectazure.missiledrone": "Missile Drone",
 
@@ -270,16 +277,17 @@
 
   "entity.projectazure.entityplanef4fwildcat": "F4F Wildcat",
 
+  "guntype.none": "None",
   "guntype.assault_rifle": "Assault Rifle",
   "guntype.shotgun": "Shotgun",
   "guntype.handgun": "Handgun",
   "guntype.sniper": "Sniper Rifle",
 
-  "really_happy": "Excited",
-  "happy": "Happy",
-  "neutral": "Neutral",
-  "tired": "Tired",
-  "exhaused": "Exhausted",
+  "morale.really_happy": "Excited",
+  "morale.happy": "Happy",
+  "morale.neutral": "Neutral",
+  "morale.tired": "Tired",
+  "morale.exhaused": "Exhausted",
 
   "plane.fighter": "Fighter",
   "plane.torpedo_bomber": "Torpedo Bomber",
@@ -310,9 +318,18 @@
   "tile.drydock": "Dry Dock",
   "metal_press": "Hydraulic Press",
 
+  "effect.projectazure.acute_oripathy": "Acute Oripathy",
+
   "message.rainbow_cube.notowner": "Seems like this cube is refusing your hand. maybe because its not yours?",
 
-  "effect.projectazure.acute_oripathy": "Acute Oripathy",
+  "message.commandstick.bedpos_saved": "Bed Location %s has been saved to your Command Stick.",
+  "message.commandstick.bedpos_cleared": "Saved Bed Location in your command stick has been cleared.",
+
+  "message.commandstick.entity_bedpos_applied": "Assigned bed at %s to %s.",
+  "message.commandstick.entity_bedpos_failed": "Failed to assign bed at %s to %s: Invalid Bed.",
+  "message.commandstick.entity_bedpos_failed_duplicate": "Failed to assign bed at %s to %s: Duplicated bed with %s",
+  "message.commandstick.entity_bedpos_cleared": "Cleared Bed Location of %s.",
+  "message.commandstick.entity_bedpos_same_companion_same_bed" : "This companion is already Assigned to bed at %s.",
 
   "death.attack.bonk": "%1$s was sent to horny jail",
 
@@ -324,8 +341,8 @@
 
   "death.attack.revenge_0": "%1$s \"provoked\" %2$s",
   "death.attack.revenge_1": "%1$s tried to lewd %2$s. and got his justice served hot.",
-  "death.attack.revenge_2": "%1$s tried to lewd %2$s. DESERVED.",
-  "death.attack.revenge_3": "%1$s got slapped by %2$s while trying to lewd %2$s",
+  "death.attack.revenge_2": "%1$s got absolutely DESTROYED trying to lewd %2$s. DESERVED.",
+  "death.attack.revenge_3": "%1$s got slapped while trying to lewd %2$s",
   "death.attack.revenge_4": "%1$s got his justice served.",
 
   "death.attack.arts_projectile_0.item": "%1$s was murdered by arts from %2$s using %3$s",
@@ -334,7 +351,7 @@
   "death.attack.arts_projectile_3.item": "%1$s turned into pile of originium by %2$s's arts cased by %3$s",
   "death.attack.arts_projectile_4.item": "%2$s was suck at dodging %2$s's spicy magic ball from %3$s",
 
-  "death.attack.ate_originium_prime_0": "%1$s Literally ate pure originium. ...oh my god",
+  "death.attack.ate_originium_prime_0": "%1$s Literally ate pure originium. *[in PheonixSC's Voice]* ...oh my god.",
   "death.attack.ate_originium_prime_1": "%1$s discovered the delicious taste of originium",
   "death.attack.ate_originium_prime_2": "%1$s tried to get arts ability. little did he know was this mod doesn't have that.",
   "death.attack.ate_originium_prime_3": "%1$s tasted the s p i c y  r o c c",

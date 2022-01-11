@@ -120,10 +120,12 @@ public class itemModelProvider extends ItemModelProvider {
         buildSimpleBlockModel("orirock");
 
         buildSimpleBlockModel("machine_frame");
-
+        buildModel("disc_enterthebeginning");
         buildModel("rainbow_wisdomcube");
         buildModel("wisdomcube");
         buildModel("disc_fridaynight");
+        buildModel("developer_bonus");
+        buildModel("contributor_bonus");
         buildModel("oath_ring");
         buildModel("ammo_generic");
         buildModel("disc_brainpower");
@@ -149,6 +151,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelAKN("spawnrosmontis");
         buildModelAKN("spawnamiya");
         buildModelAKN("spawnmudrock");
+        buildModelRUN("spawntalulah");
 
         buildModelBA("spawnshiroko");
         buildSimpleBlockModel("reenforced_concrete");
@@ -191,5 +194,9 @@ public class itemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder buildModelAKN(String ItemName){
         return buildModelWithSingleTex(ItemName, "akn_document");
+    }
+
+    private ItemModelBuilder buildModelRUN(String ItemName){
+        return buildModelWithSingleTex(ItemName, "akn_reunion_document");
     }
 }

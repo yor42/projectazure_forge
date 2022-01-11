@@ -23,59 +23,60 @@
       }
     ]
   },
+  "disc_enterthebeginning": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/enterthebeginning",
+        "stream": true
+      }
+    ]
+  },
   "bonk": {
     "sounds": [
       {
-        "name": "projectazure:weapon/misc/bonk",
-        "stream": true
+        "name": "projectazure:weapon/misc/bonk"
       }
     ]
   },
   "gun_fire_medium": {
     "sounds": [
       {
-        "name": "projectazure:weapon/gun/gun_fire_medium",
-        "stream": true
+        "name": "projectazure:weapon/gun/gun_fire_medium"
       }
     ]
   },
   "plane_gun": {
     "sounds": [
       {
-        "name": "projectazure:entity/aircraft/aircraft_machinegun_fire",
-        "stream": true
+        "name": "projectazure:entity/aircraft/aircraft_machinegun_fire"
       }
     ]
   },
   "rifle_suppressed": {
     "sounds": [
       {
-        "name": "projectazure:weapon/rifle/rifle_suppressed",
-        "stream": true
+        "name": "projectazure:weapon/rifle/rifle_suppressed"
       }
     ]
   },
   "gun_click": {
     "sounds": [
       {
-        "name": "projectazure:weapon/rifle/gun_click",
-        "stream": true
+        "name": "projectazure:weapon/rifle/gun_click"
       }
     ]
   },
   "chimera_projectile_launch": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/chimera/projectile_launch",
-        "stream": true
+        "name": "projectazure:entity/akn/chimera/projectile_launch"
       }
     ]
   },
   "chimera_projectile_impact": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/chimera/projectile_impact",
-        "stream": true
+        "name": "projectazure:entity/akn/chimera/projectile_impact"
       }
     ]
   },

@@ -19,5 +19,5 @@ public interface ISpellUser {
     Hand getSpellUsingHand();
     boolean shouldUseSpell();
     void ShootProjectile(World world, @Nonnull LivingEntity target);
-    void StartShootingEntity(LivingEntity target);
+    void StartShootingEntityUsingSpell(LivingEntity target);
 }

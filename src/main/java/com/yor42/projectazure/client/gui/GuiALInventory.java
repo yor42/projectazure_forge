@@ -29,7 +29,7 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
     public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/ship_inventory.png");
 
     private final EntityKansenBase host;
-    private final enums.Affection affectionLevel;
+    private final enums.ALAffection affectionLevel;
     private final double affection, morale;
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;
@@ -57,24 +57,24 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
         this.titleY=9;
     }
 
-    private enums.Affection affectionValuetoLevel(){
+    private enums.ALAffection affectionValuetoLevel(){
         if(this.affection>=100.0D){
             if(this.host.isOathed())
-                return enums.Affection.OATH;
+                return enums.ALAffection.OATH;
             else
-                return enums.Affection.LOVE;
+                return enums.ALAffection.LOVE;
         }
         else if(this.affection>80 && this.affection<100){
-            return enums.Affection.CRUSH;
+            return enums.ALAffection.CRUSH;
         }
         else if(this.affection>60 && this.affection<=80){
-            return enums.Affection.FRIENDLY;
+            return enums.ALAffection.FRIENDLY;
         }
         else if(this.affection>30 && this.affection<=60){
-            return enums.Affection.STRANGER;
+            return enums.ALAffection.STRANGER;
         }
         else{
-            return enums.Affection.DISAPPOINTED;
+            return enums.ALAffection.DISAPPOINTED;
         }
     }
 

@@ -36,12 +36,12 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
         }
 
         if(this.entity instanceof AbstractSwordUserBase){
-            if(((AbstractSwordUserBase)this.entity).shouldUseNonVanillaAttack()){
+            if(((AbstractSwordUserBase)this.entity).shouldUseNonVanillaAttack(this.entity.getAttackTarget())){
                 return false;
             }
         }
 
-        if(!isEquippingsword || this.entity.shouldUseGun()) {
+        if((!isEquippingsword && !this.entity.isAngry()) || this.entity.shouldUseGun()) {
             return false;
         }
         else if(this.entity instanceof EntityKansenBase) {

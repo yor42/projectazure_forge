@@ -52,7 +52,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public int getInitialAttackDelay() {
+    public int getInitialMeleeAttackDelay() {
         return 31;
     }
 

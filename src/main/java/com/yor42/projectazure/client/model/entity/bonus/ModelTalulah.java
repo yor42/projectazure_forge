@@ -1,6 +1,6 @@
-package com.yor42.projectazure.client.model.entity.sworduser;
+package com.yor42.projectazure.client.model.entity.bonus;
 
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityMudrock;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
@@ -15,27 +15,28 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
+public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
 
     private int blinkinterval = 0;
     private long LastBlinkTime = 0;
 
     @Override
-    public ResourceLocation getModelLocation(EntityMudrock object) {
-        return GeoModelEntityLocation("modelmudrock");
+    public ResourceLocation getModelLocation(EntityTalulah object) {
+        return GeoModelEntityLocation("modeltalulah");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityMudrock object) {
-        return TextureEntityLocation("modelmudrock");
+    public ResourceLocation getTextureLocation(EntityTalulah object) {
+        return TextureEntityLocation("modeltalulah");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityMudrock object) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/mudrock.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntityTalulah animatable) {
+        return new ResourceLocation(Constants.MODID,"animations/entity/bonus/talulah.animation.json");
     }
+
     @Override
-    public void setLivingAnimations(EntityMudrock entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setLivingAnimations(EntityTalulah entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
@@ -46,6 +47,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
         IBone Flushed = this.getAnimationProcessor().getBone("flushed");
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
+        IBone Angry3 = this.getAnimationProcessor().getBone("angry3");
         IBone body = this.getAnimationProcessor().getBone("Body");
         if(entity.isAngry()){
             NormalFace.setHidden(true);
@@ -55,7 +57,8 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             SleepFace.setHidden(true);
             Flushed.setHidden(true);
             Angry1.setHidden(true);
-            Angry2.setHidden(false);
+            Angry2.setHidden(true);
+            Angry3.setHidden(false);
         }
         else if(entity.getAngerWarningCount() == 2){
             NormalFace.setHidden(true);
@@ -64,8 +67,9 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             PatFace.setHidden(true);
             SleepFace.setHidden(true);
             Flushed.setHidden(true);
-            Angry1.setHidden(false);
-            Angry2.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(false);
+            Angry3.setHidden(true);
         }
         else if(entity.isinQinteraction()){
             NormalFace.setHidden(true);
@@ -73,9 +77,10 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             SleepFace.setHidden(true);
-            Flushed.setHidden(false);
-            Angry1.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(false);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
         }
         else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
@@ -86,6 +91,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -96,6 +102,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
 
             body.setPositionY(-45);
             body.setPositionZ(-5);
@@ -114,6 +121,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
                     Flushed.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
+                    Angry3.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
@@ -125,6 +133,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
                     Flushed.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
+                    Angry3.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();
@@ -138,5 +147,4 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
         }
     }
-
 }

@@ -43,7 +43,7 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             return false;
         }
 
-        boolean shouldAttack = this.host.shouldUseNonVanillaAttack();
+        boolean shouldAttack = this.host.shouldUseNonVanillaAttack(this.hostEntity.getAttackTarget());
         if(shouldAttack) {
             this.target = targetEntity;
             return true;
@@ -83,7 +83,7 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             double distance = this.hostEntity.getDistance(this.target);
             boolean canSee = this.hostEntity.getEntitySenses().canSee(this.target);
 
-            boolean isTooFar = distance > this.host.getAttackRange(this.host.isUsingTalentedWeapon());
+            boolean isTooFar = distance >= this.host.getAttackRange(this.host.isUsingTalentedWeapon());
 
             if (canSee) {
                 ++this.seeTime;
@@ -97,7 +97,7 @@ public class CompanionSwordUserMeleeAttack extends Goal {
                     this.hostEntity.getNavigator().tryMoveToEntityLiving(this.target, 1);
                 } else if(this.seeTime >= 5){
                     this.hostEntity.getNavigator().clearPath();
-                    this.hostEntity.setSprinting(false);
+                    this.hostEntity.setSprinting(distance >= 2);
                     this.host.StartMeleeAttackingEntity();
                 }else {
                     this.hostEntity.getNavigator().tryMoveToEntityLiving(this.target, 1);

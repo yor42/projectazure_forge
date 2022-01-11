@@ -1352,7 +1352,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     } else {
                         this.getNavigator().clearPath();
                         setSpellDelay(currentspelldelay - 1);
-                        if (this.ticksExisted - this.StartedSpellAttackTimeStamp == ((ISpellUser)this).getProjectilePreAnimationDelay()) {
+                        int delay = this.ticksExisted - this.StartedSpellAttackTimeStamp;
+                        if (delay == ((ISpellUser)this).getProjectilePreAnimationDelay()) {
                             ((ISpellUser)this).ShootProjectile(this.getEntityWorld(), target);
                         }
                     }
@@ -1623,8 +1624,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
             this.goalSelector.addGoal(6, new KansenRangedAttackGoal((EntityKansenBase) this, 0.8F, 10,20, 80, 100));
         }
-        else if(this instanceof AbstractCompanionMagicUser){
-            this.goalSelector.addGoal(7, new CompanionSpellRangedAttackGoal((AbstractCompanionMagicUser) this, 10));
+        else if(this instanceof ISpellUser){
+            this.goalSelector.addGoal(7, new CompanionSpellRangedAttackGoal(this, 10));
         }
         else if(this instanceof IMeleeAttacker){
             this.goalSelector.addGoal(7, new CompanionSwordUserMeleeAttack((IMeleeAttacker) this));
@@ -1930,7 +1931,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 double EyeCheckFinal = PlayerLook.dotProduct(EyeDelta);
 
 
-                if(player.getHeldItemMainhand().isEmpty()) {
+                if(player.getHeldItemMainhand().isEmpty() && this.getDistance(player)<=2) {
                     if (this.isSleeping()) {
                         if (this.forceWakeupCounter > 4) {
                             this.forceWakeup();

@@ -79,7 +79,8 @@ public class enums {
         STAR_3("rarity.r", 0xb4ff00),
         STAR_4("rarity.sr", 0x7200ff),
         STAR_5("rarity.ur", 0xffcc00),
-        STAR_6("rarity.leg", 0xff6db5);
+        STAR_6("rarity.leg", 0xff6db5),
+        SPECIAL("rarity_sp", 0x00fcff);
 
         private final String translationkey;
         private final int rarityColor;
@@ -176,12 +177,6 @@ public class enums {
 
     }
 
-    public enum MOTIONTOTRACK{
-        YAW,
-        PITCH,
-        NONE
-    }
-
     public enum CanonSize{
         LARGE,
         MEDIUM,
@@ -196,7 +191,8 @@ public class enums {
         GUARD("operator.guard"),
         MEDIC("operator.medic"),
         SPECIALIST("operator.specialist"),
-        SUPPORTER("operator.supporter");
+        SUPPORTER("operator.supporter"),
+        REUNION("operator.reunion");
 
         private final String name;
         OperatorClass(String name) {
@@ -209,7 +205,7 @@ public class enums {
     }
 
     public enum GunClass {
-        NONE("none"),
+        NONE("guntype.none"),
         AR("guntype.assault_rifle"),
         SG("guntype.shotgun"),
         HG("guntype.handgun"),
@@ -238,6 +234,7 @@ public class enums {
         BLUEARCHIVE("bluearchive"),
         OPERATOR("akn_operator"),
         ELEMENTS("gi_elements"),
+        REUNION("akn_reunion"),
         SERVANT("fgo_servant");
 
         private final String name;
@@ -250,16 +247,16 @@ public class enums {
         }
     }
 
-    public enum Affection{
-        DISAPPOINTED("disappointed"),
-        STRANGER("stranger"),
-        FRIENDLY("friendly"),
-        CRUSH("crush"),
-        LOVE("love"),
-        OATH("oath");
+    public enum ALAffection {
+        DISAPPOINTED("affection.disappointed"),
+        STRANGER("affection.stranger"),
+        FRIENDLY("affection.friendly"),
+        CRUSH("affection.crush"),
+        LOVE("affection.love"),
+        OATH("affection.oath");
 
         private final String name;
-        Affection(String name) {
+        ALAffection(String name) {
             this.name = name;
         }
 
@@ -278,11 +275,11 @@ public class enums {
     }
 
     public enum Morale{
-        REALLY_HAPPY("really_happy"),
-        HAPPY("happy"),
-        NEUTRAL("neutral"),
-        TIRED("tired"),
-        EXHAUSTED("exhausted");
+        REALLY_HAPPY("morale.really_happy"),
+        HAPPY("morale.happy"),
+        NEUTRAL("morale.neutral"),
+        TIRED("morale.tired"),
+        EXHAUSTED("morale.exhausted");
 
         private final String name;
 

@@ -6,6 +6,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.*;
@@ -123,8 +124,12 @@ public class registerManager {
     public static final EntityType<EntityAmiya> ENTITYTYPE_AMIYA = EntityType.Builder.create(EntityAmiya::new, EntityClassification.CREATURE).size(0.572F, 1.42F).build(ModResourceLocation("entityamiya").toString());
     public static final RegistryObject<EntityType<EntityAmiya>> AMIYA = ENTITIES.register("entityamiya", () -> ENTITYTYPE_AMIYA);
 
-    public static final EntityType<EntityRosmontis> ENTITYTYPE_ROSMONTIS = EntityType.Builder.create(EntityRosmontis::new, EntityClassification.CREATURE).size(0.572F, 1.42F).build(ModResourceLocation("entityamiya").toString());
+    public static final EntityType<EntityRosmontis> ENTITYTYPE_ROSMONTIS = EntityType.Builder.create(EntityRosmontis::new, EntityClassification.CREATURE).size(0.572F, 1.63F).build(ModResourceLocation("entityamiya").toString());
     public static final RegistryObject<EntityType<EntityRosmontis>> ROSMONTIS = ENTITIES.register("entityrosmontis", () -> ENTITYTYPE_ROSMONTIS);
+
+    public static final EntityType<EntityTalulah> ENTITYTYPE_TALULAH = EntityType.Builder.create(EntityTalulah::new, EntityClassification.CREATURE).size(0.572F, 1.63F).build(ModResourceLocation("entitytalulah").toString());
+    public static final RegistryObject<EntityType<EntityTalulah>> TALULAH = ENTITIES.register("entitytalulah", () -> ENTITYTYPE_TALULAH);
+
 
     //projectile
     public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>create(EntityCannonPelllet::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString());

@@ -1,5 +1,6 @@
-package com.yor42.projectazure.gameobject.items;
+package com.yor42.projectazure.gameobject.items.tools;
 
+import com.yor42.projectazure.gameobject.items.ItemBaseTooltip;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.Entity;

@@ -27,7 +27,7 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
         else return this.getHeldItem(getSpellUsingHand()).isEmpty() && !this.isSwimming();
     }
 
-    public void StartShootingEntity(LivingEntity target) {
+    public void StartShootingEntityUsingSpell(LivingEntity target) {
         this.setSpellDelay(this.getInitialSpellDelay());
         this.StartedSpellAttackTimeStamp = this.ticksExisted;
     }
