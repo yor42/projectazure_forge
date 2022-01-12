@@ -14,6 +14,7 @@ import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityMudrock;
+import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.entity.projectiles.*;
@@ -146,6 +147,10 @@ public class registerManager {
 
     public static final EntityType<EntityMissileDroneMissile> PROJECTILE_DRONE_MISSILE = EntityType.Builder.create(EntityMissileDroneMissile::new, EntityClassification.MISC).size(0.2F, 0.2F).build(ModResourceLocation("projectiledrone_missile").toString());
     public static final RegistryObject<EntityType<EntityMissileDroneMissile>> DRONE_MISSILE = ENTITIES.register("projectiledrone_missile", () -> PROJECTILE_DRONE_MISSILE);
+
+    //?????
+    public static final EntityType<EntityClaymore> ENTITYTYPE_CLAYMORE = EntityType.Builder.create(EntityClaymore::new, EntityClassification.CREATURE).size(0.7F, 2.31F).build(ModResourceLocation("entityclaymore").toString());
+    public static final RegistryObject<EntityType<EntityClaymore>> CLAYMORE = ENTITIES.register("entityclaymore", () -> ENTITYTYPE_CLAYMORE);
 
     //Planes
     public static final EntityType<EntityF4fWildcat> PLANEF4FWildCat = EntityType.Builder.<EntityF4fWildcat>create(EntityF4fWildcat::new, EntityClassification.MISC).size(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString());

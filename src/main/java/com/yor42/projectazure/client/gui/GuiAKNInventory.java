@@ -86,6 +86,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.akn_trust"), 2/scalerate, 65/scalerate, 0x313131);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent("gui.morale"), 54/scalerate, 4/scalerate, 0xffffff);
         this.font.func_243248_b(matrixStack, new TranslationTextComponent(Integer.toString(this.host.getLevel())), 9/scalerate, 79/scalerate, 0xffffff);
+        this.font.drawStringWithShadow(matrixStack, this.host.getDisplayName().getString(), 1, 5, 16777215);
         matrixStack.pop();
 
         matrixStack.push();
@@ -107,15 +108,20 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.renderEntity(x, y);
         this.minecraft.getTextureManager().bindTexture(TEXTURE);
         this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        this.blit(matrixStack, this.guiLeft+68, this.host.getSkillItemCount() == 1? this.guiTop+56: this.guiTop+38, 21, 201, 20, this.host.getSkillItemCount() == 1? 20: 38);
         if(this.host instanceof EntityGunUserBase) {
             this.blit(matrixStack, this.guiLeft + this.xSize + 4, this.guiTop + 9, 178, 102, 39, 87);
         }
 
+        this.blit(matrixStack, this.guiLeft-23, this.guiTop+7, 114, 7, 20, 10);
         for(int l = 0; l<this.host.getSkillItemCount(); l++){
-            this.blit(matrixStack, this.guiLeft+70, this.guiTop+58-(18*l), 41, 201, 16, 16);
+            this.blit(matrixStack, this.guiLeft-23, this.guiTop+17+(18*l), 21, 201, 20, 18);
+            if(l == (this.host.getSkillItemCount()-1)){
+                this.blit(matrixStack, this.guiLeft-23, this.guiTop+17+(18*(l+1)), 21, 201, 20, 4);
+            }
         }
-        this.font.drawStringWithShadow(matrixStack, this.host.getDisplayName().getString(), 11, 53, 16777215);
+        for(int l = 0; l<this.host.getSkillItemCount(); l++){
+            this.blit(matrixStack, this.guiLeft-21, this.guiTop+20+(18*l), 41, 201, 16, 16);
+        }
         matrixStack.pop();
     }
 

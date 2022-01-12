@@ -570,6 +570,13 @@
       }
     ]
   },
+  "claymore_hit": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/rosmontis/claymore_hit"
+      }
+    ]
+  },
   "sheath_hit": {
     "sounds": [
       {

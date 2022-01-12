@@ -10,7 +10,6 @@ import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
-import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
@@ -267,11 +266,39 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 
-            if(slot == 12){
+            if(slot >= 12){
                 return AbstractEntityCompanion.this.isSkillItem(stack);
             }
 
             return super.isItemValid(slot, stack);
+        }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            switch (slot){
+                case 12:
+                    AbstractEntityCompanion.this.getDataManager().set(SKILL_ITEM_0, this.getStackInSlot(slot));
+                    break;
+                case 13:
+                    ItemStack stack = this.getStackInSlot(slot);
+                    AbstractEntityCompanion.this.getDataManager().set(SKILL_ITEM_1, stack);
+                    break;
+                case 14:
+                    AbstractEntityCompanion.this.getDataManager().set(SKILL_ITEM_2, this.getStackInSlot(slot));
+                    break;
+                case 15:
+                    AbstractEntityCompanion.this.getDataManager().set(SKILL_ITEM_3, this.getStackInSlot(slot));
+                    break;
+            }
+        }
+
+        @Override
+        protected void onLoad() {
+            super.onLoad();
+            for(int i=0; i<AbstractEntityCompanion.this.getSkillItemCount(); i++){
+                DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
+                AbstractEntityCompanion.this.getDataManager().set(stacks[i], this.getStackInSlot(12+i));
+            }
         }
     };
     public ItemStackHandler AmmoStorage = new ItemStackHandler(0){
@@ -305,6 +332,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected int StartedMeleeAttackTimeStamp = -1;
     protected int AttackCount = 0;
     protected int StartedSpellAttackTimeStamp = -1;
+
+    //I'd really like to get off from datamanager's wild ride.
     protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> NONVANILLAMELEEATTACKDELAY = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> SKILLDELAYTICK = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
@@ -335,6 +364,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISUSINGGUN = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Integer> HEAL_TIMER = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
+    protected static final DataParameter<ItemStack> SKILL_ITEM_0 = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.ITEMSTACK);
+    protected static final DataParameter<ItemStack> SKILL_ITEM_1 = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.ITEMSTACK);
+    protected static final DataParameter<ItemStack> SKILL_ITEM_2 = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.ITEMSTACK);
+    protected static final DataParameter<ItemStack> SKILL_ITEM_3 = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.ITEMSTACK);
     protected static final DataParameter<Integer> RELOAD_TIMER_MAINHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> RELOAD_TIMER_OFFHAND = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
     protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.createKey(AbstractEntityCompanion.class, DataSerializers.VARINT);
@@ -962,6 +995,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.dataManager.register(ANGRYTIMER, 0);
         this.dataManager.register(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 0);
         this.dataManager.register(INTERACTION_WARNING_COUNT, 0);
+        this.dataManager.register(SKILL_ITEM_0, ItemStack.EMPTY);
+        this.dataManager.register(SKILL_ITEM_1, ItemStack.EMPTY);
+        this.dataManager.register(SKILL_ITEM_2, ItemStack.EMPTY);
+        this.dataManager.register(SKILL_ITEM_3, ItemStack.EMPTY);
     }
 
     public void setOpeningdoor(boolean openingdoor){
@@ -1212,6 +1249,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             --this.shieldCoolDown;
         }
 
+
         if(!this.getEntityWorld().isRemote() && this.ticksExisted % 200 == 0&& !this.getHOMEPOS().isPresent()){
             Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getEntityWorld(), this);
             optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 64));
@@ -1357,6 +1395,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 else if(this.AttackCount>0){
                     this.AttackCount = 0;
                 }
+
             }
 
             if(this instanceof ISpellUser) {
@@ -1375,6 +1414,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         }
                     }
                 }
+            }
+            //Very cheap fix to Datamanager not syncing
+            for(int i=0; i<this.getSkillItemCount(); i++){
+                DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
+                ItemStack serverSideItem = this.getInventory().getStackInSlot(12+i);
+                this.getDataManager().set(stacks[i], serverSideItem);
             }
 
         }
@@ -1453,7 +1498,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.shouldBeSitting = this.isSitting();
             this.func_233687_w_(false);
         }
+    }
 
+    public ItemStack getSkillItem1(){
+        return this.getDataManager().get(SKILL_ITEM_1);
     }
 
     public void playMeleeAttackPreSound(){}
@@ -1467,6 +1515,26 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
     public boolean isNonVanillaMeleeAttacking(){
         return this.getNonVanillaMeleeAttackDelay()>0;
+    }
+
+    public void setSkillItemSlotContent(int index, ItemStack stack){
+        DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
+        this.getInventory().setStackInSlot(12+index, stack);
+        this.getDataManager().set(stacks[index], stack);
+    }
+
+    public ItemStack getNextSkillItem(){
+        int index = this.getNextSkillItemindex();
+        return index>=0? this.getSkillItem(index):ItemStack.EMPTY;
+    }
+
+    public int getNextSkillItemindex(){
+        for(int i = 0; i<this.getSkillItemCount(); i++){
+            if(this.isSkillItemInindex(i)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -1609,12 +1677,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setSkillDelayTick(2400);
     }
 
-    public List<ItemStack> getSkillItem(){
-        List<ItemStack> itemstack = new ArrayList<>();
-        for(int k = 0; k<this.getSkillItemCount(); k++){
-            itemstack.add(this.getInventory().getStackInSlot(12+k));
+    public ItemStack getSkillItem(int index){
+        if(this.getEntityWorld().isRemote){
+            DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
+            ItemStack stack = this.getDataManager().get(stacks[index]);
+            return stack;
         }
-        return itemstack;
+        return this.getInventory().getStackInSlot(12+index);
+    }
+
+    public boolean isSkillItemInindex(int index){
+        return isSkillItem(getSkillItem(index));
     }
 
     public boolean isSkillItem(ItemStack stack){
@@ -1622,9 +1695,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean hasSkillItem(){
-        List<ItemStack> itemstack = getSkillItem();
-        for (ItemStack itemStack : itemstack) {
-            if (!this.isSkillItem(itemStack)) {
+        for (int i = 0; i<this.getSkillItemCount(); i++) {
+            if (!this.isSkillItem(this.getSkillItem(i))) {
                 return false;
             }
         }

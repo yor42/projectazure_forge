@@ -27,7 +27,7 @@ public class ContainerAKNInventory extends Container {
 
     //C l i e n t
     public ContainerAKNInventory(int id, PlayerInventory inventory) {
-        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), Main.PROXY.getSharedMob());
+        this(id, inventory, new ItemStackHandler(16), new ItemStackHandler(6), new ItemStackHandler(8), Main.PROXY.getSharedMob());
     }
 
     public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
@@ -59,7 +59,6 @@ public class ContainerAKNInventory extends Container {
             }
         }
 
-        //TODO Change this check to Class check
         if(this.companion instanceof EntityGunUserBase) {
             for (int m = 0; m < 4; m++) {
                 for (int n = 0; n < 2; n++) {
@@ -74,7 +73,7 @@ public class ContainerAKNInventory extends Container {
         }
 
         for(int l = 0; l<this.companion.getSkillItemCount(); l++){
-            this.addSlot(new SlotItemHandler(entityInventory, 12+l, 70, 58-l*18){
+            this.addSlot(new SlotItemHandler(entityInventory, 12+l, -21, 20+l*18){
                 @Override
                 public boolean isItemValid(@Nonnull ItemStack stack) {
                     return ContainerAKNInventory.this.companion.isSkillItem(stack);

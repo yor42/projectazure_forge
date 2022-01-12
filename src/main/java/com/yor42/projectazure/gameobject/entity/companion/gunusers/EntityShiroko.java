@@ -197,7 +197,7 @@ public class EntityShiroko extends EntityGunUserBase {
     @Override
     public boolean performOneTimeSkill(LivingEntity target) {
 
-        ItemStack stack = this.getSkillItem().get(0);
+        ItemStack stack = this.getSkillItem(0);
         if(stack.getItem() instanceof ItemMissleDrone && this.getAttackTarget() != null){
             AbstractEntityDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getEntityWorld(), stack, this);
             if(drone != null){

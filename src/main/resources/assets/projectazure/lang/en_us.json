@@ -345,6 +345,10 @@
   "death.attack.revenge_3": "%1$s got slapped while trying to lewd %2$s",
   "death.attack.revenge_4": "%1$s got his justice served.",
 
+  "death.attack.claymore_0": "%1$s got crushed by claymore",
+  "death.attack.claymore_1": "%1$s was crushed to death by a flying claymore",
+  "death.attack.claymore_2": "%1$s was compressed by flying claymore",
+
   "death.attack.arts_projectile_0.item": "%1$s was murdered by arts from %2$s using %3$s",
   "death.attack.arts_projectile_1.item": "%1$s was cooked by %2$s's arts casted using %3$s",
   "death.attack.arts_projectile_2.item": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts casted by %3$s. yikes.",

@@ -3,6 +3,8 @@ package com.yor42.projectazure.client.renderer.entity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.magicuser.RosmontisModel;
+import com.yor42.projectazure.client.renderer.layer.JavelinRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.RosmontisClaymoreLayer;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
@@ -33,6 +35,7 @@ public class EntityRosmontisRenderer extends GeoEntityRenderer<EntityRosmontis> 
 
     public EntityRosmontisRenderer(EntityRendererManager renderManager) {
         super(renderManager, new RosmontisModel());
+        this.addLayer(new RosmontisClaymoreLayer(this));
         this.shadowSize = 0.4F;
     }
 

@@ -171,7 +171,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public ItemStack getRigging(){
-        if(ITEM_RIGGING != null) {
+        if(this.getEntityWorld().isRemote()) {
             return this.dataManager.get(ITEM_RIGGING);
         }
         else{

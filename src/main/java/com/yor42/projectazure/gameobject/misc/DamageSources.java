@@ -25,6 +25,8 @@ public class DamageSources {
 
     public static final DamageSource PLANE_GUN = new DamageSource("plane_gun").setProjectile();
 
+    public static final DamageSource CLAYMORE = new DamageSourcesWithRandomMessages("claymore", 3).setDamageBypassesArmor();
+
     public static DamageSource causeGunDamage(EntityProjectileBullet bullet, @Nullable Entity indirectEntityIn) {
         return (new IndirectEntityDamageSource("gun_bullet", bullet, indirectEntityIn)).setProjectile();
     }

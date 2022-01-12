@@ -2,9 +2,12 @@ package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
+import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.gameobject.items.tools.ItemClaymore;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -176,6 +179,11 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     }
 
     @Override
+    public boolean isSkillItem(ItemStack stack) {
+        return stack.getItem() instanceof ItemClaymore;
+    }
+
+    @Override
     protected void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this));
     }
@@ -189,24 +197,25 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     /*
     WIP.
      */
-    @Override
-    public boolean shouldUseSpell() {
-        return false;
-    }
 
     @Override
     public int getInitialSpellDelay() {
-        return 0;
+        return 20;
+    }
+
+    @Override
+    public boolean shouldUseSpell() {
+        return super.shouldUseSpell() && !this.getNextSkillItem().isEmpty();
     }
 
     @Override
     public int getSkillItemCount() {
-        return 1;
+        return 4;
     }
 
     @Override
     public int getProjectilePreAnimationDelay() {
-        return 0;
+        return 10;
     }
 
     @Override
@@ -216,7 +225,14 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
     @Override
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
-
+        EntityClaymore claymore = new EntityClaymore(registerManager.ENTITYTYPE_CLAYMORE, world);
+        claymore.setPosition(target.getPosX(), target.getPosY(), target.getPosZ());
+        claymore.setOwnerId(this.getUniqueID());
+        world.addEntity(claymore);
+        int idx = this.getNextSkillItemindex();
+        ItemStack skillStack = this.getSkillItem(idx);
+        skillStack.shrink(1);
+        this.setSkillItemSlotContent(idx, skillStack);
     }
 
     @Override
