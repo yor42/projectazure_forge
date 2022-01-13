@@ -82,7 +82,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
             Angry.setHidden(true);
         }
         else if(entity.isBeingPatted()){
-            if(entity.isSitting()){
+            if(entity.isOrderedToSit()){
                     NormalFace.setHidden(true);
                     PatFace.setHidden(true);
                     EyeclosedFace.setHidden(true);

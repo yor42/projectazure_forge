@@ -14,35 +14,35 @@ public class PlaneWanderAroundCarrierGoal extends Goal {
 
     public PlaneWanderAroundCarrierGoal(AbstractEntityPlanes plane){
         this.plane = plane;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
-        return (this.plane.getAttackTarget() == null || !this.plane.getEntitySenses().canSee(this.plane.getAttackTarget())) && this.plane.hasPayload()&& !this.plane.isOnBombRun() && this.plane.getOwner() != null;
+    public boolean canUse() {
+        return (this.plane.getTarget() == null || !this.plane.getSensing().canSee(this.plane.getTarget())) && this.plane.hasPayload()&& !this.plane.isOnBombRun() && this.plane.getOwner() != null;
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return this.plane.getAttackTarget() == null && this.plane.hasPayload()&& !this.plane.isOnBombRun() && this.plane.getOwner() != null;
+    public boolean canContinueToUse() {
+        return this.plane.getTarget() == null && this.plane.hasPayload()&& !this.plane.isOnBombRun() && this.plane.getOwner() != null;
     }
 
     @Override
     public void tick() {
         super.tick();
-        MovementController movehelper = this.plane.getMoveHelper();
-        if(this.plane.getDistanceSq(movehelper.getX(), movehelper.getY(), movehelper.getZ())<2.0F) {
+        MovementController movehelper = this.plane.getMoveControl();
+        if(this.plane.distanceToSqr(movehelper.getWantedX(), movehelper.getWantedY(), movehelper.getWantedZ())<2.0F) {
             Vector3d pos;
             if (this.plane.getOwner() != null) {
-                Vector3d carrierLoc = this.plane.getOwner().getPositionVec();
-                Vector3d vector3d = carrierLoc.subtract(this.plane.getPositionVec()).normalize();
+                Vector3d carrierLoc = this.plane.getOwner().position();
+                Vector3d vector3d = carrierLoc.subtract(this.plane.position()).normalize();
                 //currently same as bee wandering
-                pos = RandomPositionGenerator.findAirTarget(this.plane, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
+                pos = RandomPositionGenerator.getAboveLandPos(this.plane, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
             } else {
-                pos = RandomPositionGenerator.findRandomTarget(this.plane, 15, 15);
+                pos = RandomPositionGenerator.getPos(this.plane, 15, 15);
             }
             if (pos != null) {
-                movehelper.setMoveTo(pos.getX(), pos.getY(), pos.getZ(), 1.0F);
+                movehelper.setWantedPosition(pos.x(), pos.y(), pos.z(), 1.0F);
             }
         }
     }

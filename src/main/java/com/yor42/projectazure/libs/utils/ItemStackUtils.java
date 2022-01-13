@@ -127,7 +127,7 @@ public class ItemStackUtils {
             nbt.putInt("armDelay", plane.getPlaneItem().getreloadTime());
         }
 
-        nbt.putInt("fuel", ((ItemEquipmentPlaneBase)plane.getPlaneItem()).getMaxOperativeTime()-plane.ticksExisted);
+        nbt.putInt("fuel", ((ItemEquipmentPlaneBase)plane.getPlaneItem()).getMaxOperativeTime()-plane.tickCount);
         return planeStack;
     }
 
@@ -213,8 +213,8 @@ public class ItemStackUtils {
 
     public static float getRequiredMinimumFuel(MobEntity Shooter, ItemEquipmentPlaneBase planeItem){
         //Movement speed 0.1 = roughly 0.2 block/tick
-        if(Shooter.getAttackTarget() != null && Shooter.getAttackTarget().isAlive()) {
-            double distance = Shooter.getDistance(Shooter.getAttackTarget())*2.5;//2 way trip+ another 0.5X of fuel because minecraft entity are stupid
+        if(Shooter.getTarget() != null && Shooter.getTarget().isAlive()) {
+            double distance = Shooter.distanceTo(Shooter.getTarget())*2.5;//2 way trip+ another 0.5X of fuel because minecraft entity are stupid
             double speed = planeItem.getMovementSpeed();
             return (int)Math.ceil(Math.abs(distance/speed));
         }
@@ -349,7 +349,7 @@ public class ItemStackUtils {
             ColorHex = "fff209";
         }
 
-        return Color.fromHex("#"+ColorHex);
+        return Color.parseColor("#"+ColorHex);
     }
 
 }

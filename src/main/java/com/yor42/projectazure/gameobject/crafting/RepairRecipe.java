@@ -25,8 +25,8 @@ public class RepairRecipe extends SpecialRecipe {
     public boolean matches(CraftingInventory inv, World worldIn) {
         IItemDestroyable RepairTargetItem = null;
         this.RepairTarget = ItemStack.EMPTY;
-        for(int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
+        for(int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 if(itemstack.getItem() instanceof IItemDestroyable){
                     this.RepairTarget = itemstack;
@@ -46,8 +46,8 @@ public class RepairRecipe extends SpecialRecipe {
             this.repairvalue = 0;
         }
 
-        for(int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
+        for(int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 this.repairvalue+=RepairTargetItem.getRepairAmount(itemstack);
                 if(this.repairvalue>=RepairTargetItem.getMaxHP()){
@@ -60,7 +60,7 @@ public class RepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
 
         ItemStack OutputStack = this.RepairTarget.copy();
         if(this.repairvalue>0) {
@@ -71,7 +71,7 @@ public class RepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 

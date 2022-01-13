@@ -13,6 +13,8 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public abstract class ItemRiggingCV extends ItemRiggingBase {
     public ItemRiggingCV(Properties properties, int HP) {
         super(properties, HP);
@@ -26,12 +28,12 @@ public abstract class ItemRiggingCV extends ItemRiggingBase {
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (worldIn == null) return; // thanks JEI very cool
 
         if (getHangerSlots() > 0) {
-            tooltip.add(new TranslationTextComponent("item.tooltip.hanger_slot_usage").appendString(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
+            tooltip.add(new TranslationTextComponent("item.tooltip.hanger_slot_usage").append(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
         }
     }
 

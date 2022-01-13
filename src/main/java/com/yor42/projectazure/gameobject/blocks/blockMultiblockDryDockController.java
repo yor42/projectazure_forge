@@ -8,6 +8,8 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class blockMultiblockDryDockController extends MultiblockStructureBlocks{
 
     public blockMultiblockDryDockController(Properties properties) {
@@ -21,7 +23,7 @@ public class blockMultiblockDryDockController extends MultiblockStructureBlocks{
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 }

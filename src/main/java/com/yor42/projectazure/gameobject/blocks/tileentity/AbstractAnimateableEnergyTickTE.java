@@ -46,7 +46,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
 
     @Override
     public void tick() {
-        if (this.world != null && this.world.isBlockPowered(this.getPos()) && PAConfig.CONFIG.RedStonePoweredMachines.get()) {
+        if (this.level != null && this.level.hasNeighborSignal(this.getBlockPos()) && PAConfig.CONFIG.RedStonePoweredMachines.get()) {
             this.energyStorage.receiveEnergy(1000, false);
         }
     }
@@ -56,7 +56,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
     protected abstract void playsound();
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.inventory.getSlots();
     }
 
@@ -71,15 +71,15 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         this.energyStorage.deserializeNBT(nbt.getCompound("energy_storage"));
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.put("inventory", this.inventory.serializeNBT());
         compound.put("energy_storage", this.energyStorage.serializeNBT());
         return compound;
@@ -91,24 +91,24 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
         CompoundNBT syncTag = this.getUpdateTag();
         syncTag.put("inventory", this.inventory.serializeNBT());
         syncTag.put("energy", this.energyStorage.serializeNBT());
-        return new SUpdateTileEntityPacket(pos, 1, syncTag);
+        return new SUpdateTileEntityPacket(worldPosition, 1, syncTag);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-        CompoundNBT syncTag = pkt.getNbtCompound();
+        CompoundNBT syncTag = pkt.getTag();
         this.inventory.deserializeNBT(syncTag.getCompound("inventory"));
         this.energyStorage.deserializeNBT(syncTag.getCompound("energy"));
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return this.inventory.getStackInSlot(index);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
         ItemStack stack = this.inventory.getStackInSlot(index);
         stack.shrink(count);
         this.inventory.setStackInSlot(index, stack);
@@ -116,7 +116,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
         if (index >=0 && index < this.inventory.getSlots()){
             this.inventory.setStackInSlot(index, ItemStack.EMPTY);
         }
@@ -124,21 +124,21 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         this.inventory.setStackInSlot(index, stack);
 
-        if (stack.getCount() > this.getInventoryStackLimit()) {
-            stack.setCount(this.getInventoryStackLimit());
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
         return true;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         for(int i=0;i<this.inventory.getSlots(); i++){
             this.inventory.setStackInSlot(i, ItemStack.EMPTY);
         }

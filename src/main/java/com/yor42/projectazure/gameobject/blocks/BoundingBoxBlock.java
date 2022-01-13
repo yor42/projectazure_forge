@@ -16,13 +16,15 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BoundingBoxBlock extends AbstractContainerBlock{
     public BoundingBoxBlock(Properties properties) {
         super(properties);
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.INVISIBLE;
     }
 
@@ -42,25 +44,25 @@ public class BoundingBoxBlock extends AbstractContainerBlock{
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if(!worldIn.isRemote && tile instanceof TileEntityBoundingBox) {
+        TileEntity tile = worldIn.getBlockEntity(pos);
+        if(!worldIn.isClientSide && tile instanceof TileEntityBoundingBox) {
             TileEntityBoundingBox tile2 = (TileEntityBoundingBox) tile;
 
             if (tile2.hasMaster()) {
-                NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider) worldIn.getTileEntity(tile2.getMasterPos()));
+                NetworkHooks.openGui((ServerPlayerEntity)player, (INamedContainerProvider) worldIn.getBlockEntity(tile2.getMasterPos()));
             }
         }
 
-        return super.onBlockActivated(state, worldIn, pos, player, handIn, hit);
+        return super.use(state, worldIn, pos, player, handIn, hit);
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-        TileEntity tile = worldIn.getTileEntity(pos);
+    public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+        TileEntity tile = worldIn.getBlockEntity(pos);
 
-        if(!worldIn.isRemote && tile instanceof TileEntityBoundingBox) {
+        if(!worldIn.isClientSide && tile instanceof TileEntityBoundingBox) {
             TileEntityBoundingBox tile2 = (TileEntityBoundingBox) tile;
 
             if (tile2.hasMaster()) {
@@ -68,14 +70,14 @@ public class BoundingBoxBlock extends AbstractContainerBlock{
             }
         }
 
-        super.onBlockHarvested(worldIn, pos, state, player);
+        super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override
     public void onBlockExploded(BlockState state, World world, BlockPos pos, Explosion explosion) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
-        if(!world.isRemote && tile instanceof TileEntityBoundingBox) {
+        if(!world.isClientSide && tile instanceof TileEntityBoundingBox) {
             TileEntityBoundingBox tile2 = (TileEntityBoundingBox) tile;
 
             if (tile2.hasMaster()) {

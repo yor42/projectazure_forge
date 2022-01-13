@@ -28,7 +28,7 @@ public class MachineRecruitBeaconRenderer extends GeoBlockRenderer<TileEntityRec
 
     @Override
     public RenderType getRenderType(TileEntityRecruitBeacon animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.getEntitySmoothCutout(textureLocation);
+        return RenderType.entitySmoothCutout(textureLocation);
     }
 
     @Override
@@ -40,18 +40,18 @@ public class MachineRecruitBeaconRenderer extends GeoBlockRenderer<TileEntityRec
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if(this.entity.getWorld() != null && this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(RecruitBeaconBlock.POWERED)) {
+        if(this.entity.getLevel() != null && this.entity.getLevel().getBlockState(this.entity.getBlockPos()).hasProperty(RecruitBeaconBlock.POWERED)) {
             if (Objects.equals(bone.getName(), "on")) {
-                bone.setHidden(!this.entity.getWorld().getBlockState(this.entity.getPos()).get(RecruitBeaconBlock.POWERED));
+                bone.setHidden(!this.entity.getLevel().getBlockState(this.entity.getBlockPos()).getValue(RecruitBeaconBlock.POWERED));
             } else if (Objects.equals(bone.getName(), "off")) {
-                bone.setHidden(this.entity.getWorld().getBlockState(this.entity.getPos()).get(RecruitBeaconBlock.POWERED));
+                bone.setHidden(this.entity.getLevel().getBlockState(this.entity.getBlockPos()).getValue(RecruitBeaconBlock.POWERED));
             }
         }
         int light = packedLightIn;
         if (Objects.equals(bone.getName(), "light") || Objects.equals(bone.getName(), "emissive")) {
-            light = LightTexture.packLight(15, 15);
+            light = LightTexture.pack(15, 15);
         }
-        bufferIn = rtb.getBuffer(RenderType.getEntitySmoothCutout(texture));
+        bufferIn = rtb.getBuffer(RenderType.entitySmoothCutout(texture));
         super.renderRecursively(bone, stack, bufferIn, light, packedOverlayIn, red, green, blue, alpha);
     }
 }

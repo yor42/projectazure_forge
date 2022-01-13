@@ -20,11 +20,11 @@ public class ModTags {
         public static final ITag.INamedTag<Fluid> GASOLINE = forge("gasoline");
 
         private static ITag.INamedTag<Fluid> forge(String path) {
-            return FluidTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
+            return FluidTags.bind(new ResourceLocation("forge", path).toString());
         }
 
         private static ITag.INamedTag<Fluid> mc(String path) {
-            return FluidTags.makeWrapperTag(new ResourceLocation("minecraft", path).toString());
+            return FluidTags.bind(new ResourceLocation("minecraft", path).toString());
         }
     }
 
@@ -38,11 +38,11 @@ public class ModTags {
         public static final ITag.INamedTag<Block> ORES_LEAD = forge("ores/lead");
 
         private static ITag.INamedTag<Block> forge(String path) {
-            return BlockTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
+            return BlockTags.bind(new ResourceLocation("forge", path).toString());
         }
 
         private static ITag.INamedTag<Block> mc(String path) {
-            return BlockTags.makeWrapperTag(new ResourceLocation("minecraft", path).toString());
+            return BlockTags.bind(new ResourceLocation("minecraft", path).toString());
         }
     }
 
@@ -116,15 +116,15 @@ public class ModTags {
         public static final ITag.INamedTag<Item> CIRCUITS_ADVANCED = forge("circuits/advanced");
 
         private static ITag.INamedTag<Item> forge(String path) {
-            return ItemTags.makeWrapperTag(new ResourceLocation("forge", path).toString());
+            return ItemTags.bind(new ResourceLocation("forge", path).toString());
         }
 
         private static ITag.INamedTag<Item> mc(String path) {
-            return ItemTags.makeWrapperTag(new ResourceLocation("minecraft", path).toString());
+            return ItemTags.bind(new ResourceLocation("minecraft", path).toString());
         }
 
         private static ITag.INamedTag<Item> mod(String path) {
-            return ItemTags.makeWrapperTag(new ResourceLocation(Constants.MODID, path).toString());
+            return ItemTags.bind(new ResourceLocation(Constants.MODID, path).toString());
         }
     }
 }

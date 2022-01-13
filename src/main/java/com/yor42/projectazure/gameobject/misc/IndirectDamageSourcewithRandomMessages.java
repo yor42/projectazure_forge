@@ -24,12 +24,12 @@ public class IndirectDamageSourcewithRandomMessages extends IndirectEntityDamage
 
     @Nonnull
     @Override
-    public ITextComponent getDeathMessage(@Nonnull LivingEntity entityLivingBaseIn) {
+    public ITextComponent getLocalizedDeathMessage(@Nonnull LivingEntity entityLivingBaseIn) {
         int randomMessage = new Random().nextInt(MessageCounts-1);
-        ITextComponent itextcomponent = this.indirectEntity == null ? this.damageSourceEntity.getDisplayName() : this.indirectEntity.getDisplayName();
-        ItemStack itemstack = this.indirectEntity instanceof LivingEntity ? ((LivingEntity)this.indirectEntity).getHeldItemMainhand() : ItemStack.EMPTY;
-        String s = "death.attack." + this.damageType+"_"+randomMessage;
+        ITextComponent itextcomponent = this.indirectEntity == null ? this.entity.getDisplayName() : this.indirectEntity.getDisplayName();
+        ItemStack itemstack = this.indirectEntity instanceof LivingEntity ? ((LivingEntity)this.indirectEntity).getMainHandItem() : ItemStack.EMPTY;
+        String s = "death.attack." + this.msgId+"_"+randomMessage;
         String s1 = s + ".item";
-        return !itemstack.isEmpty() && itemstack.hasDisplayName() ? new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName(), itextcomponent, itemstack.getTextComponent()) : new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName(), itextcomponent);
+        return !itemstack.isEmpty() && itemstack.hasCustomHoverName() ? new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName(), itextcomponent, itemstack.getDisplayName()) : new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName(), itextcomponent);
     }
 }

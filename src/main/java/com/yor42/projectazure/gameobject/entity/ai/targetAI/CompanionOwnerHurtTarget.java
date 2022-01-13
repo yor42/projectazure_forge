@@ -14,11 +14,11 @@ public class CompanionOwnerHurtTarget extends OwnerHurtTargetGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
         LivingEntity owner = this.host.getOwner();
         if(owner  != null) {
-            LivingEntity targetEntity = owner.getLastAttackedEntity();
+            LivingEntity targetEntity = owner.getLastHurtMob();
             if(targetEntity == null){
                 return false;
             }
@@ -29,6 +29,6 @@ public class CompanionOwnerHurtTarget extends OwnerHurtTargetGoal {
             }
         }
 
-        return super.shouldExecute();
+        return super.canUse();
     }
 }

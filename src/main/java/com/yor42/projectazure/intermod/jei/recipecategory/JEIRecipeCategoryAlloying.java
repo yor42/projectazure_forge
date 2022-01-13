@@ -55,7 +55,7 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
     @Override
     public void setIngredients(AlloyingRecipe alloyingRecipe, IIngredients iIngredients) {
         iIngredients.setInputs(VanillaTypes.ITEM, alloyingRecipe.getIngredientStack());
-        iIngredients.setOutput(VanillaTypes.ITEM, alloyingRecipe.getRecipeOutput());
+        iIngredients.setOutput(VanillaTypes.ITEM, alloyingRecipe.getResultItem());
     }
 
     @Override

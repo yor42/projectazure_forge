@@ -44,7 +44,7 @@ public class ContainerBasicRefinery extends Container {
             }
 
             @Override
-            public int size() {
+            public int getCount() {
                 return values.length;
             }
         }, buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack());
@@ -69,7 +69,7 @@ public class ContainerBasicRefinery extends Container {
 
         this.addSlot(new SlotItemHandler(Inventory, 8, 142, 35){
             @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
+            public boolean mayPlace(@Nonnull ItemStack stack) {
                 return false;
             }
         });
@@ -86,11 +86,11 @@ public class ContainerBasicRefinery extends Container {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));
         }
 
-        this.trackIntArray(this.field);
+        this.addDataSlots(this.field);
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 
@@ -114,7 +114,7 @@ public class ContainerBasicRefinery extends Container {
         }
 
         @Override
-        public boolean isItemValid(ItemStack stack) {
+        public boolean mayPlace(ItemStack stack) {
             return ForgeHooks.getBurnTime(stack, IRecipeType.SMELTING)>0;
         }
     }
@@ -129,7 +129,7 @@ public class ContainerBasicRefinery extends Container {
         }
 
         @Override
-        public boolean isItemValid(@Nonnull ItemStack stack) {
+        public boolean mayPlace(@Nonnull ItemStack stack) {
             return FluidUtil.getFluidContained(stack).isPresent() && FluidUtil.getFluidContained(stack).get().getFluid() == this.fluid;
         }
     }
@@ -141,7 +141,7 @@ public class ContainerBasicRefinery extends Container {
         }
 
         @Override
-        public boolean isItemValid(@Nonnull ItemStack stack) {
+        public boolean mayPlace(@Nonnull ItemStack stack) {
             return FluidUtil.getFluidHandler(stack).isPresent();
         }
     }
@@ -153,55 +153,55 @@ public class ContainerBasicRefinery extends Container {
         }
 
         @Override
-        public boolean isItemValid(@Nonnull ItemStack stack) {
+        public boolean mayPlace(@Nonnull ItemStack stack) {
             return false;
         }
     }
 
     @Nonnull
-    public ItemStack transferStackInSlot(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack CopyofStackinSlot = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack StackinSlot = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack StackinSlot = slot.getItem();
             CopyofStackinSlot = StackinSlot.copy();
             //Bucket outs
             if (index < 10) {
-                if (!this.mergeItemStack(StackinSlot, 10, 46, false)) {
+                if (!this.moveItemStackTo(StackinSlot, 10, 46, false)) {
                     return ItemStack.EMPTY;
                 }
 
             } else {
-                if (FluidUtil.getFluidContained(StackinSlot).isPresent() && FluidUtil.getFluidContained(StackinSlot).get().getFluid().isIn(ModTags.Fluids.CRUDEOIL)) {
-                    if (!this.mergeItemStack(StackinSlot, 0, 1, false)) {
+                if (FluidUtil.getFluidContained(StackinSlot).isPresent() && FluidUtil.getFluidContained(StackinSlot).get().getFluid().is(ModTags.Fluids.CRUDEOIL)) {
+                    if (!this.moveItemStackTo(StackinSlot, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 if (FluidUtil.getFluidContained(StackinSlot).isPresent() && FluidUtil.getFluidContained(StackinSlot).get().isEmpty()) {
-                    if (!this.mergeItemStack(StackinSlot, 2, 3, false)) {
+                    if (!this.moveItemStackTo(StackinSlot, 2, 3, false)) {
                         return ItemStack.EMPTY;
                     }
-                    else if (!this.mergeItemStack(StackinSlot, 4, 5, false)) {
+                    else if (!this.moveItemStackTo(StackinSlot, 4, 5, false)) {
                         return ItemStack.EMPTY;
                     }
-                    else if (!this.mergeItemStack(StackinSlot, 6, 7, false)) {
+                    else if (!this.moveItemStackTo(StackinSlot, 6, 7, false)) {
                         return ItemStack.EMPTY;
                     }
                 }else if (index < 37) {
-                    if (!this.mergeItemStack(StackinSlot, 37, 46, false)) {
+                    if (!this.moveItemStackTo(StackinSlot, 37, 46, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index < 46 && !this.mergeItemStack(StackinSlot, 10, 37, false)) {
+                } else if (index < 46 && !this.moveItemStackTo(StackinSlot, 10, 37, false)) {
                     return ItemStack.EMPTY;
-                }else if (!this.mergeItemStack(StackinSlot, 10, 37, false)) {
+                }else if (!this.moveItemStackTo(StackinSlot, 10, 37, false)) {
                     return ItemStack.EMPTY;
                 }
             }
 
             if (StackinSlot.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (StackinSlot.getCount() == CopyofStackinSlot.getCount()) {

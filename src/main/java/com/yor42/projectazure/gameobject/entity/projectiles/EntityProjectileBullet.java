@@ -43,18 +43,18 @@ public class EntityProjectileBullet extends ThrowableEntity {
     }
 
     @Override
-    protected float getGravityVelocity() {
+    protected float getGravity() {
         return 0.001F;
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult rayTraceResult) {
+    protected void onHitEntity(EntityRayTraceResult rayTraceResult) {
 
-        if(!world.isRemote()) {
+        if(!level.isClientSide()) {
             Entity target = rayTraceResult.getEntity();
-            Entity shooter = this.func_234616_v_();
-            target.attackEntityFrom(causeGunDamage(this, shooter), this.damage);
-            super.onEntityHit(rayTraceResult);
+            Entity shooter = this.getOwner();
+            target.hurt(causeGunDamage(this, shooter), this.damage);
+            super.onHitEntity(rayTraceResult);
             this.remove();
         }
     }
@@ -66,33 +66,33 @@ public class EntityProjectileBullet extends ThrowableEntity {
     }
 
     @Override
-    protected void func_230299_a_(BlockRayTraceResult blockRayTraceResult) {
-        if(this.getEntityWorld().isRemote()){
+    protected void onHitBlock(BlockRayTraceResult blockRayTraceResult) {
+        if(this.getCommandSenderWorld().isClientSide()){
             this.addBlockHitEffects(blockRayTraceResult);
         }
-        super.func_230299_a_(blockRayTraceResult);
+        super.onHitBlock(blockRayTraceResult);
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
-        super.onImpact(result);
+    protected void onHit(RayTraceResult result) {
+        super.onHit(result);
         this.remove();
     }
 
     private void addBlockHitEffects(BlockRayTraceResult result){
-        Minecraft.getInstance().particles.addBlockHitEffects(result.getPos(), result);
+        Minecraft.getInstance().particleEngine.addBlockHitEffects(result.getBlockPos(), result);
     }
 
     public void ShootFromPlayer(Entity Shooter, float pitch, float yaw, float offset, float velocity, float inAccuracy, Hand firingHand) {
 
-        this.setPosition(Shooter.getPosX(), Shooter.getPosYEye()-0.1F, Shooter.getPosZ());
+        this.setPos(Shooter.getX(), Shooter.getEyeY()-0.1F, Shooter.getZ());
 
         float f = -MathHelper.sin(yaw * ((float)Math.PI / 180F)) * MathHelper.cos(pitch * ((float)Math.PI / 180F));
         float f1 = -MathHelper.sin((pitch + offset) * ((float)Math.PI / 180F));
         float f2 = MathHelper.cos(yaw * ((float)Math.PI / 180F)) * MathHelper.cos(pitch * ((float)Math.PI / 180F));
         this.shoot((double)f, (double)f1, (double)f2, velocity, inAccuracy);
-        Vector3d vector3d = Shooter.getMotion();
-        this.setMotion(this.getMotion().add(vector3d.x, Shooter.isOnGround() ? 0.0D : vector3d.y, vector3d.z));
+        Vector3d vector3d = Shooter.getDeltaMovement();
+        this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, Shooter.isOnGround() ? 0.0D : vector3d.y, vector3d.z));
     }
 
     @Override
@@ -101,12 +101,12 @@ public class EntityProjectileBullet extends ThrowableEntity {
     }
 
     @Override
-    protected void registerData() {
+    protected void defineSynchedData() {
 
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

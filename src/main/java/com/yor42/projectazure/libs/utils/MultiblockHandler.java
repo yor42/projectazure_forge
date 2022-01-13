@@ -79,7 +79,7 @@ public class MultiblockHandler {
 
                     if (blockType != Blocks.AIR)
                     {
-                        TileEntity t = world.getTileEntity(pos);
+                        TileEntity t = world.getBlockEntity(pos);
                         if (t instanceof MultiblockBaseTE && ((MultiblockBaseTE) t).hasMaster())
                         {
                             return -1;
@@ -122,7 +122,7 @@ public class MultiblockHandler {
                 for (int z = zCoord - 1; z < zCoord + 2; z++)
                 {
                     pos = new BlockPos(x, y, z);
-                    tile = world.getTileEntity(pos);
+                    tile = world.getBlockEntity(pos);
 
                     // Check if block is master or servant
                     boolean mflag = (x == xCoord && y == yCoord && z == zCoord);
@@ -161,14 +161,14 @@ public class MultiblockHandler {
         parTile.setMaster(null);
         parTile.setHasMaster(false);
         parTile.setIsMaster(false);
-        parTile.setStructType(0, parTile.getWorld());
+        parTile.setStructType(0, parTile.getLevel());
 
     }
 
     //Reset tile multi, called from master block if struct broken
     public static void resetStructure(World world, int xCoord, int yCoord, int zCoord)
     {
-        Main.LOGGER.debug("DEBUG: reset struct: client? "+world.isRemote+" "+xCoord+" "+yCoord+" "+zCoord);
+        Main.LOGGER.debug("DEBUG: reset struct: client? "+world.isClientSide+" "+xCoord+" "+yCoord+" "+zCoord);
 
         for (int x = xCoord - 1; x < xCoord + 2; x++)
         {
@@ -176,7 +176,7 @@ public class MultiblockHandler {
             {
                 for (int z = zCoord - 1; z < zCoord + 2; z++)
                 {
-                    TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+                    TileEntity tile = world.getBlockEntity(new BlockPos(x, y, z));
 
                     if (tile instanceof MultiblockBaseTE) resetTileMulti((MultiblockBaseTE)tile);
                 }

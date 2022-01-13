@@ -30,9 +30,9 @@ public class modelEntityPlaneF4FWildCat extends AnimatedGeoModel<EntityF4fWildca
     public void setLivingAnimations(EntityF4fWildcat entity, Integer uniqueID) {
         IBone bone = this.getAnimationProcessor().getBone("Plane");
 
-        Vector3d movement = entity.getMotion();
-        bone.setRotationY(MathUtil.DegreeToRadian((float) ((Math.PI/2)-((float) Math.acos(movement.getZ()/ movement.length())))));
-        bone.setRotationX(MathUtil.DegreeToRadian((float) Math.atan(movement.getY()/ movement.getX())));
+        Vector3d movement = entity.getDeltaMovement();
+        bone.setRotationY(MathUtil.DegreeToRadian((float) ((Math.PI/2)-((float) Math.acos(movement.z()/ movement.length())))));
+        bone.setRotationX(MathUtil.DegreeToRadian((float) Math.atan(movement.y()/ movement.x())));
         super.setLivingAnimations(entity, uniqueID);
     }
 }

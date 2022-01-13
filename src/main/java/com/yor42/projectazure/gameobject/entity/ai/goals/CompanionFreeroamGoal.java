@@ -12,6 +12,8 @@ import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class CompanionFreeroamGoal extends RandomWalkingGoal {
 
     private final AbstractEntityCompanion entityCompanion;
@@ -21,11 +23,11 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
         super(entity, 0.6D, moveChance, shouldStopBeforeMove);
         this.entityCompanion = entity;
         this.shouldStopBeforeMove = shouldStopBeforeMove;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
         if ((this.entityCompanion.isBeingPatted() || !this.entityCompanion.isFreeRoaming()) && !this.entityCompanion.isMovingtoRecruitStation) {
             return false;
@@ -34,14 +36,14 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
             return false;
         }
 
-        if (this.creature.isBeingRidden()) {
+        if (this.mob.isVehicle()) {
             return false;
-        } else if (!this.mustUpdate) {
-            if (this.shouldStopBeforeMove && this.creature.getIdleTime() >= 100) {
+        } else if (!this.forceTrigger) {
+            if (this.shouldStopBeforeMove && this.mob.getNoActionTime() >= 100) {
                 return false;
             }
 
-            if (this.creature.getRNG().nextInt(this.executionChance) != 0) {
+            if (this.mob.getRandom().nextInt(this.interval) != 0) {
                 return false;
             }
         }
@@ -50,15 +52,15 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
         if (vector3d == null) {
             return false;
         } else {
-            Path path = this.entityCompanion.getNavigator().getPathToPos(vector3d.x,vector3d.y, vector3d.z, 0);
-            if (path == null || !path.reachesTarget()){
+            Path path = this.entityCompanion.getNavigation().createPath(vector3d.x,vector3d.y, vector3d.z, 0);
+            if (path == null || !path.canReach()){
                 return false;
             }
             else {
-                this.x = vector3d.x;
-                this.y = vector3d.y;
-                this.z = vector3d.z;
-                this.mustUpdate = false;
+                this.wantedX = vector3d.x;
+                this.wantedY = vector3d.y;
+                this.wantedZ = vector3d.z;
+                this.forceTrigger = false;
                 return true;
             }
         }
@@ -71,16 +73,16 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
     protected Vector3d getPosition() {
 
         if (!this.entityCompanion.getStayCenterPos().isPresent()){
-            this.entityCompanion.setStayCenterPos(this.entityCompanion.getPosition());
+            this.entityCompanion.setStayCenterPos(this.entityCompanion.blockPosition());
         }
 
         BlockPos homepos = this.entityCompanion.getStayCenterPos().get();
         BlockPos originPosition;
         boolean flag = false;
 
-        if (this.entityCompanion.isWithinHomeDistanceCurrentPosition()) {
-            homepos = this.entityCompanion.getHomePosition();
-            flag = this.entityCompanion.getEntityWorld().getDimensionKey() == World.OVERWORLD && this.entityCompanion.getPosition().withinDistance(homepos, 32);
+        if (this.entityCompanion.isWithinRestriction()) {
+            homepos = this.entityCompanion.getRestrictCenter();
+            flag = this.entityCompanion.getCommandSenderWorld().dimension() == World.OVERWORLD && this.entityCompanion.blockPosition().closerThan(homepos, 32);
         }
 
         originPosition = flag? homepos : this.entityCompanion.getStayCenterPos().get();
@@ -91,9 +93,9 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
         return new Vector3d(originPosition.getX()+x, originPosition.getY(), originPosition.getZ()+z);
     }
 
-    public void resetTask() {
+    public void stop() {
         this.entityCompanion.clearStayCenterPos();
-        this.entityCompanion.getNavigator().clearPath();
-        super.resetTask();
+        this.entityCompanion.getNavigation().stop();
+        super.stop();
     }
 }

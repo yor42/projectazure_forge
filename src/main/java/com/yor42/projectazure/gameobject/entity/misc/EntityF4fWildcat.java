@@ -29,7 +29,7 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
     @Override
     protected <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
@@ -57,9 +57,9 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
             }
         }
 
-        boolean isAttackSuccessful = entity.attackEntityFrom(PLANE_GUN, damage);
+        boolean isAttackSuccessful = entity.hurt(PLANE_GUN, damage);
         if(isAttackSuccessful){
-            this.playSound(registerSounds.PLANE_GUN, this.getSoundVolume(), this.getSoundPitch());
+            this.playSound(registerSounds.PLANE_GUN, this.getSoundVolume(), this.getVoicePitch());
         }
     }
 
@@ -70,13 +70,13 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 1.0F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 0.0F)
-                .createMutableAttribute(Attributes.MAX_HEALTH, WildcatHP)
-                .createMutableAttribute(Attributes.FLYING_SPEED, 1F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
+                .add(Attributes.MOVEMENT_SPEED, 1.0F)
+                .add(ForgeMod.SWIM_SPEED.get(), 0.0F)
+                .add(Attributes.MAX_HEALTH, WildcatHP)
+                .add(Attributes.FLYING_SPEED, 1F)
+                .add(Attributes.ATTACK_DAMAGE, 2F)
                 ;
     }
 }

@@ -22,6 +22,8 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraftingTableReloadable {
 
     public AnimationFactory factory = new AnimationFactory(this);
@@ -61,12 +63,12 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraf
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int ammo = ItemStackUtils.getRemainingAmmo(stack);
         float ammopercent = (float) ammo/this.getMaxAmmo();
         TextFormatting color = ammopercent>=0.33? ammopercent>= 0.66? TextFormatting.DARK_GREEN:TextFormatting.GOLD:TextFormatting.DARK_RED;
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(ammo+"/"+this.getMaxAmmo()).mergeStyle(color)));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(ammo+"/"+this.getMaxAmmo()).withStyle(color)));
     }
 
     @Override

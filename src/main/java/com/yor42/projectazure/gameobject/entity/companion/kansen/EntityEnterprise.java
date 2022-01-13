@@ -32,17 +32,17 @@ import javax.annotation.Nonnull;
 
 public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAzurLaneKansen {
 
-    protected static final DataParameter<Integer> INVINCIBLE_TIMER = EntityDataManager.createKey(EntityEnterprise.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> INVINCIBLE_TIMER = EntityDataManager.defineId(EntityEnterprise.class, DataSerializers.INT);
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSitting() || this.getRidingEntity() != null){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.sit_start").addAnimation("animation.enterprise.sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -73,7 +73,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
 
@@ -83,12 +83,12 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.sleep", true));
             return PlayState.CONTINUE;
         }
-        else if(this.swingProgress>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+        else if(this.attackAnim>0){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorL", false));
             }
             else{
@@ -96,12 +96,12 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
-            if(this.isSitting())
+            if(this.isOrderedToSit())
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
             else
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
@@ -115,20 +115,20 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getActiveHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getActiveHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
 
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
@@ -153,8 +153,8 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+        else if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+            if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
             return PlayState.CONTINUE;
@@ -176,64 +176,64 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.EnterpriseMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.EnterpriseSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.EnterpriseHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.EnterpriseAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.EnterpriseMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.EnterpriseSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.EnterpriseHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.EnterpriseAttackDamage.get())
                 ;
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         if(this.getInvincibleTimer()>0){
             return false;
         }
-        return super.attackEntityFrom(source, amount);
+        return super.hurt(source, amount);
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         int InvincibleTimer = this.getInvincibleTimer();
         if(InvincibleTimer>0){
             this.setInvincibleTimer(InvincibleTimer-1);
         }
 
-        if (this.world.isRemote && this.getInvincibleTimer()>0 && this.ticksExisted%10 == 0) {
+        if (this.level.isClientSide && this.getInvincibleTimer()>0 && this.tickCount%10 == 0) {
             for(int i = 0; i < 2; ++i) {
-                this.world.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getPosXRandom(0.5D), this.getPosYRandom() - 0.25D, this.getPosZRandom(0.5D), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+                this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
             }
         }
     }
 
     @Override
     public void LaunchPlane(ItemStack planestack, AbstractEntityPlanes plane, LivingEntity target, IItemHandlerModifiable hanger, int hangerIndex) {
-        if(this.getRNG().nextFloat()<0.4F){
+        if(this.getRandom().nextFloat()<0.4F){
             this.setInvincibleTimer(240);
             plane.setAttackDamage(plane.getAttackDamage()*2);
             for(int i = 0; i < 5; ++i) {
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 double d2 = this.rand.nextGaussian() * 0.02D;
-                this.world.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getPosXRandom(1.0D), this.getPosYRandom() + 1.0D, this.getPosZRandom(1.0D), d0, d1, d2);
+                this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
             }
         }
         super.LaunchPlane(planestack, plane, target, hanger, hangerIndex);
     }
 
     private void setInvincibleTimer(int invincibleTimer) {
-        this.dataManager.set(INVINCIBLE_TIMER, invincibleTimer);
+        this.entityData.set(INVINCIBLE_TIMER, invincibleTimer);
     }
 
     private int getInvincibleTimer() {
-        return this.dataManager.get(INVINCIBLE_TIMER);
+        return this.entityData.get(INVINCIBLE_TIMER);
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(INVINCIBLE_TIMER, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(INVINCIBLE_TIMER, 0);
     }
 }

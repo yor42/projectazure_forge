@@ -31,7 +31,7 @@ import java.util.UUID;
 public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     @Nullable
     protected LivingEntity targetEntity;
-    protected static final DataParameter<Optional<UUID>> TARGET = EntityDataManager.createKey(EntityMissileDroneMissile.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<Optional<UUID>> TARGET = EntityDataManager.defineId(EntityMissileDroneMissile.class, DataSerializers.OPTIONAL_UUID);
     private static final double TURNLIMIT = 9 * Math.PI;
 
     public EntityMissileDroneMissile(EntityType<EntityMissileDroneMissile> p_i50173_1_, World p_i50173_2_) {
@@ -41,82 +41,82 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
 
     public void shoot(LivingEntity shooter, LivingEntity targetEntity, double x, double y, double z){
         this.setTarget(targetEntity);
-        this.setShooter(shooter);
-        this.setMotion(shooter.getLookVec().scale(0.5));
-        BlockPos blockpos = shooter.getPosition().offset(shooter.getHorizontalFacing());
+        this.setOwner(shooter);
+        this.setDeltaMovement(shooter.getLookAngle().scale(0.5));
+        BlockPos blockpos = shooter.blockPosition().relative(shooter.getDirection());
         double d0 = (double)blockpos.getX() + 0.5D;
         double d1 = (double)blockpos.getY() + 0.5D;
         double d2 = (double)blockpos.getZ() + 0.5D;
-        this.setLocationAndAngles(d0, d1, d2, this.rotationYaw, this.rotationPitch);
-        shooter.getEntityWorld().addEntity(this);
+        this.moveTo(d0, d1, d2, this.yRot, this.xRot);
+        shooter.getCommandSenderWorld().addFreshEntity(this);
     }
 
     @Override
-    public boolean isBurning() {
+    public boolean isOnFire() {
         return false;
     }
 
     public Optional<UUID> getTargetUUID(){
-        return this.getDataManager().get(TARGET);
+        return this.getEntityData().get(TARGET);
     }
 
     public void setTarget(@Nullable  LivingEntity entity){
-        this.getDataManager().set(TARGET, Optional.ofNullable(entity != null ? entity.getUniqueID() : null));
+        this.getEntityData().set(TARGET, Optional.ofNullable(entity != null ? entity.getUUID() : null));
         this.targetEntity = entity;
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.getDataManager().register(TARGET, Optional.empty());
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(TARGET, Optional.empty());
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compoundNBT) {
-        super.writeAdditional(compoundNBT);
-        this.getTargetUUID().ifPresent((UUID)->compoundNBT.putUniqueId("target", UUID));
+    public void addAdditionalSaveData(CompoundNBT compoundNBT) {
+        super.addAdditionalSaveData(compoundNBT);
+        this.getTargetUUID().ifPresent((UUID)->compoundNBT.putUUID("target", UUID));
     }
 
     @Override
-    public void readAdditional(@ParametersAreNonnullByDefault CompoundNBT compoundNBT) {
-        super.readAdditional(compoundNBT);
+    public void readAdditionalSaveData(@ParametersAreNonnullByDefault CompoundNBT compoundNBT) {
+        super.readAdditionalSaveData(compoundNBT);
         if(compoundNBT.contains("target")){
-            this.getDataManager().set(TARGET, Optional.of(compoundNBT.getUniqueId("target")));
+            this.getEntityData().set(TARGET, Optional.of(compoundNBT.getUUID("target")));
         }
     }
 
     @Override
     public void tick() {
-        Entity entity = this.func_234616_v_();
-        if (this.world.isRemote || (entity == null || !entity.removed) && this.world.isBlockLoaded(this.getPosition())) {
+        Entity entity = this.getOwner();
+        if (this.level.isClientSide || (entity == null || !entity.removed) && this.level.hasChunkAt(this.blockPosition())) {
             super.tick();
 
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
+            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
             if (raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-                this.onImpact(raytraceresult);
+                this.onHit(raytraceresult);
             }
 
-            this.doBlockCollisions();
-            Vector3d vector3d = this.getMotion();
-            double d0 = this.getPosX() + vector3d.x;
-            double d1 = this.getPosY() + vector3d.y;
-            double d2 = this.getPosZ() + vector3d.z;
-            this.setPosition(d0, d1, d2);
+            this.checkInsideBlocks();
+            Vector3d vector3d = this.getDeltaMovement();
+            double d0 = this.getX() + vector3d.x;
+            double d1 = this.getY() + vector3d.y;
+            double d2 = this.getZ() + vector3d.z;
+            this.setPos(d0, d1, d2);
         } else {
             this.remove();
         }
 
-        if(!this.getEntityWorld().isRemote()){
+        if(!this.getCommandSenderWorld().isClientSide()){
 
             if(this.targetEntity != null){
-                Vector3d motion = this.getMotion();
+                Vector3d motion = this.getDeltaMovement();
                 double speed = motion.length();
 
-                Vector3d v2 = new Vector3d(this.targetEntity.getPosX(), this.targetEntity.getPosY()+0.5, this.targetEntity.getPosZ()).subtract(new Vector3d(this.getPosX(), this.getPosY(), this.getPosZ())).normalize();
+                Vector3d v2 = new Vector3d(this.targetEntity.getX(), this.targetEntity.getY()+0.5, this.targetEntity.getZ()).subtract(new Vector3d(this.getX(), this.getY(), this.getZ())).normalize();
                 Vector3d v1 = motion.normalize();
 
-                double angle = Math.acos(v1.dotProduct(v2));
-                Vector3d axis = v1.crossProduct(v2).normalize();
+                double angle = Math.acos(v1.dot(v2));
+                Vector3d axis = v1.cross(v2).normalize();
 
                 //angle = Math.min(angle, MAX_TURN_ANGLE);
 
@@ -127,11 +127,11 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
                     motion = MathUtil.rotateVector(v1, axis, TURNLIMIT).scale(speed);
                 }
 
-                this.setMotion(motion);
+                this.setDeltaMovement(motion);
             }
 
             if (this.targetEntity == null && this.getTargetUUID().isPresent()) {
-                Entity TargetEntity = ((ServerWorld)this.world).getEntityByUuid(this.getTargetUUID().get());
+                Entity TargetEntity = ((ServerWorld)this.level).getEntity(this.getTargetUUID().get());
                 if (this.targetEntity == null) {
                     this.setTarget(null);
                 }
@@ -141,74 +141,74 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
             }
 
             if(!this.targetEntity.isAlive()){
-                this.getEntityWorld().createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), 0, Explosion.Mode.NONE);
+                this.getCommandSenderWorld().explode(this, this.getX(), this.getY(), this.getZ(), 0, Explosion.Mode.NONE);
                 this.remove();
             }
 
-            RayTraceResult raytraceresult = ProjectileHelper.func_234618_a_(this, this::func_230298_a_);
+            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
             if (raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-                this.onImpact(raytraceresult);
+                this.onHit(raytraceresult);
             }
 
         }
-        Vector3d vector3d = this.getMotion();
+        Vector3d vector3d = this.getDeltaMovement();
         /*
 
         double d4 = vector3d.y;
         float f1 = MathHelper.sqrt(horizontalMag(vector3d));
         this.rotationPitch = (float)(MathHelper.atan2(d4, f1) * (double)(180F / (float)Math.PI));
-        this.rotationPitch = func_234614_e_(this.prevRotationPitch, this.rotationPitch);
-        this.rotationYaw = func_234614_e_(this.prevRotationYaw, this.rotationYaw);
+        this.rotationPitch = lerpRotation(this.prevRotationPitch, this.rotationPitch);
+        this.rotationYaw = lerpRotation(this.prevRotationYaw, this.rotationYaw);
 
          */
 
         ProjectileHelper.rotateTowardsMovement(this, 0);
-        if(this.getEntityWorld().isRemote()){
-            this.world.addParticle(ParticleTypes.FLAME, this.getPosX() - vector3d.x, this.getPosY() - vector3d.y + 0.15D, this.getPosZ() - vector3d.z, 0.0D, 0.0D, 0.0D);
+        if(this.getCommandSenderWorld().isClientSide()){
+            this.level.addParticle(ParticleTypes.FLAME, this.getX() - vector3d.x, this.getY() - vector3d.y + 0.15D, this.getZ() - vector3d.z, 0.0D, 0.0D, 0.0D);
         }
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
-        super.onImpact(result);
+    protected void onHit(RayTraceResult result) {
+        super.onHit(result);
         this.Detonate();
     }
 
     @Override
-    protected float getMotionFactor() {
+    protected float getInertia() {
         return 1.05F;
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_) {
+    public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
         this.remove();
         return true;
     }
 
     @Override
-    public boolean isImmuneToFire() {
+    public boolean fireImmune() {
         return true;
     }
 
     @Override
-    protected boolean isFireballFiery() {
+    protected boolean shouldBurn() {
         return false;
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
-        if(result.getEntity() != this.func_234616_v_()) {
+    protected void onHitEntity(EntityRayTraceResult result) {
+        if(result.getEntity() != this.getOwner()) {
             this.Detonate();
         }
     }
 
     private void Detonate(){
-        this.world.createExplosion(this, this.getPosX(), getPosY(), getPosZ(), 1F, Explosion.Mode.BREAK);
+        this.level.explode(this, this.getX(), getY(), getZ(), 1F, Explosion.Mode.BREAK);
         this.remove();
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

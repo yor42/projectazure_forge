@@ -13,6 +13,8 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
+import net.minecraft.item.Item.Properties;
+
 public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements ICraftingTableReloadable {
 
     protected boolean isreloadable;
@@ -33,8 +35,8 @@ public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements 
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         TextFormatting color;
 
         if(((float)getRemainingAmmo(stack)/this.getMaxAmmo())<0.3F){
@@ -48,8 +50,8 @@ public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements 
         }
 
         boolean isreloadable = this.isreloadable;
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.getMaxAmmo()).mergeStyle(color)));
-        tooltip.add(new TranslationTextComponent(isreloadable? "item.tooltip.torpedo_reloadable": "item.tooltip.torpedo_not_reloadable" ).setStyle(Style.EMPTY.setColor(Color.fromInt(isreloadable? 0x00FF00:0xff0000))));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.getMaxAmmo()).withStyle(color)));
+        tooltip.add(new TranslationTextComponent(isreloadable? "item.tooltip.torpedo_reloadable": "item.tooltip.torpedo_not_reloadable" ).setStyle(Style.EMPTY.withColor(Color.fromRgb(isreloadable? 0x00FF00:0xff0000))));
     }
 
     @Override

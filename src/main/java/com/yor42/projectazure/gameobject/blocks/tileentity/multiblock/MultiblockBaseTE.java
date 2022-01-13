@@ -30,8 +30,8 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putInt("masterX", masterPos.getX());
         compound.putInt("masterY", masterPos.getY());
         compound.putInt("masterZ", masterPos.getZ());
@@ -42,8 +42,8 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         this.masterPos = new BlockPos(nbt.getInt("masterX"), nbt.getInt("masterY"), nbt.getInt("masterZ"));
         this.structType = nbt.getInt("structType");
         this.hasMaster = nbt.getBoolean("hasMaster");
@@ -67,7 +67,7 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
             //check master again
             if (hasMaster)
             {
-                TileEntity tile = this.world.getTileEntity(this.masterPos);
+                TileEntity tile = this.level.getBlockEntity(this.masterPos);
 
                 if (tile instanceof MultiblockBaseTE)
                 {
@@ -105,7 +105,7 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
         //set blockstate
         //type: 0:NO mbs, 1:mbs INACTIVE, 2:mbs ACTIVE
         //INACTIVE
-        AbstractMultiBlockBase.updateMultiBlockState(type !=0 , world, this.getPos());  //NO MBS
+        AbstractMultiBlockBase.updateMultiBlockState(type !=0 , world, this.getBlockPos());  //NO MBS
     }
 
     /** set mater tile, separate from setHasMaster */
@@ -114,7 +114,7 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
         if (master != null && !master.isRemoved())
         {
             this.masterTile = master;
-            this.setMasterCoords(master.getPos());
+            this.setMasterCoords(master.getBlockPos());
         }
         else
         {

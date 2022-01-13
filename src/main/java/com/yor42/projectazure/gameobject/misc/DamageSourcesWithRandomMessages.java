@@ -19,12 +19,12 @@ public class DamageSourcesWithRandomMessages extends DamageSource {
 
     @Nonnull
     @Override
-    public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
+    public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
 
         int randomMessage = new Random().nextInt(MessageCounts-1);
 
-        LivingEntity livingentity = entityLivingBaseIn.getAttackingEntity();
-        String s = "death.attack." + this.damageType+"_"+randomMessage;
+        LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
+        String s = "death.attack." + this.msgId+"_"+randomMessage;
         String s1 = s + ".player";
         return livingentity != null ? new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName());
     }

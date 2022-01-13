@@ -20,6 +20,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class MultiblockStructureBlocks extends AbstractMultiBlockBase{
     public MultiblockStructureBlocks(Properties properties) {
         super(properties);
@@ -32,15 +34,15 @@ public class MultiblockStructureBlocks extends AbstractMultiBlockBase{
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return state.get(FORMED)? BlockRenderType.ENTITYBLOCK_ANIMATED: BlockRenderType.MODEL;
+    public BlockRenderType getRenderShape(BlockState state) {
+        return state.getValue(FORMED)? BlockRenderType.ENTITYBLOCK_ANIMATED: BlockRenderType.MODEL;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!worldIn.isRemote() && !player.isSneaking()){
-            TileEntity TE= worldIn.getTileEntity(pos);
+    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if(!worldIn.isClientSide() && !player.isShiftKeyDown()){
+            TileEntity TE= worldIn.getBlockEntity(pos);
             if(TE instanceof MultiblockBaseTE){
                 MultiblockBaseTE multiTE = (MultiblockBaseTE) TE;
                 if(multiTE.hasMaster()){
@@ -61,7 +63,7 @@ public class MultiblockStructureBlocks extends AbstractMultiBlockBase{
         }
 
 
-        return state.get(FORMED)? ActionResultType.SUCCESS:ActionResultType.PASS;
+        return state.getValue(FORMED)? ActionResultType.SUCCESS:ActionResultType.PASS;
     }
 
     @Override

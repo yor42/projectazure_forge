@@ -24,11 +24,11 @@ public class CompanionDefaultMovementController extends MovementController {
     @Override
     public void tick() {
         float lvt_9_2_;
-        if (this.action == MovementController.Action.STRAFE) {
+        if (this.operation == MovementController.Action.STRAFE) {
             float lvt_1_1_ = (float)this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
-            float lvt_2_1_ = (float)this.speed * lvt_1_1_;
-            float lvt_3_1_ = this.moveForward;
-            float lvt_4_1_ = this.moveStrafe;
+            float lvt_2_1_ = (float)this.speedModifier * lvt_1_1_;
+            float lvt_3_1_ = this.strafeForwards;
+            float lvt_4_1_ = this.strafeRight;
             float lvt_5_1_ = MathHelper.sqrt(lvt_3_1_ * lvt_3_1_ + lvt_4_1_ * lvt_4_1_);
             if (lvt_5_1_ < 1.0F) {
                 lvt_5_1_ = 1.0F;
@@ -37,54 +37,54 @@ public class CompanionDefaultMovementController extends MovementController {
             lvt_5_1_ = lvt_2_1_ / lvt_5_1_;
             lvt_3_1_ *= lvt_5_1_;
             lvt_4_1_ *= lvt_5_1_;
-            float lvt_6_1_ = MathHelper.sin(this.mob.rotationYaw * 0.017453292F);
-            float lvt_7_1_ = MathHelper.cos(this.mob.rotationYaw * 0.017453292F);
+            float lvt_6_1_ = MathHelper.sin(this.mob.yRot * 0.017453292F);
+            float lvt_7_1_ = MathHelper.cos(this.mob.yRot * 0.017453292F);
             float lvt_8_1_ = lvt_3_1_ * lvt_7_1_ - lvt_4_1_ * lvt_6_1_;
             lvt_9_2_ = lvt_4_1_ * lvt_7_1_ + lvt_3_1_ * lvt_6_1_;
-            if (!this.func_234024_b_(lvt_8_1_, lvt_9_2_)) {
-                this.moveForward = 1.0F;
-                this.moveStrafe = 0.0F;
+            if (!this.isWalkable(lvt_8_1_, lvt_9_2_)) {
+                this.strafeForwards = 1.0F;
+                this.strafeRight = 0.0F;
             }
 
-            this.mob.setAIMoveSpeed(lvt_2_1_);
-            this.mob.setMoveForward(this.moveForward);
-            this.mob.setMoveStrafing(this.moveStrafe);
-            this.action = MovementController.Action.WAIT;
-        } else if (this.action == MovementController.Action.MOVE_TO) {
-            this.action = MovementController.Action.WAIT;
-            double lvt_1_2_ = this.posX - this.mob.getPosX();
-            double lvt_3_2_ = this.posZ - this.mob.getPosZ();
-            double lvt_5_2_ = this.posY - this.mob.getPosY();
+            this.mob.setSpeed(lvt_2_1_);
+            this.mob.setZza(this.strafeForwards);
+            this.mob.setXxa(this.strafeRight);
+            this.operation = MovementController.Action.WAIT;
+        } else if (this.operation == MovementController.Action.MOVE_TO) {
+            this.operation = MovementController.Action.WAIT;
+            double lvt_1_2_ = this.wantedX - this.mob.getX();
+            double lvt_3_2_ = this.wantedZ - this.mob.getZ();
+            double lvt_5_2_ = this.wantedY - this.mob.getY();
             double lvt_7_2_ = lvt_1_2_ * lvt_1_2_ + lvt_5_2_ * lvt_5_2_ + lvt_3_2_ * lvt_3_2_;
             if (lvt_7_2_ < 2.500000277905201E-7D) {
-                this.mob.setMoveForward(0.0F);
+                this.mob.setZza(0.0F);
                 return;
             }
 
             lvt_9_2_ = (float)(MathHelper.atan2(lvt_3_2_, lvt_1_2_) * 57.2957763671875D) - 90.0F;
-            this.mob.rotationYaw = this.limitAngle(this.mob.rotationYaw, lvt_9_2_, 90.0F);
-            this.mob.setAIMoveSpeed((float)(this.speed * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
-            BlockPos lvt_10_1_ = this.mob.getPosition();
-            BlockState lvt_11_1_ = this.mob.world.getBlockState(lvt_10_1_);
+            this.mob.yRot = this.rotlerp(this.mob.yRot, lvt_9_2_, 90.0F);
+            this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
+            BlockPos lvt_10_1_ = this.mob.blockPosition();
+            BlockState lvt_11_1_ = this.mob.level.getBlockState(lvt_10_1_);
             Block lvt_12_1_ = lvt_11_1_.getBlock();
-            VoxelShape lvt_13_1_ = lvt_11_1_.getCollisionShape(this.mob.world, lvt_10_1_);
-            if (lvt_5_2_ > (double)this.mob.stepHeight && lvt_1_2_ * lvt_1_2_ + lvt_3_2_ * lvt_3_2_ < (double)Math.max(1.0F, this.mob.getWidth()) || !lvt_13_1_.isEmpty() && this.mob.getPosY() < lvt_13_1_.getEnd(Direction.Axis.Y) + (double)lvt_10_1_.getY() && !this.companion.isSailing() && !lvt_12_1_.isIn(BlockTags.DOORS) && !lvt_12_1_.isIn(BlockTags.FENCES)) {
-                this.mob.getJumpController().setJumping();
-                this.action = MovementController.Action.JUMPING;
+            VoxelShape lvt_13_1_ = lvt_11_1_.getCollisionShape(this.mob.level, lvt_10_1_);
+            if (lvt_5_2_ > (double)this.mob.maxUpStep && lvt_1_2_ * lvt_1_2_ + lvt_3_2_ * lvt_3_2_ < (double)Math.max(1.0F, this.mob.getBbWidth()) || !lvt_13_1_.isEmpty() && this.mob.getY() < lvt_13_1_.max(Direction.Axis.Y) + (double)lvt_10_1_.getY() && !this.companion.isSailing() && !lvt_12_1_.is(BlockTags.DOORS) && !lvt_12_1_.is(BlockTags.FENCES)) {
+                this.mob.getJumpControl().jump();
+                this.operation = MovementController.Action.JUMPING;
             }
-        } else if (this.action == MovementController.Action.JUMPING) {
-            this.mob.setAIMoveSpeed((float)(this.speed * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
+        } else if (this.operation == MovementController.Action.JUMPING) {
+            this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
             if (this.mob.isOnGround()) {
-                this.action = MovementController.Action.WAIT;
+                this.operation = MovementController.Action.WAIT;
             }
         } else {
-            this.mob.setMoveForward(0.0F);
+            this.mob.setZza(0.0F);
         }
     }
 
-    private boolean func_234024_b_(float p_234024_1_, float p_234024_2_) {
-        PathNavigator navigator = this.mob.getNavigator();
-        NodeProcessor nodeProcessor = navigator.getNodeProcessor();
-        return nodeProcessor.getPathNodeType(this.mob.world, MathHelper.floor(this.mob.getPosX() + (double) p_234024_1_), MathHelper.floor(this.mob.getPosY()), MathHelper.floor(this.mob.getPosZ() + (double) p_234024_2_)) == PathNodeType.WALKABLE;
+    private boolean isWalkable(float p_234024_1_, float p_234024_2_) {
+        PathNavigator navigator = this.mob.getNavigation();
+        NodeProcessor nodeProcessor = navigator.getNodeEvaluator();
+        return nodeProcessor.getBlockPathType(this.mob.level, MathHelper.floor(this.mob.getX() + (double) p_234024_1_), MathHelper.floor(this.mob.getY()), MathHelper.floor(this.mob.getZ() + (double) p_234024_2_)) == PathNodeType.WALKABLE;
     }
 }

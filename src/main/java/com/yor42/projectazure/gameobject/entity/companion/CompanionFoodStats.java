@@ -31,9 +31,9 @@ public class CompanionFoodStats {
     }
 
     public void consume(Item maybeFood, ItemStack stack) {
-        if (maybeFood.isFood()) {
-            Food food = maybeFood.getFood();
-            this.addStats(food != null ? food.getHealing() : 0, food.getSaturation());
+        if (maybeFood.isEdible()) {
+            Food food = maybeFood.getFoodProperties();
+            this.addStats(food != null ? food.getNutrition() : 0, food.getSaturationModifier());
         }
 
     }
@@ -43,7 +43,7 @@ public class CompanionFoodStats {
      * same as Vanilla Foodstat. but takes AbstractEntityCompanion Instead of PlayerEntity
      */
     public void tick(AbstractEntityCompanion companion) {
-        Difficulty difficulty = companion.world.getDifficulty();
+        Difficulty difficulty = companion.level.getDifficulty();
         if (this.foodExhaustionLevel > 4.0F) {
             this.foodExhaustionLevel -= 4.0F;
             if (this.foodSaturationLevel > 0.0F) {
@@ -53,7 +53,7 @@ public class CompanionFoodStats {
             }
         }
 
-        boolean flag = companion.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION);
+        boolean flag = companion.level.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
         ++this.foodTimer;
         if (flag && this.foodSaturationLevel > 0.0F && companion.shouldHeal() && this.foodLevel >= 20) {
             if (this.foodTimer >= 10) {
@@ -81,7 +81,7 @@ public class CompanionFoodStats {
         } else {
             this.foodTimer = 0;
         }
-        companion.getDataManager().set(FOODLEVEL, this.foodLevel);
+        companion.getEntityData().set(FOODLEVEL, this.foodLevel);
     }
 
     /**

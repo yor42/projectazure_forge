@@ -78,10 +78,10 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
-        registration.addRecipes(recipeManager.getRecipesForType(registerRecipes.Types.PRESSING), JEIRecipeCategoryPressing.UID);
-        registration.addRecipes(recipeManager.getRecipesForType(registerRecipes.Types.ALLOYING), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipes(recipeManager.getRecipesForType(registerRecipes.Types.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
+        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
+        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.PRESSING), JEIRecipeCategoryPressing.UID);
+        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.ALLOYING), JEIRecipeCategoryAlloying.UID);
+        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
     }
 
     @Override

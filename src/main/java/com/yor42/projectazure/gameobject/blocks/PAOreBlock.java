@@ -15,7 +15,7 @@ public class PAOreBlock extends OreBlock {
     private final enums.ResourceType resourceType;
 
     public PAOreBlock(String materialName){
-        this(materialName, enums.ResourceType.ORE, (AbstractBlock.Properties.create(Material.ROCK).harvestLevel(2).sound(SoundType.STONE).setRequiresTool().hardnessAndResistance(3.0F, 3.0F)));
+        this(materialName, enums.ResourceType.ORE, (AbstractBlock.Properties.of(Material.STONE).harvestLevel(2).sound(SoundType.STONE).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
     }
 
     public PAOreBlock(String materialName, enums.ResourceType resourceType, Block.Properties properties) {
@@ -26,7 +26,7 @@ public class PAOreBlock extends OreBlock {
 
 
     @Override
-    public IFormattableTextComponent getTranslatedName() {
-        return new TranslationTextComponent(material).appendString(" ").append(new TranslationTextComponent(resourceType.getName()));
+    public IFormattableTextComponent getName() {
+        return new TranslationTextComponent(material).append(" ").append(new TranslationTextComponent(resourceType.getName()));
     }
 }

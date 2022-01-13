@@ -8,6 +8,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class AbstractBigMachineBlock extends AbstractElectricMachineBlock{
     public AbstractBigMachineBlock(Properties properties) {
         super(properties);
@@ -20,8 +22,8 @@ public abstract class AbstractBigMachineBlock extends AbstractElectricMachineBlo
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBlockHarvested(worldIn, pos, state, player);
+    public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+        super.playerWillDestroy(worldIn, pos, state, player);
         this.DestroyBoundingBox(worldIn, pos, state, player);
     }
 

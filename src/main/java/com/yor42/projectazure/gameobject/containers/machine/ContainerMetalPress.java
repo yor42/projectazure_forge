@@ -35,7 +35,7 @@ public class ContainerMetalPress extends Container {
 
         this.field = field;
 
-        trackIntArray(this.field);
+        addDataSlots(this.field);
 
 
         for (int i = 0; i < 3; ++i) {
@@ -67,43 +67,43 @@ public class ContainerMetalPress extends Container {
         return (int)(i != 0 ? k * pixels : 0);
     }
 
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index == 2) {
-                if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+                if (!this.moveItemStackTo(itemstack1, 3, 39, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(itemstack1, itemstack);
+                slot.onQuickCraft(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (itemstack1.getItem().isIn(ModTags.Items.EXTRUSION_MOLD)) {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false)) {
+                if (itemstack1.getItem().is(ModTags.Items.EXTRUSION_MOLD)) {
+                    if (!this.moveItemStackTo(itemstack1, 1, 2, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index < 30) {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                    else if (!this.mergeItemStack(itemstack1, 30, 39, false)) {
+                    else if (!this.moveItemStackTo(itemstack1, 30, 39, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
+                } else if (index < 39 && !this.moveItemStackTo(itemstack1, 3, 30, false)) {
                     return ItemStack.EMPTY;
-                }else if (!this.mergeItemStack(itemstack1, 3, 39, false)) {
+                }else if (!this.moveItemStackTo(itemstack1, 3, 39, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 3, 39, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 3, 39, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
@@ -117,7 +117,7 @@ public class ContainerMetalPress extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
     //Why do I have to do this all over again forge :kekw:
@@ -129,12 +129,12 @@ public class ContainerMetalPress extends Container {
         }
 
         @Override
-        public boolean isItemValid(@Nonnull ItemStack stack) {
-            return stack.getItem().isIn(ModTags.Items.EXTRUSION_MOLD);
+        public boolean mayPlace(@Nonnull ItemStack stack) {
+            return stack.getItem().is(ModTags.Items.EXTRUSION_MOLD);
         }
 
         @Override
-        public int getSlotStackLimit() {
+        public int getMaxStackSize() {
             return 1;
         }
     }

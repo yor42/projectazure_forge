@@ -13,6 +13,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public abstract class ItemEquipmentGun extends ItemEquipmentBase{
 
     protected enums.CanonSize size;
@@ -27,9 +29,9 @@ public abstract class ItemEquipmentGun extends ItemEquipmentBase{
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent("item.tooltip.firerate").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(String.format("%.2f",((float)1/this.firedelay)*20)+"R/s").mergeStyle(TextFormatting.YELLOW)));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        tooltip.add(new TranslationTextComponent("item.tooltip.firerate").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(String.format("%.2f",((float)1/this.firedelay)*20)+"R/s").withStyle(TextFormatting.YELLOW)));
     }
 
     @Override

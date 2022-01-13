@@ -8,6 +8,8 @@ import net.minecraft.entity.ai.goal.TargetGoal;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class DroneOwnerAttackedTargetGoal extends TargetGoal {
     private final AbstractEntityDrone Drone;
     private LivingEntity attacker;
@@ -16,30 +18,30 @@ public class DroneOwnerAttackedTargetGoal extends TargetGoal {
     public DroneOwnerAttackedTargetGoal(AbstractEntityDrone p_i1668_1_) {
         super(p_i1668_1_, false);
         this.Drone = p_i1668_1_;
-        this.setMutexFlags(EnumSet.of(Flag.TARGET));
+        this.setFlags(EnumSet.of(Flag.TARGET));
     }
 
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if (this.Drone.getOwner().isPresent()) {
             LivingEntity lvt_1_1_ = (LivingEntity) this.Drone.getOwner().get();
-            this.attacker = lvt_1_1_.getLastAttackedEntity();
-            int lvt_2_1_ = lvt_1_1_.getLastAttackedEntityTime();
-            return lvt_2_1_ != this.timestamp && this.isSuitableTarget(this.attacker, EntityPredicate.DEFAULT) && this.Drone.shouldAttackEntity(this.attacker, lvt_1_1_);
+            this.attacker = lvt_1_1_.getLastHurtMob();
+            int lvt_2_1_ = lvt_1_1_.getLastHurtMobTimestamp();
+            return lvt_2_1_ != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.Drone.shouldAttackEntity(this.attacker, lvt_1_1_);
         } else {
             return false;
         }
     }
 
-    public void startExecuting() {
-        this.Drone.setAttackTarget(this.attacker);
+    public void start() {
+        this.Drone.setTarget(this.attacker);
         if (this.Drone.getOwner().isPresent()) {
             Entity owner = this.Drone.getOwner().get();
             if(owner instanceof LivingEntity) {
-                this.timestamp = ((LivingEntity)this.Drone.getOwner().get()).getLastAttackedEntityTime();
+                this.timestamp = ((LivingEntity)this.Drone.getOwner().get()).getLastHurtMobTimestamp();
             }
         }
 
-        super.startExecuting();
+        super.start();
     }
 
 }

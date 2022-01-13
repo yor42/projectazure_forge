@@ -16,7 +16,7 @@ public class EntityClaymoreRenderer extends GeoEntityRenderer<EntityClaymore> {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityClaymore entity) {
+    public ResourceLocation getTextureLocation(EntityClaymore entity) {
         return TextureLocation("entity/modelclaymore");
     }
 }

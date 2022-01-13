@@ -13,6 +13,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BasicRefineryBlock extends AbstractMachineBlock {
 
     public BasicRefineryBlock(Properties properties) {
@@ -32,8 +34,8 @@ public class BasicRefineryBlock extends AbstractMachineBlock {
 
     @Override
     protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity TileentityAtPos = worldIn.getTileEntity(pos);
-        if(TileentityAtPos instanceof TileEntityBasicRefinery && player instanceof ServerPlayerEntity && !worldIn.isRemote()){
+        TileEntity TileentityAtPos = worldIn.getBlockEntity(pos);
+        if(TileentityAtPos instanceof TileEntityBasicRefinery && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
             TileEntityBasicRefinery TE = (TileEntityBasicRefinery) TileentityAtPos;
             NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
         }
@@ -41,13 +43,13 @@ public class BasicRefineryBlock extends AbstractMachineBlock {
 
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.isIn(newState.getBlock())) {
-            TileEntity te = worldIn.getTileEntity(pos);
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            TileEntity te = worldIn.getBlockEntity(pos);
             if (te instanceof TileEntityBasicRefinery) {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityBasicRefinery) te);
+                InventoryHelper.dropContents(worldIn, pos, (TileEntityBasicRefinery) te);
             }
-            super.onReplaced(state, worldIn, pos, newState, isMoving);
+            super.onRemove(state, worldIn, pos, newState, isMoving);
         }
     }
 }

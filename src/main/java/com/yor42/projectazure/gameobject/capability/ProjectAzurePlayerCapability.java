@@ -137,10 +137,10 @@ public class ProjectAzurePlayerCapability {
         ListNBT entities = compound.getList("companions", 0);
         for(int i=0; i<entities.size(); i++){
             CompoundNBT nbt = entities.getCompound(i);
-            World world = this.player.getEntityWorld();
-            if(!world.isRemote()){
+            World world = this.player.getCommandSenderWorld();
+            if(!world.isClientSide()){
                 ServerWorld server = (ServerWorld) world;
-                Entity entity = server.getEntityByUuid(nbt.getUniqueId("UUID"));
+                Entity entity = server.getEntity(nbt.getUUID("UUID"));
                 if(entity instanceof AbstractEntityCompanion && ((AbstractEntityCompanion)entity).getOwner() == this.player){
                     this.companionList.add((AbstractEntityCompanion) entity);
                 }

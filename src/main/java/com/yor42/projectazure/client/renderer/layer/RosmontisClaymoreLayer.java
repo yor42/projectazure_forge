@@ -29,7 +29,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityRosmontis entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         int SpellItemIndex = entityLivingBaseIn.getNextSkillItemindex();
         if(entityLivingBaseIn.isSkillItemInindex(0)){
-            matrixStackIn.push();
+            matrixStackIn.pushPose();
             GeoModelProvider modelProvider = new ModelItemClaymore();
             matrixStackIn.scale(1/0.4f,1/0.4f,1/0.4f);
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+0.785398);
@@ -41,16 +41,16 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
             }
             if(shouldDraw) {
                 matrixStackIn.translate(0.75, 0.5 + (ymovement * 0.1), -0.75);
-                matrixStackIn.rotate(new Quaternion(15f, -45, 15f, true));
+                matrixStackIn.mulPose(new Quaternion(15f, -45, 15f, true));
                 GeoModel model = modelProvider.getModel(ModelLocation("misc/modelclaymore1"));
-                RenderType type = RenderType.getEntitySmoothCutout(TextureLocation("entity/modelclaymore1"));
+                RenderType type = RenderType.entitySmoothCutout(TextureLocation("entity/modelclaymore1"));
                 this.render(model, entityLivingBaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             }
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
         ItemStack stack = entityLivingBaseIn.getSkillItem1();
         if(entityLivingBaseIn.isSkillItem(stack)){
-            matrixStackIn.push();
+            matrixStackIn.pushPose();
             GeoModelProvider modelProvider = new ModelItemClaymore();
             matrixStackIn.scale(1/0.4f,1/0.4f,1/0.4f);
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+0.785398);
@@ -62,15 +62,15 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
             }
             if(shouldDraw) {
                 matrixStackIn.translate(-0.75, 0.5 + (ymovement * 0.1), -0.75);
-                matrixStackIn.rotate(new Quaternion(15f, 45, -15f, true));
+                matrixStackIn.mulPose(new Quaternion(15f, 45, -15f, true));
                 GeoModel model = modelProvider.getModel(ModelLocation("misc/modelclaymore1"));
-                RenderType type = RenderType.getEntitySmoothCutout(TextureLocation("entity/modelclaymore1"));
+                RenderType type = RenderType.entitySmoothCutout(TextureLocation("entity/modelclaymore1"));
                 this.render(model, entityLivingBaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             }
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
         if(entityLivingBaseIn.isSkillItemInindex(2)){
-            matrixStackIn.push();
+            matrixStackIn.pushPose();
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+0.52);
             boolean shouldDraw = true;
             if(entityLivingBaseIn.isUsingSpell() && SpellItemIndex == 2){
@@ -82,15 +82,15 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
                 GeoModelProvider modelProvider = new ModelItemClaymore();
                 matrixStackIn.scale(1 / 0.4f, 1 / 0.4f, 1 / 0.4f);
                 matrixStackIn.translate(0.75, 0.5 + (ymovement * 0.1), 0.75);
-                matrixStackIn.rotate(new Quaternion(-15f, 45, 15f, true));
+                matrixStackIn.mulPose(new Quaternion(-15f, 45, 15f, true));
                 GeoModel model = modelProvider.getModel(ModelLocation("misc/modelclaymore1"));
-                RenderType type = RenderType.getEntitySmoothCutout(TextureLocation("entity/modelclaymore1"));
+                RenderType type = RenderType.entitySmoothCutout(TextureLocation("entity/modelclaymore1"));
                 this.render(model, entityLivingBaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             }
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
         if(entityLivingBaseIn.isSkillItemInindex(3)){
-            matrixStackIn.push();
+            matrixStackIn.pushPose();
             GeoModelProvider modelProvider = new ModelClaymore();
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+1.04);
             boolean shouldDraw = true;
@@ -102,12 +102,12 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
             if(shouldDraw) {
                 matrixStackIn.scale(1 / 0.4f, 1 / 0.4f, 1 / 0.4f);
                 matrixStackIn.translate(-0.75, 0.5 + (ymovement * 0.1), 0.75);
-                matrixStackIn.rotate(new Quaternion(-15f, -45, -15f, true));
+                matrixStackIn.mulPose(new Quaternion(-15f, -45, -15f, true));
                 GeoModel model = modelProvider.getModel(ModelLocation("misc/modelclaymore1"));
-                RenderType type = RenderType.getEntitySmoothCutout(TextureLocation("entity/modelclaymore1"));
+                RenderType type = RenderType.entitySmoothCutout(TextureLocation("entity/modelclaymore1"));
                 this.render(model, entityLivingBaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             }
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
     }
 

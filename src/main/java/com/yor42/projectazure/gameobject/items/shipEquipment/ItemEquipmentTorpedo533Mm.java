@@ -6,6 +6,8 @@ import net.minecraft.nbt.CompoundNBT;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemEquipmentTorpedo533Mm extends ItemEquipmentTorpedo implements IAnimatable {
     public ItemEquipmentTorpedo533Mm(Properties properties, int maxHP) {
         super(properties, maxHP);

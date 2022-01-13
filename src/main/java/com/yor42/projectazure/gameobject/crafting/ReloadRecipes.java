@@ -29,8 +29,8 @@ public class ReloadRecipes extends SpecialRecipe {
     public boolean matches(CraftingInventory inv, World worldIn) {
         this.ReloadTarget = ItemStack.EMPTY;
         ICraftingTableReloadable ReloadTargetItem = null;
-        for(int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
+        for(int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 if(itemstack.getItem() instanceof ICraftingTableReloadable){
                     this.ReloadTarget = itemstack;
@@ -50,8 +50,8 @@ public class ReloadRecipes extends SpecialRecipe {
             this.AmmoList.clear();
         }
 
-        for(int i = 0; i < inv.getSizeInventory(); ++i) {
-            ItemStack itemstack = inv.getStackInSlot(i);
+        for(int i = 0; i < inv.getContainerSize(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
             if (!itemstack.isEmpty()) {
                 if(itemstack.getItem() instanceof ItemAmmo){
                     if(((ItemAmmo) itemstack.getItem()).getCalibur() == ReloadTargetItem.getAmmoType()){
@@ -65,7 +65,7 @@ public class ReloadRecipes extends SpecialRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         ItemStack stackToReturn = this.ReloadTarget.copy();
         int AmmoToAdd = 0;
         for (ItemStack stack : this.AmmoList) {
@@ -77,7 +77,7 @@ public class ReloadRecipes extends SpecialRecipe {
         return addAmmo(stackToReturn, AmmoToAdd);
     }
 
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return width * height >= 2;
     }
 

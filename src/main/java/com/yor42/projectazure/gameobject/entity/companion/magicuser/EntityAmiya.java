@@ -42,16 +42,16 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.isSwingInProgress){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
+        if(this.swinging){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
 
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd_chest", true));
             return PlayState.CONTINUE;
         }
@@ -61,10 +61,10 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getActiveHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getActiveHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
 
@@ -80,7 +80,7 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
             return PlayState.CONTINUE;
         }
-        else if(this.isSitting() || this.getRidingEntity() != null) {
+        else if(this.isOrderedToSit() || this.getVehicle() != null) {
             event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
 
             return PlayState.CONTINUE;
@@ -90,7 +90,7 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("openDoorL", false));
             }
             else{
@@ -108,7 +108,7 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
 
             return PlayState.CONTINUE;
@@ -125,8 +125,8 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+        else if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+            if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
             return PlayState.CONTINUE;
@@ -150,7 +150,7 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             return PlayState.CONTINUE;
         }
 
-        if(this.isSitting() || this.getRidingEntity() != null){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
             return PlayState.CONTINUE;
         }
@@ -207,27 +207,27 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.AmiyaMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.AmiyaSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.AmiyaHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.AmiyaAttackDamage.get())
+        return MobEntity.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.AmiyaMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.AmiyaSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.AmiyaHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.AmiyaAttackDamage.get())
                 ;
     }
 
     @Override
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
         if(target.isAlive()){
-            double x = target.getPosX() - (this.getPosX());
-            double y = target.getPosYHeight(0.5) - (this.getPosYHeight(0.7));
-            double z = target.getPosZ() - (this.getPosZ());
+            double x = target.getX() - (this.getX());
+            double y = target.getY(0.5) - (this.getY(0.7));
+            double z = target.getZ() - (this.getZ());
 
-            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getEntityWorld(), this);
+            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this);
             projectile.shoot(x,y,z, 1.1F, 0.05F);
-            projectile.setPosition(this.getPosX(), this.getPosYHeight(0.7), this.getPosZ());
-            this.getEntityWorld().addEntity(projectile);
+            projectile.setPos(this.getX(), this.getY(0.7), this.getZ());
+            this.getCommandSenderWorld().addFreshEntity(projectile);
 
-            this.playSound(registerSounds.CHIMERA_PROJECTILE_LAUNCH, 1F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+            this.playSound(registerSounds.CHIMERA_PROJECTILE_LAUNCH, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);
             this.addExp(0.2F);
             this.addExhaustion(0.05F);
             this.addMorale(-0.2);

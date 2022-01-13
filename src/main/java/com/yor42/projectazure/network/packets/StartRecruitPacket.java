@@ -30,8 +30,8 @@ public class StartRecruitPacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity sender = ctx.get().getSender();
             if(sender != null){
-                World world = sender.getServerWorld();
-                TileEntity TE = world.getTileEntity(msg.pos);
+                World world = sender.getLevel();
+                TileEntity TE = world.getBlockEntity(msg.pos);
                 if(TE instanceof AbstractTileEntityGacha){
                     ((AbstractTileEntityGacha) TE).StartMachine(sender);
                 }

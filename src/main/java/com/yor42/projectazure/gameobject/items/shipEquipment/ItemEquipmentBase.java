@@ -22,6 +22,8 @@ import java.util.List;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
+import net.minecraft.item.Item.Properties;
+
 public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnimatable {
 
 
@@ -39,7 +41,7 @@ public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnim
     }
 
     @Override
-    public boolean shouldSyncTag() {
+    public boolean shouldOverrideMultiplayerNbt() {
         return true;
     }
 
@@ -68,10 +70,10 @@ public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnim
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.equipmenttype").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.slot.getName()).mergeStyle(TextFormatting.BLUE)));
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
+        tooltip.add(new TranslationTextComponent("item.tooltip.equipmenttype").append(": ").withStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.slot.getName()).withStyle(TextFormatting.BLUE)));
     }
 
     public ResourceLocation getTexture(){

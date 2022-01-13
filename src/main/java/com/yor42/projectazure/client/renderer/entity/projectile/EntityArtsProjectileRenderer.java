@@ -23,7 +23,7 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 public class EntityArtsProjectileRenderer extends EntityRenderer<EntityArtsProjectile> {
 
     private static final ResourceLocation TEXTURE = ModResourceLocation("textures/entity/projectile/artsprojectile.png");
-    private static final RenderType RENDER_TYPE = RenderType.getEntityCutoutNoCull(TEXTURE);
+    private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEXTURE);
 
     public EntityArtsProjectileRenderer(EntityRendererManager renderManager) {
         super(renderManager);
@@ -31,7 +31,7 @@ public class EntityArtsProjectileRenderer extends EntityRenderer<EntityArtsProje
 
     @Nonnull
     @Override
-    public ResourceLocation getEntityTexture(@Nonnull EntityArtsProjectile entity) {
+    public ResourceLocation getTextureLocation(@Nonnull EntityArtsProjectile entity) {
         return TEXTURE;
     }
 
@@ -40,11 +40,11 @@ public class EntityArtsProjectileRenderer extends EntityRenderer<EntityArtsProje
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         Model model = new ModelArtsProjectile();
         IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0, -1.2, 0);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
-        model.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
-        matrixStackIn.pop();
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
+        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
+        model.renderToBuffer(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
+        matrixStackIn.popPose();
     }
 }

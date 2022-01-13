@@ -16,20 +16,20 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
     }
 
     public boolean hasMeleeItem(){
-        Item item = this.getHeldItemMainhand().getItem();
+        Item item = this.getMainHandItem().getItem();
         return this.getTalentedWeaponList().contains(item) || item instanceof SwordItem;
     }
     public boolean shouldUseNonVanillaAttack(LivingEntity target){
-        return this.hasMeleeItem() && !this.isSwimming() && !this.isSitting() && this.getRidingEntity() == null;
+        return this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null;
     }
 
     public boolean isUsingTalentedWeapon(){
-        return this.getTalentedWeaponList().contains(this.getHeldItemMainhand().getItem());
+        return this.getTalentedWeaponList().contains(this.getMainHandItem().getItem());
     }
 
     public void StartMeleeAttackingEntity() {
         this.setMeleeAttackDelay((int) (this.getInitialMeleeAttackDelay() *this.getAttackSpeedModifier(this.isUsingTalentedWeapon())));
-        this.StartedMeleeAttackTimeStamp = this.ticksExisted;
+        this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
 
     public abstract float getAttackSpeedModifier(boolean isUsingTalentedWeapon);

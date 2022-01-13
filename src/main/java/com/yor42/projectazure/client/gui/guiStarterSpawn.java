@@ -46,7 +46,7 @@ public class guiStarterSpawn extends Screen {
         this.minecraft = minecraft;
         this.scrollBarFarLeft = this.x+13;
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        this.minecraft.getTextureManager().bind(TEXTURE);
         //this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         for(int index = 0; index < StarterList.length; index++) {
             int buttonHeight = 127;
@@ -54,7 +54,7 @@ public class guiStarterSpawn extends Screen {
                 int finalIndex = index;
                 Button button = createButton(this.x+9+(index * buttonWidth), this.y+26, buttonWidth, buttonHeight, index, StarterList[index], (action) -> {
                     Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex));
-                    this.closeScreen();
+                    this.onClose();
                 });
                 this.addButton(button);
                         //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslationTextComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
@@ -110,7 +110,7 @@ public class guiStarterSpawn extends Screen {
 
     private void drawBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 

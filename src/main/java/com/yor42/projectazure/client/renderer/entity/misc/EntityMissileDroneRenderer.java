@@ -25,7 +25,7 @@ public class EntityMissileDroneRenderer extends GeoEntityRenderer<EntityMissileD
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityMissileDrone entity) {
+    public ResourceLocation getTextureLocation(EntityMissileDrone entity) {
         return ModResourceLocation("textures/planes/missiledrone.png");
     }
 
@@ -37,10 +37,10 @@ public class EntityMissileDroneRenderer extends GeoEntityRenderer<EntityMissileD
 
     @Override
     public void render(GeoModel model, EntityMissileDrone animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.scale(0.5F,0.5F,0.5F);
         super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
     }
 
     @Override

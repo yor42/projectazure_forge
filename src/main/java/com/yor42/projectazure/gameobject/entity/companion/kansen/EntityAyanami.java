@@ -30,19 +30,19 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.isSwingInProgress){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
+        if(this.swinging){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_body", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
@@ -51,7 +51,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorL", false));
             }
             else{
@@ -59,10 +59,10 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             }
         }
         else if(this.isEating()){
-            if(this.getActiveHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getActiveHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
@@ -93,8 +93,8 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+        else if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+            if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
             return PlayState.CONTINUE;
@@ -116,7 +116,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_leg", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isSitting() || this.getRidingEntity() != null){
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -143,12 +143,12 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.AyanamiMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.AyanamiSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.AyanamiHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.AyanamiAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.AyanamiMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.AyanamiSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.AyanamiHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.AyanamiAttackDamage.get())
                 ;
     }
 

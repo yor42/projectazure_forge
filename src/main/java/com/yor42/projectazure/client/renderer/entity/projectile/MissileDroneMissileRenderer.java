@@ -19,14 +19,14 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 public class MissileDroneMissileRenderer extends EntityRenderer<EntityMissileDroneMissile> {
 
     private static final ResourceLocation TEXTURE = ModResourceLocation("textures/entity/projectile/missiledrone_missile.png");
-    private static final RenderType RENDER_TYPE = RenderType.getEntityCutoutNoCull(TEXTURE);
+    private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEXTURE);
 
     public MissileDroneMissileRenderer(EntityRendererManager p_i46179_1_) {
         super(p_i46179_1_);
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityMissileDroneMissile entityMissileDroneMissile) {
+    public ResourceLocation getTextureLocation(EntityMissileDroneMissile entityMissileDroneMissile) {
         return TEXTURE;
     }
 
@@ -35,12 +35,12 @@ public class MissileDroneMissileRenderer extends EntityRenderer<EntityMissileDro
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         Model model = new modelProjectileDroneMissile();
         IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         matrixStackIn.translate(0,-0.7,0);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
+        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
         matrixStackIn.scale(0.5F,0.5F,0.5F);
-        model.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
-        matrixStackIn.pop();
+        model.renderToBuffer(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
+        matrixStackIn.popPose();
     }
 }

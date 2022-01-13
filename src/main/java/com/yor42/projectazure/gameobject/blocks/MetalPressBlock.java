@@ -19,7 +19,7 @@ public class MetalPressBlock extends AbstractElectricMachineBlock {
 
 
     public MetalPressBlock() {
-        super((AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 10).harvestLevel(2).sound(SoundType.METAL).notSolid()));
+        super((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()));
     }
 
     @Nullable
@@ -29,8 +29,8 @@ public class MetalPressBlock extends AbstractElectricMachineBlock {
     }
 
     protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity TileentityAtPos = worldIn.getTileEntity(pos);
-        if(TileentityAtPos instanceof TileEntityMetalPress && player instanceof ServerPlayerEntity && !worldIn.isRemote()){
+        TileEntity TileentityAtPos = worldIn.getBlockEntity(pos);
+        if(TileentityAtPos instanceof TileEntityMetalPress && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
             TileEntityMetalPress TE = (TileEntityMetalPress) TileentityAtPos;
             NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
         }

@@ -15,27 +15,27 @@ public class PlaneReturntoOwnerGoal extends Goal {
     AbstractEntityPlanes entity;
     public PlaneReturntoOwnerGoal(AbstractEntityPlanes entityIn){
         this.entity = entityIn;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
 
     @Override
-    public boolean shouldExecute() {
-        return (!this.entity.hasPayload() || this.entity.getAttackTarget() == null || this.entity.getMaxOperativeTick() - this.entity.ticksExisted <200 || !this.entity.getAttackTarget().isAlive()) && this.entity.getOwner() instanceof EntityKansenAircraftCarrier;
+    public boolean canUse() {
+        return (!this.entity.hasPayload() || this.entity.getTarget() == null || this.entity.getMaxOperativeTick() - this.entity.tickCount <200 || !this.entity.getTarget().isAlive()) && this.entity.getOwner() instanceof EntityKansenAircraftCarrier;
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return this.shouldExecute();
+    public boolean canContinueToUse() {
+        return this.canUse();
     }
 
     @Override
     public void tick() {
         super.tick();
         if(this.entity.getOwner() instanceof EntityKansenAircraftCarrier) {
-            this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getOwner(), 2);
+            this.entity.getNavigation().moveTo(this.entity.getOwner(), 2);
             this.entity.setReturningtoOwner(true);
-            if(this.entity.getDistanceSq(this.entity.getOwner())<4F) {
+            if(this.entity.distanceToSqr(this.entity.getOwner())<4F) {
                 if (((EntityKansenAircraftCarrier) this.entity.getOwner()).hasRigging()) {
                     IItemHandler Hanger = ((EntityKansenAircraftCarrier) this.entity.getOwner()).getHanger();
                     if(Hanger != null){

@@ -9,6 +9,8 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemBandage extends ItemBaseTooltip {
 
     public ItemBandage(Properties properties) {
@@ -25,23 +27,23 @@ public class ItemBandage extends ItemBaseTooltip {
     /**
      * returns the action that specifies what animation to play when the items is being used
      */
-    public UseAction getUseAction(ItemStack stack) {
+    public UseAction getUseAnimation(ItemStack stack) {
         return UseAction.BOW;
     }
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        if (player.getHealth() < player.getMaxHealth() && count % 20 == 0 && !player.getEntityWorld().isRemote) {
+        if (player.getHealth() < player.getMaxHealth() && count % 20 == 0 && !player.getCommandSenderWorld().isClientSide) {
             player.heal(1.0f);
-            stack.damageItem(1, player, (entity) -> entity.sendBreakAnimation(player.getActiveHand()));
-            player.getEntityWorld().playSound(null, player.getPosition(), SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, SoundCategory.PLAYERS, 1.0f, 1.0f);
+            stack.hurtAndBreak(1, player, (entity) -> entity.broadcastBreakEvent(player.getUsedItemHand()));
+            player.getCommandSenderWorld().playSound(null, player.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER, SoundCategory.PLAYERS, 1.0f, 1.0f);
         }
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         if(context.getPlayer() != null && context.getPlayer().getHealth()<context.getPlayer().getMaxHealth()) {
-            context.getPlayer().setActiveHand(context.getHand());
+            context.getPlayer().startUsingItem(context.getHand());
             return ActionResultType.CONSUME;
         }
         return ActionResultType.FAIL;

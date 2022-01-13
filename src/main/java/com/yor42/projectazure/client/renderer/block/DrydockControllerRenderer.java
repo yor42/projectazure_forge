@@ -38,13 +38,13 @@ public class DrydockControllerRenderer extends GeoBlockRenderer<MultiblockDrydoc
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if(this.entity.getWorld() != null) {
-            boolean hasProperty = this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).hasProperty(POWERED);
+        if(this.entity.getLevel() != null) {
+            boolean hasProperty = this.entity.getLevel().getBlockState(this.entity.getBlockPos()).hasProperty(ACTIVE) && this.entity.getLevel().getBlockState(this.entity.getBlockPos()).hasProperty(POWERED);
             if(hasProperty) {
                 if (this.LastLightSwitchTime == 0) {
                     this.LastLightSwitchTime = System.currentTimeMillis();
                 }
-                boolean powered = this.entity.getWorld().getBlockState(this.entity.getPos()).get(POWERED) || this.entity.getEnergyStorage().getEnergyStored() >= this.entity.getPowerConsumption();
+                boolean powered = this.entity.getLevel().getBlockState(this.entity.getBlockPos()).getValue(POWERED) || this.entity.getEnergyStorage().getEnergyStored() >= this.entity.getPowerConsumption();
                 if (Objects.equals(bone.getName(), "poweredon")) {
                     bone.setHidden(!powered);
                 } else if (Objects.equals(bone.getName(), "poweredoff")) {
@@ -61,7 +61,7 @@ public class DrydockControllerRenderer extends GeoBlockRenderer<MultiblockDrydoc
                     }
                 }
                 if (bone.getName().contains("activelight") || bone.getName().contains("activeeffect")) {
-                    boolean flag = !(this.entity.getWorld().getBlockState(this.entity.getPos()).get(ACTIVE) && this.entity.getWorld().getBlockState(this.entity.getPos()).get(POWERED));
+                    boolean flag = !(this.entity.getLevel().getBlockState(this.entity.getBlockPos()).getValue(ACTIVE) && this.entity.getLevel().getBlockState(this.entity.getBlockPos()).getValue(POWERED));
                     bone.setHidden(flag);
                 }
             }
@@ -69,10 +69,10 @@ public class DrydockControllerRenderer extends GeoBlockRenderer<MultiblockDrydoc
 
         int light = packedLightIn;
         if (bone.getName().contains("activelight") || bone.getName().contains("powered") || Objects.equals(bone.getName(), "blinker") || Objects.equals(bone.getName(), "activeeffect")) {
-            light = LightTexture.packLight(15, 15);
+            light = LightTexture.pack(15, 15);
         }
 
-        bufferIn = rtb.getBuffer(RenderType.getEntitySmoothCutout(texture));
+        bufferIn = rtb.getBuffer(RenderType.entitySmoothCutout(texture));
         super.renderRecursively(bone, stack, bufferIn, light, packedOverlayIn, red, green, blue, alpha);
 
     }

@@ -46,8 +46,8 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     }
 
     public void addEntry(EntityType<? extends AbstractEntityCompanion> entityType) {
-        if(this.world != null) {
-            AbstractEntityCompanion companion = entityType.create(this.world);
+        if(this.level != null) {
+            AbstractEntityCompanion companion = entityType.create(this.level);
             if(companion!= null) {
                 double weight = this.getWeightFromRarity(companion);
                 accumulatedWeight += weight;
@@ -109,7 +109,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
             if (this.canStartProcess() || starter.isCreative()) {
 
                 EntityType<? extends AbstractEntityCompanion> result = this.getRollResult();
-                AbstractEntityCompanion Entity = result.create(this.world);
+                AbstractEntityCompanion Entity = result.create(this.level);
                 if (Entity != null) {
                     int expectedProcessTime = this.getProcessTimePerEntity(Entity);
                     if (expectedProcessTime > 0) {
@@ -125,7 +125,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
                     }
                 }
             } else {
-                starter.sendMessage(new TranslationTextComponent("machine.notenoughresource"), starter.getUniqueID());
+                starter.sendMessage(new TranslationTextComponent("machine.notenoughresource"), starter.getUUID());
             }
         }
     }
@@ -201,7 +201,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         super.tick();
         boolean isActive = this.isActive();
         boolean shouldsave = false;
-        if (this.world != null && !this.world.isRemote) {
+        if (this.level != null && !this.level.isClientSide) {
             boolean flag1 = this.energyStorage.getEnergyStored() >= this.powerConsumption;
             boolean flag2 = canProcess() && this.shouldProcess && this.totalProcessTime>0;
             if(flag1 && flag2){
@@ -215,7 +215,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
             }
         }
         if(shouldsave){
-            this.markDirty();
+            this.setChanged();
         }
 
         if(!isActive && this.isActive()){
@@ -223,8 +223,8 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         }
 
 
-        if(this.getWorld() != null && isActive != this.isActive()) {
-            this.getWorld().notifyBlockUpdate(this.getPos(), this.getBlockState(), this.getBlockState(), 3);
+        if(this.getLevel() != null && isActive != this.isActive()) {
+            this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
         }
     }
 
@@ -236,14 +236,14 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     protected boolean canProcess(){return true;};
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putInt("processtime", this.ProcessTime);
         compound.putInt("totalprocesstime", this.totalProcessTime);
         compound.putDouble("accumulatedWeight", this.accumulatedWeight);
         compound.putString("taskresult", this.RollResult == null? "null": EntityType.getKey(this.RollResult).toString());
         if(this.nextTaskStarter != null) {
-            compound.putUniqueId("taskOwner", this.nextTaskStarter.getUniqueID());
+            compound.putUUID("taskOwner", this.nextTaskStarter.getUUID());
         }
         compound.putBoolean("shouldProcess", this.shouldProcess);
         return compound;
@@ -254,21 +254,21 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         this.ProcessTime = nbt.getInt("processtime");
         this.totalProcessTime = nbt.getInt("totalprocesstime");
         this.accumulatedWeight = nbt.getDouble("accumulatedWeight");
         this.shouldProcess = nbt.getBoolean("shouldProcess");
         String key = nbt.getString("taskresult");
-        if(key.equals("null") || !EntityType.byKey(key).isPresent()){
+        if(key.equals("null") || !EntityType.byString(key).isPresent()){
             this.RollResult = null;
         }
         else {
             //WARNING: Because of this line DO NOT ADD NON COMPANION ENTITY IN POOL
-            this.RollResult = (EntityType<? extends AbstractEntityCompanion>) EntityType.byKey(key).orElse(null);
+            this.RollResult = (EntityType<? extends AbstractEntityCompanion>) EntityType.byString(key).orElse(null);
         }
-        this.nextTaskStarter = this.world == null || !nbt.contains("taskOwner")? null:this.world.getPlayerByUuid(nbt.getUniqueId("taskOwner"));
+        this.nextTaskStarter = this.level == null || !nbt.contains("taskOwner")? null:this.level.getPlayerByUUID(nbt.getUUID("taskOwner"));
     }
 
     /*

@@ -18,13 +18,13 @@ public class registerPotionEffects {
         }
 
         @Override
-        public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
-            super.performEffect(entityLivingBaseIn, amplifier);
-            entityLivingBaseIn.attackEntityFrom(DamageSources.ACUTE_ORIPATHY, 10F+(float) amplifier/2);
+        public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
+            super.applyEffectTick(entityLivingBaseIn, amplifier);
+            entityLivingBaseIn.hurt(DamageSources.ACUTE_ORIPATHY, 10F+(float) amplifier/2);
         }
 
         @Override
-        public boolean isReady(int duration, int amplifier) {
+        public boolean isDurationEffectTick(int duration, int amplifier) {
             int j = 25 >> amplifier;
             if (j > 0) {
                 return duration % j == 0;

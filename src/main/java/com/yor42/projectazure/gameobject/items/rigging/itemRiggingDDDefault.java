@@ -26,6 +26,8 @@ import software.bernie.geckolib3.model.provider.GeoModelProvider;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
+import net.minecraft.item.Item.Properties;
+
 public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable {
 
     public itemRiggingDDDefault(Properties properties, int HP) {
@@ -72,7 +74,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
 
     @Override
     public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
         GeoModelProvider modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();
         IBone hostbone = entityModel.getModel(entityModel.getModelLocation(null)).getBone("Body").get();
         if (entityModel.getModel(entityModel.getModelLocation(null)).getBone("Body").isPresent()) {
@@ -80,9 +82,9 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
         }
 
 
-        RenderType type = RenderType.getEntitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
+        RenderType type = RenderType.entitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
         this.render(modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
         IMultiInventory inventories = MultiInvUtil.getCap(entitylivingbaseIn.getRigging());
 
         //gun Renderer
@@ -90,33 +92,33 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
         ItemStack stack = inventory.getStackInSlot(0);
         if (stack != ItemStack.EMPTY) {
 
-            matrixStackIn.push();
-            RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
+            matrixStackIn.pushPose();
+            RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
             matrixStackIn.translate((21.25 + hostbone.getPositionX()) / 16, (34.6 + hostbone.getPositionY()) / 16, -(4 + hostbone.getPositionZ()) / 16);
-            matrixStackIn.rotate(new Quaternion(0, 0, -90, true));
+            matrixStackIn.mulPose(new Quaternion(0, 0, -90, true));
 
 
             GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
-            EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
-            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead() - entitylivingbaseIn.renderYawOffset), 7.5F, -12.5F, false, true));
+            EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.xRot));
+            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getYHeadRot() - entitylivingbaseIn.yBodyRot), 7.5F, -12.5F, false, true));
             this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
 
         stack = inventory.getStackInSlot(1);
         if (stack != ItemStack.EMPTY) {
 
-            matrixStackIn.push();
-            RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
+            matrixStackIn.pushPose();
+            RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
             matrixStackIn.translate(-(21.25 + hostbone.getPositionX()) / 16, (34.6 + hostbone.getPositionY()) / 16, -(4 + hostbone.getPositionZ()) / 16);
-            matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
+            matrixStackIn.mulPose(new Quaternion(0, 0, 90, true));
 
 
             GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
-            EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
-            EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead() - entitylivingbaseIn.renderYawOffset), 7.5F, -12.5F, false, true));
+            EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.xRot));
+            EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getYHeadRot() - entitylivingbaseIn.yBodyRot), 7.5F, -12.5F, false, true));
             this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-            matrixStackIn.pop();
+            matrixStackIn.popPose();
         }
 
         //Torpedo Renderer
@@ -124,14 +126,14 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
         stack = inventory.getStackInSlot(0);
         if (stack != ItemStack.EMPTY) {
             if (stack.getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
-                matrixStackIn.push();
-                RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
+                matrixStackIn.pushPose();
+                RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                 matrixStackIn.translate((11.5 + hostbone.getPositionX()) / 16, (23.6 + hostbone.getPositionY()) / 16, (11.5 + hostbone.getPositionZ()) / 16);
-                matrixStackIn.rotate(new Quaternion(0, 0, -90, true));
+                matrixStackIn.mulPose(new Quaternion(0, 0, -90, true));
 
 
                 GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
-                EquipmentModel.getBone("MountX").get().setRotationY(-0.75F - MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
+                EquipmentModel.getBone("MountX").get().setRotationY(-0.75F - MathUtil.DegreeToRadian(entitylivingbaseIn.xRot));
 
                 int AmmoCount = getRemainingAmmo(stack);
                 EquipmentModel.getBone("torpedo4").ifPresent((bone) -> bone.setHidden(AmmoCount < 4));
@@ -140,21 +142,21 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
                 EquipmentModel.getBone("torpedo1").ifPresent((bone) -> bone.setHidden(AmmoCount < 1));
 
                 this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-                matrixStackIn.pop();
+                matrixStackIn.popPose();
             }
         }
 
         stack = inventory.getStackInSlot(1);
         if (stack != ItemStack.EMPTY) {
             if (stack.getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
-                matrixStackIn.push();
-                RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
+                matrixStackIn.pushPose();
+                RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                 matrixStackIn.translate((0 + hostbone.getPositionX()) / 16, (26.6 + hostbone.getPositionY()) / 16, (25.75 + hostbone.getPositionZ()) / 16);
-                matrixStackIn.rotate(new Quaternion(90, 180, 0, true));
+                matrixStackIn.mulPose(new Quaternion(90, 180, 0, true));
 
 
                 GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
-                EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getRotationYawHead() - entitylivingbaseIn.renderYawOffset), 45F, -45F, false, true)));
+                EquipmentModel.getBone("MountX").get().setRotationY((MathUtil.LimitAngleMovement(-(entitylivingbaseIn.getYHeadRot() - entitylivingbaseIn.yBodyRot), 45F, -45F, false, true)));
 
                 int AmmoCount = getRemainingAmmo(stack);
                 EquipmentModel.getBone("torpedo4").ifPresent((bone) -> bone.setHidden(AmmoCount < 4));
@@ -163,21 +165,21 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
                 EquipmentModel.getBone("torpedo1").ifPresent((bone) -> bone.setHidden(AmmoCount < 1));
 
                 this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-                matrixStackIn.pop();
+                matrixStackIn.popPose();
             }
         }
 
         stack = inventory.getStackInSlot(2);
         if (stack != ItemStack.EMPTY) {
             if (stack.getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
-                matrixStackIn.push();
-                RenderType renderType = RenderType.getEntitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
+                matrixStackIn.pushPose();
+                RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                 matrixStackIn.translate(-(11.5 + hostbone.getPositionX()) / 16, (23.6 + hostbone.getPositionY()) / 16, (11.5 + hostbone.getPositionZ()) / 16);
-                matrixStackIn.rotate(new Quaternion(0, 0, 90, true));
+                matrixStackIn.mulPose(new Quaternion(0, 0, 90, true));
 
 
                 GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
-                EquipmentModel.getBone("MountX").get().setRotationY(0.75F + MathUtil.DegreeToRadian(entitylivingbaseIn.rotationPitch));
+                EquipmentModel.getBone("MountX").get().setRotationY(0.75F + MathUtil.DegreeToRadian(entitylivingbaseIn.xRot));
 
                 int AmmoCount = getRemainingAmmo(stack);
                 EquipmentModel.getBone("torpedo4").ifPresent((bone) -> bone.setHidden(AmmoCount < 4));
@@ -186,7 +188,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
                 EquipmentModel.getBone("torpedo1").ifPresent((bone) -> bone.setHidden(AmmoCount < 1));
 
                 this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-                matrixStackIn.pop();
+                matrixStackIn.popPose();
             }
         }
     }

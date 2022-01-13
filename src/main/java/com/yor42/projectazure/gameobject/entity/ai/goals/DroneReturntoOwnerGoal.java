@@ -14,11 +14,11 @@ public class DroneReturntoOwnerGoal extends Goal {
     AbstractEntityDrone entity;
     public DroneReturntoOwnerGoal(AbstractEntityDrone entityIn){
         this.entity = entityIn;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
         if(!this.entity.getOwner().isPresent()){
             return false;
@@ -32,17 +32,17 @@ public class DroneReturntoOwnerGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return this.shouldExecute();
+    public boolean canContinueToUse() {
+        return this.canUse();
     }
 
     @Override
-    public void startExecuting() {
-        super.startExecuting();
+    public void start() {
+        super.start();
         if(this.entity.getOwner().isPresent()) {
             this.entity.setReturningtoOwner(true);
-            this.entity.getNavigator().clearPath();
-            this.entity.getNavigator().tryMoveToEntityLiving(this.entity.getOwner().get(), 1);
+            this.entity.getNavigation().stop();
+            this.entity.getNavigation().moveTo(this.entity.getOwner().get(), 1);
         }
     }
 
@@ -51,17 +51,17 @@ public class DroneReturntoOwnerGoal extends Goal {
         super.tick();
         if(this.entity.getOwner().isPresent()) {
             Entity owner = this.entity.getOwner().get();
-            if(this.entity.ticksExisted % 30 == 0){
-                this.entity.getNavigator().tryMoveToEntityLiving(owner, 1);
+            if(this.entity.tickCount % 30 == 0){
+                this.entity.getNavigation().moveTo(owner, 1);
             }
 
-            if(this.entity.getDistance(owner)>3){
+            if(this.entity.distanceTo(owner)>3){
                 ItemStack stack = this.entity.turnPlanetoItemStack();
                 boolean ItemInserted = false;
                 if(owner instanceof PlayerEntity){
-                    for(int i = 0; i< ((PlayerEntity) owner).inventory.getSizeInventory(); i++){
-                        if(((PlayerEntity) owner).inventory.isItemValidForSlot(i, stack)){
-                            ((PlayerEntity) owner).inventory.setInventorySlotContents(i, stack);
+                    for(int i = 0; i< ((PlayerEntity) owner).inventory.getContainerSize(); i++){
+                        if(((PlayerEntity) owner).inventory.canPlaceItem(i, stack)){
+                            ((PlayerEntity) owner).inventory.setItem(i, stack);
                             this.entity.remove();
                             ItemInserted = true;
                             break;
@@ -80,7 +80,7 @@ public class DroneReturntoOwnerGoal extends Goal {
                     }
                 }
                 if(!ItemInserted){
-                    this.entity.serializePlane(this.entity.getEntityWorld());
+                    this.entity.serializePlane(this.entity.getCommandSenderWorld());
                 }
             }
         }

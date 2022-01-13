@@ -13,6 +13,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class SilliconCrucibleBlock extends AbstractBigMachineBlock {
     public SilliconCrucibleBlock(Properties properties) {
         super(properties);
@@ -30,16 +32,16 @@ public class SilliconCrucibleBlock extends AbstractBigMachineBlock {
     }
 
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        worldIn.setBlockState(pos.up(), registerBlocks.BOUNDING_BOX.get().getDefaultState());
-        if(worldIn.getTileEntity(pos.up()) instanceof TileEntityBoundingBox) {
-            ((TileEntityBoundingBox) worldIn.getTileEntity(pos.up())).setMaster(worldIn.getTileEntity(pos));
+    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(worldIn, pos, state, placer, stack);
+        worldIn.setBlockAndUpdate(pos.above(), registerBlocks.BOUNDING_BOX.get().defaultBlockState());
+        if(worldIn.getBlockEntity(pos.above()) instanceof TileEntityBoundingBox) {
+            ((TileEntityBoundingBox) worldIn.getBlockEntity(pos.above())).setMaster(worldIn.getBlockEntity(pos));
         }
     }
 
     @Override
     public void DestroyBoundingBox(World worldIn, BlockPos pos, BlockState state, @Nullable PlayerEntity player) {
-        worldIn.destroyBlock(pos.up(), false, player);
+        worldIn.destroyBlock(pos.above(), false, player);
     }
 }

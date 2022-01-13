@@ -8,6 +8,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class CompanionMoveToRecruitStationGoal extends Goal {
 
     private final AbstractEntityCompanion host;
@@ -15,27 +17,27 @@ public class CompanionMoveToRecruitStationGoal extends Goal {
 
     public CompanionMoveToRecruitStationGoal(AbstractEntityCompanion companion){
         this.host = companion;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Flag.JUMP));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Flag.JUMP));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         this.NextPos = this.getPosition();
         return this.host.isMovingtoRecruitStation && this.host.getRecruitStationPos().isPresent() && this.NextPos != null;
     }
 
     @Override
     public void tick() {
-        if(this.NextPos == null || this.host.getDistanceSq(this.NextPos)<=9){
+        if(this.NextPos == null || this.host.distanceToSqr(this.NextPos)<=9){
             this.NextPos = this.getPosition();
-            this.host.getNavigator().clearPath();
+            this.host.getNavigation().stop();
         }
 
         if(this.NextPos != null) {
-            this.host.getNavigator().tryMoveToXYZ(this.NextPos.getX(), this.NextPos.getY(), this.NextPos.getZ(), 1.0);
+            this.host.getNavigation().moveTo(this.NextPos.x(), this.NextPos.y(), this.NextPos.z(), 1.0);
         }
 
-        if(this.host.getRecruitStationPos().isPresent() && this.host.getDistanceSq(this.host.getRecruitStationPos().get().getX(),this.host.getRecruitStationPos().get().getY(),this.host.getRecruitStationPos().get().getZ())<=9){
+        if(this.host.getRecruitStationPos().isPresent() && this.host.distanceToSqr(this.host.getRecruitStationPos().get().getX(),this.host.getRecruitStationPos().get().getY(),this.host.getRecruitStationPos().get().getZ())<=9){
             this.host.stopMovingtoRecruitStation();
         }
 
@@ -44,7 +46,7 @@ public class CompanionMoveToRecruitStationGoal extends Goal {
     @Nullable
     protected Vector3d getPosition() {
         if(this.host.getRecruitStationPos().isPresent()) {
-            return RandomPositionGenerator.findRandomTargetBlockTowards(this.host, 10, 7, Vector3d.copyCentered(this.host.getRecruitStationPos().get()));
+            return RandomPositionGenerator.getPosTowards(this.host, 10, 7, Vector3d.atCenterOf(this.host.getRecruitStationPos().get()));
         }
         else{
             return null;

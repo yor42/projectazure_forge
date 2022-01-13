@@ -51,7 +51,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
         ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
         CompoundNBT itemTags = tagList.getCompound(slot);
         if(slot == itemTags.getInt("Slot"))
-            return ItemStack.read(itemTags);
+            return ItemStack.of(itemTags);
         else
         {
             //in case of item isnt saved in order, doubt it will ever happen, but as an failsafe because ItemStack handler checks this too.
@@ -59,7 +59,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
                 itemTags = tagList.getCompound(i);
                 int slotnum = itemTags.getInt("Slot");
                 if(slot == slotnum){
-                    return ItemStack.read(itemTags);
+                    return ItemStack.of(itemTags);
                 }
             }
         }
@@ -75,7 +75,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
         if(slot == itemTags.getInt("Slot")){
             CompoundNBT itemTag = new CompoundNBT();
             itemTag.putInt("Slot", slot);
-            stack.write(itemTag);
+            stack.save(itemTag);
             tagList.set(slot, itemTag);
         }
         else
@@ -87,7 +87,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
                 if(slot == slotnum){
                     CompoundNBT itemTag = new CompoundNBT();
                     itemTag.putInt("Slot", slot);
-                    stack.write(itemTag);
+                    stack.save(itemTag);
                     tagList.set(slot, itemTag);
                 }
             }
@@ -203,7 +203,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
         for (int i = 0; i < newsize; i++){
             CompoundNBT itemTag = new CompoundNBT();
             itemTag.putInt("Slot", i);
-            ItemStack.EMPTY.write(itemTag);
+            ItemStack.EMPTY.save(itemTag);
             nbtTagList.add(itemTag);
         }
         CompoundNBT nbt = this.getContainerNBT();

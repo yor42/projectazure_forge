@@ -8,6 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class AbstractContainerBlock extends Block {
     public AbstractContainerBlock(Properties properties) {
         super(properties);
@@ -22,22 +24,22 @@ public class AbstractContainerBlock extends Block {
     }
 
     @Override
-    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 
-        TileEntity tile = worldIn.getTileEntity(pos);
+        TileEntity tile = worldIn.getBlockEntity(pos);
 
         //drop item
         if (canDropInventory(state) && tile instanceof IInventory)
         {
-            InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tile);
+            InventoryHelper.dropContents(worldIn, pos, (IInventory) tile);
         }
 
         //alert block change
         if (shouldNotifyBlockChange())
         {
-            worldIn.updateComparatorOutputLevel(pos, this);
+            worldIn.updateNeighbourForOutputSignal(pos, this);
         }
 
-        super.onReplaced(state, worldIn, pos, newState, isMoving);
+        super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 }

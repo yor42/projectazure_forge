@@ -25,13 +25,13 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
 
     public EntityGangwon(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
-        this.setTamed(false);
+        this.setTame(false);
     }
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
@@ -40,16 +40,16 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep_arm", true));
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
-            if(this.isSitting())
+            if(this.isOrderedToSit())
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));
             else
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", true));
@@ -59,7 +59,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorL", false));
             }
             else{
@@ -67,10 +67,10 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             }
         }
         else if(this.isEating()){
-            if(this.getActiveHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getActiveHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
@@ -98,13 +98,13 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
                 return PlayState.CONTINUE;
             }
             else{
-                if(this.isSitting()) {
+                if(this.isOrderedToSit()) {
                     event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_arm", true));
                     return PlayState.CONTINUE;
                 }
                 else{
-                    if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-                        if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+                    if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+                        if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                             event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
                         }
                         return PlayState.CONTINUE;
@@ -125,7 +125,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event)
     {
 
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
@@ -135,7 +135,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
 
-        if(this.isSitting() || this.getRidingEntity() != null){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_start").addAnimation("animation.gangwon.sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -161,12 +161,12 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.GangwonMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.GangwonSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.GangwonHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.GangwonAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.GangwonMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.GangwonSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.GangwonHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.GangwonAttackDamage.get())
                 ;
     }
 

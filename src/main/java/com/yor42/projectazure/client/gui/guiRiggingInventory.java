@@ -33,10 +33,10 @@ public class guiRiggingInventory extends ContainerScreen<RiggingContainer> imple
         super.init(minecraft, width, height);
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2+14;
-        this.playerInventoryTitleX = 9;
-        this.playerInventoryTitleY = 100;
-        this.titleX = 11;
-        this.titleY=9;
+        this.inventoryLabelX = 9;
+        this.inventoryLabelY = 100;
+        this.titleLabelX = 11;
+        this.titleLabelY=9;
     }
 
     @Override
@@ -48,20 +48,20 @@ public class guiRiggingInventory extends ContainerScreen<RiggingContainer> imple
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         this.renderSlotBackgrounds(matrixStack);
     }
 
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-        //this.font.func_243248_b(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 14085119);
-        this.font.func_243248_b(matrixStack, this.playerInventory.getDisplayName(), (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 14085119);
+    protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+        //this.font.draw(matrixStack, this.title, (float)this.titleX, (float)this.titleY, 14085119);
+        this.font.draw(matrixStack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 14085119);
     }
     private void renderSlotBackgrounds(MatrixStack matrixStack){
         if(this.riggingStack.getItem() instanceof ItemRiggingBase) {

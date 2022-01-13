@@ -13,6 +13,6 @@ import java.util.function.Consumer;
 public class Achievements implements Consumer<Consumer<Advancement>>{
     @Override
     public void accept(Consumer<Advancement> advancementConsumer) {
-        Advancement.Builder.builder().withDisplay(Items.LEAD, new TranslationTextComponent("achievements.nicetry.title"), new TranslationTextComponent("achievements.nicetry.description"), null, FrameType.GOAL, true, true, true).withCriterion("name_dinnerbone", NameEntityCriterion.Instance.any()).register(advancementConsumer, "achievement/nice_try");
+        Advancement.Builder.advancement().display(Items.LEAD, new TranslationTextComponent("achievements.nicetry.title"), new TranslationTextComponent("achievements.nicetry.description"), null, FrameType.GOAL, true, true, true).addCriterion("name_dinnerbone", NameEntityCriterion.Instance.any()).save(advancementConsumer, "achievement/nice_try");
     }
 }

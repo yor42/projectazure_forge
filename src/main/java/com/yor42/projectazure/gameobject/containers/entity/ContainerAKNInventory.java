@@ -42,12 +42,12 @@ public class ContainerAKNInventory extends Container {
         for (int l = 0; l < 4; l++) {
             int finalL = l;
             this.addSlot(new SlotItemHandler(EntityEquipment, 2 + finalL, 93, 4 + finalL * 18) {
-                public int getSlotStackLimit() {
+                public int getMaxStackSize() {
                     return 1;
                 }
 
                 @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
+                public boolean mayPlace(@Nonnull ItemStack stack) {
                     return stack.getItem() instanceof ArmorItem;
                 }
             });
@@ -64,7 +64,7 @@ public class ContainerAKNInventory extends Container {
                 for (int n = 0; n < 2; n++) {
                     this.addSlot(new SlotItemHandler(EntityAmmo, n + 2 * m, 180 + n * 18, 13 + m * 18) {
                         @Override
-                        public boolean isItemValid(@Nonnull ItemStack stack) {
+                        public boolean mayPlace(@Nonnull ItemStack stack) {
                             return stack.getItem() instanceof ItemMagazine;
                         }
                     });
@@ -75,7 +75,7 @@ public class ContainerAKNInventory extends Container {
         for(int l = 0; l<this.companion.getSkillItemCount(); l++){
             this.addSlot(new SlotItemHandler(entityInventory, 12+l, -21, 20+l*18){
                 @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
+                public boolean mayPlace(@Nonnull ItemStack stack) {
                     return ContainerAKNInventory.this.companion.isSkillItem(stack);
                 }
             });
@@ -93,14 +93,14 @@ public class ContainerAKNInventory extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 
     @Override
-    public void onContainerClosed(PlayerEntity playerIn) {
+    public void removed(PlayerEntity playerIn) {
         Main.PROXY.setSharedMob(null);
-        super.onContainerClosed(playerIn);
+        super.removed(playerIn);
     }
 
     public static class Supplier implements INamedContainerProvider {
@@ -123,11 +123,11 @@ public class ContainerAKNInventory extends Container {
         }
     }
 
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             int i = 6;
             int entityinv = i+12;
@@ -135,45 +135,45 @@ public class ContainerAKNInventory extends Container {
             int playerMainInv = ammoinv + 27;
             int PlayerHotbar = playerMainInv + 9;
             if (index < i) {
-                if (!this.mergeItemStack(itemstack1, i, this.inventorySlots.size(), true)) {
+                if (!this.moveItemStackTo(itemstack1, i, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (this.getSlot(2).isItemValid(itemstack1) && !this.getSlot(2).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
+            } else if (this.getSlot(2).mayPlace(itemstack1) && !this.getSlot(2).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 2, 3, false)) {
                     return ItemStack.EMPTY;
                 }
-            }else if (this.getSlot(3).isItemValid(itemstack1) && !this.getSlot(3).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 3, 4, false)) {
+            }else if (this.getSlot(3).mayPlace(itemstack1) && !this.getSlot(3).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 3, 4, false)) {
                     return ItemStack.EMPTY;
                 }
-            }else if (this.getSlot(4).isItemValid(itemstack1) && !this.getSlot(4).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 4, 5, false)) {
+            }else if (this.getSlot(4).mayPlace(itemstack1) && !this.getSlot(4).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 4, 5, false)) {
                     return ItemStack.EMPTY;
                 }
-            }else if (this.getSlot(5).isItemValid(itemstack1) && !this.getSlot(5).getHasStack()) {
-                if (!this.mergeItemStack(itemstack1, 5, 6, false)) {
+            }else if (this.getSlot(5).mayPlace(itemstack1) && !this.getSlot(5).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 5, 6, false)) {
                     return ItemStack.EMPTY;
                 }
             }
             if(itemstack1.getItem() instanceof ItemMagazine){
-                if (!this.mergeItemStack(itemstack1, ammoinv, ammoinv+8, false)) {
+                if (!this.moveItemStackTo(itemstack1, ammoinv, ammoinv+8, false)) {
                     return ItemStack.EMPTY;
                 }
             }else if (index < entityinv) {
-                if (!this.mergeItemStack(itemstack1, ammoinv+1, playerMainInv, false)) {
+                if (!this.moveItemStackTo(itemstack1, ammoinv+1, playerMainInv, false)) {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 6, entityinv, false)) {
+            else if (!this.moveItemStackTo(itemstack1, 6, entityinv, false)) {
                 if (index >= playerMainInv && index < PlayerHotbar) {
-                    if (!this.mergeItemStack(itemstack1, i, playerMainInv, false)) {
+                    if (!this.moveItemStackTo(itemstack1, i, playerMainInv, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else if (index < playerMainInv) {
-                    if (!this.mergeItemStack(itemstack1, playerMainInv, PlayerHotbar, false)) {
+                    if (!this.moveItemStackTo(itemstack1, playerMainInv, PlayerHotbar, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (!this.mergeItemStack(itemstack1, playerMainInv, playerMainInv, false)) {
+                } else if (!this.moveItemStackTo(itemstack1, playerMainInv, playerMainInv, false)) {
                     return ItemStack.EMPTY;
                 }
 
@@ -181,9 +181,9 @@ public class ContainerAKNInventory extends Container {
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
         }
 

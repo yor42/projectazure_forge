@@ -24,20 +24,20 @@ public class guiAlloyFurnace extends ContainerScreen<ContainerAlloyFurnace> impl
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
-        this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         if (this.container.isBurning()) {
             int k = this.container.getBurnLeftScaled(13);
-            this.blit(matrixStack, this.guiLeft + 56, this.guiTop + 36 + 12 - k, 176, 12 - k, 14, k + 1);
+            this.blit(matrixStack, this.leftPos + 56, this.topPos + 36 + 12 - k, 176, 12 - k, 14, k + 1);
         }
 
         int l = this.container.getCookProgressionScaled(24);
-        this.blit(matrixStack, this.guiLeft + 79, this.guiTop + 34, 176, 14, l + 1, 16);
+        this.blit(matrixStack, this.leftPos + 79, this.topPos + 34, 176, 14, l + 1, 16);
     }
 }

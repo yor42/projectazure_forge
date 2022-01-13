@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class buttonStarterSelect extends ImageButton {
     private final ResourceLocation resourceLocation;
     private final EntityType entityType;
@@ -49,7 +51,7 @@ public class buttonStarterSelect extends ImageButton {
         int logox, logoy;
 
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bindTexture(this.resourceLocation);
+        minecraft.getTextureManager().bind(this.resourceLocation);
         int i = this.xTexStart;
         if (this.isHovered()) {
             i += this.xDiffText;
@@ -92,7 +94,7 @@ public class buttonStarterSelect extends ImageButton {
         blit(matrixStack, this.x+2, this.y+2, logox, logoy, 53, 53, 256, 256);
 
         if (this.entityType != null) {
-            World world = Minecraft.getInstance().world;
+            World world = Minecraft.getInstance().level;
                 if (world != null){
                     Entity entity;
 
@@ -101,9 +103,9 @@ public class buttonStarterSelect extends ImageButton {
                     if (entity instanceof LivingEntity) {
                         LivingEntity livingEntity = (LivingEntity) entity;
 
-                        int entityWidth = (int) entity.getWidth();
+                        int entityWidth = (int) entity.getBbWidth();
                         try {
-                            InventoryScreen.drawEntityOnScreen(this.x+(this.width/2)-(entityWidth/2), this.y+this.height-5, 40, (float)(this.x + 51) - mouseX, (float)(this.y + 75 - 50) - mouseY, livingEntity);
+                            InventoryScreen.renderEntityInInventory(this.x+(this.width/2)-(entityWidth/2), this.y+this.height-5, 40, (float)(this.x + 51) - mouseX, (float)(this.y + 75 - 50) - mouseY, livingEntity);
                             return;
                         } catch (Exception e) {
                             Main.LOGGER.error("Failed to render Entity!");

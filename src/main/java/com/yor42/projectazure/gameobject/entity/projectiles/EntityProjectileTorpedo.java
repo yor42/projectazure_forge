@@ -44,8 +44,8 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     @OnlyIn(Dist.CLIENT)
     public EntityProjectileTorpedo(World worldIn, double x, double y, double z, double motionXIn, double motionYIn, double motionZIn) {
         this(registerManager.PROJECTILETORPEDO, worldIn);
-        this.setLocationAndAngles(x, y, z, this.rotationYaw, this.rotationPitch);
-        this.setMotion(motionXIn, motionYIn, motionZIn);
+        this.moveTo(x, y, z, this.yRot, this.xRot);
+        this.setDeltaMovement(motionXIn, motionYIn, motionZIn);
     }
 
     public EntityProjectileTorpedo(EntityType<EntityProjectileTorpedo> TypeIn, World world) {
@@ -53,17 +53,17 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     }
 
     @Override
-    protected boolean isFireballFiery() {
+    protected boolean shouldBurn() {
         return false;
     }
 
     @Override
-    public boolean isBurning() {
+    public boolean isOnFire() {
         return false;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -88,79 +88,79 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
             this.existingtime++;
         //1.25 is to compensate valilla slowdown in water.
         float multiplier = this.isInWater()? 1.25F:0.8F;
-        this.setMotion(this.getMotion().add(this.accelerationX, this.accelerationY, this.accelerationZ).scale((double)multiplier));
+        this.setDeltaMovement(this.getDeltaMovement().add(this.xPower, this.yPower, this.zPower).scale((double)multiplier));
 
         changeheading();
 
         boolean flag = !this.isInWater();
 
         ProjectileHelper.rotateTowardsMovement(this, 0.5F);
-        Vector3d vector3d4 = this.getMotion();
+        Vector3d vector3d4 = this.getDeltaMovement();
         if (flag) {
-            this.setMotion(vector3d4.x, vector3d4.y - (double)0.1F, vector3d4.z);
+            this.setDeltaMovement(vector3d4.x, vector3d4.y - (double)0.1F, vector3d4.z);
         }
         else{
-            if(this.getMotion().getY()<0)
-                this.setMotion(vector3d4.x, vector3d4.y + (double)0.05F, vector3d4.z);
+            if(this.getDeltaMovement().y()<0)
+                this.setDeltaMovement(vector3d4.x, vector3d4.y + (double)0.05F, vector3d4.z);
             else {
-                this.setMotion(vector3d4.x, 0, vector3d4.z);
+                this.setDeltaMovement(vector3d4.x, 0, vector3d4.z);
             }
         }
 
     }
 
     private void changeheading(){
-        Vector3d vector3d = this.getMotion();
+        Vector3d vector3d = this.getDeltaMovement();
 
-        if (vector3d.lengthSquared() != 0.0D) {
-            float f = MathHelper.sqrt(Entity.horizontalMag(vector3d));
-            this.rotationYaw = (float)(MathHelper.atan2(vector3d.z, vector3d.x) * (double)(180F / (float)Math.PI)) + 90.0F;
+        if (vector3d.lengthSqr() != 0.0D) {
+            float f = MathHelper.sqrt(Entity.getHorizontalDistanceSqr(vector3d));
+            this.yRot = (float)(MathHelper.atan2(vector3d.z, vector3d.x) * (double)(180F / (float)Math.PI)) + 90.0F;
 
-            while(this.rotationPitch - this.prevRotationPitch >= 180.0F) {
-                this.prevRotationPitch += 360.0F;
+            while(this.xRot - this.xRotO >= 180.0F) {
+                this.xRotO += 360.0F;
             }
 
-            while(this.rotationYaw - this.prevRotationYaw < -180.0F) {
-                this.prevRotationYaw -= 360.0F;
+            while(this.yRot - this.yRotO < -180.0F) {
+                this.yRotO -= 360.0F;
             }
 
-            while(this.rotationYaw - this.prevRotationYaw >= 180.0F) {
-                this.prevRotationYaw += 360.0F;
+            while(this.yRot - this.yRotO >= 180.0F) {
+                this.yRotO += 360.0F;
             }
         }
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
+    protected void onHit(RayTraceResult result) {
         explode();
         this.remove();
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityRayTraceResult result) {
         Entity entity = result.getEntity();
-        entity.attackEntityFrom(DamageSources.causeTorpedoDamage(this, this.func_234616_v_()), 10F);
+        entity.hurt(DamageSources.causeTorpedoDamage(this, this.getOwner()), 10F);
         explode();
-        super.onEntityHit(result);
+        super.onHitEntity(result);
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
         selfDestruct();
         return true;
     }
 
     private void explode(){
-        this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), 3.5F, PAConfig.CONFIG.EnableTorpedoBlockDamage.get()? Explosion.Mode.DESTROY:Explosion.Mode.NONE);
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 3.5F, PAConfig.CONFIG.EnableTorpedoBlockDamage.get()? Explosion.Mode.DESTROY:Explosion.Mode.NONE);
     }
 
     private void selfDestruct(){
-        this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), 2.0F, Explosion.Mode.BREAK);
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, Explosion.Mode.BREAK);
         this.remove();
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return this.isInWater();
     }
 

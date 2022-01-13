@@ -26,33 +26,35 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemContributorBonus extends Item {
     //Item Provided to people who helped development on idea and such containing spawn eggs. this mod has no patreon or any way of financial support.
 
     public ItemContributorBonus(Properties properties) {
-        super(properties.maxStackSize(1).rarity(Rarity.EPIC));
+        super(properties.stacksTo(1).rarity(Rarity.EPIC));
     }
 
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
         return stack.getOrCreateTag().contains("inventory");
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
+    public ActionResult<ItemStack> use(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
 
-        ItemStack cube = playerIn.getHeldItem(handIn);
+        ItemStack cube = playerIn.getItemInHand(handIn);
 
-        UUID PlayerUUID = playerIn.getUniqueID();
+        UUID PlayerUUID = playerIn.getUUID();
         CompoundNBT compound = cube.getOrCreateTag();
 
         //openGui
-        if(compound.hasUniqueId("owner")){
-            UUID OwnerUUID = compound.getUniqueId("owner");
+        if(compound.hasUUID("owner")){
+            UUID OwnerUUID = compound.getUUID("owner");
             if(!PlayerUUID.equals(OwnerUUID)) {
                 playerIn.sendMessage(new TranslationTextComponent("message.rewardbag.notowner"), UUID.randomUUID());
-                return ActionResult.resultFail(cube);
+                return ActionResult.fail(cube);
             }
         }
         if(compound.contains("inventory")){
@@ -60,26 +62,26 @@ public class ItemContributorBonus extends Item {
             for (int i = 0; i < list.size(); i++)
             {
                 CompoundNBT ItemInfo = list.getCompound(i);
-                ItemStack stack = ItemStack.read(ItemInfo);
-                int index = playerIn.inventory.getFirstEmptyStack();
+                ItemStack stack = ItemStack.of(ItemInfo);
+                int index = playerIn.inventory.getFreeSlot();
                 if(index>0){
-                    playerIn.inventory.setInventorySlotContents(index, stack);
+                    playerIn.inventory.setItem(index, stack);
                 }
                 else{
-                    ItemEntity entity = new ItemEntity(worldIn, playerIn.getPosX(), playerIn.getPosY(),playerIn.getPosZ(), stack);
-                    worldIn.addEntity(entity);
+                    ItemEntity entity = new ItemEntity(worldIn, playerIn.getX(), playerIn.getY(),playerIn.getZ(), stack);
+                    worldIn.addFreshEntity(entity);
                 }
             }
         }
-        playerIn.getHeldItem(handIn).shrink(1);
-        return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+        playerIn.getItemInHand(handIn).shrink(1);
+        return ActionResult.success(playerIn.getItemInHand(handIn));
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent(stack.getItem().getTranslationKey()+".tooltip").mergeStyle(TextFormatting.GRAY));
-        if (worldIn != null && worldIn.isRemote) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
+        if (worldIn != null && worldIn.isClientSide) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
         }
     }
@@ -87,22 +89,22 @@ public class ItemContributorBonus extends Item {
     @OnlyIn(Dist.CLIENT)
     public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
         CompoundNBT compound = stack.getOrCreateTag();
-        UUID OwnerID = compound.getUniqueId("owner");
+        UUID OwnerID = compound.getUUID("owner");
         @Nullable
-        PlayerEntity owner = worldIn.getPlayerByUuid(OwnerID);
+        PlayerEntity owner = worldIn.getPlayerByUUID(OwnerID);
         if (owner != null) {
-            tooltip.add(new TranslationTextComponent(stack.getItem().getTranslationKey()+".tooltip.owner").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(owner.getDisplayName().getString()).mergeStyle(TextFormatting.YELLOW)));
+            tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip.owner").withStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(owner.getDisplayName().getString()).withStyle(TextFormatting.YELLOW)));
         }
         else{
-            tooltip.add(new TranslationTextComponent(stack.getItem().getTranslationKey()+".tooltip.owner").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(OwnerID.toString()).mergeStyle(TextFormatting.RED)));
+            tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip.owner").withStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(OwnerID.toString()).withStyle(TextFormatting.RED)));
         }
         if(compound.contains("inventory")){
-            tooltip.add(new TranslationTextComponent(stack.getItem().getTranslationKey()+".tooltip.content").mergeStyle(TextFormatting.YELLOW));
+            tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip.content").withStyle(TextFormatting.YELLOW));
             ListNBT list = compound.getList("inventory", Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++) {
                 CompoundNBT ItemInfo = list.getCompound(i);
-                ItemStack content = ItemStack.read(ItemInfo);
-                tooltip.add(content.getDisplayName());
+                ItemStack content = ItemStack.of(ItemInfo);
+                tooltip.add(content.getHoverName());
             }
         }
     }

@@ -20,22 +20,22 @@ public class ResultSlotStackHandler extends SlotItemHandler {
         this.isSmelting = isSmelting;
     }
 
-    public ItemStack decrStackSize(int amount) {
-        if (this.getHasStack()) {
-            this.removeCount += Math.min(amount, this.getStack().getCount());
+    public ItemStack remove(int amount) {
+        if (this.hasItem()) {
+            this.removeCount += Math.min(amount, this.getItem().getCount());
         }
 
-        return super.decrStackSize(amount);
+        return super.remove(amount);
     }
 
     @Override
-    public boolean isItemValid(@Nonnull ItemStack stack) {
+    public boolean mayPlace(@Nonnull ItemStack stack) {
         return false;
     }
 
     @Override
     public ItemStack onTake(PlayerEntity thePlayer, ItemStack stack) {
-        this.onCrafting(stack);
+        this.checkTakeAchievements(stack);
         return super.onTake(thePlayer, stack);
     }
 
@@ -43,18 +43,18 @@ public class ResultSlotStackHandler extends SlotItemHandler {
      * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood. Typically increases an
      * internal count then calls onCrafting(item).
      */
-    protected void onCrafting(ItemStack stack, int amount) {
+    protected void onQuickCraft(ItemStack stack, int amount) {
         this.removeCount += amount;
-        this.onCrafting(stack);
+        this.checkTakeAchievements(stack);
     }
 
     /**
      * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
      */
-    protected void onCrafting(ItemStack stack) {
-        stack.onCrafting(this.player.world, this.player, this.removeCount);
-        if (!this.player.world.isRemote && this.inventory instanceof AbstractFurnaceTileEntity) {
-            ((AbstractFurnaceTileEntity)this.inventory).unlockRecipes(this.player);
+    protected void checkTakeAchievements(ItemStack stack) {
+        stack.onCraftedBy(this.player.level, this.player, this.removeCount);
+        if (!this.player.level.isClientSide && this.container instanceof AbstractFurnaceTileEntity) {
+            ((AbstractFurnaceTileEntity)this.container).awardUsedRecipesAndPopExperience(this.player);
         }
 
         this.removeCount = 0;

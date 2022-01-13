@@ -61,7 +61,7 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
                 textureX = 176;
                 format = TextFormatting.DARK_RED;
             }
-            iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new StringTextComponent(((int)morale)+"/150").mergeStyle(format));
+            iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new StringTextComponent(((int)morale)+"/150").withStyle(format));
             IFormattableTextComponent Leveltext = new TranslationTextComponent("top.companion_level.message",companion.getLevel());
             if(probeMode == ProbeMode.EXTENDED){
                 Leveltext.append(new StringTextComponent(" ["+ ((int)Math.floor(companion.getExp()))+"/"+ ((int)Math.floor(companion.getMaxExp())) +"]"));
@@ -96,13 +96,13 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
                     color = 7829367;
                     textureX = 176;
                 }
-                iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new StringTextComponent(((int)morale)+"/150").setStyle(Style.EMPTY.setColor(Color.fromInt(color))));
+                iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new StringTextComponent(((int)morale)+"/150").setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
             }
             if(companion.getLimitBreakLv()>0){
                 iProbeInfo.horizontal().text(new TranslationTextComponent("top.companion_limit_break.message",companion.getLimitBreakLv()));
             }
             if(companion.getOwner() != null) {
-                iProbeInfo.horizontal().text(new TranslationTextComponent("top.companion_owner.message").append(companion.getOwner().getName()).mergeStyle(TextFormatting.YELLOW));
+                iProbeInfo.horizontal().text(new TranslationTextComponent("top.companion_owner.message").append(companion.getOwner().getName()).withStyle(TextFormatting.YELLOW));
             }
             if(gunstack.getItem() instanceof ItemGunBase){
                 int RemainingAmmo = ItemStackUtils.getRemainingAmmo(gunstack);

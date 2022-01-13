@@ -25,22 +25,22 @@ public class RenderingUtils {
      */
     public static void drawRepeatedFluidSpriteGui(IRenderTypeBuffer buffer, MatrixStack stack, FluidStack fluid, float x, float y, float w, float h)
     {
-        RenderType renderType = getGui(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+        RenderType renderType = getGui(PlayerContainer.BLOCK_ATLAS);
         IVertexBuilder builder = buffer.getBuffer(renderType);
         drawRepeatedFluidSprite(builder, stack, fluid, x, y, w, h);
     }
 
     public static RenderType getGui(ResourceLocation texture)
     {
-        return RenderType.makeType(
+        return RenderType.create(
                 "gui_"+texture,
                 DefaultVertexFormats.POSITION_COLOR_TEX,
                 GL11.GL_QUADS,
                 256,
-                RenderType.State.getBuilder()
-                        .texture(new RenderState.TextureState(texture, false, false))
-                        .alpha(new RenderState.AlphaState(0.5F))
-                        .build(false)
+                RenderType.State.builder()
+                        .setTextureState(new RenderState.TextureState(texture, false, false))
+                        .setAlphaState(new RenderState.AlphaState(0.5F))
+                        .createCompositeState(false)
         );
     }
 
@@ -52,7 +52,7 @@ public class RenderingUtils {
         int iH = sprite.getHeight();
         if(iW > 0&&iH > 0)
             drawRepeatedSprite(builder, transform, x, y, w, h, iW, iH,
-                    sprite.getMinU(), sprite.getMaxU(), sprite.getMinV(), sprite.getMaxV(),
+                    sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1(),
                     (col >> 16&255)/255.0f, (col >> 8&255)/255.0f, (col&255)/255.0f, 1);
     }
     public static void drawRepeatedSprite(IVertexBuilder builder, MatrixStack transform, float x, float y, float w,
@@ -93,16 +93,16 @@ public class RenderingUtils {
     {
         TransformingVertexBuilder innerBuilder = new TransformingVertexBuilder(builder, transform);
         innerBuilder.setColor(r, g, b, alpha);
-        innerBuilder.setLight(LightTexture.packLight(15, 15));
+        innerBuilder.setLight(LightTexture.pack(15, 15));
         innerBuilder.setOverlay(OverlayTexture.NO_OVERLAY);
         innerBuilder.setNormal(1, 1, 1);
-        innerBuilder.pos(x, y+h, 0).tex(u0, v1).endVertex();
-        innerBuilder.pos(x+w, y+h, 0).tex(u1, v1).endVertex();
-        innerBuilder.pos(x+w, y, 0).tex(u1, v0).endVertex();
-        innerBuilder.pos(x, y, 0).tex(u0, v0).endVertex();
+        innerBuilder.vertex(x, y+h, 0).uv(u0, v1).endVertex();
+        innerBuilder.vertex(x+w, y+h, 0).uv(u1, v1).endVertex();
+        innerBuilder.vertex(x+w, y, 0).uv(u1, v0).endVertex();
+        innerBuilder.vertex(x, y, 0).uv(u0, v0).endVertex();
     }
     public static TextureAtlasSprite getSprite(ResourceLocation rl)
     {
-        return Minecraft.getInstance().getModelManager().getAtlasTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE).getSprite(rl);
+        return Minecraft.getInstance().getModelManager().getAtlas(PlayerContainer.BLOCK_ATLAS).getSprite(rl);
     }
 }

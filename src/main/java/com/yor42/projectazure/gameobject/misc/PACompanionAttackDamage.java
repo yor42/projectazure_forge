@@ -23,26 +23,26 @@ public class PACompanionAttackDamage extends DamageSource {
     }
 
     @Nullable
-    public AbstractEntityCompanion getTrueSource() {
+    public AbstractEntityCompanion getEntity() {
         return this.damageSourceEntity;
     }
 
-    public ITextComponent getDeathMessage(LivingEntity entityLivingBaseIn) {
+    public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
 
-        ItemStack itemstack = this.damageSourceEntity != null ? this.damageSourceEntity.getHeldItemMainhand() : ItemStack.EMPTY;
+        ItemStack itemstack = this.damageSourceEntity != null ? this.damageSourceEntity.getMainHandItem() : ItemStack.EMPTY;
         String s;
         if(this.MessageCounts>1){
             int randomMessage = new Random().nextInt(MessageCounts-1);
-            s = "death.attack." + this.damageType+"_"+randomMessage;
+            s = "death.attack." + this.msgId+"_"+randomMessage;
         }
         else {
-            s = "death.attack." + this.damageType;
+            s = "death.attack." + this.msgId;
         }
-        return !itemstack.isEmpty() && itemstack.hasDisplayName() ? new TranslationTextComponent(s + ".item", entityLivingBaseIn.getDisplayName(), this.damageSourceEntity.getDisplayName(), itemstack.getTextComponent()) : new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName(), this.damageSourceEntity.getDisplayName());
+        return !itemstack.isEmpty() && itemstack.hasCustomHoverName() ? new TranslationTextComponent(s + ".item", entityLivingBaseIn.getDisplayName(), this.damageSourceEntity.getDisplayName(), itemstack.getDisplayName()) : new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName(), this.damageSourceEntity.getDisplayName());
     }
 
     @Nullable
-    public Vector3d getDamageLocation() {
-        return this.damageSourceEntity != null ? this.damageSourceEntity.getPositionVec() : null;
+    public Vector3d getSourcePosition() {
+        return this.damageSourceEntity != null ? this.damageSourceEntity.position() : null;
     }
 }

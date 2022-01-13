@@ -41,8 +41,8 @@ public class ForgeBusEventHandlerClient {
     public static void onMouseEvent(InputEvent.RawMouseEvent event){
         ClientPlayerEntity player = Minecraft.getInstance().player;
         //check if game has focus
-        if(Minecraft.getInstance().isGameFocused() && player != null && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().currentScreen == null){
-            if(event.getButton() == GLFW_MOUSE_BUTTON_LEFT && player.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+        if(Minecraft.getInstance().isWindowActive() && player != null && !Minecraft.getInstance().isPaused() && Minecraft.getInstance().screen == null){
+            if(event.getButton() == GLFW_MOUSE_BUTTON_LEFT && player.getMainHandItem().getItem() instanceof ItemGunBase){
                 ClientProxy client = ClientProxy.getClientProxy();
                 client.keyFirePressedMainhand = event.getAction() == GLFW_PRESS;
                 event.setCanceled(true);
@@ -53,12 +53,12 @@ public class ForgeBusEventHandlerClient {
     @SubscribeEvent
     public static void TickPlayer(TickEvent.PlayerTickEvent event){
         if (event.phase == TickEvent.Phase.START) {
-            if (event.player.world.isRemote()) {
+            if (event.player.level.isClientSide()) {
 
                 ClientProxy client = ClientProxy.getClientProxy();
-                if (Minecraft.getInstance().isGameFocused() && !event.player.isSpectator()) {
-                    ItemStack MainStack = event.player.getHeldItemMainhand();
-                    ItemStack OffStack = event.player.getHeldItemOffhand();
+                if (Minecraft.getInstance().isWindowActive() && !event.player.isSpectator()) {
+                    ItemStack MainStack = event.player.getMainHandItem();
+                    ItemStack OffStack = event.player.getOffhandItem();
                     if (!MainStack.isEmpty() && MainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) MainStack.getItem()).ShouldFireWithLeftClick()) {
                         if (client.keyFirePressedMainhand) {
                             ItemGunBase gun = ((ItemGunBase) MainStack.getItem());
@@ -68,7 +68,7 @@ public class ForgeBusEventHandlerClient {
                             boolean hasAmmo = getRemainingAmmo(MainStack)>0;
                             if(mainDelay <= 0) {
                                 if(hasAmmo) {
-                                    if (MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(event.player, event.player.getHeldItemMainhand())))
+                                    if (MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(event.player, event.player.getMainHandItem())))
                                         return;
                                 }
                                 Main.NETWORK.sendToServer(new GunFiredPacket(false, false));
@@ -98,14 +98,14 @@ public class ForgeBusEventHandlerClient {
         if(event.getEntity() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) event.getEntity();
 
-            ItemStack mainStack = player.getHeldItemMainhand();
+            ItemStack mainStack = player.getMainHandItem();
 
             if(!mainStack.isEmpty() && mainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) mainStack.getItem()).ShouldDoBowPose()){
-                EntityModel<?> model = event.getRenderer().getEntityModel();
+                EntityModel<?> model = event.getRenderer().getModel();
                 if(model instanceof PlayerModel){
                     PlayerModel<?> playermodel = (PlayerModel<?>) model;
 
-                    if(player.getPrimaryHand() == HandSide.RIGHT){
+                    if(player.getMainArm() == HandSide.RIGHT){
                         playermodel.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
                     }
                     else{

@@ -20,6 +20,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.Direction;
@@ -92,7 +93,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 6;
         }
     };
@@ -114,7 +115,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.inventory.getSlots();
     }
 
@@ -133,18 +134,18 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return this.inventory.getStackInSlot(index);
     }
 
     @Override
-    public ItemStack decrStackSize(int i, int i1) {
+    public ItemStack removeItem(int i, int i1) {
         this.inventory.getStackInSlot(i).shrink(i1);
         return this.inventory.getStackInSlot(i);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
         if(index >= 0 && index < this.inventory.getSlots()){
             this.inventory.setStackInSlot(index, ItemStack.EMPTY);
         }
@@ -152,17 +153,17 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         this.inventory.setStackInSlot(index, stack);
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
         return true;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         for(int i=0;i<this.inventory.getSlots(); i++){
             this.inventory.setStackInSlot(i, ItemStack.EMPTY);
         }
@@ -178,14 +179,14 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     @Override
     public void tick() {
         boolean shouldsave = false;
-        if(!this.world.isRemote()){
+        if(!this.level.isClientSide()){
             for(int i = 1; i<4; i++){
                 if(this.tryFillingSolutionTank(i)){
                     break;
                 }
             }
 
-            ItemStack stack = this.getStackInSlot(5);
+            ItemStack stack = this.getItem(5);
             Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
                 FluidTank tank = this.waterTank;
                 FluidActionResult actionresult = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
@@ -209,7 +210,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
             ItemStack SeedStack = this.inventory.getStackInSlot(0);
             if(!this.SolutionTank.isEmpty()) {
                 if (!SeedStack.isEmpty()) {
-                    IRecipe<? extends IInventory> recipe = this.world.getRecipeManager().getRecipe((IRecipeType<? extends CrystalizingRecipe>) this.recipeType, this, this.world).orElse(null);
+                    IRecipe<? extends IInventory> recipe = this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends CrystalizingRecipe>) this.recipeType, this, this.level).orElse(null);
                     if (this.isProcessable(recipe)) {
                         if (this.currentRecipe == null) {
                             this.currentRecipe = recipe;
@@ -243,14 +244,14 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         }
 
         if (shouldsave) {
-            this.markDirty();
+            this.setChanged();
         }
     }
 
     private void process(IRecipe<? extends IInventory> recipe) {
         if (this.isProcessable(recipe)) {
             ItemStack seed = this.inventory.getStackInSlot(0);
-            ItemStack itemstack1 = ((IRecipe<TileEntityCrystalGrowthChamber>) recipe).getCraftingResult(this);
+            ItemStack itemstack1 = recipe.getResultItem();
             ItemStack output = this.inventory.getStackInSlot(4);
             if (output.isEmpty()) {
                 this.inventory.setStackInSlot(4, itemstack1.copy());
@@ -266,12 +267,17 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     protected int getGrowthTime() {
-        return this.world.getRecipeManager().getRecipe((IRecipeType<CrystalizingRecipe>)this.recipeType, this, this.world).map(CrystalizingRecipe::getGrowthTime).orElse(1800);
+
+        if(this.getLevel() == null){
+            return 1800;
+        }
+
+        return this.getLevel().getRecipeManager().getRecipeFor(this.recipeType, this, this.getLevel()).map(CrystalizingRecipe::getGrowthTime).orElse(1800);
     }
 
     private boolean isProcessable(IRecipe<? extends IInventory> recipe) {
         if(recipe != null && !this.inventory.getStackInSlot(0).isEmpty()){
-            ItemStack output = ((IRecipe<TileEntityCrystalGrowthChamber>)recipe).getCraftingResult(this);
+            ItemStack output = recipe.getResultItem();
             if(output.isEmpty()){
                 return false;
             }
@@ -279,9 +285,9 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
                 ItemStack itemstack1 = this.inventory.getStackInSlot(4);
                 if (itemstack1.isEmpty()) {
                     return true;
-                } else if (!itemstack1.isItemEqual(output)) {
+                } else if (!itemstack1.sameItem(output)) {
                     return false;
-                } else if (itemstack1.getCount() + output.getCount() <= this.getInventoryStackLimit() && itemstack1.getCount() + output.getCount() <= itemstack1.getMaxStackSize()) {
+                } else if (itemstack1.getCount() + output.getCount() <= this.getMaxStackSize() && itemstack1.getCount() + output.getCount() <= itemstack1.getMaxStackSize()) {
                     return true;
                 } else {
                     return itemstack1.getCount() + output.getCount() <= output.getMaxStackSize();
@@ -350,8 +356,8 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load (BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         this.growthProgress = nbt.getInt("progress");
         this.MaxGrowthProgress = nbt.getInt("maxprogress");
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
@@ -359,9 +365,10 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         this.SolutionTank.readFromNBT(nbt.getCompound("solution"));
     }
 
+    @Nonnull
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(@Nonnull CompoundNBT compound) {
+        super.save(compound);
         compound.putInt("progress", this.growthProgress);
         compound.putInt("maxprogress", this.MaxGrowthProgress);
         compound.put("inventory", this.inventory.serializeNBT());

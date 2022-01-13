@@ -29,7 +29,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
@@ -38,7 +38,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             event.getController().setAnimation(builder.addAnimation("sleeping_arm", true));
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
@@ -47,7 +47,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("openDoorL", false));
             }
             else{
@@ -55,26 +55,26 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+        else if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+            if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isSwingInProgress){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+        else if(this.swinging){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getActiveHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getActiveHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
@@ -86,7 +86,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             return PlayState.CONTINUE;
         }
 
-        if (!(this.limbSwingAmount > -0.15F && this.limbSwingAmount < 0.15F)) {
+        if (!(this.animationSpeed > -0.15F && this.animationSpeed < 0.15F)) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("sail_arm", true));
             }
@@ -98,12 +98,12 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
-        if(this.isSitting()){
+        if(this.isOrderedToSit()){
             event.getController().setAnimation(builder.addAnimation("sit_start_arm").addAnimation("idle_sit", true));
         }
         else {
-            if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-                if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+            if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+                if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                     event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
                 }
                 return PlayState.CONTINUE;
@@ -121,12 +121,12 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
 
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSitting() || this.getRidingEntity() != null){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("sit_start").addAnimation("sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -152,12 +152,12 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.NagatoMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.NagatoSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.NagatoHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.NagatoAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.NagatoMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.NagatoSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.NagatoHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.NagatoAttackDamage.get())
                 ;
     }
 

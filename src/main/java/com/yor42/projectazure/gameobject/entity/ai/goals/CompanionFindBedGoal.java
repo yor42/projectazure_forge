@@ -18,26 +18,26 @@ public class CompanionFindBedGoal extends Goal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
         boolean alreadyhasbed = this.entityCompanion.getHOMEPOS().isPresent();
 
-        return !alreadyhasbed && this.entityCompanion.ticksExisted % 10 == 0;
+        return !alreadyhasbed && this.entityCompanion.tickCount % 10 == 0;
     }
 
     @Override
-    public void startExecuting() {
-            Optional<BlockPos> optional = findHomePosition((ServerWorld) this.entityCompanion.getEntityWorld(), this.entityCompanion);
+    public void start() {
+            Optional<BlockPos> optional = findHomePosition((ServerWorld) this.entityCompanion.getCommandSenderWorld(), this.entityCompanion);
             optional.ifPresent(blockPos -> setHomePosition(this.entityCompanion, blockPos));
     }
 
     private Optional<BlockPos> findHomePosition(ServerWorld world, AbstractEntityCompanion entity) {
-        return world.getPointOfInterestManager().take(PointOfInterestType.HOME.getPredicate(), (pos) -> this.canReachHomePosition(entity, pos), entity.getPosition(), 48);
+        return world.getPoiManager().take(PointOfInterestType.HOME.getPredicate(), (pos) -> this.canReachHomePosition(entity, pos), entity.blockPosition(), 48);
     }
 
     private boolean canReachHomePosition(AbstractEntityCompanion entity, BlockPos pos) {
-        Path path = entity.getNavigator().getPathToPos(pos, PointOfInterestType.HOME.getValidRange());
-        return path != null && path.reachesTarget();
+        Path path = entity.getNavigation().createPath(pos, PointOfInterestType.HOME.getValidRange());
+        return path != null && path.canReach();
     }
 
     private void setHomePosition(AbstractEntityCompanion entityCompanion, BlockPos pos) {

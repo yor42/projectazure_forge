@@ -17,19 +17,19 @@ public class WorldgenInit {
 
     public static void registerWorldgen(final BiomeLoadingEvent event){
         if(PAConfig.CONFIG.ENABLE_COPPER.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.COPPER_ORE, PAConfig.CONFIG.COPPER_VEINSIZE.get(), PAConfig.CONFIG.COPPER_MINHEIGHT.get(), PAConfig.CONFIG.COPPER_MAXHEIGHT.get(), PAConfig.CONFIG.COPPER_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.COPPER_ORE, PAConfig.CONFIG.COPPER_VEINSIZE.get(), PAConfig.CONFIG.COPPER_MINHEIGHT.get(), PAConfig.CONFIG.COPPER_MAXHEIGHT.get(), PAConfig.CONFIG.COPPER_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_TIN.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.TIN_ORE, PAConfig.CONFIG.TIN_VEINSIZE.get(), PAConfig.CONFIG.TIN_MINHEIGHT.get(), PAConfig.CONFIG.TIN_MAXHEIGHT.get(), PAConfig.CONFIG.TIN_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.TIN_ORE, PAConfig.CONFIG.TIN_VEINSIZE.get(), PAConfig.CONFIG.TIN_MINHEIGHT.get(), PAConfig.CONFIG.TIN_MAXHEIGHT.get(), PAConfig.CONFIG.TIN_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_LEAD.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.LEAD_ORE, PAConfig.CONFIG.LEAD_VEINSIZE.get(), PAConfig.CONFIG.LEAD_MINHEIGHT.get(), PAConfig.CONFIG.LEAD_MAXHEIGHT.get(), PAConfig.CONFIG.LEAD_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.LEAD_ORE, PAConfig.CONFIG.LEAD_VEINSIZE.get(), PAConfig.CONFIG.LEAD_MINHEIGHT.get(), PAConfig.CONFIG.LEAD_MAXHEIGHT.get(), PAConfig.CONFIG.LEAD_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_ORIROCK.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.ORIROCK, PAConfig.CONFIG.ORIROCK_VEINSIZE.get(), PAConfig.CONFIG.ORIROCK_MINHEIGHT.get(), PAConfig.CONFIG.ORIROCK_MAXHEIGHT.get(), PAConfig.CONFIG.ORIROCK_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.ORIROCK, PAConfig.CONFIG.ORIROCK_VEINSIZE.get(), PAConfig.CONFIG.ORIROCK_MINHEIGHT.get(), PAConfig.CONFIG.ORIROCK_MAXHEIGHT.get(), PAConfig.CONFIG.ORIROCK_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_ZINC.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, registerBlocks.ZINC_ORE, PAConfig.CONFIG.ZINC_VEINSIZE.get(), PAConfig.CONFIG.ZINC_MINHEIGHT.get(), PAConfig.CONFIG.ZINC_MAXHEIGHT.get(), PAConfig.CONFIG.ZINC_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.ZINC_ORE, PAConfig.CONFIG.ZINC_VEINSIZE.get(), PAConfig.CONFIG.ZINC_MINHEIGHT.get(), PAConfig.CONFIG.ZINC_MAXHEIGHT.get(), PAConfig.CONFIG.ZINC_VEINSPERCHUNK.get());
         }
     }
 
@@ -39,15 +39,15 @@ public class WorldgenInit {
     }
 
     public static void addOreSpawn(final BiomeLoadingEvent event, RuleTest rule, Block block, int veinSize, int minHeight, int maxHeight, int amount){
-       addOreSpawn(event, rule, block.getDefaultState(), veinSize, minHeight, maxHeight, amount);
+       addOreSpawn(event, rule, block.defaultBlockState(), veinSize, minHeight, maxHeight, amount);
     }
 
     public static void addOreSpawn(final BiomeLoadingEvent event, RuleTest rule, BlockState blockState, int veinSize, int minHeight, int maxHeight, int amount){
-        event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.withConfiguration(new OreFeatureConfig(rule, blockState, veinSize)).withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(minHeight, 0, maxHeight))).square().func_242731_b(amount));
+        event.getGeneration().addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(rule, blockState, veinSize)).decorated(Placement.RANGE.configured(new TopSolidRangeConfig(minHeight, 0, maxHeight))).squared().count(amount));
     }
 
     private static BlockState getBlockDefaultState(RegistryObject<? extends Block> registryEntry){
-        return registryEntry.get().getDefaultState();
+        return registryEntry.get().defaultBlockState();
     }
 
 }

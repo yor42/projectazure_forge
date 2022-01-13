@@ -69,7 +69,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     public SoundEvent getAttackSound(){
-        return this.getHeldItemMainhand().getItem() == registerItems.CHIXIAO.get()? CHIXIAO_HIT:SHEATH_HIT;
+        return this.getMainHandItem().getItem() == registerItems.CHIXIAO.get()? CHIXIAO_HIT:SHEATH_HIT;
     }
 
     @Override
@@ -79,14 +79,14 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        this.playSound(getAttackSound(), 1F, 0.8F + this.getRNG().nextFloat() * 0.4F);
+        this.playSound(getAttackSound(), 1F, 0.8F + this.getRandom().nextFloat() * 0.4F);
         if(AttackCount == 2){
-            target.attackEntityFrom(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.causeMobDamage(this), damage+3);
+            target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage+3);
             this.AttackCount = 0;
         }
         else{
-            target.attackEntityFrom(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.causeMobDamage(this), damage*0.5F);
-            target.applyKnockback(0.09F, MathHelper.sin(this.rotationYaw * ((float)Math.PI / 180F)), -MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F)));
+            target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage*0.5F);
+            target.knockback(0.09F, MathHelper.sin(this.yRot * ((float)Math.PI / 180F)), -MathHelper.cos(this.yRot * ((float)Math.PI / 180F)));
         }
     }
 
@@ -103,13 +103,13 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSitting() || this.getRidingEntity() != null){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("sit_leg_start").addAnimation("sit_leg", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -137,13 +137,13 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     protected <E extends IAnimatable> PlayState predicate_tail(AnimationEvent<E> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSitting()){
+        if(this.isOrderedToSit()){
             event.getController().setAnimation(builder.addAnimation("sit_tail_start").addAnimation("sit_tail", true));
         }
         else if(this.isBeingPatted()){
@@ -160,16 +160,16 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.swingProgress>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+        if(this.attackAnim>0){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
@@ -187,7 +187,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         }
 
         if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("opendoorL", false));
             }
             else{
@@ -202,7 +202,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
@@ -214,8 +214,8 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
 
-        if(this.isSitting()){
-            if(this.getHeldItemMainhand().getItem() instanceof TieredItem){
+        if(this.isOrderedToSit()){
+            if(this.getMainHandItem().getItem() instanceof TieredItem){
                 event.getController().setAnimation(builder.addAnimation("sit_arm_toolmainhand", true));
             }
             else {
@@ -233,8 +233,8 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else{
-            if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-                if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+            if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+                if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                     event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
                 }
                 return PlayState.CONTINUE;
@@ -246,12 +246,12 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ChenMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ChenSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.ChenHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ChenAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ChenMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ChenSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.ChenHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ChenAttackDamage.get())
                 ;
     }
 

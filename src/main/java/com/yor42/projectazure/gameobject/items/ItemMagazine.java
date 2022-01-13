@@ -18,6 +18,8 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloadable {
 
     private final enums.AmmoCalibur calibur;
@@ -48,9 +50,9 @@ public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloa
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
-        super.fillItemGroup(group, items);
-        if (this.isInGroup(group)) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+        super.fillItemCategory(group, items);
+        if (this.allowdedIn(group)) {
             ItemStack stack = new ItemStack(this);
             ItemStackUtils.setAmmoFull(stack);
             items.add(stack);
@@ -72,6 +74,6 @@ public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloa
             color = TextFormatting.GREEN;
         }
 
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.Ammocount).mergeStyle(color)));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.Ammocount).withStyle(color)));
     }
 }

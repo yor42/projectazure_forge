@@ -38,7 +38,7 @@ public class ContainerDryDock extends Container {
             }
 
             @Override
-            public int size() {
+            public int getCount() {
                 return values.length;
             }
         });
@@ -47,11 +47,11 @@ public class ContainerDryDock extends Container {
     public ContainerDryDock(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field){
         super(DRYDOCK_CONTAINER_TYPE, id);
         this.field = field;
-        trackIntArray(this.field);
+        addDataSlots(this.field);
 
         this.addSlot(new SlotItemHandler(Inventory, 0, 19, 10){
             @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
+            public boolean mayPlace(@Nonnull ItemStack stack) {
                 return stack.getItem() == registerItems.WISDOM_CUBE.get();
             }
         });
@@ -59,32 +59,32 @@ public class ContainerDryDock extends Container {
         for(int i=0; i<2; i++){
             this.addSlot(new SlotItemHandler(Inventory, 1+i, 10+18*i, 33){
                 @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
-                    return stack.getItem().isIn(ModTags.Items.INGOT_ALUMINIUM);
+                public boolean mayPlace(@Nonnull ItemStack stack) {
+                    return stack.getItem().is(ModTags.Items.INGOT_ALUMINIUM);
                 }
             });
         }
         for(int i=0; i<2; i++){
             this.addSlot(new SlotItemHandler(Inventory, 3+i, 10+18*i, 56){
                 @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
-                    return stack.getItem().isIn(ModTags.Items.INGOT_STEEL);
+                public boolean mayPlace(@Nonnull ItemStack stack) {
+                    return stack.getItem().is(ModTags.Items.INGOT_STEEL);
                 }
             });
         }
         for(int i=0; i<2; i++){
             this.addSlot(new SlotItemHandler(Inventory, 5+i, 115+18*i, 33){
                 @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
-                    return stack.getItem().isIn(ModTags.Items.INGOT_COPPER);
+                public boolean mayPlace(@Nonnull ItemStack stack) {
+                    return stack.getItem().is(ModTags.Items.INGOT_COPPER);
                 }
             });
         }
         for(int i=0; i<2; i++){
             this.addSlot(new SlotItemHandler(Inventory, 7+i, 115+18*i, 56){
                 @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
-                    return stack.getItem().isIn(ModTags.Items.INGOT_ZINC);
+                public boolean mayPlace(@Nonnull ItemStack stack) {
+                    return stack.getItem().is(ModTags.Items.INGOT_ZINC);
                 }
             });
         }
@@ -120,51 +120,51 @@ public class ContainerDryDock extends Container {
     }
     @MethodsReturnNonnullByDefault
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index <9) {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true)) {
+                if (!this.moveItemStackTo(itemstack1, 9, 45, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(itemstack1, itemstack);
+                slot.onQuickCraft(itemstack1, itemstack);
             } else {
                 if (itemstack1.getItem() == registerItems.WISDOM_CUBE.get()) {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().isIn(ModTags.Items.INGOT_ALUMINIUM)) {
-                    if (!this.mergeItemStack(itemstack1, 1, 3, false)) {
+                else if (itemstack1.getItem().is(ModTags.Items.INGOT_ALUMINIUM)) {
+                    if (!this.moveItemStackTo(itemstack1, 1, 3, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().isIn(ModTags.Items.INGOT_STEEL)) {
-                    if (!this.mergeItemStack(itemstack1, 3, 5, false)) {
+                else if (itemstack1.getItem().is(ModTags.Items.INGOT_STEEL)) {
+                    if (!this.moveItemStackTo(itemstack1, 3, 5, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().isIn(ModTags.Items.INGOT_COPPER)) {
-                    if (!this.mergeItemStack(itemstack1, 5, 7, false)) {
+                else if (itemstack1.getItem().is(ModTags.Items.INGOT_COPPER)) {
+                    if (!this.moveItemStackTo(itemstack1, 5, 7, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().isIn(ModTags.Items.INGOT_ZINC)) {
-                    if (!this.mergeItemStack(itemstack1, 7, 9, false)) {
+                else if (itemstack1.getItem().is(ModTags.Items.INGOT_ZINC)) {
+                    if (!this.moveItemStackTo(itemstack1, 7, 9, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
@@ -178,7 +178,7 @@ public class ContainerDryDock extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 }

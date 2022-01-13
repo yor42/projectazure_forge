@@ -41,17 +41,17 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
 
     @Override
     public boolean matches(@Nonnull TileEntityCrystalGrowthChamber inv, @Nonnull World worldIn) {
-        return this.seed.test(inv.getStackInSlot(0)) && this.solution == inv.getSolutionTank().getFluid().getFluid() && inv.getSolutionTank().getFluid().getAmount()>0;
+        return this.seed.test(inv.getItem(0)) && this.solution == inv.getSolutionTank().getFluid().getFluid() && inv.getSolutionTank().getFluid().getAmount()>0;
     }
 
     @Nonnull
     @Override
-    public ItemStack getCraftingResult(@Nonnull TileEntityCrystalGrowthChamber inv) {
+    public ItemStack assemble(@Nonnull TileEntityCrystalGrowthChamber inv) {
         return this.output.copy();
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
@@ -60,7 +60,7 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return this.output;
     }
 
@@ -78,7 +78,7 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
 
     public NonNullList<ItemStack> getIngredientStack() {
         NonNullList<ItemStack> nonnulllist = NonNullList.create();
-        nonnulllist.add(this.seed.getMatchingStacks()[0]);
+        nonnulllist.add(this.seed.getItems()[0]);
         return nonnulllist;
     }
 
@@ -100,32 +100,32 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CrystalizingRecipe>{
         @Override
-        public CrystalizingRecipe read(ResourceLocation recipeId, JsonObject json) {
-            Ingredient seed = Ingredient.deserialize(json.get("seed"));
-            ResourceLocation FluidID = new ResourceLocation(JSONUtils.getString(json, "solution"));
+        public CrystalizingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            Ingredient seed = Ingredient.fromJson(json.get("seed"));
+            ResourceLocation FluidID = new ResourceLocation(JSONUtils.getAsString(json, "solution"));
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(FluidID);
-            int growthTime = JSONUtils.getInt(json, "growthtime", 1800);
-            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getString(json, "result"));
+            int growthTime = JSONUtils.getAsInt(json, "growthtime", 1800);
+            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getAsString(json, "result"));
             ItemStack result = new ItemStack(ForgeRegistries.ITEMS.getValue(ItemID), 1);
             return new CrystalizingRecipe(recipeId, seed, fluid, growthTime, result);
         }
 
         @Nullable
         @Override
-        public CrystalizingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            Ingredient seed = Ingredient.read(buffer);
+        public CrystalizingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            Ingredient seed = Ingredient.fromNetwork(buffer);
             FluidStack stack2Read =buffer.readFluidStack();
-            ItemStack result = buffer.readItemStack();
+            ItemStack result = buffer.readItem();
             Fluid solution = stack2Read.getFluid();
             int processtime = stack2Read.getAmount();
             return new CrystalizingRecipe(recipeId, seed, solution, processtime, result);
         }
 
         @Override
-        public void write(PacketBuffer buffer, CrystalizingRecipe recipe) {
-            recipe.seed.write(buffer);
+        public void toNetwork(PacketBuffer buffer, CrystalizingRecipe recipe) {
+            recipe.seed.toNetwork(buffer);
             buffer.writeFluidStack(new FluidStack(recipe.solution, recipe.growthTime));
-            buffer.writeItemStack(recipe.output);
+            buffer.writeItem(recipe.output);
         }
     }
 }

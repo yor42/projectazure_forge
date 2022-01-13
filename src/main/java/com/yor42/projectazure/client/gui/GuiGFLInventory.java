@@ -32,17 +32,17 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         this.host = Main.PROXY.getSharedMob();
         this.affection = this.host.getAffection();
         this.morale = this.host.getMorale();
-        this.xSize = 170;
-        this.ySize = 188;
+        this.imageWidth = 170;
+        this.imageHeight = 188;
     }
 
     private void renderEntity(int mousex, int mousey){
         Entity entity = this.host.getType().create(ClientProxy.getClientWorld());
         if(entity instanceof AbstractEntityCompanion) {
-            entity.copyDataFromOld(this.host);
-            int entityWidth = (int) entity.getWidth();
+            entity.restoreFrom(this.host);
+            int entityWidth = (int) entity.getBbWidth();
             try {
-                InventoryScreen.drawEntityOnScreen(this.guiLeft + (46 - (entityWidth / 2)), this.guiTop + 75, 30, mousex * -1 + guiLeft + (53 - entityWidth / 2), mousey * -1 + this.guiTop + 70, (LivingEntity) entity);
+                InventoryScreen.renderEntityInInventory(this.leftPos + (46 - (entityWidth / 2)), this.topPos + 75, 30, mousex * -1 + leftPos + (53 - entityWidth / 2), mousey * -1 + this.topPos + 70, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }
@@ -55,64 +55,64 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderButton();
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
-        matrixStack.push();
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
-        this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+        matrixStack.pushPose();
+        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         for(int l = 0; l<host.getSkillItemCount(); l++){
-            this.blit(matrixStack, this.guiLeft + 96, this.guiTop + 4+l*18, 153, 189, 16,16);
+            this.blit(matrixStack, this.leftPos + 96, this.topPos + 4+l*18, 153, 189, 16,16);
         }
 
-        this.blit(matrixStack, this.guiLeft + 93, this.guiTop + 75, 173, 88, (int) (76*(this.affection/this.host.getmaxAffection())), 9);
-        this.blit(matrixStack, this.guiLeft+43, this.guiTop+89, 173, 85,  (int) (45*(this.host.getExp()/this.host.getMaxExp())), 2);
-        this.blit(matrixStack, this.guiLeft+176, this.guiTop+7, 173, 109, 42, 78);
-        matrixStack.pop();
+        this.blit(matrixStack, this.leftPos + 93, this.topPos + 75, 173, 88, (int) (76*(this.affection/this.host.getmaxAffection())), 9);
+        this.blit(matrixStack, this.leftPos+43, this.topPos+89, 173, 85,  (int) (45*(this.host.getExp()/this.host.getMaxExp())), 2);
+        this.blit(matrixStack, this.leftPos+176, this.topPos+7, 173, 109, 42, 78);
+        matrixStack.popPose();
 
-        matrixStack.push();
+        matrixStack.pushPose();
         float renderscale = (float) 5/9;
         matrixStack.scale(renderscale, renderscale, renderscale);
-        this.blit(matrixStack, (int) ((this.guiLeft+43)/renderscale), (int) ((this.guiTop+92)/renderscale), 246, 11, 9, 9);
-        this.blit(matrixStack, (int) ((this.guiLeft+43)/renderscale), (int) ((this.guiTop+98)/renderscale), 236, 11, 9, 9);
-        this.blit(matrixStack, (int) ((this.guiLeft+67)/renderscale), (int) ((this.guiTop+98)/renderscale), 246, 11, 9, 9);
-        matrixStack.pop();
+        this.blit(matrixStack, (int) ((this.leftPos+43)/renderscale), (int) ((this.topPos+92)/renderscale), 246, 11, 9, 9);
+        this.blit(matrixStack, (int) ((this.leftPos+43)/renderscale), (int) ((this.topPos+98)/renderscale), 236, 11, 9, 9);
+        this.blit(matrixStack, (int) ((this.leftPos+67)/renderscale), (int) ((this.topPos+98)/renderscale), 246, 11, 9, 9);
+        matrixStack.popPose();
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
+    protected void renderLabels(MatrixStack matrixStack, int x, int y) {
 
-        matrixStack.push();
+        matrixStack.pushPose();
         float scalerate = 0.75F;
         matrixStack.scale(scalerate,scalerate,scalerate);
 
         String AffectionString = String.format("%,.2f", this.host.getAffection())+"/"+this.host.getmaxAffection();
-        int affectionwidth = (int) ((this.font.getStringWidth(AffectionString)+8)*scalerate);
-        this.font.func_243248_b(matrixStack, new StringTextComponent(AffectionString), (140-((float)affectionwidth/2))/scalerate, 77/scalerate, 0x242424);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        int affectionwidth = (int) ((this.font.width(AffectionString)+8)*scalerate);
+        this.font.draw(matrixStack, new StringTextComponent(AffectionString), (140-((float)affectionwidth/2))/scalerate, 77/scalerate, 0x242424);
+        this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, (int) (((133)-((float)affectionwidth/2))/scalerate), (int) (77/scalerate), 203, 72, 7, 7);
 
-        int textwidth = (int) (this.font.getStringWidth(this.host.getDisplayName().getString())*scalerate);
-        this.font.func_243248_b(matrixStack, this.host.getDisplayName(), (42-textwidth)/scalerate, 81/scalerate, 0x242424);
-        this.font.func_243248_b(matrixStack, new StringTextComponent("Lv."+this.host.getLevel()), 43/scalerate, 82/scalerate, 0x242424);
-        matrixStack.pop();
+        int textwidth = (int) (this.font.width(this.host.getDisplayName().getString())*scalerate);
+        this.font.draw(matrixStack, this.host.getDisplayName(), (42-textwidth)/scalerate, 81/scalerate, 0x242424);
+        this.font.draw(matrixStack, new StringTextComponent("Lv."+this.host.getLevel()), 43/scalerate, 82/scalerate, 0x242424);
+        matrixStack.popPose();
 
-        matrixStack.push();
+        matrixStack.pushPose();
         scalerate = 0.5F;
         matrixStack.scale(scalerate,scalerate,scalerate);
         String MaxHP = "MAX "+(int)this.host.getMaxHealth();
-        int maxHPLength = (int) (this.font.getStringWidth(MaxHP)*scalerate);
+        int maxHPLength = (int) (this.font.width(MaxHP)*scalerate);
         ITextComponent GunClass = new TranslationTextComponent(this.host.getGunSpecialty().getName());
-        int gunNameLength = (int) (this.font.getStringWidth(GunClass.getString())*scalerate);
-        this.font.func_243248_b(matrixStack, new StringTextComponent(MaxHP), (89-maxHPLength)/scalerate, (float) (92.5/scalerate), 0x7e8552);
-        this.font.func_243248_b(matrixStack, new StringTextComponent("HP "+ (int) this.host.getHealth()), 48/scalerate, (float) (92.5/scalerate), 0x242424);
-        this.font.func_243248_b(matrixStack, new StringTextComponent("FD "+ this.host.getFoodStats().getFoodLevel()), 48/scalerate, (float) (98.5/scalerate), 0x242424);
-        this.font.func_243248_b(matrixStack, new StringTextComponent("MR "+ (int) this.host.getMorale()), 72/scalerate, (float) (98.5/scalerate), 0x242424);
-        this.font.func_243248_b(matrixStack, GunClass, (41-gunNameLength)/scalerate, 88.5F/scalerate, 0x242424);
-        matrixStack.pop();
+        int gunNameLength = (int) (this.font.width(GunClass.getString())*scalerate);
+        this.font.draw(matrixStack, new StringTextComponent(MaxHP), (89-maxHPLength)/scalerate, (float) (92.5/scalerate), 0x7e8552);
+        this.font.draw(matrixStack, new StringTextComponent("HP "+ (int) this.host.getHealth()), 48/scalerate, (float) (92.5/scalerate), 0x242424);
+        this.font.draw(matrixStack, new StringTextComponent("FD "+ this.host.getFoodStats().getFoodLevel()), 48/scalerate, (float) (98.5/scalerate), 0x242424);
+        this.font.draw(matrixStack, new StringTextComponent("MR "+ (int) this.host.getMorale()), 72/scalerate, (float) (98.5/scalerate), 0x242424);
+        this.font.draw(matrixStack, GunClass, (41-gunNameLength)/scalerate, 88.5F/scalerate, 0x242424);
+        matrixStack.popPose();
     }
 
     private void switchBehavior() {
@@ -131,8 +131,8 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
     private void renderButton(){
         int homeModeX = this.host.isFreeRoaming()? 1:15;
         int itemModeX = this.host.shouldPickupItem()? 1:15;
-        Button homebutton = new ImageButton(this.guiLeft+1, this.guiTop+64, 14,14, homeModeX, 188, 14,TEXTURE, action->switchBehavior());
-        Button itembutton = new ImageButton(this.guiLeft+16, this.guiTop+64, 14,14, itemModeX, 216, 14,TEXTURE, action->switchItemBehavior());
+        Button homebutton = new ImageButton(this.leftPos+1, this.topPos+64, 14,14, homeModeX, 188, 14,TEXTURE, action->switchBehavior());
+        Button itembutton = new ImageButton(this.leftPos+16, this.topPos+64, 14,14, itemModeX, 216, 14,TEXTURE, action->switchItemBehavior());
 
         this.addButton(homebutton);
         this.addButton(itembutton);

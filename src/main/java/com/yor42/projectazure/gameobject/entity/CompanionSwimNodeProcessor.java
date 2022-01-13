@@ -9,12 +9,12 @@ public class CompanionSwimNodeProcessor extends SwimNodeProcessor {
         super(p_i48927_1_);
     }
 
-    public int func_222859_a(PathPoint[] p_222859_1_, PathPoint p_222859_2_) {
+    public int getNeighbors(PathPoint[] p_222859_1_, PathPoint p_222859_2_) {
         int i = 0;
 
         for(Direction direction : Direction.values()) {
-            PathPoint pathpoint = this.getWaterNode(p_222859_2_.x + direction.getXOffset(), p_222859_2_.y + direction.getYOffset(), p_222859_2_.z + direction.getZOffset());
-            if (pathpoint != null && !pathpoint.visited) {
+            PathPoint pathpoint = this.getWaterNode(p_222859_2_.x + direction.getStepX(), p_222859_2_.y + direction.getStepY(), p_222859_2_.z + direction.getStepZ());
+            if (pathpoint != null && !pathpoint.closed) {
                 p_222859_1_[i++] = pathpoint;
             }
         }
@@ -23,6 +23,6 @@ public class CompanionSwimNodeProcessor extends SwimNodeProcessor {
     }
 
     private PathPoint getWaterNode(int p_186328_1_, int p_186328_2_, int p_186328_3_) {
-        return this.openPoint(p_186328_1_, p_186328_2_, p_186328_3_);
+        return this.getNode(p_186328_1_, p_186328_2_, p_186328_3_);
     }
 }

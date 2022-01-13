@@ -26,45 +26,45 @@ public class GuiCrystalGrowthChamber extends ContainerScreen<ContainerCrystalGro
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTanks(matrixStack, partialTicks, mouseX, mouseY);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     protected void renderTanks(MatrixStack matrixStack, float partialTicks, int x, int y){
-        IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        FluidStack stack = this.container.getWaterTank();
-        float height = 34*((float)this.container.getWaterTankAmount()/this.container.getWaterTankCapacity());
-        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+12,this.guiTop+26+(34-height), 16, height);
-        buffer.finish();
-        stack = this.container.getSolutionTank();
-        height = 34*((float)this.container.getSolutionTankAmount()/this.container.getSolutionTankCapacity());
-        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+58,this.guiTop+26+(34-height), 16, height);
-        buffer.finish();
+        IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.immediate(Tessellator.getInstance().getBuilder());
+        FluidStack stack = this.menu.getWaterTank();
+        float height = 34*((float)this.menu.getWaterTankAmount()/this.menu.getWaterTankCapacity());
+        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+12,this.topPos+26+(34-height), 16, height);
+        buffer.endBatch();
+        stack = this.menu.getSolutionTank();
+        height = 34*((float)this.menu.getSolutionTankAmount()/this.menu.getSolutionTankCapacity());
+        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+58,this.topPos+26+(34-height), 16, height);
+        buffer.endBatch();
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
+        this.minecraft.getTextureManager().bind(TEXTURE);
 
-        this.blit(matrixStack, this.guiLeft + 57, this.guiTop + 25, 176, 49, 18, 36);
-        this.blit(matrixStack, this.guiLeft + 11, this.guiTop + 25, 176, 85, 18, 36);
+        this.blit(matrixStack, this.leftPos + 57, this.topPos + 25, 176, 49, 18, 36);
+        this.blit(matrixStack, this.leftPos + 11, this.topPos + 25, 176, 85, 18, 36);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int x, int y) {
-        matrixStack.push();
+    protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+        matrixStack.pushPose();
         float renserscale = 0.9F;
-        int width = this.font.getStringWidth(this.title.getString());
-        this.titleY = 6;
-        this.titleX = 180-width;
+        int width = this.font.width(this.title.getString());
+        this.titleLabelY = 6;
+        this.titleLabelX = 180-width;
         matrixStack.scale(renserscale, renserscale, renserscale);
-        this.font.func_243248_b(matrixStack, this.title, (float)this.titleX/renserscale, (float)this.titleY/renserscale, 4210752);
-        matrixStack.pop();
+        this.font.draw(matrixStack, this.title, (float)this.titleLabelX/renserscale, (float)this.titleLabelY/renserscale, 4210752);
+        matrixStack.popPose();
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
-        this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-        int b = this.container.getprogressScaled(24);
-        this.blit(matrixStack, this.guiLeft + 80, this.guiTop + 35, 176, 14, b, 17);
+        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        int b = this.menu.getprogressScaled(24);
+        this.blit(matrixStack, this.leftPos + 80, this.topPos + 35, 176, 14, b, 17);
     }
 }

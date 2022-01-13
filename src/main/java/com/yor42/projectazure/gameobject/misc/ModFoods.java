@@ -6,6 +6,6 @@ import net.minecraft.potion.EffectInstance;
 
 public class ModFoods {
 
-    public static Food ORIGINIUM_PRIME = (new Food.Builder()).hunger(2).saturation(0.3F).setAlwaysEdible().effect(()->(new EffectInstance(registerPotionEffects.ACUTE_ORIPATHY, 72000, 0)), 1).build();
+    public static Food ORIGINIUM_PRIME = (new Food.Builder()).nutrition(2).saturationMod(0.3F).alwaysEat().effect(()->(new EffectInstance(registerPotionEffects.ACUTE_ORIPATHY, 72000, 0)), 1).build();
 
 }

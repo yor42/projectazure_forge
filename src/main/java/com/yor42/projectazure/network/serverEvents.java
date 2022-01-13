@@ -16,25 +16,25 @@ import static com.yor42.projectazure.libs.Constants.StarterList;
 
 public class serverEvents {
     public static void spawnStarter(ServerPlayerEntity player, int StarterID){
-        World world = player.world;
+        World world = player.level;
         EntityType<?> entitytype;
 
-        if(!world.isRemote)
+        if(!world.isClientSide)
         {
             entitytype = StarterList[StarterID];
             if (entitytype == null){
-                player.sendMessage(new TranslationTextComponent("message.invalidstarter"), player.getUniqueID());
+                player.sendMessage(new TranslationTextComponent("message.invalidstarter"), player.getUUID());
             }
             else{
-                EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerWorld)world, player.getActiveItemStack(), player, player.getPosition(), SpawnReason.SPAWN_EGG, false, false);
+                EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerWorld)world, player.getUseItem(), player, player.blockPosition(), SpawnReason.SPAWN_EGG, false, false);
                 if (entity != null){
                     if(!player.isCreative()) {
-                        if(player.getHeldItem(Hand.MAIN_HAND).getItem() == registerItems.Rainbow_Wisdom_Cube.get())
-                            player.getHeldItem(Hand.MAIN_HAND).shrink(1);
+                        if(player.getItemInHand(Hand.MAIN_HAND).getItem() == registerItems.Rainbow_Wisdom_Cube.get())
+                            player.getItemInHand(Hand.MAIN_HAND).shrink(1);
                         else
-                            player.getHeldItem(Hand.OFF_HAND).shrink(1);
+                            player.getItemInHand(Hand.OFF_HAND).shrink(1);
                     }
-                    entity.setTamedBy(player);
+                    entity.tame(player);
                     entity.setAffection(40.0F);
                     entity.MaxFillHunger();
                     entity.setMorale(150);

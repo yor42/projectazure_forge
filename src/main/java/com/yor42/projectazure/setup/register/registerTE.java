@@ -26,7 +26,7 @@ public class registerTE {
 
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW
         //noinspection ConstantConditions
-        return registerManager.TILE_ENTITY.register(name, () -> TileEntityType.Builder.create(factory, block.get()).build(null));
+        return registerManager.TILE_ENTITY.register(name, () -> TileEntityType.Builder.of(factory, block.get()).build(null));
     }
 
     static void register(){}

@@ -39,7 +39,7 @@ public class ContainerCrystalGrowthChamber extends Container {
             }
 
             @Override
-            public int size() {
+            public int getCount() {
                 return values.length;
             }
         }, buffer.readFluidStack(), buffer.readFluidStack());
@@ -62,7 +62,7 @@ public class ContainerCrystalGrowthChamber extends Container {
         this.addSlot(new SlotItemHandler(itemStackHandler, 5, 12,6));
         this.addSlot(new SlotItemHandler(itemStackHandler, 6, 12,64){
             @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
+            public boolean mayPlace(@Nonnull ItemStack stack) {
                 return false;
             }
         });
@@ -77,7 +77,7 @@ public class ContainerCrystalGrowthChamber extends Container {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 142));
         }
 
-        this.trackIntArray(this.field);
+        this.addDataSlots(this.field);
     }
 
     public FluidStack getWaterTank() {
@@ -109,48 +109,48 @@ public class ContainerCrystalGrowthChamber extends Container {
         return (int)(length*pixels);
     }
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        ItemStack itemstack1 = slot.getStack();
-        if (slot.getHasStack()) {
+        Slot slot = this.slots.get(index);
+        ItemStack itemstack1 = slot.getItem();
+        if (slot.hasItem()) {
             itemstack = itemstack1.copy();
             if (index < 7) {
-                if (!this.mergeItemStack(itemstack1, 8, 39, false)) {
+                if (!this.moveItemStackTo(itemstack1, 8, 39, false)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(itemstack1, itemstack);
+                slot.onQuickCraft(itemstack1, itemstack);
             } else {
                 if (FluidUtil.getFluidHandler(itemstack1).isPresent()) {
-                    if (!this.mergeItemStack(itemstack1, 5, 6, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 5, 6, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 else if (itemstack1.getItem() instanceof ItemResource && ((ItemResource) itemstack1.getItem()).getResourceType() == enums.ResourceType.DUST) {
-                    if (!this.mergeItemStack(itemstack1, 1, 4, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 1, 4, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
+                else if (index >= 30 && index < 39 && !this.moveItemStackTo(itemstack1, 3, 30, false)) {
                     return ItemStack.EMPTY;
                 }
                 else {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {

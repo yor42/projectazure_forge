@@ -24,53 +24,53 @@ public class guiBasicRefinery extends ContainerScreen<ContainerBasicRefinery> {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTanks(matrixStack, partialTicks, mouseX, mouseY);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int p_230451_2_, int p_230451_3_) {
+    protected void renderLabels(MatrixStack matrixStack, int p_230451_2_, int p_230451_3_) {
     }
 
     protected void renderTanks(MatrixStack matrixStack, float partialTicks, int x, int y){
-        IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.getImpl(Tessellator.getInstance().getBuffer());
-        FluidStack stack = this.container.crudeoilstack;
-        float height = 32*((float)this.container.getCrudeOilTankAmount()/this.container.getCrudeOilTankCapacity());
-        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+10,this.guiTop+27+(32-height), 12, height);
-        buffer.finish();
-        stack = this.container.gasolinestack;
-        height = 32*((float)this.container.getGasolineTankAmount()/this.container.getGasolineTankCapacity());
-        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+69,this.guiTop+27+(32-height), 12, height);
-        buffer.finish();
-        stack = this.container.dieselstack;
-        height = 32*((float)this.container.getDieselTankAmount()/this.container.getDieselTankCapacity());
-        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+92,this.guiTop+27+(32-height), 12, height);
-        buffer.finish();
-        stack = this.container.fueloilstack;
-        height = 32*((float)this.container.getFuelOilTankAmount()/this.container.getFuelOilTankCapacity());
-        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.guiLeft+115,this.guiTop+27+(32-height), 12, height);
-        buffer.finish();
+        IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.immediate(Tessellator.getInstance().getBuilder());
+        FluidStack stack = this.menu.crudeoilstack;
+        float height = 32*((float)this.menu.getCrudeOilTankAmount()/this.menu.getCrudeOilTankCapacity());
+        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+10,this.topPos+27+(32-height), 12, height);
+        buffer.endBatch();
+        stack = this.menu.gasolinestack;
+        height = 32*((float)this.menu.getGasolineTankAmount()/this.menu.getGasolineTankCapacity());
+        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+69,this.topPos+27+(32-height), 12, height);
+        buffer.endBatch();
+        stack = this.menu.dieselstack;
+        height = 32*((float)this.menu.getDieselTankAmount()/this.menu.getDieselTankCapacity());
+        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+92,this.topPos+27+(32-height), 12, height);
+        buffer.endBatch();
+        stack = this.menu.fueloilstack;
+        height = 32*((float)this.menu.getFuelOilTankAmount()/this.menu.getFuelOilTankCapacity());
+        RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+115,this.topPos+27+(32-height), 12, height);
+        buffer.endBatch();
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
-        this.blit(matrixStack, this.guiLeft + 9, this.guiTop + 26, 176, 31, 14, 34);
-        this.blit(matrixStack, this.guiLeft + 68, this.guiTop + 26, 176, 31, 14, 34);
-        this.blit(matrixStack, this.guiLeft + 91, this.guiTop + 26, 176, 31, 14, 34);
-        this.blit(matrixStack, this.guiLeft + 114, this.guiTop + 26, 176, 31, 14, 34);
+        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.blit(matrixStack, this.leftPos + 9, this.topPos + 26, 176, 31, 14, 34);
+        this.blit(matrixStack, this.leftPos + 68, this.topPos + 26, 176, 31, 14, 34);
+        this.blit(matrixStack, this.leftPos + 91, this.topPos + 26, 176, 31, 14, 34);
+        this.blit(matrixStack, this.leftPos + 114, this.topPos + 26, 176, 31, 14, 34);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
-        int i = this.guiLeft;
-        int j = this.guiTop;
-        this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
-        if (this.container.isBurning()) {
-            int burnScale = (int) this.container.getBurnLeftScaled();
-            this.blit(matrixStack, this.guiLeft + 39, this.guiTop + 46 + 12 - burnScale, 176, 12 - burnScale, 14, burnScale + 1);
+        this.minecraft.getTextureManager().bind(TEXTURE);
+        int i = this.leftPos;
+        int j = this.topPos;
+        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        if (this.menu.isBurning()) {
+            int burnScale = (int) this.menu.getBurnLeftScaled();
+            this.blit(matrixStack, this.leftPos + 39, this.topPos + 46 + 12 - burnScale, 176, 12 - burnScale, 14, burnScale + 1);
         }
-        if(this.container.isActive()){
-            this.blit(matrixStack, this.guiLeft + 34, this.guiTop + 27, 176, 14, 24, 17);
+        if(this.menu.isActive()){
+            this.blit(matrixStack, this.leftPos + 34, this.topPos + 27, 176, 14, 24, 17);
         }
     }
 }

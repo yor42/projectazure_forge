@@ -31,7 +31,7 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     public EntityCannonPelllet(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
         super(registerManager.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
-        this.originPos = new BlockPos(shooter.getPosX(), shooter.getPosYHeight(0.5), shooter.getPosZ());
+        this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.5), shooter.getZ());
     }
 
     public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
@@ -39,22 +39,22 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     }
 
     @Override
-    protected float getMotionFactor() {
+    protected float getInertia() {
         return 1.0F;
     }
 
     @Override
-    protected boolean isFireballFiery() {
+    protected boolean shouldBurn() {
         return false;
     }
 
     @Override
-    public boolean isBurning() {
+    public boolean isOnFire() {
         return false;
     }
 
     @Override
-    protected void registerData() {
+    protected void defineSynchedData() {
     }
 
     public AmmoProperties getProperties() {
@@ -62,15 +62,15 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     }
 
     @Override
-    protected void onImpact(RayTraceResult result) {
+    protected void onHit(RayTraceResult result) {
         if(this.properties != null) {
-            super.onImpact(result);
+            super.onHit(result);
 
-            if (!this.world.isRemote()) {
+            if (!this.level.isClientSide()) {
 
                 if (this.properties.ShouldDamageMultipleComponent()) {
-                    boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.func_234616_v_());
-                    this.world.createExplosion(this, this.getPosX(), this.getPosY(), this.getPosZ(), (float) 1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+                    boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner());
+                    this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float) 1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
                 }
             }
         }
@@ -78,35 +78,35 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityRayTraceResult result) {
         Entity target = result.getEntity();
-        double DistanceMultiplier = Math.min(400/getDistanceSq(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
+        double DistanceMultiplier = Math.min(400/distanceToSqr(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
         if(this.properties != null) {
             if (target instanceof EntityKansenBase) {
-                ((EntityKansenBase) target).attackEntityFromCannon(DamageSources.causeCannonDamage(this, this.func_234616_v_()), this.properties, DistanceMultiplier);
-            } else target.attackEntityFrom(DamageSources.causeCannonDamage(this, this.func_234616_v_()), (float) (this.properties.getMaxDamage() * 1.2));
+                ((EntityKansenBase) target).attackEntityFromCannon(DamageSources.causeCannonDamage(this, this.getOwner()), this.properties, DistanceMultiplier);
+            } else target.hurt(DamageSources.causeCannonDamage(this, this.getOwner()), (float) (this.properties.getMaxDamage() * 1.2));
         }
         this.remove();
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        Vector3d vector3d = (new Vector3d(x, y, z)).normalize().add(this.rand.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.rand.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.rand.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale((double)velocity);
-        this.setMotion(vector3d);
-        float f = MathHelper.sqrt(horizontalMag(vector3d));
-        this.rotationYaw = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
-        this.rotationPitch = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
-        this.prevRotationYaw = this.rotationYaw;
-        this.prevRotationPitch = this.rotationPitch;
+        Vector3d vector3d = (new Vector3d(x, y, z)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale((double)velocity);
+        this.setDeltaMovement(vector3d);
+        float f = MathHelper.sqrt(getHorizontalDistanceSqr(vector3d));
+        this.yRot = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
+        this.xRot = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
+        this.yRotO = this.yRot;
+        this.xRotO = this.xRot;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public void tick() {
-        if(this.ticksExisted == 600 || this.isInWater()){
+        if(this.tickCount == 600 || this.isInWater()){
             this.remove();
         }
         super.tick();

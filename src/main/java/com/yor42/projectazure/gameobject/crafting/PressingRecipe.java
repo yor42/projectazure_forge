@@ -36,7 +36,7 @@ public class PressingRecipe implements IRecipe<IInventory> {
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        return this.ingredient.test(inv.getStackInSlot(0)) && this.mold.test(inv.getStackInSlot(1));
+        return this.ingredient.test(inv.getItem(0)) && this.mold.test(inv.getItem(1));
     }
 
     public int getProcessTick(){
@@ -52,17 +52,17 @@ public class PressingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack assemble(IInventory inv) {
         return this.result.copy();
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return this.result;
     }
 
@@ -85,13 +85,13 @@ public class PressingRecipe implements IRecipe<IInventory> {
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<PressingRecipe>{
         //ReadFromJson
         @Override
-        public PressingRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public PressingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
-            Ingredient ingredient = Ingredient.deserialize(json.get("ingredient"));
-            Ingredient mold = Ingredient.deserialize(json.get("mold"));
-            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getString(json, "result"));
-            int processtime = JSONUtils.getInt(json, "processtime", 200);
-            int count = JSONUtils.getInt(json, "count", 1);
+            Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
+            Ingredient mold = Ingredient.fromJson(json.get("mold"));
+            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getAsString(json, "result"));
+            int processtime = JSONUtils.getAsInt(json, "processtime", 200);
+            int count = JSONUtils.getAsInt(json, "count", 1);
             ItemStack result = new ItemStack(ForgeRegistries.ITEMS.getValue(ItemID), count);
 
             return new PressingRecipe(recipeId, ingredient, mold, processtime, result);
@@ -99,20 +99,20 @@ public class PressingRecipe implements IRecipe<IInventory> {
         //ReadFromNetwork
         @Nullable
         @Override
-        public PressingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            Ingredient ingredient = Ingredient.read(buffer);
-            Ingredient mold = Ingredient.read(buffer);
+        public PressingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            Ingredient ingredient = Ingredient.fromNetwork(buffer);
+            Ingredient mold = Ingredient.fromNetwork(buffer);
             int processtime = buffer.readInt();
-            ItemStack result = buffer.readItemStack();
+            ItemStack result = buffer.readItem();
             return new PressingRecipe(recipeId, ingredient, mold, processtime, result);
         }
 
         @Override
-        public void write(PacketBuffer buffer, PressingRecipe recipe) {
-            recipe.ingredient.write(buffer);
-            recipe.mold.write(buffer);
+        public void toNetwork(PacketBuffer buffer, PressingRecipe recipe) {
+            recipe.ingredient.toNetwork(buffer);
+            recipe.mold.toNetwork(buffer);
             buffer.writeInt(recipe.processTick);
-            buffer.writeItemStack(recipe.result);
+            buffer.writeItem(recipe.result);
         }
     }
 }

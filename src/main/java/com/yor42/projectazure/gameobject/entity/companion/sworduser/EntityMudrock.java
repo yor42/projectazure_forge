@@ -52,11 +52,11 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.swingProgress>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+        if(this.attackAnim>0){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
@@ -74,7 +74,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
         }
 
         if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("opendoorL", false));
             }
             else{
@@ -89,7 +89,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
@@ -101,8 +101,8 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
 
-        if(this.isSitting()){
-            if(this.getHeldItemMainhand().getItem() instanceof TieredItem){
+        if(this.isOrderedToSit()){
+            if(this.getMainHandItem().getItem() instanceof TieredItem){
                 event.getController().setAnimation(builder.addAnimation("sit_idle_arm_toolmainhand", true));
             }
             else {
@@ -120,8 +120,8 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else{
-            if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-                if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+            if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+                if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                     event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
                 }
                 return PlayState.CONTINUE;
@@ -138,13 +138,13 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSitting() || this.getRidingEntity() != null){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -178,7 +178,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     protected void soundListener(SoundKeyframeEvent event) {
-        this.playSound(registerSounds.HAMMER_SWING, 1, 0.8F+(0.4F*this.getRNG().nextFloat()));
+        this.playSound(registerSounds.HAMMER_SWING, 1, 0.8F+(0.4F*this.getRandom().nextFloat()));
     }
 
     @Nonnull
@@ -209,7 +209,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public void playMeleeAttackPreSound() {
-        this.playSound(registerSounds.HAMMER_SWING, 1, 0.8F+(0.2F*this.getRNG().nextFloat()));
+        this.playSound(registerSounds.HAMMER_SWING, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
     }
 
     @Override
@@ -220,9 +220,9 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         //this.playSound(getAttackSound(), 1F, 0.8F + this.getRNG().nextFloat() * 0.4F);
-        target.attackEntityFrom(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.causeMobDamage(this), damage*0.5F);
-        target.applyKnockback(0.15F, MathHelper.sin(this.rotationYaw * ((float)Math.PI / 180F)), -MathHelper.cos(this.rotationYaw * ((float)Math.PI / 180F)));
-        this.playSound(registerSounds.HAMMER_HIT, 1, 0.8F+(0.4F*this.getRNG().nextFloat()));
+        target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage*0.5F);
+        target.knockback(0.15F, MathHelper.sin(this.yRot * ((float)Math.PI / 180F)), -MathHelper.cos(this.yRot * ((float)Math.PI / 180F)));
+        this.playSound(registerSounds.HAMMER_HIT, 1, 0.8F+(0.4F*this.getRandom().nextFloat()));
     }
 
     @Override
@@ -257,12 +257,12 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.MudrockMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.MudrockSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.MudrockHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.MudrockAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.MudrockMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.MudrockSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.MudrockHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.MudrockAttackDamage.get())
                 ;
     }
 }

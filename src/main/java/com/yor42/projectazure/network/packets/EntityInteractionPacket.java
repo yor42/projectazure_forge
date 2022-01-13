@@ -24,14 +24,14 @@ public class EntityInteractionPacket {
 
     public static EntityInteractionPacket decode (final PacketBuffer buffer){
         final int ID = buffer.readInt();
-        final EntityBehaviorType BehaviorType = buffer.readEnumValue(EntityBehaviorType.class);
+        final EntityBehaviorType BehaviorType = buffer.readEnum(EntityBehaviorType.class);
         final boolean value = buffer.readBoolean();
         return new EntityInteractionPacket(ID, BehaviorType, value);
     }
 
     public static void encode(final EntityInteractionPacket msg, final PacketBuffer buffer){
         buffer.writeInt(msg.EntityID);
-        buffer.writeEnumValue(msg.behaviorType);
+        buffer.writeEnum(msg.behaviorType);
         buffer.writeBoolean(msg.value);
     }
 
@@ -40,12 +40,12 @@ public class EntityInteractionPacket {
         ctx.get().enqueueWork(() -> {
             final ServerPlayerEntity playerEntity = ctx.get().getSender();
             if(playerEntity != null) {
-                final ServerWorld world = Objects.requireNonNull(ctx.get().getSender()).getServerWorld();
-                Entity entity = world.getEntityByID(msg.EntityID);
+                final ServerWorld world = Objects.requireNonNull(ctx.get().getSender()).getLevel();
+                Entity entity = world.getEntity(msg.EntityID);
                 if(entity instanceof AbstractEntityCompanion){
                     switch(msg.behaviorType){
                         case SIT:
-                            ((AbstractEntityCompanion) entity).func_233687_w_(msg.value);
+                            ((AbstractEntityCompanion) entity).setOrderedToSit(msg.value);
                             break;
                         case HOMEMODE:
                             ((AbstractEntityCompanion) entity).setFreeRoaming(msg.value);

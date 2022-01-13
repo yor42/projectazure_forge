@@ -25,7 +25,7 @@ public class PressingRecipeBuilder {
     private final Item result;
     private final Ingredient ingredient, mold;
     private final int processingTime, count;
-    private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
+    private final Advancement.Builder advancementBuilder = Advancement.Builder.advancement();
 
     public PressingRecipeBuilder(IItemProvider result, Ingredient ingredient, Ingredient mold, int count, int processingTime) {
         this.result = result.asItem();
@@ -47,7 +47,7 @@ public class PressingRecipeBuilder {
      * Adds a criterion needed to unlock the recipe.
      */
     public PressingRecipeBuilder addCriterion(String name, ICriterionInstance criterionIn) {
-        this.advancementBuilder.withCriterion(name, criterionIn);
+        this.advancementBuilder.addCriterion(name, criterionIn);
         return this;
     }
 
@@ -63,8 +63,8 @@ public class PressingRecipeBuilder {
 
     public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
         this.validate(id);
-        this.advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id)).withRewards(AdvancementRewards.Builder.recipe(id)).withRequirementsStrategy(IRequirementsStrategy.OR);
-        consumerIn.accept(new PressingRecipeBuilder.Result(id, "", this.ingredient, this.mold, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getGroup().getPath() + "/" + id.getPath()), registerRecipes.Serializers.PRESSING.get()));
+        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
+        consumerIn.accept(new PressingRecipeBuilder.Result(id, "", this.ingredient, this.mold, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.PRESSING.get()));
     }
 
     private void validate(ResourceLocation id) {
@@ -96,27 +96,27 @@ public class PressingRecipeBuilder {
             this.serializer = serializerIn;
         }
 
-        public void serialize(JsonObject json) {
+        public void serializeRecipeData(JsonObject json) {
 
             if (!this.group.isEmpty()) {
                 json.addProperty("group", this.group);
             }
 
-            json.add("ingredient", this.ingredient.serialize());
-            json.add("mold", this.mold.serialize());
+            json.add("ingredient", this.ingredient.toJson());
+            json.add("mold", this.mold.toJson());
             json.addProperty("result", ForgeRegistries.ITEMS.getKey(this.result).toString());
             json.addProperty("count", this.count);
             json.addProperty("cookingtime", this.cookingTime);
         }
 
-        public IRecipeSerializer<?> getSerializer() {
+        public IRecipeSerializer<?> getType() {
             return this.serializer;
         }
 
         /**
          * Gets the ID for the recipe.
          */
-        public ResourceLocation getID() {
+        public ResourceLocation getId() {
             return this.id;
         }
 
@@ -124,16 +124,12 @@ public class PressingRecipeBuilder {
          * Gets the JSON for the advancement that unlocks this recipe. Null if there is no advancement.
          */
         @Nullable
-        public JsonObject getAdvancementJson() {
-            return this.advancementBuilder.serialize();
+        public JsonObject serializeAdvancement() {
+            return this.advancementBuilder.serializeToJson();
         }
 
-        /**
-         * Gets the ID for the advancement associated with this recipe. Should not be null if {@link #getAdvancementJson}
-         * is non-null.
-         */
         @Nullable
-        public ResourceLocation getAdvancementID() {
+        public ResourceLocation getAdvancementId() {
             return this.advancementId;
         }
     }

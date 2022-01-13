@@ -27,19 +27,19 @@ public class CompanionUseGunGoal extends Goal {
         this.companion = companion;
         this.moveSpeedAmp = speed;
         this.maxAttackDistance = maxAttackDistance;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
 
     private ItemStack getValidGunStack(){
-        if(this.companion.getHeldItem(this.getValidGunHand()).getItem() instanceof ItemGunBase){
-            return this.companion.getHeldItem(this.getValidGunHand());
+        if(this.companion.getItemInHand(this.getValidGunHand()).getItem() instanceof ItemGunBase){
+            return this.companion.getItemInHand(this.getValidGunHand());
         }
         return ItemStack.EMPTY;
     }
 
     private Hand getValidGunHand(){
-        if(this.companion.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+        if(this.companion.getMainHandItem().getItem() instanceof ItemGunBase){
             return Hand.MAIN_HAND;
         }
         else
@@ -48,13 +48,13 @@ public class CompanionUseGunGoal extends Goal {
 
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         ItemStack gunStack = this.getValidGunStack();
 
         if(gunStack.getItem() instanceof ItemGunBase) {
             boolean canusegun = this.companion.shouldUseGun();
-            boolean hastarget = this.companion.getAttackTarget() != null && this.companion.getAttackTarget().isAlive();
-            boolean entitycanAttack = !this.companion.isSleeping() && !this.companion.isSitting();
+            boolean hastarget = this.companion.getTarget() != null && this.companion.getTarget().isAlive();
+            boolean entitycanAttack = !this.companion.isSleeping() && !this.companion.isOrderedToSit();
             return canusegun && entitycanAttack && hastarget;
 
         }
@@ -63,33 +63,33 @@ public class CompanionUseGunGoal extends Goal {
 
 
 
-    public void startExecuting() {
-        super.startExecuting();
-        this.companion.setAggroed(true);
-        this.companion.getNavigator().clearPath();
+    public void start() {
+        super.start();
+        this.companion.setAggressive(true);
+        this.companion.getNavigation().stop();
     }
 
-    public void resetTask() {
-        super.resetTask();
-        this.companion.setAggroed(false);
+    public void stop() {
+        super.stop();
+        this.companion.setAggressive(false);
         this.seeTime = 0;
         this.attackTime = -1;
-        this.companion.resetActiveHand();
+        this.companion.stopUsingItem();
         this.companion.setUsingGun(false);
-        this.companion.getNavigator().clearPath();
+        this.companion.getNavigation().stop();
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return (this.shouldExecute() || !this.companion.getNavigator().noPath()) && this.getValidGunStack() != ItemStack.EMPTY;
+    public boolean canContinueToUse() {
+        return (this.canUse() || !this.companion.getNavigation().isDone()) && this.getValidGunStack() != ItemStack.EMPTY;
     }
 
     @Override
     public void tick() {
-        LivingEntity target = this.companion.getAttackTarget();
+        LivingEntity target = this.companion.getTarget();
         if(target != null){
-            double distanceSq = this.companion.getDistanceSq(target.getPosX(), target.getPosY(), target.getPosZ());
-            boolean canSee = this.companion.getEntitySenses().canSee(target);
+            double distanceSq = this.companion.distanceToSqr(target.getX(), target.getY(), target.getZ());
+            boolean canSee = this.companion.getSensing().canSee(target);
             boolean flag1 = this.seeTime > 0;
             if (canSee != flag1) {
                 this.seeTime = 0;
@@ -106,19 +106,19 @@ public class CompanionUseGunGoal extends Goal {
             }
 
             if (!(distanceSq > (double)this.maxAttackDistance) && this.seeTime >= 20) {
-                this.companion.getNavigator().clearPath();
+                this.companion.getNavigation().stop();
                 ++this.strafingTime;
             } else {
-                this.companion.getNavigator().tryMoveToEntityLiving(target, this.moveSpeedAmp);
+                this.companion.getNavigation().moveTo(target, this.moveSpeedAmp);
                 this.strafingTime = -1;
             }
 
             if (this.strafingTime >= 20) {
-                if ((double)this.companion.getRNG().nextFloat() < 0.3D) {
+                if ((double)this.companion.getRandom().nextFloat() < 0.3D) {
                     this.strafingClockwise = !this.strafingClockwise;
                 }
 
-                if ((double)this.companion.getRNG().nextFloat() < 0.3D) {
+                if ((double)this.companion.getRandom().nextFloat() < 0.3D) {
                     this.strafingBackwards = !this.strafingBackwards;
                 }
 
@@ -132,17 +132,17 @@ public class CompanionUseGunGoal extends Goal {
                     this.strafingBackwards = true;
                 }
 
-                this.companion.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-                this.companion.faceEntity(target, 30.0F, 30.0F);
+                this.companion.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                this.companion.lookAt(target, 30.0F, 30.0F);
             }
             else {
-                this.companion.getLookController().setLookPositionWithEntity(target, 30.0F, 30.0F);
+                this.companion.getLookControl().setLookAt(target, 30.0F, 30.0F);
             }
             boolean flag = this.companion.isUsingGun();
 
             if (flag) {
                 if (!canSee && this.seeTime < -60) {
-                    this.companion.resetActiveHand();
+                    this.companion.stopUsingItem();
                     this.companion.setUsingGun(false);
                 } else if (canSee) {
                     this.companion.setUsingGun(true);
@@ -158,7 +158,7 @@ public class CompanionUseGunGoal extends Goal {
                 }
             } else if (this.seeTime >= -60) {
                 this.companion.setUsingGun(true);
-                this.companion.setActiveHand(this.getValidGunHand());
+                this.companion.startUsingItem(this.getValidGunHand());
             }
 
         }

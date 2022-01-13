@@ -38,7 +38,7 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
     }
 
     @Override
-    public int size() {
+    public int getCount() {
         return values.length;
     }
 });
@@ -47,17 +47,17 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
     public ContainerRecruitBeacon(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
         super(RECRUIT_BEACON_CONTAINER_TYPE, id);
         this.field = field;
-        trackIntArray(this.field);
+        addDataSlots(this.field);
         this.addSlot(new SlotItemHandler(Inventory, 0, 19, 10){
             @Override
-            public boolean isItemValid(@Nonnull ItemStack stack) {
+            public boolean mayPlace(@Nonnull ItemStack stack) {
                 return stack.getItem() == registerItems.HEADHUNTING_PCB.get();
             }
         });
         for(int i=0; i<2; i++){
             this.addSlot(new SlotItemHandler(Inventory, 1+i, 10+18*i, 33){
                 @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
+                public boolean mayPlace(@Nonnull ItemStack stack) {
                     return stack.getItem() == registerItems.ORUNDUM.get();
                 }
             });
@@ -65,7 +65,7 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
         for(int i=0; i<2; i++){
             this.addSlot(new SlotItemHandler(Inventory, 3+i, 10+18*i, 56){
                 @Override
-                public boolean isItemValid(@Nonnull ItemStack stack) {
+                public boolean mayPlace(@Nonnull ItemStack stack) {
                     return stack.getItem() == Items.GOLD_INGOT;
                 }
             });
@@ -102,40 +102,40 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index <5) {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true)) {
+                if (!this.moveItemStackTo(itemstack1, 9, 45, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(itemstack1, itemstack);
+                slot.onQuickCraft(itemstack1, itemstack);
             } else {
                 if (itemstack1.getItem() == registerItems.HEADHUNTING_PCB.get()) {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 else if (itemstack1.getItem() == registerItems.ORUNDUM.get()) {
-                    if (!this.mergeItemStack(itemstack1, 1, 3, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 1, 3, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().isIn(Tags.Items.INGOTS_GOLD)) {
-                    if (!this.mergeItemStack(itemstack1, 3, 5, false)) {
+                else if (itemstack1.getItem().is(Tags.Items.INGOTS_GOLD)) {
+                    if (!this.moveItemStackTo(itemstack1, 3, 5, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
@@ -149,7 +149,7 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 }

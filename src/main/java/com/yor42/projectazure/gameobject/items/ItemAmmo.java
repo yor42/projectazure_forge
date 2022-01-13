@@ -3,6 +3,8 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.Item;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemAmmo extends Item {
 
     private final enums.AmmoCalibur calibur;

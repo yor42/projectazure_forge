@@ -14,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
 
     private final AbstractEntityCompanion host;
@@ -31,14 +33,14 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
         this.speed = speed;
         this.host = tameable;
         this.mindist = minDist;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Flag.LOOK));
     }
 
-    public boolean shouldExecute() {
-        super.shouldExecute();
+    public boolean canUse() {
+        super.canUse();
         LivingEntity livingentity = this.host.getOwner();
 
-        if(livingentity == null||livingentity.isSpectator() || livingentity.getEntityWorld() != this.host.getEntityWorld() ||this.host.isSitting()||this.host.getDistanceSq(livingentity) < (double)(this.mindist * this.mindist)||this.host.isFreeRoaming() || this.host.isSleeping() || this.host.isMovingtoRecruitStation){
+        if(livingentity == null||livingentity.isSpectator() || livingentity.getCommandSenderWorld() != this.host.getCommandSenderWorld() ||this.host.isOrderedToSit()||this.host.distanceToSqr(livingentity) < (double)(this.mindist * this.mindist)||this.host.isFreeRoaming() || this.host.isSleeping() || this.host.isMovingtoRecruitStation){
             return false;
         }
         else{
@@ -48,8 +50,8 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
     }
 
     @Override
-    public void resetTask() {
-        super.resetTask();
+    public void stop() {
+        super.stop();
     }
 
     public void tick() {
@@ -58,20 +60,20 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
         if (this.owner != null) {
             boolean val = this.host.isSwimming();
 
-            boolean cond1 = this.host.getDistance(this.owner) >= 5.0D;
-            boolean cond2 = !this.host.getLeashed();
+            boolean cond1 = this.host.distanceTo(this.owner) >= 5.0D;
+            boolean cond2 = !this.host.isLeashed();
             boolean cond3 = !this.host.isPassenger();
 
             if (cond1&&cond2&&cond3) {
-                //func_226330_g_();
-                this.host.getLookController().setLookPositionWithEntity(this.owner, 10.0F, (float) this.host.getVerticalFaceSpeed());
-                this.host.getNavigator().tryMoveToEntityLiving(this.owner, this.speed);
+                //teleportToOwner();
+                this.host.getLookControl().setLookAt(this.owner, 10.0F, (float) this.host.getMaxHeadXRot());
+                this.host.getNavigation().moveTo(this.owner, this.speed);
                 if(!val) {
-                    this.host.setSprinting(this.host.getDistance(this.owner) > 7.0);
+                    this.host.setSprinting(this.host.distanceTo(this.owner) > 7.0);
                 }
 
                 if(this.host.isSwimming()){
-                    if(this.host.getNavigator().getPathToEntity(this.owner, 0) == null){
+                    if(this.host.getNavigation().createPath(this.owner, 0) == null){
                         this.host.setSwimmingUp(true);
                     }
                     else if(this.host.isSwimmingUp()){
@@ -79,7 +81,7 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
                     }
                 }
 
-                if(this.host.getDistance(this.owner)>20){
+                if(this.host.distanceTo(this.owner)>20){
                     this.tryToTeleportNearEntity();
                 }
 
@@ -88,7 +90,7 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
     }
 
     private void tryToTeleportNearEntity() {
-        BlockPos blockpos = this.owner.getPosition();
+        BlockPos blockpos = this.owner.blockPosition();
 
         for(int i = 0; i < 10; ++i) {
             int j = this.getRandomNumber(-3, 3);
@@ -103,45 +105,45 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
     }
 
     private int getRandomNumber(int min, int max) {
-        return this.host.getRNG().nextInt(max - min + 1) + min;
+        return this.host.getRandom().nextInt(max - min + 1) + min;
     }
 
     private boolean tryToTeleportToLocation(int x, int y, int z) {
-        if (Math.abs((double)x - this.owner.getPosX()) < 2.0D && Math.abs((double)z - this.owner.getPosZ()) < 2.0D) {
+        if (Math.abs((double)x - this.owner.getX()) < 2.0D && Math.abs((double)z - this.owner.getZ()) < 2.0D) {
             return false;
         } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
             return false;
         } else {
-            this.host.setLocationAndAngles((double)x + 0.5D, (double)y, (double)z + 0.5D, this.host.rotationYaw, this.host.rotationPitch);
-            this.host.getNavigator().clearPath();
+            this.host.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.host.yRot, this.host.xRot);
+            this.host.getNavigation().stop();
             return true;
         }
     }
 
     private boolean isTeleportFriendlyBlock(BlockPos pos) {
-        PathNodeType pathnodetype = WalkNodeProcessor.func_237231_a_(host.getEntityWorld(), pos.toMutable());
+        PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(host.getCommandSenderWorld(), pos.mutable());
         if (pathnodetype != PathNodeType.WALKABLE) {
             return false;
         } else {
-            BlockState blockstate = this.host.getEntityWorld().getBlockState(pos.down());
+            BlockState blockstate = this.host.getCommandSenderWorld().getBlockState(pos.below());
             if (!this.shouldTeleport && blockstate.getBlock() instanceof LeavesBlock) {
                 return false;
             } else {
-                BlockPos blockpos = pos.subtract(this.host.getPosition());
-                return this.host.getEntityWorld().hasNoCollisions(this.host, this.host.getBoundingBox().offset(blockpos));
+                BlockPos blockpos = pos.subtract(this.host.blockPosition());
+                return this.host.getCommandSenderWorld().noCollision(this.host, this.host.getBoundingBox().move(blockpos));
             }
         }
     }
 
-    private void func_226330_g_()
+    private void teleportToOwner()
     {
-        BlockPos blockpos = this.owner.getPosition();
+        BlockPos blockpos = this.owner.blockPosition();
         for(int i = 0; i < 10; ++i)
         {
             int j = this.getRandBetween(-3, 3);
             int k = this.getRandBetween(-1, 1);
             int l = this.getRandBetween(-3, 3);
-            boolean flag = this.func_226328_a_(blockpos.getX() + j, blockpos.getY() + k, blockpos.getZ() + l);
+            boolean flag = this.maybeTeleportTo(blockpos.getX() + j, blockpos.getY() + k, blockpos.getZ() + l);
             if(flag)
             {
                 return;
@@ -149,47 +151,47 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
         }
     }
 
-    private boolean func_226328_a_(int p_226328_1_, int p_226328_2_, int p_226328_3_)
+    private boolean maybeTeleportTo(int p_226328_1_, int p_226328_2_, int p_226328_3_)
     {
-        if(Math.abs((double)p_226328_1_ - this.host.getOwner().getPosX()) < 2.0D && Math.abs((double)p_226328_3_ - this.host.getOwner().getPosZ()) < 2.0D)
+        if(Math.abs((double)p_226328_1_ - this.host.getOwner().getX()) < 2.0D && Math.abs((double)p_226328_3_ - this.host.getOwner().getZ()) < 2.0D)
         {
             return false;
         }
-        else if(!this.func_226329_a_(new BlockPos(p_226328_1_, p_226328_2_, p_226328_3_)))
+        else if(!this.canTeleportTo(new BlockPos(p_226328_1_, p_226328_2_, p_226328_3_)))
         {
             return false;
         }
         else
         {
-            this.host.setLocationAndAngles((double)p_226328_1_ + 0.5D, (double)p_226328_2_, (double)p_226328_3_ + 0.5D, this.host.rotationYaw, this.host.rotationPitch);
+            this.host.moveTo((double)p_226328_1_ + 0.5D, (double)p_226328_2_, (double)p_226328_3_ + 0.5D, this.host.yRot, this.host.xRot);
             return true;
         }
     }
 
-    private boolean func_226329_a_(BlockPos pos)
+    private boolean canTeleportTo(BlockPos pos)
     {
-        PathNodeType pathnodetype = WalkNodeProcessor.func_237231_a_(this.host.getEntityWorld(), pos.toMutable());
+        PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(this.host.getCommandSenderWorld(), pos.mutable());
         if(pathnodetype == PathNodeType.DANGER_FIRE || pathnodetype == PathNodeType.DAMAGE_FIRE)
         {
             return false;
         }
         else
         {
-            BlockState blockstate = this.host.getEntityWorld().getBlockState(pos.down());
+            BlockState blockstate = this.host.getCommandSenderWorld().getBlockState(pos.below());
             if(blockstate.getBlock() instanceof AirBlock || blockstate.getBlock() == Blocks.LAVA)
             {
                 return false;
             }
             else
             {
-                BlockPos blockpos = pos.subtract(this.host.getPosition());
-                return this.host.getEntityWorld().hasNoCollisions(this.host, this.host.getBoundingBox().offset(blockpos));
+                BlockPos blockpos = pos.subtract(this.host.blockPosition());
+                return this.host.getCommandSenderWorld().noCollision(this.host, this.host.getBoundingBox().move(blockpos));
             }
         }
     }
 
     private int getRandBetween(int p_226327_1_, int p_226327_2_)
     {
-        return this.host.getRNG().nextInt(p_226327_2_ - p_226327_1_ + 1) + p_226327_1_;
+        return this.host.getRandom().nextInt(p_226327_2_ - p_226327_1_ + 1) + p_226327_1_;
     }
 }

@@ -24,6 +24,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.HandSide;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -49,58 +50,61 @@ import static net.minecraft.util.HandSide.RIGHT;
 public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     public static final int life = 30;
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.createKey(EntityClaymore.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(EntityClaymore.class, DataSerializers.OPTIONAL_UUID);
     protected final AnimationFactory factory = new AnimationFactory(this);
 
     public EntityClaymore(EntityType<? extends LivingEntity> type, World worldIn) {
         super(type, worldIn);
-        this.ignoreFrustumCheck = true;
+        this.noCulling = true;
     }
 
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.getDataManager().register(OWNER_UNIQUE_ID, Optional.empty());
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(OWNER_UNIQUE_ID, Optional.empty());
     }
 
     @Nullable
     public UUID getOwnerId() {
-        return this.dataManager.get(OWNER_UNIQUE_ID).orElse(null);
+        return this.entityData.get(OWNER_UNIQUE_ID).orElse(null);
     }
 
     public void setOwnerId(@Nullable UUID p_184754_1_) {
-        this.dataManager.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
+        this.entityData.set(OWNER_UNIQUE_ID, Optional.ofNullable(p_184754_1_));
     }
 
     @Nullable
-    public LivingEntity getOwner() {
-        try {
-            UUID uuid = this.getOwnerId();
-            return uuid == null ? null : this.world.getPlayerByUuid(uuid);
-        } catch (IllegalArgumentException illegalargumentexception) {
-            return null;
+    public Entity getOwner() {
+        if(!this.getCommandSenderWorld().isClientSide()) {
+            try {
+                UUID uuid = this.getOwnerId();
+                return uuid == null ? null : ((ServerWorld)this.level).getEntity(this.getOwnerId());
+            } catch (IllegalArgumentException illegalargumentexception) {
+                return null;
+            }
         }
+        return null;
     }
 
     @Override
     public void tick() {
         super.tick();
-        if(!this.getEntityWorld().isRemote()){
+        if(!this.getCommandSenderWorld().isClientSide()){
 
-            if(this.ticksExisted == 5){
-                this.playSound(registerSounds.CLAYMORE_IMPACT, 1.0F, 0.8F+(0.4F*this.getRNG().nextFloat()));
-                List<LivingEntity> entitylist = this.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(2));
+            if(this.tickCount == 5){
+                this.playSound(registerSounds.CLAYMORE_IMPACT, 1.0F, 0.8F+(0.4F*this.getRandom().nextFloat()));
+                List<LivingEntity> entitylist = this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2));
                 for(LivingEntity entity:entitylist){
                     if(entity == this){
                         continue;
                     }
-                    float damage = 20/this.getDistance(entity);
-                    entity.attackEntityFrom(DamageSources.CLAYMORE, damage);
+                    float damage = 20/this.distanceTo(entity);
+                    entity.hurt(DamageSources.CLAYMORE, damage);
                 }
             }
 
-            if(this.ticksExisted>=life){
+            if(this.tickCount>=life){
                 if(this.getOwner() != null && this.getOwner() instanceof EntityRosmontis){
                     ItemStack stack = new ItemStack(registerItems.CLAYMORE.get());
                     boolean isStored = false;
@@ -108,6 +112,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
                         if(((EntityRosmontis) this.getOwner()).getInventory().insertItem(12+i, stack, true).isEmpty()){
                             ((EntityRosmontis) this.getOwner()).getInventory().insertItem(12+i, stack, false);
                             isStored = true;
+                            break;
                         }
                     }
                     if(!isStored){
@@ -115,11 +120,12 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
                             if(((EntityRosmontis) this.getOwner()).getInventory().insertItem(i, stack, true).isEmpty()){
                                 ((EntityRosmontis) this.getOwner()).getInventory().insertItem(i, stack, false);
                                 isStored = true;
+                                break;
                             }
                         }
                         if(!isStored){
-                            ItemEntity entity = new ItemEntity(this.getEntityWorld(), this.getOwner().getPosX(), this.getOwner().getPosY(), this.getOwner().getPosZ(), stack);
-                            this.getEntityWorld().addEntity(entity);
+                            ItemEntity entity = new ItemEntity(this.getCommandSenderWorld(), this.getOwner().getX(), this.getOwner().getY(), this.getOwner().getZ(), stack);
+                            this.getCommandSenderWorld().addFreshEntity(entity);
                         }
                     }
                 }
@@ -128,20 +134,22 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
         }
     }
 
+
+
     @Override
-    public HandSide getPrimaryHand() {
+    public HandSide getMainArm() {
         return RIGHT;
     }
 
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundNBT compound) {
         UUID uuid;
-        if (compound.hasUniqueId("Owner")) {
-            uuid = compound.getUniqueId("Owner");
+        if (compound.hasUUID("Owner")) {
+            uuid = compound.getUUID("Owner");
         } else {
             String s = compound.getString("Owner");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNeeded(this.getServer(), s);
+            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
         }
 
         if (uuid != null) {
@@ -154,30 +162,30 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     @Nonnull
     @Override
-    public Iterable<ItemStack> getArmorInventoryList() {
+    public Iterable<ItemStack> getArmorSlots() {
         return new ArrayList<>();
     }
 
     @Override
-    public ItemStack getItemStackFromSlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
 
     }
 
     @Override
-    public void writeAdditional(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
         if (this.getOwnerId() != null) {
-            compound.putUniqueId("owner", this.getOwnerId());
+            compound.putUUID("owner", this.getOwnerId());
         }
     }
 
     @Nonnull
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -211,12 +219,12 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 0)
-                .createMutableAttribute(Attributes.MAX_HEALTH, 30)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 0)
+                .add(Attributes.MOVEMENT_SPEED, 0)
+                .add(ForgeMod.SWIM_SPEED.get(), 0)
+                .add(Attributes.MAX_HEALTH, 30)
+                .add(Attributes.ATTACK_DAMAGE, 0)
                 ;
     }
 }

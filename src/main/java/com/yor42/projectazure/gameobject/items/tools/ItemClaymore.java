@@ -18,7 +18,7 @@ public class ItemClaymore extends Item implements IAnimatable {
 
     public ItemClaymore() {
         //Haha unstackable claymore
-        super(new Item.Properties().maxStackSize(1).group(PA_WEAPONS).setISTER(()->ItemClaymoreRenderer::new));
+        super(new Item.Properties().stacksTo(1).tab(PA_WEAPONS).setISTER(()->ItemClaymoreRenderer::new));
     }
 
     @Override

@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBlock {
 
     /** multi block structure state: 0:NO multi-structure, 1:mbs INACTIVE, 2:mbs ACTIVE */
@@ -27,9 +29,9 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
     }
 
     @Override
-    public boolean isTransparent(BlockState state) {
+    public boolean useShapeForLightOcclusion(BlockState state) {
 
-        return state.hasProperty(FORMED) && state.get(FORMED);
+        return state.hasProperty(FORMED) && state.getValue(FORMED);
     }
 
     @Override
@@ -51,21 +53,21 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
         if (state.getBlock() instanceof AbstractMultiBlockBase)
         {
             //set state
-            world.setBlockState(pos, world.getBlockState(pos).with(FORMED, mbState), 2);
+            world.setBlock(pos, world.getBlockState(pos).setValue(FORMED, mbState), 2);
         }
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(FORMED, false);
+        return super.getStateForPlacement(context).setValue(FORMED, false);
     }
 
     @Override
-    public void onBlockHarvested(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-        TileEntity tile = worldIn.getTileEntity(pos);
+    public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+        TileEntity tile = worldIn.getBlockEntity(pos);
 
-        if(!worldIn.isRemote && tile instanceof MultiblockBaseTE)
+        if(!worldIn.isClientSide && tile instanceof MultiblockBaseTE)
         {
             MultiblockBaseTE tile2 = (MultiblockBaseTE) tile;
 
@@ -75,14 +77,14 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
             }
         }
 
-        super.onBlockHarvested(worldIn, pos, state, player);
+        super.playerWillDestroy(worldIn, pos, state, player);
     }
 
     @Override
     public void onBlockExploded(BlockState state, World world, BlockPos pos, Explosion explosion) {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
-        if(!world.isRemote && tile instanceof MultiblockBaseTE)
+        if(!world.isClientSide && tile instanceof MultiblockBaseTE)
         {
             MultiblockBaseTE tile2 = (MultiblockBaseTE) tile;
 
@@ -94,8 +96,8 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(FORMED);
     }
 }

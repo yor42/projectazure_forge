@@ -1,8 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
-
+/*
 import com.chaosthedude.realistictorches.blocks.RealisticTorchBlock;
 import com.chaosthedude.realistictorches.items.MatchboxItem;
 import com.chaosthedude.realistictorches.items.UnlitTorchItem;
+
+ */
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.block.Block;
@@ -28,16 +30,16 @@ public class CompanionPlaceTorchGoal extends Goal {
 
     public CompanionPlaceTorchGoal(AbstractEntityCompanion companion){
         this.companion = companion;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
-        ItemStack mainHandStack = this.companion.getHeldItem(MAIN_HAND);
-        ItemStack offHandStack = this.companion.getHeldItem(OFF_HAND);
+        ItemStack mainHandStack = this.companion.getItemInHand(MAIN_HAND);
+        ItemStack offHandStack = this.companion.getItemInHand(OFF_HAND);
 
-        if(this.companion.isSitting() || this.companion.isSleeping()){
+        if(this.companion.isOrderedToSit() || this.companion.isSleeping()){
             return false;
         }
 
@@ -59,6 +61,9 @@ public class CompanionPlaceTorchGoal extends Goal {
 
             boolean isTorchUseable;
 
+            isTorchUseable = mainHandStack.getItem() == Items.TORCH;
+            this.isHoldingRealistictorches = false;
+            /*
             if(ModList.get().isLoaded("realistictorches")){
                 isTorchUseable = this.isRealisticTorchReady(mainHandStack ,MAIN_HAND);
             }
@@ -67,6 +72,8 @@ public class CompanionPlaceTorchGoal extends Goal {
                 this.isHoldingRealistictorches = false;
             }
 
+             */
+
             if(isTorchUseable) {
                 this.torchBlock = ((BlockItem) mainHandStack.getItem()).getBlock();
                 hasTorch = true;
@@ -74,8 +81,11 @@ public class CompanionPlaceTorchGoal extends Goal {
             }
         }
         else if(offHandStack.getItem() instanceof BlockItem && ((BlockItem) offHandStack.getItem()).getBlock() instanceof TorchBlock){
-            boolean isTorchUseable = false;
+            boolean isTorchUseable;
 
+            isTorchUseable = offHandStack.getItem() == Items.TORCH;
+            this.isHoldingRealistictorches = false;
+            /*
             if(ModList.get().isLoaded("realistictorches")){
                 isTorchUseable = this.isRealisticTorchReady(mainHandStack ,MAIN_HAND);
             }
@@ -84,6 +94,8 @@ public class CompanionPlaceTorchGoal extends Goal {
                 this.isHoldingRealistictorches = false;
             }
 
+             */
+
             if(isTorchUseable) {
                 this.torchBlock = ((BlockItem) offHandStack.getItem()).getBlock();
                 hasTorch = true;
@@ -91,16 +103,16 @@ public class CompanionPlaceTorchGoal extends Goal {
             }
         }
 
-        boolean isDark = this.companion.getEntityWorld().getLight(this.companion.getPosition())<7;
-        boolean canPlaceTorch = this.companion.getEntityWorld().getBlockState(this.companion.getPosition().down()).isSolid();
+        boolean isDark = this.companion.getCommandSenderWorld().getMaxLocalRawBrightness(this.companion.blockPosition())<7;
+        boolean canPlaceTorch = this.companion.getCommandSenderWorld().getBlockState(this.companion.blockPosition().below()).canOcclude();
 
         return hasTorch && isDark && canPlaceTorch;
     }
-
+/*
     private boolean isRealisticTorchReady(ItemStack torchstack, Hand hand){
         if(torchstack.getItem() instanceof UnlitTorchItem) {
             Hand othersidehand = hand == MAIN_HAND ? OFF_HAND : MAIN_HAND;
-            if(!(this.companion.getHeldItem(othersidehand).getItem() instanceof MatchboxItem) || (this.companion.getEntityWorld().canSeeSky(this.companion.getPosition()) && this.companion.getEntityWorld().isRaining())) {
+            if(!(this.companion.getItemInHand(othersidehand).getItem() instanceof MatchboxItem) || (this.companion.getCommandSenderWorld().canSeeSky(this.companion.blockPosition()) && this.companion.getCommandSenderWorld().isRaining())) {
                 this.isHoldingRealistictorches = false;
                 return false;
             }
@@ -109,32 +121,38 @@ public class CompanionPlaceTorchGoal extends Goal {
         return true;
     }
 
-    @Override
-    public void startExecuting() {
-        ItemStack torchStack = this.companion.getHeldItem(this.torchHand);
+ */
 
-        if(this.torchBlock != null && this.companion.getEntityWorld().getLight(this.companion.getPosition())<7) {
+    @Override
+    public void start() {
+        ItemStack torchStack = this.companion.getItemInHand(this.torchHand);
+
+        if(this.torchBlock != null && this.companion.getCommandSenderWorld().getMaxLocalRawBrightness(this.companion.blockPosition())<7) {
             this.companion.swing(this.torchHand, true);
             torchStack.shrink(1);
-            this.companion.getEntityWorld().setBlockState(this.companion.getPosition(), torchBlock.getDefaultState(), 2);
-
+            this.companion.getCommandSenderWorld().setBlock(this.companion.blockPosition(), torchBlock.defaultBlockState(), 2);
+            /*
             if(this.isHoldingRealistictorches && ModList.get().isLoaded("realistictorches")){
                 this.lightUpTorch(this.torchHand);
             }
 
+             */
+
         }
     }
-
+    /*
     private void lightUpTorch(Hand hand){
-        if(this.companion.getEntityWorld().getBlockState(this.companion.getPosition()).getBlock() instanceof RealisticTorchBlock){
-            RealisticTorchBlock torchBlock = (RealisticTorchBlock)this.companion.getEntityWorld().getBlockState(this.companion.getPosition()).getBlock();
-            torchBlock.playLightingSound(this.companion.getEntityWorld(), this.companion.getPosition());
+        if(this.companion.getCommandSenderWorld().getBlockState(this.companion.blockPosition()).getBlock() instanceof RealisticTorchBlock){
+            RealisticTorchBlock torchBlock = (RealisticTorchBlock)this.companion.getCommandSenderWorld().getBlockState(this.companion.blockPosition()).getBlock();
+            torchBlock.playLightingSound(this.companion.getCommandSenderWorld(), this.companion.blockPosition());
             Hand othersidehand = hand == MAIN_HAND ? OFF_HAND : MAIN_HAND;
-            this.companion.getHeldItem(othersidehand).damageItem(1, this.companion,(e)->{e.sendBreakAnimation(othersidehand);});
-            this.companion.swingArm(othersidehand);
-            torchBlock.changeToLit(this.companion.getEntityWorld(), this.companion.getPosition(), this.companion.getEntityWorld().getBlockState(this.companion.getPosition()));
+            this.companion.getItemInHand(othersidehand).hurtAndBreak(1, this.companion,(e)->{e.broadcastBreakEvent(othersidehand);});
+            this.companion.swing(othersidehand);
+            torchBlock.changeToLit(this.companion.getCommandSenderWorld(), this.companion.blockPosition(), this.companion.getCommandSenderWorld().getBlockState(this.companion.blockPosition()));
 
         }
     }
+
+     */
 
 }

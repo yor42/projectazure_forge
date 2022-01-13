@@ -9,6 +9,8 @@ import net.minecraft.state.StateContainer;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class AbstractElectricMachineBlock extends AbstractMachineBlock {
 
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
@@ -18,19 +20,19 @@ public abstract class AbstractElectricMachineBlock extends AbstractMachineBlock 
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
+    public BlockRenderType getRenderShape(BlockState state) {
         return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        super.fillStateContainer(builder);
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(POWERED);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return super.getStateForPlacement(context).with(POWERED, false);
+        return super.getStateForPlacement(context).setValue(POWERED, false);
     }
 }

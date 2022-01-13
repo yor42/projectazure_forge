@@ -23,30 +23,30 @@ import javax.annotation.Nonnull;
 import java.util.stream.Collectors;
 
 public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
-    private static final ILootCondition.IBuilder WITH_SLEDGEHAMMER = MatchTool.builder(ItemPredicate.Builder.create().item(registerItems.SLEDGEHAMMER.get()));
+    private static final ILootCondition.IBuilder WITH_SLEDGEHAMMER = MatchTool.toolMatches(ItemPredicate.Builder.item().of(registerItems.SLEDGEHAMMER.get()));
 
     @Override
     protected void addTables() {
-        this.registerDropSelfLootTable(registerBlocks.BAUXITE_ORE.get());
-        this.registerDropSelfLootTable(registerBlocks.COPPER_ORE.get());
-        this.registerDropSelfLootTable(registerBlocks.TIN_ORE.get());
-        this.registerDropSelfLootTable(registerBlocks.LEAD_ORE.get());
-        this.registerDropSelfLootTable(registerBlocks.ZINC_ORE.get());
-        this.registerDropSelfLootTable(registerBlocks.REENFORCED_PLANK.get());
-        this.registerDropSelfLootTable(registerBlocks.MACHINE_FRAME.get());
-        this.registerDropSelfLootTable(registerBlocks.REENFORCEDCONCRETE.get());
-        this.registerDropSelfLootTable(registerBlocks.DRYDOCKCONTROLLER.get());
-        this.registerLootTable(registerBlocks.METAL_PRESS.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
-        this.registerLootTable(registerBlocks.BASIC_REFINERY.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
-        this.registerLootTable(registerBlocks.ALLOY_FURNACE.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
-        this.registerLootTable(registerBlocks.RECRUIT_BEACON.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
-        this.registerLootTable(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), net.minecraft.data.loot.BlockLootTables::droppingWithName);
-        this.registerLootTable(registerBlocks.BOUNDING_BOX.get(), net.minecraft.data.loot.BlockLootTables.blockNoDrop());
-        this.registerLootTable(registerBlocks.ORIROCK.get(), (orirock) -> droppingWithSilkTouch(orirock, withSurvivesExplosion(orirock, ItemLootEntry.builder(registerItems.ORIGINITE.get()).acceptCondition(TableBonus.builder(Enchantments.FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).alternatively(ItemLootEntry.builder(orirock)))));
+        this.dropSelf(registerBlocks.BAUXITE_ORE.get());
+        this.dropSelf(registerBlocks.COPPER_ORE.get());
+        this.dropSelf(registerBlocks.TIN_ORE.get());
+        this.dropSelf(registerBlocks.LEAD_ORE.get());
+        this.dropSelf(registerBlocks.ZINC_ORE.get());
+        this.dropSelf(registerBlocks.REENFORCED_PLANK.get());
+        this.dropSelf(registerBlocks.MACHINE_FRAME.get());
+        this.dropSelf(registerBlocks.REENFORCEDCONCRETE.get());
+        this.dropSelf(registerBlocks.DRYDOCKCONTROLLER.get());
+        this.add(registerBlocks.METAL_PRESS.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
+        this.add(registerBlocks.BASIC_REFINERY.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
+        this.add(registerBlocks.ALLOY_FURNACE.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
+        this.add(registerBlocks.RECRUIT_BEACON.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
+        this.add(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
+        this.add(registerBlocks.BOUNDING_BOX.get(), net.minecraft.data.loot.BlockLootTables.noDrop());
+        this.add(registerBlocks.ORIROCK.get(), (orirock) -> createSilkTouchDispatchTable(orirock, applyExplosionCondition(orirock, ItemLootEntry.lootTableItem(registerItems.ORIGINITE.get()).when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).otherwise(ItemLootEntry.lootTableItem(orirock)))));
     }
     //.acceptFunction(SetCount.builder(RandomValueRange.of(4.0F, 5.0F)))
     protected static LootTable.Builder onlyWithHammerDoubling(IItemProvider item) {
-        return LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).acceptCondition(WITH_SLEDGEHAMMER).acceptFunction(SetCount.builder(RandomValueRange.of(2.0F, 2.1F))).addEntry(ItemLootEntry.builder(item)));
+        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).when(WITH_SLEDGEHAMMER).apply(SetCount.setCount(RandomValueRange.between(2.0F, 2.1F))).add(ItemLootEntry.lootTableItem(item)));
     }
 
     @Nonnull

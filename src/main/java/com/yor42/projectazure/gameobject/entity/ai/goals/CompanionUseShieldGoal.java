@@ -19,47 +19,47 @@ public class CompanionUseShieldGoal extends Goal {
 
     public CompanionUseShieldGoal(AbstractEntityCompanion companion){
         this.companion = companion;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
-    public boolean shouldExecute() {
-        return companion.getHeldItemOffhand().getItem().isShield(companion.getHeldItemOffhand(), companion) && raiseShield() && companion.getShieldCoolDown() == 0;
+    public boolean canUse() {
+        return companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion) && raiseShield() && companion.getShieldCoolDown() == 0;
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
 
-        boolean bool = this.shouldExecute();
+        boolean bool = this.canUse();
 
         if(!bool){
-            this.resetTask();
+            this.stop();
         }
 
         return bool;
     }
 
     @Override
-    public void startExecuting() {
-        if (companion.getHeldItemOffhand().getItem().isShield(companion.getHeldItemOffhand(), companion))
-            companion.setActiveHand(Hand.OFF_HAND);
+    public void start() {
+        if (companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion))
+            companion.startUsingItem(Hand.OFF_HAND);
     }
 
     @Override
-    public void resetTask() {
-        companion.stopActiveHand();
+    public void stop() {
+        companion.releaseUsingItem();
     }
 
     protected boolean raiseShield() {
-        LivingEntity target = companion.getAttackTarget();
+        LivingEntity target = companion.getTarget();
 
         if(this.companion.isSailing()){
             return false;
         }
 
         if (target != null && companion.getShieldCoolDown() == 0) {
-            boolean ranged = companion.getHeldItemMainhand().getItem() instanceof CrossbowItem || companion.getHeldItemMainhand().getItem() instanceof BowItem || companion.getHeldItemMainhand().getItem() instanceof ItemGunBase;
-            return companion.getDistance(target) <= 4.0D || target instanceof CreeperEntity || target instanceof IRangedAttackMob && target.getDistance(companion) >= 5.0D && !ranged || target instanceof RavagerEntity;
+            boolean ranged = companion.getMainHandItem().getItem() instanceof CrossbowItem || companion.getMainHandItem().getItem() instanceof BowItem || companion.getMainHandItem().getItem() instanceof ItemGunBase;
+            return companion.distanceTo(target) <= 4.0D || target instanceof CreeperEntity || target instanceof IRangedAttackMob && target.distanceTo(companion) >= 5.0D && !ranged || target instanceof RavagerEntity;
         }
         return false;
     }

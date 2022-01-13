@@ -85,7 +85,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 11;
         }
     };
@@ -140,7 +140,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return this.ITEMHANDLER.getSlots();
     }
 
@@ -155,18 +155,18 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public ItemStack getStackInSlot(int i) {
+    public ItemStack getItem(int i) {
         return this.ITEMHANDLER.getStackInSlot(i);
     }
 
     @Override
-    public ItemStack decrStackSize(int i, int i1) {
+    public ItemStack removeItem(int i, int i1) {
         this.ITEMHANDLER.getStackInSlot(i).shrink(i1);
         return this.ITEMHANDLER.getStackInSlot(i);
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
         if(index >= 0 && index < this.ITEMHANDLER.getSlots()){
             this.ITEMHANDLER.setStackInSlot(index, ItemStack.EMPTY);
         }
@@ -174,17 +174,17 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemStack) {
+    public void setItem(int i, ItemStack itemStack) {
         this.ITEMHANDLER.setStackInSlot(i, itemStack);
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity playerEntity) {
+    public boolean stillValid(PlayerEntity playerEntity) {
         return true;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         for(int i=0;i<this.ITEMHANDLER.getSlots(); i++){
             this.ITEMHANDLER.setStackInSlot(i, ItemStack.EMPTY);
         }
@@ -204,7 +204,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
     @Override
     public void tick() {
-        if(this.getWorld() != null) {
+        if(this.getLevel() != null) {
             boolean flag = this.isBurning();
             boolean flag1 = false;
             if (this.isBurning()) {
@@ -213,7 +213,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
 
             for(int slot = 0; slot<7; slot+=2){
-                ItemStack stack = this.getStackInSlot(slot);
+                ItemStack stack = this.getItem(slot);
                 if(slot == 0){
                     int finalSlot1 = slot;
                     NonNullConsumer<IFluidHandlerItem> TransferLiquids = (fluidHandler) -> {
@@ -275,7 +275,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                 }
             }
 
-            if (!this.getWorld().isRemote) {
+            if (!this.getLevel().isClientSide) {
                 ItemStack itemstack = this.ITEMHANDLER.getStackInSlot(9);
                 if(this.isBurning() || this.CrudeOilTank.getFluidAmount()>100 && !itemstack.isEmpty()){
                     if (!this.isBurning() && this.CrudeOilTank.getFluidAmount()>100) {
@@ -323,23 +323,23 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                     }
                 }
 
-                if (flag != this.isBurning() && this.getWorld().getBlockState(this.getPos()).hasProperty(ACTIVE)) {
+                if (flag != this.isBurning() && this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE)) {
                     flag1 = true;
-                    this.getWorld().setBlockState(this.pos, this.getWorld().getBlockState(this.pos).with(ACTIVE, this.isBurning()), 3);
+                    this.getLevel().setBlock(this.worldPosition, this.getLevel().getBlockState(this.worldPosition).setValue(ACTIVE, this.isBurning()), 3);
                 }
 
             }
 
             if (flag1) {
-                this.markDirty();
+                this.setChanged();
             }
 
         }
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.put("inventory", this.ITEMHANDLER.serializeNBT());
         compound.put("crudeoiltank", this.CrudeOilTank.writeToNBT(new CompoundNBT()));
         compound.put("gasolinetank", this.GasolineTank.writeToNBT(new CompoundNBT()));
@@ -353,8 +353,8 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public void read(BlockState p_230337_1_, CompoundNBT compound) {
-        super.read(p_230337_1_, compound);
+    public void load(BlockState p_230337_1_, CompoundNBT compound) {
+        super.load(p_230337_1_, compound);
         this.ITEMHANDLER.deserializeNBT(compound.getCompound("inventory"));
         this.CrudeOilTank.readFromNBT(compound.getCompound("crudeoiltank"));
         this.GasolineTank.readFromNBT(compound.getCompound("gasolinetank"));
@@ -388,7 +388,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         }
         else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
             if(this.getBlockState().hasProperty(AbstractMachineBlock.FACING))
-            switch (BlockStateUtil.getRelativeDirection(direction, this.getWorld().getBlockState(this.getPos()).get(AbstractMachineBlock.FACING))){
+            switch (BlockStateUtil.getRelativeDirection(direction, this.getLevel().getBlockState(this.getBlockPos()).getValue(AbstractMachineBlock.FACING))){
                 case LEFT:
                     return this.crudeTankCap.cast();
                 case FRONT:

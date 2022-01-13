@@ -24,11 +24,11 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
 
             return !(hasAmmo || reloadable);
         }
-        else return this.getHeldItem(getSpellUsingHand()).isEmpty() && !this.isSwimming();
+        else return this.getItemInHand(getSpellUsingHand()).isEmpty() && !this.isSwimming();
     }
 
     public void StartShootingEntityUsingSpell(LivingEntity target) {
         this.setSpellDelay(this.getInitialSpellDelay());
-        this.StartedSpellAttackTimeStamp = this.ticksExisted;
+        this.StartedSpellAttackTimeStamp = this.tickCount;
     }
 }

@@ -12,15 +12,15 @@ import net.minecraft.util.math.vector.Vector3f;
 public class EntityProjectileTorpedoRenderer extends GeoProjectileRenderer<EntityProjectileTorpedo> {
     public EntityProjectileTorpedoRenderer(EntityRendererManager renderManager) {
         super(renderManager, new modelProjectileTorpedo());
-        this.shadowSize = 0.7F; //change 0.7 to the desired shadow size.
+        this.shadowRadius = 0.7F; //change 0.7 to the desired shadow size.
     }
 
     @Override
     public void render(EntityProjectileTorpedo entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
         matrixStackIn.scale(0.4F, 0.4F, 0.4F);
         matrixStackIn.translate(0,0.75,0);
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
+        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 }

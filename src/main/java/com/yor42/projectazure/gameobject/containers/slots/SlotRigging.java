@@ -19,12 +19,12 @@ public class SlotRigging extends SlotItemHandler {
     }
 
     @Override
-    public int getSlotStackLimit() {
+    public int getMaxStackSize() {
         return 1;
     }
 
     @Override
-    public boolean isItemValid(@Nonnull ItemStack stack) {
+    public boolean mayPlace(@Nonnull ItemStack stack) {
         if(this.hostEntity!= null) {
             if (stack.getItem() instanceof ItemRiggingBase) {
                 return ((ItemRiggingBase) stack.getItem()).getValidclass() == this.hostEntity.getShipClass();

@@ -32,7 +32,7 @@ public class KansenRangedAttackGoal extends Goal {
         if (entity == null) {
             throw new IllegalArgumentException("entity of this goal is null. We can't shoot guns and torpedo from thin air mate.");
         }
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         this.entityHost = entity;
         this.entityMoveSpeed = movespeed;
         this.maxCannonAttackDistance = maxCannonAttackDistanceIn;
@@ -44,8 +44,8 @@ public class KansenRangedAttackGoal extends Goal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        LivingEntity target = this.entityHost.getAttackTarget();
+    public boolean canUse() {
+        LivingEntity target = this.entityHost.getTarget();
 
         if(this.entityHost != null) {
             if (target != null && target.isAlive() && this.entityHost.hasRigging()) {
@@ -60,30 +60,30 @@ public class KansenRangedAttackGoal extends Goal {
         return false;
     }
 
-    public boolean shouldContinueExecuting() {
-        return this.shouldExecute() || !this.entityHost.getNavigator().noPath();
+    public boolean canContinueToUse() {
+        return this.canUse() || !this.entityHost.getNavigation().isDone();
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         this.attackTarget = null;
         this.CannonAttackDelay = -1;
         this.torpedoAttackDelay = -1;
-        this.entityHost.setAggroed(false);
-        this.entityHost.getNavigator().clearPath();
+        this.entityHost.setAggressive(false);
+        this.entityHost.getNavigation().stop();
     }
 
     @Override
-    public void startExecuting() {
-        super.startExecuting();
-        this.entityHost.setAggroed(true);
-        this.entityHost.getNavigator().clearPath();
+    public void start() {
+        super.start();
+        this.entityHost.setAggressive(true);
+        this.entityHost.getNavigation().stop();
     }
 
     @Override
     public void tick() {
-        double distance = this.entityHost.getDistanceSq(this.attackTarget.getPosX(), this.attackTarget.getPosY(), this.attackTarget.getPosZ());
-        boolean canSee = this.entityHost.getEntitySenses().canSee(this.attackTarget);
+        double distance = this.entityHost.distanceToSqr(this.attackTarget.getX(), this.attackTarget.getY(), this.attackTarget.getZ());
+        boolean canSee = this.entityHost.getSensing().canSee(this.attackTarget);
         if (canSee) {
             ++this.seeTime;
         } else {
@@ -91,19 +91,19 @@ public class KansenRangedAttackGoal extends Goal {
         }
 
         if (distance <= (double)this.maxCannonAttackDistance && this.seeTime >= 5) {
-            this.entityHost.getNavigator().clearPath();
+            this.entityHost.getNavigation().stop();
             ++this.strafingTime;
         } else {
-            this.entityHost.getNavigator().tryMoveToEntityLiving(this.attackTarget, this.entityMoveSpeed);
+            this.entityHost.getNavigation().moveTo(this.attackTarget, this.entityMoveSpeed);
             this.strafingTime = -1;
         }
-        this.entityHost.faceEntity(attackTarget, 30.0F, 30.0F);
+        this.entityHost.lookAt(attackTarget, 30.0F, 30.0F);
         if (this.strafingTime >= 20) {
-            if ((double)this.entityHost.getRNG().nextFloat() < 0.3D) {
+            if ((double)this.entityHost.getRandom().nextFloat() < 0.3D) {
                 this.strafingClockwise = !this.strafingClockwise;
             }
 
-            if ((double)this.entityHost.getRNG().nextFloat() < 0.3D) {
+            if ((double)this.entityHost.getRandom().nextFloat() < 0.3D) {
                 this.strafingBackwards = !this.strafingBackwards;
             }
 
@@ -118,10 +118,10 @@ public class KansenRangedAttackGoal extends Goal {
             }
 
             //this.entityHost.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-            this.entityHost.faceEntity(attackTarget, 30.0F, 30.0F);
+            this.entityHost.lookAt(attackTarget, 30.0F, 30.0F);
         }
         else {
-            this.entityHost.getLookController().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+            this.entityHost.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
         }
         float f = MathHelper.sqrt(distance) / this.CannonattackRadius;
 

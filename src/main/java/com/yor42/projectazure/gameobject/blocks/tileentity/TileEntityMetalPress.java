@@ -65,7 +65,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 4;
         }
     };
@@ -82,12 +82,12 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
+    public boolean canPlaceItem(int index, ItemStack stack) {
         if (index == 0){
             return true;
         }
         else if(index == 1){
-            return stack.getItem().isIn(ModTags.Items.EXTRUSION_MOLD);
+            return stack.getItem().is(ModTags.Items.EXTRUSION_MOLD);
         }
         else{
             return false;
@@ -139,7 +139,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     protected int getTargetProcessTime(){
-        return this.world.getRecipeManager().getRecipe((IRecipeType<? extends PressingRecipe>)this.recipeType, this, this.world).map(PressingRecipe::getProcessTick).orElse(200);
+        return this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends PressingRecipe>)this.recipeType, this, this.level).map(PressingRecipe::getProcessTick).orElse(200);
     }
 
     protected void process(IRecipe<?> irecipe) {
@@ -147,7 +147,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         if(irecipe != null && this.canProcess(irecipe)){
             ItemStack ingredient = this.inventory.getStackInSlot(0);
             ItemStack mold = this.inventory.getStackInSlot(1);
-            ItemStack output = irecipe.getRecipeOutput();
+            ItemStack output = irecipe.getResultItem();
             ItemStack outputslot = this.inventory.getStackInSlot(2);
 
             if (outputslot.isEmpty()) {
@@ -156,7 +156,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
                 outputslot.grow(output.getCount());
             }
 
-            if (!(this.world != null && this.world.isRemote)) {
+            if (!(this.getLevel() != null && this.getLevel().isClientSide())) {
                 this.setRecipeUsed(irecipe);
             }
 
@@ -183,16 +183,16 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
 
     protected boolean canProcess(@Nullable IRecipe<?> recipeIn) {
         if (!this.inventory.getStackInSlot(0).isEmpty() && !this.inventory.getStackInSlot(1).isEmpty() && recipeIn != null) {
-            ItemStack itemstack = recipeIn.getRecipeOutput();
+            ItemStack itemstack = recipeIn.getResultItem();
             if (itemstack.isEmpty()) {
                 return false;
             } else {
                 ItemStack itemstack1 = this.inventory.getStackInSlot(2);
                 if (itemstack1.isEmpty()) {
                     return true;
-                } else if (!itemstack1.isItemEqual(itemstack)) {
+                } else if (!itemstack1.sameItem(itemstack)) {
                     return false;
-                } else if (itemstack1.getCount() + itemstack.getCount() <= this.getInventoryStackLimit() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
+                } else if (itemstack1.getCount() + itemstack.getCount() <= this.getMaxStackSize() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
                     return true;
                 } else {
                     return itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes

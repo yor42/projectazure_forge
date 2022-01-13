@@ -21,20 +21,20 @@ public class DroneRangedAttackGoal extends Goal {
     public DroneRangedAttackGoal(EntityMissileDrone drone) {
         this.drone = drone;
         this.rangedAttackTime = -1;
-        setMutexFlags(EnumSet.of(LOOK, MOVE));
+        setFlags(EnumSet.of(LOOK, MOVE));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
-        boolean hastarget = this.drone.getAttackTarget() != null;
+        boolean hastarget = this.drone.getTarget() != null;
 
         if(drone.isReturningToOwner()){
             return false;
         }
 
-        if(hastarget&&this.drone.hasAmmo() && this.drone.getAttackTarget().isAlive()) {
-            this.target = this.drone.getAttackTarget();
+        if(hastarget&&this.drone.hasAmmo() && this.drone.getTarget().isAlive()) {
+            this.target = this.drone.getTarget();
             return true;
         }
         return false;
@@ -42,43 +42,43 @@ public class DroneRangedAttackGoal extends Goal {
 
 
     @Override
-    public void resetTask() {
+    public void stop() {
         this.seeTime = 0;
         this.rangedAttackTime = -1;
         this.target = null;
     }
 
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
 
         if(drone.isReturningToOwner()){
             return false;
         }
 
-        return this.shouldExecute() || !this.drone.getNavigator().noPath();
+        return this.canUse() || !this.drone.getNavigation().isDone();
     }
 
     public void tick() {
         if (this.target != null) {
-            boolean lvt_3_1_ = this.drone.getEntitySenses().canSee(this.target);
+            boolean lvt_3_1_ = this.drone.getSensing().canSee(this.target);
             if (lvt_3_1_) {
-                this.drone.getLookController().setLookPositionWithEntity(this.target, 10.0F, (float) this.drone.getVerticalFaceSpeed());
+                this.drone.getLookControl().setLookAt(this.target, 10.0F, (float) this.drone.getMaxHeadXRot());
                 ++this.seeTime;
             } else {
                 this.seeTime = 0;
             }
 
 
-            if (this.drone.getDistance(this.target) < 6 && this.seeTime >= 5) {
-                this.drone.getNavigator().clearPath();
+            if (this.drone.distanceTo(this.target) < 6 && this.seeTime >= 5) {
+                this.drone.getNavigation().stop();
             } else {
-                this.drone.getNavigator().tryMoveToXYZ(this.target.getPosX(), this.target.getPosYEye() + 0.5, this.target.getPosZ(), 1);
+                this.drone.getNavigation().moveTo(this.target.getX(), this.target.getEyeY() + 0.5, this.target.getZ(), 1);
             }
 
-            if (this.drone.getDistance(this.target) <= 3.0D) {
-                this.drone.getMoveHelper().strafe(-1F, 0);
+            if (this.drone.distanceTo(this.target) <= 3.0D) {
+                this.drone.getMoveControl().strafe(-1F, 0);
             }
 
-            this.drone.getLookController().setLookPositionWithEntity(this.target, 30.0F, 30.0F);
+            this.drone.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.rangedAttackTime == 0) {
                 if (!lvt_3_1_) {
                     return;

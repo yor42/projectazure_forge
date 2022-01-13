@@ -30,7 +30,7 @@ public class CompanionHealandEatFoodGoal extends Goal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(this.FoodCooldown > 0){
             this.FoodCooldown--;
         }
@@ -43,7 +43,7 @@ public class CompanionHealandEatFoodGoal extends Goal {
 
                 if (this.getFoodHand(true).isPresent()) {
                     this.FoodHand = this.getFoodHand(true).get();
-                    boolean val = this.companion.isEating() || !this.companion.isAggressive() && this.companion.getAttackTarget() == null;
+                    boolean val = this.companion.isEating() || !this.companion.isAggressive() && this.companion.getTarget() == null;
                     return val;
                 } else if (InventoryFood >-1 && this.companion.getItemSwapIndexOffHand() == -1) {
                     this.ChangeItem(InventoryFood);
@@ -53,12 +53,12 @@ public class CompanionHealandEatFoodGoal extends Goal {
         }
         else if(this.companion.getFoodStats().getFoodLevel()<10){
             if(this.FoodCooldown == 0) {
-                if (this.companion.ticksExisted % 10 == 0) {
+                if (this.companion.tickCount % 10 == 0) {
                     InventoryFood = this.getFoodIndex(false);
                 }
                 if (this.getFoodHand(false).isPresent()) {
                     this.FoodHand = this.getFoodHand(false).get();
-                    return this.companion.isEating() || !this.companion.isAggressive() && this.companion.getAttackTarget() == null || this.companion.getFoodStats().getFoodLevel()<7;
+                    return this.companion.isEating() || !this.companion.isAggressive() && this.companion.getTarget() == null || this.companion.getFoodStats().getFoodLevel()<7;
                 } else if (InventoryFood >-1&& this.companion.getItemSwapIndexOffHand() == -1) {
                     this.ChangeItem(InventoryFood);
                     this.FoodCooldown = 15;
@@ -69,30 +69,30 @@ public class CompanionHealandEatFoodGoal extends Goal {
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         if(this.companion.getItemSwapIndexOffHand() != -1){
             ItemStack Buffer = this.companion.getInventory().getStackInSlot(this.companion.getItemSwapIndexOffHand());
-            this.companion.getInventory().setStackInSlot(this.companion.getItemSwapIndexOffHand(), this.companion.getHeldItemOffhand());
-            this.companion.setHeldItem(OFF_HAND, Buffer);
+            this.companion.getInventory().setStackInSlot(this.companion.getItemSwapIndexOffHand(), this.companion.getOffhandItem());
+            this.companion.setItemInHand(OFF_HAND, Buffer);
             this.companion.setItemSwapIndexOffHand(-1);
         }
         this.FoodHand = null;
         this.companion.setEating(false);
-        this.companion.stopActiveHand();
+        this.companion.releaseUsingItem();
     }
 
     private void ChangeItem(int index){
-        ItemStack Buffer = this.companion.getHeldItemOffhand();
-        this.companion.setHeldItem(OFF_HAND, this.companion.getInventory().getStackInSlot(index));
+        ItemStack Buffer = this.companion.getOffhandItem();
+        this.companion.setItemInHand(OFF_HAND, this.companion.getInventory().getStackInSlot(index));
         this.companion.getInventory().setStackInSlot(index, Buffer);
         this.companion.setItemSwapIndexOffHand(index);
     }
 
     private Optional<Hand> getFoodHand(boolean includeHealingPotion){
-        if(this.shouldEat(this.companion.getHeldItemMainhand(), includeHealingPotion)){
+        if(this.shouldEat(this.companion.getMainHandItem(), includeHealingPotion)){
             return Optional.of(Hand.MAIN_HAND);
         }
-        else if(this.shouldEat(this.companion.getHeldItemOffhand(), includeHealingPotion)) {
+        else if(this.shouldEat(this.companion.getOffhandItem(), includeHealingPotion)) {
             return Optional.of(OFF_HAND);
         }
         else{
@@ -113,21 +113,21 @@ public class CompanionHealandEatFoodGoal extends Goal {
 
     private boolean shouldEat(ItemStack stack, boolean IncludeHealingPotion){
         //Food
-        if(stack.getUseAction() == UseAction.EAT && stack.getCount() > 0 && stack.isFood()){
-            if(!stack.getItem().getFood().getEffects().isEmpty()){
-                for(int i =0; i<stack.getItem().getFood().getEffects().size(); i++){
-                    EffectInstance instance = stack.getItem().getFood().getEffects().get(i).getFirst();
-                    if(instance.getPotion().getEffectType() == EffectType.HARMFUL){
+        if(stack.getUseAnimation() == UseAction.EAT && stack.getCount() > 0 && stack.isEdible()){
+            if(!stack.getItem().getFoodProperties().getEffects().isEmpty()){
+                for(int i =0; i<stack.getItem().getFoodProperties().getEffects().size(); i++){
+                    EffectInstance instance = stack.getItem().getFoodProperties().getEffects().get(i).getFirst();
+                    if(instance.getEffect().getCategory() == EffectType.HARMFUL){
                         return false;
                     }
                 }
             }
-            return this.companion.canEat(stack.getItem().getFood().canEatWhenFull());
+            return this.companion.canEat(stack.getItem().getFoodProperties().canAlwaysEat());
         }
         else if(IncludeHealingPotion) {
-            if (stack.getUseAction() == UseAction.DRINK && !(stack.getItem() instanceof SplashPotionItem) && stack.getCount() > 0) {
-                for (EffectInstance effectinstance : PotionUtils.getEffectsFromStack(stack)) {
-                    if (doesPotionHeal(effectinstance.getPotion().getEffect())) {
+            if (stack.getUseAnimation() == UseAction.DRINK && !(stack.getItem() instanceof SplashPotionItem) && stack.getCount() > 0) {
+                for (EffectInstance effectinstance : PotionUtils.getMobEffects(stack)) {
+                    if (doesPotionHeal(effectinstance.getEffect().getEffect())) {
                         return true;
                     }
                 }
@@ -139,31 +139,31 @@ public class CompanionHealandEatFoodGoal extends Goal {
     }
 
     private boolean doesPotionHeal(Effect effect){
-        return effect == Effects.INSTANT_HEALTH || effect == Effects.REGENERATION;
+        return effect == Effects.HEAL || effect == Effects.REGENERATION;
     }
 
     @Override
-    public void startExecuting() {
+    public void start() {
         if(this.FoodHand != null){
-            this.companion.setActiveHand(this.FoodHand);
+            this.companion.startUsingItem(this.FoodHand);
             this.companion.setEating(true);
         }
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        List<LivingEntity> list = this.companion.getEntityWorld().getEntitiesWithinAABB(LivingEntity.class, this.companion.getBoundingBox().expand(5.0D, 3.0D, 5.0D));
+    public boolean canContinueToUse() {
+        List<LivingEntity> list = this.companion.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.companion.getBoundingBox().expandTowards(5.0D, 3.0D, 5.0D));
 
         if (!list.isEmpty() && this.companion.getFoodStats().getFoodLevel()>5) {
             for (LivingEntity mob : list) {
                 if (mob != null) {
-                    if (mob instanceof MobEntity && (((MobEntity) mob).getAttackTarget() instanceof AbstractEntityCompanion || ((MobEntity) mob).getAttackTarget() == this.companion.getOwner())) {
+                    if (mob instanceof MobEntity && (((MobEntity) mob).getTarget() instanceof AbstractEntityCompanion || ((MobEntity) mob).getTarget() == this.companion.getOwner())) {
                         return false;
                     }
                 }
             }
         }
 
-        return this.companion.isHandActive() && this.companion.getAttackTarget() == null && this.companion.getHealth() < this.companion.getMaxHealth() || this.companion.getAttackTarget() != null && this.companion.getHealth() < this.companion.getMaxHealth() / 2 + 2 && this.companion.isEating() || this.companion.getFoodStats().getFoodLevel()<7;
+        return this.companion.isUsingItem() && this.companion.getTarget() == null && this.companion.getHealth() < this.companion.getMaxHealth() || this.companion.getTarget() != null && this.companion.getHealth() < this.companion.getMaxHealth() / 2 + 2 && this.companion.isEating() || this.companion.getFoodStats().getFoodLevel()<7;
     }
 }

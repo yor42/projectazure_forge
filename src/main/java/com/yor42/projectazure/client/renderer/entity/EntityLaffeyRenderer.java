@@ -40,54 +40,54 @@ public class EntityLaffeyRenderer extends GeoEntityRenderer<EntityLaffey> {
     public EntityLaffeyRenderer(EntityRendererManager renderManager) {
         super(renderManager, new laffeyModel());
         this.addLayer(new LaffeyRiggingLayer(this));
-        this.shadowSize = 0.4F;
+        this.shadowRadius = 0.4F;
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityLaffey entity) {
+    public ResourceLocation getTextureLocation(EntityLaffey entity) {
         return new ResourceLocation(Constants.MODID, "textures/entity/modellaffey.png");
     }
 
     @Override
     public void render(EntityLaffey entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.push();
+        stack.pushPose();
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.pop();
+        stack.popPose();
     }
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if (bone.getName().equals("itemMainHand")){
-            stack.push();
-            stack.rotate(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+            stack.pushPose();
+            stack.mulPose(Vector3f.XP.rotationDegrees(-90));
+            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.MAINHAND);
             stack.translate(0.6F, 0.1, 1.35F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
                 Item gunItem = this.entity.getGunStack().getItem();
                 if(!this.entity.isReloadingMainHand() && this.entity.isUsingGun() && gunItem instanceof ItemGunBase && ((ItemGunBase)gunItem).isTwoHanded()){
-                    stack.rotate(Vector3f.XN.rotationDegrees(27.5F));
+                    stack.mulPose(Vector3f.XN.rotationDegrees(27.5F));
                 }
-                Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
+                Minecraft.getInstance().getItemRenderer().renderStatic(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
             }
-            stack.pop();
+            stack.popPose();
         }
         else if (bone.getName().equals("itemOffHand")){
-            stack.push();
-            stack.rotate(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
+            stack.pushPose();
+            stack.mulPose(Vector3f.XP.rotationDegrees(-90));
+            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.OFFHAND);
             float xvalue = -0.6F;
             if(mainHandStack.isShield(this.entity)){
-                stack.rotate(Vector3f.ZP.rotationDegrees(180));
+                stack.mulPose(Vector3f.ZP.rotationDegrees(180));
                 xvalue = 0.6F;
             }
             stack.translate(xvalue, 0.1, 1.35F);
             stack.scale(1.5F, 1.5F, 1.5F);
             if(!mainHandStack.isEmpty()){
-                Minecraft.getInstance().getItemRenderer().renderItem(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
+                Minecraft.getInstance().getItemRenderer().renderStatic(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
             }
-            stack.pop();
+            stack.popPose();
         }
         /*
         else if (bone.getName().equals("Body")){
@@ -102,7 +102,7 @@ public class EntityLaffeyRenderer extends GeoEntityRenderer<EntityLaffey> {
 
          */
 
-        bufferIn = rtb.getBuffer(RenderType.getEntitySmoothCutout(texture));
+        bufferIn = rtb.getBuffer(RenderType.entitySmoothCutout(texture));
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 

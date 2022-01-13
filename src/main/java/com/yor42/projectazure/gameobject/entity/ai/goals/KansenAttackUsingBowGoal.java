@@ -26,13 +26,13 @@ public class KansenAttackUsingBowGoal extends Goal {
         this.moveSpeedAmp = moveSpeedAmpIn;
         this.maxAttackDistance = maxAttackDistanceIn;
         this.attackCooldown = attackCooldownIn;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
-    public boolean shouldExecute() {
-        LivingEntity target = this.host.getAttackTarget();
-        if(target != null && target.isAlive() && this.host.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem) {
+    public boolean canUse() {
+        LivingEntity target = this.host.getTarget();
+        if(target != null && target.isAlive() && this.host.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem) {
             for (int i = 0; i < this.host.getInventory().getSlots(); i++) {
                 if (this.host.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem) {
                     return true;
@@ -42,32 +42,32 @@ public class KansenAttackUsingBowGoal extends Goal {
         return false;
     }
 
-    public boolean shouldContinueExecuting() {
-        return (this.shouldExecute() || !this.host.getNavigator().noPath()) && this.host.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem;
+    public boolean canContinueToUse() {
+        return (this.canUse() || !this.host.getNavigation().isDone()) && this.host.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem;
     }
 
-    public void startExecuting() {
-        super.startExecuting();
-        this.host.setAggroed(true);
+    public void start() {
+        super.start();
+        this.host.setAggressive(true);
     }
 
     @Override
-    public void resetTask() {
-        super.resetTask();
-        this.host.setAggroed(false);
+    public void stop() {
+        super.stop();
+        this.host.setAggressive(false);
         this.seeTime = 0;
         this.host.setUsingbow(false);
-        this.host.resetActiveHand();
+        this.host.stopUsingItem();
         this.attackTime = -1;
     }
 
     @Override
     public void tick() {
         super.tick();
-        LivingEntity targetEntity = this.host.getAttackTarget();
+        LivingEntity targetEntity = this.host.getTarget();
         if(targetEntity != null){
-            double distance = this.host.getDistanceSq(targetEntity);
-            boolean cansee = this.host.getEntitySenses().canSee(targetEntity);
+            double distance = this.host.distanceToSqr(targetEntity);
+            boolean cansee = this.host.getSensing().canSee(targetEntity);
             boolean isSeeing = this.seeTime>0;
 
             if (cansee != isSeeing) {
@@ -81,19 +81,19 @@ public class KansenAttackUsingBowGoal extends Goal {
             }
 
             if (!(distance > (double)this.maxAttackDistance) && this.seeTime >= 20) {
-                this.host.getNavigator().clearPath();
+                this.host.getNavigation().stop();
                 ++this.strafingTime;
             } else {
-                this.host.getNavigator().tryMoveToEntityLiving(targetEntity, this.moveSpeedAmp);
+                this.host.getNavigation().moveTo(targetEntity, this.moveSpeedAmp);
                 this.strafingTime = -1;
             }
 
             if (this.strafingTime >= 20) {
-                if ((double)this.host.getRNG().nextFloat() < 0.3D) {
+                if ((double)this.host.getRandom().nextFloat() < 0.3D) {
                     this.strafingClockwise = !this.strafingClockwise;
                 }
 
-                if ((double)this.host.getRNG().nextFloat() < 0.3D) {
+                if ((double)this.host.getRandom().nextFloat() < 0.3D) {
                     this.strafingBackwards = !this.strafingBackwards;
                 }
 
@@ -107,25 +107,25 @@ public class KansenAttackUsingBowGoal extends Goal {
                     this.strafingBackwards = true;
                 }
 
-                this.host.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-                this.host.faceEntity(targetEntity, 30.0F, 30.0F);
+                this.host.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                this.host.lookAt(targetEntity, 30.0F, 30.0F);
             } else {
-                this.host.getLookController().setLookPositionWithEntity(targetEntity, 30.0F, 30.0F);
+                this.host.getLookControl().setLookAt(targetEntity, 30.0F, 30.0F);
             }
 
-            if (this.host.isHandActive()) {
+            if (this.host.isUsingItem()) {
                 if (!cansee && this.seeTime < -60) {
-                    this.host.resetActiveHand();
+                    this.host.stopUsingItem();
                 } else if (cansee) {
-                    int i = this.host.getItemInUseMaxCount();
+                    int i = this.host.getTicksUsingItem();
                     if (i >= 20) {
-                        this.host.resetActiveHand();
-                        this.host.ShootArrow(targetEntity, BowItem.getArrowVelocity(i));
+                        this.host.stopUsingItem();
+                        this.host.ShootArrow(targetEntity, BowItem.getPowerForTime(i));
                         this.attackTime = this.attackCooldown;
                     }
                 }
             } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-                this.host.setActiveHand(Hand.MAIN_HAND);
+                this.host.startUsingItem(Hand.MAIN_HAND);
                 this.host.setUsingbow(true);
             }
 

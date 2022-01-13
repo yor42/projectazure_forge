@@ -33,7 +33,7 @@ public class EntityPlanef4fwildcatRenderer extends GeoEntityRenderer<EntityF4fWi
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityF4fWildcat entity) {
+    public ResourceLocation getTextureLocation(EntityF4fWildcat entity) {
         return ModResourceLocation("textures/planes/f4f_wildcat.png");
     }
 

@@ -24,16 +24,16 @@ public class EditEntityValuePacket {
 
     public static EditEntityValuePacket decode (final PacketBuffer buffer){
         final int ID = buffer.readInt();
-        final EditEntityValuePacket.ValueType ValueType = buffer.readEnumValue(EditEntityValuePacket.ValueType.class);
-        final EditType editType = buffer.readEnumValue(EditType.class);
+        final EditEntityValuePacket.ValueType ValueType = buffer.readEnum(EditEntityValuePacket.ValueType.class);
+        final EditType editType = buffer.readEnum(EditType.class);
         final float value = buffer.readFloat();
         return new EditEntityValuePacket(ID, ValueType, editType, value);
     }
 
     public static void encode(final EditEntityValuePacket msg, final PacketBuffer buffer){
         buffer.writeInt(msg.EntityID);
-        buffer.writeEnumValue(msg.valueType);
-        buffer.writeEnumValue(msg.editType);
+        buffer.writeEnum(msg.valueType);
+        buffer.writeEnum(msg.editType);
         buffer.writeFloat(msg.value);
     }
 
@@ -42,8 +42,8 @@ public class EditEntityValuePacket {
         ctx.get().enqueueWork(() -> {
             final ServerPlayerEntity playerEntity = ctx.get().getSender();
             if(playerEntity != null) {
-                final ServerWorld world = Objects.requireNonNull(ctx.get().getSender()).getServerWorld();
-                Entity entity = world.getEntityByID(msg.EntityID);
+                final ServerWorld world = Objects.requireNonNull(ctx.get().getSender()).getLevel();
+                Entity entity = world.getEntity(msg.EntityID);
                 if(entity instanceof AbstractEntityCompanion){
                     switch(msg.editType){
                         case ADD:

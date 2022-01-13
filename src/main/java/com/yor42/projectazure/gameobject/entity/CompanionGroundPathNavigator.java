@@ -23,59 +23,59 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
         this.companion = entity;
     }
 
-    protected PathFinder getPathFinder(int p_179679_1_) {
-        this.nodeProcessor = new WalkAndSwimNodeProcessor();
-        this.nodeProcessor.setCanEnterDoors(true);
-        return new PathFinder(this.nodeProcessor, p_179679_1_);
+    protected PathFinder createPathFinder(int p_179679_1_) {
+        this.nodeEvaluator = new WalkAndSwimNodeProcessor();
+        this.nodeEvaluator.setCanPassDoors(true);
+        return new PathFinder(this.nodeEvaluator, p_179679_1_);
     }
 
-    protected boolean canNavigate() {
-        return this.entity.isOnGround() || this.isInLiquid() || this.entity.isPassenger();
+    protected boolean canUpdatePath() {
+        return this.mob.isOnGround() || this.isInLiquid() || this.mob.isPassenger();
     }
 
-    protected Vector3d getEntityPosition() {
-        return new Vector3d(this.entity.getPosX(), (double)this.getPathablePosY(), this.entity.getPosZ());
+    protected Vector3d getTempMobPos() {
+        return new Vector3d(this.mob.getX(), (double)this.getPathablePosY(), this.mob.getZ());
     }
 
-    public Path getPathToPos(BlockPos blockposIn, int distance) {
+    public Path createPath(BlockPos blockposIn, int distance) {
         BlockPos BlockPosDown;
-        if (this.world.getBlockState(blockposIn).isAir()) {
-            BlockPosDown = blockposIn.down();
-            while (BlockPosDown.getY() > 0 && this.world.getBlockState(BlockPosDown).isAir()) {
-                BlockPosDown = BlockPosDown.down();
+        if (this.level.getBlockState(blockposIn).isAir()) {
+            BlockPosDown = blockposIn.below();
+            while (BlockPosDown.getY() > 0 && this.level.getBlockState(BlockPosDown).isAir()) {
+                BlockPosDown = BlockPosDown.below();
             }
 
             if (BlockPosDown.getY() > 0) {
-                return this.pathfind(ImmutableSet.of(BlockPosDown.up()), 8, false, distance);
+                return this.createPath(ImmutableSet.of(BlockPosDown.above()), 8, false, distance);
             }
 
-            while(BlockPosDown.getY() < this.world.getHeight() && this.world.getBlockState(BlockPosDown).isAir()) {
-                BlockPosDown = BlockPosDown.up();
+            while(BlockPosDown.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(BlockPosDown).isAir()) {
+                BlockPosDown = BlockPosDown.above();
             }
 
             blockposIn = BlockPosDown;
         }
 
-        if (!this.world.getBlockState(blockposIn).getMaterial().isSolid()) {
-            return super.getPathToPos(blockposIn, distance);
+        if (!this.level.getBlockState(blockposIn).getMaterial().isSolid()) {
+            return super.createPath(blockposIn, distance);
         } else {
-            BlockPosDown = blockposIn.up();
-            while (BlockPosDown.getY() < this.world.getHeight() && this.world.getBlockState(BlockPosDown).getMaterial().isSolid()) {
-                BlockPosDown = BlockPosDown.up();
+            BlockPosDown = blockposIn.above();
+            while (BlockPosDown.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(BlockPosDown).getMaterial().isSolid()) {
+                BlockPosDown = BlockPosDown.above();
             }
 
-            return super.getPathToPos(BlockPosDown, distance);
+            return super.createPath(BlockPosDown, distance);
         }
     }
 
-    public Path getPathToEntity(Entity p_75494_1_, int p_75494_2_) {
-        return this.getPathToPos(p_75494_1_.getPosition(), p_75494_2_);
+    public Path createPath(Entity p_75494_1_, int p_75494_2_) {
+        return this.createPath(p_75494_1_.blockPosition(), p_75494_2_);
     }
 
     private int getPathablePosY() {
-        if (this.entity.isInWater() && this.getCanSwim()) {
-            int lvt_1_1_ = MathHelper.floor(this.entity.getPosY());
-            Block lvt_2_1_ = this.world.getBlockState(new BlockPos(this.entity.getPosX(), (double)lvt_1_1_, this.entity.getPosZ())).getBlock();
+        if (this.mob.isInWater() && this.canFloat()) {
+            int lvt_1_1_ = MathHelper.floor(this.mob.getY());
+            Block lvt_2_1_ = this.level.getBlockState(new BlockPos(this.mob.getX(), (double)lvt_1_1_, this.mob.getZ())).getBlock();
             int lvt_3_1_ = 0;
 
             do {
@@ -84,15 +84,15 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
                 }
 
                 ++lvt_1_1_;
-                lvt_2_1_ = this.world.getBlockState(new BlockPos(this.entity.getPosX(), (double)lvt_1_1_, this.entity.getPosZ())).getBlock();
+                lvt_2_1_ = this.level.getBlockState(new BlockPos(this.mob.getX(), (double)lvt_1_1_, this.mob.getZ())).getBlock();
                 ++lvt_3_1_;
             } while(lvt_3_1_ <= 16);
 
-            return MathHelper.floor(this.entity.getPosY());
+            return MathHelper.floor(this.mob.getY());
         } else {
             if(this.companion.isSailing()){
-                int lvt_1_1_ = MathHelper.floor(this.entity.getPosY());
-                Block lvt_2_1_ = this.world.getBlockState(new BlockPos(this.entity.getPosX(), (double)lvt_1_1_, this.entity.getPosZ())).getBlock();
+                int lvt_1_1_ = MathHelper.floor(this.mob.getY());
+                Block lvt_2_1_ = this.level.getBlockState(new BlockPos(this.mob.getX(), (double)lvt_1_1_, this.mob.getZ())).getBlock();
                 int lvt_3_1_ = 0;
 
                 do {
@@ -101,27 +101,27 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
                     }
 
                     ++lvt_1_1_;
-                    lvt_2_1_ = this.world.getBlockState(new BlockPos(this.entity.getPosX(), (double)lvt_1_1_, this.entity.getPosZ())).getBlock();
+                    lvt_2_1_ = this.level.getBlockState(new BlockPos(this.mob.getX(), (double)lvt_1_1_, this.mob.getZ())).getBlock();
                     ++lvt_3_1_;
                 } while(lvt_3_1_ <= 16);
 
-                return MathHelper.floor(this.entity.getPosY());
+                return MathHelper.floor(this.mob.getY());
             }
-            return MathHelper.floor(this.entity.getPosY() + 0.5D);
+            return MathHelper.floor(this.mob.getY() + 0.5D);
         }
     }
 
     protected void trimPath() {
         super.trimPath();
         if (this.shouldAvoidSun) {
-            if (this.world.canSeeSky(new BlockPos(this.entity.getPosX(), this.entity.getPosY() + 0.5D, this.entity.getPosZ()))) {
+            if (this.level.canSeeSky(new BlockPos(this.mob.getX(), this.mob.getY() + 0.5D, this.mob.getZ()))) {
                 return;
             }
 
-            for(int lvt_1_1_ = 0; lvt_1_1_ < this.currentPath.getCurrentPathLength(); ++lvt_1_1_) {
-                PathPoint lvt_2_1_ = this.currentPath.getPathPointFromIndex(lvt_1_1_);
-                if (this.world.canSeeSky(new BlockPos(lvt_2_1_.x, lvt_2_1_.y, lvt_2_1_.z))) {
-                    this.currentPath.setCurrentPathLength(lvt_1_1_);
+            for(int lvt_1_1_ = 0; lvt_1_1_ < this.path.getNodeCount(); ++lvt_1_1_) {
+                PathPoint lvt_2_1_ = this.path.getNode(lvt_1_1_);
+                if (this.level.canSeeSky(new BlockPos(lvt_2_1_.x, lvt_2_1_.y, lvt_2_1_.z))) {
+                    this.path.truncateNodes(lvt_1_1_);
                     return;
                 }
             }
@@ -129,7 +129,7 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
 
     }
 
-    protected boolean isDirectPathBetweenPoints(Vector3d p_75493_1_, Vector3d p_75493_2_, int p_75493_3_, int p_75493_4_, int p_75493_5_) {
+    protected boolean canMoveDirectly(Vector3d p_75493_1_, Vector3d p_75493_2_, int p_75493_3_, int p_75493_4_, int p_75493_5_) {
         int lvt_6_1_ = MathHelper.floor(p_75493_1_.x);
         int lvt_7_1_ = MathHelper.floor(p_75493_1_.z);
         double lvt_8_1_ = p_75493_2_.x - p_75493_1_.x;
@@ -201,13 +201,13 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
                     double lvt_16_1_ = (double)lvt_14_1_ + 0.5D - p_179683_7_.x;
                     double lvt_18_1_ = (double)lvt_15_1_ + 0.5D - p_179683_7_.z;
                     if (!(lvt_16_1_ * p_179683_8_ + lvt_18_1_ * p_179683_10_ < 0.0D)) {
-                        PathNodeType lvt_20_1_ = this.nodeProcessor.getPathNodeType(this.world, lvt_14_1_, p_179683_2_ - 1, lvt_15_1_, this.entity, p_179683_4_, p_179683_5_, p_179683_6_, true, true);
-                        if (!this.func_230287_a_(lvt_20_1_)) {
+                        PathNodeType lvt_20_1_ = this.nodeEvaluator.getBlockPathType(this.level, lvt_14_1_, p_179683_2_ - 1, lvt_15_1_, this.mob, p_179683_4_, p_179683_5_, p_179683_6_, true, true);
+                        if (!this.hasValidPathType(lvt_20_1_)) {
                             return false;
                         }
 
-                        lvt_20_1_ = this.nodeProcessor.getPathNodeType(this.world, lvt_14_1_, p_179683_2_, lvt_15_1_, this.entity, p_179683_4_, p_179683_5_, p_179683_6_, true, true);
-                        float lvt_21_1_ = this.entity.getPathPriority(lvt_20_1_);
+                        lvt_20_1_ = this.nodeEvaluator.getBlockPathType(this.level, lvt_14_1_, p_179683_2_, lvt_15_1_, this.mob, p_179683_4_, p_179683_5_, p_179683_6_, true, true);
+                        float lvt_21_1_ = this.mob.getPathfindingMalus(lvt_20_1_);
                         if (lvt_21_1_ < 0.0F || lvt_21_1_ >= 8.0F) {
                             return false;
                         }
@@ -223,7 +223,7 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
         }
     }
 
-    protected boolean func_230287_a_(PathNodeType p_230287_1_) {
+    protected boolean hasValidPathType(PathNodeType p_230287_1_) {
         if (p_230287_1_ == PathNodeType.WATER) {
             return false;
         } else if (p_230287_1_ == PathNodeType.LAVA) {
@@ -234,7 +234,7 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
     }
 
     private boolean isPositionClear(int p_179692_1_, int p_179692_2_, int p_179692_3_, int p_179692_4_, int p_179692_5_, int p_179692_6_, Vector3d p_179692_7_, double p_179692_8_, double p_179692_10_) {
-        Iterator var12 = BlockPos.getAllInBoxMutable(new BlockPos(p_179692_1_, p_179692_2_, p_179692_3_), new BlockPos(p_179692_1_ + p_179692_4_ - 1, p_179692_2_ + p_179692_5_ - 1, p_179692_3_ + p_179692_6_ - 1)).iterator();
+        Iterator var12 = BlockPos.betweenClosed(new BlockPos(p_179692_1_, p_179692_2_, p_179692_3_), new BlockPos(p_179692_1_ + p_179692_4_ - 1, p_179692_2_ + p_179692_5_ - 1, p_179692_3_ + p_179692_6_ - 1)).iterator();
 
         BlockPos lvt_13_1_;
         double lvt_14_1_;
@@ -247,17 +247,17 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
             lvt_13_1_ = (BlockPos)var12.next();
             lvt_14_1_ = (double)lvt_13_1_.getX() + 0.5D - p_179692_7_.x;
             lvt_16_1_ = (double)lvt_13_1_.getZ() + 0.5D - p_179692_7_.z;
-        } while(lvt_14_1_ * p_179692_8_ + lvt_16_1_ * p_179692_10_ < 0.0D || this.world.getBlockState(lvt_13_1_).allowsMovement(this.world, lvt_13_1_, PathType.LAND));
+        } while(lvt_14_1_ * p_179692_8_ + lvt_16_1_ * p_179692_10_ < 0.0D || this.level.getBlockState(lvt_13_1_).isPathfindable(this.level, lvt_13_1_, PathType.LAND));
 
         return false;
     }
 
-    public void setBreakDoors(boolean p_179688_1_) {
-        this.nodeProcessor.setCanOpenDoors(p_179688_1_);
+    public void setCanOpenDoors(boolean p_179688_1_) {
+        this.nodeEvaluator.setCanOpenDoors(p_179688_1_);
     }
 
-    public boolean getEnterDoors() {
-        return this.nodeProcessor.getCanEnterDoors();
+    public boolean canOpenDoors() {
+        return this.nodeEvaluator.canPassDoors();
     }
 
     public void setAvoidSun(boolean p_179685_1_) {

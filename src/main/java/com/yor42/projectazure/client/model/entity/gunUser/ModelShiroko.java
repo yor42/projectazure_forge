@@ -147,7 +147,7 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
             }
         }
         Halo.setHidden(entity.isSleeping());
-        Halo.setPositionY((float) (Math.sin(2*Math.PI*0.0125*entity.ticksExisted)*1.0F)%80);
+        Halo.setPositionY((float) (Math.sin(2*Math.PI*0.0125*entity.tickCount)*1.0F)%80);
 
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 
@@ -163,11 +163,11 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
         super.setMolangQueries(animatable, currentTick);
         MolangParser parser = GeckoLibCache.getInstance().parser;
         if(animatable instanceof AbstractEntityCompanion){
-            parser.setValue("query.head_pitch", ((LivingEntity)animatable).rotationPitch);
-            parser.setValue("query.head_yaw", ((LivingEntity)animatable).rotationYawHead-((LivingEntity)animatable).renderYawOffset);
+            parser.setValue("query.head_pitch", ((LivingEntity)animatable).xRot);
+            parser.setValue("query.head_yaw", ((LivingEntity)animatable).yHeadRot-((LivingEntity)animatable).yBodyRot);
 
-            parser.setValue("query.prev_head_pitch", ((LivingEntity)animatable).prevRotationPitch * ((float) Math.PI / 180F));
-            parser.setValue("query.prev_head_yaw", ((LivingEntity)animatable).prevRotationYawHead * ((float) Math.PI / 180F));
+            parser.setValue("query.prev_head_pitch", ((LivingEntity)animatable).xRotO * ((float) Math.PI / 180F));
+            parser.setValue("query.prev_head_yaw", ((LivingEntity)animatable).yHeadRotO * ((float) Math.PI / 180F));
         }
     }
 }

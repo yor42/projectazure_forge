@@ -4,6 +4,8 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.client.gui.widget.button.Button.IPressable;
+
 public class buttonKansenInventoryTab extends ImageButton {
 
     private int x;

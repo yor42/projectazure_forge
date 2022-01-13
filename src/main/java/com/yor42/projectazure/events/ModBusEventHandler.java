@@ -29,7 +29,7 @@ public class ModBusEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void playerLogin(PlayerEvent.PlayerLoggedInEvent event){
-        if (!event.getPlayer().world.isRemote) {
+        if (!event.getPlayer().level.isClientSide) {
 
             CompoundNBT playerData = event.getPlayer().getPersistentData();
             CompoundNBT data;
@@ -46,14 +46,14 @@ public class ModBusEventHandler {
                 PlayerEntity player = event.getPlayer();
                 UUID yorUUID = UUID.fromString("d45160dc-ae0b-4f7c-b44a-b535a48182d2");
                 UUID AoichiID = UUID.fromString("d189319f-ee53-4e80-9472-7c5e4711642e");
-                boolean isDev = player.getUniqueID().equals(yorUUID);
-                boolean isAoichi = player.getUniqueID().equals(AoichiID) || player.getDisplayName().getString().equals("Dev");
+                boolean isDev = player.getUUID().equals(yorUUID);
+                boolean isAoichi = player.getUUID().equals(AoichiID) || player.getDisplayName().getString().equals("Dev");
 
                 ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
                 CompoundNBT nbt = cubeStack.getOrCreateTag();
-                nbt.putUniqueId("owner", player.getUniqueID());
+                nbt.putUUID("owner", player.getUUID());
                 cubeStack.setTag(nbt);
-                player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), cubeStack);
+                player.inventory.setItem(player.inventory.getFreeSlot(), cubeStack);
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
                     stacks.add(registerItems.SPAWN_NAGATO.get());
@@ -76,15 +76,15 @@ public class ModBusEventHandler {
                 if(!stacks.isEmpty()){
                     ItemStack stack = new ItemStack(isDev? registerItems.DEVELOPER_BONUS.get():registerItems.CONTRIBUTOR_BONUS.get());
                     CompoundNBT compound = stack.getOrCreateTag();
-                    compound.putUniqueId("owner", player.getUniqueID());
+                    compound.putUUID("owner", player.getUUID());
                     ListNBT stackList = new ListNBT();
                     for(Item item:stacks){
                         CompoundNBT itemTag = new CompoundNBT();
-                        new ItemStack(item).write(itemTag);
+                        new ItemStack(item).save(itemTag);
                         stackList.add(itemTag);
                     }
                     compound.put("inventory", stackList);
-                    player.inventory.setInventorySlotContents(player.inventory.getFirstEmptyStack(), stack);
+                    player.inventory.setItem(player.inventory.getFreeSlot(), stack);
                 }
 
                 data.putBoolean("PRJA:gotStarterCube", true);

@@ -10,17 +10,19 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
 
+import net.minecraft.item.Item.Properties;
+
 public class PAOreBlockItem extends BlockItem {
 
     private final String material;
     private final enums.ResourceType resourceType;
 
     public PAOreBlockItem(Block blockIn, String materialName){
-        this(blockIn, materialName, enums.ResourceType.ORE, new Item.Properties().group(PA_RESOURCES));
+        this(blockIn, materialName, enums.ResourceType.ORE, new Item.Properties().tab(PA_RESOURCES));
     }
 
     public PAOreBlockItem(Block blockIn, String materialName, enums.ResourceType resourceType){
-        this(blockIn, materialName, resourceType, new Item.Properties().group(PA_RESOURCES));
+        this(blockIn, materialName, resourceType, new Item.Properties().tab(PA_RESOURCES));
     }
 
     public PAOreBlockItem(Block blockIn, String materialName, enums.ResourceType resourceType, Properties builder) {
@@ -30,7 +32,7 @@ public class PAOreBlockItem extends BlockItem {
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack) {
-        return new TranslationTextComponent(material).appendString(" ").append(new TranslationTextComponent(resourceType.getName()));
+    public ITextComponent getName(ItemStack stack) {
+        return new TranslationTextComponent(material).append(" ").append(new TranslationTextComponent(resourceType.getName()));
     }
 }

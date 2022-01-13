@@ -60,7 +60,7 @@ public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<Crystalizi
     public void setIngredients(CrystalizingRecipe recipe, IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, recipe.getIngredientStack());
         ingredients.setInputs(VanillaTypes.FLUID, recipe.getFluid());
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
     }
 
     @Override

@@ -26,25 +26,25 @@ public class guiMetalPress extends ContainerScreen<ContainerMetalPress> implemen
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
 
-        if(isPointInRegion(157, 6,10,72,mouseX,mouseY)){
+        if(isHovering(157, 6,10,72,mouseX,mouseY)){
             this.renderTooltip(matrixStack, new StringTextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), mouseX,mouseY);
         }
 
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bindTexture(TEXTURE);
-        this.blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         int b = this.container.getprogressScaled(41);
-        this.blit(matrixStack,this.guiLeft+65,this.guiTop+30,186,0,b+1,26);
+        this.blit(matrixStack,this.leftPos+65,this.topPos+30,186,0,b+1,26);
 
         int p = this.container.getStoredPowerScaled(71);
-        this.blit(matrixStack, this.guiLeft+157, this.guiTop+6, 176, 0, 10, 72-p);
+        this.blit(matrixStack, this.leftPos+157, this.topPos+6, 176, 0, 10, 72-p);
 
     }
 

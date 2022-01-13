@@ -25,7 +25,7 @@ public class AlloyingRecipeBuilder {
     private final Item result;
     private final Ingredient ingredient1, ingredient2;
     private final int processingTime, count, ing1count, ing2count;
-    private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
+    private final Advancement.Builder advancementBuilder = Advancement.Builder.advancement();
 
     public AlloyingRecipeBuilder(Ingredient ingredient1, int ing1Count, Ingredient ingredient2, int ing2Count, IItemProvider result, int count, int processingTime) {
         this.result = result.asItem();
@@ -49,7 +49,7 @@ public class AlloyingRecipeBuilder {
      * Adds a criterion needed to unlock the recipe.
      */
     public AlloyingRecipeBuilder addCriterion(String name, ICriterionInstance criterionIn) {
-        this.advancementBuilder.withCriterion(name, criterionIn);
+        this.advancementBuilder.addCriterion(name, criterionIn);
         return this;
     }
 
@@ -65,8 +65,8 @@ public class AlloyingRecipeBuilder {
 
     public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
         this.validate(id);
-        this.advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(id)).withRewards(AdvancementRewards.Builder.recipe(id)).withRequirementsStrategy(IRequirementsStrategy.OR);
-        consumerIn.accept(new AlloyingRecipeBuilder.Result(id, "", this.ingredient1, this.ing1count, this.ingredient2, this.ing2count, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getGroup().getPath() + "/" + id.getPath()), registerRecipes.Serializers.ALLOYING.get()));
+        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
+        consumerIn.accept(new AlloyingRecipeBuilder.Result(id, "", this.ingredient1, this.ing1count, this.ingredient2, this.ing2count, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.ALLOYING.get()));
     }
 
     private void validate(ResourceLocation id) {
@@ -102,14 +102,14 @@ public class AlloyingRecipeBuilder {
         }
 
         @Override
-        public void serialize(JsonObject json) {
+        public void serializeRecipeData(JsonObject json) {
             if (!this.group.isEmpty()) {
                 json.addProperty("group", this.group);
             }
 
-            json.add("ingredient1", this.ingredient1.serialize());
+            json.add("ingredient1", this.ingredient1.toJson());
             json.addProperty("ing1count", this.ing1count);
-            json.add("ingredient2", this.ingredients2.serialize());
+            json.add("ingredient2", this.ingredients2.toJson());
             json.addProperty("ing2count", this.ing2count);
             json.addProperty("result", ForgeRegistries.ITEMS.getKey(this.result).toString());
             json.addProperty("resultcount", this.outputcount);
@@ -118,24 +118,24 @@ public class AlloyingRecipeBuilder {
         }
 
         @Override
-        public ResourceLocation getID() {
+        public ResourceLocation getId() {
             return this.id;
         }
 
         @Override
-        public IRecipeSerializer<?> getSerializer() {
+        public IRecipeSerializer<?> getType() {
             return this.serializer;
         }
 
         @Nullable
         @Override
-        public JsonObject getAdvancementJson() {
-            return this.advancementBuilder.serialize();
+        public JsonObject serializeAdvancement() {
+            return this.advancementBuilder.serializeToJson();
         }
 
         @Nullable
         @Override
-        public ResourceLocation getAdvancementID() {
+        public ResourceLocation getAdvancementId() {
             return advancementId;
         }
     }

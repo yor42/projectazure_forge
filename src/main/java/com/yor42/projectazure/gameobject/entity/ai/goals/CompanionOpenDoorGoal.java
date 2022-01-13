@@ -12,8 +12,8 @@ public class CompanionOpenDoorGoal extends OpenDoorGoal {
     }
 
     @Override
-    public void startExecuting() {
-        super.startExecuting();
+    public void start() {
+        super.start();
         this.entityin.setOpeningdoor(true);
         this.animatingtimer = 12;
     }

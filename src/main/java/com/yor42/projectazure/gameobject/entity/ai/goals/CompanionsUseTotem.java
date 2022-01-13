@@ -19,9 +19,9 @@ public class CompanionsUseTotem extends Goal {
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
-        int lastattacktime = this.companion.ticksExisted - this.companion.getRevengeTimer();
+        int lastattacktime = this.companion.tickCount - this.companion.getLastHurtByMobTimestamp();
 
         if(this.companion.getHealth() > 8 || lastattacktime>400){
             return false;
@@ -33,33 +33,33 @@ public class CompanionsUseTotem extends Goal {
     }
 
     @Override
-    public void startExecuting() {
-        ItemStack buffer = this.companion.getHeldItemOffhand();
-        this.companion.setHeldItem(OFF_HAND, this.TotemStack.getKey());
+    public void start() {
+        ItemStack buffer = this.companion.getOffhandItem();
+        this.companion.setItemInHand(OFF_HAND, this.TotemStack.getKey());
         this.companion.getInventory().setStackInSlot(this.hasTotem().getValue(), buffer);
         this.companion.setItemSwapIndexOffHand(this.TotemStack.getValue());
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        boolean flag1 = (this.companion.getFireTimer() > 0 || this.companion.isPotionActive(Effects.WITHER) || this.companion.ticksExisted - this.companion.getRevengeTimer()<400);
+    public boolean canContinueToUse() {
+        boolean flag1 = (this.companion.getRemainingFireTicks() > 0 || this.companion.hasEffect(Effects.WITHER) || this.companion.tickCount - this.companion.getLastHurtByMobTimestamp()<400);
         boolean value = this.companion.getHealth()<8;
-        boolean canuseTotem = this.companion.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING || this.hasTotem().getKey() != ItemStack.EMPTY;
+        boolean canuseTotem = this.companion.getOffhandItem().getItem() == Items.TOTEM_OF_UNDYING || this.hasTotem().getKey() != ItemStack.EMPTY;
         return value && flag1 && canuseTotem;
     }
 
     @Override
-    public void resetTask() {
-        ItemStack buffer = this.companion.getHeldItemOffhand();
-        this.companion.setHeldItem(OFF_HAND, this.companion.getInventory().getStackInSlot(this.companion.getItemSwapIndexOffHand()));
+    public void stop() {
+        ItemStack buffer = this.companion.getOffhandItem();
+        this.companion.setItemInHand(OFF_HAND, this.companion.getInventory().getStackInSlot(this.companion.getItemSwapIndexOffHand()));
         this.companion.getInventory().setStackInSlot(this.companion.getItemSwapIndexOffHand(), buffer);
         this.companion.setItemSwapIndexOffHand(-1);
     }
 
     @Override
     public void tick() {
-        if(this.companion.getHeldItemOffhand() == ItemStack.EMPTY && this.companion.isPotionActive(Effects.REGENERATION) && this.companion.isPotionActive(Effects.ABSORPTION)){
-            this.resetTask();
+        if(this.companion.getOffhandItem() == ItemStack.EMPTY && this.companion.hasEffect(Effects.REGENERATION) && this.companion.hasEffect(Effects.ABSORPTION)){
+            this.stop();
         }
     }
 

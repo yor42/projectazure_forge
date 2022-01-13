@@ -52,16 +52,16 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     public AnimationFactory factory = new AnimationFactory(this);
     private boolean isReturningToOwner = false;
 
-    protected static final DataParameter<Integer> AMMO = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.VARINT);
-    protected static final DataParameter<Integer> FUEL = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.VARINT);
-    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.createKey(AbstractEntityDrone.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<Integer> AMMO = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> FUEL = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.INT);
+    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.OPTIONAL_UUID);
 
     protected AbstractEntityDrone(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new FlyingMovementController(this, 20, true);
-        this.navigator = new FlyingPathNavigator(this, worldIn);
-        this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
-        this.setPathPriority(PathNodeType.WATER, -1.0F);
+        this.moveControl = new FlyingMovementController(this, 20, true);
+        this.navigation = new FlyingPathNavigator(this, worldIn);
+        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
     }
 
     @Override
@@ -88,7 +88,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     }
 
     public Optional<UUID> getOwnerUUID(){
-        return this.dataManager.get(OWNER_UUID);
+        return this.entityData.get(OWNER_UUID);
     }
 
     public boolean hasOwner(){
@@ -104,22 +104,22 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
                     return PAConfig.CONFIG.EnablePVP.get();
                 }
 
-                return !((TameableEntity) targetEntity).isOwner((LivingEntity) this.getOwner().get());
+                return !((TameableEntity) targetEntity).isOwnedBy((LivingEntity) this.getOwner().get());
             }
         }
         return true;
     }
 
     public void setOwner(@Nullable LivingEntity owner) {
-        this.getDataManager().set(OWNER_UUID, owner == null? Optional.empty() : Optional.of(owner.getUniqueID()));
+        this.getEntityData().set(OWNER_UUID, owner == null? Optional.empty() : Optional.of(owner.getUUID()));
     }
 
     public void setOwnerFromUUID(@Nullable UUID ownerUUID) {
-        this.getDataManager().set(OWNER_UUID, ownerUUID == null? Optional.empty() : Optional.of(ownerUUID));
+        this.getEntityData().set(OWNER_UUID, ownerUUID == null? Optional.empty() : Optional.of(ownerUUID));
     }
 
     public boolean isOwner(LivingEntity owner){
-        return this.getOwnerUUID().isPresent() && this.getOwnerUUID().get() == owner.getUniqueID();
+        return this.getOwnerUUID().isPresent() && this.getOwnerUUID().get() == owner.getUUID();
     }
 
     public boolean isOutofFuel() {
@@ -127,34 +127,34 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     }
 
     @Override
-    public void writeAdditional(CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putBoolean("isreturning", this.isReturningToOwner());
         if(this.getOwnerUUID().isPresent()) {
             UUID OwnerID = this.getOwnerUUID().get();
-            compound.putUniqueId("owner", OwnerID);
+            compound.putUUID("owner", OwnerID);
         }
         compound.putInt("fuel", this.getRemainingFuel());
     }
 
     @Override
-    public void readAdditional(CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.setReturningtoOwner(compound.getBoolean("isreturning"));
         if (this.getServer() != null) {
-            if (compound.hasUniqueId("owner")) {
-                this.setOwnerFromUUID(compound.getUniqueId("owner"));
+            if (compound.hasUUID("owner")) {
+                this.setOwnerFromUUID(compound.getUUID("owner"));
             }
         }
         this.setRemainingFuel(compound.getInt("fuel"));
     }
 
     @Override
-    public ActionResultType applyPlayerInteraction(PlayerEntity player, Vector3d vec, Hand hand) {
+    public ActionResultType interactAt(PlayerEntity player, Vector3d vec, Hand hand) {
 
         if (this.isOwner(player)) {
-            if (player.isSneaking()) {
-                this.serializePlane(this.getEntityWorld());
+            if (player.isShiftKeyDown()) {
+                this.serializePlane(this.getCommandSenderWorld());
                 return ActionResultType.SUCCESS;
             }
         }
@@ -162,21 +162,21 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
             this.remove();
         }
 
-        return super.applyPlayerInteraction(player, vec, hand);
+        return super.interactAt(player, vec, hand);
     }
 
     public int getRemainingFuel(){
-        return this.dataManager.get(FUEL);
+        return this.entityData.get(FUEL);
     }
 
     public void setRemainingFuel(int value){
-        this.dataManager.set(FUEL, value);
+        this.entityData.set(FUEL, value);
     }
 
     public void serializePlane(World world) {
-        if (!world.isRemote()) {
-            ItemEntity entity = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), turnPlanetoItemStack());
-            world.addEntity(entity);
+        if (!world.isClientSide()) {
+            ItemEntity entity = new ItemEntity(this.getCommandSenderWorld(), this.getX(), this.getY(), this.getZ(), turnPlanetoItemStack());
+            world.addFreshEntity(entity);
             this.remove();
         }
     }
@@ -185,7 +185,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         ItemStack stack = new ItemStack(this.getDroneItem());
         CompoundNBT nbt = stack.getOrCreateTag();
         CompoundNBT planedata = new CompoundNBT();
-        this.writeAdditional(planedata);
+        this.addAdditionalSaveData(planedata);
         nbt.put("planedata", planedata);
         nbt.putInt("fuel", this.getRemainingFuel());
         ItemStackUtils.setCurrentHP(stack, (int) this.getHealth());
@@ -198,11 +198,11 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     }
 
     public int getammo() {
-        return this.dataManager.get(AMMO);
+        return this.entityData.get(AMMO);
     }
 
     public void setAmmo(int value){
-        this.dataManager.set(AMMO, value);
+        this.entityData.set(AMMO, value);
     }
 
     public int useAmmo(){
@@ -214,12 +214,12 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     }
 
     @Override
-    public boolean isOnLadder() {
+    public boolean onClimbable() {
         return false;
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return this.isAlive() && !this.isOutofFuel();
     }
 
@@ -231,25 +231,25 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     public abstract Item getDroneItem();
 
     @Override
-    public void livingTick() {
-        super.livingTick();
-        if (this.isOutofFuel() && this.getNavigator().hasPath()) {
-            this.getNavigator().clearPath();
+    public void aiStep() {
+        super.aiStep();
+        if (this.isOutofFuel() && this.getNavigation().isInProgress()) {
+            this.getNavigation().stop();
         }
 
         if(this.isInWater()){
-            this.serializePlane(this.getEntityWorld());
+            this.serializePlane(this.getCommandSenderWorld());
         }
     }
     public Optional<Entity> getOwner(){
-        if(!this.getEntityWorld().isRemote() && this.getOwnerUUID().isPresent()){
-            return Optional.ofNullable(((ServerWorld)this.getEntityWorld()).getEntityByUuid(this.getOwnerUUID().get()));
+        if(!this.getCommandSenderWorld().isClientSide() && this.getOwnerUUID().isPresent()){
+            return Optional.ofNullable(((ServerWorld)this.getCommandSenderWorld()).getEntity(this.getOwnerUUID().get()));
         }
         return Optional.empty();
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -262,40 +262,40 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(OWNER_UUID, Optional.empty());
-        this.dataManager.register(AMMO, 0);
-        this.dataManager.register(FUEL, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(OWNER_UUID, Optional.empty());
+        this.entityData.define(AMMO, 0);
+        this.entityData.define(FUEL, 0);
     }
 
     class FlyRandomlyGoal extends Goal {
         FlyRandomlyGoal() {
-            this.setMutexFlags(EnumSet.of(MOVE));
+            this.setFlags(EnumSet.of(MOVE));
         }
 
         /**
          * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
          * method as well.
          */
-        public boolean shouldExecute() {
-            return AbstractEntityDrone.this.navigator.noPath() && !AbstractEntityDrone.this.isOutofFuel() && AbstractEntityDrone.this.rand.nextInt(10) == 0;
+        public boolean canUse() {
+            return AbstractEntityDrone.this.navigation.isDone() && !AbstractEntityDrone.this.isOutofFuel() && AbstractEntityDrone.this.random.nextInt(10) == 0;
         }
 
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
-        public boolean shouldContinueExecuting() {
-            return AbstractEntityDrone.this.navigator.hasPath();
+        public boolean canContinueToUse() {
+            return AbstractEntityDrone.this.navigation.isInProgress();
         }
 
         /**
          * Execute a one shot task or start executing a continuous task
          */
-        public void startExecuting() {
+        public void start() {
             Vector3d vector3d = this.getRandomLocation();
             if (vector3d != null) {
-                AbstractEntityDrone.this.navigator.setPath(AbstractEntityDrone.this.navigator.getPathToPos(new BlockPos(vector3d), 1), 1.0D);
+                AbstractEntityDrone.this.navigation.moveTo(AbstractEntityDrone.this.navigation.createPath(new BlockPos(vector3d), 1), 1.0D);
             }
 
         }
@@ -304,52 +304,52 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         private Vector3d getRandomLocation() {
             Vector3d vector3d;
             if (AbstractEntityDrone.this.getOwner().isPresent()) {
-                Vector3d vector3d1 = AbstractEntityDrone.this.getOwner().get().getPositionVec();
-                vector3d = vector3d1.subtract(AbstractEntityDrone.this.getPositionVec()).normalize();
+                Vector3d vector3d1 = AbstractEntityDrone.this.getOwner().get().position();
+                vector3d = vector3d1.subtract(AbstractEntityDrone.this.position()).normalize();
             } else {
-                vector3d = AbstractEntityDrone.this.getLook(0.0F);
+                vector3d = AbstractEntityDrone.this.getViewVector(0.0F);
             }
 
-            Vector3d vector3d2 = RandomPositionGenerator.findAirTarget(AbstractEntityDrone.this, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
-            return vector3d2 != null ? vector3d2 : RandomPositionGenerator.findGroundTarget(AbstractEntityDrone.this, 8, 4, -2, vector3d, (float) Math.PI / 2F);
+            Vector3d vector3d2 = RandomPositionGenerator.getAboveLandPos(AbstractEntityDrone.this, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
+            return vector3d2 != null ? vector3d2 : RandomPositionGenerator.getAirPos(AbstractEntityDrone.this, 8, 4, -2, vector3d, (float) Math.PI / 2F);
         }
     }
 
     class DroneFollowOwnerGoal extends Goal {
 
         public DroneFollowOwnerGoal() {
-            this.setMutexFlags(EnumSet.of(MOVE));
+            this.setFlags(EnumSet.of(MOVE));
         }
 
         @Override
-        public boolean shouldExecute() {
+        public boolean canUse() {
             if (AbstractEntityDrone.this.getOwner().isPresent() && AbstractEntityDrone.this.getOwner().get() instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity) AbstractEntityDrone.this.getOwner().get();
-                return !livingentity.isSpectator() && livingentity.getEntityWorld() == AbstractEntityDrone.this.getEntityWorld() && !(AbstractEntityDrone.this.getDistanceSq(livingentity) < 16);
+                return !livingentity.isSpectator() && livingentity.getCommandSenderWorld() == AbstractEntityDrone.this.getCommandSenderWorld() && !(AbstractEntityDrone.this.distanceToSqr(livingentity) < 16);
             }
             return false;
         }
 
         @Override
-        public void resetTask() {
-            super.resetTask();
+        public void stop() {
+            super.stop();
         }
 
         public void tick() {
 
 
             if (AbstractEntityDrone.this.getOwner().isPresent()) {
-                boolean cond1 = AbstractEntityDrone.this.getDistance(AbstractEntityDrone.this.getOwner().get()) >= 10.0D;
-                boolean cond2 = !AbstractEntityDrone.this.getLeashed();
+                boolean cond1 = AbstractEntityDrone.this.distanceTo(AbstractEntityDrone.this.getOwner().get()) >= 10.0D;
+                boolean cond2 = !AbstractEntityDrone.this.isLeashed();
                 boolean cond3 = !AbstractEntityDrone.this.isPassenger();
 
                 if (cond1 && cond2 && cond3) {
-                    //func_226330_g_();
-                    AbstractEntityDrone.this.getLookController().setLookPositionWithEntity(AbstractEntityDrone.this.getOwner().get(), 10.0F, (float) AbstractEntityDrone.this.getVerticalFaceSpeed());
-                    AbstractEntityDrone.this.getNavigator().tryMoveToEntityLiving(AbstractEntityDrone.this.getOwner().get(), 1);
+                    //teleportToOwner();
+                    AbstractEntityDrone.this.getLookControl().setLookAt(AbstractEntityDrone.this.getOwner().get(), 10.0F, (float) AbstractEntityDrone.this.getMaxHeadXRot());
+                    AbstractEntityDrone.this.getNavigation().moveTo(AbstractEntityDrone.this.getOwner().get(), 1);
                 }
 
-                if (AbstractEntityDrone.this.getDistance(AbstractEntityDrone.this.getOwner().get()) > 32) {
+                if (AbstractEntityDrone.this.distanceTo(AbstractEntityDrone.this.getOwner().get()) > 32) {
                     this.tryToTeleportNearEntity();
                 }
 
@@ -360,7 +360,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
             if(AbstractEntityDrone.this.getOwner().isPresent()) {
 
-                BlockPos blockpos = AbstractEntityDrone.this.getOwner().get().getPosition();
+                BlockPos blockpos = AbstractEntityDrone.this.getOwner().get().blockPosition();
 
                 for (int i = 0; i < 10; ++i) {
                     int j = this.getRandomNumber(-3, 3);
@@ -375,7 +375,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         }
 
         private int getRandomNumber(int min, int max) {
-            return AbstractEntityDrone.this.getRNG().nextInt(max - min + 1) + min;
+            return AbstractEntityDrone.this.getRandom().nextInt(max - min + 1) + min;
         }
 
         private boolean tryToTeleportToLocation(int x, int y, int z) {
@@ -384,39 +384,39 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
                 return false;
             }
 
-            if (Math.abs((double) x - AbstractEntityDrone.this.getOwner().get().getPosX()) < 2.0D && Math.abs((double) z - AbstractEntityDrone.this.getOwner().get().getPosZ()) < 2.0D) {
+            if (Math.abs((double) x - AbstractEntityDrone.this.getOwner().get().getX()) < 2.0D && Math.abs((double) z - AbstractEntityDrone.this.getOwner().get().getZ()) < 2.0D) {
                 return false;
             } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
                 return false;
             } else {
-                AbstractEntityDrone.this.setLocationAndAngles((double) x + 0.5D, y, (double) z + 0.5D, AbstractEntityDrone.this.rotationYaw, AbstractEntityDrone.this.rotationPitch);
-                AbstractEntityDrone.this.getNavigator().clearPath();
+                AbstractEntityDrone.this.moveTo((double) x + 0.5D, y, (double) z + 0.5D, AbstractEntityDrone.this.yRot, AbstractEntityDrone.this.xRot);
+                AbstractEntityDrone.this.getNavigation().stop();
                 return true;
             }
         }
 
         private boolean isTeleportFriendlyBlock(BlockPos pos) {
-            PathNodeType pathnodetype = WalkNodeProcessor.func_237231_a_(AbstractEntityDrone.this.getEntityWorld(), pos.toMutable());
+            PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(AbstractEntityDrone.this.getCommandSenderWorld(), pos.mutable());
             if (pathnodetype != PathNodeType.WALKABLE) {
                 return false;
             } else {
-                BlockState blockstate = AbstractEntityDrone.this.getEntityWorld().getBlockState(pos.down());
+                BlockState blockstate = AbstractEntityDrone.this.getCommandSenderWorld().getBlockState(pos.below());
                 if (blockstate.getBlock() instanceof LeavesBlock) {
                     return false;
                 } else {
-                    BlockPos blockpos = pos.subtract(AbstractEntityDrone.this.getPosition());
-                    return AbstractEntityDrone.this.getEntityWorld().hasNoCollisions(AbstractEntityDrone.this, AbstractEntityDrone.this.getBoundingBox().offset(blockpos));
+                    BlockPos blockpos = pos.subtract(AbstractEntityDrone.this.blockPosition());
+                    return AbstractEntityDrone.this.getCommandSenderWorld().noCollision(AbstractEntityDrone.this, AbstractEntityDrone.this.getBoundingBox().move(blockpos));
                 }
             }
         }
     }
 
     @Override
-    public boolean attackEntityFrom(DamageSource source, float p_70097_2_) {
-        if(source.getTrueSource() == this){
+    public boolean hurt(DamageSource source, float p_70097_2_) {
+        if(source.getEntity() == this){
             return false;
         }
 
-        return super.attackEntityFrom(source, p_70097_2_);
+        return super.hurt(source, p_70097_2_);
     }
 }

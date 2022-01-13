@@ -27,16 +27,16 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        Item item = this.entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem();
+    public boolean canUse() {
+        Item item = this.entity.getItemBySlot(EquipmentSlotType.MAINHAND).getItem();
         boolean isEquippingsword = item instanceof SwordItem;
 
-        if(this.entity.getAttackTarget() == null || !this.entity.getAttackTarget().isAlive()){
+        if(this.entity.getTarget() == null || !this.entity.getTarget().isAlive()){
             return false;
         }
 
         if(this.entity instanceof AbstractSwordUserBase){
-            if(((AbstractSwordUserBase)this.entity).shouldUseNonVanillaAttack(this.entity.getAttackTarget())){
+            if(((AbstractSwordUserBase)this.entity).shouldUseNonVanillaAttack(this.entity.getTarget())){
                 return false;
             }
         }
@@ -50,24 +50,24 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
                 return false;
             }
         }
-        this.target = this.entity.getAttackTarget();
+        this.target = this.entity.getTarget();
         return true;
     }
 
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
 
-        if(this.target == null || this.entity.getOwner() != null && (this.entity.getDistance(this.entity.getOwner())>=16 || this.target.getDistance(this.entity.getOwner())>=16)){
+        if(this.target == null || this.entity.getOwner() != null && (this.entity.distanceTo(this.entity.getOwner())>=16 || this.target.distanceTo(this.entity.getOwner())>=16)){
             return false;
         }
 
 
-        return this.shouldExecute() || !this.entity.getNavigator().noPath();
+        return this.canUse() || !this.entity.getNavigation().isDone();
     }
 
 
     @Override
-    public void startExecuting() {
-        super.startExecuting();
+    public void start() {
+        super.start();
         this.entity.setMeleeing(true);
     }
 
@@ -75,11 +75,11 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
     protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
 
         double d0 = this.getAttackReachSqr(enemy)+1;
-        this.entity.setSprinting(this.entity.getNavigator().hasPath() && this.entity.getDistance(enemy)>4F);
+        this.entity.setSprinting(this.entity.getNavigation().isInProgress() && this.entity.distanceTo(enemy)>4F);
         if(this.entity.isAngry() && this.entity.getOwner() == enemy && distToEnemySqr <= d0){
-            this.func_234039_g_();
-            this.attacker.swingArm(Hand.MAIN_HAND);
-            enemy.attackEntityFrom(DamageSources.causeRevengeDamage(this.entity), this.entity.getAttackDamage());
+            this.resetAttackCooldown();
+            this.mob.swing(Hand.MAIN_HAND);
+            enemy.hurt(DamageSources.causeRevengeDamage(this.entity), this.entity.getAttackDamage());
         }
         else{
             super.checkAndPerformAttack(enemy, distToEnemySqr);
@@ -87,8 +87,8 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
     }
 
     @Override
-    public void resetTask() {
-        super.resetTask();
+    public void stop() {
+        super.stop();
         this.entity.setMeleeing(false);
         this.entity.setSprinting(false);
     }

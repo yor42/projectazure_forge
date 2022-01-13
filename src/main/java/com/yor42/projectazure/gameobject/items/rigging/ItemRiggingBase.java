@@ -48,6 +48,8 @@ import java.util.List;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
+import net.minecraft.item.Item.Properties;
+
 public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable, IGeoRenderer {
 
     public AnimationFactory factory = new AnimationFactory(this);
@@ -70,8 +72,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (worldIn == null) return; // thanks JEI very cool
 
         IFluidHandlerItem tank = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).orElseThrow(() -> new RuntimeException("Can't get the fuel tank of non rigging item!"));
@@ -86,10 +88,10 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         } else {
             color = TextFormatting.GREEN;
         }
-        tooltip.add(new StringTextComponent("HP: " + getCurrentHP(stack) + "/" + this.getMaxHP()).setStyle(Style.EMPTY.setColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(fluidAmount + "/" + fluidCapacity).appendString("mb").mergeStyle(color)));
-        tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").appendString(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.setColor(Color.fromInt(8900331))));
-        if (worldIn.isRemote) {
+        tooltip.add(new StringTextComponent("HP: " + getCurrentHP(stack) + "/" + this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(fluidAmount + "/" + fluidCapacity).append("mb").withStyle(color)));
+        tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").append(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(8900331))));
+        if (worldIn.isClientSide) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, MultiInvUtil.getCap(stack), worldIn, tooltip, flagIn));
         }
 
@@ -104,19 +106,19 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     @OnlyIn(Dist.CLIENT)
     public void addInformationAfterShift(ItemStack stack, IMultiInventory inventories, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-        Color CategoryColor = Color.fromHex("#6bb82d");
+        Color CategoryColor = Color.parseColor("#6bb82d");
         for(int i = 0; i< inventories.getInventoryCount(); i++){
             IItemHandler Equipments = inventories.getInventory(i);
             enums.SLOTTYPE slottype = enums.SLOTTYPE.values()[i];
             //not really needed but its here to make mc to not add header of equipment that isnt supported by rigging
             if(Equipments.getSlots()>0) {
-                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.setColor(CategoryColor))));
+                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
                 for (int j = 0; j < Equipments.getSlots(); j++) {
                     ItemStack currentstack = Equipments.getStackInSlot(j);
                     if (currentstack.getItem() instanceof ItemEquipmentBase)
-                        tooltip.add(currentstack.getDisplayName().copyRaw().appendString(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.setColor(getHPColor(currentstack))));
+                        tooltip.add(currentstack.getHoverName().plainCopy().append(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.withColor(getHPColor(currentstack))));
                     else {
-                        tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).appendString("-")).setStyle(Style.EMPTY.setItalic(true).setColor(Color.fromInt(7829367))));
+                        tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(Color.fromRgb(7829367))));
                     }
                 }
             }
@@ -125,15 +127,15 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, @Nonnull Hand hand) {
-        ItemStack stack = player.getHeldItem(hand);
-        if(!world.isRemote()) {
-            if (player.isSneaking()) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, new RiggingContainer.Provider(stack), buf -> buf.writeItemStack(stack));
-                return ActionResult.resultSuccess(stack);
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, @Nonnull Hand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if(!world.isClientSide()) {
+            if (player.isShiftKeyDown()) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, new RiggingContainer.Provider(stack), buf -> buf.writeItem(stack));
+                return ActionResult.success(stack);
             }
         }
-        return super.onItemRightClick(world, player, hand);
+        return super.use(world, player, hand);
     }
 
     public enums.shipClass getValidclass() {

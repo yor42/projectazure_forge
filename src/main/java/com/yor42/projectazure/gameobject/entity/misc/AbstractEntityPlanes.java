@@ -42,13 +42,13 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
     protected AbstractEntityPlanes(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
-        this.moveController = new PlaneFlyMovementController(this, 20, true);
-        this.navigator = new FlyingPathNavigator(this, worldIn);
+        this.moveControl = new PlaneFlyMovementController(this, 20, true);
+        this.navigation = new FlyingPathNavigator(this, worldIn);
         this.isLifeLimited = false;
         this.hasRadar = false;
         this.isReturningToOwner = false;
-        this.setPathPriority(PathNodeType.DANGER_FIRE, -1.0F);
-        this.setPathPriority(PathNodeType.WATER, -1.0F);
+        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
         this.attackdamage = this.getPlaneItem().getAttackDamage();
     }
 
@@ -95,20 +95,20 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     }
 
     public boolean canAttack(){
-        return this.hasPayload() && this.getAttackTarget() != null && this.getMaxOperativeTick() - this.ticksExisted >200;
+        return this.hasPayload() && this.getTarget() != null && this.getMaxOperativeTick() - this.tickCount >200;
     }
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
         this.setNoGravity(this.isAlive());
         //in water = crash
         if(this.isInWater()){
-            this.world.createExplosion(this, this.getPosX(), getPosY(), getPosZ(), 0.5F, Explosion.Mode.DESTROY);
+            this.level.explode(this, this.getX(), getY(), getZ(), 0.5F, Explosion.Mode.DESTROY);
             this.remove();
         }
         if(this.isLimitedLifespan()) {
-            if (this.ticksExisted >= this.getMaxOperativeTick()) {
+            if (this.tickCount >= this.getMaxOperativeTick()) {
                 this.crashThePlane();
             }
         }
@@ -164,57 +164,57 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     public abstract ItemEquipmentPlaneBase getPlaneItem();
 
     public void crashThePlane(){
-        this.setDead();
+        this.removeAfterChangingDimensions();
     }
 
     @Override
-    protected void onDeathUpdate() {
-        Vector3d movement = this.getMotion();
-        double d0 = this.getPosX() + movement.x;
-        double d1 = this.getPosY() + movement.y;
-        double d2 = this.getPosZ() + movement.z;
-        this.world.addParticle(ParticleTypes.SMOKE, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+    protected void tickDeath() {
+        Vector3d movement = this.getDeltaMovement();
+        double d0 = this.getX() + movement.x;
+        double d1 = this.getY() + movement.y;
+        double d2 = this.getZ() + movement.z;
+        this.level.addParticle(ParticleTypes.SMOKE, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
 
         if(this.isOnGround() || isInWater()) {
-            this.world.createExplosion(this, this.getPosX(), this.getPosYHeight(0.0625D), this.getPosZ(), 1.0F, Explosion.Mode.DESTROY);
+            this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, Explosion.Mode.DESTROY);
             this.remove();
         }
 
     }
 
-    public void onDeath(DamageSource cause) {
+    public void die(DamageSource cause) {
         if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, cause)) return;
         if (!this.removed && !this.dead) {
-            Entity entity = cause.getTrueSource();
-            LivingEntity livingentity = this.getAttackingEntity();
-            if (this.scoreValue >= 0 && livingentity != null) {
-                livingentity.awardKillScore(this, this.scoreValue, cause);
+            Entity entity = cause.getEntity();
+            LivingEntity livingentity = this.getKillCredit();
+            if (this.deathScore >= 0 && livingentity != null) {
+                livingentity.awardKillScore(this, this.deathScore, cause);
             }
 
             if (this.isSleeping()) {
-                this.wakeUp();
+                this.stopSleeping();
             }
 
-            if(this.getAttackTarget()!= null){
-                if(this.getDistanceSq(this.getAttackTarget())<20F && this.getAttackTarget().getPosY()<this.getPosY()){
-                    this.getMoveHelper().setMoveTo(this.getAttackTarget().getPosX(), this.getAttackTarget().getPosY(), this.getAttackTarget().getPosZ(), 1.0F);
+            if(this.getTarget()!= null){
+                if(this.distanceToSqr(this.getTarget())<20F && this.getTarget().getY()<this.getY()){
+                    this.getMoveControl().setWantedPosition(this.getTarget().getX(), this.getTarget().getY(), this.getTarget().getZ(), 1.0F);
                 }
             }
 
             this.dead = true;
-            this.getCombatTracker().reset();
-            if (this.world instanceof ServerWorld) {
+            this.getCombatTracker().recheckStatus();
+            if (this.level instanceof ServerWorld) {
                 if (entity != null) {
-                    entity.func_241847_a((ServerWorld) this.world, this);
+                    entity.killed((ServerWorld) this.level, this);
                 }
             }
 
-            this.world.setEntityState(this, (byte)3);
+            this.level.broadcastEntityEvent(this, (byte)3);
         }
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
         return this.isAlive();
     }
 
@@ -223,19 +223,19 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         super.travel(travelVector);
         if (this.isOnGround())
         {
-            this.setMotion(this.getMotion().getX(), this.getMotion().getY()+0.02, this.getMotion().getZ());
+            this.setDeltaMovement(this.getDeltaMovement().x(), this.getDeltaMovement().y()+0.02, this.getDeltaMovement().z());
         }
     }
 
     @Override
-    public boolean isOnLadder() {
+    public boolean onClimbable() {
         return false;
     }
 
     @Override
-    public IPacket<?> createSpawnPacket() {
+    public IPacket<?> getAddEntityPacket() {
         NetworkHooks.getEntitySpawningPacket(this);
-        return super.createSpawnPacket();
+        return super.getAddEntityPacket();
     }
 
     @Override

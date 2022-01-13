@@ -14,19 +14,19 @@ public class PlaneInterceptGoal extends NearestAttackableTargetGoal<AbstractEnti
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         if(this.planes.getPlaneType() != enums.PLANE_TYPE.FIGHTER || !this.planes.canAttack()){
             return false;
         }
 
-        if (this.targetChance > 0 && this.goalOwner.getRNG().nextInt(this.targetChance) != 0) {
+        if (this.randomInterval > 0 && this.mob.getRandom().nextInt(this.randomInterval) != 0) {
             return false;
         } else {
-            this.findNearestTarget();
-            if(this.nearestTarget == null)
+            this.findTarget();
+            if(this.target == null)
                 return false;
-            if(this.nearestTarget instanceof AbstractEntityPlanes) {
-                return this.planes.getOwner() != ((AbstractEntityPlanes) this.nearestTarget).getOwner() && this.planes.getOwner().getOwner() != ((AbstractEntityPlanes) this.nearestTarget).getOwner().getOwner();
+            if(this.target instanceof AbstractEntityPlanes) {
+                return this.planes.getOwner() != ((AbstractEntityPlanes) this.target).getOwner() && this.planes.getOwner().getOwner() != ((AbstractEntityPlanes) this.target).getOwner().getOwner();
             }
         }
         return false;

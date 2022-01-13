@@ -40,49 +40,49 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
     @Override
     public boolean matches(IInventory inv, World worldIn) {
 
-        boolean isItemCorrect = (this.ingredient1.test(inv.getStackInSlot(0))||this.ingredient1.test(inv.getStackInSlot(1))) && (this.ingredient1.test(inv.getStackInSlot(0))||this.ingredient1.test(inv.getStackInSlot(1)));
+        boolean isItemCorrect = (this.ingredient1.test(inv.getItem(0))||this.ingredient1.test(inv.getItem(1))) && (this.ingredient1.test(inv.getItem(0))||this.ingredient1.test(inv.getItem(1)));
         boolean isItemCountEnough = getIng1ItemCount(inv)>=this.ing1Count && getIng2ItemCount(inv)>=this.ing2Count;
 
         return isItemCorrect && isItemCountEnough;
     }
 
     private int getIng1ItemCount(IInventory inventory){
-        if(this.ingredient1.test(inventory.getStackInSlot(0))){
-            return inventory.getStackInSlot(0).getCount();
+        if(this.ingredient1.test(inventory.getItem(0))){
+            return inventory.getItem(0).getCount();
         }
-        else if(this.ingredient1.test(inventory.getStackInSlot(1))){
-            return inventory.getStackInSlot(1).getCount();
+        else if(this.ingredient1.test(inventory.getItem(1))){
+            return inventory.getItem(1).getCount();
         }
         return 0;
     }
 
     private int getIng2ItemCount(IInventory inventory){
-        if(this.ingredient2.test(inventory.getStackInSlot(0))){
-            return inventory.getStackInSlot(0).getCount();
+        if(this.ingredient2.test(inventory.getItem(0))){
+            return inventory.getItem(0).getCount();
         }
-        else if(this.ingredient2.test(inventory.getStackInSlot(1))){
-            return inventory.getStackInSlot(1).getCount();
+        else if(this.ingredient2.test(inventory.getItem(1))){
+            return inventory.getItem(1).getCount();
         }
         return 0;
     }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack assemble(IInventory inv) {
         return this.result.copy();
     }
 
     @Override
-    public boolean canFit(int width, int height) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     public NonNullList<ItemStack> getIngredientStack() {
         NonNullList<ItemStack> list = NonNullList.create();
 
-        ItemStack stack1 = this.ingredient1.getMatchingStacks()[0];
+        ItemStack stack1 = this.ingredient1.getItems()[0];
         stack1.setCount(this.ing1Count);
 
-        ItemStack stack2 = this.ingredient2.getMatchingStacks()[0];
+        ItemStack stack2 = this.ingredient2.getItems()[0];
         stack2.setCount(this.ing2Count);
 
         list.add(stack1);
@@ -101,7 +101,7 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return this.result;
     }
 
@@ -136,16 +136,16 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
 
 
         @Override
-        public AlloyingRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public AlloyingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
-            Ingredient ingredient1 = Ingredient.deserialize(json.get("ingredient1"));
-            int ing1count = JSONUtils.getInt(json, "ing1count", 1);
-            Ingredient ingredient2 = Ingredient.deserialize(json.get("ingredient2"));
-            int ing2count = JSONUtils.getInt(json, "ing2count", 1);
+            Ingredient ingredient1 = Ingredient.fromJson(json.get("ingredient1"));
+            int ing1count = JSONUtils.getAsInt(json, "ing1count", 1);
+            Ingredient ingredient2 = Ingredient.fromJson(json.get("ingredient2"));
+            int ing2count = JSONUtils.getAsInt(json, "ing2count", 1);
 
-            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getString(json, "result"));
-            int processtime = JSONUtils.getInt(json, "processtime", 200);
-            int resultcount = JSONUtils.getInt(json, "resultcount", 1);
+            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getAsString(json, "result"));
+            int processtime = JSONUtils.getAsInt(json, "processtime", 200);
+            int resultcount = JSONUtils.getAsInt(json, "resultcount", 1);
 
             ItemStack result = new ItemStack(ForgeRegistries.ITEMS.getValue(ItemID), resultcount);
 
@@ -154,26 +154,26 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
 
         @Nullable
         @Override
-        public AlloyingRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public AlloyingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 
-            Ingredient ingredient1 = Ingredient.read(buffer);
+            Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
             int ing1count = buffer.readInt();
-            Ingredient ingredient2 = Ingredient.read(buffer);
+            Ingredient ingredient2 = Ingredient.fromNetwork(buffer);
             int ing2count = buffer.readInt();
             int processtick = buffer.readInt();
-            ItemStack resultStack = buffer.readItemStack();
+            ItemStack resultStack = buffer.readItem();
 
             return new AlloyingRecipe(recipeId, ingredient1, ing1count, ingredient2, ing2count, processtick, resultStack);
         }
 
         @Override
-        public void write(PacketBuffer buffer, AlloyingRecipe recipe) {
-            recipe.ingredient1.write(buffer);
+        public void toNetwork(PacketBuffer buffer, AlloyingRecipe recipe) {
+            recipe.ingredient1.toNetwork(buffer);
             buffer.writeInt(recipe.ing1Count);
-            recipe.ingredient2.write(buffer);
+            recipe.ingredient2.toNetwork(buffer);
             buffer.writeInt(recipe.ing2Count);
             buffer.writeInt(recipe.processTick);
-            buffer.writeItemStack(recipe.result);
+            buffer.writeItem(recipe.result);
         }
     }
 }

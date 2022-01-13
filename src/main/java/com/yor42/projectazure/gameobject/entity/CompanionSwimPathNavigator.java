@@ -7,6 +7,6 @@ import net.minecraft.world.World;
 public class CompanionSwimPathNavigator extends SwimmerPathNavigator {
     public CompanionSwimPathNavigator(MobEntity entitylivingIn, World worldIn) {
         super(entitylivingIn, worldIn);
-        this.nodeProcessor = new CompanionSwimNodeProcessor(false);
+        this.nodeEvaluator = new CompanionSwimNodeProcessor(false);
     }
 }

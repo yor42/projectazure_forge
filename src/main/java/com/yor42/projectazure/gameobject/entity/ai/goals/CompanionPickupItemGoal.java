@@ -8,6 +8,8 @@ import net.minecraft.entity.item.ItemEntity;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.entity.ai.goal.Goal.Flag;
+
 public class CompanionPickupItemGoal extends Goal {
 
     private final AbstractEntityCompanion host;
@@ -18,27 +20,27 @@ public class CompanionPickupItemGoal extends Goal {
     public CompanionPickupItemGoal(AbstractEntityCompanion host) {
         this.host = host;
         this.range = 5;
-        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
-        this.Lootlist = this.host.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, this.host.getBoundingBox().grow(this.range));
-        this.Explist = this.host.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, this.host.getBoundingBox().grow(this.range));
-        return ((this.host.getAttackTarget() == null || this.host.getRevengeTarget() == null) && this.host.shouldPickupItem() && (!this.Lootlist.isEmpty() || !this.Explist.isEmpty()) && !(this.host.isSleeping()&&this.host.isSitting())) && (this.host.getFirstEmptyStack() != -1 || (!Lootlist.isEmpty() && this.host.storeItemStack(Lootlist.get(0).getItem()) != -1));
+        this.Lootlist = this.host.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, this.host.getBoundingBox().inflate(this.range));
+        this.Explist = this.host.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrbEntity.class, this.host.getBoundingBox().inflate(this.range));
+        return ((this.host.getTarget() == null || this.host.getLastHurtByMob() == null) && this.host.shouldPickupItem() && (!this.Lootlist.isEmpty() || !this.Explist.isEmpty()) && !(this.host.isSleeping()&&this.host.isOrderedToSit())) && (this.host.getFirstEmptyStack() != -1 || (!Lootlist.isEmpty() && this.host.storeItemStack(Lootlist.get(0).getItem()) != -1));
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return this.shouldExecute();
+    public boolean canContinueToUse() {
+        return this.canUse();
     }
 
     @Override
     public void tick() {
-        if(this.host.ticksExisted % 10 == 0){
-            this.Lootlist = this.host.getEntityWorld().getEntitiesWithinAABB(ItemEntity.class, this.host.getBoundingBox().grow(this.range));;
-            this.Explist = this.host.getEntityWorld().getEntitiesWithinAABB(ExperienceOrbEntity.class, this.host.getBoundingBox().grow(this.range));
+        if(this.host.tickCount % 10 == 0){
+            this.Lootlist = this.host.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, this.host.getBoundingBox().inflate(this.range));;
+            this.Explist = this.host.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrbEntity.class, this.host.getBoundingBox().inflate(this.range));
         }
 
         if(!this.Lootlist.isEmpty()) {
@@ -50,9 +52,9 @@ public class CompanionPickupItemGoal extends Goal {
                     }
                 }
                 if (target!=null) {
-                    this.host.getNavigator().tryMoveToEntityLiving(target, 1.0F);
+                    this.host.getNavigation().moveTo(target, 1.0F);
 
-                    if (this.host.getDistanceSq(target) < 1) {
+                    if (this.host.distanceToSqr(target) < 1) {
                         this.host.PickUpItem(target);
                     }
                 }
@@ -67,9 +69,9 @@ public class CompanionPickupItemGoal extends Goal {
                 }
             }
             if (target!=null) {
-                this.host.getNavigator().tryMoveToEntityLiving(target, 1.0F);
+                this.host.getNavigation().moveTo(target, 1.0F);
 
-                if (this.host.getDistanceSq(target) < 1.5) {
+                if (this.host.distanceToSqr(target) < 1.5) {
                     this.host.pickupExpOrb(target);
                 }
             }

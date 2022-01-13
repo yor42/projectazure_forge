@@ -57,7 +57,7 @@ public class EntityShiroko extends EntityGunUserBase {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat", true));
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
@@ -72,7 +72,7 @@ public class EntityShiroko extends EntityGunUserBase {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }else if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.shiroko.openDoorL", false));
             }
             else{
@@ -81,19 +81,19 @@ public class EntityShiroko extends EntityGunUserBase {
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getActiveHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getActiveHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isSwingInProgress){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+        else if(this.swinging){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
@@ -114,13 +114,13 @@ public class EntityShiroko extends EntityGunUserBase {
                 return PlayState.CONTINUE;
             }
             else{
-                if(this.isSitting() || this.getRidingEntity() != null){
+                if(this.isOrderedToSit() || this.getVehicle() != null){
                     event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_hand", true));
                     return PlayState.CONTINUE;
                 }
-                if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
+                if(this.getMainHandItem().getItem() instanceof ItemGunBase){
 
-                    if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+                    if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                         event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_idle_twohanded", true));
                     }else{
                         event.getController().setAnimation(builder.addAnimation("animation.shiroko.idle_arm", true));
@@ -153,7 +153,7 @@ public class EntityShiroko extends EntityGunUserBase {
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
 
@@ -162,7 +162,7 @@ public class EntityShiroko extends EntityGunUserBase {
             return PlayState.CONTINUE;
         }
 
-        if(this.isSitting() || this.getRidingEntity() != null){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_start").addAnimation("animation.shiroko.sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -185,12 +185,12 @@ public class EntityShiroko extends EntityGunUserBase {
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ShirokoMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ShirokoSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.ShirokoHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ShirokoAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ShirokoMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ShirokoSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.ShirokoHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ShirokoAttackDamage.get())
                 ;
     }
 
@@ -198,11 +198,11 @@ public class EntityShiroko extends EntityGunUserBase {
     public boolean performOneTimeSkill(LivingEntity target) {
 
         ItemStack stack = this.getSkillItem(0);
-        if(stack.getItem() instanceof ItemMissleDrone && this.getAttackTarget() != null){
-            AbstractEntityDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getEntityWorld(), stack, this);
+        if(stack.getItem() instanceof ItemMissleDrone && this.getTarget() != null){
+            AbstractEntityDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getCommandSenderWorld(), stack, this);
             if(drone != null){
-                drone.setAttackTarget(this.getAttackTarget());
-                this.getEntityWorld().addEntity(drone);
+                drone.setTarget(this.getTarget());
+                this.getCommandSenderWorld().addFreshEntity(drone);
                 stack.shrink(1);
                 return true;
             }

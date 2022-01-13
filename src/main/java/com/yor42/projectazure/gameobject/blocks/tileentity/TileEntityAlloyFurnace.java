@@ -74,7 +74,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
 
         }
 
-        public int size() {
+        public int getCount() {
             return 4;
         }
     };
@@ -90,8 +90,8 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         return this.burnTime > 0;
     }
 
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
         this.burnTime = nbt.getInt("BurnTime");
         this.cookTime = nbt.getInt("CookTime");
@@ -101,14 +101,14 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2));
         CompoundNBT compoundnbt = nbt.getCompound("RecipesUsed");
 
-        for(String s : compoundnbt.keySet()) {
+        for(String s : compoundnbt.getAllKeys()) {
             this.recipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
         }
 
     }
 
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("CookTime", this.cookTime);
         compound.putInt("CookTimeTotal", this.cookTimeTotal);
@@ -142,7 +142,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     @Override
-    public int getSizeInventory() {
+    public int getContainerSize() {
         return 4;
     }
 
@@ -157,19 +157,19 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
+    public ItemStack getItem(int index) {
         return this.inventory.getStackInSlot(index);
     }
 
     @Override
-    public ItemStack decrStackSize(int index, int count) {
+    public ItemStack removeItem(int index, int count) {
         ItemStack stack = this.inventory.getStackInSlot(index);
         stack.shrink(count);
         return stack;
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int index) {
+    public ItemStack removeItemNoUpdate(int index) {
         if (index >=0 && index < this.inventory.getSlots()){
             this.inventory.setStackInSlot(index, ItemStack.EMPTY);
         }
@@ -177,17 +177,17 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setItem(int index, ItemStack stack) {
         this.inventory.setStackInSlot(index, stack);
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
         return true;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         for(int i=0;i<this.inventory.getSlots(); i++){
             this.inventory.setStackInSlot(i, ItemStack.EMPTY);
         }
@@ -222,10 +222,10 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
             --this.burnTime;
         }
 
-        if (!(this.world != null && this.world.isRemote)) {
+        if (!(this.level != null && this.level.isClientSide)) {
             ItemStack FuelStack = this.inventory.getStackInSlot(2);
             if (this.isBurning() || !FuelStack.isEmpty() && !this.inventory.getStackInSlot(0).isEmpty()&& !this.inventory.getStackInSlot(1).isEmpty()) {
-                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe(this.recipeType, this, this.world).orElse(null);
+                IRecipe<?> irecipe = this.level.getRecipeManager().getRecipeFor(this.recipeType, this, this.level).orElse(null);
 
                 if(irecipe != null){
                     this.cookTimeTotal = this.getCookTime();
@@ -264,27 +264,27 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
 
             if (flag != this.isBurning()) {
                 flag1 = true;
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(AlloyFurnaceBlock.ACTIVE, this.isBurning()), 3);
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(AlloyFurnaceBlock.ACTIVE, this.isBurning()), 3);
             }
         }
 
         if (flag1) {
-            this.markDirty();
+            this.setChanged();
         }
 
     }
     protected boolean canSmelt(@Nullable IRecipe<?> recipeIn) {
         if (!this.inventory.getStackInSlot(0).isEmpty()&&!this.inventory.getStackInSlot(1).isEmpty() && recipeIn != null) {
-            ItemStack itemstack = recipeIn.getRecipeOutput();
+            ItemStack itemstack = recipeIn.getResultItem();
             if (itemstack.isEmpty()) {
                 return false;
             } else {
                 ItemStack outputstack = this.inventory.getStackInSlot(3);
                 if (outputstack.isEmpty()) {
                     return true;
-                } else if (!outputstack.isItemEqual(itemstack)) {
+                } else if (!outputstack.sameItem(itemstack)) {
                     return false;
-                } else if (outputstack.getCount() + itemstack.getCount() <= this.getInventoryStackLimit() && outputstack.getCount() + itemstack.getCount() <= outputstack.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
+                } else if (outputstack.getCount() + itemstack.getCount() <= this.getMaxStackSize() && outputstack.getCount() + itemstack.getCount() <= outputstack.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
                     return true;
                 } else {
                     return outputstack.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes
@@ -299,7 +299,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         if (recipe != null && this.canSmelt(recipe)) {
             ItemStack input1 = this.inventory.getStackInSlot(0);
             ItemStack input2 = this.inventory.getStackInSlot(1);
-            ItemStack recipeOutput = recipe.getRecipeOutput();
+            ItemStack recipeOutput = recipe.getResultItem();
             ItemStack outputslot = this.inventory.getStackInSlot(3);
             if (outputslot.isEmpty()) {
                 this.inventory.setStackInSlot(3, recipeOutput.copy());
@@ -307,7 +307,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
                 outputslot.grow(recipeOutput.getCount());
             }
 
-            if (!(this.world != null && this.world.isRemote)) {
+            if (!(this.level != null && this.level.isClientSide)) {
                 this.setRecipeUsed(recipe);
             }
 
@@ -324,7 +324,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     protected int getCookTime() {
-        return this.world.getRecipeManager().getRecipe(this.recipeType, this, this.world).map(AlloyingRecipe::getProcessTick).orElse(200);
+        return this.level.getRecipeManager().getRecipeFor(this.recipeType, this, this.level).map(AlloyingRecipe::getProcessTick).orElse(200);
     }
 
     public void encodeExtraData(PacketBuffer buffer) {

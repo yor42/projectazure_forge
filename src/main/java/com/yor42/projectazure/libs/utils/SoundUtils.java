@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 public class SoundUtils {
 
     public static void playReloadSoundOnEntity(World world, Entity entity, SoundEvent sound, float volume, float pitch, boolean repeat, boolean moving){
-        if(!world.isRemote()){
+        if(!world.isClientSide()){
 
         }
         else{

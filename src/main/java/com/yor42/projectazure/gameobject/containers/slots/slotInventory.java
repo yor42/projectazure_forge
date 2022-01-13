@@ -17,11 +17,11 @@ public class slotInventory extends Slot {
     }
 
     @Override
-    public boolean canTakeStack(PlayerEntity playerIn) {
-        if(this.getHandler().getStackInSlot(this.index).getItem() instanceof ItemRiggingBase){
+    public boolean mayPickup(PlayerEntity playerIn) {
+        if(this.getHandler().getItem(this.index).getItem() instanceof ItemRiggingBase){
             return false;
         }
-        return super.canTakeStack(playerIn);
+        return super.mayPickup(playerIn);
     }
 
     public PlayerInventory getHandler() {

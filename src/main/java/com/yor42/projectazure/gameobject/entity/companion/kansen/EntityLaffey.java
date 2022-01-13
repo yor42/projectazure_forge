@@ -28,24 +28,24 @@ public class EntityLaffey extends EntityKansenDestroyer{
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.isSwingInProgress){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL", true));
+        if(this.swinging){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getActiveHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getActiveHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
@@ -53,7 +53,7 @@ public class EntityLaffey extends EntityKansenDestroyer{
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isSitting() || this.getRidingEntity() != null) {
+        else if(this.isOrderedToSit() || this.getVehicle() != null) {
             event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
             return PlayState.CONTINUE;
         }
@@ -62,7 +62,7 @@ public class EntityLaffey extends EntityKansenDestroyer{
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("openDoorL", false));
             }
             else{
@@ -76,7 +76,7 @@ public class EntityLaffey extends EntityKansenDestroyer{
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
@@ -99,8 +99,8 @@ public class EntityLaffey extends EntityKansenDestroyer{
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+        else if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+            if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
             return PlayState.CONTINUE;
@@ -116,7 +116,7 @@ public class EntityLaffey extends EntityKansenDestroyer{
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
@@ -125,7 +125,7 @@ public class EntityLaffey extends EntityKansenDestroyer{
             event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isSitting() || this.getRidingEntity() != null){
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -157,12 +157,12 @@ public class EntityLaffey extends EntityKansenDestroyer{
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.LaffeyMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.LaffeySwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.LaffeyHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.LaffeyAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.LaffeyMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.LaffeySwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.LaffeyHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.LaffeyAttackDamage.get())
                 ;
     }
 }

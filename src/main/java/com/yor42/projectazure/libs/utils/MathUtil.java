@@ -99,9 +99,9 @@ public class MathUtil {
 
     public static Vector4f getNormalizedLookVector(LivingEntity entity1, LivingEntity entity2){
         if(entity1 != null && entity2 != null){
-            double x = entity1.getPosX() - entity2.getPosX();
-            double y = entity1.getPosY() - entity2.getPosY();
-            double z = entity1.getPosY() - entity2.getPosY();
+            double x = entity1.getX() - entity2.getX();
+            double y = entity1.getY() - entity2.getY();
+            double z = entity1.getY() - entity2.getY();
             double dist = MathHelper.sqrt(x * x + y * y + z * z);
 
             if (dist > 1.0E-4D)
@@ -117,8 +117,8 @@ public class MathUtil {
     }
 
     public static int ColorHexToInt(String HEX_VALUE){
-        Color color = Color.fromHex(HEX_VALUE);
-        return color.getColor();
+        Color color = Color.parseColor(HEX_VALUE);
+        return color.getValue();
     }
 
     public static int Tick2Second(int Tick){
@@ -155,11 +155,11 @@ public class MathUtil {
             int x = originPos.getX() + (int) (radius * Math.cos(RandRadian));
             int z = originPos.getZ() + (int) (radius * Math.sin(RandRadian));
             int y = world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z);
-            pos.setPos(x,y,z);
+            pos.set(x,y,z);
             tries++;
-        }while(!WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkProvider().isChunkLoaded(new ChunkPos(pos)) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
+        }while(!WorldEntitySpawner.isSpawnPositionOk(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkSource().isEntityTickingChunk(new ChunkPos(pos)) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
         if(tries >= PAConfig.CONFIG.BeaconFindSpawnPositionTries.get()){
-            pos.setPos(originPos.getX(),originPos.getY(), originPos.getZ());
+            pos.set(originPos.getX(),originPos.getY(), originPos.getZ());
         }
         return pos;
     }

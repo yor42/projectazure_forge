@@ -17,7 +17,7 @@ public class ClientProxy extends CommonProxy {
 
     public static World getClientWorld()
     {
-        return Minecraft.getInstance().world;
+        return Minecraft.getInstance().level;
     }
 
     //client player

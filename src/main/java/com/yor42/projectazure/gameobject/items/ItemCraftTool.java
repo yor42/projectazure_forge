@@ -6,10 +6,12 @@ import net.minecraft.item.ItemStack;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemCraftTool extends Item {
 
     public ItemCraftTool(final int Durability){
-        this(new Item.Properties().group(PA_RESOURCES).maxDamage(Durability));
+        this(new Item.Properties().tab(PA_RESOURCES).durability(Durability));
     }
 
 
@@ -25,7 +27,7 @@ public class ItemCraftTool extends Item {
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
         ItemStack stack = itemStack.copy();
-        if (!stack.attemptDamageItem(1, MathUtil.getRand(), null)) {
+        if (!stack.hurt(1, MathUtil.getRand(), null)) {
             return stack;
         }
         else return ItemStack.EMPTY;

@@ -36,7 +36,7 @@ public class TransformingVertexBuilder implements IVertexBuilder
 
     @Nonnull
     @Override
-    public IVertexBuilder pos(double x, double y, double z)
+    public IVertexBuilder vertex(double x, double y, double z)
     {
         pos.putData(new Vector3d(x, y, z));
         return this;
@@ -52,7 +52,7 @@ public class TransformingVertexBuilder implements IVertexBuilder
 
     @Nonnull
     @Override
-    public IVertexBuilder tex(float u, float v)
+    public IVertexBuilder uv(float u, float v)
     {
         uv.putData(new Vector2f(u, v));
         return this;
@@ -60,7 +60,7 @@ public class TransformingVertexBuilder implements IVertexBuilder
 
     @Nonnull
     @Override
-    public IVertexBuilder overlay(int u, int v)
+    public IVertexBuilder overlayCoords(int u, int v)
     {
         overlay.putData(new Vec2i(u, v));
         return this;
@@ -68,7 +68,7 @@ public class TransformingVertexBuilder implements IVertexBuilder
 
     @Nonnull
     @Override
-    public IVertexBuilder lightmap(int u, int v)
+    public IVertexBuilder uv2(int u, int v)
     {
         lightmap.putData(new Vec2i(u, v));
         return this;
@@ -85,13 +85,13 @@ public class TransformingVertexBuilder implements IVertexBuilder
     @Override
     public void endVertex()
     {
-        pos.ifPresent(pos -> base.pos(transform.getLast().getMatrix(), (float)pos.x, (float)pos.y, (float)pos.z));
-        color.ifPresent(c -> base.color(c.getX(), c.getY(), c.getZ(), c.getW()));
-        uv.ifPresent(uv -> base.tex(uv.x, uv.y));
-        overlay.ifPresent(overlay -> base.overlay(overlay.x, overlay.y));
-        lightmap.ifPresent(lightmap -> base.lightmap(lightmap.x, lightmap.y));
+        pos.ifPresent(pos -> base.vertex(transform.last().pose(), (float)pos.x, (float)pos.y, (float)pos.z));
+        color.ifPresent(c -> base.color(c.x(), c.y(), c.z(), c.w()));
+        uv.ifPresent(uv -> base.uv(uv.x, uv.y));
+        overlay.ifPresent(overlay -> base.overlayCoords(overlay.x, overlay.y));
+        lightmap.ifPresent(lightmap -> base.uv2(lightmap.x, lightmap.y));
         normal.ifPresent(
-                normal -> base.normal(transform.getLast().getNormal(), normal.getX(), normal.getY(), normal.getZ())
+                normal -> base.normal(transform.last().normal(), normal.x(), normal.y(), normal.z())
         );
         base.endVertex();
     }

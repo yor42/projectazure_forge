@@ -56,11 +56,11 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.swingProgress>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingHand == Hand.MAIN_HAND?"swingR":"swingL"));
+        if(this.attackAnim>0){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
-        else if(this.dataManager.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
@@ -82,7 +82,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         }
 
         if(this.isOpeningDoor()){
-            if(this.getItemStackFromSlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemStackFromSlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("opendoorL", false));
             }
             else{
@@ -97,7 +97,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }
-        else if(this.isActiveItemStackBlocking()){
+        else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
@@ -109,8 +109,8 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
 
-        if(this.isSitting()){
-            if(this.getHeldItemMainhand().getItem() instanceof TieredItem){
+        if(this.isOrderedToSit()){
+            if(this.getMainHandItem().getItem() instanceof TieredItem){
                 event.getController().setAnimation(builder.addAnimation("sit_idle_arm_toolmainhand", true));
             }
             else {
@@ -128,8 +128,8 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
         else{
-            if(this.getHeldItemMainhand().getItem() instanceof ItemGunBase){
-                if(((ItemGunBase) this.getHeldItemMainhand().getItem()).isTwoHanded()){
+            if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+                if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
                     event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
                 }
                 return PlayState.CONTINUE;
@@ -148,7 +148,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSitting() || this.getRidingEntity() != null){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
@@ -204,7 +204,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
 
     @Override
     public boolean hasMeleeItem() {
-        return this.getHeldItemMainhand().getItem() instanceof SwordItem;
+        return this.getMainHandItem().getItem() instanceof SwordItem;
     }
 
     @Override
@@ -217,22 +217,22 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         if(target == null){
             return false;
         }
-        return this.hasMeleeItem() && !this.isSwimming() && !this.isSitting() && this.getRidingEntity() == null && this.getDistance(target) <=this.getAttackRange(this.isUsingTalentedWeapon());
+        return this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null && this.distanceTo(target) <=this.getAttackRange(this.isUsingTalentedWeapon());
     }
 
     @Override
     public boolean isUsingTalentedWeapon() {
-        return this.getHeldItemMainhand().getItem() instanceof SwordItem;
+        return this.getMainHandItem().getItem() instanceof SwordItem;
     }
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         if(target.isAlive()){
             if(this.isAngry() && target == this.getOwner()){
-                target.attackEntityFrom(DamageSources.causeRevengeDamage(this), this.getAttackDamage());
+                target.hurt(DamageSources.causeRevengeDamage(this), this.getAttackDamage());
             }
             else{
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackDamage());
+                target.hurt(DamageSource.mobAttack(this), this.getAttackDamage());
             }
         }
     }
@@ -240,7 +240,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     @Override
     public void StartMeleeAttackingEntity() {
         this.setMeleeAttackDelay((int) (this.getInitialMeleeAttackDelay() *this.getAttackSpeedModifier(this.isUsingTalentedWeapon())));
-        this.StartedMeleeAttackTimeStamp = this.ticksExisted;
+        this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
 
     @Override
@@ -266,14 +266,14 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
 
             return !(hasAmmo || reloadable);
         }
-        else return this.getHeldItem(getSpellUsingHand()).isEmpty() && !this.isSwimming() && !this.shouldUseNonVanillaAttack(this.getAttackTarget());
+        else return this.getItemInHand(getSpellUsingHand()).isEmpty() && !this.isSwimming() && !this.shouldUseNonVanillaAttack(this.getTarget());
     }
 
     @Override
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
         if(target.isAlive()){
-            target.attackEntityFrom(DamageSources.causeArtsFireDamage(this), 6);
-            target.setFire(5);
+            target.hurt(DamageSources.causeArtsFireDamage(this), 6);
+            target.setSecondsOnFire(5);
             this.addExp(0.2F);
             this.addExhaustion(0.05F);
             this.addMorale(-0.2);
@@ -283,7 +283,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     @Override
     public void StartShootingEntityUsingSpell(LivingEntity target) {
         this.setSpellDelay(this.getInitialSpellDelay());
-        this.StartedSpellAttackTimeStamp = this.ticksExisted;
+        this.StartedSpellAttackTimeStamp = this.tickCount;
     }
 
     @Override
@@ -313,12 +313,12 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.TalulahMovementSpeed.get())
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.TalulahSwimSpeed.get())
-                .createMutableAttribute(Attributes.MAX_HEALTH, PAConfig.CONFIG.TalulahHealth.get())
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.TalulahAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.TalulahMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.TalulahSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.TalulahHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.TalulahAttackDamage.get())
                 ;
     }
 }

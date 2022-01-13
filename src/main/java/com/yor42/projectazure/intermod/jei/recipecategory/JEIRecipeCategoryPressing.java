@@ -62,7 +62,7 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     @Override
     public void setIngredients(PressingRecipe pressingRecipe, IIngredients iIngredients) {
         iIngredients.setInputIngredients(pressingRecipe.getIngredients());
-        iIngredients.setOutput(VanillaTypes.ITEM, pressingRecipe.getRecipeOutput());
+        iIngredients.setOutput(VanillaTypes.ITEM, pressingRecipe.getResultItem());
     }
 
     @Override

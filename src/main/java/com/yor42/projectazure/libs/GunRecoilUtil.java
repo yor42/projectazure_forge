@@ -49,17 +49,17 @@ public class GunRecoilUtil {
         if(mc.player == null)
             return;
 
-        float recoilAmount = this.cameraRecoil * mc.getTickLength() * 0.1F;
+        float recoilAmount = this.cameraRecoil * mc.getDeltaFrameTime() * 0.1F;
         float startProgress = this.progressCameraRecoil / this.cameraRecoil;
         float endProgress = (this.progressCameraRecoil + recoilAmount) / this.cameraRecoil;
 
         if(startProgress < 0.2F)
         {
-            mc.player.rotationPitch -= ((endProgress - startProgress) / 0.2F) * this.cameraRecoil;
+            mc.player.xRot -= ((endProgress - startProgress) / 0.2F) * this.cameraRecoil;
         }
         else
         {
-            mc.player.rotationPitch += ((endProgress - startProgress) / 0.8F) * this.cameraRecoil;
+            mc.player.xRot += ((endProgress - startProgress) / 0.8F) * this.cameraRecoil;
         }
 
         this.progressCameraRecoil += recoilAmount;

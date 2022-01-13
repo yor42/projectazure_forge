@@ -51,13 +51,13 @@ public class DoGunAnimationPacket {
     public static void handle(final DoGunAnimationPacket message, final Supplier<NetworkEvent.Context> ctx){
         ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             World clientWorld = ClientProxy.getClientWorld();;
-            Entity entity =  clientWorld.getEntityByID(message.PlayerID);
+            Entity entity =  clientWorld.getEntity(message.PlayerID);
 
             if(entity instanceof PlayerEntity){
                 PlayerEntity playerEntity = (PlayerEntity) entity;
 
-                ItemStack mainstck = playerEntity.getHeldItemMainhand();
-                ItemStack offStack = playerEntity.getHeldItemOffhand();
+                ItemStack mainstck = playerEntity.getMainHandItem();
+                ItemStack offStack = playerEntity.getOffhandItem();
                 if(message.isOffHand){
                     if(offStack.getItem() instanceof ItemGunBase){
 

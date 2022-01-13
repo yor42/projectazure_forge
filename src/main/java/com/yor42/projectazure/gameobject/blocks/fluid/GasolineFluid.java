@@ -26,24 +26,24 @@ import static com.yor42.projectazure.setup.register.registerFluids.GASOLINE_SOUR
 
 public abstract class GasolineFluid extends FlowingFluid {
     @Override
-    public Fluid getFlowingFluid() {
+    public Fluid getFlowing() {
         return GASOLINE_FLOWING;
     }
 
     @Override
-    public Fluid getStillFluid() {
+    public Fluid getSource() {
         return GASOLINE_SOURCE;
     }
 
     @Override
-    protected boolean canSourcesMultiply() {
+    protected boolean canConvertToSource() {
         return false;
     }
 
     @Override
-    protected void beforeReplacingBlock(IWorld worldIn, BlockPos pos, BlockState state) {
-        TileEntity tileentity = state.hasTileEntity() ? worldIn.getTileEntity(pos) : null;
-        Block.spawnDrops(state, worldIn, pos, tileentity);
+    protected void beforeDestroyingBlock(IWorld worldIn, BlockPos pos, BlockState state) {
+        TileEntity tileentity = state.hasTileEntity() ? worldIn.getBlockEntity(pos) : null;
+        Block.dropResources(state, worldIn, pos, tileentity);
     }
 
     @Override
@@ -52,18 +52,18 @@ public abstract class GasolineFluid extends FlowingFluid {
     }
 
     @Override
-    protected int getLevelDecreasePerBlock(IWorldReader worldIn) {
+    protected int getDropOff(IWorldReader worldIn) {
         return 1;
     }
 
     @Override
-    public Item getFilledBucket() {
+    public Item getBucket() {
         return registerItems.GASOLINE_BUCKET.get();
     }
 
     @Override
-    protected boolean canDisplace(FluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
-        return direction == Direction.DOWN && !fluid.isIn(FluidTags.WATER);
+    protected boolean canBeReplacedWith(FluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
+        return direction == Direction.DOWN && !fluid.is(FluidTags.WATER);
     }
 
     @Override
@@ -74,12 +74,12 @@ public abstract class GasolineFluid extends FlowingFluid {
                 .overlay(new ResourceLocation("block/water_overlay"))
                 .translationKey("block.projectazure.gasoline")
                 .color(0x88fff600).density(2000).viscosity(2000)
-                .sound(SoundEvents.ITEM_BUCKET_FILL, SoundEvents.ITEM_BUCKET_EMPTY)
+                .sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
                 .build(this);
     }
 
     @Override
-    public int getTickRate(IWorldReader p_205569_1_) {
+    public int getTickDelay(IWorldReader p_205569_1_) {
         return 10;
     }
 
@@ -89,23 +89,23 @@ public abstract class GasolineFluid extends FlowingFluid {
     }
 
     @Override
-    protected BlockState getBlockState(FluidState state) {
-        return registerBlocks.GASOLINE.get().getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+    protected BlockState createLegacyBlock(FluidState state) {
+        return registerBlocks.GASOLINE.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
-    public boolean isEquivalentTo(Fluid fluidIn) {
+    public boolean isSame(Fluid fluidIn) {
         return fluidIn == GASOLINE_SOURCE || fluidIn == GASOLINE_FLOWING;
     }
 
     public static class Flowing extends GasolineFluid {
-        protected void fillStateContainer(StateContainer.Builder<Fluid, FluidState> builder) {
-            super.fillStateContainer(builder);
-            builder.add(LEVEL_1_8);
+        protected void createFluidStateDefinition(StateContainer.Builder<Fluid, FluidState> builder) {
+            super.createFluidStateDefinition(builder);
+            builder.add(LEVEL);
         }
 
-        public int getLevel(FluidState state) {
-            return state.get(LEVEL_1_8);
+        public int getAmount(FluidState state) {
+            return state.getValue(LEVEL);
         }
 
         public boolean isSource(FluidState state) {
@@ -114,7 +114,7 @@ public abstract class GasolineFluid extends FlowingFluid {
     }
 
     public static class Source extends GasolineFluid {
-        public int getLevel(FluidState state) {
+        public int getAmount(FluidState state) {
             return 8;
         }
 

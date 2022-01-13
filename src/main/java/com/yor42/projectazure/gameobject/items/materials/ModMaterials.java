@@ -12,13 +12,13 @@ import java.util.function.Supplier;
 public enum ModMaterials implements IItemTier {
 
     CHIXIAO(3, 2500, 7.5F, 7, 8, () -> {
-        return Ingredient.fromTag(ModTags.Items.INGOT_TIN);}),
+        return Ingredient.of(ModTags.Items.INGOT_TIN);}),
 
     SHEATH(2, 1256, 5.5F, 5, 8, () -> {
-        return Ingredient.fromTag(ModTags.Items.INGOT_TIN);}),
+        return Ingredient.of(ModTags.Items.INGOT_TIN);}),
 
     SLEDGEHAMMER(2, 600, 1F, 10, 3, () -> {
-        return Ingredient.fromTag(Tags.Items.INGOTS_IRON);});
+        return Ingredient.of(Tags.Items.INGOTS_IRON);});
 
     private final int harvestLevel;
     private final int maxUses;
@@ -36,27 +36,27 @@ public enum ModMaterials implements IItemTier {
         this.repairMaterial = new LazyValue<>(repairMaterialIn);
     }
 
-    public int getMaxUses() {
+    public int getUses() {
         return this.maxUses;
     }
 
-    public float getEfficiency() {
+    public float getSpeed() {
         return this.efficiency;
     }
 
-    public float getAttackDamage() {
+    public float getAttackDamageBonus() {
         return this.attackDamage;
     }
 
-    public int getHarvestLevel() {
+    public int getLevel() {
         return this.harvestLevel;
     }
 
-    public int getEnchantability() {
+    public int getEnchantmentValue() {
         return this.enchantability;
     }
 
-    public Ingredient getRepairMaterial() {
-        return this.repairMaterial.getValue();
+    public Ingredient getRepairIngredient() {
+        return this.repairMaterial.get();
     }
 }

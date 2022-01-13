@@ -60,18 +60,18 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
     private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",5F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
-    private static final DataParameter<Integer> SHIP_FIRE_TICK = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.VARINT);
-    private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.createKey(EntityKansenBase.class, DataSerializers.ITEMSTACK);
+    private static final DataParameter<Integer> SHIP_FIRE_TICK = EntityDataManager.defineId(EntityKansenBase.class, DataSerializers.INT);
+    private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.defineId(EntityKansenBase.class, DataSerializers.ITEM_STACK);
 
     public ItemStackHandler RiggingSlot = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
-                EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(0));
+                EntityKansenBase.this.entityData.set(ITEM_RIGGING, this.getStackInSlot(0));
         }
 
         @Override
         protected void onLoad() {
-            EntityKansenBase.this.dataManager.set(ITEM_RIGGING, this.getStackInSlot(0));
+            EntityKansenBase.this.entityData.set(ITEM_RIGGING, this.getStackInSlot(0));
         }
     };
 
@@ -95,10 +95,10 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         this.getAttribute(ForgeMod.SWIM_SPEED.get()).setBaseValue(1.0F);
     }
 
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(SHIP_FIRE_TICK, 0);
-        this.dataManager.register(ITEM_RIGGING,ItemStack.EMPTY);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHIP_FIRE_TICK, 0);
+        this.entityData.define(ITEM_RIGGING,ItemStack.EMPTY);
     }
 
     public boolean isShipOnFire(){
@@ -106,16 +106,16 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public int getShipFireTicks(){
-        return this.dataManager.get(SHIP_FIRE_TICK);
+        return this.entityData.get(SHIP_FIRE_TICK);
     }
 
     public void ForceShipFireTicks(int tick){
-        this.dataManager.set(SHIP_FIRE_TICK, tick);
+        this.entityData.set(SHIP_FIRE_TICK, tick);
     }
 
     public void setShipFire(int seconds) {
         int i = seconds * 20;
-        i = ProtectionEnchantment.getFireTimeForEntity((LivingEntity)this, i);
+        i = ProtectionEnchantment.getFireAfterDampener((LivingEntity)this, i);
 
         if (this.getShipFireTicks() < i) {
             this.ForceShipFireTicks(i);
@@ -127,14 +127,14 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Override
-    public void writeAdditional(@Nonnull CompoundNBT compound) {
-        super.writeAdditional(compound);
+    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
         compound.putInt("shipfire", this.getShipFireTicks());
         compound.put("rigging",this.RiggingSlot.serializeNBT());
     }
 
-    public void readAdditional(@Nonnull CompoundNBT compound) {
-        super.readAdditional(compound);
+    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
         this.ForceShipFireTicks(compound.getInt("shipfire"));
         if(compound.contains("rigging"))
             this.RiggingSlot.deserializeNBT(compound.getCompound("rigging"));
@@ -171,8 +171,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public ItemStack getRigging(){
-        if(this.getEntityWorld().isRemote()) {
-            return this.dataManager.get(ITEM_RIGGING);
+        if(this.getCommandSenderWorld().isClientSide()) {
+            return this.entityData.get(ITEM_RIGGING);
         }
         else{
             return this.getShipRiggingStorage().getStackInSlot(0);
@@ -209,44 +209,44 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 DamageItem(property.getDamage(enums.DamageType.RIGGING), this.getRigging());
                 DamageComponent(property.getDamage(enums.DamageType.COMPONENT), this.getRigging(), property.ShouldDamageMultipleComponent());
             }
-            return super.attackEntityFrom(source, property.getDamage(enums.DamageType.ENTITY));
+            return super.hurt(source, property.getDamage(enums.DamageType.ENTITY));
         }
         return true;
     }
 
     @ParametersAreNonnullByDefault
-    public boolean attackEntityFrom(DamageSource source, float amount) {
+    public boolean hurt(DamageSource source, float amount) {
 
         float DamageMultiplier = 1.0F;
         float ignoreArmorChance = RangedFloatRandom(0.05F, 0.1F);
         if(this.hasRigging()&& (!(source==DamageSource.FALL)||!(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance)))){
             DamageMultiplier = getRiggingedDamageModifier();
             DamageItem(amount, this.getRigging());
-            this.playSound(SoundEvents.ENTITY_IRON_GOLEM_HURT, 1.0F, 1.0f);
+            this.playSound(SoundEvents.IRON_GOLEM_HURT, 1.0F, 1.0f);
         }
-        return super.attackEntityFrom(source, amount*DamageMultiplier);
+        return super.hurt(source, amount*DamageMultiplier);
     }
 
 
 
     @Override
-    public void livingTick() {
-        super.livingTick();
+    public void aiStep() {
+        super.aiStep();
 
         ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
         if (this.isSailing()) {
             this.kansenFloat();
             if (modifiableattributeinstance != null && modifiableattributeinstance.getModifier(SAILING_SPEED_MODIFIER) == null) {
-                modifiableattributeinstance.applyNonPersistentModifier(SAILING_SPEED_BOOST);
+                modifiableattributeinstance.addTransientModifier(SAILING_SPEED_BOOST);
             }
-            Vector3d vector3d = this.getMotion();
-            double d0 = this.getPosX() + vector3d.x;
-            double d1 = this.getPosY() + vector3d.y;
-            double d2 = this.getPosZ() + vector3d.z;
+            Vector3d vector3d = this.getDeltaMovement();
+            double d0 = this.getX() + vector3d.x;
+            double d1 = this.getY() + vector3d.y;
+            double d2 = this.getZ() + vector3d.z;
             if(!(vector3d.x == 0 || vector3d.z == 0)) {
-                this.world.addParticle(ParticleTypes.CLOUD, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
+                this.level.addParticle(ParticleTypes.CLOUD, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             }
-            if(!PAConfig.CONFIG.RiggingInfiniteFuel.get() && this.ticksExisted%2 == 0) {
+            if(!PAConfig.CONFIG.RiggingInfiniteFuel.get() && this.tickCount%2 == 0) {
                 this.getRigging().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent((fluidtank) -> {
                     fluidtank.drain(1, IFluidHandler.FluidAction.EXECUTE);
                 });
@@ -262,7 +262,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
         if(this.isShipOnFire()){
             if (this.getShipFireTicks() % 20 == 0) {
-                this.attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
+                this.hurt(DamageSource.ON_FIRE, 1.0F);
             }
 
             this.ForceShipFireTicks(this.getShipFireTicks() - 1);
@@ -270,12 +270,12 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Override
-    public boolean canRenderOnFire() {
-        return super.canRenderOnFire() || this.isShipOnFire();
+    public boolean displayFireAnimation() {
+        return super.displayFireAnimation() || this.isShipOnFire();
     }
 
     @Override
-    public boolean hasNoGravity() {
+    public boolean isNoGravity() {
 
         return this.isSailing();
     }
@@ -322,15 +322,15 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
             ItemStack Ammostack = this.findAmmo(this.getActiveShellCategory());
             if (Ammostack.getItem() instanceof ItemCannonshell) {
-                Vector3d vector3d = this.getLook(1.0F);
-                double x = target.getPosX() - (this.getPosX());
-                double y = this.getPosYHeight(0.5) - (this.getPosYHeight(0.5));
-                double z = target.getPosZ() - (this.getPosZ());
+                Vector3d vector3d = this.getViewVector(1.0F);
+                double x = target.getX() - (this.getX());
+                double y = this.getY(0.5) - (this.getY(0.5));
+                double z = target.getZ() - (this.getZ());
 
-                EntityCannonPelllet shell = new EntityCannonPelllet(this.world, this, 0, 0, 0, ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty());
+                EntityCannonPelllet shell = new EntityCannonPelllet(this.level, this, 0, 0, 0, ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty());
                 shell.shoot(x,y,z, 0.8F, 0.05F);
                 this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-                this.world.addEntity(shell);
+                this.level.addFreshEntity(shell);
                 Ammostack.shrink(1);
                 Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));
 
@@ -345,14 +345,14 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public void AttackUsingTorpedo(LivingEntity target, float distanceFactor){
         boolean shouldFire = this.isSailing() && canUseTorpedo(this.getRigging());
         if(shouldFire){
-            Vector3d vector3d = this.getLook(1.0F);
-            double d2 = target.getPosX() - (this.getPosX() + vector3d.x * 4.0D);
-            double d3 = target.getPosYHeight(0.5D) - this.getPosY() - 0.5D;
-            double d4 = target.getPosZ() - (this.getPosZ() + vector3d.z * 4.0D);
+            Vector3d vector3d = this.getViewVector(1.0F);
+            double d2 = target.getX() - (this.getX() + vector3d.x * 4.0D);
+            double d3 = target.getY(0.5D) - this.getY() - 0.5D;
+            double d4 = target.getZ() - (this.getZ() + vector3d.z * 4.0D);
 
-            EntityProjectileTorpedo torpedo = new EntityProjectileTorpedo(this, d2, d3, d4, this.world);
-            torpedo.setPosition(this.getPosX() + vector3d.x, this.getPosY() - 0.5D, torpedo.getPosZ() + vector3d.z);
-            this.world.addEntity(torpedo);
+            EntityProjectileTorpedo torpedo = new EntityProjectileTorpedo(this, d2, d3, d4, this.level);
+            torpedo.setPos(this.getX() + vector3d.x, this.getY() - 0.5D, torpedo.getZ() + vector3d.z);
+            this.level.addFreshEntity(torpedo);
             this.addExp(1.0F);
             ItemStack FiringTorpedo = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.TORPEDO, this);
             ItemStackUtils.useAmmo(FiringTorpedo);
@@ -362,11 +362,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     private void kansenFloat() {
-        Vector3d vec3d = this.getMotion();
-        if(this.func_233571_b_(FluidTags.WATER)>0.3)
-            this.setMotion(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-3F : 0.0F), vec3d.z);
+        Vector3d vec3d = this.getDeltaMovement();
+        if(this.getFluidHeight(FluidTags.WATER)>0.3)
+            this.setDeltaMovement(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-3F : 0.0F), vec3d.z);
         else if (vec3d.y>0){
-            this.setVelocity(vec3d.x, vec3d.y - 0.0001, vec3d.z);
+            this.lerpMotion(vec3d.x, vec3d.y - 0.0001, vec3d.z);
         }
     }
 

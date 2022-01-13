@@ -7,18 +7,18 @@ import net.minecraft.client.gui.ScreenManager;
 public class ClientRegisterManager {
 
     public static void registerScreen(){
-        ScreenManager.registerFactory(registerManager.SHIP_CONTAINER.get(), GuiALInventory::new);
-        ScreenManager.registerFactory(registerManager.RIGGING_INVENTORY.get(), guiRiggingInventory::new);
-        ScreenManager.registerFactory(registerManager.BA_CONTAINER.get(), guiBAInventory::new);
-        ScreenManager.registerFactory(registerManager.GFL_CONTAINER.get(), GuiGFLInventory::new);
-        ScreenManager.registerFactory(registerManager.AKN_CONTAINER.get(), GuiAKNInventory::new);
+        ScreenManager.register(registerManager.SHIP_CONTAINER.get(), GuiALInventory::new);
+        ScreenManager.register(registerManager.RIGGING_INVENTORY.get(), guiRiggingInventory::new);
+        ScreenManager.register(registerManager.BA_CONTAINER.get(), guiBAInventory::new);
+        ScreenManager.register(registerManager.GFL_CONTAINER.get(), GuiGFLInventory::new);
+        ScreenManager.register(registerManager.AKN_CONTAINER.get(), GuiAKNInventory::new);
 
-        ScreenManager.registerFactory(registerManager.METAL_PRESS_CONTAINER.get(), guiMetalPress::new);
-        ScreenManager.registerFactory(registerManager.ALLOY_FURNACE_CONTAINER.get(), guiAlloyFurnace::new);
-        ScreenManager.registerFactory(registerManager.RECRUIT_BEACON_CONTAINER.get(), guiRecruitBeacon::new);
-        ScreenManager.registerFactory(registerManager.DRYDOCK_CONTAINER.get(), guiDryDock::new);
-        ScreenManager.registerFactory(registerManager.BASIC_REFINERY_CONTAINER.get(), guiBasicRefinery::new);
-        ScreenManager.registerFactory(registerManager.GROWTH_CHAMBER_CONTAINER.get(), GuiCrystalGrowthChamber::new);
+        ScreenManager.register(registerManager.METAL_PRESS_CONTAINER.get(), guiMetalPress::new);
+        ScreenManager.register(registerManager.ALLOY_FURNACE_CONTAINER.get(), guiAlloyFurnace::new);
+        ScreenManager.register(registerManager.RECRUIT_BEACON_CONTAINER.get(), guiRecruitBeacon::new);
+        ScreenManager.register(registerManager.DRYDOCK_CONTAINER.get(), guiDryDock::new);
+        ScreenManager.register(registerManager.BASIC_REFINERY_CONTAINER.get(), guiBasicRefinery::new);
+        ScreenManager.register(registerManager.GROWTH_CHAMBER_CONTAINER.get(), GuiCrystalGrowthChamber::new);
     }
 
 }

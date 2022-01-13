@@ -18,8 +18,8 @@ public class TileEntityBoundingBox extends TileEntity {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putInt("masterX", masterPos.getX());
         compound.putInt("masterY", masterPos.getY());
         compound.putInt("masterZ", masterPos.getZ());
@@ -28,8 +28,8 @@ public class TileEntityBoundingBox extends TileEntity {
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         this.masterPos = new BlockPos(nbt.getInt("masterX"), nbt.getInt("masterY"), nbt.getInt("masterZ"));
         this.hasMaster = nbt.getBoolean("hasMaster");
     }
@@ -45,7 +45,7 @@ public class TileEntityBoundingBox extends TileEntity {
             //check master again
             if (hasMaster)
             {
-                TileEntity tile = this.world.getTileEntity(this.masterPos);
+                TileEntity tile = this.level.getBlockEntity(this.masterPos);
 
                 if (tile instanceof MultiblockBaseTE)
                 {
@@ -74,7 +74,7 @@ public class TileEntityBoundingBox extends TileEntity {
         if (master != null && !master.isRemoved())
         {
             this.masterTile = master;
-            this.setMasterCoords(master.getPos());
+            this.setMasterCoords(master.getBlockPos());
         }
         else
         {

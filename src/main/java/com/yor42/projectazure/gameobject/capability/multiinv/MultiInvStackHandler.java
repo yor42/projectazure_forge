@@ -144,7 +144,7 @@ public class MultiInvStackHandler implements IItemHandlerModifiable {
             if (!stacks.get(i).isEmpty()) {
                 CompoundNBT item = new CompoundNBT();
                 item.putInt("Slot", i);
-                stacks.get(i).write(item);
+                stacks.get(i).save(item);
                 items.add(item);
             }
         }

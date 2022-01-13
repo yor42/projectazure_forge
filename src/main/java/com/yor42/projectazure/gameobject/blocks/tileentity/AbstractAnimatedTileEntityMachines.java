@@ -39,12 +39,12 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         boolean shouldsave = false;
 
 
-        if (this.world != null && !this.world.isRemote) {
+        if (this.level != null && !this.level.isClientSide) {
             ItemStack ingredient = this.inventory.getStackInSlot(0);
             ItemStack mold = this.inventory.getStackInSlot(1);
 
             if (!ingredient.isEmpty() && !mold.isEmpty()) {
-                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<? extends IRecipe<IInventory>>) this.recipeType, this, this.world).orElse(null);
+                IRecipe<?> irecipe = this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends IRecipe<IInventory>>) this.recipeType, this, this.level).orElse(null);
 
                 boolean flag1 = this.energyStorage.getEnergyStored() >= this.powerConsumption;
                 boolean flag2 = this.canProcess(irecipe);
@@ -71,7 +71,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
 
         }
         if(shouldsave){
-            this.markDirty();
+            this.setChanged();
         }
 
         if(!isActive && this.isActive()){
@@ -79,8 +79,8 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         }
 
 
-        if(this.getWorld() != null && isActive != this.isActive()) {
-            this.getWorld().notifyBlockUpdate(this.getPos(), this.getBlockState(), this.getBlockState(), 3);
+        if(this.getLevel() != null && isActive != this.isActive()) {
+            this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
         }
     }
 
@@ -91,15 +91,15 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     protected abstract boolean canProcess(IRecipe<?> irecipe);
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
         this.ProcessTime = nbt.getInt("processtime");
         this.totalProcessTime = nbt.getInt("totalprocesstime");
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        super.save(compound);
         compound.putInt("processtime", this.ProcessTime);
         compound.putInt("totalprocesstime", this.totalProcessTime);
         return compound;
@@ -111,27 +111,27 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         CompoundNBT syncTag = super.getUpdateTag();
         syncTag.putInt("progress", this.ProcessTime);
         syncTag.putInt("totalprogress", this.totalProcessTime);
-        return new SUpdateTileEntityPacket(pos, 1, syncTag);
+        return new SUpdateTileEntityPacket(worldPosition, 1, syncTag);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-        CompoundNBT syncTag = pkt.getNbtCompound();
+        CompoundNBT syncTag = pkt.getTag();
         this.totalProcessTime = syncTag.getInt("totalprogress");
         this.ProcessTime = syncTag.getInt("progress");
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        super.setInventorySlotContents(index, stack);
-        ItemStack stack1 = this.getStackInSlot(index);
-        boolean flag = !stack.isEmpty() && stack.isItemEqual(stack1) && ItemStack.areItemStackTagsEqual(stack, stack1);
+    public void setItem(int index, ItemStack stack) {
+        super.setItem(index, stack);
+        ItemStack stack1 = this.getItem(index);
+        boolean flag = !stack.isEmpty() && stack.sameItem(stack1) && ItemStack.tagMatches(stack, stack1);
 
         if (index == 0 || index==1 && !flag) {
             this.totalProcessTime = this.getTargetProcessTime();
             this.ProcessTime = 0;
-            this.markDirty();
+            this.setChanged();
         }
     }
 
@@ -143,12 +143,12 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         return this.ProcessTime;
     }
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
+    public boolean stillValid(PlayerEntity player) {
         return true;
     }
 
     @Override
-    public void clear() {
+    public void clearContent() {
         for(int i=0;i<this.inventory.getSlots(); i++){
             this.inventory.setStackInSlot(i, ItemStack.EMPTY);
         }

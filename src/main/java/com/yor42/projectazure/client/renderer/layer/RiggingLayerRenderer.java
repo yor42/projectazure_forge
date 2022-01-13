@@ -32,14 +32,14 @@ public class RiggingLayerRenderer<T extends AbstractEntityCompanion> extends Geo
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        matrixStackIn.push();
+        matrixStackIn.pushPose();
 
         boolean shouldSit = entitylivingbaseIn.isPassenger()
-                && (entitylivingbaseIn.getRidingEntity() != null && entitylivingbaseIn.getRidingEntity().shouldRiderSit());
+                && (entitylivingbaseIn.getVehicle() != null && entitylivingbaseIn.getVehicle().shouldRiderSit());
 
         EntityModelData entityModelData = new EntityModelData();
         entityModelData.isSitting = shouldSit;
-        entityModelData.isChild = entitylivingbaseIn.isChild();
+        entityModelData.isChild = entitylivingbaseIn.isBaby();
 
         AnimationEvent<T> predicate = new AnimationEvent<T>(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks,
                 !(limbSwingAmount > -0.15F && limbSwingAmount < 0.15F), Collections.singletonList(entityModelData));
@@ -56,19 +56,19 @@ public class RiggingLayerRenderer<T extends AbstractEntityCompanion> extends Geo
 
                 GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelLocation(entitylivingbaseIn));
                 ((IAnimatableModel) this.modelProvider).setLivingAnimations(entitylivingbaseIn, this.getUniqueID(entitylivingbaseIn), predicate);
-                render(model, entitylivingbaseIn, partialTicks, RenderType.getEntitySmoothCutout(this.getTextureLocation(entitylivingbaseIn)), matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-                matrixStackIn.pop();
+                render(model, entitylivingbaseIn, partialTicks, RenderType.entitySmoothCutout(this.getTextureLocation(entitylivingbaseIn)), matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                matrixStackIn.popPose();
 
                 //ItemStackHandler Equipments = new RiggingItemCapabilityProvider(entitylivingbaseIn.getRigging(), entitylivingbaseIn, 10, 10).getEquipments();
 
 
             }
         }
-        matrixStackIn.pop();
+        matrixStackIn.popPose();
     }
 
     public Integer getUniqueID(T animatable) {
-        return Objects.hash(animatable.getEntityId(), animatable.hashCode(), animatable.getRigging());
+        return Objects.hash(animatable.getId(), animatable.hashCode(), animatable.getRigging());
     }
 
     @Override

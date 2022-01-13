@@ -22,6 +22,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.item.Item.Properties;
+
 public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
 
     protected float damage;
@@ -51,8 +53,8 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void onCreated(ItemStack stack, World worldIn, PlayerEntity playerIn) {
-        super.onCreated(stack, worldIn, playerIn);
+    public void onCraftedBy(ItemStack stack, World worldIn, PlayerEntity playerIn) {
+        super.onCraftedBy(stack, worldIn, playerIn);
         stack.getOrCreateTag().putString("planeUUID", UUID.randomUUID().toString());
     }
 
@@ -67,9 +69,9 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         ItemStack stack = new ItemStack(this);
-        if (this.isInGroup(group)) {
+        if (this.allowdedIn(group)) {
             items.add(stack.copy());
             stack.getOrCreateTag().putInt("fuel", this.getMaxOperativeTime());
             stack.getOrCreateTag().putBoolean("isArmed", true);
@@ -79,8 +81,8 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int currentFuel = stack.getOrCreateTag().getInt("fuel");
         boolean isArmed = stack.getOrCreateTag().getBoolean("isArmed");
         float fuelPercent = (float) currentFuel/this.getMaxOperativeTime();
@@ -91,9 +93,9 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
         else if(fuelPercent<0.3){
             color = TextFormatting.DARK_RED;
         }
-        tooltip.add(isArmed? new TranslationTextComponent("item.tooltip.plane_armed").mergeStyle(TextFormatting.DARK_GREEN):new TranslationTextComponent("item.tooltip.plane_not_armed").mergeStyle(TextFormatting.DARK_RED));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(currentFuel+"/"+this.getMaxOperativeTime()).mergeStyle(color)));
-        tooltip.add(new TranslationTextComponent("item.tooltip.plane_type").appendString(": ").mergeStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.getType().getName()).mergeStyle(TextFormatting.GOLD)));
+        tooltip.add(isArmed? new TranslationTextComponent("item.tooltip.plane_armed").withStyle(TextFormatting.DARK_GREEN):new TranslationTextComponent("item.tooltip.plane_not_armed").withStyle(TextFormatting.DARK_RED));
+        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(currentFuel+"/"+this.getMaxOperativeTime()).withStyle(color)));
+        tooltip.add(new TranslationTextComponent("item.tooltip.plane_type").append(": ").withStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.getType().getName()).withStyle(TextFormatting.GOLD)));
     }
 
     public abstract int getreloadTime();

@@ -28,22 +28,22 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             throw new IllegalArgumentException("IMeleeAttacker companion is not instance of AbstractEntityCompanion!");
         }
         this.hostEntity = (AbstractEntityCompanion) companion;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
         @Nullable
-        LivingEntity targetEntity = this.hostEntity.getAttackTarget();
+        LivingEntity targetEntity = this.hostEntity.getTarget();
         if(targetEntity == null || !targetEntity.isAlive()){
             return false;
         }
 
-        if(this.hostEntity.getOwner() != null && (this.hostEntity.getDistance(this.hostEntity.getOwner())>=16 || targetEntity.getDistance(this.hostEntity.getOwner())>=16)){
+        if(this.hostEntity.getOwner() != null && (this.hostEntity.distanceTo(this.hostEntity.getOwner())>=16 || targetEntity.distanceTo(this.hostEntity.getOwner())>=16)){
             return false;
         }
 
-        boolean shouldAttack = this.host.shouldUseNonVanillaAttack(this.hostEntity.getAttackTarget());
+        boolean shouldAttack = this.host.shouldUseNonVanillaAttack(this.hostEntity.getTarget());
         if(shouldAttack) {
             this.target = targetEntity;
             return true;
@@ -51,37 +51,37 @@ public class CompanionSwordUserMeleeAttack extends Goal {
         return false;
     }
 
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
 
         if(this.target == null){
             return false;
         }
 
-        if(this.hostEntity.getOwner() != null && (this.hostEntity.getDistance(this.hostEntity.getOwner())>=16 || this.target.getDistance(this.hostEntity.getOwner())>=16)){
+        if(this.hostEntity.getOwner() != null && (this.hostEntity.distanceTo(this.hostEntity.getOwner())>=16 || this.target.distanceTo(this.hostEntity.getOwner())>=16)){
             return false;
         }
 
-        return this.shouldExecute() || !this.hostEntity.getNavigator().noPath();
+        return this.canUse() || !this.hostEntity.getNavigation().isDone();
     }
 
     @Override
-    public void startExecuting() {
-        this.hostEntity.getNavigator().clearPath();
-        this.hostEntity.setAggroed(true);
+    public void start() {
+        this.hostEntity.getNavigation().stop();
+        this.hostEntity.setAggressive(true);
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         this.target = null;
-        this.hostEntity.getNavigator().clearPath();
-        this.hostEntity.setAggroed(false);
+        this.hostEntity.getNavigation().stop();
+        this.hostEntity.setAggressive(false);
     }
 
     @Override
     public void tick() {
         if(this.target != null) {
-            double distance = this.hostEntity.getDistance(this.target);
-            boolean canSee = this.hostEntity.getEntitySenses().canSee(this.target);
+            double distance = this.hostEntity.distanceTo(this.target);
+            boolean canSee = this.hostEntity.getSensing().canSee(this.target);
 
             boolean isTooFar = distance >= this.host.getAttackRange(this.host.isUsingTalentedWeapon());
 
@@ -90,17 +90,17 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             } else {
                 this.seeTime = 0;
             }
-            this.hostEntity.faceEntity(this.target, 30.0F, 30.0F);
+            this.hostEntity.lookAt(this.target, 30.0F, 30.0F);
             if(!this.hostEntity.isNonVanillaMeleeAttacking()) {
                 if (isTooFar) {
                     this.hostEntity.setSprinting(distance >= 8);
-                    this.hostEntity.getNavigator().tryMoveToEntityLiving(this.target, 1);
+                    this.hostEntity.getNavigation().moveTo(this.target, 1);
                 } else if(this.seeTime >= 5){
-                    this.hostEntity.getNavigator().clearPath();
+                    this.hostEntity.getNavigation().stop();
                     this.hostEntity.setSprinting(distance >= 2);
                     this.host.StartMeleeAttackingEntity();
                 }else {
-                    this.hostEntity.getNavigator().tryMoveToEntityLiving(this.target, 1);
+                    this.hostEntity.getNavigation().moveTo(this.target, 1);
                 }
             }
 

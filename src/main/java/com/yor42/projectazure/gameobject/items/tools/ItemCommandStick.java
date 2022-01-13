@@ -30,54 +30,54 @@ import static com.yor42.projectazure.Main.PA_WEAPONS;
 
 public class ItemCommandStick extends Item {
     public ItemCommandStick() {
-        super(new Item.Properties().group(PA_GROUP).maxStackSize(1));
+        super(new Item.Properties().tab(PA_GROUP).stacksTo(1));
     }
 
     @Nonnull
     @Override
-    public ActionResultType onItemUse(@Nonnull ItemUseContext context) {
+    public ActionResultType useOn(@Nonnull ItemUseContext context) {
 
         PlayerEntity player = context.getPlayer();
-        ItemStack holdingStack = context.getItem();
-        World world = context.getWorld();
-        BlockPos pos = context.getPos();
+        ItemStack holdingStack = context.getItemInHand();
+        World world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
 
         if(player != null){
-            if(player.isSneaking()){
+            if(player.isShiftKeyDown()){
 
-                if(context.getWorld().isRemote()){
+                if(context.getLevel().isClientSide()){
                     return ActionResultType.CONSUME;
                 }
 
-                if(!context.getWorld().isRemote()) {
+                if(!context.getLevel().isClientSide()) {
                     CompoundNBT NBTTag = holdingStack.getOrCreateTag();
                     BlockState state = world.getBlockState(pos);
                     Block block = state.getBlock();
                     if (state.isBed(world, pos, null)) {
-                        pos = block instanceof BedBlock ? state.get(BedBlock.PART) == BedPart.HEAD ? pos : pos.offset(state.get(BedBlock.HORIZONTAL_FACING)) : pos;
+                        pos = block instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
                         NBTTag.putInt("BedX", pos.getX());
                         NBTTag.putInt("BedY", pos.getY());
                         NBTTag.putInt("BedZ", pos.getZ());
-                        player.sendStatusMessage(new TranslationTextComponent("message.commandstick.bedpos_saved", "[" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]"), true);
+                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.bedpos_saved", "[" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]"), true);
                     } else {
                         NBTTag.remove("BedX");
                         NBTTag.remove("BedY");
                         NBTTag.remove("BedZ");
-                        player.sendStatusMessage(new TranslationTextComponent("message.commandstick.bedpos_cleared"), true);
+                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.bedpos_cleared"), true);
                     }
                     holdingStack.setTag(NBTTag);
                 }
             }
         }
-        return super.onItemUse(context);
+        return super.useOn(context);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         CompoundNBT compound = stack.getOrCreateTag();
         if (compound.contains("BedX") && compound.contains("BedY") && compound.contains("BedZ")) {
             tooltip.add(new TranslationTextComponent("item.tooltip.bed_position", "["+ compound.getInt("BedX")+", "+ compound.getInt("BedY")+", "+ compound.getInt("BedZ") +"]"));
         }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }

@@ -24,7 +24,7 @@ public class GunFireEvent extends PlayerEvent {
     }
 
     public boolean isRemote(){
-        return this.getPlayer().getEntityWorld().isRemote();
+        return this.getPlayer().getCommandSenderWorld().isClientSide();
     }
 
     @Cancelable

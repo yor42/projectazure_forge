@@ -20,8 +20,8 @@ import java.util.List;
 public final class TooltipUtils {
     @OnlyIn(Dist.CLIENT)
     public static ITextComponent getShiftInfoTooltip() {
-        ITextComponent shift = new StringTextComponent("[SHIFT]").mergeStyle(TextFormatting.YELLOW);
-        return new TranslationTextComponent("item.tooltip.shiftinfo", shift).mergeStyle(TextFormatting.GRAY);
+        ITextComponent shift = new StringTextComponent("[SHIFT]").withStyle(TextFormatting.YELLOW);
+        return new TranslationTextComponent("item.tooltip.shiftinfo", shift).withStyle(TextFormatting.GRAY);
     }
     @OnlyIn(Dist.CLIENT)
     public static void addOnShift(List<ITextComponent> tooltip, Runnable lambda) {

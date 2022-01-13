@@ -21,61 +21,63 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.item.Item.Properties;
+
 public class itemRainbowWisdomCube extends Item {
     public itemRainbowWisdomCube(Properties properties) {
         super(properties);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 
-        ItemStack cube = playerIn.getHeldItem(handIn);
+        ItemStack cube = playerIn.getItemInHand(handIn);
 
-        UUID PlayerUUID = playerIn.getUniqueID();
+        UUID PlayerUUID = playerIn.getUUID();
 
         //openGui
-        if(cube.getOrCreateTag().hasUniqueId("owner")){
-            UUID OwnerUUID = cube.getOrCreateTag().getUniqueId("owner");
+        if(cube.getOrCreateTag().hasUUID("owner")){
+            UUID OwnerUUID = cube.getOrCreateTag().getUUID("owner");
             if(!PlayerUUID.equals(OwnerUUID)) {
                 playerIn.sendMessage(new TranslationTextComponent("message.rainbow_cube.notowner"), UUID.randomUUID());
-                return ActionResult.resultFail(cube);
+                return ActionResult.fail(cube);
             }
         }
-        if(worldIn.isRemote){
+        if(worldIn.isClientSide){
             //openGui
             this.openGUI();
-            return ActionResult.resultSuccess(playerIn.getHeldItem(handIn));
+            return ActionResult.success(playerIn.getItemInHand(handIn));
         }
-        return ActionResult.resultPass(playerIn.getHeldItem(handIn));
+        return ActionResult.pass(playerIn.getItemInHand(handIn));
     }
 
     @OnlyIn(Dist.CLIENT)
     private void openGUI(){
-        Minecraft.getInstance().displayGuiScreen(new guiStarterSpawn(new TranslationTextComponent("gui.StarterSelection")));
+        Minecraft.getInstance().setScreen(new guiStarterSpawn(new TranslationTextComponent("gui.StarterSelection")));
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-        if (worldIn != null && worldIn.isRemote) {
+    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
+        if (worldIn != null && worldIn.isClientSide) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        if(stack.getOrCreateTag().hasUniqueId("owner")&& worldIn != null) {
-            UUID OwnerID = stack.getOrCreateTag().getUniqueId("owner");
+        if(stack.getOrCreateTag().hasUUID("owner")&& worldIn != null) {
+            UUID OwnerID = stack.getOrCreateTag().getUUID("owner");
             @Nullable
-            PlayerEntity owner = worldIn.getPlayerByUuid(OwnerID);
+            PlayerEntity owner = worldIn.getPlayerByUUID(OwnerID);
             if (owner != null) {
-                tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.owner").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(owner.getDisplayName().getString()).mergeStyle(TextFormatting.YELLOW)));
+                tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.owner").withStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(owner.getDisplayName().getString()).withStyle(TextFormatting.YELLOW)));
             }
             else{
-                tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.owner").mergeStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(OwnerID.toString()).mergeStyle(TextFormatting.RED)));
+                tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.owner").withStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(OwnerID.toString()).withStyle(TextFormatting.RED)));
             }
         }
-        tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.tooltip1").mergeStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.tooltip2").mergeStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.tooltip1").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.tooltip2").withStyle(TextFormatting.GRAY));
     }
 }

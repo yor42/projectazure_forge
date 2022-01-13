@@ -15,25 +15,25 @@ public class modelProjectileGunBullet extends EntityModel<Entity> {
 	private final ModelRenderer bb_main;
 
 	public modelProjectileGunBullet() {
-		this.textureWidth = 16;
-		this.textureHeight = 16;
+		this.texWidth = 16;
+		this.texHeight = 16;
 
 		bb_main = new ModelRenderer(this);
-		bb_main.setRotationPoint(0.0F, 0.5F, 0.0F);
-		bb_main.setTextureOffset(0, 0).addBox(-0.5F, -1.0F, -1.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
+		bb_main.setPos(0.0F, 0.5F, 0.0F);
+		bb_main.texOffs(0, 0).addBox(-0.5F, -1.0F, -1.0F, 1.0F, 1.0F, 2.0F, 0.0F, false);
 	}
 
 	@Override
-	public void setRotationAngles(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		bb_main.rotateAngleY = MathHelper.lerp(1, entity.prevRotationYaw, entity.rotationYaw) - 90.0F;
-		bb_main.rotateAngleZ = MathHelper.lerp(1, entity.prevRotationPitch, entity.rotationPitch);
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
+		bb_main.yRot = MathHelper.lerp(1, entity.yRotO, entity.yRot) - 90.0F;
+		bb_main.zRot = MathHelper.lerp(1, entity.xRotO, entity.xRot);
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		matrixStack.push();
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+		matrixStack.pushPose();
 		matrixStack.scale(0.5f,0.5f,0.5f);
 		bb_main.render(matrixStack, buffer, packedLight, packedOverlay);
-		matrixStack.pop();
+		matrixStack.popPose();
 	}
 }

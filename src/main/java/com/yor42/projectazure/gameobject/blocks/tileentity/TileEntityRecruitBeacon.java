@@ -52,11 +52,11 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                 case 3:
                     return TileEntityRecruitBeacon.this.energyStorage.getMaxEnergyStored();
                 case 4:
-                    return TileEntityRecruitBeacon.this.getPos().getX();
+                    return TileEntityRecruitBeacon.this.getBlockPos().getX();
                 case 5:
-                    return TileEntityRecruitBeacon.this.getPos().getY();
+                    return TileEntityRecruitBeacon.this.getBlockPos().getY();
                 case 6:
-                    return TileEntityRecruitBeacon.this.getPos().getZ();
+                    return TileEntityRecruitBeacon.this.getBlockPos().getZ();
                 default:
                     return 0;
             }
@@ -81,7 +81,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -92,18 +92,18 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         boolean isActive = this.isActive();
         boolean shouldSave = false;
         super.tick();
-        if(!(this.world != null && this.world.isRemote)){
-            if(isPowered!=this.isPowered() || this.isPowered() && !this.world.getBlockState(this.pos).get(POWERED) || !this.isPowered() && this.world.getBlockState(this.pos).get(POWERED)) {
+        if(!(this.level != null && this.level.isClientSide)){
+            if(isPowered!=this.isPowered() || this.isPowered() && !this.level.getBlockState(this.worldPosition).getValue(POWERED) || !this.isPowered() && this.level.getBlockState(this.worldPosition).getValue(POWERED)) {
                 shouldSave = true;
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(POWERED, this.isPowered()), 2);
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(POWERED, this.isPowered()), 2);
             }
             if(isActive!=this.isActive()){
                 shouldSave = true;
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(RecruitBeaconBlock.ACTIVE, this.isActive()), 2);
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(RecruitBeaconBlock.ACTIVE, this.isActive()), 2);
             }
         }
 
-        if(shouldSave){this.markDirty();}
+        if(shouldSave){this.setChanged();}
     }
 
     public TileEntityRecruitBeacon() {
@@ -129,7 +129,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     @Override
     protected void SpawnResultEntity(ServerPlayerEntity owner) {
 
-        boolean worldReady = this.world != null && !this.world.isRemote();
+        boolean worldReady = this.level != null && !this.level.isClientSide();
         boolean EntityTypeNotNull = this.RollResult != null;
         boolean spawn_sitting = true;
 
@@ -142,13 +142,13 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         else if(worldReady) {
             BlockPos blockpos;
             //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
-            if(SolarApocalypse.isSunlightDangerous((ServerWorld) this.world)) {
-                BlockPos.Mutable CandidatePos = this.pos.toMutable();
-                CandidatePos = CandidatePos.move(this.world.getBlockState(this.pos).get(FACING));
+            if(SolarApocalypse.isSunlightDangerous((ServerWorld) this.level)) {
+                BlockPos.Mutable CandidatePos = this.worldPosition.mutable();
+                CandidatePos = CandidatePos.move(this.level.getBlockState(this.worldPosition).getValue(FACING));
                 blockpos = CandidatePos;
             }
             else {
-                blockpos = getRandomBlockposInRadius2D(this.getWorld(), this.getPos(), 20, 10);
+                blockpos = getRandomBlockposInRadius2D(this.getLevel(), this.getBlockPos(), 20, 10);
                 spawn_sitting = false;
             }
             this.spawnEntity(blockpos, owner, spawn_sitting);
@@ -156,24 +156,24 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     public void spawnEntity(BlockPos pos, ServerPlayerEntity owner, boolean spawn_sitting){
-        if(this.world != null) {
-            AbstractEntityCompanion entityCompanion = this.RollResult.create(this.world);
+        if(this.level != null) {
+            AbstractEntityCompanion entityCompanion = this.RollResult.create(this.level);
             if (entityCompanion != null) {
                 Random rand = new Random();
                 for(int i = 0; i < 32; ++i) {
-                    this.world.addParticle(ParticleTypes.PORTAL, pos.getX(), pos.getY() + rand.nextDouble() * 2.0D, pos.getZ(), rand.nextGaussian(), 0.0D, rand.nextGaussian());
+                    this.level.addParticle(ParticleTypes.PORTAL, pos.getX(), pos.getY() + rand.nextDouble() * 2.0D, pos.getZ(), rand.nextGaussian(), 0.0D, rand.nextGaussian());
                 }
-                entityCompanion.setPosition(pos.getX(), pos.getY(), pos.getZ());
-                entityCompanion.getNavigator().tryMoveToXYZ((double) this.getPos().getX()+0.5, this.getPos().getY(), (double) this.getPos().getZ()+0.5, 1.0F);
-                entityCompanion.setMovingtoRecruitStation(this.getPos());
-                entityCompanion.setTamedBy(owner);
+                entityCompanion.setPos(pos.getX(), pos.getY(), pos.getZ());
+                entityCompanion.getNavigation().moveTo((double) this.getBlockPos().getX()+0.5, this.getBlockPos().getY(), (double) this.getBlockPos().getZ()+0.5, 1.0F);
+                entityCompanion.setMovingtoRecruitStation(this.getBlockPos());
+                entityCompanion.tame(owner);
                 if(spawn_sitting) {
-                    entityCompanion.func_233687_w_(true);
+                    entityCompanion.setOrderedToSit(true);
                 }
                 entityCompanion.setMorale(150);
                 entityCompanion.setAffection(40F);
                 entityCompanion.MaxFillHunger();
-                this.world.addEntity(entityCompanion);
+                this.level.addFreshEntity(entityCompanion);
 
                 Main.LOGGER.debug("Entity is Spawned at:" + pos);
             }
@@ -181,13 +181,13 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        return super.write(compound);
+    public CompoundNBT save(CompoundNBT compound) {
+        return super.save(compound);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
 
     @Override
     public void encodeExtraData(PacketBuffer buffer) {
-        int[] var = {this.ProcessTime, this.totalProcessTime, this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()};
+        int[] var = {this.ProcessTime, this.totalProcessTime, this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored(), this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ()};
         buffer.writeVarIntArray(var);
     }
 

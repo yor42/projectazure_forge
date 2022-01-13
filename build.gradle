@@ -3,14 +3,9 @@ buildscript {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
 
-        maven {
-            name = "cursemaven"
-            url "https://plugins.gradle.org/m2/"
-        }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.1"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 
@@ -18,7 +13,6 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: "com.wynprice.cursemaven"
 
 version = '0.3.10'
 group = 'com.yor42.projecrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -33,7 +27,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    mappings channel: 'official', version: '1.16.5'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -122,15 +116,9 @@ repositories {
 
     maven { url 'https://modmaven.dev/' }//Mekanism
 
-    maven {
-
-        url "https://www.cursemaven.com"
-
-    }
-
     maven { // TOP
         name 'tterrag maven'
-        url "http://maven.tterrag.com/"
+        url "https://maven.tterrag.com/"
     }
 
     flatDir {
@@ -142,15 +130,15 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.4'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.22'
 
     //Geckoilib
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.57')
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
-    compileOnly fg.deobf('curse.maven:realistic-torches-235729:3191715')
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
+    //compileOnly fg.deobf('com.chaosthedude:realistictorches:1.16.5:3.1.2')
 
     // JEI
     if (project.hasProperty('jei_version')) {

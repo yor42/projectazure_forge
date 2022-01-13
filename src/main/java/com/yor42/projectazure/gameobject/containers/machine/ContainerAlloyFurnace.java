@@ -26,7 +26,7 @@ public class ContainerAlloyFurnace extends Container {
     public ContainerAlloyFurnace(int id, PlayerInventory inventory, ItemStackHandler machineInventory, IIntArray machineInfo){
         super(registerManager.CONTAINER_ALLOY_FURNACE_CONTAINER_TYPE, id);
         this.field = machineInfo;
-        trackIntArray(this.field);
+        addDataSlots(this.field);
 
         this.addSlot(new SlotItemHandler(machineInventory, 0, 47, 17));
         this.addSlot(new SlotItemHandler(machineInventory, 1, 65,17));
@@ -62,43 +62,43 @@ public class ContainerAlloyFurnace extends Container {
         return this.field.get(0) * pixel / i;
     }
 
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index == 3) {
-                if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+                if (!this.moveItemStackTo(itemstack1, 3, 39, true)) {
                     return ItemStack.EMPTY;
                 }
 
-                slot.onSlotChange(itemstack1, itemstack);
+                slot.onQuickCraft(itemstack1, itemstack);
             } else if (index != 1 && index != 0 && index != 2) {
                 if (ForgeHooks.getBurnTime(itemstack1)>0) {
-                    if (!this.mergeItemStack(itemstack1, 2, 3, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 2, 3, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
                 else if (index < 30) {
-                    if (!this.mergeItemStack(itemstack1, 0, 2, false)) {
+                    if (!this.moveItemStackTo(itemstack1, 0, 2, false)) {
                         return ItemStack.EMPTY;
                     }
-                    else if (!this.mergeItemStack(itemstack1, 31, 40, false)) {
+                    else if (!this.moveItemStackTo(itemstack1, 31, 40, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false)) {
+                else if (index >= 30 && index < 39 && !this.moveItemStackTo(itemstack1, 3, 30, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 4, 40, false)) {
+            } else if (!this.moveItemStackTo(itemstack1, 4, 40, false)) {
                 return ItemStack.EMPTY;
             }
 
             if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
+                slot.set(ItemStack.EMPTY);
             } else {
-                slot.onSlotChanged();
+                slot.setChanged();
             }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
@@ -112,7 +112,7 @@ public class ContainerAlloyFurnace extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 }

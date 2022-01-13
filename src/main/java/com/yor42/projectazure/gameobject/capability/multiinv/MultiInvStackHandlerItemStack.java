@@ -25,7 +25,7 @@ public class MultiInvStackHandlerItemStack extends MultiInvStackHandler {
                     CompoundNBT item = items.getCompound(i);
                     int slot = item.getInt("Slot");
                     if (slot >= 0 && slot < stacks.size()) {
-                        stacks.set(slot, ItemStack.read(item));
+                        stacks.set(slot, ItemStack.of(item));
                     }
                 }
             }

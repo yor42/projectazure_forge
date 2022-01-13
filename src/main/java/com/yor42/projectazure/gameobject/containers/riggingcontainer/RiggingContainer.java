@@ -32,7 +32,7 @@ public class RiggingContainer extends Container {
 
     public RiggingContainer(int id, PlayerInventory playerInv, PacketBuffer data) {
         super(RIGGING_INVENTORY.get(), id);
-        this.riggingStack = data.readItemStack();
+        this.riggingStack = data.readItem();
 
         IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
 
@@ -76,12 +76,12 @@ public class RiggingContainer extends Container {
         }
     }
 
-    public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
-        Slot slot = this.inventorySlots.get(index);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack itemstack1 = slot.getStack();
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             int hangercount = 0;
@@ -99,7 +99,7 @@ public class RiggingContainer extends Container {
             int playerMainInv = maxEquipmenttSlots + 27;
             int PlayerHotbar = playerMainInv + 9;
             if (index < ((ItemRiggingBase) this.riggingStack.getItem()).getMainGunSlotCount() + ((ItemRiggingBase) this.riggingStack.getItem()).getSubGunSlotCount() + ((ItemRiggingBase) this.riggingStack.getItem()).getAASlotCount()) {
-                if (!this.mergeItemStack(itemstack1, maxEquipmenttSlots, PlayerHotbar, false)) {
+                if (!this.moveItemStackTo(itemstack1, maxEquipmenttSlots, PlayerHotbar, false)) {
                     return ItemStack.EMPTY;
                 }
             } else {
@@ -107,11 +107,11 @@ public class RiggingContainer extends Container {
                     if (itemstack1.getItem() instanceof ItemEquipmentGun) {
                         ItemEquipmentGun gun = (ItemEquipmentGun) itemstack1.getItem();
                         if (gun.getSize() == enums.CanonSize.LARGE) {
-                            if (!this.mergeItemStack(itemstack1, 0, mainguncount, false)) {
+                            if (!this.moveItemStackTo(itemstack1, 0, mainguncount, false)) {
                                 return ItemStack.EMPTY;
                             }
                         } else {
-                            if (!this.mergeItemStack(itemstack1, 0, subgunCount, false)) {
+                            if (!this.moveItemStackTo(itemstack1, 0, subgunCount, false)) {
                                 return ItemStack.EMPTY;
                             }
                         }
@@ -125,17 +125,17 @@ public class RiggingContainer extends Container {
 
                      */
                     else if (itemstack1.getItem() instanceof ItemEquipmentTorpedo) {
-                        if (!this.mergeItemStack(itemstack1, AACount , torpedocount, false)) {
+                        if (!this.moveItemStackTo(itemstack1, AACount , torpedocount, false)) {
                             return ItemStack.EMPTY;
                         }
                     }
                 }
                 if (index < playerMainInv) {
-                    if (!this.mergeItemStack(itemstack1, playerMainInv, PlayerHotbar, false)) {
+                    if (!this.moveItemStackTo(itemstack1, playerMainInv, PlayerHotbar, false)) {
                         return ItemStack.EMPTY;
                     }
                 } else {
-                    if (!this.mergeItemStack(itemstack1, maxEquipmenttSlots, playerMainInv, false)) {
+                    if (!this.moveItemStackTo(itemstack1, maxEquipmenttSlots, playerMainInv, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
@@ -145,7 +145,7 @@ public class RiggingContainer extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
+    public boolean stillValid(PlayerEntity playerIn) {
         return true;
     }
 

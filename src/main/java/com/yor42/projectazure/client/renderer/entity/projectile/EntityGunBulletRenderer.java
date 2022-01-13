@@ -19,7 +19,7 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 public class EntityGunBulletRenderer extends EntityRenderer<EntityProjectileBullet> {
 
     private static final ResourceLocation TEXTURE = ModResourceLocation("textures/entity/projectile/gun_bullet.png");
-    private static final RenderType RENDER_TYPE = RenderType.getEntityCutoutNoCull(TEXTURE);
+    private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEXTURE);
 
     public EntityGunBulletRenderer(EntityRendererManager renderManager) {
         super(renderManager);
@@ -30,15 +30,15 @@ public class EntityGunBulletRenderer extends EntityRenderer<EntityProjectileBull
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         Model model = new modelProjectileGunBullet();
         IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
-        matrixStackIn.push();
-        matrixStackIn.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationYaw, entityIn.rotationYaw) - 90.0F));
-        matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.prevRotationPitch, entityIn.rotationPitch)));
-        model.render(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
-        matrixStackIn.pop();
+        matrixStackIn.pushPose();
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
+        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
+        model.renderToBuffer(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
+        matrixStackIn.popPose();
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityProjectileBullet entity) {
+    public ResourceLocation getTextureLocation(EntityProjectileBullet entity) {
         return TEXTURE;
     }
 }

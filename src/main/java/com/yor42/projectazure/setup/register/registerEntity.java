@@ -19,23 +19,23 @@ import net.minecraftforge.fml.common.Mod;
 public class registerEntity {
 
     public static void RegisterAttributes(){
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_AYANAMI, EntityAyanami.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_JAVELIN, EntityJavelin.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_GANGWON, EntityGangwon.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_ENTERPRISE, EntityEnterprise.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.PLANEF4FWildCat, EntityF4fWildcat.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_MISSILEDRONE, EntityMissileDrone.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SHIROKO, EntityShiroko.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_NAGATO, EntityNagato.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CHEN, EntityChen.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_ROSMONTIS, EntityRosmontis.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_TALULAH, EntityTalulah.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_Z23, EntityZ23.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_LAFFEY, EntityLaffey.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_M4A1, EntityM4A1.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_AMIYA, EntityAmiya.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_MUDROCK, EntityMudrock.MutableAttribute().create());
-        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().create());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_AYANAMI, EntityAyanami.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_JAVELIN, EntityJavelin.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_GANGWON, EntityGangwon.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_ENTERPRISE, EntityEnterprise.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.PLANEF4FWildCat, EntityF4fWildcat.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_MISSILEDRONE, EntityMissileDrone.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SHIROKO, EntityShiroko.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_NAGATO, EntityNagato.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CHEN, EntityChen.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_ROSMONTIS, EntityRosmontis.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_TALULAH, EntityTalulah.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_Z23, EntityZ23.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_LAFFEY, EntityLaffey.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_M4A1, EntityM4A1.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_AMIYA, EntityAmiya.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_MUDROCK, EntityMudrock.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().build());
     }
 
 

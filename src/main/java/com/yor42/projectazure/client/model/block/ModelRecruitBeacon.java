@@ -37,8 +37,8 @@ public class ModelRecruitBeacon extends AnimatedGeoModel<TileEntityRecruitBeacon
         if(this.LastLightSwitchTime == 0){
             this.LastLightSwitchTime = System.currentTimeMillis();
         }
-        if(entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).hasProperty(RecruitBeaconBlock.ACTIVE)) {
-            if(entity.getWorld().getBlockState(entity.getPos()).get(RecruitBeaconBlock.ACTIVE)) {
+        if(entity.getLevel() != null && entity.getLevel().getBlockState(entity.getBlockPos()).hasProperty(RecruitBeaconBlock.ACTIVE)) {
+            if(entity.getLevel().getBlockState(entity.getBlockPos()).getValue(RecruitBeaconBlock.ACTIVE)) {
                 if (System.currentTimeMillis() - this.LastLightSwitchTime >= this.lightDelay) {
                     if (Light.isHidden()) {
                         this.lightDelay = 2000;

@@ -58,35 +58,35 @@ public class Main
 
     public static ItemGroup PA_GROUP = new ItemGroup(MODID) {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
         }
     };
 
     public static ItemGroup PA_SHIPS = new ItemGroup("pa_ship") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(registerItems.WISDOM_CUBE.get());
         }
     };
 
     public static ItemGroup PA_RESOURCES = new ItemGroup("pa_resources") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(registerItems.INGOT_COPPER.get().asItem());
         }
     };
 
     public static ItemGroup PA_MACHINES = new ItemGroup("pa_machines") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(registerBlocks.METAL_PRESS.get().asItem());
         }
     };
 
     public static ItemGroup PA_WEAPONS = new ItemGroup("pa_weapons") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(registerItems.BONKBAT.get());
         }
     };

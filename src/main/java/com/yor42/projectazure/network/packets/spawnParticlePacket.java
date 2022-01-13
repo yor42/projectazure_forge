@@ -27,44 +27,44 @@ public class spawnParticlePacket {
     private final ItemStack stack;
 
     public spawnParticlePacket(LivingEntity entity, @Nullable ItemStack particleStack){
-        this.EntityID = entity.getEntityId();
+        this.EntityID = entity.getId();
         this.particleID = Particles.ITEM_PARTICLE;
-        this.PosX = entity.getPosX();
-        this.PosY = entity.getPosY();
-        this.PosZ = entity.getPosZ();
+        this.PosX = entity.getX();
+        this.PosY = entity.getY();
+        this.PosZ = entity.getZ();
         this.stack = particleStack;
-        Vector3d vector3d = entity.getLook(1.0F);
-        this.NormalizedLookX = vector3d.getX();
-        this.NormalizedLookY = vector3d.getY();
-        this.NormalizedLookZ = vector3d.getZ();
+        Vector3d vector3d = entity.getViewVector(1.0F);
+        this.NormalizedLookX = vector3d.x();
+        this.NormalizedLookY = vector3d.y();
+        this.NormalizedLookZ = vector3d.z();
     }
 
     public spawnParticlePacket(LivingEntity entity, Particles particleID){
-        this.EntityID = entity.getEntityId();
+        this.EntityID = entity.getId();
         this.particleID = particleID;
-        this.PosX = entity.getPosX();
-        this.PosY = entity.getPosY();
-        this.PosZ = entity.getPosZ();
+        this.PosX = entity.getX();
+        this.PosY = entity.getY();
+        this.PosZ = entity.getZ();
         this.stack = null;
-        Vector3d vector3d = entity.getLook(1.0F);
-        this.NormalizedLookX = vector3d.getX();
-        this.NormalizedLookY = vector3d.getY();
-        this.NormalizedLookZ = vector3d.getZ();
+        Vector3d vector3d = entity.getViewVector(1.0F);
+        this.NormalizedLookX = vector3d.x();
+        this.NormalizedLookY = vector3d.y();
+        this.NormalizedLookZ = vector3d.z();
     }
 
     public spawnParticlePacket(LivingEntity entity, Particles particleID, double NormalizedLookX, double NormalizedLookY, double NormalizedLookZ){
-        this.EntityID = entity.getEntityId();
+        this.EntityID = entity.getId();
         this.particleID = particleID;
-        this.PosX = entity.getPosX();
-        this.PosY = entity.getPosY();
-        this.PosZ = entity.getPosZ();
+        this.PosX = entity.getX();
+        this.PosY = entity.getY();
+        this.PosZ = entity.getZ();
         this.stack = null;
         this.NormalizedLookX = NormalizedLookX;
         this.NormalizedLookY = NormalizedLookY;
         this.NormalizedLookZ = NormalizedLookZ;
     }
     public spawnParticlePacket(LivingEntity entity, Particles particleID, double posx, double posy, double posz, double NormalizedLookX, double NormalizedLookY, double NormalizedLookZ){
-        this.EntityID = entity.getEntityId();
+        this.EntityID = entity.getId();
         this.particleID = particleID;
         this.PosX = posx;
         this.PosY = posy;
@@ -101,11 +101,11 @@ public class spawnParticlePacket {
 
     public static spawnParticlePacket decode(PacketBuffer buffer){
         final int EntityID = buffer.readInt();
-        final Particles ParticleID = buffer.readEnumValue(Particles.class);
+        final Particles ParticleID = buffer.readEnum(Particles.class);
         final double posX = buffer.readDouble();
         final double posY = buffer.readDouble();
         final double posZ = buffer.readDouble();
-        final ItemStack itemStack = buffer.readItemStack();
+        final ItemStack itemStack = buffer.readItem();
         final double NormalizedLookX = buffer.readDouble();
         final double NormalizedLookY = buffer.readDouble();
         final double NormalizedLookZ = buffer.readDouble();
@@ -115,11 +115,11 @@ public class spawnParticlePacket {
 
     public static void encode(final spawnParticlePacket message, final PacketBuffer buffer){
         buffer.writeInt(message.EntityID);
-        buffer.writeEnumValue(message.particleID);
+        buffer.writeEnum(message.particleID);
         buffer.writeDouble(message.PosX);
         buffer.writeDouble(message.PosY);
         buffer.writeDouble(message.PosZ);
-        buffer.writeItemStack(message.stack == null? ItemStack.EMPTY: message.stack);
+        buffer.writeItem(message.stack == null? ItemStack.EMPTY: message.stack);
         buffer.writeDouble(message.NormalizedLookX);
         buffer.writeDouble(message.NormalizedLookY);
         buffer.writeDouble(message.NormalizedLookZ);

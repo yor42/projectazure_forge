@@ -15,8 +15,8 @@ import java.util.function.Supplier;
 
 public class GunFiredPacket{
 
-    public boolean isZooming=false;
-    public boolean offHand=false;
+    public boolean isZooming;
+    public boolean offHand;
 
     public GunFiredPacket(boolean isZooming, boolean isOffHand){
         this.isZooming = isZooming;
@@ -43,13 +43,13 @@ public class GunFiredPacket{
                 int mainDelay = capability.getMainHandFireDelay();
                 int offDelay = capability.getOffHandFireDelay();
                 Hand hand = message.offHand ? Hand.OFF_HAND : Hand.MAIN_HAND;
-                ItemStack heldStack = playerEntity.getHeldItem(hand);
+                ItemStack heldStack = playerEntity.getItemInHand(hand);
 
                 if (!heldStack.isEmpty() && heldStack.getItem() instanceof ItemGunBase) {
                     if(!message.offHand) {
                         if (mainDelay <= 0) {
-                            boolean shouldDoReloadAnim = ((ItemGunBase) heldStack.getItem()).shootGun(heldStack, playerEntity.getEntityWorld(), playerEntity, message.isZooming, hand, null);
-                            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getEntityId(), shouldDoReloadAnim));
+                            boolean shouldDoReloadAnim = ((ItemGunBase) heldStack.getItem()).shootGun(heldStack, playerEntity.getCommandSenderWorld(), playerEntity, message.isZooming, hand, null);
+                            Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerEntity), new DoGunAnimationPacket(message.offHand, message.isZooming, playerEntity.getId(), shouldDoReloadAnim));
                         }
                     }
                 }

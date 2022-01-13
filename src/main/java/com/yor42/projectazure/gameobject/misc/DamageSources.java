@@ -12,20 +12,20 @@ import net.minecraft.util.IndirectEntityDamageSource;
 import javax.annotation.Nullable;
 
 public class DamageSources {
-    public static final DamageSource DAMAGE_CANNON = new DamageSource("canon_shot_generic").setProjectile().setDamageIsAbsolute();
+    public static final DamageSource DAMAGE_CANNON = new DamageSource("canon_shot_generic").setProjectile().bypassMagic();
 
-    public static final DamageSource SHIP_FIRE = new DamageSource("ship_fire").setFireDamage();
+    public static final DamageSource SHIP_FIRE = new DamageSource("ship_fire").setIsFire();
     public static final DamageSource TORPEDO = new DamageSource("torpedo").setExplosion();
 
-    public static final DamageSource ARTS = new DamageSourcesWithRandomMessages("arts", 5).setMagicDamage().setDamageBypassesArmor().setProjectile();
+    public static final DamageSource ARTS = new DamageSourcesWithRandomMessages("arts", 5).setMagic().bypassArmor().setProjectile();
 
     public static final DamageSource Revenge = new DamageSourcesWithRandomMessages("revenge", 5);
 
-    public static final DamageSource ACUTE_ORIPATHY = new DamageSourcesWithRandomMessages("ate_originium_prime", 5).setDamageBypassesArmor().setDamageIsAbsolute();
+    public static final DamageSource ACUTE_ORIPATHY = new DamageSourcesWithRandomMessages("ate_originium_prime", 5).bypassArmor().bypassMagic();
 
     public static final DamageSource PLANE_GUN = new DamageSource("plane_gun").setProjectile();
 
-    public static final DamageSource CLAYMORE = new DamageSourcesWithRandomMessages("claymore", 3).setDamageBypassesArmor();
+    public static final DamageSource CLAYMORE = new DamageSourcesWithRandomMessages("claymore", 3).bypassArmor();
 
     public static DamageSource causeGunDamage(EntityProjectileBullet bullet, @Nullable Entity indirectEntityIn) {
         return (new IndirectEntityDamageSource("gun_bullet", bullet, indirectEntityIn)).setProjectile();
@@ -36,7 +36,7 @@ public class DamageSources {
     }
 
     public static DamageSource causeArtsFireDamage(AbstractEntityCompanion companion) {
-        return (new PACompanionAttackDamage("fire_arts", companion, 5).setFireDamage().setMagicDamage());
+        return (new PACompanionAttackDamage("fire_arts", companion, 5).setIsFire().setMagic());
     }
 
     public static DamageSource causeCannonDamage(EntityCannonPelllet cannonPelllet, @Nullable Entity indirectEntityIn) {
@@ -44,7 +44,7 @@ public class DamageSources {
     }
 
     public static DamageSource causeArtsDamage(EntityArtsProjectile projectile, @Nullable Entity indirectEntityIn) {
-        return (new IndirectDamageSourcewithRandomMessages("arts_projectile", projectile, indirectEntityIn, 5)).setProjectile().setMagicDamage().setDamageBypassesArmor();
+        return (new IndirectDamageSourcewithRandomMessages("arts_projectile", projectile, indirectEntityIn, 5)).setProjectile().setMagic().bypassArmor();
     }
 
     public static DamageSource causeTorpedoDamage(EntityProjectileTorpedo torpedo, @Nullable Entity indirectEntityIn) {
@@ -52,5 +52,5 @@ public class DamageSources {
     }
 
     //Uhhhhhhh
-    public static final DamageSource BONK = new DamageSource("bonk").setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode();
+    public static final DamageSource BONK = new DamageSource("bonk").bypassArmor().bypassMagic().bypassInvul();
 }

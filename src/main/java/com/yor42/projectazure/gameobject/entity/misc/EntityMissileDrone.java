@@ -25,7 +25,7 @@ import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_D
 
 public class EntityMissileDrone extends AbstractEntityDrone{
 
-    protected static final DataParameter<Integer> FireTick = EntityDataManager.createKey(EntityMissileDrone.class, DataSerializers.VARINT);
+    protected static final DataParameter<Integer> FireTick = EntityDataManager.defineId(EntityMissileDrone.class, DataSerializers.INT);
 
     private static final int MAX_AMMO = 8;
 
@@ -36,7 +36,7 @@ public class EntityMissileDrone extends AbstractEntityDrone{
 
     @Override
     protected <T extends IAnimatable> PlayState body_predicate(AnimationEvent<T> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
@@ -45,7 +45,7 @@ public class EntityMissileDrone extends AbstractEntityDrone{
             event.getController().setAnimation(builder.addAnimation("body_fire", true));
             return PlayState.CONTINUE;
         }
-        else if(!(this.limbSwingAmount > -0.1F && this.limbSwingAmount < 0.1F)){
+        else if(!(this.animationSpeed > -0.1F && this.animationSpeed < 0.1F)){
             event.getController().setAnimation(builder.addAnimation("body_moveforward", true));
             return PlayState.CONTINUE;
         }
@@ -55,7 +55,7 @@ public class EntityMissileDrone extends AbstractEntityDrone{
 
     @Override
     protected PlayState propeller_predicate(AnimationEvent<AbstractEntityDrone> event) {
-        if(Minecraft.getInstance().isGamePaused()){
+        if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
@@ -73,11 +73,11 @@ public class EntityMissileDrone extends AbstractEntityDrone{
     }
 
     public boolean isFiring(){
-        return this.getDataManager().get(FireTick)>0;
+        return this.getEntityData().get(FireTick)>0;
     }
 
     public int getFireingTick(){
-        return this.getDataManager().get(FireTick);
+        return this.getEntityData().get(FireTick);
     }
 
     public int getFiredelay(){
@@ -85,15 +85,15 @@ public class EntityMissileDrone extends AbstractEntityDrone{
     }
 
     public void setFiringTick(int value){
-        this.getDataManager().set(FireTick, value);
+        this.getEntityData().set(FireTick, value);
     }
 
     public void FireMissile(LivingEntity target){
-        double x = target.getPosX() - (this.getPosX());
-        double y = target.getPosY() - (0.5D + this.getPosYHeight(0.5D));
-        double z = target.getPosZ() - (this.getPosZ());
+        double x = target.getX() - (this.getX());
+        double y = target.getY() - (0.5D + this.getY(0.5D));
+        double z = target.getZ() - (this.getZ());
 
-        EntityMissileDroneMissile droneMissile = PROJECTILE_DRONE_MISSILE.create(this.getEntityWorld());
+        EntityMissileDroneMissile droneMissile = PROJECTILE_DRONE_MISSILE.create(this.getCommandSenderWorld());
         if(droneMissile != null){
             droneMissile.shoot(this, target, x,y,z);
             this.setFiringTick(this.getFireingTick());
@@ -102,9 +102,9 @@ public class EntityMissileDrone extends AbstractEntityDrone{
     }
 
     @Override
-    protected void registerData() {
-        super.registerData();
-        this.dataManager.register(FireTick, 0);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(FireTick, 0);
     }
 
     @Override
@@ -117,13 +117,13 @@ public class EntityMissileDrone extends AbstractEntityDrone{
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
-        return MobEntity.func_233666_p_()
+        return MobEntity.createMobAttributes()
                 //Attribute
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5F)
-                .createMutableAttribute(ForgeMod.SWIM_SPEED.get(), 0.0F)
-                .createMutableAttribute(Attributes.MAX_HEALTH, 10)
-                .createMutableAttribute(Attributes.FLYING_SPEED, 0.5F)
-                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2F)
+                .add(Attributes.MOVEMENT_SPEED, 0.5F)
+                .add(ForgeMod.SWIM_SPEED.get(), 0.0F)
+                .add(Attributes.MAX_HEALTH, 10)
+                .add(Attributes.FLYING_SPEED, 0.5F)
+                .add(Attributes.ATTACK_DAMAGE, 2F)
                 ;
     }
 }

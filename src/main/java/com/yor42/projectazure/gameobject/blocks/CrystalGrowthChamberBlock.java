@@ -12,6 +12,8 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class CrystalGrowthChamberBlock extends AbstractMachineBlock{
     public CrystalGrowthChamberBlock(Properties properties) {
         super(properties);
@@ -30,8 +32,8 @@ public class CrystalGrowthChamberBlock extends AbstractMachineBlock{
 
     @Override
     protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
-        TileEntity TileentityAtPos = worldIn.getTileEntity(pos);
-        if(TileentityAtPos instanceof TileEntityCrystalGrowthChamber && player instanceof ServerPlayerEntity && !worldIn.isRemote()){
+        TileEntity TileentityAtPos = worldIn.getBlockEntity(pos);
+        if(TileentityAtPos instanceof TileEntityCrystalGrowthChamber && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
             TileEntityCrystalGrowthChamber TE = (TileEntityCrystalGrowthChamber) TileentityAtPos;
             NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
         }

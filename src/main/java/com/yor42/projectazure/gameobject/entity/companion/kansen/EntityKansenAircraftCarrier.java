@@ -20,12 +20,12 @@ public abstract class EntityKansenAircraftCarrier extends EntityKansenBase {
 
     public void LaunchPlane(ItemStack planestack, AbstractEntityPlanes plane, LivingEntity target, IItemHandlerModifiable hanger, int hangerIndex){
         plane.setOwner(this);
-        plane.setPosition(this.getPosX(), this.getPosY() + 2, this.getPosZ());
+        plane.setPos(this.getX(), this.getY() + 2, this.getZ());
         plane.setHealth(getCurrentHP(planestack));
         plane.setPayloads(planestack.getOrCreateTag().getInt("armDelay") <= 0);
         plane.setMaxOperativetime(getPlaneFuel(planestack));
-        plane.setAttackTarget(target);
-        this.getEntityWorld().addEntity(plane);
+        plane.setTarget(target);
+        this.getCommandSenderWorld().addFreshEntity(plane);
         hanger.setStackInSlot(hangerIndex, ItemStack.EMPTY);
     }
 }

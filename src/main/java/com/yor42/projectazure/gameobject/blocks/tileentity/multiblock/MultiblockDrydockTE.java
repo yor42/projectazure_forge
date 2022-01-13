@@ -40,11 +40,11 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
                 case 3:
                     return MultiblockDrydockTE.this.energyStorage.getMaxEnergyStored();
                 case 4:
-                    return MultiblockDrydockTE.this.getPos().getX();
+                    return MultiblockDrydockTE.this.getBlockPos().getX();
                 case 5:
-                    return MultiblockDrydockTE.this.getPos().getY();
+                    return MultiblockDrydockTE.this.getBlockPos().getY();
                 case 6:
-                    return MultiblockDrydockTE.this.getPos().getZ();
+                    return MultiblockDrydockTE.this.getBlockPos().getZ();
                 default:
                     return 0;
             }
@@ -69,7 +69,7 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
         }
 
         @Override
-        public int size() {
+        public int getCount() {
             return 7;
         }
     };
@@ -114,18 +114,18 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
         boolean isPowered = this.isPowered();
         boolean shouldSave = false;
         super.tick();
-        if(this.world != null && !this.world.isRemote){
-            if(isPowered!=this.isPowered() || this.isPowered() && !this.world.getBlockState(this.pos).get(POWERED) || !this.isPowered() && this.world.getBlockState(this.pos).get(POWERED)) {
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(POWERED, this.isPowered()), 2);
+        if(this.level != null && !this.level.isClientSide){
+            if(isPowered!=this.isPowered() || this.isPowered() && !this.level.getBlockState(this.worldPosition).getValue(POWERED) || !this.isPowered() && this.level.getBlockState(this.worldPosition).getValue(POWERED)) {
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(POWERED, this.isPowered()), 2);
                 shouldSave = true;
             }
             if(isActive!=this.isActive()){
-                this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(ACTIVE, this.isActive()), 2);
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ACTIVE, this.isActive()), 2);
                 shouldSave = true;
             }
         }
 
-        if(shouldSave){this.markDirty();}
+        if(shouldSave){this.setChanged();}
     }
 
     public MultiblockDrydockTE() {
@@ -137,16 +137,16 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
 
     @Override
     protected void SpawnResultEntity(ServerPlayerEntity owner) {
-        if(this.getWorld() != null && !this.getWorld().isRemote()){
-            AbstractEntityCompanion entity = this.getRollResult().create(this.getWorld());
+        if(this.getLevel() != null && !this.getLevel().isClientSide()){
+            AbstractEntityCompanion entity = this.getRollResult().create(this.getLevel());
             if(entity != null && owner != null){
-                entity.setTamedBy(owner);
-                entity.setPosition(this.pos.getX()+0.5, this.pos.getY()-2, this.pos.getZ()+0.5);
-                entity.func_233687_w_(true);
+                entity.tame(owner);
+                entity.setPos(this.worldPosition.getX()+0.5, this.worldPosition.getY()-2, this.worldPosition.getZ()+0.5);
+                entity.setOrderedToSit(true);
                 entity.setMorale(150);
                 entity.setAffection(40F);
                 entity.MaxFillHunger();
-                this.getWorld().addEntity(entity);
+                this.getLevel().addFreshEntity(entity);
             }
         }
     }
@@ -166,7 +166,7 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().transitionLengthTicks = 20;
-        boolean flag = this.getWorld()!= null && this.getWorld().getBlockState(this.getPos()).hasProperty(ACTIVE) && this.getWorld().getBlockState(this.getPos()).hasProperty(POWERED) && this.getWorld().getBlockState(this.getPos()).get(ACTIVE) && this.getWorld().getBlockState(this.getPos()).get(POWERED);
+        boolean flag = this.getLevel()!= null && this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).hasProperty(POWERED) && this.getLevel().getBlockState(this.getBlockPos()).getValue(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).getValue(POWERED);
         if(flag) {
             event.getController().setAnimation(builder.addAnimation("working", true));
             return PlayState.CONTINUE;
@@ -181,7 +181,7 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
 
     @Override
     public void encodeExtraData(PacketBuffer buffer) {
-        int[] var = {this.ProcessTime, this.totalProcessTime, this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored(), this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()};
+        int[] var = {this.ProcessTime, this.totalProcessTime, this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored(), this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ()};
         buffer.writeVarIntArray(var);
     }
 
@@ -198,8 +198,8 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     @OnlyIn(Dist.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        BlockPos pos = getPos();
-        AxisAlignedBB bb = new AxisAlignedBB(pos.add(-2, -4, -2), pos.add(2, 2, 2));
+        BlockPos pos = getBlockPos();
+        AxisAlignedBB bb = new AxisAlignedBB(pos.offset(-2, -4, -2), pos.offset(2, 2, 2));
         return bb;
     }
 }

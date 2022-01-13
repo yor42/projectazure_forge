@@ -36,14 +36,14 @@ public class KansenLaunchPlaneGoal extends Goal {
     public KansenLaunchPlaneGoal(EntityKansenAircraftCarrier entity, float maxAttackDistanceIn, int minDelayPerPlane, int maxDelayPerPlane){
         this.entity = entity;
         this.attackRadius = maxAttackDistanceIn;
-        this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 
         this.attackIntervalMin = minDelayPerPlane;
         this.maxRangedAttackTime = maxDelayPerPlane;
     }
 
     @Override
-    public boolean shouldExecute() {
+    public boolean canUse() {
 
         if(this.entity == null){
             return false;
@@ -53,14 +53,14 @@ public class KansenLaunchPlaneGoal extends Goal {
             return false;
         }
 
-        boolean flag = !this.entity.isSitting()&&this.entity.hasRigging() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive();
+        boolean flag = !this.entity.isOrderedToSit()&&this.entity.hasRigging() && this.entity.getTarget() != null && this.entity.getTarget().isAlive();
         boolean canFire = this.entity.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
 
         if (flag && canFire){
-            boolean flag2 =this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && EntityHasPlanes(this.entity);
+            boolean flag2 =this.entity.getSensing().canSee(this.entity.getTarget()) && EntityHasPlanes(this.entity);
 
             if(flag2) {
-                this.targetEntity = entity.getAttackTarget();
+                this.targetEntity = entity.getTarget();
                 return true;
             }
         }
@@ -68,13 +68,13 @@ public class KansenLaunchPlaneGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
-        return this.shouldExecute();
+    public boolean canContinueToUse() {
+        return this.canUse();
     }
 
     @Override
-    public void resetTask() {
-        super.resetTask();
+    public void stop() {
+        super.stop();
         this.seeTime = 0;
         this.PlaneDelay = -1;
     }
@@ -82,9 +82,9 @@ public class KansenLaunchPlaneGoal extends Goal {
     @Override
     public void tick() {
         super.tick();
-        double d0 = this.entity.getDistanceSq(this.targetEntity.getPosX(), this.targetEntity.getPosY(), this.targetEntity.getPosZ());
-        boolean flag = this.entity.getEntitySenses().canSee(this.targetEntity);
-        Entity targetEntity = this.entity.getAttackTarget();
+        double d0 = this.entity.distanceToSqr(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ());
+        boolean flag = this.entity.getSensing().canSee(this.targetEntity);
+        Entity targetEntity = this.entity.getTarget();
         if(targetEntity!= null) {
             if (flag) {
                 ++this.seeTime;
@@ -93,7 +93,7 @@ public class KansenLaunchPlaneGoal extends Goal {
             }
 
             if (this.seeTime > 0) {
-                this.entity.getLookController().setLookPositionWithEntity(targetEntity, 10, 10);
+                this.entity.getLookControl().setLookAt(targetEntity, 10, 10);
             }
 
             if (entity.getRigging().getItem() instanceof ItemRiggingBase) {
@@ -104,7 +104,7 @@ public class KansenLaunchPlaneGoal extends Goal {
                     if(hangerIndex>=0) {
                         ItemStack planestack = hanger.getStackInSlot(hangerIndex);
 
-                        this.entity.getLookController().setLookPositionWithEntity(this.targetEntity, 30.0F, 30.0F);
+                        this.entity.getLookControl().setLookAt(this.targetEntity, 30.0F, 30.0F);
 
                         boolean flag3 = --this.PlaneDelay == 0 && planestack.getItem() instanceof ItemEquipmentPlaneBase;
                         if (flag3) {
@@ -113,7 +113,7 @@ public class KansenLaunchPlaneGoal extends Goal {
                             }
                             EntityType<? extends AbstractEntityPlanes> planetype = ((ItemEquipmentPlaneBase) planestack.getItem()).getEntityType();
 
-                            AbstractEntityPlanes planeEntity = planetype.create(this.entity.getEntityWorld());
+                            AbstractEntityPlanes planeEntity = planetype.create(this.entity.getCommandSenderWorld());
                             if (planeEntity != null) {
                                 this.entity.LaunchPlane(planestack, planeEntity, this.targetEntity, (IItemHandlerModifiable) hanger, hangerIndex);
                             }

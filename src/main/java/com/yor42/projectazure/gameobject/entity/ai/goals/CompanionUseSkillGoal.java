@@ -15,20 +15,20 @@ public class CompanionUseSkillGoal extends Goal {
     }
 
     @Override
-    public boolean shouldExecute() {
-        return this.companion.canUseSkill() && this.companion.getSkillDelayTick() == 0 && !this.isSkillFinished && this.companion.getAttackTarget() != null && this.companion.getAttackTarget().isAlive();
+    public boolean canUse() {
+        return this.companion.canUseSkill() && this.companion.getSkillDelayTick() == 0 && !this.isSkillFinished && this.companion.getTarget() != null && this.companion.getTarget().isAlive();
     }
 
     @Override
-    public boolean shouldContinueExecuting() {
+    public boolean canContinueToUse() {
         return this.companion.canUseSkill() && this.companion.getSkillDelayTick() == 0 && !this.isSkillFinished;
     }
 
     @Override
-    public void startExecuting() {
-        if(this.companion.getAttackTarget() != null && !this.isSkillFinished) {
+    public void start() {
+        if(this.companion.getTarget() != null && !this.isSkillFinished) {
             this.companion.setUsingSkill(false);
-            if(this.companion.performOneTimeSkill(this.companion.getAttackTarget())){
+            if(this.companion.performOneTimeSkill(this.companion.getTarget())){
                 this.isSkillFinished = true;
             }
         }
@@ -36,8 +36,8 @@ public class CompanionUseSkillGoal extends Goal {
 
     @Override
     public void tick() {
-        if(this.companion.getAttackTarget() != null && !this.isSkillFinished) {
-            if(this.companion.performSkillTick(this.companion.getAttackTarget(), this.SkillTimer)){
+        if(this.companion.getTarget() != null && !this.isSkillFinished) {
+            if(this.companion.performSkillTick(this.companion.getTarget(), this.SkillTimer)){
                 this.isSkillFinished = true;
             }
             this.SkillTimer++;
@@ -45,7 +45,7 @@ public class CompanionUseSkillGoal extends Goal {
     }
 
     @Override
-    public void resetTask() {
+    public void stop() {
         this.companion.resetSkill();
         this.isSkillFinished = false;
         this.companion.setSkillDelay();
