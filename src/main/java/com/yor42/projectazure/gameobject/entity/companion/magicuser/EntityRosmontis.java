@@ -230,9 +230,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
         claymore.setOwnerId(this.getUUID());
         world.addFreshEntity(claymore);
         int idx = this.getNextSkillItemindex();
-        ItemStack skillStack = this.getSkillItem(idx);
-        skillStack.shrink(1);
-        this.setSkillItemSlotContent(idx, skillStack);
+        this.getInventory().extractItem(12+idx, 1, false);
     }
 
     @Override

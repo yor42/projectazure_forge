@@ -55,7 +55,6 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     public EntityClaymore(EntityType<? extends LivingEntity> type, World worldIn) {
         super(type, worldIn);
-        this.noCulling = true;
     }
 
 
