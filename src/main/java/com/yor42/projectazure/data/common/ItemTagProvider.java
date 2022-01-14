@@ -2,7 +2,6 @@ package com.yor42.projectazure.data.common;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -28,6 +27,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         copy(ModTags.Blocks.ORES_TIN, ModTags.Items.ORES_TIN);
         copy(ModTags.Blocks.ORES_LEAD, ModTags.Items.ORES_LEAD);
         copy(ModTags.Blocks.ORES_ALUMINIUM, ModTags.Items.ORES_ALUMINIUM);
+        copy(ModTags.Blocks.ORES_ZINC, ModTags.Items.ORES_ZINC);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
 
         this.tag(ModTags.Items.INGOT_ALUMINIUM).add(registerItems.INGOT_ALUMINIUM.get());
@@ -54,6 +54,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.PLATE_LEAD).add(registerItems.PLATE_LEAD.get());
         this.tag(ModTags.Items.PLATE_ZINC).add(registerItems.PLATE_ZINC.get());
         this.tag(ModTags.Items.PLATE_IRON).add(registerItems.PLATE_IRON.get());
+        this.tag(ModTags.Items.PLATE_GOLD).add(registerItems.PLATE_GOLD.get());
         this.tag(ModTags.Items.PLATE_STEEL).add(registerItems.PLATE_STEEL.get());
         this.tag(ModTags.Items.PLATE_BRASS).add(registerItems.PLATE_BRASS.get());
 
@@ -61,6 +62,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.GEAR_BRONZE).add(registerItems.GEAR_BRONZE.get());
         this.tag(ModTags.Items.GEAR_TIN).add(registerItems.GEAR_TIN.get());
         this.tag(ModTags.Items.GEAR_IRON).add(registerItems.GEAR_IRON.get());
+        this.tag(ModTags.Items.GEAR_GOLD).add(registerItems.GEAR_GOLD.get());
         this.tag(ModTags.Items.GEAR_COPPER).add(registerItems.GEAR_COPPER.get());
 
         this.tag(ModTags.Items.DUST_ALUMINIUM).add(registerItems.DUST_ALUMINIUM.get());
@@ -71,8 +73,11 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.DUST_IRON).add(registerItems.DUST_IRON.get());
         this.tag(ModTags.Items.DUST_ZINC).add(registerItems.DUST_ZINC.get());
         this.tag(ModTags.Items.DUST_COAL).add(registerItems.DUST_COAL.get());
+        this.tag(ModTags.Items.DUST_GOLD).add(registerItems.DUST_GOLD.get());
         this.tag(ModTags.Items.DUST_STEEL).add(registerItems.DUST_STEEL.get());
         this.tag(ModTags.Items.DUST_BRASS).add(registerItems.DUST_BRASS.get());
+
+        this.tag(ModTags.Items.SLEDGEHAMMER).add(registerItems.SLEDGEHAMMER.get());
 
         this.tag(ModTags.Items.WIRE_COPPER).add(registerItems.COPPER_WIRE.get());
 

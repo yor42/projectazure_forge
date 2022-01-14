@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:hammer"
+      "tag": "forge:crafting_hammer"
     },
     {
       "tag": "forge:ingots/aluminium"

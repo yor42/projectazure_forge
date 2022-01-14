@@ -4,6 +4,8 @@ import com.google.common.base.Throwables;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.items.ItemKansenSpawnEgg;
+import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,13 +15,16 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.crafting.StackList;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.system.CallbackI;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 import static com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability.CapabilityID;
@@ -92,6 +97,13 @@ public class ModBusEventHandler {
             }
         }
 
+    }
+
+    @SubscribeEvent
+    public static void registerModifierSerializers(@Nonnull final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
+        event.getRegistry()
+                .register(new SledgeHammerModifier.Serializer()
+                        .setRegistryName(Constants.MODID, "sledgehammer"));
     }
 
     @SubscribeEvent

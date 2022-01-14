@@ -17,6 +17,7 @@ import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
+import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.item.ItemGroup;
@@ -54,6 +55,7 @@ public class Main
     // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
     public static final SimpleChannel NETWORK = registerNetwork.getNetworkChannel();
+    public static final CrushingRecipeCache CRUSHING_REGISTRY = new CrushingRecipeCache();
     public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public static ItemGroup PA_GROUP = new ItemGroup(MODID) {

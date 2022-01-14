@@ -29,13 +29,11 @@ public class ModTags {
     }
 
     public static final class Blocks {
-
-        public static final ITag.INamedTag<Block> LOG = forge("logs");
-
         public static final ITag.INamedTag<Block> ORES_ALUMINIUM = forge("ores/aluminium");
         public static final ITag.INamedTag<Block> ORES_COPPER = forge("ores/copper");
         public static final ITag.INamedTag<Block> ORES_TIN = forge("ores/tin");
         public static final ITag.INamedTag<Block> ORES_LEAD = forge("ores/lead");
+        public static final ITag.INamedTag<Block> ORES_ZINC = forge("ores/zinc");
 
         private static ITag.INamedTag<Block> forge(String path) {
             return BlockTags.bind(new ResourceLocation("forge", path).toString());
@@ -47,6 +45,7 @@ public class ModTags {
     }
 
     public static final class Items {
+
         public static final ITag.INamedTag<Item> INGOT_ALUMINIUM = forge("ingots/aluminium");
         public static final ITag.INamedTag<Item> INGOT_COPPER = forge("ingots/copper");
         public static final ITag.INamedTag<Item> INGOT_TIN = forge("ingots/tin");
@@ -69,6 +68,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> GEAR_BRONZE = forge("gears/bronze");
         public static final ITag.INamedTag<Item> GEAR_IRON = forge("gears/iron");
         public static final ITag.INamedTag<Item> GEAR_STEEL = forge("gears/steel");
+        public static final ITag.INamedTag<Item> GEAR_GOLD = forge("gears/gold");
 
         public static final ITag.INamedTag<Item> PLATE_ALUMINIUM = forge("plates/aluminium");
         public static final ITag.INamedTag<Item> PLATE_COPPER = forge("plates/copper");
@@ -79,6 +79,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> PLATE_ZINC = forge("plates/zinc");
         public static final ITag.INamedTag<Item> PLATE_STEEL = forge("plates/steel");
         public static final ITag.INamedTag<Item> PLATE_BRASS = forge("plates/brass");
+        public static final ITag.INamedTag<Item> PLATE_GOLD = forge("plates/gold");
 
         public static final ITag.INamedTag<Item> DUST_ALUMINIUM = forge("dusts/aluminium");
         public static final ITag.INamedTag<Item> DUST_COPPER = forge("dusts/copper");
@@ -90,11 +91,13 @@ public class ModTags {
         public static final ITag.INamedTag<Item> DUST_COAL = forge("dusts/coal");
         public static final ITag.INamedTag<Item> DUST_STEEL = forge("dusts/steel");
         public static final ITag.INamedTag<Item> DUST_BRASS = forge("dusts/brass");
+        public static final ITag.INamedTag<Item> DUST_GOLD = forge("dusts/gold");
 
         public static final ITag.INamedTag<Item> ORES_ALUMINIUM = forge("ores/aluminium");
         public static final ITag.INamedTag<Item> ORES_COPPER = forge("ores/copper");
         public static final ITag.INamedTag<Item> ORES_TIN = forge("ores/tin");
         public static final ITag.INamedTag<Item> ORES_LEAD = forge("ores/lead");
+        public static final ITag.INamedTag<Item> ORES_ZINC = forge("ores/zinc");
 
         public static final ITag.INamedTag<Item> WIRE_COPPER = forge("wires/copper");
 
@@ -104,7 +107,9 @@ public class ModTags {
 
         public static final ITag.INamedTag<Item> MORTAR = forge("mortar");
         public static final ITag.INamedTag<Item> CUTTER = forge("cutter");
-        public static final ITag.INamedTag<Item> HAMMER = forge("hammer");
+        public static final ITag.INamedTag<Item> HAMMER = forge("crafting_hammer");
+
+        public static final ITag.INamedTag<Item> SLEDGEHAMMER = forge("sledgehammer");
 
         public static final ITag.INamedTag<Item> TREE_SAP = forge("tree_sap");
 

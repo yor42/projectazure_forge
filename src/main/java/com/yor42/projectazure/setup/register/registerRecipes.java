@@ -13,15 +13,17 @@ import java.util.function.Supplier;
 public class registerRecipes {
 
     public static class Types{
-        public static final IRecipeType<PressingRecipe> PRESSING = IRecipeType.register(Constants.MODID+"pressing");
-        public static final IRecipeType<AlloyingRecipe> ALLOYING = IRecipeType.register(Constants.MODID+"alloying");
-        public static final IRecipeType<CrystalizingRecipe> CRYSTALIZING = IRecipeType.register(Constants.MODID+"crystalizing");
+        public static final IRecipeType<PressingRecipe> PRESSING = IRecipeType.register(Constants.MODID+":pressing");
+        public static final IRecipeType<CrushingRecipe> CRUSHING = IRecipeType.register(Constants.MODID+":crushing");
+        public static final IRecipeType<AlloyingRecipe> ALLOYING = IRecipeType.register(Constants.MODID+":alloying");
+        public static final IRecipeType<CrystalizingRecipe> CRYSTALIZING = IRecipeType.register(Constants.MODID+":crystalizing");
         public static void register(){}
     }
 
     public static class Serializers{
 
         public static final RegistryObject<IRecipeSerializer<PressingRecipe>> PRESSING = register("pressing", PressingRecipe.Serializer::new);
+        public static final RegistryObject<IRecipeSerializer<CrushingRecipe>> CRUSHING = register("crushing", CrushingRecipe.Serializer::new);
         public static final RegistryObject<IRecipeSerializer<AlloyingRecipe>> ALLOYING = register("alloying", AlloyingRecipe.Serializer::new);
         public static final RegistryObject<IRecipeSerializer<CrystalizingRecipe>> CRYSTALIZING = register("crystalizing", CrystalizingRecipe.Serializer::new);
 

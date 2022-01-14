@@ -2,6 +2,7 @@ package com.yor42.projectazure.data.common;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.data.recipebuilder.AlloyingRecipeBuilder;
+import com.yor42.projectazure.data.recipebuilder.CrushingRecipeBuilder;
 import com.yor42.projectazure.data.recipebuilder.CrystalizingRecipeBuilder;
 import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
@@ -11,12 +12,14 @@ import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import mekanism.api.MekanismAPI;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
@@ -45,7 +48,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         BuildMetalRecipe(consumer, 0.5F, new Metals("zinc", registerItems.INGOT_ZINC.get(), ModTags.Items.INGOT_ZINC).dust(registerItems.DUST_ZINC.get(), ModTags.Items.DUST_ZINC).plates(registerItems.PLATE_ZINC.get(), ModTags.Items.PLATE_ZINC).nugget(registerItems.NUGGET_ZINC.get(), ModTags.Items.NUGGET_ZINC));
 
         BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(registerItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(registerItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON).gear(registerItems.GEAR_IRON.get(), ModTags.Items.GEAR_IRON));
-
+        BuildMetalRecipe(consumer, 0.5F, new Metals("gold", Items.GOLD_INGOT, Tags.Items.INGOTS_GOLD).dust(registerItems.DUST_GOLD.get(), ModTags.Items.DUST_GOLD).plates(registerItems.PLATE_GOLD.get(), ModTags.Items.PLATE_GOLD).gear(registerItems.GEAR_GOLD.get(), ModTags.Items.GEAR_GOLD));
 
         ShapedRecipeBuilder.shaped(registerItems.HAMMER_IRON.get())
                 .define('I', Tags.Items.INGOTS_IRON)
@@ -611,6 +614,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steel", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
+        createHammerRecipes(consumer, Blocks.STONE, Blocks.COBBLESTONE, "cobblestone");
+        createHammerRecipes(consumer, Blocks.COBBLESTONE, Blocks.GRAVEL, "gravel");
+        createHammerRecipes(consumer, Blocks.GRAVEL, Blocks.SAND, "sand");
+        createHammerRecipes(consumer, ModTags.Items.ORES_COPPER, registerItems.DUST_COPPER.get(), 2, "copper");
+        createHammerRecipes(consumer, ModTags.Items.ORES_ALUMINIUM, registerItems.DUST_ALUMINIUM.get(), 2, "aluminium");
+        createHammerRecipes(consumer, ModTags.Items.ORES_LEAD, registerItems.DUST_LEAD.get(), 2, "lead");
+        createHammerRecipes(consumer, ModTags.Items.ORES_TIN, registerItems.DUST_TIN.get(), 2, "tin");
+        createHammerRecipes(consumer, ModTags.Items.ORES_ZINC, registerItems.DUST_ZINC.get(), 2, "zinc");
+        createHammerRecipes(consumer, Blocks.IRON_ORE, Blocks.COBBLESTONE, "iron");
+        createHammerRecipes(consumer, Tags.Items.ORES_COAL, registerItems.DUST_COAL.get(), 2, "coal");
+        createHammerRecipes(consumer, Tags.Items.ORES_GOLD, registerItems.DUST_GOLD.get(), 2, "gold");
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {
@@ -698,8 +712,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                     .addCriterion("hasmold", has(registerItems.MOLD_PLATE.get()))
                     .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_pressing"));
         }
-
-
     }
 
 
@@ -768,5 +780,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
             this.plateTag = tag;
             return this;
         }
+    }
+
+    protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Block blockOutput, String id) {
+        CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
+    }
+
+    protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Item blockOutput, String id) {
+        CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
+    }
+
+    protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, ITag<Item> blockInput, Item out, int count, String id) {
+        CrushingRecipeBuilder.builder().input(blockInput).addDrop(out, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
     }
 }

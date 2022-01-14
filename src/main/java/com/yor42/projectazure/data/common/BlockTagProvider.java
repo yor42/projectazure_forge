@@ -18,12 +18,10 @@ public class BlockTagProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags() {
-
-        this.tag(ModTags.Blocks.LOG).add(Blocks.BIRCH_LOG).add(Blocks.ACACIA_LOG).add(Blocks.SPRUCE_LOG).add(Blocks.JUNGLE_LOG).add(Blocks.OAK_LOG).add(Blocks.DARK_OAK_LOG);
-
         this.tag(ModTags.Blocks.ORES_ALUMINIUM).add(registerBlocks.BAUXITE_ORE.get());
         this.tag(ModTags.Blocks.ORES_COPPER).add(registerBlocks.COPPER_ORE.get());
         this.tag(ModTags.Blocks.ORES_LEAD).add(registerBlocks.LEAD_ORE.get());
         this.tag(ModTags.Blocks.ORES_TIN).add(registerBlocks.TIN_ORE.get());
+        this.tag(ModTags.Blocks.ORES_ZINC).add(registerBlocks.ZINC_ORE.get());
     }
 }
