@@ -1,17 +1,19 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -20,9 +22,11 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class EntityLaffey extends EntityKansenDestroyer{
-    public EntityLaffey(EntityType<? extends TameableEntity> type, World worldIn) {
+public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable, IAzurLaneKansen {
+
+    public EntityJavelin(EntityType<? extends EntityJavelin> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -45,22 +49,6 @@ public class EntityLaffey extends EntityKansenDestroyer{
             }
             return PlayState.CONTINUE;
         }
-        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat", true));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isOrderedToSit() || this.getVehicle() != null) {
-            event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
-            return PlayState.CONTINUE;
-        }
         else if(this.isOpeningDoor()){
             if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("openDoorL", false));
@@ -69,15 +57,31 @@ public class EntityLaffey extends EntityKansenDestroyer{
                 event.getController().setAnimation(builder.addAnimation("openDoorR", false));
             }
         }
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBlocking()){
+            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
+            event.getController().setAnimation(builder.addAnimation("pat", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
+            event.getController().setAnimation(builder.addAnimation("pat", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
         else if(this.isReloadingMainHand()){
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isBlocking()){
-            event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
         }
         else if(this.isGettingHealed()){
@@ -110,23 +114,24 @@ public class EntityLaffey extends EntityKansenDestroyer{
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
         return PlayState.CONTINUE;
     }
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
+
         if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+            event.getController().setAnimation(builder.addAnimation("sleep", true));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle", true));
+            event.getController().setAnimation(builder.addAnimation("sit_start").addAnimation("sit", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
@@ -149,20 +154,58 @@ public class EntityLaffey extends EntityKansenDestroyer{
         return PlayState.CONTINUE;
     }
 
-    @Nonnull
     @Override
-    public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_4;
+    public SoundEvent getDisappointedAmbientSound() {
+        return registerSounds.JAVELIN_TALK_DISAPPOINTED;
+    }
+
+    @Override
+    public SoundEvent getStrangerAmbientSound() {
+        return registerSounds.JAVELIN_TALK_STRANGER;
+    }
+
+    @Override
+    public SoundEvent getFriendlyAmbientSound() {
+        return registerSounds.JAVELIN_TALK_FRIENDLY;
+    }
+
+    @Override
+    public SoundEvent getLikeAmbientSound() {
+        return registerSounds.JAVELIN_TALK_CRUSH;
+    }
+
+    @Override
+    public SoundEvent getLoveAmbientSound() {
+        return registerSounds.JAVELIN_TALK_LOVE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.JAVELIN_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.JAVELIN_TALK_PAT;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.createMobAttributes()
                 //Attribute
-                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.LaffeyMovementSpeed.get())
-                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.LaffeySwimSpeed.get())
-                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.LaffeyHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.LaffeyAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.JavelinMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.JavelinSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.JavelinHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.JavelinAttackDamage.get())
                 ;
     }
+
+    @Nonnull
+    @Override
+    public enums.CompanionRarity getRarity() {
+        return enums.CompanionRarity.STAR_4;
+    }
+
 }

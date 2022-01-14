@@ -1,6 +1,6 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasPlanes;
 

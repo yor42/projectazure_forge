@@ -1,10 +1,11 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -20,6 +21,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -29,6 +31,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAzurLaneKansen {
 
@@ -161,6 +164,43 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         }
         event.getController().setAnimation(builder.addAnimation("animation.enterprise.idle", true));
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public SoundEvent getDisappointedAmbientSound() {
+        return registerSounds.ENTERPRISE_TALK_DISAPPOINTED;
+    }
+
+    @Override
+    public SoundEvent getStrangerAmbientSound() {
+        return registerSounds.ENTERPRISE_TALK_STRANGER;
+    }
+
+    @Override
+    public SoundEvent getFriendlyAmbientSound() {
+        return registerSounds.ENTERPRISE_TALK_FRIENDLY;
+    }
+
+    @Override
+    public SoundEvent getLikeAmbientSound() {
+        return registerSounds.ENTERPRISE_TALK_CRUSH;
+    }
+
+    @Override
+    public SoundEvent getLoveAmbientSound() {
+        return registerSounds.ENTERPRISE_TALK_LOVE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.ENTERPRISE_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.ENTERPRISE_TALK_PAT;
     }
 
     @Override

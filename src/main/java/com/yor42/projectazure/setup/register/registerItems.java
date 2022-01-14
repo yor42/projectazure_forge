@@ -269,15 +269,17 @@ public class registerItems {
             .setISTER(() -> ItemAbydos550Renderer::new)
             .tab(PA_WEAPONS).stacksTo(1), true, MAGAZINE_5_56.get()));
 
-    public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 10, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 8, -1.5F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> COMPOUNDBOW = registerManager.ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));
     public static final RegistryObject<Item> BONKBAT = registerManager.ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
             .tab(PA_WEAPONS)
             .rarity(Rarity.EPIC)
             .stacksTo(1)));
 
-    public static final RegistryObject<Item> SLEDGEHAMMER = registerManager.ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -5F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
+    public static final RegistryObject<Item> SLEDGEHAMMER = registerManager.ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -3.7F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
+    public static final RegistryObject<Item> CLAYMORE = registerManager.ITEMS.register("claymore", ItemClaymore::new);
+
 
     public static final RegistryObject<Item> COMMANDING_STICK = registerManager.ITEMS.register("commanding_stick", ItemCommandStick::new);
 
@@ -306,6 +308,7 @@ public class registerItems {
     public static final RegistryObject<Item> EQUIPMENT_PLANE_F4FWildcat = registerManager.ITEMS.register("equipment_plane_f4fwildcat", () -> new ItemPlanef4Fwildcat(new Item.Properties()
             .setISTER(() -> ItemPlanef4fWildcatRenderer::new)
             .tab(PA_WEAPONS).stacksTo(1), (int) WildcatHP));
+
 
     public static final RegistryObject<Item> DRONE_BAMISSILE = registerManager.ITEMS.register("missiledrone", () -> new ItemMissleDrone(new Item.Properties()
             .setISTER(() -> ItemMissileDroneRenderer::new)
@@ -353,8 +356,6 @@ public class registerItems {
 
     public static final RegistryObject<Item> BANDAGE_ROLL = registerManager.ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()
             .tab(PA_GROUP)));
-
-    public static final RegistryObject<Item> CLAYMORE = registerManager.ITEMS.register("claymore", ItemClaymore::new);
 
     public static final RegistryObject<Item> DEVELOPER_BONUS = registerManager.ITEMS.register("developer_bonus", () -> new ItemContributorBonus(new Item.Properties()));
     public static final RegistryObject<Item> CONTRIBUTOR_BONUS = registerManager.ITEMS.register("contributor_bonus", () -> new ItemContributorBonus(new Item.Properties()));

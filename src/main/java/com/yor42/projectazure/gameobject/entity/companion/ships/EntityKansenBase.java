@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
@@ -32,7 +32,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;

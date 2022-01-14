@@ -35,6 +35,16 @@
   "item.projectazure.originite": "오리지늄 조각",
   "item.projectazure.originium_prime": "순오리지늄",
 
+  "item.projectazure.developer_bonus": "Project:Azure Developer Supply Package",
+  "item.projectazure.developer_bonus.tooltip": "Supply Pack provided to Project:Azure Developer for live server debugging.",
+  "item.projectazure.developer_bonus.tooltip.owner": "Owner: ",
+  "item.projectazure.developer_bonus.tooltip.content": "Contents: ",
+
+  "item.projectazure.contributor_bonus": "Project:Azure Contributor Gift Package",
+  "item.projectazure.contributor_bonus.tooltip": "Thank-you gift for Contributor of Project:Azure and Something to flex others to.",
+  "item.projectazure.contributor_bonus.tooltip.owner": "Owner: ",
+  "item.projectazure.contributor_bonus.tooltip.content": "Contents: ",
+
   "item.projectazure.headhunting_pcb": "신호 증폭 회로",
 
   "item.projectazure.mold_plate": "판 압출 틀",
@@ -63,10 +73,18 @@
   "disc.brainpower.desc1": "렛 더 베이스 킥 오오오오오오ㅗㅗ오오오-",
   "item.projectazure.disc_brainpower.desc": "Noma - 브레인 파워 (롱 버전)",
   "item.projectazure.disc_rickroll.desc": "릭 애스틀리 - Never Gonna Give You Up",
+  "item.projectazure.disc_enterthebeginning.desc": "Edvard.S - Enter the Beginning",
+  "disc.enterthebeginning.desc1": "EZ2ON is good game. Buy it. Suffer with me. :gun: - Dev",
 
   "item.projectazure.equipment_torpedo_533mm": "533mm 4연장 어뢰",
   "item.projectazure.equipment_gun_127mm": "127mm 단장포",
   "item.projectazure.equipment_plane_f4fwildcat": "F4F 와일드캣",
+
+  "item.projectazure.sheath": "Raythean Sword",
+  "item.projectazure.sheath.tooltip": "Black Sword made from steel.",
+  "item.projectazure.chixiao": "Chi Xiao",
+  "item.projectazure.chixiao.tooltip": "Red Sword made from mysterious material. its heavy.",
+
 
   "item.projectazure.abydos550": "화이트팽 465",
 
@@ -111,6 +129,7 @@
 
   "tooltip.companion.rarity": "희귀도",
   "tooltip.companion.type": "동료 분류",
+  "tooltip.companion.shiupgirl_class": "Ship Class",
   "tooltip.companion.operator_class": "오퍼레이터 포지션",
   "tooltip.companion.shipgirl_class": "함선 분류",
   "tooltip.companion.gun_speciality": "주무기",
@@ -120,7 +139,7 @@
 
   "item.projectazure.bonk_bat.tooltip": "???: Aㅏ. [검열됨]을 만들어 주마.",
   "item.projectazure.rainbowcube.tooltip1": "주머니 속에 들어있던 신비한 기운을 내뿜는 무지개색 큐브입니다.",
-  "item.projectazure.rainbowcube.tooltip2": "더 세게 쥐면 무슨 일이 일어날지도요?",
+  "item.projectazure.rainbowcube.tooltip2": "더 세게 쥐면 무슨 일이 일어날까요?",
 
 
   "item.tooltip.firerate": "발사 속도",
@@ -194,26 +213,17 @@
 
   "gui.kansen_ammostorage_usage": "탄약고 사용량",
 
-  "message.commandstick.bedpos_saved": "침대 위치 %s가 지휘봉에 저장되었습니다.",
-  "message.commandstick.bedpos_cleared": "지휘봉에 저장된 침대 위치를 지웠습니다.",
-
-  "message.commandstick.entity_bedpos_applied": "%s에 있는 침대를 %s에게 배정했습니다.",
-  "message.commandstick.entity_bedpos_failed": "%s에 있는 침대를 %s에게 배정하지 못했습니다: 해당 블럭이 침대가 아닙니다.",
-  "message.commandstick.entity_bedpos_failed_duplicate": "%s에 있는 침대를 %s에게 배정하지 못했습니다: %s와 침대가 겹칩니다.",
-  "message.commandstick.entity_bedpos_cleared": "%s의 침대 위치를 지웠습니다.",
-  "message.commandstick.entity_bedpos_same_companion_same_bed": "해당 동료가 이미 그 침대에 배정되어 있습니다.",
-
   "destroyer": "구축함",
   "light_cruiser": "경순양함",
   "battleship": "전함",
   "aircraft_carrier": "항공모함",
 
-  "disappointed": "실망",
-  "stranger": "낯섦",
-  "friendly": "친근",
-  "crush": "호감",
-  "love": "사랑",
-  "oath": "서약",
+  "affection.disappointed": "Disappointed",
+  "affection.stranger": "Stranger",
+  "affection.friendly": "Friendly",
+  "affection.crush": "Crush",
+  "affection.love": "Love",
+  "affection.oath": "Oath",
 
   "rarity.c": "일반",
   "rarity.uc": "고급",
@@ -221,6 +231,7 @@
   "rarity.sr": "매우 희귀",
   "rarity.ur": "극도로 희귀",
   "rarity.leg": "전설",
+  "rarity.sp": "특수",
 
   "operator.vanguard": "뱅가드",
   "operator.sniper": "스나이퍼",
@@ -230,8 +241,10 @@
   "operator.medic": "메딕",
   "operator.specialist": "스페셜리스트",
   "operator.supporter": "서포터",
+  "operator.reunion": "Reunion",
 
   "akn_operator": "오퍼레이터 / 명일방주",
+  "akn_reunion": "Reunion/Arknights",
   "bluearchive": "블루 아카이브",
   "al_kansen": "함선소녀 / 벽람항로",
   "gfl_tdoll": "전술인형 / 소녀전선",
@@ -250,6 +263,9 @@
 
   "entity.projectazure.entitychen": "첸",
   "entity.projectazure.entityamiya": "아미야",
+  "entity.projectazure.entityrosmontis": "Rosmontis",
+  "entity.projectazure.entitymudrock": "Mudrock",
+  "entity.projectazure.entitytalulah": "Talulah",
 
   "entity.projectazure.missiledrone": "미사일 드론",
 
@@ -261,16 +277,17 @@
 
   "entity.projectazure.entityplanef4fwildcat": "F4F 와일드캣",
 
+  "guntype.none": "없음",
   "guntype.assault_rifle": "돌격소총",
   "guntype.shotgun": "산탄총",
   "guntype.handgun": "권총",
   "guntype.sniper": "저격총",
 
-  "really_happy": "잘 쉼",
-  "happy": "기분 좋음",
-  "neutral": "보통",
-  "tired": "지침",
-  "exhaused": "탈진",
+  "morale.really_happy": "Excited",
+  "morale.happy": "Happy",
+  "morale.neutral": "Neutral",
+  "morale.tired": "Tired",
+  "morale.exhaused": "Exhausted",
 
   "plane.fighter": "전투기",
   "plane.torpedo_bomber": "어뢰폭격기",
@@ -301,23 +318,42 @@
   "tile.drydock": "드라이독",
   "metal_press": "유압 프레스",
 
+  "effect.projectazure.acute_oripathy": "급성 광석병",
+
   "message.rainbow_cube.notowner": "이 큐브가 당신의 손을 거부하는듯 합니다. 이 큐브는 당신 것이 아닌 것 같습니다.",
 
-  "effect.projectazure.acute_oripathy": "급성 광석병",
+  "message.commandstick.bedpos_saved": "침대 위치 %s가 지휘봉에 저장되었습니다.",
+  "message.commandstick.bedpos_cleared": "지휘봉에 저장된 침대 위치를 지웠습니다.",
+
+  "message.commandstick.entity_bedpos_applied": "%s에 있는 침대를 %s에게 배정했습니다.",
+  "message.commandstick.entity_bedpos_failed": "%s에 있는 침대를 %s에게 배정하지 못했습니다: 해당 블럭이 침대가 아닙니다.",
+  "message.commandstick.entity_bedpos_failed_duplicate": "%s에 있는 침대를 %s에게 배정하지 못했습니다: %s와 침대가 겹칩니다.",
+  "message.commandstick.entity_bedpos_cleared": "%s의 침대 위치를 지웠습니다.",
+  "message.commandstick.entity_bedpos_same_companion_same_bed": "해당 동료가 이미 그 침대에 배정되어 있습니다.",
 
   "death.attack.bonk": "%1$s이(가) 백병원으로 보내졌습니다.",
 
-  "death.attack.arts_0": "%1$s이(가) %2$s의 오리지늄 아츠로 살해당했습니다.",
-  "death.attack.arts_1": "%1$s이(가) %2$s의 아츠로 잘게 썰렸습니다.",
-  "death.attack.arts_2": "%2$s이(가) 개나리 스텝을 시전하였으나, %2$s의 마법구가 더 빨랐습니다. X.",
-  "death.attack.arts_3": "%1$s이(가) %2$s의 오리지늄 아츠로 인해 오리지늄 덩어리로 변했습니다.",
-  "death.attack.arts_4": "%1$s이(가) %2$s와의 마법구 피구 시합에서 졌습니다.",
+  "death.attack.arts_projectile_0": "%1$s was murdered by arts from %2$s",
+  "death.attack.arts_projectile_1": "%1$s was cooked by %2$s's arts",
+  "death.attack.arts_projectile_2": "%1$s was not so good at dodgeball and got destroyed by %2$s's arts. yikes.",
+  "death.attack.arts_projectile_3": "%1$s turned into pile of originium by %2$s's arts",
+  "death.attack.arts_projectile_4": "%1$s was suck at dodging %2$s's spicy magic ball",
 
-  "death.attack.arts_0.item": "%1$s이(가) %3$s를 사용한 %2$s의 오리지늄 아츠로 살해당했습니다.",
-  "death.attack.arts_1.item": "%1$s이(가) %3$s를 사용한 %2$s의 오리지늄 아츠로 잘게 썰렸습니다.",
-  "death.attack.arts_2.item": "%2$s이(가) 개나리 스텝을 시전하였으나, %3$s를 사용한 %2$s의 마법구가 더 빨랐습니다. X.",
-  "death.attack.arts_3.item": "%1$s이(가) %3$s를 사용한 %2$s의 오리지늄 아츠로 인해 오리지늄 덩어리로 변했습니다.",
-  "death.attack.arts_4.item": "%1$s이(가) %3$s를 사용한 %2$s와의 마법구 피구 시합에서 졌습니다.",
+  "death.attack.revenge_0": "%1$s \"provoked\" %2$s",
+  "death.attack.revenge_1": "%1$s tried to lewd %2$s. and got his justice served hot.",
+  "death.attack.revenge_2": "%1$s got absolutely DESTROYED trying to lewd %2$s. DESERVED.",
+  "death.attack.revenge_3": "%1$s got slapped while trying to lewd %2$s",
+  "death.attack.revenge_4": "%1$s got his justice served.",
+
+  "death.attack.claymore_0": "%1$s got crushed by claymore",
+  "death.attack.claymore_1": "%1$s was crushed to death by a flying claymore",
+  "death.attack.claymore_2": "%1$s was compressed by flying claymore",
+
+  "death.attack.arts_projectile_0.item": "%1$s was murdered by arts from %2$s using %3$s",
+  "death.attack.arts_projectile_1.item": "%1$s was cooked by %2$s's arts casted using %3$s",
+  "death.attack.arts_projectile_2.item": "%2$s was not so good at dodgeball and got destroyed by %2$s's arts casted by %3$s. yikes.",
+  "death.attack.arts_projectile_3.item": "%1$s turned into pile of originium by %2$s's arts cased by %3$s",
+  "death.attack.arts_projectile_4.item": "%2$s was suck at dodging %2$s's spicy magic ball from %3$s",
 
   "death.attack.ate_originium_prime_0": "%1$s 가 방금 오리지늄을 먹었습니다. ..세상에나.",
   "death.attack.ate_originium_prime_1": "%1$s 이(가) 방금 오리지늄의 맛을 깨우쳤습니다.",
@@ -328,6 +364,4 @@
   "top.companion_level.message": "레벨: %s",
   "top.companion_limit_break.message": "한계 돌파: %s",
   "top.companion_owner.message": "지휘관: %s"
-
-
 }

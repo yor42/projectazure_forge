@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;

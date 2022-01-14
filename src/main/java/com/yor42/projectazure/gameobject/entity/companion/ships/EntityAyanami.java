@@ -1,9 +1,10 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -11,6 +12,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -19,6 +21,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable, IAzurLaneKansen {
 
@@ -139,6 +142,43 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
 
         event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle_leg", true));
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public SoundEvent getDisappointedAmbientSound() {
+        return registerSounds.AYANAMI_TALK_DISAPPOINTED;
+    }
+
+    @Override
+    public SoundEvent getStrangerAmbientSound() {
+        return registerSounds.AYANAMI_TALK_STRANGER;
+    }
+
+    @Override
+    public SoundEvent getFriendlyAmbientSound() {
+        return registerSounds.AYANAMI_TALK_FRIENDLY;
+    }
+
+    @Override
+    public SoundEvent getLikeAmbientSound() {
+        return registerSounds.AYANAMI_TALK_CRUSH;
+    }
+
+    @Override
+    public SoundEvent getLoveAmbientSound() {
+        return registerSounds.AYANAMI_TALK_LOVE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.AYANAMI_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.AYANAMI_TALK_PAT;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

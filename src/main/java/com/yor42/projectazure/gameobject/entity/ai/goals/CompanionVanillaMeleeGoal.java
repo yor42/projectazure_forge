@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import net.minecraft.entity.LivingEntity;
@@ -9,7 +9,6 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 
 import javax.annotation.Nullable;
@@ -50,8 +49,11 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
                 return false;
             }
         }
-        this.target = this.entity.getTarget();
-        return true;
+        boolean val = super.canUse();
+        if(val){
+            this.target = this.entity.getTarget();
+        }
+        return val;
     }
 
     public boolean canContinueToUse() {
@@ -60,8 +62,7 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
             return false;
         }
 
-
-        return this.canUse() || !this.entity.getNavigation().isDone();
+        return super.canContinueToUse();
     }
 
 

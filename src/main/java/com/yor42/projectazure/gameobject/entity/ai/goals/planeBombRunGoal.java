@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.LivingEntity;

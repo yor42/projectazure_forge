@@ -1,6 +1,6 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityZ23;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityZ23;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

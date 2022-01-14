@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import mcp.MethodsReturnNonnullByDefault;
@@ -20,8 +20,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
-
-import net.minecraft.item.Item.Properties;
 
 public class ItemKansenSpawnEgg extends Item {
 

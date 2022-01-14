@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityZ23;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityZ23;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.item.Item;

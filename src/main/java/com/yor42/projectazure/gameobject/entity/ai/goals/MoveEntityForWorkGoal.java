@@ -90,9 +90,9 @@ abstract class MoveEntityForWorkGoal extends Goal {
     {
         if(this.BlockList.size() > 0) {
             for (BlockPos pos : this.BlockList) {
-
-                boolean flag = this.canSeeBlock(pos.above()) && this.shouldMoveTo(this.host.level, pos);
-                if (flag) {
+                boolean cansee = this.canSeeBlock(pos.above());
+                boolean flag = this.shouldMoveTo(this.host.level, pos);
+                if (cansee && flag) {
                     this.BlockPosBelowTarget = pos;
                     return true;
                 }
@@ -132,6 +132,7 @@ abstract class MoveEntityForWorkGoal extends Goal {
             BlockPos blockpos = this.BlockPosBelowTarget.above();
             if (blockpos.distSqr(this.host.getX(), this.host.getY(), this.host.getZ(), true) <= 4d) {
                 this.work = true;
+                this.host.getNavigation().stop();
             } else {
                 this.work = !this.host.getNavigation().moveTo((double) ((float) blockpos.getX()) + 0.5D, (double) blockpos.getY(), (double) ((float) blockpos.getZ()) + 0.5D, this.speed);
             }

@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import net.minecraft.entity.ai.goal.SwimGoal;
 
 public class CompanionSwimGoal extends SwimGoal {

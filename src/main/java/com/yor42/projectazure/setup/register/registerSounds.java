@@ -42,24 +42,90 @@ public final class registerSounds {
 
     //*jumps off cliff*
     public static final SoundEvent CHIMERA_TALK_NORMAL = registerSoundEvent("chimera_talk_normal");
+    public static final SoundEvent CHIMERA_TALK_PAT = registerSoundEvent("chimera_talk_pat");
+    public static final SoundEvent CHIMERA_TALK_ATTACK = registerSoundEvent("chimera_talk_attack");
     public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION1 = registerSoundEvent("chimera_talk_high_affection1");
     public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION2 = registerSoundEvent("chimera_talk_high_affection2");
     public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION3 = registerSoundEvent("chimera_talk_high_affection3");
 
     public static final SoundEvent CHEN_TALK_NORMAL = registerSoundEvent("chen_talk_normal");
+    public static final SoundEvent CHEN_TALK_PAT = registerSoundEvent("chen_talk_pat");
+    public static final SoundEvent CHEN_TALK_ATTACK = registerSoundEvent("chen_talk_attack");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION1 = registerSoundEvent("chen_talk_high_affection1");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION2 = registerSoundEvent("chen_talk_high_affection2");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION3 = registerSoundEvent("chen_talk_high_affection3");
 
     public static final SoundEvent MUDROCK_TALK_NORMAL = registerSoundEvent("mudrock_talk_normal");
+    public static final SoundEvent MUDROCK_TALK_PAT = registerSoundEvent("mudrock_talk_pat");
+    public static final SoundEvent MUDROCK_TALK_ATTACK = registerSoundEvent("mudrock_talk_attack");
     public static final SoundEvent MUDROCK_TALK_HIGH_AFFECTION1 = registerSoundEvent("mudrock_talk_high_affection1");
     public static final SoundEvent MUDROCK_TALK_HIGH_AFFECTION2 = registerSoundEvent("mudrock_talk_high_affection2");
     public static final SoundEvent MUDROCK_TALK_HIGH_AFFECTION3 = registerSoundEvent("mudrock_talk_high_affection3");
 
     public static final SoundEvent ROSMONTIS_TALK_NORMAL = registerSoundEvent("rosmontis_talk_normal");
+    public static final SoundEvent ROSMONTIS_TALK_PAT = registerSoundEvent("rosmontis_talk_pat");
+    public static final SoundEvent ROSMONTIS_TALK_ATTACK = registerSoundEvent("rosmontis_talk_attack");
     public static final SoundEvent ROSMONTIS_TALK_HIGH_AFFECTION1 = registerSoundEvent("rosmontis_talk_high_affection1");
     public static final SoundEvent ROSMONTIS_TALK_HIGH_AFFECTION2 = registerSoundEvent("rosmontis_talk_high_affection2");
     public static final SoundEvent ROSMONTIS_TALK_HIGH_AFFECTION3 = registerSoundEvent("rosmontis_talk_high_affection3");
+
+    public static final SoundEvent M4A1_TALK_NORMAL = registerSoundEvent("m4a1_talk_normal");
+    public static final SoundEvent M4A1_TALK_PAT = registerSoundEvent("m4a1_talk_pat");
+    public static final SoundEvent M4A1_TALK_ATTACK = registerSoundEvent("m4a1_talk_attack");
+
+    public static final SoundEvent AYANAMI_TALK_DISAPPOINTED = registerSoundEvent("ayanami_talk_disappointed");
+    public static final SoundEvent AYANAMI_TALK_STRANGER = registerSoundEvent("ayanami_talk_stranger");
+    public static final SoundEvent AYANAMI_TALK_FRIENDLY = registerSoundEvent("ayanami_talk_friendly");
+    public static final SoundEvent AYANAMI_TALK_CRUSH = registerSoundEvent("ayanami_talk_crush");
+    public static final SoundEvent AYANAMI_TALK_LOVE = registerSoundEvent("ayanami_talk_love");
+    public static final SoundEvent AYANAMI_TALK_OATH = registerSoundEvent("ayanami_talk_oath");
+    public static final SoundEvent AYANAMI_TALK_PAT = registerSoundEvent("ayanami_talk_pat");
+    public static final SoundEvent AYANAMI_TALK_ATTACK = registerSoundEvent("ayanami_talk_attack");
+
+    public static final SoundEvent ENTERPRISE_TALK_DISAPPOINTED = registerSoundEvent("enterprise_talk_disappointed");
+    public static final SoundEvent ENTERPRISE_TALK_STRANGER = registerSoundEvent("enterprise_talk_stranger");
+    public static final SoundEvent ENTERPRISE_TALK_FRIENDLY = registerSoundEvent("enterprise_talk_friendly");
+    public static final SoundEvent ENTERPRISE_TALK_CRUSH = registerSoundEvent("enterprise_talk_crush");
+    public static final SoundEvent ENTERPRISE_TALK_LOVE = registerSoundEvent("enterprise_talk_love");
+    public static final SoundEvent ENTERPRISE_TALK_OATH = registerSoundEvent("enterprise_talk_oath");
+    public static final SoundEvent ENTERPRISE_TALK_PAT = registerSoundEvent("enterprise_talk_pat");
+    public static final SoundEvent ENTERPRISE_TALK_ATTACK = registerSoundEvent("enterprise_talk_attack");
+
+    public static final SoundEvent JAVELIN_TALK_DISAPPOINTED = registerSoundEvent("javelin_talk_disappointed");
+    public static final SoundEvent JAVELIN_TALK_STRANGER = registerSoundEvent("javelin_talk_stranger");
+    public static final SoundEvent JAVELIN_TALK_FRIENDLY = registerSoundEvent("javelin_talk_friendly");
+    public static final SoundEvent JAVELIN_TALK_CRUSH = registerSoundEvent("javelin_talk_crush");
+    public static final SoundEvent JAVELIN_TALK_LOVE = registerSoundEvent("javelin_talk_love");
+    public static final SoundEvent JAVELIN_TALK_OATH = registerSoundEvent("javelin_talk_oath");
+    public static final SoundEvent JAVELIN_TALK_PAT = registerSoundEvent("javelin_talk_pat");
+    public static final SoundEvent JAVELIN_TALK_ATTACK = registerSoundEvent("javelin_talk_attack");
+
+    public static final SoundEvent LAFFEY_TALK_DISAPPOINTED = registerSoundEvent("laffey_talk_disappointed");
+    public static final SoundEvent LAFFEY_TALK_STRANGER = registerSoundEvent("laffey_talk_stranger");
+    public static final SoundEvent LAFFEY_TALK_FRIENDLY = registerSoundEvent("laffey_talk_friendly");
+    public static final SoundEvent LAFFEY_TALK_CRUSH = registerSoundEvent("laffey_talk_crush");
+    public static final SoundEvent LAFFEY_TALK_LOVE = registerSoundEvent("laffey_talk_love");
+    public static final SoundEvent LAFFEY_TALK_OATH = registerSoundEvent("laffey_talk_oath");
+    public static final SoundEvent LAFFEY_TALK_PAT = registerSoundEvent("laffey_talk_pat");
+    public static final SoundEvent LAFFEY_TALK_ATTACK = registerSoundEvent("laffey_talk_attack");
+
+    public static final SoundEvent NAGATO_TALK_DISAPPOINTED = registerSoundEvent("nagato_talk_disappointed");
+    public static final SoundEvent NAGATO_TALK_STRANGER = registerSoundEvent("nagato_talk_stranger");
+    public static final SoundEvent NAGATO_TALK_FRIENDLY = registerSoundEvent("nagato_talk_friendly");
+    public static final SoundEvent NAGATO_TALK_CRUSH = registerSoundEvent("nagato_talk_crush");
+    public static final SoundEvent NAGATO_TALK_LOVE = registerSoundEvent("nagato_talk_love");
+    public static final SoundEvent NAGATO_TALK_OATH = registerSoundEvent("nagato_talk_oath");
+    public static final SoundEvent NAGATO_TALK_PAT = registerSoundEvent("nagato_talk_pat");
+    public static final SoundEvent NAGATO_TALK_ATTACK = registerSoundEvent("nagato_talk_attack");
+
+    public static final SoundEvent Z23_TALK_DISAPPOINTED = registerSoundEvent("z23_talk_disappointed");
+    public static final SoundEvent Z23_TALK_STRANGER = registerSoundEvent("z23_talk_stranger");
+    public static final SoundEvent Z23_TALK_FRIENDLY = registerSoundEvent("z23_talk_friendly");
+    public static final SoundEvent Z23_TALK_CRUSH = registerSoundEvent("z23_talk_crush");
+    public static final SoundEvent Z23_TALK_LOVE = registerSoundEvent("z23_talk_love");
+    public static final SoundEvent Z23_TALK_OATH = registerSoundEvent("z23_talk_oath");
+    public static final SoundEvent Z23_TALK_PAT = registerSoundEvent("z23_talk_pat");
+    public static final SoundEvent Z23_TALK_ATTACK = registerSoundEvent("z23_talk_attack");
 
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);

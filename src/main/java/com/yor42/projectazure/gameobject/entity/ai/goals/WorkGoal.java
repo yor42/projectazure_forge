@@ -65,28 +65,19 @@ public class WorkGoal extends MoveEntityForWorkGoal {
             BlockPos pos3 = pos.above();
             Block blockup = worldIn.getBlockState(pos3).getBlock();
             BlockState iblockstate = worldIn.getBlockState(pos3);
-            if(pos3.getY() > 0)
-            {
-                if(mainHandItem == Items.BONE_MEAL)
-                {
-                    return blockup instanceof CropsBlock && !((CropsBlock) blockup).isMaxAge(iblockstate);
-                }
 
-                else if(mainHandItem instanceof HoeItem)
-                {
-                    return blockup == Blocks.MELON || blockup == Blocks.PUMPKIN || (blockup instanceof CropsBlock && ((CropsBlock) blockup).isMaxAge(iblockstate));
+            if (mainHandItem == Items.BONE_MEAL) {
+                return blockup instanceof CropsBlock && !((CropsBlock) blockup).isMaxAge(iblockstate);
+            } else if (mainHandItem instanceof HoeItem) {
+                return blockup == Blocks.MELON || blockup == Blocks.PUMPKIN || (blockup instanceof CropsBlock && ((CropsBlock) blockup).isMaxAge(iblockstate));
+            } else if (mainHandItem.isCorrectToolForDrops(iblockstate)) {
+                if (mainHandItem instanceof PickaxeItem) {
+                    return blockup instanceof OreBlock;
                 }
-                else if(mainHandItem.isCorrectToolForDrops(iblockstate))
-                {
-                    if(mainHandItem instanceof PickaxeItem)
-                    {
-                        return blockup instanceof OreBlock;
-                    }
-                }
-
             }
 
         }
+
         return false;
     }
 
@@ -108,10 +99,12 @@ public class WorkGoal extends MoveEntityForWorkGoal {
                 this.host.getLookControl().setLookAt((double) blockpos.getX() + 0.5D, (double) (blockpos.getY()), (double) blockpos.getZ() + 0.5D, 10.0F, (float) this.host.getMaxHeadXRot());
             }
             if (this.work) {
+                if(!this.host.swinging){
+                    this.host.swing(MAIN_HAND);
+                }
                 ItemStack mainHandStack = this.host.getItemBySlot(EquipmentSlotType.MAINHAND);
                 BlockState BlockAboveDestinationState = this.host.level.getBlockState(blockpos);
                 Block blockAboveDestination = BlockAboveDestinationState.getBlock();
-                ItemStack item = blockAboveDestination.getCloneItemStack(this.host.level, blockpos, BlockAboveDestinationState);
 
                 if (mainHandStack.getItem() == Items.BONE_MEAL) {
                     this.host.level.levelEvent(2005, blockpos, 0);

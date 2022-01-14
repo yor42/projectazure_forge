@@ -1,8 +1,10 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -12,6 +14,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -20,9 +23,10 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class EntityZ23 extends EntityKansenDestroyer{
-    public EntityZ23(EntityType<? extends TameableEntity> type, World worldIn) {
+public class EntityLaffey extends EntityKansenDestroyer implements IAzurLaneKansen {
+    public EntityLaffey(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -36,10 +40,6 @@ public class EntityZ23 extends EntityKansenDestroyer{
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
-        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
-            return PlayState.CONTINUE;
-        }
         else if(this.isEating()){
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
@@ -47,6 +47,10 @@ public class EntityZ23 extends EntityKansenDestroyer{
             else if(this.getUsedItemHand() == Hand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
+            return PlayState.CONTINUE;
+        }
+        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+            event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
@@ -122,11 +126,11 @@ public class EntityZ23 extends EntityKansenDestroyer{
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+            event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle", true));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
@@ -149,6 +153,43 @@ public class EntityZ23 extends EntityKansenDestroyer{
         return PlayState.CONTINUE;
     }
 
+    @Override
+    public SoundEvent getDisappointedAmbientSound() {
+        return registerSounds.LAFFEY_TALK_DISAPPOINTED;
+    }
+
+    @Override
+    public SoundEvent getStrangerAmbientSound() {
+        return registerSounds.LAFFEY_TALK_STRANGER;
+    }
+
+    @Override
+    public SoundEvent getFriendlyAmbientSound() {
+        return registerSounds.LAFFEY_TALK_FRIENDLY;
+    }
+
+    @Override
+    public SoundEvent getLikeAmbientSound() {
+        return registerSounds.LAFFEY_TALK_CRUSH;
+    }
+
+    @Override
+    public SoundEvent getLoveAmbientSound() {
+        return registerSounds.LAFFEY_TALK_LOVE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.LAFFEY_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.LAFFEY_TALK_PAT;
+    }
+
     @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
@@ -159,11 +200,10 @@ public class EntityZ23 extends EntityKansenDestroyer{
     {
         return MobEntity.createMobAttributes()
                 //Attribute
-                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.Z23MovementSpeed.get())
-                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.Z23SwimSpeed.get())
-                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.Z23Health.get())
-                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.Z23AttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.LaffeyMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.LaffeySwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.LaffeyHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.LaffeyAttackDamage.get())
                 ;
     }
-
 }

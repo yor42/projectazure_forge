@@ -8,8 +8,8 @@ import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenAircraftCarrier;
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
@@ -21,6 +21,7 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.interfaces.IAttributeable;
+import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.BlockStateUtil;
@@ -43,6 +44,7 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -54,9 +56,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
+import net.minecraft.pathfinding.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
@@ -312,6 +312,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected int patTimer, shieldCoolDown, qinteractionTimer;
     private int ItemSwapIndexOffhand = -1;
     private int ItemSwapIndexMainHand = -1;
+    protected int lastAggroedTimeStamp = 0;
     protected boolean isSwimmingUp;
     protected boolean shouldBeSitting;
     protected boolean isMeleeing;
@@ -324,6 +325,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private final MovementController MoveController;
     protected final SwimmerPathNavigator swimmingNav;
     private final GroundPathNavigator groundNav;
+    private final PathNavigator sailingNav;
     protected CompanionFoodStats foodStats = new CompanionFoodStats();
     private List<ExperienceOrbEntity> nearbyExpList;
 
@@ -379,6 +381,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.groundNav = new CompanionGroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
         this.MoveController = new CompanionDefaultMovementController(this);
+        this.sailingNav = new SwimmerPathNavigator(this, worldIn){
+            protected PathFinder createPathFinder(int p_179679_1_) {
+                this.nodeEvaluator = new WalkAndSwimNodeProcessor();
+                return new PathFinder(this.nodeEvaluator, p_179679_1_);
+            }
+            public boolean isStableDestination(BlockPos p_188555_1_) {
+                return !this.level.getBlockState(p_188555_1_.below()).isAir();
+            }
+        };
     }
 
 
@@ -516,7 +527,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putBoolean("isSitting", this.isOrderedToSit());
         compound.putBoolean("freeroaming", this.isFreeRoaming());
         compound.putDouble("morale", this.entityData.get(MORALE));
-        compound.putInt("pat_animation", this.entityData.get(PAT_ANIMATION_TIME));
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
         compound.putBoolean("isMovingtoRecruitStation", this.isMovingtoRecruitStation);
@@ -560,7 +570,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(ANGRYTIMER, compound.getInt("angrytimer"));
         this.entityData.set(SITTING, compound.getBoolean("issitting"));
         this.entityData.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
-        this.entityData.set(PAT_ANIMATION_TIME, compound.getInt("pat_animation"));
         this.entityData.set(EATING, compound.getBoolean("eating"));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.awakeningLevel = compound.getInt("awaken");
@@ -1151,6 +1160,22 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 return ((IAknOp)this).getNormalAmbientSounds();
             }
         }
+        else if(this instanceof IAzurLaneKansen){
+            IAzurLaneKansen kansen = (IAzurLaneKansen) this;
+            switch (kansen.affectionValuetoEnum()){
+                case DISAPPOINTED:
+                    return kansen.getDisappointedAmbientSound();
+                case STRANGER:
+                    return kansen.getStrangerAmbientSound();
+                case FRIENDLY:
+                    return kansen.getFriendlyAmbientSound();
+                case CRUSH:
+                    return kansen.getLikeAmbientSound();
+                case LOVE:
+                case OATH:
+                    return kansen.getLoveAmbientSound();
+            }
+        }
 
         return super.getAmbientSound();
     }
@@ -1324,9 +1349,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             }
         }
-        else if(patTimer>0){
-
-            this.patTimer = 0;
+        else{
+            if(patTimer>0) {
+                this.patTimer = 0;
+            }
 
             if(this.entityData.get(PATCOOLDOWN) > 0){
                 this.entityData.set(PATCOOLDOWN, this.entityData.get(PATCOOLDOWN) -1);
@@ -1336,6 +1362,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.entityData.set(PATEFFECTCOUNT,0);
             }
         }
+
         if(!this.getCommandSenderWorld().isClientSide()) {
             int AngerWarningCount = this.entityData.get(INTERACTION_WARNING_COUNT);
             if(this.getOwner() != null && this.getOwner().isAlive()){
@@ -1351,7 +1378,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         if (newWarningCount == 1 && this.distanceTo(this.getOwner()) < 5) {
                             this.swing(MAIN_HAND);
                             this.getOwner().hurt(DamageSources.causeRevengeDamage(this), 2F);
-                        } else if (newWarningCount >= 3 && this.distanceTo(this.getOwner()) < 5) {
+                        } else if (newWarningCount >= 3 && this.getSensing().canSee(this.getOwner())) {
                             this.addAffection(-2F);
                             this.setTarget(this.getOwner());
                             this.getEntityData().set(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 0);
@@ -1719,23 +1746,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.goalSelector.addGoal(7, new CompanionSpellRangedAttackGoal(this, 10));
         }
         else if(this instanceof IMeleeAttacker){
-            this.goalSelector.addGoal(7, new CompanionSwordUserMeleeAttack((IMeleeAttacker) this));
+            this.goalSelector.addGoal(8, new CompanionSwordUserMeleeAttack((IMeleeAttacker) this));
         }
-        this.goalSelector.addGoal(8, new CompanionUseShieldGoal(this));
         this.goalSelector.addGoal(9, new CompanionHealandEatFoodGoal(this));
         this.goalSelector.addGoal(10, new CompanionsUseTotem(this));
-        this.goalSelector.addGoal(11, new CompanionUseGunGoal(this, 40, 0.6));
-        this.goalSelector.addGoal(12, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(13, new CompanionVanillaMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(14, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(15, new WorkGoal(this, 1.0D));
-        this.goalSelector.addGoal(16, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
-        this.goalSelector.addGoal(17, new CompanionOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(18, new CompanionFreeroamGoal(this, 60, true));
-        this.goalSelector.addGoal(19, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(20, new CompanionPlaceTorchGoal(this));
-        this.goalSelector.addGoal(21, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(22, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(11, new CompanionPlaceTorchGoal(this));
+        this.goalSelector.addGoal(12, new CompanionUseShieldGoal(this));
+        this.goalSelector.addGoal(13, new WorkGoal(this, 1.0D));
+        this.goalSelector.addGoal(14, new CompanionUseGunGoal(this, 40, 0.6));
+        this.goalSelector.addGoal(15, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(16, new CompanionVanillaMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(17, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(18, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
+        this.goalSelector.addGoal(19, new CompanionOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(20, new CompanionFreeroamGoal(this, 60, true));
+        this.goalSelector.addGoal(21, new CompanionPickupItemGoal(this));
+        this.goalSelector.addGoal(22, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(23, new LookRandomlyGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
@@ -1909,6 +1936,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             player.getItemInHand(hand).shrink(1);
                         }
                         this.setOathed(true);
+                        if(this.getOathSound()!= null) {
+                            this.playSound(this.getOathSound(), 1.0f, 1.0f);
+                        }
                         return ActionResultType.CONSUME;
                     }
                 }
@@ -1980,6 +2010,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     if (!this.level.isClientSide) {
                         this.openGUI((ServerPlayerEntity) player);
                     }
+                    this.playSound(SoundEvents.ARMOR_EQUIP_CHAIN, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
                     Main.PROXY.setSharedMob(this);
                     return ActionResultType.SUCCESS;
                 }
@@ -2061,6 +2092,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         return super.interactAt(player, vec, hand);
     }
+    @Nullable
+    public SoundEvent getOathSound(){
+        return null;
+    }
 
     public boolean isDoingVerticalInteraction(LivingEntity player, float heightpoint, float distance){
         Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
@@ -2114,6 +2149,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
+    public void setAggressive(boolean value) {
+        if(this.getOwner() != null && this.tickCount - this.lastAggroedTimeStamp>=this.getMinimumAggressiveVoiceInterval()){
+            if(this.getTarget() != null && this.getTarget() != this.getOwner() && this.getAggroedSoundEvent() != null){
+                this.playSound(this.getAggroedSoundEvent(), 1.0f, this.getVoicePitch());
+            }
+        }
+        this.lastAggroedTimeStamp = value? this.tickCount:this.lastAggroedTimeStamp;
+
+        super.setAggressive(value);
+    }
+    protected int getMinimumAggressiveVoiceInterval(){
+        return 600;
+    }
+    @Nullable
+    protected SoundEvent getAggroedSoundEvent(){
+        return null;
+    }
+
+    @Override
     public void tick() {
         super.tick();
         if(this.getHOMEPOS().isPresent()&&this.tickCount%30==0){
@@ -2135,7 +2189,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.navigation = this.swimmingNav;
                 this.moveControl = this.SwimController;
                 this.setSwimming(true);
-            }else {
+            }
+            else if(this.isSailing()){
+                this.navigation = this.sailingNav;
+                this.moveControl = this.MoveController;
+                this.setSwimming(false);
+            }
+            else {
                 this.navigation = this.groundNav;
                 this.moveControl = this.MoveController;
                 this.setSwimming(false);
@@ -2186,14 +2246,21 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected abstract void openGUI(ServerPlayerEntity player);
 
     public void beingpatted(){
-        if(this.getEntityData().get(PAT_ANIMATION_TIME) == 0 || this.entityData.get(MAXPATEFFECTCOUNT) == 0){
-            this.entityData.set(MAXPATEFFECTCOUNT, 5+this.random.nextInt(3));
+        if(this.entityData.get(MAXPATEFFECTCOUNT) == 0){
+            this.entityData.set(MAXPATEFFECTCOUNT, 5+this.random.nextInt(5));
+            if(this.getPatSoundEvent() != null){
+                this.playSound(this.getPatSoundEvent(), 1, this.getVoicePitch() );
+            }
         }
         this.getEntityData().set(PAT_ANIMATION_TIME, 20);
     }
 
     public void startqinteraction(){
         this.getEntityData().set(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 20);
+    }
+    @Nullable
+    public SoundEvent getPatSoundEvent(){
+        return null;
     }
 
     public boolean isGettingHealed(){

@@ -1,9 +1,10 @@
-package com.yor42.projectazure.gameobject.entity.companion.kansen;
+package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -13,6 +14,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -21,6 +23,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKansen {
     public EntityNagato(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -148,6 +151,43 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
         }
         event.getController().markNeedsReload();
         return PlayState.STOP;
+    }
+
+    @Override
+    public SoundEvent getDisappointedAmbientSound() {
+        return registerSounds.NAGATO_TALK_DISAPPOINTED;
+    }
+
+    @Override
+    public SoundEvent getStrangerAmbientSound() {
+        return registerSounds.NAGATO_TALK_STRANGER;
+    }
+
+    @Override
+    public SoundEvent getFriendlyAmbientSound() {
+        return registerSounds.NAGATO_TALK_FRIENDLY;
+    }
+
+    @Override
+    public SoundEvent getLikeAmbientSound() {
+        return registerSounds.NAGATO_TALK_CRUSH;
+    }
+
+    @Override
+    public SoundEvent getLoveAmbientSound() {
+        return registerSounds.NAGATO_TALK_LOVE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.NAGATO_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.NAGATO_TALK_PAT;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

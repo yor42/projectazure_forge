@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
-import com.yor42.projectazure.gameobject.entity.companion.kansen.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

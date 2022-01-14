@@ -290,6 +290,15 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_gear", has(ModTags.Items.GEAR_STEEL))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerItems.CLAYMORE.get(), 1)
+                .define('S', Tags.Items.STORAGE_BLOCKS_IRON)
+                .define('P', registerItems.IRON_PIPE.get())
+                .pattern("PP")
+                .pattern("SS")
+                .pattern("SS")
+                .unlockedBy("has_gear", has(Tags.Items.STORAGE_BLOCKS_IRON))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(registerItems.ORUNDUM.get(), 4)
                 .define('C', ModTags.Items.WIRE_COPPER)
                 .define('P', ModTags.Items.PLATE_STEEL)

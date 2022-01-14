@@ -288,7 +288,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
             double d2 = d0 - entity.getY();
             double d3 = target.getZ() - Shooter.getZ();
             float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
-            entity.shoot(d1, d2 + (double)f, d3, 5.0f, Accuracy);
+            entity.shoot(d1, d2 + (double)f, d3, 10.0f, Accuracy);
         }
         else{
             entity.ShootFromPlayer(Shooter, Shooter.xRot, Shooter.yRot, 0.0f, 5.0F, Accuracy, hand);
