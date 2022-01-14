@@ -35,6 +35,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("plate_steel");
         buildModel("plate_iron");
         buildModel("plate_brass");
+        buildModel("plate_gold");
 
         buildModel("gear_copper");
         buildModel("gear_tin");
@@ -42,6 +43,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("gear_lead");
         buildModel("gear_steel");
         buildModel("gear_iron");
+        buildModel("gear_gold");
 
         buildModel("nugget_copper");
         buildModel("nugget_tin");
@@ -63,6 +65,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("dust_brass");
         buildModel("dust_originium");
         buildModel("dust_quartz");
+        buildModel("dust_gold");
 
         buildModel("crude_oil_bucket");
         buildModel("gasoline_bucket");

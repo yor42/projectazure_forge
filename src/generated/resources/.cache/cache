@@ -41,6 +41,7 @@ ca0cd6050baf691a1f371aedb980a92997603aa5 assets/projectazure/models/item/dust_al
 db9e7a21b3b5aaaa536a35353dc875c201696161 assets/projectazure/models/item/dust_bronze.json
 0b10049449e4de8ec5f6919ac21b8caf243fbce3 assets/projectazure/models/item/dust_coal.json
 5a7f6660075e3d8a397c7bc4d1fe3fe343cf4f00 assets/projectazure/models/item/dust_copper.json
+cd00f473ea581c0da06d7ea959260b1d6a0a0b1a assets/projectazure/models/item/dust_gold.json
 0c463cbea115c24c7fe96167bc2163bde76cf110 assets/projectazure/models/item/dust_iron.json
 bec9a5c70c56e4d54628b83219f6f3cb85a69dbb assets/projectazure/models/item/dust_lead.json
 c66185f542d523a23c08ad022d559b5cabfb6a30 assets/projectazure/models/item/dust_originium.json
@@ -53,6 +54,7 @@ e971815bea6a6e28c3f57bcabd5262427692fb21 assets/projectazure/models/item/energy_
 0daa506678d95c2377385ab1397fec59925a365b assets/projectazure/models/item/gasoline_bucket.json
 2b4989d584a6061c6039583f8e50bcb89c22363c assets/projectazure/models/item/gear_bronze.json
 6bf383173568f6e765cd20fef33b9e1943266512 assets/projectazure/models/item/gear_copper.json
+dd0fa8b0396b42a8371f5af69b338a7f1c722c72 assets/projectazure/models/item/gear_gold.json
 9840ab15b5705187fff43918023c56973b900c81 assets/projectazure/models/item/gear_iron.json
 3727897c820ff845a35252810c44a595876551ce assets/projectazure/models/item/gear_lead.json
 b49e75c5d087c986e4404dedb9afb10ad2e126e2 assets/projectazure/models/item/gear_steel.json
@@ -99,6 +101,7 @@ f292bc6aba8222a6d11d7888896fd2b97f4e30d1 assets/projectazure/models/item/plate_a
 b010492115d8279135f5956ceb6d2cd9113638ce assets/projectazure/models/item/plate_brass.json
 fd9a55f184080384e3b07417c4a003ba95fdfccd assets/projectazure/models/item/plate_bronze.json
 1852088464827f08910441d8bd9495f5131b44e7 assets/projectazure/models/item/plate_copper.json
+0dfbb360f2ea0e0e856b7376540f5c8d18df05bf assets/projectazure/models/item/plate_gold.json
 3d78fe3c47bc46b5a586e0187a6ab74e8fc04d69 assets/projectazure/models/item/plate_iron.json
 0d3b8f84dc5575b22dbbe59f5cd9c9a543158a0f assets/projectazure/models/item/plate_lead.json
 bf00eec39acd5da0e7441c9f485f71527a8ae6e1 assets/projectazure/models/item/plate_steel.json
