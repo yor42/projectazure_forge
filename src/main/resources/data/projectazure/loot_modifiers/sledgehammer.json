@@ -1,0 +1,11 @@
+{
+  "type": "projectazure:sledgehammer",
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "tag": "forge:sledgehammer"
+      }
+    }
+  ]
+}

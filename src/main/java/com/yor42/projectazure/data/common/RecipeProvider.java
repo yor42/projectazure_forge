@@ -622,7 +622,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         createHammerRecipes(consumer, ModTags.Items.ORES_LEAD, registerItems.DUST_LEAD.get(), 2, "lead");
         createHammerRecipes(consumer, ModTags.Items.ORES_TIN, registerItems.DUST_TIN.get(), 2, "tin");
         createHammerRecipes(consumer, ModTags.Items.ORES_ZINC, registerItems.DUST_ZINC.get(), 2, "zinc");
-        createHammerRecipes(consumer, Blocks.IRON_ORE, Blocks.COBBLESTONE, "iron");
+        createHammerRecipes(consumer, Tags.Items.ORES_IRON, registerItems.DUST_IRON.get(), 2, "iron");
         createHammerRecipes(consumer, Tags.Items.ORES_COAL, registerItems.DUST_COAL.get(), 2, "coal");
         createHammerRecipes(consumer, Tags.Items.ORES_GOLD, registerItems.DUST_GOLD.get(), 2, "gold");
     }

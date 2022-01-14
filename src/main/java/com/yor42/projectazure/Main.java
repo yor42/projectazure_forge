@@ -15,6 +15,7 @@ import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
 import com.yor42.projectazure.network.proxy.ClientProxy;
 import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
@@ -24,7 +25,10 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
@@ -44,6 +48,7 @@ import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
 
+import javax.annotation.Nonnull;
 import java.util.stream.Stream;
 
 import static com.yor42.projectazure.libs.Constants.MODID;
@@ -171,6 +176,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
         ClientRegisterManager.registerScreen();
     }
+
 }
 
 /*

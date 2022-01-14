@@ -1,0 +1,13 @@
+{
+  "type": "projectazure:crushing",
+  "results": [
+    {
+      "chance": 1.0,
+      "item": "projectazure:dust_coal",
+      "count": 2
+    }
+  ],
+  "input": {
+    "tag": "forge:ores/coal"
+  }
+}

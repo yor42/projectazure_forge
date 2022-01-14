@@ -279,7 +279,7 @@ public class registerItems {
             .rarity(Rarity.EPIC)
             .stacksTo(1)));
 
-    public static final RegistryObject<Item> SLEDGEHAMMER = registerManager.ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -3.7F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
+    public static final RegistryObject<Item> SLEDGEHAMMER = registerManager.ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = registerManager.ITEMS.register("claymore", ItemClaymore::new);
 
 

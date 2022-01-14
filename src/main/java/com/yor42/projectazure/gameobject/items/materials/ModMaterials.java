@@ -17,7 +17,7 @@ public enum ModMaterials implements IItemTier {
     SHEATH(2, 1256, 5.5F, 5, 8, () -> {
         return Ingredient.of(ModTags.Items.INGOT_TIN);}),
 
-    SLEDGEHAMMER(2, 600, 1F, 1, 3, () -> {
+    SLEDGEHAMMER(2, 600, 0.5F, 1, 3, () -> {
         return Ingredient.of(Tags.Items.INGOTS_IRON);}),
 
     CLAYMORE(2, 5100, 1F, 11, 3, () -> {

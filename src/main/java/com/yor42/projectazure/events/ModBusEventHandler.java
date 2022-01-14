@@ -29,7 +29,7 @@ import java.util.UUID;
 
 import static com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability.CapabilityID;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Constants.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModBusEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -102,8 +102,7 @@ public class ModBusEventHandler {
     @SubscribeEvent
     public static void registerModifierSerializers(@Nonnull final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
         event.getRegistry()
-                .register(new SledgeHammerModifier.Serializer()
-                        .setRegistryName(Constants.MODID, "sledgehammer"));
+                .register(new SledgeHammerModifier.Serializer().setRegistryName(Constants.MODID, "sledgehammer"));
     }
 
     @SubscribeEvent
