@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity;
 
 import com.google.common.collect.ImmutableSet;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.entity.pathfinding.CompanionWalkerNodeProcessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -24,7 +25,7 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
     }
 
     protected PathFinder createPathFinder(int p_179679_1_) {
-        this.nodeEvaluator = new WalkNodeProcessor();
+        this.nodeEvaluator = new CompanionWalkerNodeProcessor();
         this.nodeEvaluator.setCanPassDoors(true);
         this.nodeEvaluator.setCanOpenDoors(true);
         return new PathFinder(this.nodeEvaluator, p_179679_1_);
