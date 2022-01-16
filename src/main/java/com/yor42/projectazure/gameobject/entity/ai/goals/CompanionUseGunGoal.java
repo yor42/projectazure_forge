@@ -4,7 +4,6 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 

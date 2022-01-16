@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.SwordItem;
 import net.minecraft.util.Hand;
 
 import java.util.ArrayList;

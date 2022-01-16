@@ -13,8 +13,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class BasicRefineryBlock extends AbstractMachineBlock {
 
     public BasicRefineryBlock(Properties properties) {

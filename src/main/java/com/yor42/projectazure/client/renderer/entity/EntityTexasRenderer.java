@@ -4,8 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.sworduser.TexasModel;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.ships.EntityEnterprise;
-import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.client.Minecraft;

@@ -10,8 +10,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
 
-import net.minecraft.item.Item.Properties;
-
 public class PAOreBlockItem extends BlockItem {
 
     private final String material;

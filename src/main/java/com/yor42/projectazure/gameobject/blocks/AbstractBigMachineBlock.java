@@ -8,8 +8,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public abstract class AbstractBigMachineBlock extends AbstractElectricMachineBlock{
     public AbstractBigMachineBlock(Properties properties) {
         super(properties);

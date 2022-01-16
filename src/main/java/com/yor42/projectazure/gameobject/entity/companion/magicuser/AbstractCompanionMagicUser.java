@@ -7,8 +7,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
-
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion implements ISpellUser {

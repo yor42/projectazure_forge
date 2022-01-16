@@ -13,8 +13,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class SilliconCrucibleBlock extends AbstractBigMachineBlock {
     public SilliconCrucibleBlock(Properties properties) {
         super(properties);

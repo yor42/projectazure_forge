@@ -16,9 +16,6 @@ import java.util.EnumSet;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 /**
  * Basically fork of Furenzu's work AI but with less intrusion and possibility for world break.
  *

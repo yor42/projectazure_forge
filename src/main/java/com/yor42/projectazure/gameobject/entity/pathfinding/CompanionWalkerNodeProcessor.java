@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.pathfinding;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.pathfinding.WalkNodeProcessor;

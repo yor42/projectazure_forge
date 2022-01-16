@@ -20,7 +20,6 @@ import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.AnimationUtils;
 
-import javax.annotation.Nonnull;
 import java.awt.*;
 
 public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends EntityRenderer<T>

@@ -16,8 +16,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import java.util.EnumSet;
 import java.util.List;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class CompanionRideBoatAlongPlayerGoal extends Goal {
 
     private final AbstractEntityCompanion entity;

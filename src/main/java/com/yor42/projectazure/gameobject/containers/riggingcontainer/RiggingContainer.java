@@ -5,10 +5,10 @@ import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandle
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.containers.slots.slotEquipment;
 import com.yor42.projectazure.gameobject.containers.slots.slotInventory;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentGun;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentTorpedo;
-import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

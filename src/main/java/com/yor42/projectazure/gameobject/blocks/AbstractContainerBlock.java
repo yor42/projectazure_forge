@@ -8,8 +8,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class AbstractContainerBlock extends Block {
     public AbstractContainerBlock(Properties properties) {
         super(properties);

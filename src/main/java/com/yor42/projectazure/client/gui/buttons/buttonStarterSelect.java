@@ -15,8 +15,6 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.gui.widget.button.Button.IPressable;
-
 public class buttonStarterSelect extends ImageButton {
     private final ResourceLocation resourceLocation;
     private final EntityType entityType;

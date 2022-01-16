@@ -25,8 +25,6 @@ import java.util.UUID;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
-import net.minecraft.item.Item.Properties;
-
 public abstract class AbstractItemPlaceableDrone extends ItemDestroyable implements IAnimatable, ICraftingTableReloadable {
     private final int AmmoCount;
     private final int maxFuel;

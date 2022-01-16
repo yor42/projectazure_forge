@@ -16,8 +16,6 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class BoundingBoxBlock extends AbstractContainerBlock{
     public BoundingBoxBlock(Properties properties) {
         super(properties);

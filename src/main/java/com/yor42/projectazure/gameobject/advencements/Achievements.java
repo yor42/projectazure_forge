@@ -3,9 +3,7 @@ package com.yor42.projectazure.gameobject.advencements;
 import com.yor42.projectazure.gameobject.advencements.triggers.NameEntityCriterion;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
-import net.minecraft.advancements.criterion.TameAnimalTrigger;
 import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.function.Consumer;

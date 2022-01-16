@@ -7,8 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-import net.minecraft.entity.projectile.AbstractArrowEntity.PickupStatus;
-
 public class EntityPlasmaArrow extends AbstractArrowEntity {
     protected EntityPlasmaArrow(EntityType<? extends AbstractArrowEntity> type, World worldIn) {
         super(type, worldIn);

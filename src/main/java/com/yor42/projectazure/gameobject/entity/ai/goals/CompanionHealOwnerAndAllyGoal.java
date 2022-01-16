@@ -25,9 +25,6 @@ import java.util.Optional;
 import static net.minecraft.potion.Effects.HEAL;
 import static net.minecraft.potion.Effects.REGENERATION;
 
-//Mostly from Guard Villager by seymourimadeit with minor tweak
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class CompanionHealOwnerAndAllyGoal extends Goal {
 
     private final AbstractEntityCompanion companion;

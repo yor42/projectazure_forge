@@ -8,8 +8,6 @@ import net.minecraft.entity.ai.goal.TargetGoal;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class DroneOwnerAttackedTargetGoal extends TargetGoal {
     private final AbstractEntityDrone Drone;
     private LivingEntity attacker;

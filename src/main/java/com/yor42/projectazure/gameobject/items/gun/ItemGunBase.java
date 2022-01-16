@@ -43,8 +43,6 @@ import java.util.List;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
-import net.minecraft.item.Item.Properties;
-
 public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable,  ICraftingTableReloadable {
 
     private final boolean isSemiAuto;

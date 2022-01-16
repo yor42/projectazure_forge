@@ -18,8 +18,6 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
-import net.minecraft.item.Item.Properties;
-
 public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloadable {
 
     private final enums.AmmoCalibur calibur;

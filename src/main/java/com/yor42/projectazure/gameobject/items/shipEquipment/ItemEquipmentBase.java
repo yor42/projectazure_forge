@@ -22,8 +22,6 @@ import java.util.List;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
-import net.minecraft.item.Item.Properties;
-
 public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnimatable {
 
 

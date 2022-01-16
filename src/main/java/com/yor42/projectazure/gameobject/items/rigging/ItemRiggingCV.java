@@ -13,8 +13,6 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public abstract class ItemRiggingCV extends ItemRiggingBase {
     public ItemRiggingCV(Properties properties, int HP) {
         super(properties, HP);

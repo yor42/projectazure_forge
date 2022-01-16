@@ -22,8 +22,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public abstract class AbstractMachineBlock extends AbstractContainerBlock{
     public AbstractMachineBlock(Properties properties) {
         super(properties);

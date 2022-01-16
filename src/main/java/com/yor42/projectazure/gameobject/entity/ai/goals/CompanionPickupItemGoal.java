@@ -8,8 +8,6 @@ import net.minecraft.entity.item.ItemEntity;
 import java.util.EnumSet;
 import java.util.List;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class CompanionPickupItemGoal extends Goal {
 
     private final AbstractEntityCompanion host;

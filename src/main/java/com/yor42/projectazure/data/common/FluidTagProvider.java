@@ -5,7 +5,6 @@ import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerFluids;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.FluidTagsProvider;
-import net.minecraft.tags.FluidTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;

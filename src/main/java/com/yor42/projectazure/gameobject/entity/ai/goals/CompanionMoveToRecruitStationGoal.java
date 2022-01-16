@@ -8,8 +8,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class CompanionMoveToRecruitStationGoal extends Goal {
 
     private final AbstractEntityCompanion host;

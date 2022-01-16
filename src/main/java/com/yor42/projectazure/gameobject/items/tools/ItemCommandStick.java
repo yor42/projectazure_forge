@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
-import com.yor42.projectazure.client.renderer.items.BBDefaultRiggingRenderer;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,19 +13,14 @@ import net.minecraft.state.properties.BedPart;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
-import java.util.UUID;
 
 import static com.yor42.projectazure.Main.PA_GROUP;
-import static com.yor42.projectazure.Main.PA_WEAPONS;
 
 public class ItemCommandStick extends Item {
     public ItemCommandStick() {

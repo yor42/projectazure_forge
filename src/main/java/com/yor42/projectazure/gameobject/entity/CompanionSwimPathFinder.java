@@ -13,8 +13,6 @@ import net.minecraftforge.common.ForgeMod;
 
 import static net.minecraft.tags.FluidTags.WATER;
 
-import net.minecraft.entity.ai.controller.MovementController.Action;
-
 public class CompanionSwimPathFinder extends MovementController {
 
     AbstractEntityCompanion companion;

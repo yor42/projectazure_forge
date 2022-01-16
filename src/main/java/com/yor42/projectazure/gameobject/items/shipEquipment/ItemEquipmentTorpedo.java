@@ -13,8 +13,6 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
-import net.minecraft.item.Item.Properties;
-
 public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements ICraftingTableReloadable {
 
     protected boolean isreloadable;

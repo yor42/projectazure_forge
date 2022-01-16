@@ -5,6 +5,7 @@ import com.chaosthedude.realistictorches.items.MatchboxItem;
 import com.chaosthedude.realistictorches.items.UnlitTorchItem;
 
  */
+
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.block.Block;
@@ -14,7 +15,6 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
-import net.minecraftforge.fml.ModList;
 
 import java.util.EnumSet;
 

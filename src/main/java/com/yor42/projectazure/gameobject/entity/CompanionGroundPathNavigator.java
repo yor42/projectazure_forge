@@ -1,18 +1,11 @@
 package com.yor42.projectazure.gameobject.entity;
 
-import com.google.common.collect.ImmutableSet;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.pathfinding.CompanionWalkerNodeProcessor;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.pathfinding.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.PathFinder;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.world.World;
-
-import java.util.Iterator;
 
 public class CompanionGroundPathNavigator extends GroundPathNavigator {
 

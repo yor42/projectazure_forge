@@ -22,8 +22,6 @@ import software.bernie.geckolib3.model.provider.GeoModelProvider;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
-import net.minecraft.item.Item.Properties;
-
 public class ItemRiggingBBDefault extends ItemRiggingBase{
     public ItemRiggingBBDefault(Properties properties, int HP) {
         super(properties, HP);

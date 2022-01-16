@@ -3,8 +3,6 @@ package com.yor42.projectazure.gameobject.crafting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.libs.utils.ItemStackWithChance;
-import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -13,10 +11,8 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
@@ -24,14 +20,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * This class is distributed as part of the Ex Nihilo Sequentia Mod.
- * Get the Source Code in github:
- * https://github.com/NovaMachina-Mods/ExNihiloSequentia
- *
- * Ex Nihilo Sequentia is Open Source and distributed under the
- * CC BY-NC-SA 4.0 License: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
- */
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.CRUSHING;
 
 public class CrushingRecipe implements IRecipe<IInventory> {

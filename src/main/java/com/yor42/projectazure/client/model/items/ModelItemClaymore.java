@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.items;
 
 import com.yor42.projectazure.gameobject.items.tools.ItemClaymore;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

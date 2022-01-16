@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 

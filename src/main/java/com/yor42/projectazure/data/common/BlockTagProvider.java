@@ -3,7 +3,6 @@ package com.yor42.projectazure.data.common;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerBlocks;
-import net.minecraft.block.Blocks;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;

@@ -19,14 +19,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
-
-import net.minecraft.item.Item.Properties;
 
 public class ItemContributorBonus extends Item {
     //Item Provided to people who helped development on idea and such containing spawn eggs. this mod has no patreon or any way of financial support.

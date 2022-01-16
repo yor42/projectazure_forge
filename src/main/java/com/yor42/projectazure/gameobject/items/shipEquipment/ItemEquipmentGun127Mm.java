@@ -6,8 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-import net.minecraft.item.Item.Properties;
-
 public class ItemEquipmentGun127Mm extends ItemEquipmentGun{
     public ItemEquipmentGun127Mm(Properties properties, int maxHP) {
         super(properties, maxHP);

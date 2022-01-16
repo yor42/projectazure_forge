@@ -6,7 +6,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.libs.utils.ItemStackWithChance;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.block.Block;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

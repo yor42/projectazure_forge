@@ -6,8 +6,6 @@ import net.minecraft.item.ItemStack;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
 
-import net.minecraft.item.Item.Properties;
-
 public class ItemCraftTool extends Item {
 
     public ItemCraftTool(final int Durability){

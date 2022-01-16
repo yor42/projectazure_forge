@@ -9,9 +9,9 @@ import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingCont
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
-import com.yor42.projectazure.gameobject.entity.companion.ships.*;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
+import com.yor42.projectazure.gameobject.entity.companion.ships.*;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityMudrock;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;

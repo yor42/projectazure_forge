@@ -7,7 +7,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
-import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 public abstract class AbstractSwordUserBase extends AbstractEntityCompanion implements IMeleeAttacker {

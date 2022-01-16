@@ -8,8 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 
-import net.minecraft.item.Item.Properties;
-
 public class ItemBonkBat extends ItemBaseTooltip {
     public ItemBonkBat(Properties properties) {
         super(properties);

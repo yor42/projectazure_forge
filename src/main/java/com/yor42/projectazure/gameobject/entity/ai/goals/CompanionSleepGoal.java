@@ -9,8 +9,6 @@ import net.minecraft.world.World;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class CompanionSleepGoal extends Goal {
 
     private final AbstractEntityCompanion companion;

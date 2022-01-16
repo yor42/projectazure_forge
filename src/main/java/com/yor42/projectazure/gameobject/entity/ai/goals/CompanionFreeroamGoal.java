@@ -12,8 +12,6 @@ import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class CompanionFreeroamGoal extends RandomWalkingGoal {
 
     private final AbstractEntityCompanion entityCompanion;

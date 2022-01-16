@@ -26,8 +26,6 @@ import software.bernie.geckolib3.model.provider.GeoModelProvider;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
-import net.minecraft.item.Item.Properties;
-
 public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable {
 
     public itemRiggingDDDefault(Properties properties, int HP) {

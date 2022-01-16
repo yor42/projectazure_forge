@@ -14,8 +14,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public class ItemBaseTooltip extends Item {
     public ItemBaseTooltip(Properties properties) {
         super(properties);

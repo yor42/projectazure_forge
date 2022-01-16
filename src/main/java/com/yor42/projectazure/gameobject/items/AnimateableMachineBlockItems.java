@@ -22,8 +22,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public class AnimateableMachineBlockItems extends BlockItem implements IAnimatable {
 
     protected final String controllerName = "Controller";

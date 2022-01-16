@@ -1,23 +1,19 @@
 package com.yor42.projectazure.intermod.top;
 
-import com.google.common.base.Enums;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import mcjty.theoneprobe.api.*;
-import net.minecraft.block.BlockState;
+import mcjty.theoneprobe.api.IProbeHitEntityData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.IProbeInfoEntityProvider;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-
-import javax.xml.soap.Text;
-
-import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class EntityInfoProvider implements IProbeInfoEntityProvider {
 

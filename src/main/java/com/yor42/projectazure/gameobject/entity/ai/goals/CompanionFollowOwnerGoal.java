@@ -14,8 +14,6 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.EnumSet;
 
-import net.minecraft.entity.ai.goal.Goal.Flag;
-
 public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
 
     private final AbstractEntityCompanion host;

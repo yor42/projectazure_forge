@@ -9,8 +9,6 @@ import net.minecraft.state.StateContainer;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public abstract class AbstractElectricMachineBlock extends AbstractMachineBlock {
 
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");

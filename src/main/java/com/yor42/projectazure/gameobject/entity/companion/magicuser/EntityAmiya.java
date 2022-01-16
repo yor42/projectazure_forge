@@ -28,7 +28,6 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     public EntityAmiya(EntityType<? extends TameableEntity> type, World worldIn) {

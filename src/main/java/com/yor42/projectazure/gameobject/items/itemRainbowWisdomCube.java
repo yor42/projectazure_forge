@@ -21,8 +21,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.item.Item.Properties;
-
 public class itemRainbowWisdomCube extends Item {
     public itemRainbowWisdomCube(Properties properties) {
         super(properties);

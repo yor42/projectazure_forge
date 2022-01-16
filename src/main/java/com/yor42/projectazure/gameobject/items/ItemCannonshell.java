@@ -3,8 +3,6 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 
-import net.minecraft.item.Item.Properties;
-
 public class ItemCannonshell extends ItemBaseTooltip {
     enums.AmmoCategory ammoCategory;
     private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
