@@ -35,6 +35,9 @@ public final class registerSounds {
     public static final SoundEvent HAMMER_SWING = registerSoundEvent("hammer_swing");
     public static final SoundEvent HAMMER_HIT = registerSoundEvent("hammer_hit");
 
+    public static final SoundEvent TEXAS_SWORD_SWING = registerSoundEvent("sword_swing");
+    public static final SoundEvent TEXAS_SWORD_HIT = registerSoundEvent("sword_hit");
+
     public static final SoundEvent CLAYMORE_IMPACT = registerSoundEvent("claymore_hit");
 
     public static final SoundEvent CHIMERA_PROJECTILE_LAUNCH = registerSoundEvent("chimera_projectile_launch");
@@ -54,6 +57,13 @@ public final class registerSounds {
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION1 = registerSoundEvent("chen_talk_high_affection1");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION2 = registerSoundEvent("chen_talk_high_affection2");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION3 = registerSoundEvent("chen_talk_high_affection3");
+
+    public static final SoundEvent TEXAS_TALK_NORMAL = registerSoundEvent("texas_talk_normal");
+    public static final SoundEvent TEXAS_TALK_PAT = registerSoundEvent("texas_talk_pat");
+    public static final SoundEvent TEXAS_TALK_ATTACK = registerSoundEvent("texas_talk_attack");
+    public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION1 = registerSoundEvent("texas_talk_high_affection1");
+    public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION2 = registerSoundEvent("texas_talk_high_affection2");
+    public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION3 = registerSoundEvent("texas_talk_high_affection3");
 
     public static final SoundEvent MUDROCK_TALK_NORMAL = registerSoundEvent("mudrock_talk_normal");
     public static final SoundEvent MUDROCK_TALK_PAT = registerSoundEvent("mudrock_talk_pat");

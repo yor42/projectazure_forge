@@ -34,6 +34,7 @@ import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -253,6 +254,18 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
     @Override
     public SoundEvent getAffection3AmbientSounds() {
         return registerSounds.MUDROCK_TALK_HIGH_AFFECTION3;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.MUDROCK_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.MUDROCK_TALK_PAT;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

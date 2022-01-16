@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -34,6 +35,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -180,6 +182,16 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
+    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
+        return new ArrayList<>(Collections.singletonList(10));
+    }
+
+    @Override
+    public void playMeleeAttackPreSound() {
+        this.playSound(registerSounds.TEXAS_SWORD_SWING, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
+    }
+
+    @Override
     protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
         AnimationBuilder builder = new AnimationBuilder();
         pAnimationEvent.getController().setAnimation(builder.addAnimation("idle_chest", true));
@@ -254,6 +266,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this): DamageSource.mobAttack(this), damage+3);
         this.AttackCount = 0;
+        this.playSound(registerSounds.TEXAS_SWORD_HIT, 1, 0.8F+(0.4F*this.getRandom().nextFloat()));
     }
 
     @Override
@@ -279,21 +292,33 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public SoundEvent getNormalAmbientSounds() {
-        return null;
+        return registerSounds.TEXAS_TALK_NORMAL;
     }
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return null;
+        return registerSounds.TEXAS_TALK_HIGH_AFFECTION1;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return null;
+        return registerSounds.TEXAS_TALK_HIGH_AFFECTION2;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return null;
+        return registerSounds.TEXAS_TALK_HIGH_AFFECTION3;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.TEXAS_TALK_PAT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.TEXAS_TALK_ATTACK;
     }
 }

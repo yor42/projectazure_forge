@@ -394,6 +394,162 @@
       }
     ]
   },
+  "texas_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice8"
+      }
+    ]
+  },
+  "texas_talk_pat": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/pat/pat1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/pat/pat2"
+      }
+    ]
+  },
+  "texas_talk_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/attack1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/attack2"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/attack3"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/attack4"
+      }
+    ]
+  },
+  "texas_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice8"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/affection1"
+      }
+    ]
+  },
+  "texas_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice8"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/affection1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/affection2"
+      }
+    ]
+  },
+  "texas_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/voice8"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/affection1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/affection2"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/affection3"
+      }
+    ]
+  },
   "mudrock_talk_normal": {
     "sounds": [
       {
@@ -1632,6 +1788,20 @@
     "sounds": [
       {
         "name": "projectazure:entity/akn/chen/hit_heavy"
+      }
+    ]
+  },
+  "sword_swing": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/sword_swing"
+      }
+    ]
+  },
+  "sword_hit": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/sword_hit"
       }
     ]
   }

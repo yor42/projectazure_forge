@@ -30,6 +30,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknOp {
 
@@ -194,10 +195,6 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
         return enums.CompanionRarity.STAR_6;
     }
 
-    /*
-    WIP.
-     */
-
     @Override
     public int getInitialSpellDelay() {
         return 20;
@@ -266,5 +263,17 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     @Override
     public SoundEvent getAffection3AmbientSounds() {
         return registerSounds.ROSMONTIS_TALK_HIGH_AFFECTION3;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.ROSMONTIS_TALK_PAT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.ROSMONTIS_TALK_ATTACK;
     }
 }

@@ -35,6 +35,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -62,6 +63,18 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         list.add(8);
         list.add(24);
         return list;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.CHEN_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.CHEN_TALK_PAT;
     }
 
     public ArrayList<Item> getTalentedWeaponList(){
