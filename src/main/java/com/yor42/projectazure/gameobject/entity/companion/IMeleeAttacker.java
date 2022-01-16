@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
+import net.minecraft.util.Hand;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,10 @@ public interface IMeleeAttacker {
     ArrayList<Item> getTalentedWeaponList();
 
     boolean hasMeleeItem();
+
+    default Hand getNonVanillaMeleeAttackHand(){
+        return Hand.MAIN_HAND;
+    }
 
     float getAttackRange(boolean isUsingTalentedWeapon);
 

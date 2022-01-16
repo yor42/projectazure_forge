@@ -273,12 +273,12 @@ public class registerItems {
 
     public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> FLEXABLE_SWORD_THINGY = registerManager.ITEMS.register("flexsword", () -> new ModSwordItem(ModMaterials.FLEXABLESWORD, 1, -1.0F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> COMPOUNDBOW = registerManager.ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));
     public static final RegistryObject<Item> BONKBAT = registerManager.ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
             .tab(PA_WEAPONS)
             .rarity(Rarity.EPIC)
             .stacksTo(1)));
-
     public static final RegistryObject<Item> SLEDGEHAMMER = registerManager.ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = registerManager.ITEMS.register("claymore", ItemClaymore::new);
 
@@ -354,6 +354,9 @@ public class registerItems {
             .tab(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SHIROKO, new Item.Properties()
+            .tab(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWN_TEXAS = registerManager.ITEMS.register("spawntexas", () -> new ItemKansenSpawnEgg(ENTITYTYPE_TEXAS, new Item.Properties()
             .tab(PA_SHIPS)));
 
     public static final RegistryObject<Item> BANDAGE_ROLL = registerManager.ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()

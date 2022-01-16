@@ -2,8 +2,8 @@
 	"credit": "yor42",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "projectazure:item/originium sword",
-		"particle": "projectazure:item/originium sword"
+		"0": "projectazure:item/flexsword",
+		"particle": "projectazure:item/flexsword"
 	},
 	"elements": [
 		{

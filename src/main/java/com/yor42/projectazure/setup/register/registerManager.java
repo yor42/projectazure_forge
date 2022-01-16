@@ -14,6 +14,7 @@ import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityMudrock;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;
 import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
@@ -130,6 +131,9 @@ public class registerManager {
 
     public static final EntityType<EntityTalulah> ENTITYTYPE_TALULAH = EntityType.Builder.of(EntityTalulah::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitytalulah").toString());
     public static final RegistryObject<EntityType<EntityTalulah>> TALULAH = ENTITIES.register("entitytalulah", () -> ENTITYTYPE_TALULAH);
+
+    public static final EntityType<EntityTexas> ENTITYTYPE_TEXAS = EntityType.Builder.of(EntityTexas::new, EntityClassification.CREATURE).sized(0.572F, 1.61F).build(ModResourceLocation("entitytexas").toString());
+    public static final RegistryObject<EntityType<EntityTexas>> TEXAS = ENTITIES.register("entitytexas", () -> ENTITYTYPE_TEXAS);
 
 
     //projectile

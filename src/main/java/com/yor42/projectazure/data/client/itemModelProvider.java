@@ -155,6 +155,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelAKN("spawnamiya");
         buildModelAKN("spawnmudrock");
         buildModelRUN("spawntalulah");
+        buildModelAKN("spawntexas");
 
         buildModelBA("spawnshiroko");
         buildSimpleBlockModel("reenforced_concrete");

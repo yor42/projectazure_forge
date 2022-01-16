@@ -74,6 +74,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue ChenAttackDamage;
         public final ForgeConfigSpec.DoubleValue ChenMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue TexasHealth;
+        public final ForgeConfigSpec.DoubleValue TexasSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue TexasAttackDamage;
+        public final ForgeConfigSpec.DoubleValue TexasMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue AmiyaHealth;
         public final ForgeConfigSpec.DoubleValue AmiyaSwimSpeed;
         public final ForgeConfigSpec.DoubleValue AmiyaAttackDamage;
@@ -206,6 +211,12 @@ public class PAConfig {
             ChenSwimSpeed = builder.defineInRange("Swim Speed of Ch'en", 2.5, 0, 1024);
             ChenAttackDamage = builder.defineInRange("Attack Damage of Ch'en", 2.0F, 0, 1024);
             ChenMovementSpeed = builder.defineInRange("Movement speed of Ch'en", 0.4F, 0, 2);
+
+            TexasHealth = builder.defineInRange("Max Health of Texas", 20D, 1, 1024);
+            TexasSwimSpeed = builder.defineInRange("Swim Speed of Texas", 2.5, 0, 1024);
+            TexasAttackDamage = builder.defineInRange("Attack Damage of Texas", 2.0F, 0, 1024);
+            TexasMovementSpeed = builder.defineInRange("Movement speed of Texas", 0.4F, 0, 2);
+
 
             AmiyaHealth = builder.defineInRange("Max Health of Amiya", 20D, 1, 1024);
             AmiyaSwimSpeed = builder.defineInRange("Swim Speed of Amiya", 2.5, 0, 1024);

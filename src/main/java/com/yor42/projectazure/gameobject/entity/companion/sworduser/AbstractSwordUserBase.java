@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 public abstract class AbstractSwordUserBase extends AbstractEntityCompanion implements IMeleeAttacker {
@@ -16,9 +17,10 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
     }
 
     public boolean hasMeleeItem(){
-        Item item = this.getMainHandItem().getItem();
+        Item item = this.getItemInHand(this.getNonVanillaMeleeAttackHand()).getItem();
         return this.getTalentedWeaponList().contains(item) || item instanceof SwordItem;
     }
+
     public boolean shouldUseNonVanillaAttack(LivingEntity target){
         return this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null;
     }
@@ -31,7 +33,4 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
         this.setMeleeAttackDelay((int) (this.getInitialMeleeAttackDelay() *this.getAttackSpeedModifier(this.isUsingTalentedWeapon())));
         this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
-
-    public abstract float getAttackSpeedModifier(boolean isUsingTalentedWeapon);
-
 }

@@ -156,6 +156,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TALULAH.get(), EntityTalulahRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.AMIYA.get(), EntityAmiyaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.M4A1.get(), EntityM4A1Renderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.TEXAS.get(), EntityTexasRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerManager.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
