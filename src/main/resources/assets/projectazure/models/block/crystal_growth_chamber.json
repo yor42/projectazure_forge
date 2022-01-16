@@ -3,7 +3,7 @@
 	"texture_size": [128, 128],
 	"textures": {
 		"0": "projectazure:block/crystalgrowthchamber",
-		"particle": "projectazure:block/crystalgrowthchamber"
+		"particle": "projectazure:block/machine_frame"
 	},
 	"elements": [
 		{
