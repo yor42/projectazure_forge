@@ -232,6 +232,10 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     public void registerRollEntry() {
         addEntry(registerManager.ENTITYTYPE_CHEN);
         addEntry(registerManager.ENTITYTYPE_AMIYA);
+        addEntry(registerManager.ENTITYTYPE_ROSMONTIS);
+        addEntry(registerManager.ENTITYTYPE_MUDROCK);
+        addEntry(registerManager.ENTITYTYPE_TEXAS);
+        addEntry(registerManager.ENTITYTYPE_M4A1);
         addEntry(registerManager.ENTITYTYPE_SHIROKO);
         if(PAConfig.CONFIG.shouldRecruitBeaconSpawnAllCompanions.get()){
             addEntry(registerManager.ENTITYTYPE_ENTERPRISE);

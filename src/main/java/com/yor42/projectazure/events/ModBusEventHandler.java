@@ -48,8 +48,10 @@ public class ModBusEventHandler {
                 PlayerEntity player = event.getPlayer();
                 UUID yorUUID = UUID.fromString("d45160dc-ae0b-4f7c-b44a-b535a48182d2");
                 UUID AoichiID = UUID.fromString("d189319f-ee53-4e80-9472-7c5e4711642e");
-                boolean isDev = player.getUUID().equals(yorUUID);
-                boolean isAoichi = player.getUUID().equals(AoichiID) || player.getDisplayName().getString().equals("Dev");
+                UUID NecromID = UUID.fromString("23b61d99-fbe4-4202-a6e6-3d467a08f3ba");
+                boolean isDev = player.getUUID().equals(yorUUID) || player.getDisplayName().getString().equals("Dev");
+                boolean isAoichi = player.getUUID().equals(AoichiID);
+                boolean isNecrom = player.getUUID().equals(NecromID);
 
                 ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
                 CompoundNBT nbt = cubeStack.getOrCreateTag();
@@ -69,10 +71,13 @@ public class ModBusEventHandler {
                     stacks.add(registerItems.SPAWM_JAVELIN.get());
                     stacks.add(registerItems.SPAWN_TALULAH.get());
                     stacks.add(registerItems.SPAWN_M4A1.get());
+                    stacks.add(registerItems.SPAWN_TEXAS.get());
                 }
                 else if(isAoichi){
                     stacks.add(registerItems.SPAWN_MUDROCK.get());
                     stacks.add(registerItems.SPAWN_ROSMONTIS.get());
+                }else if(isNecrom){
+                    stacks.add(registerItems.SPAWN_AMIYA.get());
                 }
 
                 if(!stacks.isEmpty()){
