@@ -89,6 +89,10 @@ public class EntityShiroko extends EntityGunUserBase {
             }
             return PlayState.CONTINUE;
         }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
         else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
@@ -163,7 +167,12 @@ public class EntityShiroko extends EntityGunUserBase {
         }
 
         if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_start").addAnimation("animation.shiroko.sit", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_start").addAnimation("animation.shiroko.sit", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.swim_leg", true));

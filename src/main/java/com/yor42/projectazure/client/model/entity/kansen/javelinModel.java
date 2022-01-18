@@ -2,6 +2,7 @@ package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityJavelin;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -128,7 +129,17 @@ public class javelinModel extends AnimatedGeoModel<EntityJavelin> {
                 head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
                 head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
             }
+        }
 
+        if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
+            body.setPositionY(body.getPositionY() - 58);
+            body.setPositionZ(body.getPositionZ() + 10);
+
+            if(entity.getOwner().isCrouching()){
+                body.setPositionZ(body.getPositionZ() + 2);
+                body.setPositionY(body.getPositionY() + 2);
+                body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
+            }
         }
     }
 }

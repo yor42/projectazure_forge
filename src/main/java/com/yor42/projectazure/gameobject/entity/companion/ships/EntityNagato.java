@@ -77,6 +77,10 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
         else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
@@ -130,7 +134,12 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit_start").addAnimation("sit", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_start").addAnimation("sit", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));

@@ -1973,6 +1973,73 @@
 					}
 				}
 			}
+		},
+		"carry_leg": {
+			"loop": true,
+			"bones": {
+				"RightLeg": {
+					"rotation": {
+						"vector": [-68.49762, 21.07593, 8.0634]
+					}
+				},
+				"RightLowerLeg": {
+					"rotation": {
+						"vector": [52.5, 0, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [-68.49762, -21.07593, -8.0634]
+					}
+				},
+				"LeftLowerLeg": {
+					"rotation": {
+						"vector": [50, 0, 0]
+					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": [7.5, 0, 10]
+					}
+				},
+				"waist": {
+					"rotation": {
+						"vector": [-15, 0, 0]
+					}
+				}
+			}
+		},
+		"carry_arm": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"vector": [-84.981, 4.98093, 0.43688]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -62.5]
+					},
+					"position": {
+						"vector": [1, -3, 0]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-84.981, -4.98093, -0.43688]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 62.5]
+					},
+					"position": {
+						"vector": [-1, -3, 0]
+					}
+				}
+			}
 		}
 	}
 }

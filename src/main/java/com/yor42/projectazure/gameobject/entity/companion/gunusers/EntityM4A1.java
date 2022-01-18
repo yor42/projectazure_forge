@@ -91,6 +91,10 @@ public class EntityM4A1 extends EntityGunUserBase{
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
         }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
         else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
@@ -120,7 +124,12 @@ public class EntityM4A1 extends EntityGunUserBase{
             }
             else{
                 if(this.isOrderedToSit() || this.getVehicle() != null){
-                    event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+                    if(this.getVehicle() == this.getOwner()){
+                        event.getController().setAnimation(builder.addAnimation("carry_leg"));
+                    }
+                    else {
+                        event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+                    }
                     return PlayState.CONTINUE;
                 }
                 if(this.getMainHandItem().getItem() instanceof ItemGunBase){
@@ -156,7 +165,12 @@ public class EntityM4A1 extends EntityGunUserBase{
         }
 
         if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));

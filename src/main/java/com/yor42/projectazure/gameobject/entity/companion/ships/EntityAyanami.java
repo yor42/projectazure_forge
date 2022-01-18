@@ -70,6 +70,10 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             }
             return PlayState.CONTINUE;
         }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
         else if(this.isReloadingMainHand()){
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             return PlayState.CONTINUE;
@@ -120,7 +124,12 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_leg", true));

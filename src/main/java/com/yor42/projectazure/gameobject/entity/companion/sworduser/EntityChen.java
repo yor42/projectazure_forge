@@ -123,7 +123,12 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit_leg_start").addAnimation("sit_leg", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_leg_start").addAnimation("sit_leg", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
@@ -156,7 +161,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isOrderedToSit()){
+        if(this.isOrderedToSit() && this.getVehicle() == null){
             event.getController().setAnimation(builder.addAnimation("sit_tail_start").addAnimation("sit_tail", true));
         }
         else if(this.isBeingPatted()){
@@ -198,8 +203,21 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
         }
+        else if(this.isEating()){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+            }
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+            }
 
-        if(this.isOpeningDoor()){
+            return PlayState.CONTINUE;
+        }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOpeningDoor()){
             if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("opendoorL", false));
             }
@@ -236,7 +254,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isMoving()) {
+        else if(this.isMoving() && this.getVehicle() == null) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }
@@ -245,6 +263,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
+
         else{
             if(this.getMainHandItem().getItem() instanceof ItemGunBase){
                 if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){

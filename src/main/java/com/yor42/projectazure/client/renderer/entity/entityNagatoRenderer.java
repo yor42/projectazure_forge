@@ -23,6 +23,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class entityNagatoRenderer extends GeoEntityRenderer<EntityNagato> {
 
@@ -55,7 +56,7 @@ public class entityNagatoRenderer extends GeoEntityRenderer<EntityNagato> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityNagato entity) {
-        return ModResourceLocation("animations/entity/kansen/nagato.animation.json");
+        return TextureEntityLocation("modelnagato");
     }
 
     @Override

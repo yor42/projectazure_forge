@@ -68,6 +68,20 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             event.getController().setAnimation(builder.addAnimation("rangedattack_arm", true));
             return PlayState.CONTINUE;
         }
+        else if(this.isEating()){
+            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+            }
+            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+            }
+
+            return PlayState.CONTINUE;
+        }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
         else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
@@ -145,7 +159,12 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));

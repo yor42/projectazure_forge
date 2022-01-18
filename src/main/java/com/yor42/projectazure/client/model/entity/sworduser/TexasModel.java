@@ -2,6 +2,8 @@ package com.yor42.projectazure.client.model.entity.sworduser;
 
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.solarapocalypse.utils.MathUtils;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -151,8 +153,14 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
         }
 
         if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
-            body.setPositionY(body.getPositionY() - 54);
+            body.setPositionY(body.getPositionY() - 63);
             body.setPositionZ(body.getPositionZ() + 10);
+
+            if(entity.getOwner().isCrouching()){
+                body.setPositionZ(body.getPositionZ() + 2);
+                body.setPositionY(body.getPositionY() + 2);
+                body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
+            }
         }
     }
 }

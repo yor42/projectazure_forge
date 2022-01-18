@@ -331,7 +331,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected int patTimer, shieldCoolDown, qinteractionTimer;
+    protected int patTimer, shieldCoolDown, qinteractionTimer, talkinterval;
     public boolean isClimbingUp = false;
     private int ItemSwapIndexOffhand = -1;
     private int ItemSwapIndexMainHand = -1;
@@ -899,7 +899,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public double getMyRidingOffset() {
-        return 0.3D;
+        if(this.getVehicle() instanceof PlayerEntity){
+            return 0.45D;
+        }
+        else {
+            return 0.3D;
+        }
     }
 
     @Override
@@ -2231,7 +2236,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public int getAmbientSoundInterval() {
-        return 3000;
+        return 3000+this.getRandom().nextInt(1000);
     }
 
     @Override

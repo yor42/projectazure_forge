@@ -2236,6 +2236,73 @@
 					}
 				}
 			}
+		},
+		"carry_leg": {
+			"loop": true,
+			"bones": {
+				"RightLeg": {
+					"rotation": {
+						"vector": [-68.49762, -21.07593, -8.0634]
+					}
+				},
+				"RightLowerLeg": {
+					"rotation": {
+						"vector": [52.5, 0, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [-68.49762, 21.07593, 8.0634]
+					}
+				},
+				"LeftLowerLeg": {
+					"rotation": {
+						"vector": [50, 0, 0]
+					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": [12.54437, 0.02701, -0.10201]
+					}
+				},
+				"waist": {
+					"rotation": {
+						"vector": [-15, 0, 0]
+					}
+				}
+			}
+		},
+		"carry_arm": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"vector": [-85, 0, 0]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -57.5]
+					},
+					"position": {
+						"vector": [0, -1, 0]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-85, 0, 0]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 57.5]
+					},
+					"position": {
+						"vector": [0, -1, 0]
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

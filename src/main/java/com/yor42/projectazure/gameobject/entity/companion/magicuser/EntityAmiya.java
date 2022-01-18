@@ -69,6 +69,10 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
             return PlayState.CONTINUE;
         }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
         else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", true));
 
@@ -150,7 +154,12 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
         }
 
         if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
+            }
             return PlayState.CONTINUE;
         }
         else if(this.isUsingSpell()){

@@ -58,7 +58,12 @@ public class EntityZ23 extends EntityKansenDestroyer implements IAzurLaneKansen 
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
-            event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+            }
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
@@ -130,7 +135,12 @@ public class EntityZ23 extends EntityKansenDestroyer implements IAzurLaneKansen 
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));

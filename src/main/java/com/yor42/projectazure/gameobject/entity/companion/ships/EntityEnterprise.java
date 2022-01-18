@@ -46,7 +46,12 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("animation.enterprise.sit_start").addAnimation("animation.enterprise.sit", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.sit_start").addAnimation("animation.enterprise.sit", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.enterprise.swim_leg", true));
@@ -108,6 +113,10 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
             else
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
             return PlayState.CONTINUE;
         }
         else if(this.isReloadingMainHand()){
