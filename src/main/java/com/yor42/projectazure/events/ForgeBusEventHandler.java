@@ -3,12 +3,18 @@ package com.yor42.projectazure.events;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.crafting.CrushingRecipe;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.registerRecipes;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,6 +23,8 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static sun.audio.AudioPlayer.player;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeBusEventHandler {
@@ -35,6 +43,20 @@ public class ForgeBusEventHandler {
             if(cap.getMainHandFireDelay()>0){
                 cap.setMainHandFireDelay(cap.getMainHandFireDelay()-1);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event){
+        PlayerEntity player = event.getPlayer();
+        List<Entity> passengers = player.getPassengers();
+        if(!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY){
+            for(Entity entity:passengers){
+                if(entity instanceof AbstractEntityCompanion){
+                    entity.stopRiding();
+                }
+            }
+            event.setCanceled(true);
         }
     }
 

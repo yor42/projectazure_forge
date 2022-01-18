@@ -34,6 +34,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
+import net.minecraft.client.audio.RidingMinecartTickableSound;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -43,8 +44,10 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -266,6 +269,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
     };
+
+    @Override
+    public boolean startRiding(@Nonnull Entity p_184205_1_, boolean p_184205_2_) {
+        if (!super.startRiding(p_184205_1_, p_184205_2_)) {
+            return false;
+        } else {
+            if (p_184205_1_ instanceof BoatEntity) {
+                this.yRotO = p_184205_1_.yRot;
+                this.yRot = p_184205_1_.yRot;
+            }
+
+            return true;
+        }
+    }
 
     protected final ItemStackHandler Inventory = new ItemStackHandler(12+this.getSkillItemCount()){
         @Override
@@ -881,8 +898,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public double getMyRidingOffset() {
+        return 0.3D;
+    }
 
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if(source.getEntity() == this.getVehicle()) {
+            return false;
+        }
         if(source.getEntity() instanceof TameableEntity && this.getOwner() != null && ((TameableEntity) source.getEntity()).isOwnedBy(this.getOwner())){
             return false;
         }
@@ -1387,6 +1411,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         } else if (newWarningCount >= 3 && this.getSensing().canSee(this.getOwner())) {
                             this.addAffection(-2F);
                             this.setTarget(this.getOwner());
+                            if(this.isOrderedToSit()){
+                                this.setOrderedToSit(false);
+                            }
                             this.getEntityData().set(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 0);
                             this.getEntityData().set(ANGRYTIMER, 6000);
                             this.entityData.set(INTERACTION_WARNING_COUNT,0);
@@ -1768,7 +1795,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(20, new CompanionOpenDoorGoal(this, true));
         this.goalSelector.addGoal(21, new CompanionFreeroamGoal(this, 60, true));
         this.goalSelector.addGoal(22, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(23, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(23, new CompanionLookplayerGoal(this));
         this.goalSelector.addGoal(24, new LookRandomlyGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
@@ -1913,6 +1940,24 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.getEntityData().get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0;
     }
 
+    @Override
+    public void rideTick() {
+        super.rideTick();
+        if(this.getOwner() != null && this.getVehicle() != null && this.getVehicle() == this.getOwner()){
+            LivingEntity player = (LivingEntity) this.getVehicle();
+            this.yRot = player.yBodyRot;
+            this.clampRotation(this);
+        }
+    }
+
+    protected void clampRotation(Entity p_184454_1_) {
+        p_184454_1_.setYBodyRot(this.yRot);
+        float f = MathHelper.wrapDegrees(p_184454_1_.yRot - this.yRot);
+        float f1 = MathHelper.clamp(f, -105.0F, 105.0F);
+        p_184454_1_.yRotO += f1 - f;
+        p_184454_1_.yRot += f1 - f;
+        p_184454_1_.setYHeadRot(p_184454_1_.yRot);
+    }
 
     @Nonnull
     @Override
@@ -2047,14 +2092,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     return ActionResultType.CONSUME;
                 }
             } else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
-                if(player.isShiftKeyDown()) {
-                    if (!this.level.isClientSide) {
-                        this.openGUI((ServerPlayerEntity) player);
-                    }
-                    this.playSound(SoundEvents.ARMOR_EQUIP_CHAIN, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
-                    Main.PROXY.setSharedMob(this);
-                    return ActionResultType.SUCCESS;
-                }
 
                 BlockStateUtil.RelativeDirection interactionDirection;
                 float entityHitAngle = (float) ((Math.atan2(player.getZ() - getZ(), player.getX() - getX()) * (180 / Math.PI) - 90) % 360);
@@ -2116,9 +2153,22 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         return ActionResultType.SUCCESS;
                     }
                     else if (this.isDoingVerticalInteraction(player, 0.2F, -1)) {
-                        this.SwitchSittingStatus();
+                        if(player.isShiftKeyDown() && player.getPassengers().isEmpty()) {
+                            this.startRiding(player, true);
+                        }
+                        else {
+                            this.SwitchSittingStatus();
+                        }
                         return ActionResultType.SUCCESS;
                         //this.setOrderedToSit(!this.isSitting());
+                    }
+                    else if(player.isShiftKeyDown()) {
+                        if (!this.level.isClientSide) {
+                            this.openGUI((ServerPlayerEntity) player);
+                        }
+                        this.playSound(SoundEvents.ARMOR_EQUIP_CHAIN, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
+                        Main.PROXY.setSharedMob(this);
+                        return ActionResultType.SUCCESS;
                     }
                 }
             }

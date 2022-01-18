@@ -58,6 +58,9 @@ public class EntityInteractionPacket {
                             break;
                         case QUESTIONABLE:
                             ((AbstractEntityCompanion) entity).startqinteraction();
+                            break;
+                        case STOP_RIDING:
+                            entity.stopRiding();
                         case HEAL:
 
                     }
@@ -73,6 +76,7 @@ public class EntityInteractionPacket {
         PAT,
         HEAL,
         ITEMPICKUP,
-        QUESTIONABLE
+        QUESTIONABLE,
+        STOP_RIDING
     }
 }

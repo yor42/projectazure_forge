@@ -149,5 +149,10 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
                 head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
             }
         }
+
+        if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
+            body.setPositionY(body.getPositionY() - 54);
+            body.setPositionZ(body.getPositionZ() + 10);
+        }
     }
 }

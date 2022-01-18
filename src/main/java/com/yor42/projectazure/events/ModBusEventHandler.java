@@ -3,10 +3,12 @@ package com.yor42.projectazure.events;
 import com.google.common.base.Throwables;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +24,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability.CapabilityID;
@@ -96,9 +99,52 @@ public class ModBusEventHandler {
 
                 data.putBoolean("PRJA:gotStarterCube", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+
+                if(data.contains("carrying_companion")){
+                    ListNBT list = data.getList("carrying_companion", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+                    for(int i = 0; i<list.size(); i++){
+                        CompoundNBT compound = list.getCompound(i);
+                        Optional<Entity> entity = EntityType.create(compound, player.level);
+                        entity.ifPresent((ent)->{
+                            if(ent instanceof AbstractEntityCompanion){
+                                player.level.addFreshEntity(ent);
+                                if(ent.startRiding(player, true)){
+                                    Main.LOGGER.debug("Successfully loaded entity");
+                                }
+                            }
+                        });
+                    }
+                    data.remove("carrying_companion");
+                }
             }
+
         }
 
+    }
+
+    @SubscribeEvent
+    public void PlayerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (!event.getPlayer().level.isClientSide) {
+            PlayerEntity player = event.getPlayer();
+            CompoundNBT playerData = event.getPlayer().getPersistentData();
+            if(!player.getPassengers().isEmpty()){
+                ListNBT listnbt1 = new ListNBT();
+
+                for(Entity entity : player.getPassengers()) {
+                    if(entity instanceof AbstractEntityCompanion) {
+                        CompoundNBT compoundnbt = new CompoundNBT();
+                        if (entity.saveAsPassenger(compoundnbt)) {
+                            listnbt1.add(compoundnbt);
+                        }
+                    }
+                }
+
+                if (!listnbt1.isEmpty()) {
+                    playerData.put("carrying_companion", listnbt1);
+                }
+
+            }
+        }
     }
 
     @SubscribeEvent

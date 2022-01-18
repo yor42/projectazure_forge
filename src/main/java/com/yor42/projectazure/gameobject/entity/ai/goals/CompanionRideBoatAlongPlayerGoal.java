@@ -76,9 +76,6 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
     public void stop() {
         this.boat = null;
         this.sameBoatWithOwner = false;
-        this.entity.stopRiding();
-        this.entity.setPathfindingMalus(PathNodeType.WATER, -1.0F);
-        this.entity.setPathfindingMalus(PathNodeType.WALKABLE, 0F);
         super.stop();
     }
 

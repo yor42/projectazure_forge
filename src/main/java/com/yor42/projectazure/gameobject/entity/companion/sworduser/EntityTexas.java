@@ -57,7 +57,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     private <T extends IAnimatable> PlayState predicate_tail(AnimationEvent<T> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+        if(this.isOrderedToSit() || (this.getVehicle() != null && this.getVehicle() != this.getOwner())){
             event.getController().setAnimation(builder.addAnimation("sit_tail").addAnimation("sit_tail_idle"));
             return PlayState.CONTINUE;
         }
@@ -107,6 +107,10 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
 
+            return PlayState.CONTINUE;
+        }
+        else if(this.getVehicle() == this.getOwner()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
@@ -159,7 +163,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
-        else if (isMoving()) {
+        else if (isMoving()&& this.getVehicle() == null) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }
@@ -208,7 +212,13 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
+
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
+            }
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {
@@ -216,7 +226,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
 
-        if (isMoving()) {
+        if (isMoving() && this.getVehicle() == null) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_leg", true));
             }

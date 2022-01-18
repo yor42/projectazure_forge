@@ -137,6 +137,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("disc_rickroll");
 
         buildModel("bandage_roll");
+        buildModel("medkit");
 
         buildModel("5.56_magazine");
 
