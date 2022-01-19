@@ -160,7 +160,6 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
         if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
             body.setPositionY(body.getPositionY() - 60);
             body.setPositionZ(body.getPositionZ() + 10);
-
             if(entity.getOwner().isCrouching()){
                 body.setPositionZ(body.getPositionZ() + 2);
                 body.setPositionY(body.getPositionY() + 2);

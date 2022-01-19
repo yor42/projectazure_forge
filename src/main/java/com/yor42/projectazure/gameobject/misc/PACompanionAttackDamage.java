@@ -13,16 +13,16 @@ import java.util.Random;
 
 public class PACompanionAttackDamage extends DamageSource {
     @Nullable
-    protected final AbstractEntityCompanion damageSourceEntity;
+    protected final LivingEntity damageSourceEntity;
     private final int MessageCounts;
-    public PACompanionAttackDamage(String damageTypeIn, AbstractEntityCompanion source, int messagecount) {
+    public PACompanionAttackDamage(String damageTypeIn, LivingEntity source, int messagecount) {
         super(damageTypeIn);
         this.damageSourceEntity = source;
         this.MessageCounts = messagecount;
     }
 
     @Nullable
-    public AbstractEntityCompanion getEntity() {
+    public LivingEntity getEntity() {
         return this.damageSourceEntity;
     }
 

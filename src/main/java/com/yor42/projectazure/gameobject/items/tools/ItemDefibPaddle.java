@@ -1,0 +1,88 @@
+package com.yor42.projectazure.gameobject.items.tools;
+
+import com.yor42.projectazure.client.renderer.items.ItemDefibPaddleRenderer;
+import com.yor42.projectazure.gameobject.misc.DamageSources;
+import com.yor42.projectazure.setup.register.registerSounds;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import javax.annotation.Nonnull;
+
+import java.util.Random;
+
+import static com.yor42.projectazure.Main.PA_WEAPONS;
+import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.util.Hand.OFF_HAND;
+import static sun.audio.AudioPlayer.player;
+
+public class ItemDefibPaddle extends Item implements IAnimatable {
+    private final Random random = new Random();
+    public AnimationFactory factory = new AnimationFactory(this);
+    public String controllerName = "paddle_controller";
+
+    public ItemDefibPaddle() {
+        super(new Properties().tab(PA_WEAPONS).setISTER(()->ItemDefibPaddleRenderer::new).stacksTo(1));
+    }
+
+    @Nonnull
+    @Override
+    public ActionResultType interactLivingEntity(@Nonnull ItemStack p_111207_1_, @Nonnull PlayerEntity p_111207_2_, @Nonnull LivingEntity p_111207_3_, @Nonnull Hand p_111207_4_) {
+        return super.interactLivingEntity(p_111207_1_, p_111207_2_, p_111207_3_, p_111207_4_);
+    }
+
+    public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+    }
+
+    @Nonnull
+    @Override
+    public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity entity, @Nonnull Hand hand) {
+        Hand oppositehand = hand == MAIN_HAND? Hand.OFF_HAND: MAIN_HAND;
+        if(entity.getItemInHand(oppositehand).getItem() instanceof ItemDefibPaddle) {
+            if (entity.isCrouching()) {
+                ItemStack ChargerStack = ItemStack.EMPTY;
+                for (int i = 0; i < entity.inventory.getContainerSize(); i++) {
+                    ItemStack stack = entity.inventory.getItem(i);
+                    Item item = stack.getItem();
+                    if (item instanceof ItemDefibCharger && ItemDefibCharger.isOn(stack) && ItemDefibCharger.getChargeProgress(stack)<100) {
+                        if (stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(100, true) == 100).orElse(false)) {
+                            ChargerStack = stack;
+                            break;
+                        }
+                    }
+                }
+
+                if (!ChargerStack.isEmpty() && !ItemDefibCharger.ShouldCharging(ChargerStack)) {
+                    ItemDefibCharger.setCharging(ChargerStack, true);
+                    entity.playSound(registerSounds.DEFIB_CHARGING, 1.0f, 1.0f);
+                }
+            }
+        }
+
+        return super.use(world, entity, hand);
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
+}

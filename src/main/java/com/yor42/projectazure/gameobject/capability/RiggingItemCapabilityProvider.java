@@ -50,7 +50,6 @@ public class RiggingItemCapabilityProvider implements ICapabilityProvider {
         } else if (cap == CapabilityMultiInventory.MULTI_INVENTORY_CAPABILITY) {
             return multiInventory.cast();
         }
-
         return LazyOptional.empty();
     }
 }

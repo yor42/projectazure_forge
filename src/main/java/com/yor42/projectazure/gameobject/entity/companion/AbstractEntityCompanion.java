@@ -2171,7 +2171,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         if (!this.level.isClientSide) {
                             this.openGUI((ServerPlayerEntity) player);
                         }
-                        this.playSound(SoundEvents.ARMOR_EQUIP_CHAIN, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
+                        this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
                         Main.PROXY.setSharedMob(this);
                         return ActionResultType.SUCCESS;
                     }

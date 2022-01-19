@@ -42,6 +42,13 @@ public final class registerSounds {
     public static final SoundEvent CHIMERA_PROJECTILE_LAUNCH = registerSoundEvent("chimera_projectile_launch");
     public static final SoundEvent CHIMERA_PROJECTILE_HIT = registerSoundEvent("chimera_projectile_impact");
 
+    public static final SoundEvent DEFIB_NOBATTERY = registerSoundEvent("defib_nobattery");
+    public static final SoundEvent DEFIB_POWERON = registerSoundEvent("defib_poweron");
+    public static final SoundEvent DEFIB_POWEROFF = registerSoundEvent("defib_poweroff");
+    public static final SoundEvent DEFIB_CHARGING = registerSoundEvent("defib_charging");
+    public static final SoundEvent DEFIB_READY = registerSoundEvent("defib_ready");
+    public static final SoundEvent DEFIB_SHOCK = registerSoundEvent("defib_shock");
+
     //*jumps off cliff*
     public static final SoundEvent CHIMERA_TALK_NORMAL = registerSoundEvent("chimera_talk_normal");
     public static final SoundEvent CHIMERA_TALK_PAT = registerSoundEvent("chimera_talk_pat");

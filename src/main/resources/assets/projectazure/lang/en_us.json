@@ -149,6 +149,7 @@
   "item.tooltip.remainingammo" : "Remaining Ammo",
   "item.tooltip.remainingfuel" : "Remaining Fuel",
   "item.tooltip.hanger_slot_usage": "Hanger Usage",
+  "item.tooltip.energystored": "Energy Stored: %s",
 
   "item.projectazure.ammo_generic": "Generic Shell",
 

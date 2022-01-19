@@ -4,13 +4,21 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.crafting.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
+import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
+import com.yor42.projectazure.gameobject.misc.DamageSources;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerRecipes;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.util.Hand;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -24,6 +32,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.util.Hand.OFF_HAND;
 import static sun.audio.AudioPlayer.player;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -57,6 +67,41 @@ public class ForgeBusEventHandler {
                 }
             }
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void OnplayerRightClickedEntity(PlayerInteractEvent.EntityInteract event){
+        PlayerEntity player = event.getPlayer();
+        Hand hand = event.getHand();
+        ItemStack stack = player.getItemInHand(hand);
+        Hand OtherHand = hand == MAIN_HAND?Hand.OFF_HAND:MAIN_HAND;
+        ItemStack otherHandStack = player.getItemInHand(OtherHand);
+        Entity target = event.getTarget();
+
+        if(target instanceof LivingEntity){
+            if(stack.getItem() instanceof ItemDefibPaddle && otherHandStack.getItem() instanceof ItemDefibPaddle){
+                if(hand == OFF_HAND){
+                    event.setCanceled(true);
+                    return;
+                }
+                ItemStack ChargerStack = ItemStack.EMPTY;
+                for (int i = 0; i < player.inventory.getContainerSize(); i++) {
+                    ItemStack invstack = player.inventory.getItem(i);
+                    Item item = invstack.getItem();
+                    if (item instanceof ItemDefibCharger && ItemDefibCharger.isOn(invstack) && ItemDefibCharger.getChargeProgress(invstack)==100) {
+                        ChargerStack = invstack;
+                        break;
+                    }
+
+                }
+                if(!ChargerStack.isEmpty()){
+                    ItemDefibCharger.setChargeProgress(ChargerStack, 0);
+                    target.hurt(DamageSources.causeDefibDamage(player), 20);
+                    player.playSound(registerSounds.DEFIB_SHOCK, 0.8F+(0.4F+ MathUtil.getRand().nextFloat()), 0.8F+(0.4F+MathUtil.getRand().nextFloat()));
+                    event.setCanceled(true);
+                }
+            }
         }
     }
 

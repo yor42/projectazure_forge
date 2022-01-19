@@ -6,20 +6,20 @@ import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IndirectEntityDamageSource;
 
 import javax.annotation.Nullable;
 
 public class DamageSources {
-    public static final DamageSource DAMAGE_CANNON = new DamageSource("canon_shot_generic").setProjectile().bypassMagic();
+    public static final DamageSource DAMAGE_CANNON = new DamageSource("canon_shot_generic").setProjectile().bypassMagic().bypassInvul();
 
     public static final DamageSource SHIP_FIRE = new DamageSource("ship_fire").setIsFire();
-    public static final DamageSource TORPEDO = new DamageSource("torpedo").setExplosion();
+    public static final DamageSource TORPEDO = new DamageSource("torpedo").setExplosion().bypassInvul();
 
     public static final DamageSource ARTS = new DamageSourcesWithRandomMessages("arts", 5).setMagic().bypassArmor().setProjectile();
 
-    public static final DamageSource Revenge = new DamageSourcesWithRandomMessages("revenge", 5);
 
     public static final DamageSource ACUTE_ORIPATHY = new DamageSourcesWithRandomMessages("ate_originium_prime", 5).bypassArmor().bypassMagic();
 
@@ -28,11 +28,15 @@ public class DamageSources {
     public static final DamageSource CLAYMORE = new DamageSourcesWithRandomMessages("claymore", 3).bypassArmor();
 
     public static DamageSource causeGunDamage(EntityProjectileBullet bullet, @Nullable Entity indirectEntityIn) {
-        return (new IndirectEntityDamageSource("gun_bullet", bullet, indirectEntityIn)).setProjectile();
+        return (new IndirectEntityDamageSource("gun_bullet", bullet, indirectEntityIn)).setProjectile().bypassInvul();
     }
 
     public static DamageSource causeRevengeDamage(AbstractEntityCompanion companion) {
         return (new PACompanionAttackDamage("revenge", companion, 5));
+    }
+
+    public static DamageSource causeDefibDamage(PlayerEntity player) {
+        return (new PACompanionAttackDamage("revenge", player, 5).bypassArmor().bypassInvul());
     }
 
     public static DamageSource causeArtsFireDamage(AbstractEntityCompanion companion) {

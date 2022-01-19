@@ -363,6 +363,9 @@ public class registerItems {
             .tab(PA_GROUP)));
     public static final RegistryObject<Item> MEDKIT = registerManager.ITEMS.register("medkit", ItemMedKit::new);
 
+    public static final RegistryObject<Item> DEFIB_PADDLE = registerManager.ITEMS.register("defib_paddle", ItemDefibPaddle::new);
+    public static final RegistryObject<Item> DEFIB_CHARGER = registerManager.ITEMS.register("defib_charger", ItemDefibCharger::new);
+
     public static final RegistryObject<Item> DEVELOPER_BONUS = registerManager.ITEMS.register("developer_bonus", () -> new ItemContributorBonus(new Item.Properties()));
     public static final RegistryObject<Item> CONTRIBUTOR_BONUS = registerManager.ITEMS.register("contributor_bonus", () -> new ItemContributorBonus(new Item.Properties()));
 

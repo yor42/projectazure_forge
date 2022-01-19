@@ -1804,5 +1804,47 @@
         "name": "projectazure:entity/akn/texas/sword_hit"
       }
     ]
+  },
+  "defib_nobattery": {
+    "sounds": [
+      {
+        "name": "projectazure:item/defib_nobattery"
+      }
+    ]
+  },
+  "defib_poweron": {
+    "sounds": [
+      {
+        "name": "projectazure:item/defib_poweron"
+      }
+    ]
+  },
+  "defib_poweroff": {
+    "sounds": [
+      {
+        "name": "projectazure:item/defib_poweroff"
+      }
+    ]
+  },
+  "defib_charging": {
+    "sounds": [
+      {
+        "name": "projectazure:item/defib_charging"
+      }
+    ]
+  },
+  "defib_ready": {
+    "sounds": [
+      {
+        "name": "projectazure:item/defib_ready"
+      }
+    ]
+  },
+  "defib_shock": {
+    "sounds": [
+      {
+        "name": "projectazure:item/defib_shock"
+      }
+    ]
   }
 }
