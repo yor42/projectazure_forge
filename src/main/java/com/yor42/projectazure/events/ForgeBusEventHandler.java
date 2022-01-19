@@ -19,6 +19,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.Hand;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -27,11 +29,17 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle.controllerName;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static sun.audio.AudioPlayer.player;
@@ -78,9 +86,21 @@ public class ForgeBusEventHandler {
         Hand OtherHand = hand == MAIN_HAND?Hand.OFF_HAND:MAIN_HAND;
         ItemStack otherHandStack = player.getItemInHand(OtherHand);
         Entity target = event.getTarget();
+        World world = event.getWorld();
 
         if(target instanceof LivingEntity){
             if(stack.getItem() instanceof ItemDefibPaddle && otherHandStack.getItem() instanceof ItemDefibPaddle){
+
+                if(!world.isClientSide()){
+                    for(ItemStack itemstack : new ItemStack[]{stack, otherHandStack}) {
+                        ItemDefibPaddle item = (ItemDefibPaddle) itemstack.getItem();
+                        final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) world);
+                        final AnimationController controller = GeckoLibUtil.getControllerForID(item.factory, id, ItemDefibPaddle.controllerName);
+                        controller.markNeedsReload();
+                        controller.setAnimation(new AnimationBuilder().addAnimation("shock"));
+                    }
+                }
+
                 if(hand == OFF_HAND){
                     event.setCanceled(true);
                     return;

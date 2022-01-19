@@ -19,6 +19,6 @@ public class ModelDefibPaddle extends AnimatedGeoModel<ItemDefibPaddle> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(ItemDefibPaddle animatable) {
-        return ModResourceLocation("animations/item/defib.animation.json");
+        return ModResourceLocation("animations/item/defib_paddle.animation.json");
     }
 }

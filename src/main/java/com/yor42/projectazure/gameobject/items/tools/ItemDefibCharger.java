@@ -43,7 +43,7 @@ import static com.yor42.projectazure.setup.register.registerSounds.*;
 public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     private static final int ANIM_ON = 0;
     private static final int ANIM_OFF = 1;
-    public String controllerName = "defibcharger_controller";
+    public static final String controllerName = "defibcharger_controller";
     public AnimationFactory factory = new AnimationFactory(this);
     public ItemDefibCharger() {
         super(new Item.Properties().tab(PA_WEAPONS).stacksTo(1).setISTER(()->ItemDefibChargerRenderer::new));

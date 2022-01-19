@@ -19,6 +19,8 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.network.ISyncable;
 
 import javax.annotation.Nonnull;
 
@@ -29,13 +31,14 @@ import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static sun.audio.AudioPlayer.player;
 
-public class ItemDefibPaddle extends Item implements IAnimatable {
-    private final Random random = new Random();
+public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
+    public static final int ANIM_SHOCK = 0;
     public AnimationFactory factory = new AnimationFactory(this);
-    public String controllerName = "paddle_controller";
+    public static final String controllerName = "paddle_controller";
 
     public ItemDefibPaddle() {
         super(new Properties().tab(PA_WEAPONS).setISTER(()->ItemDefibPaddleRenderer::new).stacksTo(1));
+        GeckoLibNetwork.registerSyncable(this);
     }
 
     @Nonnull
@@ -51,6 +54,11 @@ public class ItemDefibPaddle extends Item implements IAnimatable {
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+    }
+
+    @Override
+    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+        return false;
     }
 
     @Nonnull
@@ -84,5 +92,10 @@ public class ItemDefibPaddle extends Item implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
+    }
+
+    @Override
+    public void onAnimationSync(int id, int state) {
+
     }
 }
