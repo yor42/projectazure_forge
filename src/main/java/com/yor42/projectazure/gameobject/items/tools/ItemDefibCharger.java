@@ -113,6 +113,10 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                     int charge = Math.max(0, getChargeProgress(stack)-10);
                     if (charge <= 0) {
                         setCharging(stack, false);
+                        if(p_77663_3_ instanceof PlayerEntity) {
+                            PlayerEntity player = (PlayerEntity) p_77663_3_;
+                            player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargefailed_nobattery").withStyle(TextFormatting.RED), true);
+                        }
                     }
                     setChargeProgress(stack, charge);
                 }
@@ -135,6 +139,15 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                         setOn(stack, false);
                     }
                 }
+            }
+        }
+        if(p_77663_3_ instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) p_77663_3_;
+            if (ShouldCharging(stack)) {
+                int charge = (int) (((float) getChargeProgress(stack) / 100) * 100);
+                player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargeprogress", charge + "%").withStyle(TextFormatting.AQUA), true);
+            } else if (getChargeProgress(stack) == 100) {
+                player.displayClientMessage(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN), true);
             }
         }
 
@@ -190,6 +203,14 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                     }
                 }
             }
+        }
+
+        if(ShouldCharging(stack)){
+            int charge = (int) (((float)getChargeProgress(stack)/100)*100);
+            player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargeprogress", charge+"%").withStyle(TextFormatting.AQUA), true);
+        }
+        else if(getChargeProgress(stack) == 100){
+            player.displayClientMessage(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN), true);
         }
 
         if(!world.isClientSide()) {
@@ -257,9 +278,15 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
 
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldin, @Nonnull List<ITextComponent> tooltips, @Nonnull ITooltipFlag tooltipadvanced) {
-
+        tooltips.add(new TranslationTextComponent(this.getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
         stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((cap)->tooltips.add(new TranslationTextComponent("item.tooltip.energystored", cap.getEnergyStored()+"/"+cap.getMaxEnergyStored()).withStyle(TextFormatting.GRAY)));
-
+        if(ShouldCharging(stack)){
+            int charge = (int) (((float)getChargeProgress(stack)/100)*100);
+            tooltips.add(new TranslationTextComponent("item.tooltip.energystored", charge+"%").withStyle(TextFormatting.AQUA));
+        }
+        else if(getChargeProgress(stack) == 100){
+            tooltips.add(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN));
+        }
         super.appendHoverText(stack, worldin, tooltips, tooltipadvanced);
     }
 

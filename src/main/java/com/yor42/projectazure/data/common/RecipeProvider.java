@@ -622,6 +622,41 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         createHammerRecipes(consumer, Tags.Items.ORES_IRON, registerItems.DUST_IRON.get(), 2, "iron");
         createHammerRecipes(consumer, Tags.Items.ORES_COAL, registerItems.DUST_COAL.get(), 2, "coal");
         createHammerRecipes(consumer, Tags.Items.ORES_GOLD, registerItems.DUST_GOLD.get(), 2, "gold");
+
+        ShapedRecipeBuilder.shaped(registerItems.DEFIB_PADDLE.get(), 1)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('B', Items.STONE_BUTTON)
+                .define('P', registerItems.PLATE_POLYMER.get())
+                .define('C', registerItems.COPPER_COIL.get())
+                .define('H', registerItems.PRIMITIVE_CIRCUIT.get())
+                .pattern("BPP")
+                .pattern("PCH")
+                .pattern("III")
+                .unlockedBy("has_part", has(registerItems.PRIMITIVE_CIRCUIT.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.DEFIB_CHARGER.get(), 1)
+                .define('W', registerItems.COPPER_COIL.get())
+                .define('C', registerItems.CAPACITOR_PRIMITIVE.get())
+                .define('P', Items.REDSTONE_LAMP)
+                .define('I', registerItems.ADVANCED_CIRCUIT.get())
+                .define('B', registerItems.HEADHUNTING_PCB.get())
+                .define('R', registerItems.RESISTOR_PRIMITIVE.get())
+                .pattern("WPW")
+                .pattern("RBR")
+                .pattern("CIC")
+                .unlockedBy("has_paddle", has(registerItems.DEFIB_PADDLE.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.MOLD_EXTRACTION.get(), 1)
+                .define('N', Tags.Items.NUGGETS_IRON)
+                .define('P', ModTags.Items.PLATE_IRON)
+                .define('M', registerItems.MOLD_PLATE.get())
+                .pattern("PNP")
+                .pattern("PMP")
+                .pattern("NPN")
+                .unlockedBy("has_part", has(ModTags.Items.PLATE_IRON))
+                .save(consumer);
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {

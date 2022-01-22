@@ -88,6 +88,11 @@
   "item.projectazure.claymore.tooltip": "Gigantic claymore made out of steel alloy. it looks near impossible to wield.",
   "item.projectazure.sledgehammer": "Sledgehammer",
 
+  "item.projectazure.defib_paddle": "Defibrillator Paddle",
+  "item.projectazure.defib_paddle.tooltip": "Handheld paddle that somehow magically revives fallen companion no matter the cause.\nrequires 2 paddle and 1 charger to work.",
+  "item.projectazure.defib_paddle.tooltip.nocharger": "Error: Missing Charger!",
+  "item.projectazure.defib_charger": "Defibrillator Charger",
+  "item.projectazure.defib_charger.tooltip": "Device with battery and capacitor. used for conducting electrical shock to fallen companion's heart.",
 
   "item.projectazure.abydos550": "WHITE FANG 465",
 
@@ -150,7 +155,9 @@
   "item.tooltip.remainingfuel" : "Remaining Fuel",
   "item.tooltip.hanger_slot_usage": "Hanger Usage",
   "item.tooltip.energystored": "Energy Stored: %s",
-
+  "item.tooltip.chargeprogress": "Charge Progress: %s",
+  "item.tooltip.chargefailed_nobattery": "Charge FAILED: No Battery!",
+  "item.tooltip.ready": "READY!",
   "item.projectazure.ammo_generic": "Generic Shell",
 
   "block.projectazure.recruit_beacon": "Recruit Beacon",

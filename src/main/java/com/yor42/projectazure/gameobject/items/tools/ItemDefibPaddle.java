@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.items.tools;
 import com.yor42.projectazure.client.renderer.items.ItemDefibPaddleRenderer;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerSounds;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -23,7 +27,9 @@ import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import java.util.List;
 import java.util.Random;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
@@ -32,7 +38,6 @@ import static net.minecraft.util.Hand.OFF_HAND;
 import static sun.audio.AudioPlayer.player;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
-    public static final int ANIM_SHOCK = 0;
     public AnimationFactory factory = new AnimationFactory(this);
     public static final String controllerName = "paddle_controller";
 
@@ -78,15 +83,25 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
                         }
                     }
                 }
-
-                if (!ChargerStack.isEmpty() && !ItemDefibCharger.ShouldCharging(ChargerStack)) {
-                    ItemDefibCharger.setCharging(ChargerStack, true);
-                    entity.playSound(registerSounds.DEFIB_CHARGING, 1.0f, 1.0f);
+                if(!ChargerStack.isEmpty()) {
+                    if (!ItemDefibCharger.ShouldCharging(ChargerStack)) {
+                        ItemDefibCharger.setCharging(ChargerStack, true);
+                        entity.playSound(registerSounds.DEFIB_CHARGING, 1.0f, 1.0f);
+                    }
+                }else{
+                    entity.displayClientMessage(new TranslationTextComponent(this.getDescriptionId()+".tooltip.nocharger").withStyle(TextFormatting.RED), true);
                 }
             }
         }
 
         return super.use(world, entity, hand);
+    }
+
+    @Override
+    public void appendHoverText(@Nonnull ItemStack p_77624_1_, @Nullable World p_77624_2_, @Nonnull List<ITextComponent> tooltips, ITooltipFlag p_77624_4_) {
+        super.appendHoverText(p_77624_1_, p_77624_2_, tooltips, p_77624_4_);
+        tooltips.add(new TranslationTextComponent(this.getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
+
     }
 
     @Override
