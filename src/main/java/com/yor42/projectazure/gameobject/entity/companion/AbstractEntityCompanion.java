@@ -18,6 +18,7 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import com.yor42.projectazure.gameobject.items.tools.ItemCommandStick;
+import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.interfaces.IAttributeable;
@@ -61,6 +62,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -83,6 +85,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -97,18 +100,16 @@ import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.yor42.projectazure.libs.utils.BlockStateUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
+import static net.minecraft.particles.ParticleTypes.CRIT;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
-public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable, IAttributeable {
+public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable, IAnimationTickable, IAttributeable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
@@ -369,8 +370,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> LIMITBREAKLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> LEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> ANGRYTIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> INJURYCURETIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Float> AFFECTION = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> SITTING = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> CRITICALLYINJURED = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> USINGBOW = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -413,9 +416,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 return !this.level.getBlockState(p_188555_1_.below()).isAir();
             }
         };
+        this.noCulling = true;
     }
 
-
+    public void setdead(boolean value){
+        this.dead = value;
+    }
 
     public void setOathed(boolean bool){
         this.entityData.set(OATHED, bool);
@@ -483,8 +489,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return  !(this.animationSpeed > -0.1F && this.animationSpeed < 0.1F) && !this.isOrderedToSit();
     }
 
+    @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing) {
         if(capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
             return LazyOptional.of(this::getInventory).cast();
         }
@@ -493,12 +500,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Nullable
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSourceIn) {
         return this.isBlocking()? SoundEvents.SHIELD_BLOCK:super.getHurtSound(damageSourceIn);
     }
 
     @Override
-    protected void hurtArmor(DamageSource damageSource, float damage) {
+    protected void hurtArmor(@Nonnull DamageSource damageSource, float damage) {
         if (damage >= 0.0F) {
             damage = damage / 4.0F;
             if (damage < 1.0F) {
@@ -521,10 +528,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putFloat("affection", this.entityData.get(AFFECTION));
         compound.putInt("patcooldown", this.entityData.get(PATCOOLDOWN));
         compound.putInt("angrytimer", this.entityData.get(ANGRYTIMER));
+        compound.putInt("injury_curetimer", this.entityData.get(INJURYCURETIMER));
         compound.putBoolean("oathed", this.entityData.get(OATHED));
         compound.putBoolean("pickupitem", this.entityData.get(PICKUP_ITEM));
         compound.putFloat("home_distance", this.entityData.get(VALID_HOME_DISTANCE));
         compound.putBoolean("issitting", this.entityData.get(SITTING));
+        compound.putBoolean("isCriticallyInjured", this.entityData.get(CRITICALLYINJURED));
         if(this.entityData.get(STAYPOINT).isPresent()) {
             compound.putDouble("stayX", this.entityData.get(STAYPOINT).get().getX());
             compound.putDouble("stayY", this.entityData.get(STAYPOINT).get().getY());
@@ -569,6 +578,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(PATCOOLDOWN, compound.getInt("patcooldown"));
         this.entityData.set(OATHED, compound.getBoolean("oathed"));
         this.getEntityData().set(NONVANILLAMELEEATTACKDELAY, compound.getInt("attackdelay"));
+        this.getEntityData().set(CRITICALLYINJURED, compound.getBoolean("isCriticallyInjured"));
         this.entityData.set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
         this.setOrderedToSit(compound.getBoolean("isSitting"));
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
@@ -591,6 +601,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(EXP, compound.getFloat("exp"));
         this.entityData.set(MORALE, compound.getFloat("morale"));
         this.entityData.set(ANGRYTIMER, compound.getInt("angrytimer"));
+        this.entityData.set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
         this.entityData.set(SITTING, compound.getBoolean("issitting"));
         this.entityData.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.entityData.set(EATING, compound.getBoolean("eating"));
@@ -652,6 +663,93 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public int getItemSwapIndex(Hand hand){
         return hand == MAIN_HAND? this.getItemSwapIndexMainHand() : this.getItemSwapIndexOffHand();
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        int deathtimethreshold = this.isCriticallyInjured()? 40:24000;
+        if (this.deathTime >= deathtimethreshold) {
+            for(int i = 0; i < 20; ++i) {
+                LivingEntity livingentity = this.getKillCredit();
+                this.dropEquipment();
+                this.createWitherRose(livingentity);
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
+                this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+            }
+        }
+    }
+
+    public void die(@Nonnull DamageSource p_70645_1_) {
+        if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, p_70645_1_)) return;
+        if (!this.removed && !this.dead) {
+            Entity entity = p_70645_1_.getEntity();
+            LivingEntity livingentity = this.getKillCredit();
+            if (this.deathScore >= 0 && livingentity != null) {
+                livingentity.awardKillScore(this, this.deathScore, p_70645_1_);
+            }
+
+            if (this.isSleeping()) {
+                this.stopSleeping();
+            }
+
+            this.getCombatTracker().recheckStatus();
+            if (this.level instanceof ServerWorld) {
+                if (entity != null) {
+                    entity.killed((ServerWorld)this.level, this);
+                }
+            }
+            this.setPose(Pose.STANDING);
+            this.level.broadcastEntityEvent(this, (byte)3);
+        }
+    }
+
+    public void reviveCompanion(){
+        this.revive();
+        this.setHealth(2);
+        this.setCriticallyinjured(true);
+        this.setOrderedToSit(true);
+        this.setPose(Pose.STANDING);
+        this.deathTime = 0;
+    }
+
+    @Override
+    protected void dropAllDeathLoot(DamageSource p_213345_1_) {
+        Entity entity = p_213345_1_.getEntity();
+
+        int i = net.minecraftforge.common.ForgeHooks.getLootingLevel(this, entity, p_213345_1_);
+        this.captureDrops(new java.util.ArrayList<>());
+
+        boolean flag = this.lastHurtByPlayerTime > 0;
+        if (this.shouldDropLoot() && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+            this.dropFromLootTable(p_213345_1_, flag);
+            this.dropCustomDeathLoot(p_213345_1_, i, flag);
+        }
+
+        this.dropExperience();
+
+        Collection<ItemEntity> drops = captureDrops(new java.util.ArrayList<>());
+        if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, p_213345_1_, drops, i, lastHurtByPlayerTime > 0))
+            drops.forEach(e -> level.addFreshEntity(e));
+    }
+
+    @Override
+    protected void dropEquipment() {
+        for(int i=0; i<this.getInventory().getSlots()+this.getSkillItemCount(); i++){
+            ItemStack stack = this.getInventory().getStackInSlot(i);
+            if(!stack.isEmpty()) {
+                this.spawnAtLocation(stack);
+            }
+        };
+
+        for(int i=0; i<this.getAmmoStorage().getSlots(); i++){
+            ItemStack stack = this.getInventory().getStackInSlot(i);
+            if(!stack.isEmpty()) {
+                this.spawnAtLocation(stack);
+            }
+        };
     }
 
     public void setItemswapIndex(Hand hand, int value){
@@ -912,11 +1010,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(source.getEntity() == this.getVehicle()) {
             return false;
         }
-        if(source.getEntity() instanceof TameableEntity && this.getOwner() != null && ((TameableEntity) source.getEntity()).isOwnedBy(this.getOwner())){
+        else if(source.getEntity() instanceof TameableEntity && this.getOwner() != null && ((TameableEntity) source.getEntity()).isOwnedBy(this.getOwner())){
             return false;
         }
-
-        if(source.getEntity() instanceof AbstractEntityDrone && ((AbstractEntityDrone) source.getEntity()).getOwner().isPresent() && (((AbstractEntityDrone) source.getEntity()).getOwner().get() == this ||  (((AbstractEntityDrone) source.getEntity()).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) source.getEntity()).getOwner().get()).isOwnedBy(this.getOwner())))){
+        else if(source.getEntity() instanceof AbstractEntityDrone && ((AbstractEntityDrone) source.getEntity()).getOwner().isPresent() && (((AbstractEntityDrone) source.getEntity()).getOwner().get() == this ||  (((AbstractEntityDrone) source.getEntity()).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) source.getEntity()).getOwner().get()).isOwnedBy(this.getOwner())))){
             return false;
         }
 
@@ -928,14 +1025,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    protected void blockUsingShield(LivingEntity entityIn) {
+    protected void blockUsingShield(@Nonnull LivingEntity entityIn) {
         super.blockUsingShield(entityIn);
         if (entityIn.getMainHandItem().canDisableShield(this.useItem, this, entityIn))
             this.disableShield(true);
     }
 
     @Override
-    public void startUsingItem(Hand hand) {
+    public void startUsingItem(@Nonnull Hand hand) {
         ItemStack itemstack = this.getItemInHand(hand);
         if (itemstack.isShield(this)) {
             ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -1017,6 +1114,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.define(SITTING, false);
         this.entityData.define(OPENINGDOOR, false);
         this.entityData.define(MELEEATTACKING, false);
+        this.entityData.define(CRITICALLYINJURED, false);
         this.entityData.define(MAXPATEFFECTCOUNT, 0);
         this.entityData.define(PATEFFECTCOUNT, 0);
         this.getEntityData().define(NONVANILLAMELEEATTACKDELAY, 0);
@@ -1037,12 +1135,34 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.define(PICKUP_ITEM, false);
         this.entityData.define(FOODLEVEL, 0);
         this.entityData.define(ANGRYTIMER, 0);
+        this.entityData.define(INJURYCURETIMER, -1);
         this.entityData.define(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 0);
         this.entityData.define(INTERACTION_WARNING_COUNT, 0);
         this.entityData.define(SKILL_ITEM_0, ItemStack.EMPTY);
         this.entityData.define(SKILL_ITEM_1, ItemStack.EMPTY);
         this.entityData.define(SKILL_ITEM_2, ItemStack.EMPTY);
         this.entityData.define(SKILL_ITEM_3, ItemStack.EMPTY);
+    }
+
+    public int getInjuryCureTimer(){
+        return this.entityData.get(INJURYCURETIMER);
+    }
+
+    public void setInjurycuretimer(int value){
+        this.entityData.set(INJURYCURETIMER, value);
+    }
+
+    @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.isCriticallyInjured() || this.isSleeping();
+    }
+
+    public boolean isCriticallyInjured(){
+        return this.entityData.get(CRITICALLYINJURED);
+    }
+
+    public void setCriticallyinjured(boolean value){
+        this.entityData.set(CRITICALLYINJURED, value);
     }
 
     public void setOpeningdoor(boolean openingdoor){
@@ -1176,7 +1296,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     protected SoundEvent getAmbientSound() {
 
-        if(this.isAngry()){
+        if(this.isAngry() || this.isSleeping()){
             return null;
         }
 
@@ -1504,10 +1624,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.getEntityData().set(HEAL_TIMER, this.getEntityData().get(HEAL_TIMER)-1);
         }
 
-        if(this.isSleeping()){
-            this.getNavigation().stop();
-        }
-
         if (this.forcewakeupExpireTimer>0){
             this.forcewakeupExpireTimer--;
         }
@@ -1548,12 +1664,34 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.addMorale(0.015);
         }
         else if(!this.isFreeRoaming()&& this.tickCount%20 == 0){
-            this.addMorale(-0.0001);
+            this.addMorale(-0.001);
         }
-        if(!this.level.isClientSide() && this.getCommandSenderWorld().isDay()) {
-            if (this.isSleeping()) {
+
+        if(this.isSleeping()) {
+            this.setDeltaMovement(new Vector3d(0, 0, 0));
+            this.getSleepingPos().ifPresent((pos)->this.setPos((double)pos.getX() + 0.5D, (double)pos.getY() + 0.6875D, (double)pos.getZ() + 0.5D));
+
+            if(this.tickCount %600 ==0){
+                this.heal(1F);
+                this.addAffection(0.1);
+                this.addMorale(2.5F);
+            }
+
+            if(this.isCriticallyInjured()){
+                int curetime = this.getInjuryCureTimer();
+                if(curetime>=0){
+                    curetime++;
+                    if(curetime>=168000){
+                        curetime = -1;
+                        this.stopSleeping();
+                        this.setCriticallyinjured(false);
+                    }
+                    this.setInjurycuretimer(curetime);
+                }
+            }
+            if (!this.level.isClientSide() && this.getCommandSenderWorld().isDay() && !this.isCriticallyInjured()) {
                 this.stopSleeping();
-                if(this.shouldBeSitting){
+                if (this.shouldBeSitting) {
                     this.setOrderedToSit(true);
                 }
             }
@@ -1609,6 +1747,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         else {
             return super.getWalkTargetValue(pos, worldIn);
+        }
+    }
+
+    @Override
+    public void heal(float p_70691_1_) {
+        if(!this.isCriticallyInjured()) {
+            super.heal(p_70691_1_);
         }
     }
 
@@ -1905,6 +2050,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void startSleeping(@Nonnull BlockPos pos) {
         super.startSleeping(pos);
         this.setLastSlept(this.getCommandSenderWorld().getDayTime());
+        this.setDeltaMovement(new Vector3d(0, 0, 0));
     }
 
     public void setLastSlept(long lastSlept) {
@@ -1952,6 +2098,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             LivingEntity player = (LivingEntity) this.getVehicle();
             this.yRot = player.yBodyRot;
             this.clampRotation(this);
+
+            if(this.tickCount%1200 == 0){
+                this.addAffection(0.5F);
+                this.addMorale(5);
+            }
         }
     }
 
@@ -1972,7 +2123,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         Item HeldItem = heldstacks.getItem();
 
         if(this.isOwnedBy(player) && !(this instanceof EntityKansenBase && HeldItem instanceof ItemRiggingBase)) {
-
+            if((this.isDeadOrDying() || this.isCriticallyInjured()) && this.distanceTo(player)<4){
+                if(player.getMainHandItem().getItem() instanceof ItemDefibPaddle || player.getOffhandItem().getItem() instanceof ItemDefibPaddle){
+                    return ActionResultType.PASS;
+                }
+                if(this.isSleeping()){
+                    this.stopSleeping();
+                }
+                this.startRiding(player, true);
+                return ActionResultType.SUCCESS;
+            }
             if (this.getVehicle() != null) {
                 this.stopRiding();
             }
@@ -2415,9 +2575,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     private void CalculateMoraleBasedonTime(long lastSlept, long lastWokenup) {
-
         long deltaTime = lastSlept-lastWokenup;
-
         this.addAffection(0.02*((float)deltaTime/300));
         this.addMorale(((float)deltaTime/1000)*30);
     }
@@ -2505,9 +2663,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setOrderedToSit(boolean val) {
+        //You cant expect someone nearly dead to walk *shrug*
+        if(!val && this.isCriticallyInjured()){
+            return;
+        }
         this.getEntityData().set(SITTING, val);
         super.setOrderedToSit(val);
         this.refreshDimensions();
+    }
+
+    @Override
+    public int tickTimer() {
+        return this.tickCount;
     }
 
     @Nullable

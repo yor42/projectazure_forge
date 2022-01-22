@@ -16,6 +16,11 @@ public class CompanionUseSkillGoal extends Goal {
 
     @Override
     public boolean canUse() {
+
+        if(this.companion.isCriticallyInjured()){
+            return false;
+        }
+
         return this.companion.canUseSkill() && this.companion.getSkillDelayTick() == 0 && !this.isSkillFinished && this.companion.getTarget() != null && this.companion.getTarget().isAlive();
     }
 

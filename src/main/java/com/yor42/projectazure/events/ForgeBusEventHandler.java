@@ -7,22 +7,26 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
+import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -65,13 +69,39 @@ public class ForgeBusEventHandler {
     }
 
     @SubscribeEvent
+    public static void onItemUseFinish(LivingEntityUseItemEvent.Finish event) {
+        LivingEntity entity = event.getEntityLiving();
+        ItemStack stack = event.getResultStack();
+        Item item = stack.getItem();
+        if(entity instanceof AbstractEntityCompanion){
+            if(item.getClass() == PotionItem.class){
+                event.setResultStack(new ItemStack(Items.GLASS_BOTTLE));
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event){
         PlayerEntity player = event.getPlayer();
         List<Entity> passengers = player.getPassengers();
+        World world = event.getWorld();
+        BlockPos pos = event.getPos();
         if(!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY){
             for(Entity entity:passengers){
                 if(entity instanceof AbstractEntityCompanion){
-                    entity.stopRiding();
+                    if((((AbstractEntityCompanion) entity).isCriticallyInjured()||world.isNight()) && world.getBlockState(pos).isBed(world, pos, (LivingEntity) entity)){
+                        entity.stopRiding();
+                        BlockStateUtil.getAvailableBedPos(world, pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
+                        if(((AbstractEntityCompanion) entity).isCriticallyInjured()){
+                            ((AbstractEntityCompanion) entity).setInjurycuretimer(0);
+                        }
+
+                        break;
+                    }
+                    else {
+                        entity.stopRiding();
+
+                    }
                 }
             }
             event.setCanceled(true);
@@ -91,16 +121,6 @@ public class ForgeBusEventHandler {
         if(target instanceof LivingEntity){
             if(stack.getItem() instanceof ItemDefibPaddle && otherHandStack.getItem() instanceof ItemDefibPaddle){
 
-                if(!world.isClientSide()){
-                    for(ItemStack itemstack : new ItemStack[]{stack, otherHandStack}) {
-                        ItemDefibPaddle item = (ItemDefibPaddle) itemstack.getItem();
-                        final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) world);
-                        final AnimationController controller = GeckoLibUtil.getControllerForID(item.factory, id, ItemDefibPaddle.controllerName);
-                        controller.markNeedsReload();
-                        controller.setAnimation(new AnimationBuilder().addAnimation("shock"));
-                    }
-                }
-
                 if(hand == OFF_HAND){
                     event.setCanceled(true);
                     return;
@@ -116,9 +136,26 @@ public class ForgeBusEventHandler {
 
                 }
                 if(!ChargerStack.isEmpty()){
+
+                    if(!world.isClientSide()){
+                        for(ItemStack itemstack : new ItemStack[]{stack, otherHandStack}) {
+                            ItemDefibPaddle item = (ItemDefibPaddle) itemstack.getItem();
+                            final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) world);
+                            final AnimationController controller = GeckoLibUtil.getControllerForID(item.factory, id, ItemDefibPaddle.controllerName);
+                            controller.markNeedsReload();
+                            controller.setAnimation(new AnimationBuilder().addAnimation("shock"));
+                        }
+                    }
+
                     ItemDefibCharger.setChargeProgress(ChargerStack, 0);
-                    target.hurt(DamageSources.causeDefibDamage(player), 20);
                     player.playSound(registerSounds.DEFIB_SHOCK, 0.8F+(0.4F+ MathUtil.getRand().nextFloat()), 0.8F+(0.4F+MathUtil.getRand().nextFloat()));
+                    if(target instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) target).isDeadOrDying() && ((AbstractEntityCompanion) target).isOwnedBy(player)){
+                        ((AbstractEntityCompanion) target).reviveCompanion();
+                        ((AbstractEntityCompanion) target).setOrderedToSit(true);
+                    }
+                    else {
+                        target.hurt(DamageSources.causeDefibDamage(player), 20);
+                    }
                     event.setCanceled(true);
                 }
             }

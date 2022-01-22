@@ -34,6 +34,9 @@ public class CompanionHealandEatFoodGoal extends Goal {
         if(this.FoodCooldown > 0){
             this.FoodCooldown--;
         }
+        if(this.companion.isCriticallyInjured()){
+            return false;
+        }
         int InventoryFood = this.getFoodIndex(true);
         if(this.companion.isEating()){
             return true;

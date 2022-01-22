@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class EntityAmiyaRenderer extends GeoEntityRenderer<EntityAmiya> {
+public class EntityAmiyaRenderer extends GeoCompanionRenderer<EntityAmiya> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;

@@ -12,6 +12,14 @@ public class CompanionOpenDoorGoal extends OpenDoorGoal {
     }
 
     @Override
+    public boolean canUse() {
+        if(this.entityin.isCriticallyInjured()){
+            return false;
+        }
+        return super.canUse();
+    }
+
+    @Override
     public void start() {
         super.start();
         this.entityin.setOpeningdoor(true);

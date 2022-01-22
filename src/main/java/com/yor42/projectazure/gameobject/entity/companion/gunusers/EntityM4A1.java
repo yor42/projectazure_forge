@@ -47,102 +47,107 @@ public class EntityM4A1 extends EntityGunUserBase{
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
+            }
             return PlayState.CONTINUE;
         }
-        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        if (this.isSleeping()) {
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        } else if (this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME) > 0 && !this.isAngry()) {
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isBeingPatted()){
+        else if (this.swinging) {
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND ? "swingR" : "swingL"));
+            return PlayState.CONTINUE;
+        }
+        else if (this.isBeingPatted()) {
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.isGettingHealed()){
+        } else if (this.isGettingHealed()) {
             event.getController().setAnimation(builder.addAnimation("heal", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.isReloadingMainHand()){
+        } else if (this.isReloadingMainHand()) {
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             return PlayState.CONTINUE;
-        }else if(this.isUsingGun()){
+        } else if (this.isUsingGun()) {
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             return PlayState.CONTINUE;
-        }else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+        } else if (this.isOpeningDoor()) {
+            if (this.getItemBySlot(EquipmentSlotType.OFFHAND) == ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY) {
                 event.getController().setAnimation(builder.addAnimation("openDoorL", false));
-            }
-            else{
+            } else {
                 event.getController().setAnimation(builder.addAnimation("openDoorR", false));
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+        else if (this.isEating()) {
+            if (this.getUsedItemHand() == Hand.MAIN_HAND) {
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
-            }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            } else if (this.getUsedItemHand() == Hand.OFF_HAND) {
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
-        }
-        else if(this.isBeingPatted()){
+        } else if (this.isBeingPatted()) {
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.getVehicle() == this.getOwner()){
+        } else if (this.getVehicle() == this.getOwner()) {
             event.getController().setAnimation(builder.addAnimation("carry_arm"));
             return PlayState.CONTINUE;
-        }
-        else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
-            return PlayState.CONTINUE;
-        }else if(this.isGettingHealed()){
+        }else if (this.isGettingHealed()) {
             event.getController().setAnimation(builder.addAnimation("heal_arm", true));
             return PlayState.CONTINUE;
-        }else if(this.isSwimming()) {
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+                }
+            }
+            return PlayState.CONTINUE;
+        }
+        else if (this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
-        }else{
-            if (isMoving()) {
-                if(this.getMainHandItem().getItem() instanceof ItemGunBase){
-                    if (this.isSprinting()) {
-                        event.getController().setAnimation(builder.addAnimation("gun_run_twohanded", true));
-                    } else {
-                        event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
-                    }
-                }
-                else {
-                    if (this.isSprinting()) {
-                        event.getController().setAnimation(builder.addAnimation("run_arm", true));
-                    } else {
-                        event.getController().setAnimation(builder.addAnimation("walk_hand", true));
-                    }
-                }
-                return PlayState.CONTINUE;
-            }
-            else{
-                if(this.isOrderedToSit() || this.getVehicle() != null){
-                    if(this.getVehicle() == this.getOwner()){
-                        event.getController().setAnimation(builder.addAnimation("carry_leg"));
-                    }
-                    else {
-                        event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
-                    }
-                    return PlayState.CONTINUE;
-                }
-                if(this.getMainHandItem().getItem() instanceof ItemGunBase){
-
-                    if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
-                        event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
-                    }else{
-                        event.getController().setAnimation(builder.addAnimation("idle_arm", true));
-                    }
-                    return PlayState.CONTINUE;
-                }
-            }
         }
+        else if (isMoving()) {
+            if (this.getMainHandItem().getItem() instanceof ItemGunBase) {
+                if (this.isSprinting()) {
+                    event.getController().setAnimation(builder.addAnimation("gun_run_twohanded", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+                }
+            } else {
+                if (this.isSprinting()) {
+                    event.getController().setAnimation(builder.addAnimation("run_arm", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("walk_hand", true));
+                }
+            }
+            return PlayState.CONTINUE;
+        }
+
+        if (this.getMainHandItem().getItem() instanceof ItemGunBase) {
+
+            if (((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()) {
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+            } else {
+                event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+            }
+            return PlayState.CONTINUE;
+        }
+
         event.getController().setAnimation(builder.addAnimation("idle_arm", true));
         return PlayState.CONTINUE;
     }
@@ -158,26 +163,36 @@ public class EntityM4A1 extends EntityGunUserBase{
         if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
-
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep", true));
-            return PlayState.CONTINUE;
-        }
-
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+        if(this.isDeadOrDying()){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured", false).addAnimation("sit_injured_idle", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+                }
             }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
         }
-
-        if (isMoving()) {
+        else if (isMoving()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run", true));
             }

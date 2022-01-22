@@ -48,12 +48,24 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone SleepFace = this.getAnimationProcessor().getBone("Sleep");
         IBone Angry = this.getAnimationProcessor().getBone("Angry");
+        IBone faint = this.getAnimationProcessor().getBone("faint");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
 
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
-        if(entity.isAngry()){
+        if(entity.isDeadOrDying() || entity.isCriticallyInjured()){
+            faint.setHidden(false);
+            NormalFace.setHidden(true);
+            PatFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            SleepFace.setHidden(true);
+            PoutFace.setHidden(true);
+            Angry.setHidden(true);
+        }
+        else if(entity.isAngry()){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -63,6 +75,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
             Angry.setHidden(false);
         }
         else if(entity.getAngerWarningCount() == 2){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -73,6 +86,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
             Angry.setHidden(true);
         }
         else if(entity.isinQinteraction()){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -83,17 +97,19 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
             Angry.setHidden(true);
         }
         else if(entity.isBeingPatted()){
-            if(entity.isOrderedToSit()){
-                    NormalFace.setHidden(true);
-                    PatFace.setHidden(true);
-                    EyeclosedFace.setHidden(true);
-                    PoutFace.setHidden(true);
-                    Flustered.setHidden(false);
-                    ExcitedFace.setHidden(true);
-                    SleepFace.setHidden(true);
-                    Angry.setHidden(true);
+            if(entity.isOrderedToSit()) {
+                faint.setHidden(true);
+                NormalFace.setHidden(true);
+                PatFace.setHidden(true);
+                EyeclosedFace.setHidden(true);
+                PoutFace.setHidden(true);
+                Flustered.setHidden(false);
+                ExcitedFace.setHidden(true);
+                SleepFace.setHidden(true);
+                Angry.setHidden(true);
             }
             else {
+                faint.setHidden(true);
                 NormalFace.setHidden(true);
                 PatFace.setHidden(false);
                 EyeclosedFace.setHidden(true);
@@ -105,6 +121,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
             }
         }
         else if(entity.isSleeping()){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -114,14 +131,23 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
             SleepFace.setHidden(false);
             Angry.setHidden(true);
             body.setPositionY(-20);
-            body.setPositionZ(-10);
         }
         else {
             if(this.LastBlinkTime == 0){
                 this.LastBlinkTime = System.currentTimeMillis();
+                faint.setHidden(true);
+                NormalFace.setHidden(false);
+                PatFace.setHidden(true);
+                EyeclosedFace.setHidden(true);
+                PoutFace.setHidden(true);
+                Flustered.setHidden(true);
+                ExcitedFace.setHidden(true);
+                Angry.setHidden(true);
+                SleepFace.setHidden(true);
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
                 if(EyeclosedFace.isHidden()){
+                    faint.setHidden(true);
                     NormalFace.setHidden(true);
                     PatFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
@@ -133,6 +159,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
+                    faint.setHidden(true);
                     NormalFace.setHidden(false);
                     PatFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
@@ -163,6 +190,10 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
                 body.setPositionY(body.getPositionY() + 2);
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
+        }
+        else if(entity.isSleeping()){
+            body.setPositionY(-23);
+            body.setPositionZ(-5);
         }
     }
 }

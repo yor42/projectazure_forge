@@ -35,6 +35,10 @@ abstract class MoveEntityForWorkGoal extends Goal {
     public boolean canUse()
     {
 
+        if(this.host.isCriticallyInjured()){
+            return false;
+        }
+
         if(this.UpdateTimer == 0){
             this.UpdateTimer = 10;
             this.UpdateBlockList();

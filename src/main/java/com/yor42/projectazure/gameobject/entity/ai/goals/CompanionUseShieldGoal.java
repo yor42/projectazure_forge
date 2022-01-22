@@ -24,6 +24,11 @@ public class CompanionUseShieldGoal extends Goal {
 
     @Override
     public boolean canUse() {
+
+        if(this.companion.isCriticallyInjured()){
+            return false;
+        }
+
         return companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion) && raiseShield() && companion.getShieldCoolDown() == 0;
     }
 

@@ -1,6 +1,17 @@
 package com.yor42.projectazure.libs.utils;
 
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.state.properties.BedPart;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldReader;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class BlockStateUtil {
     public static RelativeDirection getRelativeDirection(Direction direction, Direction MachineFacings) {
@@ -103,6 +114,33 @@ public class BlockStateUtil {
             }
         }
         return RelativeDirection.FRONT;
+    }
+
+    @Nonnull
+    public static Optional<BlockPos> getBedHeadPos(@Nonnull IWorldReader world, @Nonnull BlockPos Bedpos, @Nullable LivingEntity sleeper){
+        BlockState state = world.getBlockState(Bedpos);
+        if(state.isBed(world, Bedpos, sleeper)){
+            Block block = state.getBlock();
+            BlockPos pos = block instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? Bedpos : Bedpos.relative(state.getValue(BedBlock.FACING)) : null;
+            return Optional.ofNullable(pos);
+        }
+        else{
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<BlockPos> getAvailableBedPos(@Nonnull IWorldReader world, @Nonnull BlockPos Bedpos, @Nullable LivingEntity sleeper){
+        return getBedHeadPos(world, Bedpos, sleeper).map((pos)->{
+            @Nullable
+            BlockPos blockpos;
+            if(world.getBlockState(pos).getBlock() instanceof BedBlock && !world.getBlockState(pos).getValue(BedBlock.OCCUPIED)){
+                blockpos = pos;
+            }
+            else{
+                blockpos = null;
+            }
+            return Optional.ofNullable(blockpos);
+        }).orElse(Optional.empty());
     }
 
     public enum RelativeDirection {

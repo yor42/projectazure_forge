@@ -48,6 +48,11 @@ public class CompanionUseGunGoal extends Goal {
 
     @Override
     public boolean canUse() {
+
+        if(this.companion.isCriticallyInjured()){
+            return false;
+        }
+
         ItemStack gunStack = this.getValidGunStack();
 
         if(gunStack.getItem() instanceof ItemGunBase) {

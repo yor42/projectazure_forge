@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class entityShirokoRenderer extends GeoEntityRenderer<EntityShiroko> {
+public class entityShirokoRenderer extends GeoCompanionRenderer<EntityShiroko> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;

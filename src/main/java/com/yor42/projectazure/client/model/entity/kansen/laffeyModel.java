@@ -44,10 +44,22 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
         IBone Flushed = this.getAnimationProcessor().getBone("Flushed");
         IBone Angry1 = this.getAnimationProcessor().getBone("Angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("Angry2");
-
+        IBone faint = this.getAnimationProcessor().getBone("faint");
         IBone body = this.getAnimationProcessor().getBone("Body");
 
-        if(entity.isAngry()){
+        if(entity.isDeadOrDying() || entity.isCriticallyInjured()){
+            faint.setHidden(false);
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepingFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+        }
+        else if(entity.isAngry()){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -58,6 +70,7 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
             Angry2.setHidden(false);
         }
         else if(entity.getAngerWarningCount() == 2){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -68,6 +81,7 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
             Angry2.setHidden(true);
         }
         else if(entity.isinQinteraction()){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -78,6 +92,7 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
             Angry2.setHidden(true);
         }
         else if(entity.isBeingPatted()){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             PatFace.setHidden(false);
@@ -88,6 +103,7 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
             Angry2.setHidden(true);
         }
         else if(entity.isSleeping()){
+            faint.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -97,7 +113,6 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
             Angry1.setHidden(true);
             Angry2.setHidden(true);
             body.setPositionY(-45);
-            body.setPositionZ(-10);
         }
         else {
             if(this.LastBlinkTime == 0){
@@ -105,6 +120,7 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
                 if(EyeclosedFace.isHidden()){
+                    faint.setHidden(true);
                     NormalFace.setHidden(true);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
@@ -116,6 +132,7 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
+                    faint.setHidden(true);
                     NormalFace.setHidden(false);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
@@ -148,6 +165,9 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
                 body.setPositionY(body.getPositionY() + 2);
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
+        }
+        else if(entity.isSleeping()){
+            body.setPositionY(-35);
         }
     }
 }

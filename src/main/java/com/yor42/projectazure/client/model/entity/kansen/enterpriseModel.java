@@ -45,10 +45,36 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
         IBone Flushed = this.getAnimationProcessor().getBone("flushed");
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
+        IBone Faint = this.getAnimationProcessor().getBone("faint");
+        IBone Injured = this.getAnimationProcessor().getBone("injured");
         IBone Backhair = this.getAnimationProcessor().getBone("bone24");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
-        if(entity.isAngry()){
+        if(entity.isDeadOrDying()|| (entity.isSleeping() && entity.isCriticallyInjured())){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Faint.setHidden(false);
+            Injured.setHidden(true);
+        }
+        else if(entity.isCriticallyInjured()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(false);
+        }
+        else if(entity.isAngry()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -97,8 +123,6 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
-            body.setPositionY(-45);
-            body.setPositionZ(-5);
         }
         else {
             if(this.LastBlinkTime == 0){
@@ -148,6 +172,9 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
                 body.setPositionY(body.getPositionY() + 2);
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
+        }
+        else if(entity.isSleeping()){
+            body.setPositionY(-45);
         }
     }
 }

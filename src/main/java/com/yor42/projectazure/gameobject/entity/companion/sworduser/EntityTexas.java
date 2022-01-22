@@ -85,13 +85,26 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.swinging){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingL":"swingR", true));
 
             return PlayState.CONTINUE;
         }
         else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd_chest", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
         }
         else if(this.isNonVanillaMeleeAttacking()){
@@ -123,17 +136,21 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
             return PlayState.CONTINUE;
         }
-        if(this.isOrderedToSit()){
-            if(this.getMainHandItem().getItem() instanceof TieredItem){
-                event.getController().setAnimation(builder.addAnimation("sit_arm_idle_toolhand", true));
+        if(this.isOrderedToSit()|| this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+                return PlayState.CONTINUE;
+            }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_arm_idle_emptyhand", true));
+                if (this.getMainHandItem().getItem() instanceof TieredItem) {
+                    event.getController().setAnimation(builder.addAnimation("sit_arm_idle_toolhand", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit_arm_idle_emptyhand", true));
+                }
             }
-            return PlayState.CONTINUE;
-        }
-        else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
@@ -203,12 +220,17 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
+            }
             return PlayState.CONTINUE;
         }
-        if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("melee_attack_leg", false));
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
@@ -217,8 +239,16 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
+                }
             }
+            return PlayState.CONTINUE;
+        }
+        if(this.isNonVanillaMeleeAttacking()){
+            event.getController().setAnimation(builder.addAnimation("melee_attack_leg", false));
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {

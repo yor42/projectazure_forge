@@ -49,7 +49,36 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
         IBone Angry3 = this.getAnimationProcessor().getBone("angry3");
         IBone body = this.getAnimationProcessor().getBone("Body");
-        if(entity.isAngry()){
+        IBone Faint = this.getAnimationProcessor().getBone("Faint");
+        IBone Injured = this.getAnimationProcessor().getBone("Injured");
+
+        if(entity.isDeadOrDying() || (entity.isCriticallyInjured() && entity.isSleeping())){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Angry3.setHidden(true);
+            Faint.setHidden(false);
+            Injured.setHidden(true);
+        }
+        else if(entity.isCriticallyInjured()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Angry3.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(false);
+        }
+        else if(entity.isAngry()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -59,6 +88,8 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry1.setHidden(true);
             Angry2.setHidden(true);
             Angry3.setHidden(false);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else if(entity.getAngerWarningCount() == 2){
             NormalFace.setHidden(true);
@@ -70,6 +101,8 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry1.setHidden(true);
             Angry2.setHidden(false);
             Angry3.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else if(entity.isinQinteraction()){
             NormalFace.setHidden(true);
@@ -81,6 +114,8 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry1.setHidden(false);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
@@ -92,6 +127,8 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry1.setHidden(true);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -103,12 +140,24 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry1.setHidden(true);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
-
+            Faint.setHidden(true);
+            Injured.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-5);
         }
         else {
             if(this.LastBlinkTime == 0){
+                NormalFace.setHidden(false);
+                ExcitedFace.setHidden(true);
+                EyeclosedFace.setHidden(true);
+                PatFace.setHidden(true);
+                SleepFace.setHidden(true);
+                Flushed.setHidden(true);
+                Angry1.setHidden(true);
+                Angry2.setHidden(true);
+                Angry3.setHidden(true);
+                Faint.setHidden(true);
+                Injured.setHidden(true);
                 this.LastBlinkTime = System.currentTimeMillis();
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
@@ -122,6 +171,8 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
                     Angry3.setHidden(true);
+                    Faint.setHidden(true);
+                    Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
@@ -134,6 +185,8 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
                     Angry3.setHidden(true);
+                    Faint.setHidden(true);
+                    Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();
@@ -156,6 +209,8 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
                 body.setPositionY(body.getPositionY() + 2);
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
+        }else if(entity.isSleeping()){
+            body.setPositionY(-35);
         }
     }
 }

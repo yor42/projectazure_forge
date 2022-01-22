@@ -2274,6 +2274,25 @@
 					]
 				},
 				{
+					"name": "fainted",
+					"parent": "Faces",
+					"pivot": [-3, 34.75, -2.65],
+					"cubes": [
+						{
+							"origin": [-6.5, 50, -6.75],
+							"size": [13, 13, 1],
+							"uv": {
+								"north": {"uv": [46, 147], "uv_size": [13, 13]},
+								"east": {"uv": [25, 134], "uv_size": [1, 13]},
+								"south": {"uv": [52, 0], "uv_size": [13, 13]},
+								"west": {"uv": [134, 49], "uv_size": [1, 13]},
+								"up": {"uv": [134, 62], "uv_size": [13, 1]},
+								"down": {"uv": [134, 116], "uv_size": [13, -1]}
+							}
+						}
+					]
+				},
+				{
 					"name": "angry1",
 					"parent": "Faces",
 					"pivot": [-3, 34.75, -2.65],

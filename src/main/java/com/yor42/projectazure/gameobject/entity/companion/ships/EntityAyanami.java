@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.TieredItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -33,7 +34,16 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.swinging){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
@@ -60,6 +70,19 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             else{
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorR", false));
             }
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null) {
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+                return PlayState.CONTINUE;
+            }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle"));
+            }
+            return PlayState.CONTINUE;
         }
         else if(this.isEating()){
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
@@ -119,7 +142,16 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_leg", true));
             return PlayState.CONTINUE;
         }
@@ -128,15 +160,19 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", true));
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", true));
+                }
             }
             return PlayState.CONTINUE;
-        }else if(this.isSwimming()) {
+        }
+        else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_leg", true));
             return PlayState.CONTINUE;
         }
-
-        if (isMoving()) {
+        else if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
             }

@@ -43,10 +43,20 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
         IBone Flushed = this.getAnimationProcessor().getBone("Flushed");
         IBone Angry1 = this.getAnimationProcessor().getBone("Angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("Angry2");
-
+        IBone fainted = this.getAnimationProcessor().getBone("faint");
         IBone body = this.getAnimationProcessor().getBone("Body");
-
-        if(entity.isAngry()){
+        if(entity.isDeadOrDying() || entity.isCriticallyInjured()){
+            fainted.setHidden(false);
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+        }
+        else if(entity.isAngry()){
+            fainted.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -56,6 +66,7 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
             Angry2.setHidden(false);
         }
         else if(entity.getAngerWarningCount() == 2){
+            fainted.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -65,6 +76,7 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
             Angry2.setHidden(true);
         }
         else if(entity.isinQinteraction()){
+            fainted.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -74,6 +86,7 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
             Angry2.setHidden(true);
         }
         else if(entity.isBeingPatted()){
+            fainted.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             PatFace.setHidden(false);
@@ -83,6 +96,7 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
             Angry2.setHidden(true);
         }
         else if(entity.isSleeping()){
+            fainted.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(false);
@@ -90,15 +104,22 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
-            body.setPositionY(-45);
-            body.setPositionZ(-10);
         }
         else {
             if(this.LastBlinkTime == 0){
                 this.LastBlinkTime = System.currentTimeMillis();
+                fainted.setHidden(true);
+                NormalFace.setHidden(false);
+                ExcitedFace.setHidden(true);
+                EyeclosedFace.setHidden(true);
+                PatFace.setHidden(true);
+                Flushed.setHidden(true);
+                Angry1.setHidden(true);
+                Angry2.setHidden(true);
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
                 if(EyeclosedFace.isHidden()){
+                    fainted.setHidden(true);
                     NormalFace.setHidden(true);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
@@ -109,6 +130,7 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
+                    fainted.setHidden(true);
                     NormalFace.setHidden(false);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
@@ -139,6 +161,9 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
                 body.setPositionY(body.getPositionY() + 2);
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
+        }
+        else if(entity.isSleeping()){
+            body.setPositionY(-35);
         }
     }
 }

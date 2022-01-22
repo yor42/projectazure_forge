@@ -51,10 +51,38 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
         IBone anger3 = this.getAnimationProcessor().getBone("angry3");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone Sleep = this.getAnimationProcessor().getBone("Sleeping");
+        IBone Faint = this.getAnimationProcessor().getBone("faint");
+        IBone Injured = this.getAnimationProcessor().getBone("injured");
+
 
         IBone body = this.getAnimationProcessor().getBone("Body");
-
-        if(entity.isAngry()){
+        if(entity.isDeadOrDying() || (entity.isCriticallyInjured() && entity.isSleeping())){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            anger1.setHidden(true);
+            anger2.setHidden(true);
+            anger3.setHidden(true);
+            Sleep.setHidden(true);
+            Faint.setHidden(false);
+            flushed.setHidden(true);
+            Injured.setHidden(true);
+        }
+        else if(entity.isCriticallyInjured()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            anger1.setHidden(true);
+            anger2.setHidden(true);
+            anger3.setHidden(true);
+            Sleep.setHidden(true);
+            flushed.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(false);
+        }
+        else if(entity.isAngry()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -64,6 +92,8 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             anger3.setHidden(false);
             flushed.setHidden(true);
             Sleep.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else if(entity.getAngerWarningCount() == 2){
             NormalFace.setHidden(true);
@@ -75,6 +105,8 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             flushed.setHidden(true);
             anger3.setHidden(true);
             Sleep.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else if(entity.isinQinteraction()){
             NormalFace.setHidden(true);
@@ -86,6 +118,8 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             flushed.setHidden(true);
             anger3.setHidden(true);
             Sleep.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
@@ -97,6 +131,8 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             anger2.setHidden(true);
             anger3.setHidden(true);
             Sleep.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -110,11 +146,23 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             anger2.setHidden(true);
             anger3.setHidden(true);
             Sleep.setHidden(false);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else {
 
             if(this.LastBlinkTime == 0){
                 this.LastBlinkTime = System.currentTimeMillis();
+                NormalFace.setHidden(false);
+                ExcitedFace.setHidden(true);
+                EyeclosedFace.setHidden(true);
+                flushed.setHidden(true);
+                anger1.setHidden(true);
+                anger2.setHidden(true);
+                anger3.setHidden(true);
+                Sleep.setHidden(true);
+                Faint.setHidden(true);
+                Injured.setHidden(true);
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
                 if(EyeclosedFace.isHidden()){
@@ -126,6 +174,8 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
                     anger1.setHidden(true);
                     anger2.setHidden(true);
                     anger3.setHidden(true);
+                    Faint.setHidden(true);
+                    Injured.setHidden(true);
                     Sleep.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
@@ -138,6 +188,8 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
                     anger2.setHidden(true);
                     anger3.setHidden(true);
                     Sleep.setHidden(true);
+                    Faint.setHidden(true);
+                    Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();
@@ -161,6 +213,9 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
                 body.setPositionY(body.getPositionY() + 2);
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
+        }
+        else if(entity.isSleeping()){
+            body.setPositionY(-36);
         }
     }
 }

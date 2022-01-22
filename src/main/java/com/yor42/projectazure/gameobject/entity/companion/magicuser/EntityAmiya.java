@@ -26,6 +26,7 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 
@@ -45,7 +46,16 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.swinging){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
 
             return PlayState.CONTINUE;
@@ -69,10 +79,6 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
             return PlayState.CONTINUE;
         }
-        else if(this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            return PlayState.CONTINUE;
-        }
         else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", true));
 
@@ -83,13 +89,21 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
             return PlayState.CONTINUE;
         }
-        else if(this.isOrderedToSit() || this.getVehicle() != null) {
-            event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
-
-            return PlayState.CONTINUE;
-        }
         else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null) {
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+                return PlayState.CONTINUE;
+            }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle"));
+            }
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
@@ -148,17 +162,30 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
-            return PlayState.CONTINUE;
-        }
-
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+        if(this.isDeadOrDying()){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                if(this.isCriticallyInjured()){
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+                }
+                else {
+                    event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
+                }
             }
             return PlayState.CONTINUE;
         }

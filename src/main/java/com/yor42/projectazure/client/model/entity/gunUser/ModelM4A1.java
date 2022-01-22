@@ -48,7 +48,34 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
         IBone body = this.getAnimationProcessor().getBone("Body");
-        if(entity.isAngry()){
+        IBone Faint = this.getAnimationProcessor().getBone("fainted");
+        IBone Injured = this.getAnimationProcessor().getBone("injured");
+
+        if(entity.isDeadOrDying()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Faint.setHidden(false);
+            Injured.setHidden(true);
+        }
+        else if(entity.isCriticallyInjured()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(false);
+        }
+        else if(entity.isAngry()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -67,6 +94,8 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
             Flushed.setHidden(true);
             Angry1.setHidden(false);
             Angry2.setHidden(true);
+            Faint.setHidden(false);
+            Injured.setHidden(true);
         }
         else if(entity.isinQinteraction()){
             NormalFace.setHidden(true);
@@ -77,6 +106,8 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
             Flushed.setHidden(false);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Faint.setHidden(false);
+            Injured.setHidden(true);
         }
         else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
@@ -87,6 +118,8 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Faint.setHidden(false);
+            Injured.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -97,12 +130,21 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
-
-            body.setPositionY(-45);
-            body.setPositionZ(-5);
+            Faint.setHidden(false);
+            Injured.setHidden(true);
         }
         else {
             if(this.LastBlinkTime == 0){
+                NormalFace.setHidden(false);
+                ExcitedFace.setHidden(true);
+                EyeclosedFace.setHidden(true);
+                PatFace.setHidden(true);
+                SleepFace.setHidden(true);
+                Flushed.setHidden(true);
+                Faint.setHidden(true);
+                Injured.setHidden(true);
+                Angry1.setHidden(true);
+                Angry2.setHidden(true);
                 this.LastBlinkTime = System.currentTimeMillis();
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
@@ -113,6 +155,8 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
                     PatFace.setHidden(true);
                     SleepFace.setHidden(true);
                     Flushed.setHidden(true);
+                    Faint.setHidden(true);
+                    Injured.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
@@ -124,6 +168,8 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
                     PatFace.setHidden(true);
                     SleepFace.setHidden(true);
                     Flushed.setHidden(true);
+                    Faint.setHidden(true);
+                    Injured.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
@@ -148,6 +194,8 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
                 body.setPositionY(body.getPositionY() + 2);
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
+        }else if(entity.isSleeping()){
+            body.setPositionY(-40);
         }
     }
 

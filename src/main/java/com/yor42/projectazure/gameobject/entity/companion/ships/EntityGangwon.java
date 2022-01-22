@@ -31,92 +31,92 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
-        if(Minecraft.getInstance().isPaused()){
+        if (Minecraft.getInstance().isPaused()) {
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isSleeping()) {
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if (this.isSleeping()) {
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep_arm", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        } else if (this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME) > 0 && !this.isAngry()) {
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.isBlocking()){
+        } else if (this.isBlocking()) {
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.isBeingPatted()){
-            if(this.isOrderedToSit())
+        } else if (this.isBeingPatted()) {
+            if (this.isOrderedToSit())
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));
             else
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", true));
             return PlayState.CONTINUE;
-        } else if(this.isGettingHealed()){
+        } else if (this.isGettingHealed()) {
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.heal_arm", true));
             return PlayState.CONTINUE;
-        }
-        else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+        } else if (this.isOpeningDoor()) {
+            if (this.getItemBySlot(EquipmentSlotType.OFFHAND) == ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY) {
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorL", false));
-            }
-            else{
+            } else {
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorR", false));
             }
-        }
-        else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+        } else if (this.isEating()) {
+            if (this.getUsedItemHand() == Hand.MAIN_HAND) {
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
-            }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            } else if (this.getUsedItemHand() == Hand.OFF_HAND) {
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+        else if (this.isOrderedToSit() && this.getVehicle()!= null) {
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+                return PlayState.CONTINUE;
+            }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_arm", true));
+            }
             return PlayState.CONTINUE;
         }
-        else if(this.isReloadingMainHand()){
+        else if (this.isReloadingMainHand()) {
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             return PlayState.CONTINUE;
-        }else if(this.isUsingGun()){
+        } else if (this.isUsingGun()) {
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             return PlayState.CONTINUE;
-        }
-        else if(this.isSwimming()) {
+        } else if (this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_arm", true));
             return PlayState.CONTINUE;
+        } else if (isMoving()) {
+            if (this.isSailing()) {
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", true));
+            } else if (this.isSprinting()) {
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.run_arm", true));
+            } else {
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk_arm", true));
+            }
+            return PlayState.CONTINUE;
         }else {
-
-            if (isMoving()) {
-                if (this.isSailing()) {
-                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", true));
-                } else if (this.isSprinting()) {
-                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.run_arm", true));
-                } else {
-                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk_arm", true));
+            if (this.getMainHandItem().getItem() instanceof ItemGunBase) {
+                if (((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()) {
+                    event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
                 }
                 return PlayState.CONTINUE;
             }
-            else{
-                if(this.isOrderedToSit()) {
-                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_arm", true));
-                    return PlayState.CONTINUE;
-                }
-                else{
-                    if(this.getMainHandItem().getItem() instanceof ItemGunBase){
-                        if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
-                            event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
-                        }
-                        return PlayState.CONTINUE;
-                    }
-                    event.getController().setAnimation(builder.addAnimation("animation.gangwon.idle", true));
-                }
-            }
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.idle", true));
         }
+
 
         return PlayState.CONTINUE;
     }
@@ -134,12 +134,24 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
+                }
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep", true));
             return PlayState.CONTINUE;
         }
-
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
@@ -151,8 +163,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_leg", true));
             return PlayState.CONTINUE;
         }
-
-        if (isMoving()) {
+        else if (isMoving()) {
             if(this.isSailing()){
                 event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail", true));
             }

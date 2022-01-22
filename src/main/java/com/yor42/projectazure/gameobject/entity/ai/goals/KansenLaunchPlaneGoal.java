@@ -49,6 +49,10 @@ public class KansenLaunchPlaneGoal extends Goal {
             return false;
         }
 
+        if(this.entity.isCriticallyInjured()){
+            return false;
+        }
+
         if(!(this.entity.getShipClass()== enums.shipClass.AircraftCarrier ||this.entity.getShipClass()==  enums.shipClass.LightAircraftCarrier || this.entity.getShipClass()== enums.shipClass.SubmarineCarrier)){
             return false;
         }

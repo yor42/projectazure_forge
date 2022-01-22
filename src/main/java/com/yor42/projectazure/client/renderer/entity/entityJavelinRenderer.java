@@ -23,7 +23,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
 
-public class entityJavelinRenderer extends GeoEntityRenderer<EntityJavelin> {
+public class entityJavelinRenderer extends GeoCompanionRenderer<EntityJavelin> {
 
     private EntityKansenBase entity;
     private IRenderTypeBuffer rtb;

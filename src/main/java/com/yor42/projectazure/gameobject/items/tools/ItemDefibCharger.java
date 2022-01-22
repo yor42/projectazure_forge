@@ -99,20 +99,18 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     public void inventoryTick(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
         super.inventoryTick(stack, world, p_77663_3_, p_77663_4_, p_77663_5_);
         if(isOn(stack)){
-
+            int chargeprogress = getChargeProgress(stack);
             if(ShouldCharging(stack)){
                 if(stack.getCapability(CapabilityEnergy.ENERGY).map((e)->e.extractEnergy(100, true)>=100).orElse(false)) {
-                    int charge = Math.min(100, getChargeProgress(stack) + 1);
+                    int charge = Math.min(100, chargeprogress + 1);
                     if (charge >= 100) {
                         setCharging(stack, false);
                         p_77663_3_.playSound(DEFIB_READY, 1.0F, 1.0F);
                     }
                     setChargeProgress(stack, charge);
-                    if(p_77663_3_.tickCount%5 == 0) {
-                        stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(100, false));
-                    }
+                    stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(100, false));
                 }else{
-                    int charge = Math.max(0, getChargeProgress(stack));
+                    int charge = Math.max(0, getChargeProgress(stack)-10);
                     if (charge <= 0) {
                         setCharging(stack, false);
                     }
@@ -122,7 +120,20 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
             }
             else {
                 if(p_77663_3_.tickCount%5 == 0) {
-                    stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(1, false));
+                    if(stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(1, true)==1).orElse(false)){
+                        stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(1, false));
+                    }
+                    else{
+                        setChargeProgress(stack, 0);
+                        setCharging(stack, false);
+                        if(!world.isClientSide()){
+                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+                            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> p_77663_3_);
+                            GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
+                        }
+                        p_77663_3_.playSound(DEFIB_POWEROFF, 1.0F, 1.0F);
+                        setOn(stack, false);
+                    }
                 }
             }
         }
@@ -141,11 +152,46 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     @Override
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         super.onArmorTick(stack, world, player);
-        if(isOn(stack) && player.tickCount%20 == 0){
-            stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e)->{
-                e.extractEnergy(1, false);
-            });
+        if(isOn(stack)){
+            int chargeprogress = getChargeProgress(stack);
+            if(ShouldCharging(stack)){
+                if(stack.getCapability(CapabilityEnergy.ENERGY).map((e)->e.extractEnergy(100, true)>=100).orElse(false)) {
+                    int charge = Math.min(100, chargeprogress + 1);
+                    if (charge >= 100) {
+                        setCharging(stack, false);
+                        player.playSound(DEFIB_READY, 1.0F, 1.0F);
+                    }
+                    setChargeProgress(stack, charge);
+                    stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(100, false));
+                }else{
+                    int charge = Math.max(0, getChargeProgress(stack)-10);
+                    if (charge <= 0) {
+                        setCharging(stack, false);
+                    }
+                    setChargeProgress(stack, charge);
+                }
+
+            }
+            else {
+                if(player.tickCount%5 == 0) {
+                    if(stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(1, true)==1).orElse(false)){
+                        stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(1, false));
+                    }
+                    else{
+                        setChargeProgress(stack, 0);
+                        setCharging(stack, false);
+                        if(!world.isClientSide()){
+                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+                            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player);
+                            GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
+                        }
+                        player.playSound(DEFIB_POWEROFF, 1.0F, 1.0F);
+                        setOn(stack, false);
+                    }
+                }
+            }
         }
+
         if(!world.isClientSide()) {
             final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
             final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);

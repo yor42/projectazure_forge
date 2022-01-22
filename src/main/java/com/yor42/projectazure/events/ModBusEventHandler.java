@@ -132,16 +132,24 @@ public class ModBusEventHandler {
 
                 for(Entity entity : player.getPassengers()) {
                     if(entity instanceof AbstractEntityCompanion) {
+
+                        entity.stopRiding();
+                        ((AbstractEntityCompanion) entity).setOrderedToSit(true);
+                        /*
                         CompoundNBT compoundnbt = new CompoundNBT();
                         if (entity.saveAsPassenger(compoundnbt)) {
                             listnbt1.add(compoundnbt);
                         }
+
+                         */
                     }
                 }
-
+/*
                 if (!listnbt1.isEmpty()) {
                     playerData.put("carrying_companion", listnbt1);
                 }
+
+ */
 
             }
         }

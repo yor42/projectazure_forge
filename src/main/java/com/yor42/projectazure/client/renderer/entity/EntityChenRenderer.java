@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class EntityChenRenderer extends GeoEntityRenderer<EntityChen> {
+public class EntityChenRenderer extends GeoCompanionRenderer<EntityChen> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;

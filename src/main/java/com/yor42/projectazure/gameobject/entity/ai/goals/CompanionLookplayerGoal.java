@@ -16,7 +16,7 @@ public class CompanionLookplayerGoal extends LookAtGoal {
     @Override
     public boolean canUse() {
 
-        if(this.entity.getOwner() != null && this.entity.getVehicle() == this.entity.getOwner()){
+        if(this.entity.getOwner() != null && this.entity.getVehicle() == this.entity.getOwner() || this.entity.isCriticallyInjured()){
             return false;
         }
 

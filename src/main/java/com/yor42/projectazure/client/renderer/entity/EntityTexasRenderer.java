@@ -22,7 +22,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class EntityTexasRenderer extends GeoEntityRenderer<EntityTexas> {
+public class EntityTexasRenderer extends GeoCompanionRenderer<EntityTexas> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;

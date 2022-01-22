@@ -23,6 +23,10 @@ public class CompanionsUseTotem extends Goal {
 
         int lastattacktime = this.companion.tickCount - this.companion.getLastHurtByMobTimestamp();
 
+        if(this.companion.isCriticallyInjured()){
+            return false;
+        }
+
         if(this.companion.getHealth() > 8 || lastattacktime>400){
             return false;
         }

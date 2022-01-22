@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class EntityMudrockRenderer extends GeoEntityRenderer<EntityMudrock> {
+public class EntityMudrockRenderer extends GeoCompanionRenderer<EntityMudrock> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;

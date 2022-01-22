@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class EntityTalulahRenderer extends GeoEntityRenderer<EntityTalulah> {
+public class EntityTalulahRenderer extends GeoCompanionRenderer<EntityTalulah> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;

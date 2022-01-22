@@ -30,6 +30,11 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
         Item item = this.entity.getItemBySlot(EquipmentSlotType.MAINHAND).getItem();
         boolean isEquippingsword = item instanceof SwordItem;
 
+
+        if(this.entity.isCriticallyInjured()){
+            return false;
+        }
+
         if(this.entity.getTarget() == null || !this.entity.getTarget().isAlive()){
             return false;
         }

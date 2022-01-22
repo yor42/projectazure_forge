@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class EntityRosmontisRenderer extends GeoEntityRenderer<EntityRosmontis> {
+public class EntityRosmontisRenderer extends GeoCompanionRenderer<EntityRosmontis> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;

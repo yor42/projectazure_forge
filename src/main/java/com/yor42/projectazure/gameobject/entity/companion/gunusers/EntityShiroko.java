@@ -52,8 +52,24 @@ public class EntityShiroko extends EntityGunUserBase {
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isBeingPatted()){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm", false).addAnimation("faint_arm_loop", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.swinging){
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.pat", true));
             return PlayState.CONTINUE;
         }
@@ -89,14 +105,6 @@ public class EntityShiroko extends EntityGunUserBase {
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            return PlayState.CONTINUE;
-        }
-        else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
-            return PlayState.CONTINUE;
-        }
         else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;
@@ -107,31 +115,36 @@ public class EntityShiroko extends EntityGunUserBase {
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.swim_arm", true));
             return PlayState.CONTINUE;
-        }else{
-            if (isMoving()) {
-                if(this.isSprinting()){
-                    event.getController().setAnimation(builder.addAnimation("animation.shiroko.run_arm", true));
-                }
-                else {
-                    event.getController().setAnimation(builder.addAnimation("animation.shiroko.walk_hand", true));
-                }
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
                 return PlayState.CONTINUE;
             }
-            else{
-                if(this.isOrderedToSit() || this.getVehicle() != null){
-                    event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_hand", true));
-                    return PlayState.CONTINUE;
-                }
-                if(this.getMainHandItem().getItem() instanceof ItemGunBase){
-
-                    if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
-                        event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_idle_twohanded", true));
-                    }else{
-                        event.getController().setAnimation(builder.addAnimation("animation.shiroko.idle_arm", true));
-                    }
-                    return PlayState.CONTINUE;
-                }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle", true));
             }
+            else {
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_hand", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.getMainHandItem().getItem() instanceof ItemGunBase){
+
+            if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_idle_twohanded", true));
+            }else{
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.idle_arm", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if (isMoving()) {
+            if (this.isSprinting()) {
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.run_arm", true));
+            } else {
+                event.getController().setAnimation(builder.addAnimation("animation.shiroko.walk_hand", true));
+            }
+            return PlayState.CONTINUE;
         }
         event.getController().setAnimation(builder.addAnimation("animation.shiroko.idle_arm", true));
         return PlayState.CONTINUE;
@@ -160,13 +173,34 @@ public class EntityShiroko extends EntityGunUserBase {
         if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
-
-        if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.shiroko.sleep", true));
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
+            }
             return PlayState.CONTINUE;
         }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
 
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg", false).addAnimation("sit_injured_leg_idle", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
+                }
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
@@ -178,8 +212,7 @@ public class EntityShiroko extends EntityGunUserBase {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.swim_leg", true));
             return PlayState.CONTINUE;
         }
-
-        if (isMoving()) {
+        else if (isMoving()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("animation.shiroko.run", true));
             }

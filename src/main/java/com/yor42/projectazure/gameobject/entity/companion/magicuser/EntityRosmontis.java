@@ -49,7 +49,20 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.swinging){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
 
             return PlayState.CONTINUE;
@@ -88,12 +101,16 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
-            event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
-
-            return PlayState.CONTINUE;
-        }
-        else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+                return PlayState.CONTINUE;
+            }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+            }
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
@@ -152,22 +169,30 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
+        if(this.isDeadOrDying()){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop", true));
             }
             return PlayState.CONTINUE;
         }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
 
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg", false).addAnimation("sit_injured_leg_idle", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
+                }
             }
             return PlayState.CONTINUE;
         }

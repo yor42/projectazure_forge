@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class entityGangwonRenderer extends GeoEntityRenderer<EntityGangwon> {
+public class entityGangwonRenderer extends GeoCompanionRenderer<EntityGangwon> {
 
     private EntityKansenBase entity;
     private IRenderTypeBuffer rtb;

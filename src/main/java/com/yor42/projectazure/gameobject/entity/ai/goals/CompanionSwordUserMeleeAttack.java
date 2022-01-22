@@ -32,6 +32,11 @@ public class CompanionSwordUserMeleeAttack extends Goal {
 
     @Override
     public boolean canUse() {
+
+        if(this.hostEntity.isCriticallyInjured()){
+            return false;
+        }
+
         @Nullable
         LivingEntity targetEntity = this.hostEntity.getTarget();
         if(targetEntity == null || !targetEntity.isAlive()){

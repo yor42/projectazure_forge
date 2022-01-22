@@ -36,6 +36,11 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
 
     public boolean canUse() {
         super.canUse();
+
+        if(this.host.isCriticallyInjured()){
+            return false;
+        }
+
         LivingEntity livingentity = this.host.getOwner();
 
         if(livingentity == null||livingentity.isSpectator() || livingentity.getCommandSenderWorld() != this.host.getCommandSenderWorld() ||this.host.isOrderedToSit()||this.host.distanceToSqr(livingentity) < (double)(this.mindist * this.mindist)||this.host.isFreeRoaming() || this.host.isSleeping() || this.host.isMovingtoRecruitStation){

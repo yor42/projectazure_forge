@@ -47,7 +47,19 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
         IBone body = this.getAnimationProcessor().getBone("Body");
-        if(entity.isAngry()){
+        IBone Faint = this.getAnimationProcessor().getBone("fainted");
+        if(entity.isDeadOrDying() || entity.isCriticallyInjured()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Faint.setHidden(false);
+        }
+        else if(entity.isAngry()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -56,6 +68,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(false);
+            Faint.setHidden(true);
         }
         else if(entity.getAngerWarningCount() == 2){
             NormalFace.setHidden(true);
@@ -66,6 +79,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             Flushed.setHidden(true);
             Angry1.setHidden(false);
             Angry2.setHidden(true);
+            Faint.setHidden(true);
         }
         else if(entity.isinQinteraction()){
             NormalFace.setHidden(true);
@@ -76,6 +90,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             Flushed.setHidden(false);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Faint.setHidden(true);
         }
         else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
@@ -86,6 +101,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Faint.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -96,13 +112,20 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
-
-            body.setPositionY(-45);
-            body.setPositionZ(-5);
+            Faint.setHidden(true);
         }
         else {
             if(this.LastBlinkTime == 0){
                 this.LastBlinkTime = System.currentTimeMillis();
+                NormalFace.setHidden(false);
+                ExcitedFace.setHidden(true);
+                EyeclosedFace.setHidden(true);
+                PatFace.setHidden(true);
+                SleepFace.setHidden(true);
+                Flushed.setHidden(true);
+                Angry1.setHidden(true);
+                Angry2.setHidden(true);
+                Faint.setHidden(true);
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
                 if(EyeclosedFace.isHidden()){
@@ -114,6 +137,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
                     Flushed.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
+                    Faint.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
@@ -125,6 +149,7 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
                     Flushed.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
+                    Faint.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();
@@ -147,6 +172,9 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
                 body.setPositionY(body.getPositionY() + 2);
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
+        }
+        else if(entity.isSleeping()){
+            body.setPositionY(-35);
         }
     }
 

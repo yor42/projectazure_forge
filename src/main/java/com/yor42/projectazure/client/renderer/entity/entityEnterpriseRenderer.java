@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class entityEnterpriseRenderer extends GeoEntityRenderer<EntityEnterprise> {
+public class entityEnterpriseRenderer extends GeoCompanionRenderer<EntityEnterprise> {
     private EntityKansenBase entity;
     private IRenderTypeBuffer rtb;
     private ResourceLocation texture;

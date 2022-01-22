@@ -37,7 +37,16 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleeping_arm", true));
             return PlayState.CONTINUE;
         }
@@ -77,8 +86,17 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+        else if(this.isOrderedToSit() || this.getVehicle() != null) {
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+                return PlayState.CONTINUE;
+            }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("sit_start_arm").addAnimation("idle_sit", true));
+            }
             return PlayState.CONTINUE;
         }
         else if(this.isBlocking()){
@@ -105,9 +123,6 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             }
             return PlayState.CONTINUE;
         }
-        if(this.isOrderedToSit()){
-            event.getController().setAnimation(builder.addAnimation("sit_start_arm").addAnimation("idle_sit", true));
-        }
         else {
             if(this.getMainHandItem().getItem() instanceof ItemGunBase){
                 if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
@@ -132,13 +147,27 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+        if(this.isDeadOrDying()){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_start").addAnimation("sit", true));
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            return PlayState.STOP;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }else {
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit_start").addAnimation("sit", true));
+                }
             }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {

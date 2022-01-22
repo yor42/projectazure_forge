@@ -121,16 +121,33 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         }
 
         AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+        if(this.isDeadOrDying()){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_leg_start").addAnimation("sit_leg", true));
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
             }
             return PlayState.CONTINUE;
-        }else if(this.isSwimming()) {
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit_leg_start").addAnimation("sit_leg", true));
+                }
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
         }
@@ -164,6 +181,9 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         if(this.isOrderedToSit() && this.getVehicle() == null){
             event.getController().setAnimation(builder.addAnimation("sit_tail_start").addAnimation("sit_tail", true));
         }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_tail", true));
+        }
         else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat_tail", true));
         }
@@ -183,7 +203,17 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         }
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.attackAnim>0){
+
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
@@ -196,7 +226,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
@@ -244,17 +274,25 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
-
-        if(this.isOrderedToSit()){
-            if(this.getMainHandItem().getItem() instanceof TieredItem){
-                event.getController().setAnimation(builder.addAnimation("sit_arm_toolmainhand", true));
+        else if(this.isOrderedToSit() || this.getVehicle() != null) {
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+                return PlayState.CONTINUE;
+            }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_arm_emptymainhand", true));
+                if(this.getMainHandItem().getItem() instanceof TieredItem){
+                    event.getController().setAnimation(builder.addAnimation("sit_arm_toolmainhand", true));
+                }
+                else {
+                    event.getController().setAnimation(builder.addAnimation("sit_arm_emptymainhand", true));
+                }
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isMoving() && this.getVehicle() == null) {
+        else if(this.isMoving()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
             }

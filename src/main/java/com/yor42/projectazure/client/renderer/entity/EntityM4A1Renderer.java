@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class EntityM4A1Renderer extends GeoEntityRenderer<EntityM4A1> {
+public class EntityM4A1Renderer extends GeoCompanionRenderer<EntityM4A1> {
 
     private AbstractEntityCompanion entity;
     private IRenderTypeBuffer rtb;

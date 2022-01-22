@@ -36,7 +36,16 @@ public class EntityZ23 extends EntityKansenDestroyer implements IAzurLaneKansen 
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.swinging){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
             return PlayState.CONTINUE;
         }
@@ -57,17 +66,20 @@ public class EntityZ23 extends EntityKansenDestroyer implements IAzurLaneKansen 
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
         }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
+            }
             else {
                 event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
             }
-            return PlayState.CONTINUE;
-        }
-        else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
@@ -130,7 +142,16 @@ public class EntityZ23 extends EntityKansenDestroyer implements IAzurLaneKansen 
         }
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isSleeping()){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep", true));
             return PlayState.CONTINUE;
         }
@@ -139,7 +160,11 @@ public class EntityZ23 extends EntityKansenDestroyer implements IAzurLaneKansen 
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_idle", true));
+                }
             }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {

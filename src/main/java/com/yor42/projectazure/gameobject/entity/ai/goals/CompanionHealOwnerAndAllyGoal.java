@@ -61,6 +61,10 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
             this.ItemSwapDelay--;
         }
 
+        if(this.companion.isCriticallyInjured()){
+            return false;
+        }
+
         if(this.companion.getOwner() != null && !this.companion.isSleeping() && !this.companion.isOrderedToSit() && this.ItemSwapDelay == 0) {
 
             Optional<Hand> PotionHand = this.getPotioninHand();

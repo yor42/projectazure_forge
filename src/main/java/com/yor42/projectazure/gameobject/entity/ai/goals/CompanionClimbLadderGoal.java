@@ -26,6 +26,11 @@ public class CompanionClimbLadderGoal extends Goal {
 
     @Override
     public boolean canUse() {
+
+        if(this.entity.isCriticallyInjured()){
+            return false;
+        }
+
         if (!this.entity.getNavigation().isDone()) {
             this.path = this.entity.getNavigation().getPath();
             return this.path != null && this.entity.onClimbable();

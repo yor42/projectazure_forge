@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class entityNagatoRenderer extends GeoEntityRenderer<EntityNagato> {
+public class entityNagatoRenderer extends GeoCompanionRenderer<EntityNagato> {
 
     private EntityKansenBase entity;
     private IRenderTypeBuffer rtb;

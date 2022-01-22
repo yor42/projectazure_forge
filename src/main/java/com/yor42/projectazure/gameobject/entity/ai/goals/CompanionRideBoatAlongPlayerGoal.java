@@ -33,7 +33,9 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
     public boolean canUse() {
 
         Entity Owner = this.entity.getOwner();
-
+        if(this.entity.isCriticallyInjured()){
+            return false;
+        }
         if(Owner == null || this.entity.getCommandSenderWorld() != this.entity.getOwner().getCommandSenderWorld()){
             return false;
         }

@@ -53,20 +53,26 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.attackAnim>0){
+
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.swinging){
             event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
         else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
-            return PlayState.CONTINUE;
-        }
-        if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("meleeattack_arm", true));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
@@ -81,10 +87,6 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
 
-            return PlayState.CONTINUE;
-        }
-        else if(this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
@@ -114,13 +116,24 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
-
-        if(this.isOrderedToSit()){
-            if(this.getMainHandItem().getItem() instanceof TieredItem){
-                event.getController().setAnimation(builder.addAnimation("sit_idle_arm_toolmainhand", true));
+        else if(this.isNonVanillaMeleeAttacking()){
+            event.getController().setAnimation(builder.addAnimation("meleeattack_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_arm"));
+                return PlayState.CONTINUE;
+            }
+            else if(this.isCriticallyInjured()){
+                event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_idle_arm_emptymainhand", true));
+                if (this.getMainHandItem().getItem() instanceof TieredItem) {
+                    event.getController().setAnimation(builder.addAnimation("sit_idle_arm_toolmainhand", true));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit_idle_arm_emptymainhand", true));
+                }
             }
             return PlayState.CONTINUE;
         }
@@ -158,14 +171,32 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
 
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isOrderedToSit() || this.getVehicle() != null){
+        if(this.isDeadOrDying()){
+            if(this.getVehicle() == this.getOwner()){
+                event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
+            }
+            return PlayState.CONTINUE;
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isOrderedToSit() || this.getVehicle() != null){
             if(this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }else {
-                event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", true));
+                if (this.isCriticallyInjured()) {
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+                } else {
+                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", true));
+                }
             }
             return PlayState.CONTINUE;
-        }else if(this.isSwimming()) {
+        }
+        else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
         }
@@ -180,10 +211,6 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             else {
                 event.getController().setAnimation(builder.addAnimation("walk_leg", true));
             }
-            return PlayState.CONTINUE;
-        }
-        else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
             return PlayState.CONTINUE;
         }
         event.getController().setAnimation(builder.addAnimation("idle_leg", true));

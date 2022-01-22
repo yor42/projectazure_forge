@@ -23,7 +23,9 @@ public class CompanionPickupItemGoal extends Goal {
 
     @Override
     public boolean canUse() {
-
+        if(this.host.isCriticallyInjured()){
+            return false;
+        }
         this.Lootlist = this.host.getCommandSenderWorld().getEntitiesOfClass(ItemEntity.class, this.host.getBoundingBox().inflate(this.range));
         this.Explist = this.host.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrbEntity.class, this.host.getBoundingBox().inflate(this.range));
         return ((this.host.getTarget() == null || this.host.getLastHurtByMob() == null) && this.host.shouldPickupItem() && (!this.Lootlist.isEmpty() || !this.Explist.isEmpty()) && !(this.host.isSleeping()&&this.host.isOrderedToSit())) && (this.host.getFirstEmptyStack() != -1 || (!Lootlist.isEmpty() && this.host.storeItemStack(Lootlist.get(0).getItem()) != -1));
