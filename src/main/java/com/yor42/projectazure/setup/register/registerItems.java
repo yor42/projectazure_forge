@@ -23,6 +23,7 @@ import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.RegistryObject;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -218,45 +219,79 @@ public class registerItems {
             .tab(PA_GROUP).stacksTo(1)));
 
     //I'M READY TO GO TONIIIIGHT YEAH THERES PARTY ALRIGHTTTTTTT WE DON'T NEED REASON FOR JOY OH YEAHHHHH
-    public static final RegistryObject<Item> DISC_FRIDAYNIGHT = registerManager.ITEMS.register("disc_fridaynight", () -> new MusicDiscItem(15, registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
+    public static final RegistryObject<Item> DISC_FRIDAYNIGHT = registerManager.ITEMS.register("disc_fridaynight", () -> new MusicDiscItem(15, ()->registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1)){
+        @Nonnull
         @Override
-        public ITextComponent getName(ItemStack stack) {
+        public ITextComponent getName(@Nonnull ItemStack stack) {
             return new TranslationTextComponent("item.projectazure.music_disc");
         }
     });
 
     //LET THE BASS KICK O-oooooooooo AAAA E A A I A U
-    public static final RegistryObject<Item> DISC_BRAINPOWER = registerManager.ITEMS.register("disc_brainpower", () -> new MusicDiscItem(15, registerSounds.DISC_BRAINPOWER, new Item.Properties()
+    public static final RegistryObject<Item> DISC_BRAINPOWER = registerManager.ITEMS.register("disc_brainpower", () -> new MusicDiscItem(15, ()->registerSounds.DISC_BRAINPOWER, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Override
-        public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
             tooltip.add(new TranslationTextComponent("disc.brainpower.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
         }
 
+        @Nonnull
         @Override
-        public ITextComponent getName(ItemStack stack) {
+        public ITextComponent getName(@Nonnull ItemStack stack) {
             return new TranslationTextComponent("item.projectazure.music_disc");
         }
     });
 
     //You know the rules and so do I
-    public static final RegistryObject<Item> DISC_RICKROLL = registerManager.ITEMS.register("disc_rickroll", () -> new MusicDiscItem(15, registerSounds.DISC_RICKROLL, new Item.Properties()
+    public static final RegistryObject<Item> DISC_RICKROLL = registerManager.ITEMS.register("disc_rickroll", () -> new MusicDiscItem(15, ()->registerSounds.DISC_RICKROLL, new Item.Properties()
             .tab(PA_WEAPONS).stacksTo(1))
     {
+        @Nonnull
         @Override
-        public ITextComponent getName(ItemStack stack) {
+        public ITextComponent getName(@Nonnull ItemStack stack) {
             return new TranslationTextComponent("item.projectazure.music_disc");
         }
     });
 
-    public static final RegistryObject<Item> DISC_ENTERTHEBEGINNING = registerManager.ITEMS.register("disc_enterthebeginning", () -> new MusicDiscItem(15, registerSounds.DISC_ENTERTHEBEGINNING, new Item.Properties()
+    public static final RegistryObject<Item> DISC_CC5 = registerManager.ITEMS.register("disc_cc5", () -> new MusicDiscItem(15, ()->registerSounds.DISC_CC5, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
+        @Nonnull
         @Override
-        public ITextComponent getName(ItemStack stack) {
+        public ITextComponent getName(@Nonnull ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
+    public static final RegistryObject<Item> DISC_SANDSTORM = registerManager.ITEMS.register("disc_sandstorm", () -> new MusicDiscItem(15, ()->registerSounds.DISC_SANDSTORM, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public ITextComponent getName(@Nonnull ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
+    public static final RegistryObject<Item> DISC_SANDROLL = registerManager.ITEMS.register("disc_sandroll", () -> new MusicDiscItem(15, ()->registerSounds.DISC_SANDROLL, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public ITextComponent getName(@Nonnull ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
+    public static final RegistryObject<Item> DISC_ENTERTHEBEGINNING = registerManager.ITEMS.register("disc_enterthebeginning", () -> new MusicDiscItem(15, ()->registerSounds.DISC_ENTERTHEBEGINNING, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public ITextComponent getName(@Nonnull ItemStack stack) {
             return new TranslationTextComponent("item.projectazure.music_disc");
         }
 
@@ -357,6 +392,9 @@ public class registerItems {
             .tab(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_TEXAS = registerManager.ITEMS.register("spawntexas", () -> new ItemKansenSpawnEgg(ENTITYTYPE_TEXAS, new Item.Properties()
+            .tab(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWN_FROSTNOVA = registerManager.ITEMS.register("spawnfrostnova", () -> new ItemKansenSpawnEgg(ENTITYTYPE_FROSTNOVA, new Item.Properties()
             .tab(PA_SHIPS)));
 
     public static final RegistryObject<Item> BANDAGE_ROLL = registerManager.ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()

@@ -6,6 +6,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
@@ -135,6 +136,8 @@ public class registerManager {
     public static final EntityType<EntityTexas> ENTITYTYPE_TEXAS = EntityType.Builder.of(EntityTexas::new, EntityClassification.CREATURE).sized(0.572F, 1.61F).build(ModResourceLocation("entitytexas").toString());
     public static final RegistryObject<EntityType<EntityTexas>> TEXAS = ENTITIES.register("entitytexas", () -> ENTITYTYPE_TEXAS);
 
+    public static final EntityType<EntityFrostnova> ENTITYTYPE_FROSTNOVA = EntityType.Builder.of(EntityFrostnova::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entityfrostnova").toString());
+    public static final RegistryObject<EntityType<EntityFrostnova>> FROSTNOVA = ENTITIES.register("entityfrostnova", () -> ENTITYTYPE_FROSTNOVA);
 
     //projectile
     public static final EntityType<EntityCannonPelllet> PROJECTILECANNONSHELL = EntityType.Builder.<EntityCannonPelllet>of(EntityCannonPelllet::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString());

@@ -71,10 +71,13 @@
 
   "item.projectazure.disc_fridaynight.desc": "Tempest Studio - Friday Night(Astrophysics Remix)",
   "disc.brainpower.desc1": "LET THE BASS KICK O-oooooooooo AAAA E A A I A U",
-  "item.projectazure.disc_brainpower.desc": "Noma - Brain Power (Long Version)",
+  "item.projectazure.disc_brainpower.desc": "Noma - Brain Power",
   "item.projectazure.disc_rickroll.desc": "Rick Astley - Never Gonna Give You Up",
   "item.projectazure.disc_enterthebeginning.desc": "Edvard.S - Enter the Beginning",
-  "disc.enterthebeginning.desc1": "EZ2ON is good game. Buy it. Suffer with me. :gun: - Dev",
+  "disc.enterthebeginning.desc1": "EZ2ON is good game. Buy it. :gun: - Dev",
+  "item.projectazure.disc_cc5.desc": "Hyperglyph - Get this party started (Arknights CC5 Lobby theme)",
+  "item.projectazure.disc_sandstorm.desc": "Darude - Sandstorm",
+  "item.projectazure.disc_sandroll.desc": "Rick Astley vs Darude feat. groboclone - Sandroll",
 
   "item.projectazure.equipment_torpedo_533mm": "533mm Quadruple Torpedo Mount",
   "item.projectazure.equipment_gun_127mm": "Single 127mm (SK C/34)",
@@ -277,6 +280,7 @@
   "entity.projectazure.entityrosmontis": "Rosmontis",
   "entity.projectazure.entitymudrock": "Mudrock",
   "entity.projectazure.entitytalulah": "Talulah",
+  "entity.projectazure.entityfrostnova": "Frostnova",
   "entity.projectazure.entitytexas": "Texas",
 
   "entity.projectazure.missiledrone": "Missile Drone",

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
@@ -37,6 +38,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_AMIYA, EntityAmiya.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_MUDROCK, EntityMudrock.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_TEXAS, EntityTexas.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_FROSTNOVA, EntityFrostnova.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().build());
     }
 

@@ -10,6 +10,7 @@ import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
@@ -18,18 +19,30 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nullable;
 import java.util.Random;
 
 public class EntityArtsProjectile extends DamagingProjectileEntity {
     private BlockPos originPos;
+    private float damage = 5.0F;
+    @Nullable
+    private EffectInstance Effect;
     public EntityArtsProjectile(EntityType<? extends DamagingProjectileEntity> entityType, World worldin) {
         super(entityType, worldin);
     }
 
     public EntityArtsProjectile(World worldIn, LivingEntity shooter){
+        this(worldIn, shooter, 5.0F, null);
+    }
+
+    public EntityArtsProjectile(World worldIn, LivingEntity shooter, float damage, @Nullable EffectInstance effect) {
         super(registerManager.PROJECTILEARTS_ENTITYTYPE, shooter, 0, 0, 0, worldIn);
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.7F), shooter.getZ());
+        this.damage = damage;
+        this.Effect = effect;
     }
+
+
 
     @Override
     protected float getInertia() {
@@ -91,9 +104,14 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
     @Override
     protected void onHitEntity(EntityRayTraceResult result) {
         Entity target = result.getEntity();
-        if(target != this.getOwner()) {
+        if(target != this.getOwner() && target instanceof LivingEntity) {
+            LivingEntity LivingTarget = (LivingEntity)target;
             double DistanceMultiplier = this.originPos != null ? Math.min(25 / distanceToSqr(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0) : 1;
-            target.hurt(DamageSources.causeArtsDamage(this, this.getOwner()), (float) (5 * DistanceMultiplier));
+            target.hurt(DamageSources.causeArtsDamage(this, this.getOwner()), (float) (this.damage * DistanceMultiplier));
+            if(this.Effect != null){
+                LivingTarget.addEffect(this.Effect);
+            }
+
             this.remove();
         }
     }

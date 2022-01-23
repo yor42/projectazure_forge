@@ -94,6 +94,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue MudrockAttackDamage;
         public final ForgeConfigSpec.DoubleValue MudrockMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue FrostnovaHealth;
+        public final ForgeConfigSpec.DoubleValue FrostnovaSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue FrostnovaAttackDamage;
+        public final ForgeConfigSpec.DoubleValue FrostnovaMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue TalulahHealth;
         public final ForgeConfigSpec.DoubleValue TalulahSwimSpeed;
         public final ForgeConfigSpec.DoubleValue TalulahAttackDamage;
@@ -232,6 +237,11 @@ public class PAConfig {
             MudrockSwimSpeed = builder.defineInRange("Swim Speed of Mudrock", 2.5, 0, 1024);
             MudrockAttackDamage = builder.defineInRange("Attack Damage of Mudrock", 2.0F, 0, 1024);
             MudrockMovementSpeed = builder.defineInRange("Movement speed of Mudrock", 0.5F, 0, 2);
+
+            FrostnovaHealth = builder.defineInRange("Max Health of Frostnova", 20D, 1, 1024);
+            FrostnovaSwimSpeed = builder.defineInRange("Swim Speed of Frostnova", 2.5, 0, 1024);
+            FrostnovaAttackDamage = builder.defineInRange("Attack Damage of Frostnova", 2.0F, 0, 1024);
+            FrostnovaMovementSpeed = builder.defineInRange("Movement speed of Frostnova", 0.5F, 0, 2);
 
             TalulahHealth = builder.defineInRange("Max Health of Talulah", 40D, 1, 1024);
             TalulahSwimSpeed = builder.defineInRange("Swim Speed of Talulah", 2.5, 0, 1024);

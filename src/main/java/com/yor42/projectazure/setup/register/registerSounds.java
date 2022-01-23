@@ -22,6 +22,9 @@ public final class registerSounds {
     public static final SoundEvent DISC_FRIDAY_NIGHT = registerSoundEvent("disc_fridaynight");
     public static final SoundEvent DISC_BRAINPOWER = registerSoundEvent("disc_brainpower");
     public static final SoundEvent DISC_RICKROLL = registerSoundEvent("disc_rickroll");
+    public static final SoundEvent DISC_SANDSTORM = registerSoundEvent("disc_sandstorm");
+    public static final SoundEvent DISC_SANDROLL = registerSoundEvent("disc_sandroll");
+    public static final SoundEvent DISC_CC5 = registerSoundEvent("disc_cc5");
     public static final SoundEvent DISC_ENTERTHEBEGINNING = registerSoundEvent("disc_enterthebeginning");
 
     public static final SoundEvent WEAPON_BONK = registerSoundEvent("bonk");

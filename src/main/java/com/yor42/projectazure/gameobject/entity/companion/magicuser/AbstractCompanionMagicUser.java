@@ -15,16 +15,6 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
         super(type, worldIn);
     }
 
-    public boolean shouldUseSpell(){
-        if(this.getGunStack().getItem() instanceof ItemGunBase) {
-            boolean hasAmmo = getRemainingAmmo(this.getGunStack()) > 0;
-            boolean reloadable = this.HasRightMagazine((((ItemGunBase) this.getGunStack().getItem()).getAmmoType()));
-
-            return !(hasAmmo || reloadable);
-        }
-        else return this.getItemInHand(getSpellUsingHand()).isEmpty() && !this.isSwimming();
-    }
-
     public void StartShootingEntityUsingSpell(LivingEntity target) {
         this.setSpellDelay(this.getInitialSpellDelay());
         this.StartedSpellAttackTimeStamp = this.tickCount;

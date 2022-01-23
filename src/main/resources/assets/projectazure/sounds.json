@@ -7,6 +7,30 @@
       }
     ]
   },
+  "disc_cc5": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/getthispartystarted",
+        "stream": true
+      }
+    ]
+  },
+  "disc_sandstorm": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/sandstorm",
+        "stream": true
+      }
+    ]
+  },
+  "disc_sandroll": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/sandroll",
+        "stream": true
+      }
+    ]
+  },
   "disc_brainpower": {
     "sounds": [
       {

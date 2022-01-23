@@ -479,6 +479,31 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Tags.Items.DYES_BLACK))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerItems.DISC_SANDSTORM.get(), 1)
+                .define('S', ModTags.Items.PLATE_IRON)
+                .define('D', Tags.Items.SAND)
+                .pattern(" S ")
+                .pattern("SDS")
+                .pattern(" S ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
+                .unlockedBy("has_sand", has(Tags.Items.SAND))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.DISC_CC5.get(), 1)
+                .define('S', ModTags.Items.PLATE_IRON)
+                .define('D', ModTags.Items.ORIGINIUM_PRIME)
+                .pattern(" S ")
+                .pattern("SDS")
+                .pattern(" S ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
+                .unlockedBy("has_sand", has(ModTags.Items.ORIGINIUM_PRIME))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(registerItems.DISC_SANDROLL.get(),1).requires(registerItems.DISC_SANDSTORM.get()).requires(registerItems.DISC_RICKROLL.get())
+                .unlockedBy("has_sandstorm", has(registerItems.DISC_SANDSTORM.get()))
+                .unlockedBy("has_rickroll", has(registerItems.DISC_RICKROLL.get()))
+                        .save(consumer);
+
         ShapedRecipeBuilder.shaped(registerItems.DISC_RICKROLL.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Tags.Items.DYES_GRAY)

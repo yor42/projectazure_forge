@@ -135,6 +135,9 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("bonk_bat");
         buildModel("commanding_stick");
         buildModel("disc_rickroll");
+        buildModel("disc_sandstorm");
+        buildModel("disc_sandroll");
+        buildModel("disc_cc5");
 
         buildModel("bandage_roll");
         buildModel("medkit");
@@ -156,6 +159,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelAKN("spawnamiya");
         buildModelAKN("spawnmudrock");
         buildModelRUN("spawntalulah");
+        buildModelRUN("spawnfrostnova");
         buildModelAKN("spawntexas");
 
         buildModelBA("spawnshiroko");
