@@ -55,6 +55,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -80,6 +81,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -1007,7 +1010,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if(source.getEntity() == this.getVehicle()) {
+        if(this.getVehicle() != null && source.getEntity() == this.getVehicle()) {
             return false;
         }
         else if(source.getEntity() instanceof TameableEntity && this.getOwner() != null && ((TameableEntity) source.getEntity()).isOwnedBy(this.getOwner())){
@@ -2150,6 +2153,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                 }
             }
+            else if(this.isOnFire() && HeldItem == Items.WATER_BUCKET){
+                this.clearFire();
+                this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
+                if(!player.isCreative()) {
+                    player.setItemInHand(hand, HeldItem.getContainerItem(heldstacks));
+                }
+            }
             //food
             else if (HeldItem != registerItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
                 ItemStack stack = this.eat(this.getCommandSenderWorld(), player.getItemInHand(hand));
@@ -2157,6 +2167,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 if (!player.isCreative()) {
                     player.setItemInHand(hand, stack);
                 }
+                this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
                 return ActionResultType.SUCCESS;
             }
             //Potion
