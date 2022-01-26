@@ -80,7 +80,7 @@ public class enums {
         STAR_4("rarity.sr", 0x7200ff),
         STAR_5("rarity.ur", 0xffcc00),
         STAR_6("rarity.leg", 0xff6db5),
-        SPECIAL("rarity_sp", 0x00fcff);
+        SPECIAL("rarity.sp", 0x00fcff);
 
         private final String translationkey;
         private final int rarityColor;

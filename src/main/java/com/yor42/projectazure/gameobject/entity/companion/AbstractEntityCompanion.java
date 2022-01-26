@@ -21,7 +21,6 @@ import com.yor42.projectazure.gameobject.items.tools.ItemCommandStick;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
-import com.yor42.projectazure.interfaces.IAttributeable;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
@@ -35,7 +34,6 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
-import net.minecraft.client.audio.RidingMinecartTickableSound;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -48,14 +46,12 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.item.minecart.AbstractMinecartEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -81,8 +77,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -107,12 +101,11 @@ import java.util.*;
 
 import static com.yor42.projectazure.libs.utils.BlockStateUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
-import static net.minecraft.particles.ParticleTypes.CRIT;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
-public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable, IAnimationTickable, IAttributeable {
+public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
@@ -626,8 +619,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    public float getAttackDamage(){
-        ItemStack stack = this.getItemInHand(Hand.MAIN_HAND);
+    public float getAttackDamageMainHand(){
+        return this.getAttackDamageForStack(this.getMainHandItem());
+    }
+
+    public float getAttackDamageOffHand(){
+        return this.getAttackDamageForStack(this.getOffhandItem());
+    }
+
+    public float getAttackDamageForStack(ItemStack stack){
         Item item = stack.getItem();
         if(item instanceof TieredItem){
             Float dmg;
@@ -1005,6 +1005,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         else {
             return 0.3D;
+        }
+    }
+
+    @Override
+    public void remove(boolean keepData) {
+        super.remove(keepData);
+        if(!keepData && this.getOwner() instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) this.getOwner();
+            ProjectAzurePlayerCapability.getCapability(player).removeCompanion(this);
         }
     }
 
@@ -1569,14 +1578,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         this.setMeleeAttackDelay(0);
                         this.AttackCount = 0;
                     } else {
+                        this.lookAt(target, 30.0F, 30.0F);
                         this.setMeleeAttackDelay(currentspelldelay - 1);
                         int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
                         if(!((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().isEmpty() && ((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().contains(delay)){
                             this.playMeleeAttackPreSound();
                         }
-                        if (((IMeleeAttacker)this).getAttackPreAnimationDelay().contains(delay) && this.distanceTo(target)<=((IMeleeAttacker)this).getAttackRange(((IMeleeAttacker)this).isUsingTalentedWeapon())) {
+                        if (((IMeleeAttacker)this).getAttackDamageDelay().contains(delay) && this.distanceTo(target)<=((IMeleeAttacker)this).getAttackRange(((IMeleeAttacker)this).isTalentedWeaponinMainHand())) {
                             this.AttackCount+=1;
-                            ((IMeleeAttacker)this).PerformMeleeAttack(target, this.getAttackDamage(), this.AttackCount);
+                            ((IMeleeAttacker)this).PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
                         }
                     }
                 }

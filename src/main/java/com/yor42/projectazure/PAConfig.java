@@ -79,6 +79,21 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue TexasAttackDamage;
         public final ForgeConfigSpec.DoubleValue TexasMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue LapplandHealth;
+        public final ForgeConfigSpec.DoubleValue LapplandSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue LapplandAttackDamage;
+        public final ForgeConfigSpec.DoubleValue LapplandMovementSpeed;
+
+        public final ForgeConfigSpec.DoubleValue SiegeHealth;
+        public final ForgeConfigSpec.DoubleValue SiegeSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue SiegeAttackDamage;
+        public final ForgeConfigSpec.DoubleValue SiegeMovementSpeed;
+
+        public final ForgeConfigSpec.DoubleValue SchwarzHealth;
+        public final ForgeConfigSpec.DoubleValue SchwarzSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue SchwarzAttackDamage;
+        public final ForgeConfigSpec.DoubleValue SchwarzMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue AmiyaHealth;
         public final ForgeConfigSpec.DoubleValue AmiyaSwimSpeed;
         public final ForgeConfigSpec.DoubleValue AmiyaAttackDamage;
@@ -222,6 +237,20 @@ public class PAConfig {
             TexasAttackDamage = builder.defineInRange("Attack Damage of Texas", 2.0F, 0, 1024);
             TexasMovementSpeed = builder.defineInRange("Movement speed of Texas", 0.4F, 0, 2);
 
+            LapplandHealth = builder.defineInRange("Max Health of Lappland", 20D, 1, 1024);
+            LapplandSwimSpeed = builder.defineInRange("Swim Speed of Lappland", 2.5, 0, 1024);
+            LapplandAttackDamage = builder.defineInRange("Attack Damage of Lappland", 2.0F, 0, 1024);
+            LapplandMovementSpeed = builder.defineInRange("Movement speed of Lappland", 0.4F, 0, 2);
+
+            SiegeHealth = builder.defineInRange("Max Health of Siege", 20D, 1, 1024);
+            SiegeSwimSpeed = builder.defineInRange("Swim Speed of Siege", 2.5, 0, 1024);
+            SiegeAttackDamage = builder.defineInRange("Attack Damage of Siege", 2.0F, 0, 1024);
+            SiegeMovementSpeed = builder.defineInRange("Movement speed of Siege", 0.4F, 0, 2);
+
+            SchwarzHealth = builder.defineInRange("Max Health of Schwarz", 20D, 1, 1024);
+            SchwarzSwimSpeed = builder.defineInRange("Swim Speed of Schwarz", 2.5, 0, 1024);
+            SchwarzAttackDamage = builder.defineInRange("Attack Damage of Schwarz", 2.0F, 0, 1024);
+            SchwarzMovementSpeed = builder.defineInRange("Movement speed of Schwarz", 0.4F, 0, 2);
 
             AmiyaHealth = builder.defineInRange("Max Health of Amiya", 20D, 1, 1024);
             AmiyaSwimSpeed = builder.defineInRange("Swim Speed of Amiya", 2.5, 0, 1024);

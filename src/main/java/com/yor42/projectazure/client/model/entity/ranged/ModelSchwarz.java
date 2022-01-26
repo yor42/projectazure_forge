@@ -1,9 +1,9 @@
-package com.yor42.projectazure.client.model.entity.sworduser;
+package com.yor42.projectazure.client.model.entity.ranged;
 
+import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.solarapocalypse.utils.MathUtils;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -16,28 +16,27 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class TexasModel extends AnimatedGeoModel<EntityTexas> {
-
+public class ModelSchwarz extends AnimatedGeoModel<EntitySchwarz> {
     private int blinkinterval = 0;
     private long LastBlinkTime = 0;
 
     @Override
-    public ResourceLocation getModelLocation(EntityTexas object) {
-        return GeoModelEntityLocation("modeltexas");
+    public ResourceLocation getModelLocation(EntitySchwarz object) {
+        return GeoModelEntityLocation("modelschwarz");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTexas object) {
-        return TextureEntityLocation("modeltexas");
+    public ResourceLocation getTextureLocation(EntitySchwarz object) {
+        return TextureEntityLocation("modelschwarz");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityTexas animatable) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/texas.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntitySchwarz animatable) {
+        return new ResourceLocation(Constants.MODID,"animations/entity/ranged/schwarz.animation.json");
     }
 
     @Override
-    public void setLivingAnimations(EntityTexas entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setLivingAnimations(EntitySchwarz entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
@@ -46,7 +45,6 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
         IBone flushed = this.getAnimationProcessor().getBone("flushed");
         IBone anger1 = this.getAnimationProcessor().getBone("angry1");
         IBone anger2 = this.getAnimationProcessor().getBone("angry2");
-        IBone anger3 = this.getAnimationProcessor().getBone("angry3");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone Sleep = this.getAnimationProcessor().getBone("Sleeping");
         IBone Faint = this.getAnimationProcessor().getBone("faint");
@@ -61,7 +59,6 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             PatFace.setHidden(true);
             anger1.setHidden(true);
             anger2.setHidden(true);
-            anger3.setHidden(true);
             Sleep.setHidden(true);
             Faint.setHidden(false);
             flushed.setHidden(true);
@@ -74,7 +71,6 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             PatFace.setHidden(true);
             anger1.setHidden(true);
             anger2.setHidden(true);
-            anger3.setHidden(true);
             Sleep.setHidden(true);
             flushed.setHidden(true);
             Faint.setHidden(true);
@@ -86,8 +82,7 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             anger1.setHidden(true);
-            anger2.setHidden(true);
-            anger3.setHidden(false);
+            anger2.setHidden(false);
             flushed.setHidden(true);
             Sleep.setHidden(true);
             Faint.setHidden(true);
@@ -98,10 +93,9 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
-            anger1.setHidden(true);
-            anger2.setHidden(false);
+            anger1.setHidden(false);
+            anger2.setHidden(true);
             flushed.setHidden(true);
-            anger3.setHidden(true);
             Sleep.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
@@ -111,10 +105,9 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
-            anger1.setHidden(false);
+            anger1.setHidden(true);
             anger2.setHidden(true);
-            flushed.setHidden(true);
-            anger3.setHidden(true);
+            flushed.setHidden(false);
             Sleep.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
@@ -127,7 +120,7 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             PatFace.setHidden(false);
             anger1.setHidden(true);
             anger2.setHidden(true);
-            anger3.setHidden(true);
+
             Sleep.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
@@ -140,7 +133,7 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             flushed.setHidden(true);
             anger1.setHidden(true);
             anger2.setHidden(true);
-            anger3.setHidden(true);
+
             Sleep.setHidden(false);
             Faint.setHidden(true);
             Injured.setHidden(true);
@@ -155,7 +148,7 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
                 flushed.setHidden(true);
                 anger1.setHidden(true);
                 anger2.setHidden(true);
-                anger3.setHidden(true);
+
                 Sleep.setHidden(true);
                 Faint.setHidden(true);
                 Injured.setHidden(true);
@@ -169,7 +162,7 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
                     flushed.setHidden(true);
                     anger1.setHidden(true);
                     anger2.setHidden(true);
-                    anger3.setHidden(true);
+
                     Faint.setHidden(true);
                     Injured.setHidden(true);
                     Sleep.setHidden(true);
@@ -182,7 +175,7 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
                     flushed.setHidden(true);
                     anger1.setHidden(true);
                     anger2.setHidden(true);
-                    anger3.setHidden(true);
+
                     Sleep.setHidden(true);
                     Faint.setHidden(true);
                     Injured.setHidden(true);
@@ -202,7 +195,7 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
 
         if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
             body.setPositionY(body.getPositionY() - 63);
-            body.setPositionZ(body.getPositionZ() + 10);
+            body.setPositionZ(body.getPositionZ() + 12);
 
             if(entity.getOwner().isCrouching()){
                 body.setPositionZ(body.getPositionZ() + 2);

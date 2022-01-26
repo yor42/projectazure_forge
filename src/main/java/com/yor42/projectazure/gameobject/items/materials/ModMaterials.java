@@ -22,7 +22,13 @@ public enum ModMaterials implements IItemTier {
     SLEDGEHAMMER(2, 600, 0.5F, 1, 3, () -> {
         return Ingredient.of(Tags.Items.INGOTS_IRON);}),
 
+    WARHAMMER(7, 600, 0.5F, 6, 3, () -> {
+        return Ingredient.of(Tags.Items.INGOTS_IRON);}),
+
     CLAYMORE(2, 5100, 1F, 11, 3, () -> {
+        return Ingredient.of(ModTags.Items.INGOT_STEEL);}),
+
+    CRESCENT_KATANA(2, 1500, 1F, 5, 3, () -> {
         return Ingredient.of(ModTags.Items.INGOT_STEEL);});
 
     private final int harvestLevel;

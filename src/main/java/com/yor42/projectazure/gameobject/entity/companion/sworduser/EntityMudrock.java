@@ -238,7 +238,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Integer> getAttackPreAnimationDelay() {
+    public ArrayList<Integer> getAttackDamageDelay() {
         return new ArrayList<>(Arrays.asList(18));
     }
 

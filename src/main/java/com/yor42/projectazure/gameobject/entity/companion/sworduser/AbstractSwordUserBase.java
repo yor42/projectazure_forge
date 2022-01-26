@@ -24,12 +24,12 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
         return this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null;
     }
 
-    public boolean isUsingTalentedWeapon(){
-        return this.getTalentedWeaponList().contains(this.getMainHandItem().getItem());
+    public boolean isTalentedWeaponinMainHand(){
+        return this.isTalentedWeapon(this.getMainHandItem());
     }
 
     public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.getInitialMeleeAttackDelay() *this.getAttackSpeedModifier(this.isUsingTalentedWeapon())));
+        this.setMeleeAttackDelay((int) (this.getInitialMeleeAttackDelay() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
         this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
 }

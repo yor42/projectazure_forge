@@ -812,13 +812,10 @@
         "name": "projectazure:entity/akn/rosmontis/voice/voice6"
       },
       {
-        "name": "projectazure:entity/akn/rosmontis/voice/voice7"
+        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff1"
       },
       {
-        "name": "projectazure:entity/akn/mudrock/voice/voice_aff1"
-      },
-      {
-        "name": "projectazure:entity/akn/mudrock/voice/voice_aff2"
+        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff2"
       }
     ]
   },
@@ -850,6 +847,588 @@
       },
       {
         "name": "projectazure:entity/akn/rosmontis/voice/voice_aff3"
+      }
+    ]
+  },
+  "lappland_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice6"
+      }
+    ]
+  },
+  "lappland_talk_pat": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/voice/pat/pat1"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/pat/pat2"
+      }
+    ]
+  },
+  "lappland_talk_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/voice/attack1"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/attack2"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/attack3"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/attack4"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/attack5"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/attack6"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/attack7"
+      }
+    ]
+  },
+  "lappland_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/affection1"
+      }
+    ]
+  },
+  "lappland_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/affection1"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/affection2"
+      }
+    ]
+  },
+  "lappland_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/affection1"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/affection2"
+      },
+      {
+        "name": "projectazure:entity/akn/lappland/voice/affection3"
+      }
+    ]
+  },
+  "siege_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice6"
+      }
+    ]
+  },
+  "siege_talk_pat": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/siege/voice/pat/pat1"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/pat/pat2"
+      }
+    ]
+  },
+  "siege_talk_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/siege/voice/attack1"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/attack2"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/attack3"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/attack4"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/attack5"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/attack6"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/attack7"
+      }
+    ]
+  },
+  "siege_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/affection1"
+      }
+    ]
+  },
+  "siege_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/affection1"
+      },
+      {
+        "name": "projectazure:entity/akn/mudrock/voice/affection2"
+      }
+    ]
+  },
+  "siege_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/affection1"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/affection2"
+      },
+      {
+        "name": "projectazure:entity/akn/siege/voice/affection3"
+      }
+    ]
+  },
+  "schwarz_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice6"
+      }
+    ]
+  },
+  "schwarz_talk_pat": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/pat/pat1"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/pat/pat2"
+      }
+    ]
+  },
+  "schwarz_talk_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/attack1"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/attack2"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/attack3"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/attack4"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/attack5"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/attack6"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/attack7"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/attack8"
+      }
+    ]
+  },
+  "schwarz_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/affection1"
+      }
+    ]
+  },
+  "schwarz_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/affection1"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/affection2"
+      }
+    ]
+  },
+  "schwarz_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/affection1"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/affection2"
+      },
+      {
+        "name": "projectazure:entity/akn/schwarz/voice/affection3"
+      }
+    ]
+  },
+  "shiroko_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/ba/shiroko/voice1"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice2"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice3"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice4"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice5"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice6"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice7"
+      }
+    ]
+  },
+  "shiroko_talk_pat": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/ba/shiroko/pat/pat1"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/pat/pat2"
+      }
+    ]
+  },
+  "shiroko_talk_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/ba/shiroko/attack1"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/attack2"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/attack3"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/attack4"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/attack5"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/attack6"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/attack7"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/attack8"
+      }
+    ]
+  },
+  "shiroko_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/ba/shiroko/voice1"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice2"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice3"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice4"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice5"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice6"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice7"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/aff_1"
+      }
+    ]
+  },
+  "shiroko_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/ba/shiroko/voice1"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice2"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice3"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice4"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice5"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice6"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice7"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/aff_1"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/aff_2"
+      }
+    ]
+  },
+  "shiroko_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/ba/shiroko/voice1"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice2"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice3"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice4"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice5"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice6"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/voice7"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/aff_1"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/aff_2"
+      },
+      {
+        "name": "projectazure:entity/ba/shiroko/aff_3"
       }
     ]
   },

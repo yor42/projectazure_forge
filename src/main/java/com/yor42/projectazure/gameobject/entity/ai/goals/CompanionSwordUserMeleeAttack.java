@@ -87,7 +87,7 @@ public class CompanionSwordUserMeleeAttack extends Goal {
             double distance = this.hostEntity.distanceTo(this.target);
             boolean canSee = this.hostEntity.getSensing().canSee(this.target);
 
-            boolean isTooFar = distance >= this.host.getAttackRange(this.host.isUsingTalentedWeapon());
+            boolean isTooFar = distance >= this.host.getAttackRange(this.host.isTalentedWeaponinMainHand());
 
             if (canSee) {
                 ++this.seeTime;

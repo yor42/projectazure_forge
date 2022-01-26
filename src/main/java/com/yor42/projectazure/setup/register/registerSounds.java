@@ -88,6 +88,34 @@ public final class registerSounds {
     public static final SoundEvent ROSMONTIS_TALK_HIGH_AFFECTION2 = registerSoundEvent("rosmontis_talk_high_affection2");
     public static final SoundEvent ROSMONTIS_TALK_HIGH_AFFECTION3 = registerSoundEvent("rosmontis_talk_high_affection3");
 
+    public static final SoundEvent LAPPLAND_TALK_NORMAL = registerSoundEvent("lappland_talk_normal");
+    public static final SoundEvent LAPPLAND_TALK_PAT = registerSoundEvent("lappland_talk_pat");
+    public static final SoundEvent LAPPLAND_TALK_ATTACK = registerSoundEvent("lappland_talk_attack");
+    public static final SoundEvent LAPPLAND_TALK_HIGH_AFFECTION1 = registerSoundEvent("lappland_talk_high_affection1");
+    public static final SoundEvent LAPPLAND_TALK_HIGH_AFFECTION2 = registerSoundEvent("lappland_talk_high_affection2");
+    public static final SoundEvent LAPPLAND_TALK_HIGH_AFFECTION3 = registerSoundEvent("lappland_talk_high_affection3");
+
+    public static final SoundEvent SIEGE_TALK_NORMAL = registerSoundEvent("siege_talk_normal");
+    public static final SoundEvent SIEGE_TALK_PAT = registerSoundEvent("siege_talk_pat");
+    public static final SoundEvent SIEGE_TALK_ATTACK = registerSoundEvent("siege_talk_attack");
+    public static final SoundEvent SIEGE_TALK_HIGH_AFFECTION1 = registerSoundEvent("siege_talk_high_affection1");
+    public static final SoundEvent SIEGE_TALK_HIGH_AFFECTION2 = registerSoundEvent("siege_talk_high_affection2");
+    public static final SoundEvent SIEGE_TALK_HIGH_AFFECTION3 = registerSoundEvent("siege_talk_high_affection3");
+
+    public static final SoundEvent SCHWARZ_TALK_NORMAL = registerSoundEvent("schwarz_talk_normal");
+    public static final SoundEvent SCHWARZ_TALK_PAT = registerSoundEvent("schwarz_talk_pat");
+    public static final SoundEvent SCHWARZ_TALK_ATTACK = registerSoundEvent("schwarz_talk_attack");
+    public static final SoundEvent SCHWARZ_TALK_HIGH_AFFECTION1 = registerSoundEvent("schwarz_talk_high_affection1");
+    public static final SoundEvent SCHWARZ_TALK_HIGH_AFFECTION2 = registerSoundEvent("schwarz_talk_high_affection2");
+    public static final SoundEvent SCHWARZ_TALK_HIGH_AFFECTION3 = registerSoundEvent("schwarz_talk_high_affection3");
+
+    public static final SoundEvent SHIROKO_TALK_NORMAL = registerSoundEvent("shiroko_talk_normal");
+    public static final SoundEvent SHIROKO_TALK_PAT = registerSoundEvent("shiroko_talk_pat");
+    public static final SoundEvent SHIROKO_TALK_ATTACK = registerSoundEvent("shiroko_talk_attack");
+    public static final SoundEvent SHIROKO_TALK_HIGH_AFFECTION1 = registerSoundEvent("shiroko_talk_high_affection1");
+    public static final SoundEvent SHIROKO_TALK_HIGH_AFFECTION2 = registerSoundEvent("shiroko_talk_high_affection2");
+    public static final SoundEvent SHIROKO_TALK_HIGH_AFFECTION3 = registerSoundEvent("shiroko_talk_high_affection3");
+
     public static final SoundEvent M4A1_TALK_NORMAL = registerSoundEvent("m4a1_talk_normal");
     public static final SoundEvent M4A1_TALK_PAT = registerSoundEvent("m4a1_talk_pat");
     public static final SoundEvent M4A1_TALK_ATTACK = registerSoundEvent("m4a1_talk_attack");

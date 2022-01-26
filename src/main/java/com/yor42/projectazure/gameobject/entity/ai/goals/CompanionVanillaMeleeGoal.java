@@ -85,7 +85,7 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
         if(this.entity.isAngry() && this.entity.getOwner() == enemy && distToEnemySqr <= d0){
             this.resetAttackCooldown();
             this.mob.swing(Hand.MAIN_HAND);
-            enemy.hurt(DamageSources.causeRevengeDamage(this.entity), this.entity.getAttackDamage());
+            enemy.hurt(DamageSources.causeRevengeDamage(this.entity), this.entity.getAttackDamageMainHand());
         }
         else{
             super.checkAndPerformAttack(enemy, distToEnemySqr);

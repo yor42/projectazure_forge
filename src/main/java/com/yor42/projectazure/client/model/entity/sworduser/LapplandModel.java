@@ -1,9 +1,9 @@
 package com.yor42.projectazure.client.model.entity.sworduser;
 
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityLappland;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.solarapocalypse.utils.MathUtils;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -16,28 +16,28 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class TexasModel extends AnimatedGeoModel<EntityTexas> {
+public class LapplandModel extends AnimatedGeoModel<EntityLappland> {
 
     private int blinkinterval = 0;
     private long LastBlinkTime = 0;
 
     @Override
-    public ResourceLocation getModelLocation(EntityTexas object) {
-        return GeoModelEntityLocation("modeltexas");
+    public ResourceLocation getModelLocation(EntityLappland animatable) {
+        return GeoModelEntityLocation("modellappland");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTexas object) {
-        return TextureEntityLocation("modeltexas");
+    public ResourceLocation getTextureLocation(EntityLappland animatable) {
+        return TextureEntityLocation("modellappland");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityTexas animatable) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/texas.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntityLappland animatable) {
+        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/lappland.animation.json");
     }
 
     @Override
-    public void setLivingAnimations(EntityTexas entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setLivingAnimations(EntityLappland entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
@@ -138,6 +138,8 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             flushed.setHidden(true);
+            body.setPositionY(-45);
+            body.setPositionZ(-10);
             anger1.setHidden(true);
             anger2.setHidden(true);
             anger3.setHidden(true);
@@ -202,7 +204,7 @@ public class TexasModel extends AnimatedGeoModel<EntityTexas> {
 
         if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
             body.setPositionY(body.getPositionY() - 63);
-            body.setPositionZ(body.getPositionZ() + 10);
+            body.setPositionZ(body.getPositionZ() + 11);
 
             if(entity.getOwner().isCrouching()){
                 body.setPositionZ(body.getPositionZ() + 2);

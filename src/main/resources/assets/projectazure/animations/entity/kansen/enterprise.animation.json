@@ -936,49 +936,9 @@
 						}
 					}
 				},
-				"bone8": {
+				"Body": {
 					"rotation": {
-						"0.0": {
-							"vector": [15, 0, 0]
-						},
-						"0.52": {
-							"vector": [12.5, 0, 0],
-							"easing": "easeInOutSine"
-						},
-						"1.04": {
-							"vector": [15, 0, 0],
-							"easing": "easeInOutSine"
-						}
-					}
-				},
-				"bone9": {
-					"rotation": {
-						"0.0": {
-							"vector": [27.5, 0, 0]
-						},
-						"0.52": {
-							"vector": [20, 0, 0],
-							"easing": "easeInOutSine"
-						},
-						"1.04": {
-							"vector": [27.5, 0, 0],
-							"easing": "easeInOutSine"
-						}
-					}
-				},
-				"bone4": {
-					"rotation": {
-						"0.0": {
-							"vector": [10, 0, 0]
-						},
-						"0.52": {
-							"vector": [12.5, 0, 0],
-							"easing": "easeInOutSine"
-						},
-						"1.04": {
-							"vector": [10, 0, 0],
-							"easing": "easeInOutSine"
-						}
+						"vector": [10, 0, 0]
 					}
 				}
 			}

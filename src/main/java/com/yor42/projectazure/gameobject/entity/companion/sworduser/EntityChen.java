@@ -58,7 +58,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Integer> getAttackPreAnimationDelay() {
+    public ArrayList<Integer> getAttackDamageDelay() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(8);
         list.add(24);

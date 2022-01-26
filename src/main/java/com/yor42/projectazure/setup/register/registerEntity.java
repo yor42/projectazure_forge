@@ -6,10 +6,9 @@ import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
+import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.*;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityChen;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityMudrock;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.*;
 import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
 import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
@@ -39,6 +38,9 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_MUDROCK, EntityMudrock.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_TEXAS, EntityTexas.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_FROSTNOVA, EntityFrostnova.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_LAPPLAND, EntityLappland.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SIEGE, EntitySiege.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SCHWARZ, EntitySchwarz.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().build());
     }
 

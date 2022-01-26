@@ -1,26 +1,21 @@
-package com.yor42.projectazure.gameobject.entity.companion.sworduser;
+package com.yor42.projectazure.gameobject.entity.companion.ranged;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -29,54 +24,20 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
 
-public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
-    public EntityTexas(EntityType<? extends TameableEntity> type, World worldIn) {
+import static com.yor42.projectazure.libs.enums.EntityType.OPERATOR;
+
+public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
+    public EntitySchwarz(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     @Override
     public enums.EntityType getEntityType() {
-        return enums.EntityType.OPERATOR;
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        super.registerControllers(animationData);
-        animationData.addAnimationController(new AnimationController<>(this, "controller_tail", 10, this::predicate_tail));
-    }
-
-    private <T extends IAnimatable> PlayState predicate_tail(AnimationEvent<T> event) {
-        AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isOrderedToSit() || (this.getVehicle() != null && this.getVehicle() != this.getOwner())){
-            event.getController().setAnimation(builder.addAnimation("sit_tail").addAnimation("sit_tail_idle"));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat_tail", true));
-
-            return PlayState.CONTINUE;
-        }
-        else if (isMoving()) {
-            if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_tail", true));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("walk_tail", true));
-            }
-            return PlayState.CONTINUE;
-        }
-        event.getController().setAnimation(builder.addAnimation("idle_tail", true));
-        return PlayState.CONTINUE;
+        return OPERATOR;
     }
 
     @Override
@@ -95,7 +56,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingL":"swingR", true));
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
 
             return PlayState.CONTINUE;
         }
@@ -146,9 +107,9 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             }
             else {
                 if (this.getMainHandItem().getItem() instanceof TieredItem) {
-                    event.getController().setAnimation(builder.addAnimation("sit_arm_idle_toolhand", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_idle_arm_toolmainhand", true));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_arm_idle_emptyhand", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_idle_arm_emptymainhand", true));
                 }
             }
             return PlayState.CONTINUE;
@@ -201,21 +162,12 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
-        return new ArrayList<>(Collections.singletonList(10));
-    }
-
-    @Override
-    public void playMeleeAttackPreSound() {
-        this.playSound(registerSounds.TEXAS_SWORD_SWING, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
-    }
-
-    @Override
-    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
-        pAnimationEvent.getController().setAnimation(builder.addAnimation("idle_chest", true));
+        event.getController().setAnimation(builder.addAnimation("idle_chest"));
         return PlayState.CONTINUE;
     }
+
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
@@ -242,15 +194,18 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
+                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg"));
                 }
             }
             return PlayState.CONTINUE;
         }
+        /*
         if(this.isNonVanillaMeleeAttacking()){
             event.getController().setAnimation(builder.addAnimation("melee_attack_leg", false));
             return PlayState.CONTINUE;
         }
+
+         */
         else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
             return PlayState.CONTINUE;
@@ -273,90 +228,45 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     protected void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this));
     }
-
     @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_5;
-    }
-
-    @Override
-    public int getInitialMeleeAttackDelay() {
-        return 18;
-    }
-
-    @Override
-    public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(14));
-    }
-
-    @Override
-    public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.FLEXABLE_SWORD_THINGY.get()));
-    }
-
-    @Override
-    public float getAttackRange(boolean isUsingTalentedWeapon) {
-        return 3;
-    }
-
-    @Override
-    public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this): DamageSource.mobAttack(this), damage+3);
-        this.AttackCount = 0;
-        this.playSound(registerSounds.TEXAS_SWORD_HIT, 1, 0.8F+(0.4F*this.getRandom().nextFloat()));
-    }
-
-    @Override
-    public boolean shouldUseNonVanillaAttack(LivingEntity target) {
-        return super.shouldUseNonVanillaAttack(target);
-    }
-
-    @Override
-    public enums.OperatorClass getOperatorClass() {
-        return enums.OperatorClass.VANGUARD;
+        return enums.CompanionRarity.STAR_6;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.createMobAttributes()
                 //Attribute
-                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.TexasMovementSpeed.get())
-                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.TexasSwimSpeed.get())
-                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.TexasHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.TexasAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.SchwarzMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.SchwarzSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.SchwarzHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.SchwarzAttackDamage.get())
                 ;
     }
 
     @Override
+    public enums.OperatorClass getOperatorClass() {
+        return enums.OperatorClass.SNIPER;
+    }
+
+    @Override
     public SoundEvent getNormalAmbientSounds() {
-        return registerSounds.TEXAS_TALK_NORMAL;
+        return null;
     }
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return registerSounds.TEXAS_TALK_HIGH_AFFECTION1;
+        return null;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return registerSounds.TEXAS_TALK_HIGH_AFFECTION2;
+        return null;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return registerSounds.TEXAS_TALK_HIGH_AFFECTION3;
-    }
-
-    @Nullable
-    @Override
-    public SoundEvent getPatSoundEvent() {
-        return registerSounds.TEXAS_TALK_PAT;
-    }
-
-    @Nullable
-    @Override
-    protected SoundEvent getAggroedSoundEvent() {
-        return registerSounds.TEXAS_TALK_ATTACK;
+        return null;
     }
 }

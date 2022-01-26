@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public interface IMeleeAttacker {
     Q1. Why arraylist?
     A1. Because some entity apparently deals damage multiple times each attack.
      */
-    ArrayList<Integer> getAttackPreAnimationDelay();
+    ArrayList<Integer> getAttackDamageDelay();
 
     ArrayList<Item> getTalentedWeaponList();
 
@@ -31,7 +32,21 @@ public interface IMeleeAttacker {
     float getAttackRange(boolean isUsingTalentedWeapon);
 
     boolean shouldUseNonVanillaAttack(LivingEntity target);
-    boolean isUsingTalentedWeapon();
+    default boolean isTalentedWeaponinMainHand(){
+        return this.isTalentedWeapon(this.getMainHandItem());
+    }
+
+    default boolean isDuelWielding(){
+        return this.isTalentedWeapon(this.getMainHandItem()) && this.isTalentedWeapon(this.getOffhandItem());
+    }
+
+    ItemStack getMainHandItem();
+
+    ItemStack getOffhandItem();
+
+    default boolean isTalentedWeapon(ItemStack stack){
+        return this.getTalentedWeaponList().contains(stack.getItem());
+    }
 
     default ArrayList<Integer> getMeleeAnimationAudioCueDelay(){
         return new ArrayList<>();

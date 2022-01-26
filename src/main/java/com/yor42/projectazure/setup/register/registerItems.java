@@ -308,6 +308,9 @@ public class registerItems {
 
     public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> CRESCENTKATANA_SHIRO = registerManager.ITEMS.register("crescentkatana_shiro", () -> new ModSwordItem(ModMaterials.CRESCENT_KATANA, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> CRESCENTKATANA_KURO = registerManager.ITEMS.register("crescentkatana_kuro", () -> new ModSwordItem(ModMaterials.CRESCENT_KATANA, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> WARHAMMER = registerManager.ITEMS.register("warhammer", () -> new ModSwordItem(ModMaterials.WARHAMMER, 1, -1.8F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> FLEXABLE_SWORD_THINGY = registerManager.ITEMS.register("flexsword", () -> new ModSwordItem(ModMaterials.FLEXABLESWORD, 1, -1.0F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> COMPOUNDBOW = registerManager.ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));
     public static final RegistryObject<Item> BONKBAT = registerManager.ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
@@ -395,6 +398,15 @@ public class registerItems {
             .tab(PA_SHIPS)));
 
     public static final RegistryObject<Item> SPAWN_FROSTNOVA = registerManager.ITEMS.register("spawnfrostnova", () -> new ItemKansenSpawnEgg(ENTITYTYPE_FROSTNOVA, new Item.Properties()
+            .tab(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWN_SIEGE = registerManager.ITEMS.register("spawnsiege", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SIEGE, new Item.Properties()
+            .tab(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWN_SCHWARZ = registerManager.ITEMS.register("spawnschwarz", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SCHWARZ, new Item.Properties()
+            .tab(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWN_LAPPLAND = registerManager.ITEMS.register("spawnlappland", () -> new ItemKansenSpawnEgg(ENTITYTYPE_LAPPLAND, new Item.Properties()
             .tab(PA_SHIPS)));
 
     public static final RegistryObject<Item> BANDAGE_ROLL = registerManager.ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()
