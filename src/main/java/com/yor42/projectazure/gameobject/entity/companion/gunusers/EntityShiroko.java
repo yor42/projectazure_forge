@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.items.ItemMissleDrone;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +18,9 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -27,6 +30,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EntityShiroko extends EntityGunUserBase {
     @Override
@@ -262,6 +266,36 @@ public class EntityShiroko extends EntityGunUserBase {
             return hasSkillItem && isDroneArmed && isDroneReady;
         }
         return false;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return this.getAffection()>=90? registerSounds.SHIROKO_TALK_HIGH_AFFECTION :registerSounds.SHIROKO_TALK_NORMAL;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.SHIROKO_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.SHIROKO_TALK_PAT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSourceIn) {
+        return registerSounds.SHIROKO_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return registerSounds.SHIROKO_FAINT;
     }
 
     @Override

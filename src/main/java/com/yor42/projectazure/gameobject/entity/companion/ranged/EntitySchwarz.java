@@ -6,6 +6,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -27,6 +28,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.enums.EntityType.OPERATOR;
 
@@ -250,23 +252,37 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
         return enums.OperatorClass.SNIPER;
     }
 
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.SCHWARZ_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.SCHWARZ_TALK_PAT;
+    }
+
     @Override
     public SoundEvent getNormalAmbientSounds() {
-        return null;
+        return registerSounds.SCHWARZ_TALK_NORMAL;
     }
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return null;
+        return registerSounds.SCHWARZ_TALK_HIGH_AFFECTION1;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return null;
+        return registerSounds.SCHWARZ_TALK_HIGH_AFFECTION2;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return null;
+        return registerSounds.SCHWARZ_TALK_HIGH_AFFECTION3;
     }
+
+
 }

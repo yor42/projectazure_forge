@@ -29,6 +29,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     public EntityAmiya(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -277,6 +278,18 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     @Override
     public SoundEvent getNormalAmbientSounds() {
         return registerSounds.CHIMERA_TALK_NORMAL;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.CHIMERA_TALK_PAT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.CHIMERA_TALK_ATTACK;
     }
 
     @Override

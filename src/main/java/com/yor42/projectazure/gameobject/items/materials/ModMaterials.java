@@ -28,8 +28,11 @@ public enum ModMaterials implements IItemTier {
     CLAYMORE(2, 5100, 1F, 11, 3, () -> {
         return Ingredient.of(ModTags.Items.INGOT_STEEL);}),
 
-    CRESCENT_KATANA(2, 1500, 1F, 5, 3, () -> {
-        return Ingredient.of(ModTags.Items.INGOT_STEEL);});
+    CRESCENT_KATANA_KURO(2, 756, 1F, 5, 3, () -> {
+        return Ingredient.of(ModTags.Items.INGOT_STEEL);}),
+
+    CRESCENT_KATANA_SHIRO(2, 540, 1F, 3, 3, () -> {
+        return Ingredient.of(Tags.Items.INGOTS_IRON);});
 
     private final int harvestLevel;
     private final int maxUses;

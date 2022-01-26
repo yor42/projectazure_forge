@@ -875,10 +875,10 @@
   "lappland_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/lappland/voice/pat/pat1"
+        "name": "projectazure:entity/akn/lappland/voice/pat1"
       },
       {
-        "name": "projectazure:entity/akn/lappland/voice/pat/pat2"
+        "name": "projectazure:entity/akn/lappland/voice/pat2"
       }
     ]
   },
@@ -1016,10 +1016,10 @@
   "siege_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/siege/voice/pat/pat1"
+        "name": "projectazure:entity/akn/siege/voice/pat1"
       },
       {
-        "name": "projectazure:entity/akn/siege/voice/pat/pat2"
+        "name": "projectazure:entity/akn/siege/voice/pat2"
       }
     ]
   },
@@ -1157,10 +1157,10 @@
   "schwarz_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/schwarz/voice/pat/pat1"
+        "name": "projectazure:entity/akn/schwarz/voice/pat1"
       },
       {
-        "name": "projectazure:entity/akn/schwarz/voice/pat/pat2"
+        "name": "projectazure:entity/akn/schwarz/voice/pat2"
       }
     ]
   },
@@ -1304,10 +1304,10 @@
   "shiroko_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/ba/shiroko/pat/pat1"
+        "name": "projectazure:entity/ba/shiroko/pat1"
       },
       {
-        "name": "projectazure:entity/ba/shiroko/pat/pat2"
+        "name": "projectazure:entity/ba/shiroko/pat2"
       }
     ]
   },
@@ -1339,66 +1339,27 @@
       }
     ]
   },
-  "shiroko_talk_high_affection1": {
+  "shiroko_talk_hurt": {
     "sounds": [
       {
-        "name": "projectazure:entity/ba/shiroko/voice1"
+        "name": "projectazure:entity/ba/shiroko/hurt1"
       },
       {
-        "name": "projectazure:entity/ba/shiroko/voice2"
+        "name": "projectazure:entity/ba/shiroko/hurt2"
       },
       {
-        "name": "projectazure:entity/ba/shiroko/voice3"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice4"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice5"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice6"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice7"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/aff_1"
+        "name": "projectazure:entity/ba/shiroko/hurt3"
       }
     ]
   },
-  "shiroko_talk_high_affection2": {
+  "shiroko_talk_faint": {
     "sounds": [
       {
-        "name": "projectazure:entity/ba/shiroko/voice1"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice2"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice3"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice4"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice5"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice6"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/voice7"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/aff_1"
-      },
-      {
-        "name": "projectazure:entity/ba/shiroko/aff_2"
+        "name": "projectazure:entity/ba/shiroko/faint"
       }
     ]
   },
-  "shiroko_talk_high_affection3": {
+  "shiroko_talk_high_affection": {
     "sounds": [
       {
         "name": "projectazure:entity/ba/shiroko/voice1"
@@ -2394,10 +2355,38 @@
       }
     ]
   },
+  "lappland_swing": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/sword_swing"
+      }
+    ]
+  },
+  "lappland_hit": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/sword_hit"
+      }
+    ]
+  },
+  "warhammer_swing": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/lappland/sword_swing"
+      }
+    ]
+  },
+  "warhammer_hit": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/schwarz/hammer_hit"
+      }
+    ]
+  },
   "sword_swing": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/texas/sword_swing"
+        "name": "projectazure:entity/akn/schwarz/hammer_swing"
       }
     ]
   },

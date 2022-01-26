@@ -2,11 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "  B",
-    " B ",
-    "L  "
+    " BP",
+    "LP "
   ],
   "key": {
     "B": {
+      "tag": "forge:ingots/iron"
+    },
+    "P": {
       "tag": "forge:plates/steel"
     },
     "L": {
@@ -14,6 +17,6 @@
     }
   },
   "result": {
-    "item": "projectazure:sheath"
+    "item": "projectazure:crescentkatana_shiro"
   }
 }

@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:sheath"
+      "projectazure:warhammer"
     ]
   },
   "criteria": {
-    "has_plate": {
+    "has_ingot": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:plates/steel"
+            "tag": "forge:ingots/steel"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:sheath"
+        "recipe": "projectazure:warhammer"
       }
     }
   },
   "requirements": [
     [
-      "has_plate",
+      "has_ingot",
       "has_the_recipe"
     ]
   ]

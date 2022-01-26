@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -29,6 +30,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -166,6 +168,16 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
+    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
+        return new ArrayList<>(Collections.singletonList(20));
+    }
+
+    @Override
+    public void playMeleeAttackPreSound() {
+        this.playSound(registerSounds.WARHAMMER_SWING, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
+    }
+
+    @Override
     protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().setAnimation(builder.addAnimation("idle_chest", true));
@@ -259,6 +271,7 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(DamageSource.mobAttack(this), this.getAttackDamageMainHand());
+        target.playSound(registerSounds.WARHAMMER_HIT, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
     }
 
     @Override
@@ -279,21 +292,33 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public SoundEvent getNormalAmbientSounds() {
-        return null;
+        return registerSounds.SIEGE_TALK_NORMAL;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.SIEGE_TALK_PAT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.SIEGE_TALK_ATTACK;
     }
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return null;
+        return registerSounds.SIEGE_TALK_HIGH_AFFECTION1;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return null;
+        return registerSounds.SIEGE_TALK_HIGH_AFFECTION2;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return null;
+        return registerSounds.SIEGE_TALK_HIGH_AFFECTION3;
     }
 }

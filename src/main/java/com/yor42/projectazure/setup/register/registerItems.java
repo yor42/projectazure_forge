@@ -308,8 +308,8 @@ public class registerItems {
 
     public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> CRESCENTKATANA_SHIRO = registerManager.ITEMS.register("crescentkatana_shiro", () -> new ModSwordItem(ModMaterials.CRESCENT_KATANA, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> CRESCENTKATANA_KURO = registerManager.ITEMS.register("crescentkatana_kuro", () -> new ModSwordItem(ModMaterials.CRESCENT_KATANA, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> CRESCENTKATANA_SHIRO = registerManager.ITEMS.register("crescentkatana_shiro", () -> new ModSwordItem(ModMaterials.CRESCENT_KATANA_SHIRO, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> CRESCENTKATANA_KURO = registerManager.ITEMS.register("crescentkatana_kuro", () -> new ModSwordItem(ModMaterials.CRESCENT_KATANA_KURO, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> WARHAMMER = registerManager.ITEMS.register("warhammer", () -> new ModSwordItem(ModMaterials.WARHAMMER, 1, -1.8F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> FLEXABLE_SWORD_THINGY = registerManager.ITEMS.register("flexsword", () -> new ModSwordItem(ModMaterials.FLEXABLESWORD, 1, -1.0F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> COMPOUNDBOW = registerManager.ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));

@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -31,6 +32,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -295,6 +297,7 @@ public class EntityLappland extends AbstractSwordUserBase implements IAknOp {
         if(this.isDuelWielding()){
             damage = this.getAttackDamageMainHand()+this.getAttackDamageOffHand();
         }
+        target.playSound(registerSounds.CRESCENT_KATANA_HIT, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
         target.hurt(DamageSource.mobAttack(this), damage);
     }
 
@@ -305,22 +308,44 @@ public class EntityLappland extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public SoundEvent getNormalAmbientSounds() {
-        return null;
+        return registerSounds.LAPPLAND_TALK_NORMAL;
     }
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return null;
+        return registerSounds.LAPPLAND_TALK_HIGH_AFFECTION1;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return null;
+        return registerSounds.LAPPLAND_TALK_HIGH_AFFECTION2;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return null;
+        return registerSounds.LAPPLAND_TALK_HIGH_AFFECTION3;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.LAPPLAND_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.LAPPLAND_TALK_PAT;
+    }
+
+    @Override
+    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
+        return new ArrayList<>(Collections.singletonList(12));
+    }
+
+    @Override
+    public void playMeleeAttackPreSound() {
+        this.playSound(registerSounds.CRESCENT_KATANA_SWING, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

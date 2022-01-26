@@ -436,6 +436,37 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_gunpowder", has(Tags.Items.GUNPOWDER))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerItems.CRESCENTKATANA_KURO.get())
+                .define('B', ModTags.Items.INGOT_STEEL)
+                .define('P', ModTags.Items.PLATE_STEEL)
+                .define('L', registerItems.STEEL_PIPE.get())
+                .pattern("  B")
+                .pattern(" BP")
+                .pattern("LP ")
+                .unlockedBy("has_ingot", has(ModTags.Items.INGOT_STEEL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.CRESCENTKATANA_SHIRO.get())
+                .define('B', Tags.Items.INGOTS_IRON)
+                .define('P', ModTags.Items.PLATE_STEEL)
+                .define('L', registerItems.STEEL_PIPE.get())
+                .pattern("  B")
+                .pattern(" BP")
+                .pattern("LP ")
+                .unlockedBy("has_ingot", has(Tags.Items.INGOTS_IRON))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.WARHAMMER.get())
+                .define('B', Tags.Items.STORAGE_BLOCKS_IRON)
+                .define('S', ModTags.Items.INGOT_STEEL)
+                .define('P', ModTags.Items.PLATE_STEEL)
+                .define('L', registerItems.STEEL_PIPE.get())
+                .pattern("BSP")
+                .pattern(" L ")
+                .pattern(" L ")
+                .unlockedBy("has_ingot", has(ModTags.Items.INGOT_STEEL))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(registerItems.AMMO_TORPEDO.get(), 1)
                 .define('A', ModTags.Items.INGOT_ALUMINIUM)
                 .define('T', Blocks.TNT.asItem())
@@ -618,22 +649,25 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(registerItems.MECHANICAL_PARTS.get()))
                 .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
                 .save(consumer);
-        /*
-        Because These weapons are SO OP
-        I'm nerfing this harder than TTFAF in guitar hero.
-        ...Okay that's maybe an overstatement.
-         */
-        ShapedRecipeBuilder.shaped(registerItems.SHEATH.get(), 1)
-                .define('P', ModTags.Items.PLATE_STEEL)
-                .define('H', registerItems.HAMMER_IRON.get())
-                .define('S', Tags.Items.SANDSTONE)
-                .define('R', ModTags.Items.INGOT_STEEL)
-                .define('W', registerItems.PLATE_POLYMER.get())
-                .define('C', registerItems.STEEL_CUTTER.get())
-                .pattern("HSP")
-                .pattern("WPS")
-                .pattern("RWC")
-                .unlockedBy("has_steel", has(ModTags.Items.INGOT_STEEL))
+
+
+        ShapedRecipeBuilder.shaped(registerItems.SHEATH.get())
+                .define('B', ModTags.Items.PLATE_STEEL)
+                .define('L', registerItems.STEEL_PIPE.get())
+                .pattern("  B")
+                .pattern(" B ")
+                .pattern("L  ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_STEEL))
+                .save(consumer);
+
+        //Temp Recipe
+        ShapedRecipeBuilder.shaped(registerItems.FLEXABLE_SWORD_THINGY.get())
+                .define('B', ModTags.Items.PLATE_STEEL)
+                .define('L', registerItems.PLATE_POLYMER.get())
+                .pattern("  B")
+                .pattern(" B ")
+                .pattern("L  ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
         createHammerRecipes(consumer, Blocks.STONE, Blocks.COBBLESTONE, "cobblestone");

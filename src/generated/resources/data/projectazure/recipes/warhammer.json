@@ -1,12 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "  B",
-    " B ",
-    "L  "
+    "BSP",
+    " L ",
+    " L "
   ],
   "key": {
     "B": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "S": {
+      "tag": "forge:ingots/steel"
+    },
+    "P": {
       "tag": "forge:plates/steel"
     },
     "L": {
@@ -14,6 +20,6 @@
     }
   },
   "result": {
-    "item": "projectazure:sheath"
+    "item": "projectazure:warhammer"
   }
 }

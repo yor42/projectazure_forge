@@ -10,10 +10,10 @@
       "tag": "forge:plates/steel"
     },
     "L": {
-      "item": "projectazure:steel_pipe"
+      "item": "projectazure:polymer_plate"
     }
   },
   "result": {
-    "item": "projectazure:sheath"
+    "item": "projectazure:flexsword"
   }
 }

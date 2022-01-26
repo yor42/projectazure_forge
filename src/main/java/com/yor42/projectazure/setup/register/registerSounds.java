@@ -37,6 +37,12 @@ public final class registerSounds {
     public static final SoundEvent HAMMER_SWING = registerSoundEvent("hammer_swing");
     public static final SoundEvent HAMMER_HIT = registerSoundEvent("hammer_hit");
 
+    public static final SoundEvent CRESCENT_KATANA_SWING = registerSoundEvent("lappland_swing");
+    public static final SoundEvent CRESCENT_KATANA_HIT = registerSoundEvent("lappland_hit");
+
+    public static final SoundEvent WARHAMMER_SWING = registerSoundEvent("warhammer_swing");
+    public static final SoundEvent WARHAMMER_HIT = registerSoundEvent("warhammer_hit");
+
     public static final SoundEvent TEXAS_SWORD_SWING = registerSoundEvent("sword_swing");
     public static final SoundEvent TEXAS_SWORD_HIT = registerSoundEvent("sword_hit");
 
@@ -112,9 +118,9 @@ public final class registerSounds {
     public static final SoundEvent SHIROKO_TALK_NORMAL = registerSoundEvent("shiroko_talk_normal");
     public static final SoundEvent SHIROKO_TALK_PAT = registerSoundEvent("shiroko_talk_pat");
     public static final SoundEvent SHIROKO_TALK_ATTACK = registerSoundEvent("shiroko_talk_attack");
-    public static final SoundEvent SHIROKO_TALK_HIGH_AFFECTION1 = registerSoundEvent("shiroko_talk_high_affection1");
-    public static final SoundEvent SHIROKO_TALK_HIGH_AFFECTION2 = registerSoundEvent("shiroko_talk_high_affection2");
-    public static final SoundEvent SHIROKO_TALK_HIGH_AFFECTION3 = registerSoundEvent("shiroko_talk_high_affection3");
+    public static final SoundEvent SHIROKO_TALK_HIGH_AFFECTION = registerSoundEvent("shiroko_talk_high_affection");
+    public static final SoundEvent SHIROKO_HURT = registerSoundEvent("shiroko_hurt");
+    public static final SoundEvent SHIROKO_FAINT = registerSoundEvent("shiroko_faint");
 
     public static final SoundEvent M4A1_TALK_NORMAL = registerSoundEvent("m4a1_talk_normal");
     public static final SoundEvent M4A1_TALK_PAT = registerSoundEvent("m4a1_talk_pat");
