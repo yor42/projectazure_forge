@@ -27,6 +27,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nullable;
 
+import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
+
 public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
 
     private final IIntArray fields = new IIntArray() {
@@ -121,17 +123,13 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().transitionLengthTicks = 0;
-        boolean flag = this.isActive() && this.isPowered();
+        boolean flag = this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).getValue(ACTIVE);
         if(flag) {
             event.getController().setAnimation(builder.addAnimation("work", true));
             return PlayState.CONTINUE;
         }
 
         return PlayState.STOP;
-    }
-
-    private boolean isPowered() {
-        return this.getEnergyStorage().getEnergyStored()>=this.powerConsumption;
     }
 
     @Override

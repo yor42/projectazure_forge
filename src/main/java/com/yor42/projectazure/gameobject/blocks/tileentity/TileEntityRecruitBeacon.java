@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.FACING;
+import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 import static com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock.POWERED;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRandomBlockposInRadius2D;
 
@@ -97,7 +98,8 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                 shouldSave = true;
                 this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(POWERED, this.isPowered()), 2);
             }
-            if(isActive!=this.isActive()){
+            boolean flag = this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).getValue(ACTIVE);
+            if(flag){
                 shouldSave = true;
                 this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(RecruitBeaconBlock.ACTIVE, this.isActive()), 2);
             }

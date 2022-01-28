@@ -76,6 +76,9 @@ public class ModBusEventHandler {
                     stacks.add(registerItems.SPAWN_M4A1.get());
                     stacks.add(registerItems.SPAWN_TEXAS.get());
                     stacks.add(registerItems.SPAWN_FROSTNOVA.get());
+                    stacks.add(registerItems.SPAWN_LAPPLAND.get());
+                    stacks.add(registerItems.SPAWN_SIEGE.get());
+                    stacks.add(registerItems.SPAWN_SCHWARZ.get());
                 }
                 else if(isAoichi){
                     stacks.add(registerItems.SPAWN_MUDROCK.get());

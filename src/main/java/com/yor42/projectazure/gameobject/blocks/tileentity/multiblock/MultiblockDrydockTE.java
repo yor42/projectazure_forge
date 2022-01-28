@@ -101,13 +101,6 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
         }
     }
 
-    public boolean isPowered(){
-
-        boolean flag = this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();
-
-        return flag;
-    }
-
     @Override
     public void tick() {
         boolean isActive = this.isActive();

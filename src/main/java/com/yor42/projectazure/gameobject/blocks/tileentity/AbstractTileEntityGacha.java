@@ -130,11 +130,6 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         }
     }
 
-    public boolean isPowered(){
-        return this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();
-    }
-
-
     /*
         Deduct the used item from machine's inventory
          */

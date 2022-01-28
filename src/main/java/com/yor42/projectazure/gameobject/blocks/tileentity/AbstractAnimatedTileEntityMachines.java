@@ -19,6 +19,9 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
+import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;
+import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
+
 public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimateableEnergyTickTE implements IRecipeHolder, IRecipeHelperPopulator {
 
     protected final AnimationFactory factory = new AnimationFactory(this);
@@ -33,11 +36,15 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     protected int ProcessTime, totalProcessTime;
     protected int powerConsumption;
 
+    public boolean isPowered(){
+        return this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();
+    }
+
     @Override
     public void tick() {
         boolean isActive = this.isActive();
         boolean shouldsave = false;
-
+        boolean isPowered = this.isPowered();
 
         if (this.level != null && !this.level.isClientSide) {
             ItemStack ingredient = this.inventory.getStackInSlot(0);
@@ -72,6 +79,15 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         }
         if(shouldsave){
             this.setChanged();
+        }
+
+        if(this.level != null && !this.level.isClientSide){
+            if(isPowered!=this.isPowered() || this.isPowered() && !this.level.getBlockState(this.worldPosition).getValue(POWERED) || !this.isPowered() && this.level.getBlockState(this.worldPosition).getValue(POWERED)) {
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(POWERED, this.isPowered()), 2);
+            }
+            if(isActive!=this.isActive()){
+                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ACTIVE, this.isActive()), 2);
+            }
         }
 
         if(!isActive && this.isActive()){
