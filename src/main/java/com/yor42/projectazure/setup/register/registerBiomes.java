@@ -58,11 +58,13 @@ public class registerBiomes {
     }
 
     public static void register(){
-        addBiometoList("mirror_sea" , makeMirrorSea(), 10, BiomeManager.BiomeType.WARM);
-
+        //addBiometoList("mirror_sea" , makeMirrorSea(), 10, BiomeManager.BiomeType.WARM);
+        /*
         for(BiomeData data:BiomeList){
             registerviaData(data);
         }
+
+         */
     }
 
     public static void registerviaData(BiomeData data){
