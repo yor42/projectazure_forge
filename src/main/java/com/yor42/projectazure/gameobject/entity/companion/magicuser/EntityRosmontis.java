@@ -19,6 +19,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -158,6 +159,20 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
         event.getController().setAnimation(builder.addAnimation("idle_arm", true));
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        int skillitemcount = 0;
+        for(int i=0;i<this.getSkillItemCount(); i++){
+            if(this.isSkillItemInindex(i)){
+                skillitemcount++;
+            }
+        }
+
+        amount = amount - ((amount*0.75F)*((float)skillitemcount/(float)this.getSkillItemCount()));
+
+        return super.hurt(source, amount);
     }
 
     @Override
