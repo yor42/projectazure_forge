@@ -590,6 +590,13 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_quartz", has(Items.QUARTZ))
                 .save(consumer, new ResourceLocation("quartz_dust_from_quartz"));
 
+        ShapelessRecipeBuilder.shapeless(registerItems.DUST_STEEL.get(), 2)
+                .requires(ModTags.Items.DUST_IRON)
+                .requires(ModTags.Items.DUST_IRON)
+                .requires(ModTags.Items.DUST_COAL)
+                .unlockedBy("has_iron", has(ModTags.Items.DUST_IRON))
+                .save(consumer, new ResourceLocation("steel_dust_from_iron"));
+
         ShapedRecipeBuilder.shaped(registerItems.DD_DEFAULT_RIGGING.get(), 1)
                 .define('A', ModTags.Items.PLATE_ALUMINIUM)
                 .define('S', ModTags.Items.INGOT_STEEL)

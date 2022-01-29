@@ -740,7 +740,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     protected void dropEquipment() {
-        for(int i=0; i<this.getInventory().getSlots()+this.getSkillItemCount(); i++){
+        for(int i=0; i<this.getInventory().getSlots(); i++){
             ItemStack stack = this.getInventory().getStackInSlot(i);
             if(!stack.isEmpty()) {
                 this.spawnAtLocation(stack);
