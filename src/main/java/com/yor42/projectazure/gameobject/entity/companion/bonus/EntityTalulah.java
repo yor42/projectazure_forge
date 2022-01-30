@@ -251,6 +251,16 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
+    public ItemStack getMainHandItem() {
+        return super.getMainHandItem();
+    }
+
+    @Override
+    public ItemStack getOffhandItem() {
+        return super.getOffhandItem();
+    }
+
+    @Override
     public boolean shouldUseNonVanillaAttack(LivingEntity target) {
         if(target == null){
             return false;

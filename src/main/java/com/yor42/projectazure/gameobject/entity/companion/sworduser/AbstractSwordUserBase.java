@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.world.World;
 
@@ -31,5 +32,15 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
     public void StartMeleeAttackingEntity() {
         this.setMeleeAttackDelay((int) (this.getInitialMeleeAttackDelay() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
         this.StartedMeleeAttackTimeStamp = this.tickCount;
+    }
+
+    @Override
+    public ItemStack getMainHandItem() {
+        return super.getMainHandItem();
+    }
+
+    @Override
+    public ItemStack getOffhandItem() {
+        return super.getOffhandItem();
     }
 }

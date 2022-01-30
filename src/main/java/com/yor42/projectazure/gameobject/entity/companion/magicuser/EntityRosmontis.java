@@ -234,6 +234,11 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     }
 
     @Override
+    public ItemStack getItemInHand(Hand p_184586_1_) {
+        return super.getItemInHand(p_184586_1_);
+    }
+
+    @Override
     public boolean isSkillItem(ItemStack stack) {
         return stack.getItem() instanceof ItemClaymore;
     }

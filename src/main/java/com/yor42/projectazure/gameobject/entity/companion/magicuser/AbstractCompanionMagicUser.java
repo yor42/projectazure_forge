@@ -5,6 +5,8 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
@@ -19,4 +21,16 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
         this.setSpellDelay(this.getInitialSpellDelay());
         this.StartedSpellAttackTimeStamp = this.tickCount;
     }
+
+    @Override
+    public ItemStack getGunStack() {
+        return super.getGunStack();
+    }
+
+    @Override
+    public ItemStack getItemInHand(Hand p_184586_1_) {
+        return super.getItemInHand(p_184586_1_);
+    }
+
+
 }
