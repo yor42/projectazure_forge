@@ -33,6 +33,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
+
 public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUser {
     public EntityFrostnova(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -236,6 +238,11 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
     @Override
     public Hand getSpellUsingHand() {
         return Hand.MAIN_HAND;
+    }
+
+    @Override
+    public boolean shouldUseSpell() {
+        return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
     }
 
     @Override

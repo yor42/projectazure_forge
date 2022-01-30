@@ -33,6 +33,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
+
 public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknOp {
 
     public EntityRosmontis(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -261,7 +263,13 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
     @Override
     public boolean shouldUseSpell() {
-        return super.shouldUseSpell() && !this.getNextSkillItem().isEmpty();
+        if(getGunStack().getItem() instanceof ItemGunBase) {
+            boolean hasAmmo = getRemainingAmmo(getGunStack()) > 0;
+            boolean reloadable = HasRightMagazine((((ItemGunBase) getGunStack().getItem()).getAmmoType()));
+
+            return !(hasAmmo || reloadable) && !this.getNextSkillItem().isEmpty();
+        }
+        else return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming()&& !this.getNextSkillItem().isEmpty();
     }
 
     @Override

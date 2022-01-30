@@ -37,7 +37,7 @@ public interface IMeleeAttacker {
     }
 
     default boolean isDuelWielding(){
-        return this.isTalentedWeapon(this.getMainHandItem()) && isTalentedWeapon(getOffhandItem());
+        return isTalentedWeapon(this.getMainHandItem()) && isTalentedWeapon(getOffhandItem());
     }
 
     ItemStack getMainHandItem();

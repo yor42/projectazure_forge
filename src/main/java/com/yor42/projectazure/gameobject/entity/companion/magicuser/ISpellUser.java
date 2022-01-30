@@ -22,19 +22,7 @@ public interface ISpellUser {
      */
     int getProjectilePreAnimationDelay();
     Hand getSpellUsingHand();
-    default boolean shouldUseSpell(){
-        if(getGunStack().getItem() instanceof ItemGunBase) {
-            boolean hasAmmo = getRemainingAmmo(getGunStack()) > 0;
-            boolean reloadable = HasRightMagazine((((ItemGunBase) getGunStack().getItem()).getAmmoType()));
-
-            return !(hasAmmo || reloadable);
-        }
-        else return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
-    };
-    ItemStack getGunStack();
-    boolean HasRightMagazine(enums.AmmoCalibur calibur);
-    boolean isSwimming();
-    ItemStack getItemInHand(Hand hand);
+    boolean shouldUseSpell();
     void setSpellDelay(int delay);
 
     void ShootProjectile(World world, @Nonnull LivingEntity target);
