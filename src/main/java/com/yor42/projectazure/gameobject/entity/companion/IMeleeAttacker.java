@@ -33,11 +33,11 @@ public interface IMeleeAttacker {
 
     boolean shouldUseNonVanillaAttack(LivingEntity target);
     default boolean isTalentedWeaponinMainHand(){
-        return this.isTalentedWeapon(this.getMainHandItem());
+        return isTalentedWeapon(getMainHandItem());
     }
 
     default boolean isDuelWielding(){
-        return this.isTalentedWeapon(this.getMainHandItem()) && this.isTalentedWeapon(this.getOffhandItem());
+        return this.isTalentedWeapon(this.getMainHandItem()) && isTalentedWeapon(getOffhandItem());
     }
 
     ItemStack getMainHandItem();
@@ -45,7 +45,7 @@ public interface IMeleeAttacker {
     ItemStack getOffhandItem();
 
     default boolean isTalentedWeapon(ItemStack stack){
-        return this.getTalentedWeaponList().contains(stack.getItem());
+        return getTalentedWeaponList().contains(stack.getItem());
     }
 
     default ArrayList<Integer> getMeleeAnimationAudioCueDelay(){

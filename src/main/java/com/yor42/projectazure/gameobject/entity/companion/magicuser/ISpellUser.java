@@ -23,13 +23,13 @@ public interface ISpellUser {
     int getProjectilePreAnimationDelay();
     Hand getSpellUsingHand();
     default boolean shouldUseSpell(){
-        if(this.getGunStack().getItem() instanceof ItemGunBase) {
-            boolean hasAmmo = getRemainingAmmo(this.getGunStack()) > 0;
-            boolean reloadable = this.HasRightMagazine((((ItemGunBase) this.getGunStack().getItem()).getAmmoType()));
+        if(getGunStack().getItem() instanceof ItemGunBase) {
+            boolean hasAmmo = getRemainingAmmo(getGunStack()) > 0;
+            boolean reloadable = HasRightMagazine((((ItemGunBase) getGunStack().getItem()).getAmmoType()));
 
             return !(hasAmmo || reloadable);
         }
-        else return this.getItemInHand(getSpellUsingHand()).isEmpty() && !this.isSwimming();
+        else return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
     };
     ItemStack getGunStack();
     boolean HasRightMagazine(enums.AmmoCalibur calibur);
