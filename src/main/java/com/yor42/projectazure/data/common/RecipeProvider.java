@@ -150,14 +150,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_tin", has(ModTags.Items.DUST_TIN))
                 .save(consumer, new ResourceLocation("bronze_powder_alloying"));
 
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_PIPE.get())
-                .define('S', ModTags.Items.PLATE_STEEL)
-                .pattern(" S ")
-                .pattern("S S")
-                .pattern(" S ")
-                .unlockedBy("has_steel", has(ModTags.Items.INGOT_STEEL))
-                .save(consumer);
-
         ShapedRecipeBuilder.shaped(registerItems.EQUIPMENT_GUN_127MM.get())
                 .define('S', ModTags.Items.PLATE_STEEL)
                 .define('B', registerItems.STEEL_PIPE.get())
@@ -610,6 +602,20 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern(" MA")
                 .unlockedBy("has_cube", has(registerItems.WISDOM_CUBE.get()))
                 .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.IRON_PIPE.get(), 1)
+                .define('A', ModTags.Items.PLATE_IRON)
+                .pattern("A")
+                .pattern("A")
+                .unlockedBy("has_ironplate", has(ModTags.Items.PLATE_IRON))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.STEEL_PIPE.get(), 1)
+                .define('A', ModTags.Items.PLATE_STEEL)
+                .pattern("A")
+                .pattern("A")
+                .unlockedBy("has_steelplate", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.BB_DEFAULT_RIGGING.get(), 1)
