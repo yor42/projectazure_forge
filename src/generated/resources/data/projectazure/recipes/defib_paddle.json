@@ -19,7 +19,7 @@
       "item": "projectazure:copper_coil"
     },
     "H": {
-      "item": "projectazure:circuit_primitive"
+      "tag": "forge:circuits/basic"
     }
   },
   "result": {

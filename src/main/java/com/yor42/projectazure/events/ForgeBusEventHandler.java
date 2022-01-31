@@ -9,6 +9,7 @@ import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.Entity;
@@ -81,31 +82,19 @@ public class ForgeBusEventHandler {
     }
 
     @SubscribeEvent
-    public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event){
+    public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event) {
         PlayerEntity player = event.getPlayer();
         List<Entity> passengers = player.getPassengers();
         World world = event.getWorld();
         BlockPos pos = event.getPos();
-        if(!world.isClientSide()) {
-            if (!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY) {
-                for (Entity entity : passengers) {
-                    if (entity instanceof AbstractEntityCompanion) {
-                        if ((((AbstractEntityCompanion) entity).isCriticallyInjured() || world.isNight()) && world.getBlockState(pos).isBed(world, pos, (LivingEntity) entity)) {
-                            entity.stopRiding();
-                            BlockStateUtil.getAvailableBedPos(world, pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
-                            if (((AbstractEntityCompanion) entity).isCriticallyInjured()) {
-                                ((AbstractEntityCompanion) entity).setInjurycuretimer(0);
-                            }
-
-                            break;
-                        } else {
-                            entity.stopRiding();
-
-                        }
-                    }
+        if (!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY) {
+            for (Entity entity : passengers) {
+                if (entity instanceof AbstractEntityCompanion) {
+                    player.ejectPassengers();
+                    break;
                 }
-                event.setCanceled(true);
             }
+            event.setCanceled(true);
         }
     }
 

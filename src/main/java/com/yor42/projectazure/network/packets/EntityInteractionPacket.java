@@ -1,12 +1,16 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -15,11 +19,18 @@ public class EntityInteractionPacket {
     private final int EntityID;
     private final EntityBehaviorType behaviorType;
     private final boolean value;
+    @Nullable
+    private final BlockPos pos;
 
-    public EntityInteractionPacket(int EntityID, EntityBehaviorType behaviorType, boolean value) {
+    public EntityInteractionPacket(int EntityID, EntityBehaviorType behaviorType, boolean value){
+        this(EntityID, behaviorType, value, null);
+    }
+
+    public EntityInteractionPacket(int EntityID, EntityBehaviorType behaviorType, boolean value, @Nullable BlockPos pos) {
         this.EntityID = EntityID;
         this.behaviorType = behaviorType;
         this.value = value;
+        this.pos = pos;
     }
 
     public static EntityInteractionPacket decode (final PacketBuffer buffer){
@@ -61,6 +72,12 @@ public class EntityInteractionPacket {
                             break;
                         case STOP_RIDING:
                             entity.stopRiding();
+                            if(msg.pos != null) {
+                                BlockStateUtil.getAvailableBedPos(world, msg.pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
+                                if (((AbstractEntityCompanion) entity).isCriticallyInjured()) {
+                                    ((AbstractEntityCompanion) entity).setInjurycuretimer(0);
+                                }
+                            }
                         case HEAL:
 
                     }

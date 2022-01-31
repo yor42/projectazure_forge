@@ -16,7 +16,7 @@
       "item": "minecraft:redstone_lamp"
     },
     "I": {
-      "item": "projectazure:circuit_advanced"
+      "tag": "forge:circuits/advanced"
     },
     "B": {
       "item": "projectazure:headhunting_pcb"

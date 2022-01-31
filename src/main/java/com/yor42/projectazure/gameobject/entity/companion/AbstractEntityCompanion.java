@@ -758,6 +758,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
 
         if(!PAConfig.CONFIG.permadeath.get()){
+            this.reviveCompanion();
             this.setLevel(0);
             this.setLimitBreakLv(0);
             this.addAffection(-20);

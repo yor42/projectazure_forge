@@ -51,6 +51,10 @@ public class ItemStasisCrystal extends Item {
         Optional<Entity> entity = EntityType.create(compound, world);
         entity.map((spawnedEntity)->{
             if(spawnedEntity instanceof AbstractEntityCompanion) {
+                if(((AbstractEntityCompanion) spawnedEntity).getOwner()!= null && player != ((AbstractEntityCompanion) spawnedEntity).getOwner()){
+                    player.displayClientMessage(new TranslationTextComponent("message.stasiscrystal.notowner", ((AbstractEntityCompanion) spawnedEntity).getOwner().getDisplayName()), true);
+                    return ActionResultType.FAIL;
+                }
                 AbstractEntityCompanion companion = (AbstractEntityCompanion)spawnedEntity;
                 companion.setPos(context.getClickedPos().getX() + 0.5, context.getClickedPos().getY() + 1.1F, context.getClickedPos().getZ() + 0.5);
                 context.getLevel().addFreshEntity(spawnedEntity);
@@ -76,6 +80,9 @@ public class ItemStasisCrystal extends Item {
             Optional<Entity> entity = EntityType.create(compound, p_77624_2_);
             entity.ifPresent((storedEntity) ->{
                 list.add(new TranslationTextComponent("tooltip.companion.name").withStyle(TextFormatting.GRAY).append(": ").append(storedEntity.getDisplayName()).withStyle(TextFormatting.YELLOW));
+                if(storedEntity instanceof AbstractEntityCompanion && ((AbstractEntityCompanion)storedEntity).getOwner()!= null) {
+                    list.add(new TranslationTextComponent("tooltip.companion.owner", ((AbstractEntityCompanion) storedEntity).getOwner().getDisplayName()).withStyle(TextFormatting.YELLOW));
+                }
                 list.add(new TranslationTextComponent("tooltip.companion.cost", cost).withStyle(TextFormatting.YELLOW));
             });
         }

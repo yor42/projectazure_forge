@@ -363,6 +363,7 @@
 
   "message.stasiscrystal.notenoughlevel" : "Not Enough level: Cost to spawn this entity is %s.",
   "message.stasiscrystal.cost" : "Not Enough level: Cost to spawn this entity is %s.",
+  "message.stasiscrystal.notowner" : "You are not the owner of this entity! owner is: %s.",
 
   "death.attack.bonk": "%1$s was sent to horny jail",
 
