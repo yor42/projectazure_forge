@@ -141,7 +141,7 @@ public class itemModelProvider extends ItemModelProvider {
 
         buildModel("bandage_roll");
         buildModel("medkit");
-
+        buildModel("stasis_crystal");
         buildModel("5.56_magazine");
 
         buildModelWisdomCube("spawnayanami");

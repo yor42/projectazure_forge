@@ -174,6 +174,7 @@ public class PAConfig {
         public final ForgeConfigSpec.BooleanValue RedStonePoweredMachines;
 
         public final ForgeConfigSpec.BooleanValue shouldRecruitBeaconSpawnAllCompanions;
+        public final ForgeConfigSpec.BooleanValue permadeath;
 
         public final ForgeConfigSpec.BooleanValue RiggingInfiniteFuel;
 
@@ -351,6 +352,7 @@ public class PAConfig {
 
             builder.pop().push("Misc").comment("Other Thingys");
             shouldRecruitBeaconSpawnAllCompanions = builder.define("Should Recruit Beacon Spawn ALL Companion?", false);
+            permadeath = builder.define("Enable Permadeath: disable companion dropping back stasis crystal", false);
             builder.pop();
 
             builder.push("Cheats").comment("wuss mode");

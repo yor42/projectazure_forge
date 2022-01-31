@@ -86,25 +86,26 @@ public class ForgeBusEventHandler {
         List<Entity> passengers = player.getPassengers();
         World world = event.getWorld();
         BlockPos pos = event.getPos();
-        if(!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY){
-            for(Entity entity:passengers){
-                if(entity instanceof AbstractEntityCompanion){
-                    if((((AbstractEntityCompanion) entity).isCriticallyInjured()||world.isNight()) && world.getBlockState(pos).isBed(world, pos, (LivingEntity) entity)){
-                        entity.stopRiding();
-                        BlockStateUtil.getAvailableBedPos(world, pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
-                        if(((AbstractEntityCompanion) entity).isCriticallyInjured()){
-                            ((AbstractEntityCompanion) entity).setInjurycuretimer(0);
+        if(!world.isClientSide()) {
+            if (!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY) {
+                for (Entity entity : passengers) {
+                    if (entity instanceof AbstractEntityCompanion) {
+                        if ((((AbstractEntityCompanion) entity).isCriticallyInjured() || world.isNight()) && world.getBlockState(pos).isBed(world, pos, (LivingEntity) entity)) {
+                            entity.stopRiding();
+                            BlockStateUtil.getAvailableBedPos(world, pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
+                            if (((AbstractEntityCompanion) entity).isCriticallyInjured()) {
+                                ((AbstractEntityCompanion) entity).setInjurycuretimer(0);
+                            }
+
+                            break;
+                        } else {
+                            entity.stopRiding();
+
                         }
-
-                        break;
-                    }
-                    else {
-                        entity.stopRiding();
-
                     }
                 }
+                event.setCanceled(true);
             }
-            event.setCanceled(true);
         }
     }
 

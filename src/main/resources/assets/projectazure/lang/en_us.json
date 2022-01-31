@@ -97,6 +97,8 @@
   "item.projectazure.claymore.tooltip": "Gigantic claymore made out of steel alloy. it looks near impossible to wield.",
   "item.projectazure.sledgehammer": "Sledgehammer",
 
+  "item.projectazure.stasis_crystal": "Stasis Crystal",
+
   "item.projectazure.defib_paddle": "Defibrillator Paddle",
   "item.projectazure.defib_paddle.tooltip": "Handheld paddle that somehow magically revives fallen companion no matter the cause.\nrequires 2 paddle and 1 charger to work.",
   "item.projectazure.defib_paddle.tooltip.nocharger": "Error: Missing Charger!",
@@ -151,6 +153,8 @@
   "tooltip.companion.shipgirl_class": "Ship Class",
   "tooltip.companion.gun_speciality": "Gun Specialty",
   "tooltip.companion.maxhealth": "Max Health",
+  "tooltip.companion.name": "Entity",
+  "tooltip.companion.cost": "Cost to summon: %s",
 
   "item.projectazure.spawnegg.spawn": "Spawn: ",
 
@@ -356,6 +360,9 @@
   "message.commandstick.entity_bedpos_failed_duplicate": "Failed to assign bed at %s to %s: Duplicated bed with %s",
   "message.commandstick.entity_bedpos_cleared": "Cleared Bed Location of %s.",
   "message.commandstick.entity_bedpos_same_companion_same_bed" : "This companion is already Assigned to bed at %s.",
+
+  "message.stasiscrystal.notenoughlevel" : "Not Enough level: Cost to spawn this entity is %s.",
+  "message.stasiscrystal.cost" : "Not Enough level: Cost to spawn this entity is %s.",
 
   "death.attack.bonk": "%1$s was sent to horny jail",
 

@@ -416,6 +416,8 @@ public class registerItems {
     public static final RegistryObject<Item> DEFIB_PADDLE = registerManager.ITEMS.register("defib_paddle", ItemDefibPaddle::new);
     public static final RegistryObject<Item> DEFIB_CHARGER = registerManager.ITEMS.register("defib_charger", ItemDefibCharger::new);
 
+    public static final RegistryObject<Item> STASIS_CRYSTAL = registerManager.ITEMS.register("stasis_crystal", ItemStasisCrystal::new);
+
     public static final RegistryObject<Item> DEVELOPER_BONUS = registerManager.ITEMS.register("developer_bonus", () -> new ItemContributorBonus(new Item.Properties()));
     public static final RegistryObject<Item> CONTRIBUTOR_BONUS = registerManager.ITEMS.register("contributor_bonus", () -> new ItemContributorBonus(new Item.Properties()));
 

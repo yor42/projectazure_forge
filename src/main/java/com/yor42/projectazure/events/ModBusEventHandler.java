@@ -139,13 +139,10 @@ public class ModBusEventHandler {
 
                         entity.stopRiding();
                         ((AbstractEntityCompanion) entity).setOrderedToSit(true);
-                        /*
                         CompoundNBT compoundnbt = new CompoundNBT();
                         if (entity.saveAsPassenger(compoundnbt)) {
                             listnbt1.add(compoundnbt);
                         }
-
-                         */
                     }
                 }
 /*

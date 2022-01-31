@@ -674,19 +674,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         int deathtimethreshold = this.isCriticallyInjured()? 40:24000;
         if (this.deathTime >= deathtimethreshold) {
             for(int i = 0; i < 20; ++i) {
-                LivingEntity livingentity = this.getKillCredit();
-                this.dropEquipment();
-                this.createWitherRose(livingentity);
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
                 this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
             }
+            LivingEntity livingentity = this.getKillCredit();
+            this.dropEquipment();
+            this.createWitherRose(livingentity);
+            this.remove(false);
         }
     }
 
     public void die(@Nonnull DamageSource p_70645_1_) {
         if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, p_70645_1_)) return;
+        if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayerEntity) {
+            this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
+        }
         if (!this.removed && !this.dead) {
             Entity entity = p_70645_1_.getEntity();
             LivingEntity livingentity = this.getKillCredit();
@@ -704,7 +708,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     entity.killed((ServerWorld)this.level, this);
                 }
             }
-            this.setPose(Pose.STANDING);
             this.level.broadcastEntityEvent(this, (byte)3);
         }
     }
@@ -745,14 +748,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             if(!stack.isEmpty()) {
                 this.spawnAtLocation(stack);
             }
-        };
+        }
 
         for(int i=0; i<this.getAmmoStorage().getSlots(); i++){
             ItemStack stack = this.getInventory().getStackInSlot(i);
             if(!stack.isEmpty()) {
                 this.spawnAtLocation(stack);
             }
-        };
+        }
+
+        if(!PAConfig.CONFIG.permadeath.get()){
+            this.setLevel(0);
+            this.setLimitBreakLv(0);
+            this.addAffection(-20);
+            ItemStack stack = new ItemStack(registerItems.STASIS_CRYSTAL.get());
+            CompoundNBT nbt = stack.getOrCreateTag();
+            nbt.putInt("cost", 10+this.getLevel());
+            nbt.put("entity", this.serializeNBT());
+            this.spawnAtLocation(stack);
+        }
     }
 
     public void setItemswapIndex(Hand hand, int value){
@@ -2136,21 +2150,21 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         Item HeldItem = heldstacks.getItem();
 
         if(this.isOwnedBy(player) && !(this instanceof EntityKansenBase && HeldItem instanceof ItemRiggingBase)) {
-            if((this.isDeadOrDying() || this.isCriticallyInjured()) && this.distanceTo(player)<4){
+            if((this.isDeadOrDying() || this.isCriticallyInjured())){
                 if(player.getMainHandItem().getItem() instanceof ItemDefibPaddle || player.getOffhandItem().getItem() instanceof ItemDefibPaddle){
                     return ActionResultType.PASS;
                 }
-                if(this.isSleeping()){
+                else if(this.isSleeping()){
                     this.stopSleeping();
                 }
                 this.startRiding(player, true);
                 return ActionResultType.SUCCESS;
             }
-            if (this.getVehicle() != null) {
+            else if (this.getVehicle() != null) {
                 this.stopRiding();
+                return ActionResultType.SUCCESS;
             }
-
-            if (HeldItem instanceof ArmorItem || HeldItem instanceof TieredItem) {
+            else if (HeldItem instanceof ArmorItem || HeldItem instanceof TieredItem) {
                 ItemStack stack = player.getItemInHand(hand).copy();
                 EquipmentSlotType type = getEquipmentSlotForItem(stack);
                 ItemStack EquippedStack = this.getItemBySlot(type).copy();
