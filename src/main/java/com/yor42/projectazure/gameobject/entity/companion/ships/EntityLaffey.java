@@ -37,7 +37,7 @@ public class EntityLaffey extends EntityKansenDestroyer implements IAzurLaneKans
         }
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
             else {
@@ -71,7 +71,7 @@ public class EntityLaffey extends EntityKansenDestroyer implements IAzurLaneKans
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
             else if(this.isCriticallyInjured()){
@@ -143,7 +143,7 @@ public class EntityLaffey extends EntityKansenDestroyer implements IAzurLaneKans
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
@@ -156,7 +156,7 @@ public class EntityLaffey extends EntityKansenDestroyer implements IAzurLaneKans
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {

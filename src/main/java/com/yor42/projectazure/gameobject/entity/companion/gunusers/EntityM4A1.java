@@ -48,7 +48,7 @@ public class EntityM4A1 extends EntityGunUserBase{
 
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
             else {
@@ -97,7 +97,7 @@ public class EntityM4A1 extends EntityGunUserBase{
         } else if (this.isBeingPatted()) {
             event.getController().setAnimation(builder.addAnimation("pat", true));
             return PlayState.CONTINUE;
-        } else if (this.getVehicle() == this.getOwner()) {
+        } else if (this.getVehicle() != null && this.getVehicle() == this.getOwner()) {
             event.getController().setAnimation(builder.addAnimation("carry_arm"));
             return PlayState.CONTINUE;
         }else if (this.isGettingHealed()) {
@@ -105,7 +105,7 @@ public class EntityM4A1 extends EntityGunUserBase{
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
             else {
@@ -164,7 +164,7 @@ public class EntityM4A1 extends EntityGunUserBase{
             return PlayState.STOP;
         }
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
@@ -177,7 +177,7 @@ public class EntityM4A1 extends EntityGunUserBase{
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {

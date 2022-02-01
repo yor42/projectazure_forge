@@ -45,7 +45,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
 
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
@@ -58,7 +58,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
@@ -102,7 +102,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
 
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
             else {
@@ -115,7 +115,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
                 return PlayState.CONTINUE;
             }
@@ -151,7 +151,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
             return PlayState.CONTINUE;
         }
-        else if(this.getVehicle() == this.getOwner()){
+        else if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
             event.getController().setAnimation(builder.addAnimation("carry_arm"));
             return PlayState.CONTINUE;
         }

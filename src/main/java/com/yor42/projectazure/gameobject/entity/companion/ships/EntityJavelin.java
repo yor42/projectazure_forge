@@ -37,7 +37,7 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
         }
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
             else {
@@ -63,7 +63,7 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
                 return PlayState.CONTINUE;
             }
@@ -144,7 +144,7 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
         }
         AnimationBuilder builder = new AnimationBuilder();
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
@@ -157,7 +157,7 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
