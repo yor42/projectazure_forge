@@ -1584,753 +1584,753 @@
   "enterprise_talk_disappointed": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice1"
+        "name": "projectazure:entity/al/enterprise/voice1"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice2"
+        "name": "projectazure:entity/al/enterprise/voice2"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice3"
+        "name": "projectazure:entity/al/enterprise/voice3"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice4"
+        "name": "projectazure:entity/al/enterprise/voice4"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice5"
+        "name": "projectazure:entity/al/enterprise/voice5"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice6"
+        "name": "projectazure:entity/al/enterprise/voice6"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/disappointed"
+        "name": "projectazure:entity/al/enterprise/disappointed"
       }
     ]
   },
   "enterprise_talk_stranger": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice1"
+        "name": "projectazure:entity/al/enterprise/voice1"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice2"
+        "name": "projectazure:entity/al/enterprise/voice2"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice3"
+        "name": "projectazure:entity/al/enterprise/voice3"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice4"
+        "name": "projectazure:entity/al/enterprise/voice4"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice5"
+        "name": "projectazure:entity/al/enterprise/voice5"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice6"
+        "name": "projectazure:entity/al/enterprise/voice6"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/stranger"
+        "name": "projectazure:entity/al/enterprise/stranger"
       }
     ]
   },
   "enterprise_talk_friendly": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice1"
+        "name": "projectazure:entity/al/enterprise/voice1"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice2"
+        "name": "projectazure:entity/al/enterprise/voice2"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice3"
+        "name": "projectazure:entity/al/enterprise/voice3"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice4"
+        "name": "projectazure:entity/al/enterprise/voice4"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice5"
+        "name": "projectazure:entity/al/enterprise/voice5"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice6"
+        "name": "projectazure:entity/al/enterprise/voice6"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/friendly"
+        "name": "projectazure:entity/al/enterprise/friendly"
       }
     ]
   },
   "enterprise_talk_crush": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice1"
+        "name": "projectazure:entity/al/enterprise/voice1"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice2"
+        "name": "projectazure:entity/al/enterprise/voice2"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice3"
+        "name": "projectazure:entity/al/enterprise/voice3"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice4"
+        "name": "projectazure:entity/al/enterprise/voice4"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice5"
+        "name": "projectazure:entity/al/enterprise/voice5"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice6"
+        "name": "projectazure:entity/al/enterprise/voice6"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/crush"
+        "name": "projectazure:entity/al/enterprise/crush"
       }
     ]
   },
   "enterprise_talk_love": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice1"
+        "name": "projectazure:entity/al/enterprise/voice1"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice2"
+        "name": "projectazure:entity/al/enterprise/voice2"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice3"
+        "name": "projectazure:entity/al/enterprise/voice3"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice4"
+        "name": "projectazure:entity/al/enterprise/voice4"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice5"
+        "name": "projectazure:entity/al/enterprise/voice5"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/voice6"
+        "name": "projectazure:entity/al/enterprise/voice6"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/love"
+        "name": "projectazure:entity/al/enterprise/love"
       }
     ]
   },
   "enterprise_talk_oath": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/enterprise/voice/oath"
+        "name": "projectazure:entity/al/enterprise/oath"
       }
     ]
   },
   "enterprise_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/enterprise/voice/pat/pat1"
+        "name": "projectazure:entity/al/enterprise/pat/pat1"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/pat/pat2"
+        "name": "projectazure:entity/al/enterprise/pat/pat2"
       }
     ]
   },
   "enterprise_talk_attack": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/enterprise/voice/attack1"
+        "name": "projectazure:entity/al/enterprise/attack1"
       },
       {
-        "name": "projectazure:entity/al/enterprise/voice/attack2"
+        "name": "projectazure:entity/al/enterprise/attack2"
       },{
-        "name": "projectazure:entity/al/enterprise/voice/attack3"
+        "name": "projectazure:entity/al/enterprise/attack3"
       },{
-        "name": "projectazure:entity/al/enterprise/voice/attack4"
+        "name": "projectazure:entity/al/enterprise/attack4"
       },{
-        "name": "projectazure:entity/al/enterprise/voice/attack5"
+        "name": "projectazure:entity/al/enterprise/attack5"
       }
     ]
   },
   "javelin_talk_disappointed": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/javelin/voice/voice1"
+        "name": "projectazure:entity/al/javelin/voice1"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice2"
+        "name": "projectazure:entity/al/javelin/voice2"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice3"
+        "name": "projectazure:entity/al/javelin/voice3"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice4"
+        "name": "projectazure:entity/al/javelin/voice4"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice5"
+        "name": "projectazure:entity/al/javelin/voice5"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice6"
+        "name": "projectazure:entity/al/javelin/voice6"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/disappointed"
+        "name": "projectazure:entity/al/javelin/disappointed"
       }
     ]
   },
   "javelin_talk_stranger": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/javelin/voice/voice1"
+        "name": "projectazure:entity/al/javelin/voice1"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice2"
+        "name": "projectazure:entity/al/javelin/voice2"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice3"
+        "name": "projectazure:entity/al/javelin/voice3"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice4"
+        "name": "projectazure:entity/al/javelin/voice4"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice5"
+        "name": "projectazure:entity/al/javelin/voice5"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice6"
+        "name": "projectazure:entity/al/javelin/voice6"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/stranger"
+        "name": "projectazure:entity/al/javelin/stranger"
       }
     ]
   },
   "javelin_talk_friendly": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/javelin/voice/voice1"
+        "name": "projectazure:entity/al/javelin/voice1"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice2"
+        "name": "projectazure:entity/al/javelin/voice2"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice3"
+        "name": "projectazure:entity/al/javelin/voice3"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice4"
+        "name": "projectazure:entity/al/javelin/voice4"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice5"
+        "name": "projectazure:entity/al/javelin/voice5"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice6"
+        "name": "projectazure:entity/al/javelin/voice6"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/friendly"
+        "name": "projectazure:entity/al/javelin/friendly"
       }
     ]
   },
   "javelin_talk_crush": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/javelin/voice/voice1"
+        "name": "projectazure:entity/al/javelin/voice1"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice2"
+        "name": "projectazure:entity/al/javelin/voice2"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice3"
+        "name": "projectazure:entity/al/javelin/voice3"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice4"
+        "name": "projectazure:entity/al/javelin/voice4"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice5"
+        "name": "projectazure:entity/al/javelin/voice5"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice6"
+        "name": "projectazure:entity/al/javelin/voice6"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/crush"
+        "name": "projectazure:entity/al/javelin/crush"
       }
     ]
   },
   "javelin_talk_love": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/javelin/voice/voice1"
+        "name": "projectazure:entity/al/javelin/voice1"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice2"
+        "name": "projectazure:entity/al/javelin/voice2"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice3"
+        "name": "projectazure:entity/al/javelin/voice3"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice4"
+        "name": "projectazure:entity/al/javelin/voice4"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice5"
+        "name": "projectazure:entity/al/javelin/voice5"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/voice6"
+        "name": "projectazure:entity/al/javelin/voice6"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/love"
+        "name": "projectazure:entity/al/javelin/love"
       }
     ]
   },
   "javelin_talk_oath": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/javelin/voice/oath"
+        "name": "projectazure:entity/al/javelin/oath"
       }
     ]
   },
   "javelin_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/javelin/voice/pat/pat1"
+        "name": "projectazure:entity/al/javelin/pat/pat1"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/pat/pat2"
+        "name": "projectazure:entity/al/javelin/pat/pat2"
       }
     ]
   },
   "javelin_talk_attack": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/javelin/voice/attack1"
+        "name": "projectazure:entity/al/javelin/attack1"
       },
       {
-        "name": "projectazure:entity/al/javelin/voice/attack2"
+        "name": "projectazure:entity/al/javelin/attack2"
       },{
-        "name": "projectazure:entity/al/javelin/voice/attack3"
+        "name": "projectazure:entity/al/javelin/attack3"
       }
     ]
   },
   "laffey_talk_disappointed": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/laffey/voice/voice1"
+        "name": "projectazure:entity/al/laffey/voice1"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice2"
+        "name": "projectazure:entity/al/laffey/voice2"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice3"
+        "name": "projectazure:entity/al/laffey/voice3"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice4"
+        "name": "projectazure:entity/al/laffey/voice4"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice5"
+        "name": "projectazure:entity/al/laffey/voice5"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice6"
+        "name": "projectazure:entity/al/laffey/voice6"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice7"
+        "name": "projectazure:entity/al/laffey/voice7"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/disappointed"
+        "name": "projectazure:entity/al/laffey/disappointed"
       }
     ]
   },
   "laffey_talk_stranger": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/laffey/voice/voice1"
+        "name": "projectazure:entity/al/laffey/voice1"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice2"
+        "name": "projectazure:entity/al/laffey/voice2"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice3"
+        "name": "projectazure:entity/al/laffey/voice3"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice4"
+        "name": "projectazure:entity/al/laffey/voice4"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice5"
+        "name": "projectazure:entity/al/laffey/voice5"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice6"
+        "name": "projectazure:entity/al/laffey/voice6"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice7"
+        "name": "projectazure:entity/al/laffey/voice7"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/stranger"
+        "name": "projectazure:entity/al/laffey/stranger"
       }
     ]
   },
   "laffey_talk_friendly": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/laffey/voice/voice1"
+        "name": "projectazure:entity/al/laffey/voice1"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice2"
+        "name": "projectazure:entity/al/laffey/voice2"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice3"
+        "name": "projectazure:entity/al/laffey/voice3"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice4"
+        "name": "projectazure:entity/al/laffey/voice4"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice5"
+        "name": "projectazure:entity/al/laffey/voice5"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice6"
+        "name": "projectazure:entity/al/laffey/voice6"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice7"
+        "name": "projectazure:entity/al/laffey/voice7"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/friendly"
+        "name": "projectazure:entity/al/laffey/friendly"
       }
     ]
   },
   "laffey_talk_crush": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/laffey/voice/voice1"
+        "name": "projectazure:entity/al/laffey/voice1"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice2"
+        "name": "projectazure:entity/al/laffey/voice2"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice3"
+        "name": "projectazure:entity/al/laffey/voice3"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice4"
+        "name": "projectazure:entity/al/laffey/voice4"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice5"
+        "name": "projectazure:entity/al/laffey/voice5"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice6"
+        "name": "projectazure:entity/al/laffey/voice6"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice7"
+        "name": "projectazure:entity/al/laffey/voice7"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/crush"
+        "name": "projectazure:entity/al/laffey/crush"
       }
     ]
   },
   "laffey_talk_love": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/laffey/voice/voice1"
+        "name": "projectazure:entity/al/laffey/voice1"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice2"
+        "name": "projectazure:entity/al/laffey/voice2"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice3"
+        "name": "projectazure:entity/al/laffey/voice3"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice4"
+        "name": "projectazure:entity/al/laffey/voice4"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice5"
+        "name": "projectazure:entity/al/laffey/voice5"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice6"
+        "name": "projectazure:entity/al/laffey/voice6"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/voice7"
+        "name": "projectazure:entity/al/laffey/voice7"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/love"
+        "name": "projectazure:entity/al/laffey/love"
       }
     ]
   },
   "laffey_talk_oath": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/laffey/voice/oath"
+        "name": "projectazure:entity/al/laffey/oath"
       }
     ]
   },
   "laffey_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/laffey/voice/pat/pat1"
+        "name": "projectazure:entity/al/laffey/pat/pat1"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/pat/pat2"
+        "name": "projectazure:entity/al/laffey/pat/pat2"
       }
     ]
   },
   "laffey_talk_attack": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/laffey/voice/attack1"
+        "name": "projectazure:entity/al/laffey/attack1"
       },
       {
-        "name": "projectazure:entity/al/laffey/voice/attack2"
+        "name": "projectazure:entity/al/laffey/attack2"
       }
     ]
   },
   "nagato_talk_disappointed": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/nagato/voice/voice1"
+        "name": "projectazure:entity/al/nagato/voice1"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice2"
+        "name": "projectazure:entity/al/nagato/voice2"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice3"
+        "name": "projectazure:entity/al/nagato/voice3"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice4"
+        "name": "projectazure:entity/al/nagato/voice4"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice5"
+        "name": "projectazure:entity/al/nagato/voice5"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/disappointed"
+        "name": "projectazure:entity/al/nagato/disappointed"
       }
     ]
   },
   "nagato_talk_stranger": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/nagato/voice/voice1"
+        "name": "projectazure:entity/al/nagato/voice1"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice2"
+        "name": "projectazure:entity/al/nagato/voice2"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice3"
+        "name": "projectazure:entity/al/nagato/voice3"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice4"
+        "name": "projectazure:entity/al/nagato/voice4"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice5"
+        "name": "projectazure:entity/al/nagato/voice5"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/stranger"
+        "name": "projectazure:entity/al/nagato/stranger"
       }
     ]
   },
   "nagato_talk_friendly": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/nagato/voice/voice1"
+        "name": "projectazure:entity/al/nagato/voice1"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice2"
+        "name": "projectazure:entity/al/nagato/voice2"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice3"
+        "name": "projectazure:entity/al/nagato/voice3"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice4"
+        "name": "projectazure:entity/al/nagato/voice4"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice5"
+        "name": "projectazure:entity/al/nagato/voice5"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/friendly"
+        "name": "projectazure:entity/al/nagato/friendly"
       }
     ]
   },
   "nagato_talk_crush": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/nagato/voice/voice1"
+        "name": "projectazure:entity/al/nagato/voice1"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice2"
+        "name": "projectazure:entity/al/nagato/voice2"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice3"
+        "name": "projectazure:entity/al/nagato/voice3"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice4"
+        "name": "projectazure:entity/al/nagato/voice4"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice5"
+        "name": "projectazure:entity/al/nagato/voice5"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/crush"
+        "name": "projectazure:entity/al/nagato/crush"
       }
     ]
   },
   "nagato_talk_love": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/nagato/voice/voice1"
+        "name": "projectazure:entity/al/nagato/voice1"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice2"
+        "name": "projectazure:entity/al/nagato/voice2"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice3"
+        "name": "projectazure:entity/al/nagato/voice3"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice4"
+        "name": "projectazure:entity/al/nagato/voice4"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/voice5"
+        "name": "projectazure:entity/al/nagato/voice5"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/love"
+        "name": "projectazure:entity/al/nagato/love"
       }
     ]
   },
   "nagato_talk_oath": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/nagato/voice/oath"
+        "name": "projectazure:entity/al/nagato/oath"
       }
     ]
   },
   "nagato_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/nagato/voice/pat/pat1"
+        "name": "projectazure:entity/al/nagato/pat/pat1"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/pat/pat2"
+        "name": "projectazure:entity/al/nagato/pat/pat2"
       }
     ]
   },
   "nagato_talk_attack": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/nagato/voice/attack1"
+        "name": "projectazure:entity/al/nagato/attack1"
       },
       {
-        "name": "projectazure:entity/al/nagato/voice/attack2"
+        "name": "projectazure:entity/al/nagato/attack2"
       }
     ]
   },
   "z23_talk_disappointed": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/z23/voice/voice1"
+        "name": "projectazure:entity/al/z23/voice1"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice2"
+        "name": "projectazure:entity/al/z23/voice2"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice3"
+        "name": "projectazure:entity/al/z23/voice3"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice4"
+        "name": "projectazure:entity/al/z23/voice4"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice5"
+        "name": "projectazure:entity/al/z23/voice5"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/disappointed"
+        "name": "projectazure:entity/al/z23/disappointed"
       }
     ]
   },
   "z23_talk_stranger": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/z23/voice/voice1"
+        "name": "projectazure:entity/al/z23/voice1"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice2"
+        "name": "projectazure:entity/al/z23/voice2"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice3"
+        "name": "projectazure:entity/al/z23/voice3"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice4"
+        "name": "projectazure:entity/al/z23/voice4"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice5"
+        "name": "projectazure:entity/al/z23/voice5"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/stranger"
+        "name": "projectazure:entity/al/z23/stranger"
       }
     ]
   },
   "z23_talk_friendly": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/z23/voice/voice1"
+        "name": "projectazure:entity/al/z23/voice1"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice2"
+        "name": "projectazure:entity/al/z23/voice2"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice3"
+        "name": "projectazure:entity/al/z23/voice3"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice4"
+        "name": "projectazure:entity/al/z23/voice4"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice5"
+        "name": "projectazure:entity/al/z23/voice5"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/friendly"
+        "name": "projectazure:entity/al/z23/friendly"
       }
     ]
   },
   "z23_talk_crush": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/z23/voice/voice1"
+        "name": "projectazure:entity/al/z23/voice1"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice2"
+        "name": "projectazure:entity/al/z23/voice2"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice3"
+        "name": "projectazure:entity/al/z23/voice3"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice4"
+        "name": "projectazure:entity/al/z23/voice4"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice5"
+        "name": "projectazure:entity/al/z23/voice5"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/crush"
+        "name": "projectazure:entity/al/z23/crush"
       }
     ]
   },
   "z23_talk_love": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/z23/voice/voice1"
+        "name": "projectazure:entity/al/z23/voice1"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice2"
+        "name": "projectazure:entity/al/z23/voice2"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice3"
+        "name": "projectazure:entity/al/z23/voice3"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice4"
+        "name": "projectazure:entity/al/z23/voice4"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/voice5"
+        "name": "projectazure:entity/al/z23/voice5"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/love"
+        "name": "projectazure:entity/al/z23/love"
       }
     ]
   },
   "z23_talk_oath": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/z23/voice/oath"
+        "name": "projectazure:entity/al/z23/oath"
       }
     ]
   },
   "z23_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/z23/voice/pat/pat1"
+        "name": "projectazure:entity/al/z23/pat/pat1"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/pat/pat2"
+        "name": "projectazure:entity/al/z23/pat/pat2"
       }
     ]
   },
   "z23_talk_attack": {
     "sounds": [
       {
-        "name": "projectazure:entity/al/z23/voice/attack1"
+        "name": "projectazure:entity/al/z23/attack1"
       },
       {
-        "name": "projectazure:entity/al/z23/voice/attack2"
+        "name": "projectazure:entity/al/z23/attack2"
       }
     ]
   },
