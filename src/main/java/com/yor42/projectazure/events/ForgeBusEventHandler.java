@@ -47,7 +47,6 @@ import java.util.stream.Collectors;
 import static com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle.controllerName;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
-import static sun.audio.AudioPlayer.player;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeBusEventHandler {

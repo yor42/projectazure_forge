@@ -346,6 +346,15 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_orundum", has(registerItems.ORUNDUM.get()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerItems.SLEDGEHAMMER.get())
+                .define('S', registerItems.STEEL_PIPE.get())
+                .define('B', Tags.Items.STORAGE_BLOCKS_IRON)
+                .pattern("BBB")
+                .pattern(" S ")
+                .pattern(" S ")
+                .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
+                .save(consumer);
+
         ShapelessRecipeBuilder.shapeless(registerItems.ORIGINITE.get(), 9)
                 .requires(ModTags.Items.ORIGINIUM_PRIME).unlockedBy("hasoriginium", has(registerItems.ORIGINIUM_PRIME.get()));
 

@@ -34,8 +34,6 @@ import java.util.Random;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static net.minecraft.util.Hand.MAIN_HAND;
-import static net.minecraft.util.Hand.OFF_HAND;
-import static sun.audio.AudioPlayer.player;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     public AnimationFactory factory = new AnimationFactory(this);
