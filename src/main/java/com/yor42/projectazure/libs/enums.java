@@ -235,7 +235,8 @@ public class enums {
         OPERATOR("akn_operator"),
         ELEMENTS("gi_elements"),
         REUNION("akn_reunion"),
-        SERVANT("fgo_servant");
+        SERVANT("fgo_servant"),
+        CLOSER("cls_closer");
 
         private final String name;
         EntityType(String name) {

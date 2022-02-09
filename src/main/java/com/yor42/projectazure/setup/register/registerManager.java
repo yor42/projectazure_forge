@@ -1,9 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
@@ -69,6 +66,8 @@ public class registerManager {
     public static final ContainerType<ContainerGFLInventory> GFL_INVENTORY_TYPE = new ContainerType<>(ContainerGFLInventory::new);
     public static final RegistryObject<ContainerType<ContainerGFLInventory>> GFL_CONTAINER = CONTAINER.register("girlsfrontline_inventory", () -> GFL_INVENTORY_TYPE);
 
+    public static final ContainerType<ContainerCLSInventory> CLS_INVENTORY_TYPE = new ContainerType<>(ContainerCLSInventory::new);
+    public static final RegistryObject<ContainerType<ContainerCLSInventory>> CLS_CONTAINER = CONTAINER.register("closers_inventory", () -> CLS_INVENTORY_TYPE);
 
     public static final ContainerType<ContainerMetalPress> METAL_PRESS_CONTAINER_TYPE = IForgeContainerType.create(ContainerMetalPress::new);
     public static final RegistryObject<ContainerType<ContainerMetalPress>> METAL_PRESS_CONTAINER = CONTAINER.register("metal_press_container", () -> METAL_PRESS_CONTAINER_TYPE);

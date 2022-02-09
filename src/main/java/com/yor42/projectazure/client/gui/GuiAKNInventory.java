@@ -40,9 +40,9 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
         this.renderValues(matrixStack, mouseX, mouseY);
         this.drawButtons(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     private void renderValues(MatrixStack matrixStack, int mouseX, int mouseY) {
@@ -108,9 +108,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.renderEntity(x, y);
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-        if(this.host instanceof EntityGunUserBase) {
-            this.blit(matrixStack, this.leftPos + this.imageWidth + 4, this.topPos + 9, 178, 102, 39, 87);
-        }
+        this.blit(matrixStack, this.leftPos + this.imageWidth + 4, this.topPos + 9, 214, 0, 42, 87);
 
         this.blit(matrixStack, this.leftPos-23, this.topPos+7, 114, 7, 20, 10);
         for(int l = 0; l<this.host.getSkillItemCount(); l++){
