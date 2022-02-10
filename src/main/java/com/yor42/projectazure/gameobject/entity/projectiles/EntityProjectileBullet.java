@@ -62,7 +62,7 @@ public class EntityProjectileBullet extends ThrowableEntity {
     @Override
     public void tick() {
         super.tick();
-        ProjectileHelper.rotateTowardsMovement(this, 0F);
+        ProjectileHelper.rotateTowardsMovement(this, 0.5F);
     }
 
     @Override

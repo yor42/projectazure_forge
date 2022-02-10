@@ -35,6 +35,10 @@ public class DamageSources {
         return (new PACompanionAttackDamage("revenge", companion, 5));
     }
 
+    public static DamageSource knife(Entity p_203096_0_, @Nullable Entity p_203096_1_) {
+        return (new IndirectEntityDamageSource("knife", p_203096_0_, p_203096_1_)).setProjectile();
+    }
+
     public static DamageSource causeDefibDamage(PlayerEntity player) {
         return (new PACompanionAttackDamage("revenge", player, 5).bypassArmor().bypassInvul());
     }

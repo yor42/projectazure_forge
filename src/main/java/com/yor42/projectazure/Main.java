@@ -165,6 +165,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.PROJECTILEARTS.get(), EntityArtsProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.GUN_BULLET.get(), EntityGunBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.THROWN_KNIFE.get(), EntityThrownKnifeRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerManager.CLAYMORE.get(), EntityClaymoreRenderer::new);
 

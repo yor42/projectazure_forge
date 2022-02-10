@@ -36,7 +36,6 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
 
     public EntityMissileDroneMissile(EntityType<EntityMissileDroneMissile> p_i50173_1_, World p_i50173_2_) {
         super(p_i50173_1_, p_i50173_2_);
-
     }
 
     public void shoot(LivingEntity shooter, LivingEntity targetEntity, double x, double y, double z){
@@ -162,7 +161,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
 
          */
 
-        ProjectileHelper.rotateTowardsMovement(this, 0);
+        ProjectileHelper.rotateTowardsMovement(this, 0.5F);
         if(this.getCommandSenderWorld().isClientSide()){
             this.level.addParticle(ParticleTypes.FLAME, this.getX() - vector3d.x, this.getY() - vector3d.y + 0.15D, this.getZ() - vector3d.z, 0.0D, 0.0D, 0.0D);
         }
