@@ -47,7 +47,8 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
 
         Button homebutton = new ImageButton(this.leftPos+178, this.topPos+141, 14,14, homeModeX, 210, 14,TEXTURE, action->switchBehavior());
         Button itembutton = new ImageButton(this.leftPos+193, this.topPos+141, 14,14, ItemPickupX, 210, 14,TEXTURE, action->switchItemBehavior());
-
+        this.addButton(homebutton);
+        this.addButton(itembutton);
     }
 
     private void renderValues(MatrixStack matrixStack, int mouseX, int mouseY) {

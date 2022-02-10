@@ -156,6 +156,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.LAPPLAND.get(), EntityLapplandRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.SIEGE.get(), EntitySiegeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.SCHWARZ.get(), EntitySchwarzRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.SYLVI.get(), EntitySylviRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerManager.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
@@ -208,8 +209,8 @@ and YOU <3
 This mod contains codes from these dev/mods:
 Botania by Vazkii on Shift-Tooltip
 Techgun by pWn3d1337 on gun related stuff
-Fakedomi for Container Server<>Client sync
-MrCrayfich/Ocelot on Gun related Stuff
+Fakedomi for Container Server<->Client sync
+MrCrayfish/Ocelot on Gun related Stuff
 
 Are you missing from this credit? Let me know on:
 yor42#0420

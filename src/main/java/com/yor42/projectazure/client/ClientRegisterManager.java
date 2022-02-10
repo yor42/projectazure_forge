@@ -11,6 +11,7 @@ public class ClientRegisterManager {
         ScreenManager.register(registerManager.RIGGING_INVENTORY.get(), guiRiggingInventory::new);
         ScreenManager.register(registerManager.BA_CONTAINER.get(), guiBAInventory::new);
         ScreenManager.register(registerManager.GFL_CONTAINER.get(), GuiGFLInventory::new);
+        ScreenManager.register(registerManager.CLS_CONTAINER.get(), GuiCLSInventory::new);
         ScreenManager.register(registerManager.AKN_CONTAINER.get(), GuiAKNInventory::new);
 
         ScreenManager.register(registerManager.METAL_PRESS_CONTAINER.get(), guiMetalPress::new);

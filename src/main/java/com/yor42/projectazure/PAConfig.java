@@ -119,6 +119,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue TalulahAttackDamage;
         public final ForgeConfigSpec.DoubleValue TalulahMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue SylviHealth;
+        public final ForgeConfigSpec.DoubleValue SylviSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue SylviAttackDamage;
+        public final ForgeConfigSpec.DoubleValue SylviMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -252,6 +257,11 @@ public class PAConfig {
             SchwarzSwimSpeed = builder.defineInRange("Swim Speed of Schwarz", 2.5, 0, 1024);
             SchwarzAttackDamage = builder.defineInRange("Attack Damage of Schwarz", 2.0F, 0, 1024);
             SchwarzMovementSpeed = builder.defineInRange("Movement speed of Schwarz", 0.4F, 0, 2);
+
+            SylviHealth = builder.defineInRange("Max Health of Sylvi Lee", 20D, 1, 1024);
+            SylviSwimSpeed = builder.defineInRange("Swim Speed of Sylvi Lee", 2.5, 0, 1024);
+            SylviAttackDamage = builder.defineInRange("Attack Damage of Sylvi Lee" , 2.0F, 0, 1024);
+            SylviMovementSpeed = builder.defineInRange("Movement speed of Sylvi Lee", 0.4F, 0, 2);
 
             AmiyaHealth = builder.defineInRange("Max Health of Amiya", 20D, 1, 1024);
             AmiyaSwimSpeed = builder.defineInRange("Swim Speed of Amiya", 2.5, 0, 1024);

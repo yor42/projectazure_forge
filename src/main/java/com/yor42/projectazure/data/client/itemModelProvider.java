@@ -165,6 +165,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelAKN("spawnschwarz");
         buildModelAKN("spawnlappland");
 
+        buildModelcls("spawnsylvi");
+
         buildModelBA("spawnshiroko");
         buildSimpleBlockModel("reenforced_concrete");
 
@@ -199,6 +201,11 @@ public class itemModelProvider extends ItemModelProvider {
     private ItemModelBuilder buildModelBA(String ItemName){
         return buildModelWithSingleTex(ItemName, "spawn_bluearchive");
     }
+
+    private ItemModelBuilder buildModelcls(String ItemName){
+        return buildModelWithSingleTex(ItemName, "spawn_closer");
+    }
+
 
     private ItemModelBuilder buildModelGFL(String ItemName){
         return buildModelWithSingleTex(ItemName, "gfl_manufacture_contract");

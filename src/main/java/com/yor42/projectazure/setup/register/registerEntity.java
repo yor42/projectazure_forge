@@ -6,6 +6,7 @@ import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
+import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntitySylvi;
 import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.*;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.*;
@@ -41,6 +42,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_LAPPLAND, EntityLappland.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SIEGE, EntitySiege.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SCHWARZ, EntitySchwarz.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SYLVI, EntitySylvi.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().build());
     }
 
