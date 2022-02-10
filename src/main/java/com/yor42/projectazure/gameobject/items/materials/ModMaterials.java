@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.materials;
 
 import com.yor42.projectazure.data.ModTags;
 import net.minecraft.item.IItemTier;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 import net.minecraftforge.common.Tags;
@@ -32,7 +33,11 @@ public enum ModMaterials implements IItemTier {
         return Ingredient.of(ModTags.Items.INGOT_STEEL);}),
 
     CRESCENT_KATANA_SHIRO(2, 540, 1F, 3, 3, () -> {
-        return Ingredient.of(Tags.Items.INGOTS_IRON);});
+        return Ingredient.of(Tags.Items.INGOTS_IRON);}),
+
+    KNIFE(2, 500, 6.0F, 1.0F, 14, () -> {
+        return Ingredient.of(Items.IRON_INGOT);
+    });
 
     private final int harvestLevel;
     private final int maxUses;
