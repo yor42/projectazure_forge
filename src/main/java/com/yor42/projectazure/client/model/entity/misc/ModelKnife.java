@@ -26,4 +26,9 @@ public class ModelKnife extends AnimatedGeoModel<EntityThrownKnifeProjectile> {
     public ResourceLocation getAnimationFileLocation(EntityThrownKnifeProjectile animatable) {
         return ModResourceLocation("animations/entity/misc/tactical_knife.animation.json");
     }
+
+    @Override
+    public void setLivingAnimations(EntityThrownKnifeProjectile entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
+    }
 }

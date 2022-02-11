@@ -12,7 +12,6 @@ import net.minecraft.util.math.vector.Vector3f;
 public class EntityProjectileTorpedoRenderer extends GeoProjectileRenderer<EntityProjectileTorpedo> {
     public EntityProjectileTorpedoRenderer(EntityRendererManager renderManager) {
         super(renderManager, new modelProjectileTorpedo());
-        this.shadowRadius = 0.7F; //change 0.7 to the desired shadow size.
     }
 
     @Override

@@ -101,14 +101,14 @@ public class EntityThrownKnifeProjectile extends AbstractArrowEntity implements 
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(SHOULDRETURN, compound.getBoolean("shouldreturn"));
-        this.entityData.set(SHOULDRETURN, compound.getBoolean("dealtdamage"));
+        this.dealtDamage = compound.getBoolean("dealtdamage");
         this.previousDamage = compound.getInt("stackdamage");
     }
 
     @Override
     protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
         Entity entity = p_213868_1_.getEntity();
-        float f = 8.0F;
+        float f = 2.0F;
         if (entity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity)entity;
             f += EnchantmentHelper.getDamageBonus(new ItemStack(registerItems.TACTICAL_KNIFE.get()), livingentity.getMobType());

@@ -34,7 +34,7 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
         });
     }
 
-    private final AnimatedGeoModel<T> modelProvider;
+    protected final AnimatedGeoModel<T> modelProvider;
 
     protected GeoProjectileRenderer(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
         super(renderManager);
@@ -47,7 +47,7 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityIn));
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(
-                MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
+                MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 180.0F));
         matrixStackIn.mulPose(Vector3f.ZP
                 .rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
         Minecraft.getInstance().textureManager.bind(getTextureLocation(entityIn));
