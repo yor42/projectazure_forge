@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -18,6 +18,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -29,15 +31,16 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
 
     public GuiGFLInventory(ContainerGFLInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.host = Main.PROXY.getSharedMob();
+        this.host = screenContainer.companion;
         this.affection = this.host.getAffection();
         this.morale = this.host.getMorale();
         this.imageWidth = 170;
         this.imageHeight = 188;
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientProxy.getClientWorld());
+        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
         if(entity instanceof AbstractEntityCompanion) {
             entity.restoreFrom(this.host);
             int entityWidth = (int) entity.getBbWidth();

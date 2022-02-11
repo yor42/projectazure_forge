@@ -1,6 +1,5 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.yor42.projectazure.network.proxy.ClientProxy;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ItemParticleData;
@@ -14,7 +13,7 @@ public class ParticleUtils {
 
     @OnlyIn(Dist.CLIENT)
     public static void spawnCannonParticleModerate(double X, double Y, double Z, double NormalLookX, double NormalLookZ){
-        World world = ClientProxy.getClientWorld();
+        World world = ClientUtils.getClientWorld();
         for (int i = 0; i < 24; i++)
         {
             double ran1 = MathUtil.getRand().nextFloat() - 0.5F;
@@ -29,7 +28,7 @@ public class ParticleUtils {
 
     @OnlyIn(Dist.CLIENT)
     public static void spawnPatHeartParticle(int EntityID){
-        World world = ClientProxy.getClientWorld();
+        World world = ClientUtils.getClientWorld();
         Entity target = world.getEntity(EntityID);
         if(target != null) {
             double d0 = MathUtil.rand.nextGaussian() * 0.02D;
@@ -41,7 +40,7 @@ public class ParticleUtils {
 
     @OnlyIn(Dist.CLIENT)
     public static void spawnPatSmokeParticle(int EntityID){
-        World world = ClientProxy.getClientWorld();
+        World world = ClientUtils.getClientWorld();
         Entity target = world.getEntity(EntityID);
         if(target != null) {
             double d0 = MathUtil.rand.nextGaussian() * 0.02D;
@@ -53,7 +52,7 @@ public class ParticleUtils {
     }
 
     public static void SpawnItemParticles(int EntityID, ItemStack stack) {
-        World world = ClientProxy.getClientWorld();
+        World world = ClientUtils.getClientWorld();
         Entity target = world.getEntity(EntityID);
         if(target != null) {
             for (int i = 0; i < 16; ++i) {

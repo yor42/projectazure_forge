@@ -29,7 +29,7 @@ public class ContainerKansenInventory extends Container {
     private final IItemHandler AmmoStack;
     private final IItemHandler equipment;
     @Nullable
-    private final EntityKansenBase entity;
+    public final EntityKansenBase entity;
 
     //client
     public ContainerKansenInventory(int id, PlayerInventory playerInventory) {
@@ -92,12 +92,6 @@ public class ContainerKansenInventory extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 168));
         }
-    }
-
-    @Override
-    public void removed(PlayerEntity playerIn) {
-        Main.PROXY.setSharedMob(null);
-        super.removed(playerIn);
     }
 
     @Override

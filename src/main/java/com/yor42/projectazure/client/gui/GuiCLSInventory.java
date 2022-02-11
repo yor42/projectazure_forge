@@ -5,7 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerCLSInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -17,6 +17,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -27,7 +29,7 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
 
     public GuiCLSInventory(ContainerCLSInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
-        this.host = Main.PROXY.getSharedMob();
+        this.host = p_i51105_1_.companion;
         this.imageWidth = 214;
         this.imageHeight = 202;
     }
@@ -87,9 +89,9 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
         }
         matrixStack.popPose();
     }
-
+    @OnlyIn(Dist.CLIENT)
     private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientProxy.getClientWorld());
+        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
         if(entity instanceof AbstractEntityCompanion) {
             entity.restoreFrom(this.host);
             int entityWidth = (int) entity.getBbWidth();

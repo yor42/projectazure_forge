@@ -4,10 +4,9 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.GunFiredPacket;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -39,6 +38,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ForgeBusEventHandlerClient {
 
+    private static boolean keyFirePressedMainhand = false;
+    private static boolean keyFirePressedOffhand = false;
 
     /*
     Snippets from Techguns 2.
@@ -51,8 +52,7 @@ public class ForgeBusEventHandlerClient {
         //check if game has focus
         if(Minecraft.getInstance().isWindowActive() && player != null && !Minecraft.getInstance().isPaused() && Minecraft.getInstance().screen == null){
             if(event.getButton() == GLFW_MOUSE_BUTTON_LEFT && player.getMainHandItem().getItem() instanceof ItemGunBase){
-                ClientProxy client = ClientProxy.getClientProxy();
-                client.keyFirePressedMainhand = event.getAction() == GLFW_PRESS;
+                keyFirePressedMainhand = event.getAction() == GLFW_PRESS;
                 event.setCanceled(true);
             }
         }
@@ -77,12 +77,11 @@ public class ForgeBusEventHandlerClient {
         if (event.phase == TickEvent.Phase.START) {
             if (event.player.level.isClientSide()) {
 
-                ClientProxy client = ClientProxy.getClientProxy();
                 if (Minecraft.getInstance().isWindowActive() && !event.player.isSpectator()) {
                     ItemStack MainStack = event.player.getMainHandItem();
                     ItemStack OffStack = event.player.getOffhandItem();
                     if (!MainStack.isEmpty() && MainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) MainStack.getItem()).ShouldFireWithLeftClick()) {
-                        if (client.keyFirePressedMainhand) {
+                        if (keyFirePressedMainhand) {
                             ItemGunBase gun = ((ItemGunBase) MainStack.getItem());
                             ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(event.player);
                             int mainDelay = capability.getMainHandFireDelay();
@@ -97,18 +96,18 @@ public class ForgeBusEventHandlerClient {
                             }
 
                             if (gun.isSemiAuto()) {
-                                client.keyFirePressedMainhand = false;
+                                keyFirePressedMainhand = false;
                             }
 
                         }
                     } else {
-                        client.keyFirePressedMainhand = false;
+                        keyFirePressedMainhand = false;
                     }
 
 
                 } else {
-                    client.keyFirePressedMainhand = false;
-                    client.keyFirePressedOffhand = false;
+                    keyFirePressedMainhand = false;
+                    keyFirePressedOffhand = false;
                 }
 
             }

@@ -27,7 +27,7 @@ public class ContainerAKNInventory extends Container {
 
     //C l i e n t
     public ContainerAKNInventory(int id, PlayerInventory inventory) {
-        this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), Main.PROXY.getSharedMob());
+        this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), null);
     }
 
     public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
@@ -95,12 +95,6 @@ public class ContainerAKNInventory extends Container {
     @Override
     public boolean stillValid(PlayerEntity playerIn) {
         return true;
-    }
-
-    @Override
-    public void removed(PlayerEntity playerIn) {
-        Main.PROXY.setSharedMob(null);
-        super.removed(playerIn);
     }
 
     public static class Supplier implements INamedContainerProvider {

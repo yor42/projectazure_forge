@@ -5,9 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.Screen;
@@ -30,7 +29,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/bluearchive_inventory.png");
 
-    private final EntityGunUserBase host;
+    private final AbstractEntityCompanion host;
     private final enums.ALAffection affectionLevel;
     private final double affection, morale;
     private final int backgroundWidth = 176;
@@ -40,7 +39,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
 
     public guiBAInventory(ContainerBAInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.host = (EntityGunUserBase) Main.PROXY.getSharedMob();
+        this.host = screenContainer.companion;
         this.affection = this.host.getAffection();
         this.affectionLevel = this.affectionValuetoLevel();
         this.morale = this.host.getMorale();
@@ -108,7 +107,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
     }
 
     private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientProxy.getClientWorld());
+        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
         if(entity instanceof AbstractEntityCompanion) {
             entity.restoreFrom(this.host);
             int entityWidth = (int) entity.getBbWidth();

@@ -2,7 +2,7 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.events.GunFireEvent;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -50,7 +50,7 @@ public class DoGunAnimationPacket {
 
     public static void handle(final DoGunAnimationPacket message, final Supplier<NetworkEvent.Context> ctx){
         ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            World clientWorld = ClientProxy.getClientWorld();;
+            World clientWorld = ClientUtils.getClientWorld();;
             Entity entity =  clientWorld.getEntity(message.PlayerID);
 
             if(entity instanceof PlayerEntity){

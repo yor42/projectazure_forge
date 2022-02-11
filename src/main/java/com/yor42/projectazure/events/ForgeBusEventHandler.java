@@ -12,6 +12,8 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerSounds;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
@@ -21,6 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.state.properties.BedPart;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -82,18 +85,27 @@ public class ForgeBusEventHandler {
 
     @SubscribeEvent
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event) {
-        PlayerEntity player = event.getPlayer();
-        List<Entity> passengers = player.getPassengers();
         World world = event.getWorld();
-        BlockPos pos = event.getPos();
-        if (!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY) {
-            for (Entity entity : passengers) {
-                if (entity instanceof AbstractEntityCompanion) {
-                    player.ejectPassengers();
-                    break;
+        if(!world.isClientSide()) {
+            PlayerEntity player = event.getPlayer();
+            List<Entity> passengers = player.getPassengers();
+            BlockPos pos = event.getPos();
+            if (!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY) {
+                for (Entity entity : passengers) {
+                    if (entity instanceof AbstractEntityCompanion) {
+                        player.ejectPassengers();
+                        if (((AbstractEntityCompanion) entity).isCriticallyInjured()) {
+                            BlockState state = world.getBlockState(pos);
+                            if (state.isBed(world, pos, (LivingEntity) entity)) {
+                                pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
+                                ((AbstractEntityCompanion) entity).startSleeping(pos);
+                            }
+                        }
+                        break;
+                    }
                 }
+                event.setCanceled(true);
             }
-            event.setCanceled(true);
         }
     }
 

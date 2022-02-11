@@ -5,8 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -31,7 +30,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
 
     public GuiAKNInventory(ContainerAKNInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.host = Main.PROXY.getSharedMob();
+        this.host = screenContainer.companion;
         this.imageWidth = 171;
         this.imageHeight = 182;
     }
@@ -180,7 +179,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
     }
 
     private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientProxy.getClientWorld());
+        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
         if(entity instanceof AbstractEntityCompanion) {
             entity.restoreFrom(this.host);
             int entityWidth = (int) entity.getBbWidth();

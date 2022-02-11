@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.items.shipEquipment;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -63,7 +63,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     public abstract EntityType<? extends AbstractEntityPlanes> getEntityType();
 
     public float getMovementSpeed(){
-        return (float) this.getEntityType().create(ClientProxy.getClientWorld()).getAttribute(Attributes.MOVEMENT_SPEED).getValue();
+        return (float) this.getEntityType().create(ClientUtils.getClientWorld()).getAttribute(Attributes.MOVEMENT_SPEED).getValue();
     }
 
     @Override

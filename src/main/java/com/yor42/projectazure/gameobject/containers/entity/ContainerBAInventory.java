@@ -25,11 +25,11 @@ import static com.yor42.projectazure.setup.register.registerManager.BA_CONTAINER
 public class ContainerBAInventory extends Container {
 
     private ItemStackHandler AmmoStack;
-    private final AbstractEntityCompanion companion;
+    public final AbstractEntityCompanion companion;
 
 
     public ContainerBAInventory(int ID, PlayerInventory inventory) {
-        this(ID, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), Main.PROXY.getSharedMob());
+        this(ID, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), null);
     }
 
     public ContainerBAInventory(int ID, PlayerInventory inventory, ItemStackHandler Inventory, IItemHandlerModifiable Equipments, ItemStackHandler Ammo, AbstractEntityCompanion companion) {
@@ -92,12 +92,6 @@ public class ContainerBAInventory extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 8 + k * 18, 168));
         }
-    }
-
-    @Override
-    public void removed(PlayerEntity playerIn) {
-        Main.PROXY.setSharedMob(null);
-        super.removed(playerIn);
     }
 
     public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {

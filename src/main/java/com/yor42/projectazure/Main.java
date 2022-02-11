@@ -15,7 +15,7 @@ import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
@@ -56,7 +56,6 @@ public class Main
     public static final Logger LOGGER = LogManager.getLogger();
     public static final SimpleChannel NETWORK = registerNetwork.getNetworkChannel();
     public static final CrushingRecipeCache CRUSHING_REGISTRY = new CrushingRecipeCache();
-    public static CommonProxy PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public static ItemGroup PA_GROUP = new ItemGroup(MODID) {
         @Override

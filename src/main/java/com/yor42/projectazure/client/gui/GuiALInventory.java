@@ -8,7 +8,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.network.proxy.ClientProxy;
+import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -33,13 +33,14 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
     private final double affection, morale;
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;
-    private PlayerInventory inventory;
+    private final PlayerInventory inventory;
 
     private int x, y;
 
     public GuiALInventory(ContainerKansenInventory container, PlayerInventory playerinventory, ITextComponent titleIn) {
         super(container, playerinventory, titleIn);
-        this.host = (EntityKansenBase) Main.PROXY.getSharedMob();
+        this.host = container.entity;
+        assert this.host != null;
         this.affection = this.host.getAffection();
         this.morale = this.host.getMorale();
         this.affectionLevel = this.affectionValuetoLevel();
@@ -213,7 +214,7 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
     }
 
     private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientProxy.getClientWorld());
+        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
         if(entity instanceof AbstractEntityCompanion) {
             entity.restoreFrom(this.host);
             int entityWidth = (int) entity.getBbWidth();

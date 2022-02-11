@@ -24,9 +24,9 @@ import static com.yor42.projectazure.setup.register.registerManager.GFL_INVENTOR
 
 public class ContainerCLSInventory extends Container {
 
-    private final AbstractEntityCompanion companion;
+    public final AbstractEntityCompanion companion;
     public ContainerCLSInventory(int id, PlayerInventory inventory) {
-        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), Main.PROXY.getSharedMob());
+        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), null);
     }
     public ContainerCLSInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(CLS_INVENTORY_TYPE, id);
