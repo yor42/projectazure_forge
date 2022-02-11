@@ -7,10 +7,15 @@ import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimatableModel;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
@@ -19,7 +24,18 @@ public class ItemDefibChargerRenderer extends GeoItemRenderer<com.yor42.projecta
     public ItemDefibChargerRenderer() {
         super(new ModelDefibCharger());
     }
-
+    static {
+        AnimationController.addModelFetcher((IAnimatable object) -> {
+            if (object instanceof Item) {
+                Item item = (Item) object;
+                ItemStackTileEntityRenderer renderer = item.getItemStackTileEntityRenderer();
+                if (renderer instanceof GeoItemRenderer) {
+                    return (IAnimatableModel<Object>) ((GeoItemRenderer<?>) renderer).getGeoModelProvider();
+                }
+            }
+            return null;
+        });
+    }
     @Override
     public void render(ItemDefibCharger animatable, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, ItemStack itemStack) {
         super.render(animatable, stack, bufferIn, packedLightIn, itemStack);

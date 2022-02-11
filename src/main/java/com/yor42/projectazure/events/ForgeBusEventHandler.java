@@ -37,6 +37,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -58,15 +59,15 @@ public class ForgeBusEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 
-        if(event.phase == TickEvent.Phase.START){
+        if (event.phase == TickEvent.Phase.START) {
 
             ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability(event.player);
 
-            if(cap.getOffHandFireDelay()>0){
-                cap.setOffHandFireDelay(cap.getOffHandFireDelay()-1);
+            if (cap.getOffHandFireDelay() > 0) {
+                cap.setOffHandFireDelay(cap.getOffHandFireDelay() - 1);
             }
-            if(cap.getMainHandFireDelay()>0){
-                cap.setMainHandFireDelay(cap.getMainHandFireDelay()-1);
+            if (cap.getMainHandFireDelay() > 0) {
+                cap.setMainHandFireDelay(cap.getMainHandFireDelay() - 1);
             }
         }
     }
@@ -76,8 +77,8 @@ public class ForgeBusEventHandler {
         LivingEntity entity = event.getEntityLiving();
         ItemStack stack = event.getResultStack();
         Item item = stack.getItem();
-        if(entity instanceof AbstractEntityCompanion){
-            if(item.getClass() == PotionItem.class){
+        if (entity instanceof AbstractEntityCompanion) {
+            if (item.getClass() == PotionItem.class) {
                 event.setResultStack(new ItemStack(Items.GLASS_BOTTLE));
             }
         }
@@ -86,25 +87,25 @@ public class ForgeBusEventHandler {
     @SubscribeEvent
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event) {
         World world = event.getWorld();
-        if(!world.isClientSide()) {
-            PlayerEntity player = event.getPlayer();
-            List<Entity> passengers = player.getPassengers();
-            BlockPos pos = event.getPos();
-            if (!passengers.isEmpty() && player.isShiftKeyDown() && player.getMainHandItem() == ItemStack.EMPTY) {
-                for (Entity entity : passengers) {
-                    if (entity instanceof AbstractEntityCompanion) {
-                        player.ejectPassengers();
-                        if (((AbstractEntityCompanion) entity).isCriticallyInjured()) {
-                            BlockState state = world.getBlockState(pos);
-                            if (state.isBed(world, pos, (LivingEntity) entity)) {
-                                pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
-                                ((AbstractEntityCompanion) entity).startSleeping(pos);
-                            }
+        PlayerEntity player = event.getPlayer();
+        List<Entity> passengers = player.getPassengers();
+        BlockPos pos = event.getPos();
+        if (!passengers.isEmpty() && player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
+            for (Entity entity : passengers) {
+                entity.stopRiding();
+                if (entity instanceof AbstractEntityCompanion) {
+                    boolean isInjured = ((AbstractEntityCompanion) entity).isCriticallyInjured();
+                    if (isInjured) {
+                        BlockState state = world.getBlockState(pos);
+                        if (state.isBed(world, pos, (LivingEntity) entity)) {
+                            pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
+                            ((AbstractEntityCompanion) entity).startSleeping(pos);
+                            event.setCanceled(true);
                         }
                         break;
                     }
+
                 }
-                event.setCanceled(true);
             }
         }
     }
