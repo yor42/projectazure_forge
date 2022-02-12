@@ -5,13 +5,31 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.items.ModelDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.item.Item;
 import net.minecraftforge.energy.CapabilityEnergy;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimatableModel;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class ItemDefibChargerRenderer extends GeoItemRenderer<ItemDefibCharger> {
     public ItemDefibChargerRenderer() {
         super(new ModelDefibCharger());
+    }
+
+    static {
+        AnimationController.addModelFetcher((IAnimatable object) -> {
+            if (object instanceof ItemDefibCharger) {
+                ItemDefibCharger item = (ItemDefibCharger) object;
+                ItemStackTileEntityRenderer renderer = item.getItemStackTileEntityRenderer();
+                if (renderer instanceof GeoItemRenderer) {
+                    return (IAnimatableModel<Object>) ((GeoItemRenderer<?>) renderer).getGeoModelProvider();
+                }
+            }
+            return null;
+        });
     }
 
     @Override
