@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +19,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.setup.register.registerManager.CLS_INVENTORY_TYPE;
-import static com.yor42.projectazure.setup.register.registerManager.GFL_INVENTORY_TYPE;
 
 public class ContainerCLSInventory extends Container {
 

@@ -34,6 +34,7 @@ public class ModTags {
         public static final ITag.INamedTag<Block> ORES_TIN = forge("ores/tin");
         public static final ITag.INamedTag<Block> ORES_LEAD = forge("ores/lead");
         public static final ITag.INamedTag<Block> ORES_ZINC = forge("ores/zinc");
+        public static final ITag.INamedTag<Block> ORES_ORIROCK = forge("ores/originium");
 
         private static ITag.INamedTag<Block> forge(String path) {
             return BlockTags.bind(new ResourceLocation("forge", path).toString());
@@ -98,6 +99,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> ORES_TIN = forge("ores/tin");
         public static final ITag.INamedTag<Item> ORES_LEAD = forge("ores/lead");
         public static final ITag.INamedTag<Item> ORES_ZINC = forge("ores/zinc");
+        public static final ITag.INamedTag<Item> ORES_ORIROCK = forge("ores/originium");
 
         public static final ITag.INamedTag<Item> WIRE_COPPER = forge("wires/copper");
 

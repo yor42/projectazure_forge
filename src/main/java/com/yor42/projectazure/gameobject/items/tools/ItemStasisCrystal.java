@@ -1,8 +1,6 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
-import com.yor42.projectazure.interfaces.IAknOp;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

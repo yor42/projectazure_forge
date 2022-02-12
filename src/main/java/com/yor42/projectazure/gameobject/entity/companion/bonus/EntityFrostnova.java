@@ -19,7 +19,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
-import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
@@ -32,8 +31,6 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
-
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUser {
     public EntityFrostnova(EntityType<? extends TameableEntity> type, World worldIn) {

@@ -131,6 +131,8 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue Star_5_Chance;
         public final ForgeConfigSpec.DoubleValue Star_6_Chance;
 
+        public final ForgeConfigSpec.BooleanValue ALLOW_DUPLICATE;
+
         public final ForgeConfigSpec.IntValue Star_1_MinTime;
         public final ForgeConfigSpec.IntValue Star_1_MaxTime;
         public final ForgeConfigSpec.IntValue Star_2_MinTime;
@@ -301,6 +303,8 @@ public class PAConfig {
             M4A1MovementSpeed = builder.defineInRange("Movement speed of M4A1", 0.35F, 0, 2);
 
             builder.pop().pop().push("Gacha Roll RNG").comment("Chance of Roll per rarity.").comment("1 star is most common, and 6 star is most rare.").comment("Higher the number is, Commoner the item is.");
+            ALLOW_DUPLICATE = builder.define("Allow Duplicate Entity for same player?", false);
+
             Star_1_Chance =  builder.defineInRange("1 Star Rarity", 60D, 0, Double.MAX_VALUE);
             Star_2_Chance = builder.defineInRange("2 Star Rarity", 20D, 0, Double.MAX_VALUE);
             Star_3_Chance = builder.defineInRange("3 Star Rarity", 10D, 0, Double.MAX_VALUE);
@@ -328,31 +332,31 @@ public class PAConfig {
             builder.pop().push("Worldgen").comment("Options about worldgen like ores");
             ENABLE_COPPER = builder.define("Enable Copper Generation", true);
             COPPER_VEINSPERCHUNK = builder.defineInRange("Count of copper vein in single chunk", 8,0,128);
-            COPPER_VEINSIZE = builder.defineInRange("Count of copper vein in single chunk", 4,0,512);
+            COPPER_VEINSIZE = builder.defineInRange("Size of Copper vein", 4,0,512);
             COPPER_MINHEIGHT = builder.defineInRange("Minimum Y axis value that copper can generate", 0,0,256);
             COPPER_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that copper can generate", 60,0,256);
 
             ENABLE_ZINC = builder.define("Enable Zinc Generation", true);
             ZINC_VEINSPERCHUNK = builder.defineInRange("Count of Zinc vein in single chunk", 3,0,128);
-            ZINC_VEINSIZE = builder.defineInRange("Count of Zinc vein in single chunk", 5,0,512);
+            ZINC_VEINSIZE = builder.defineInRange("Size of Zinc vein", 5,0,512);
             ZINC_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Zinc can generate", 0,0,256);
             ZINC_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Zinc can generate", 40,0,256);
 
             ENABLE_TIN = builder.define("Enable Tin Generation", true);
             TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 4,0,128);
-            TIN_VEINSIZE = builder.defineInRange("Count of Tin vein in single chunk", 7,0,512);
+            TIN_VEINSIZE = builder.defineInRange("Size of Tin vein", 7,0,512);
             TIN_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Tin can generate", 0,0,256);
             TIN_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Tin can generate", 60,0,256);
 
             ENABLE_LEAD = builder.define("Enable Lead Generation", true);
             LEAD_VEINSPERCHUNK = builder.defineInRange("Count of Lead vein in single chunk", 4,0,128);
-            LEAD_VEINSIZE = builder.defineInRange("Count of Lead vein in single chunk", 4,0,512);
+            LEAD_VEINSIZE = builder.defineInRange("Size of Lead vein", 4,0,512);
             LEAD_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Lead can generate", 5,0,256);
             LEAD_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Lead can generate", 40,0,256);
 
             ENABLE_ORIROCK = builder.define("Enable Orirock Generation", true);
             ORIROCK_VEINSPERCHUNK = builder.defineInRange("Count of Orirock vein in single chunk", 10,0,128);
-            ORIROCK_VEINSIZE = builder.defineInRange("Count of Orirock vein in single chunk", 2,0,512);
+            ORIROCK_VEINSIZE = builder.defineInRange("Size of Orirock vein", 2,0,512);
             ORIROCK_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Orirock can generate", 0,0,256);
             ORIROCK_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Orirock can generate", 30,0,256);
 

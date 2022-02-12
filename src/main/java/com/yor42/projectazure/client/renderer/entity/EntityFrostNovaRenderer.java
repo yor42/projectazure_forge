@@ -3,7 +3,6 @@ package com.yor42.projectazure.client.renderer.entity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.bonus.ModelFrostNova;
-import com.yor42.projectazure.client.model.entity.sworduser.ModelMudrock;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
@@ -19,7 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

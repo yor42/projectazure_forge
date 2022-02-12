@@ -22,5 +22,6 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(ModTags.Blocks.ORES_LEAD).add(registerBlocks.LEAD_ORE.get());
         this.tag(ModTags.Blocks.ORES_TIN).add(registerBlocks.TIN_ORE.get());
         this.tag(ModTags.Blocks.ORES_ZINC).add(registerBlocks.ZINC_ORE.get());
+        this.tag(ModTags.Blocks.ORES_ORIROCK).add(registerBlocks.ORIROCK.get());
     }
 }

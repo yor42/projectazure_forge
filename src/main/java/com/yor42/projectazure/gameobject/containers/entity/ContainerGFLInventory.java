@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import net.minecraft.entity.player.PlayerEntity;

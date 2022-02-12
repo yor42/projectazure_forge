@@ -1,10 +1,8 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemDefibPaddleRenderer;
-import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -28,9 +26,7 @@ import software.bernie.geckolib3.network.ISyncable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
-import java.util.Random;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static net.minecraft.util.Hand.MAIN_HAND;

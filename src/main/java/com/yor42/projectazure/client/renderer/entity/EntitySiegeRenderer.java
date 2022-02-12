@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.entity.sworduser.SiegeModel;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntitySiege;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -18,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

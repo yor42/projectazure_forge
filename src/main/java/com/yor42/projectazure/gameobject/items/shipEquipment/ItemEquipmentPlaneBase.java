@@ -2,8 +2,8 @@ package com.yor42.projectazure.gameobject.items.shipEquipment;
 
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.ClientUtils;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;

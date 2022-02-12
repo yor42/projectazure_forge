@@ -15,8 +15,6 @@ import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.libs.utils.ClientUtils;
-import com.yor42.projectazure.network.proxy.CommonProxy;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
@@ -25,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;

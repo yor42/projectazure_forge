@@ -147,6 +147,7 @@ a5cba2925bcf39f84f2c3109855bc1500e0eb0c4 assets/projectazure/models/item/torpedo
 173ed3768cb50e0927ca970c4a77511cb15fbdaa data/forge/tags/blocks/ores/aluminium.json
 fbdf03636db54e0e4afc163653fdf3b0259fb965 data/forge/tags/blocks/ores/copper.json
 6bac1a7679f4dbc3d1996049d087d51619b4dbb2 data/forge/tags/blocks/ores/lead.json
+ed2150c09503ded3f160f919eb3cee35796bd7d8 data/forge/tags/blocks/ores/originium.json
 041ded8d20af9073209d55dfbca50a919c9e943b data/forge/tags/blocks/ores/tin.json
 d31a76d582efd960034661e4636cc4916d17f330 data/forge/tags/blocks/ores/zinc.json
 91e55e7054214b9e41fe709ecb68d2c9846096f6 data/forge/tags/fluids/crude_oil.json
@@ -197,6 +198,7 @@ d1e9c2b9eefd19de7abf17ffa103734a81aec334 data/forge/tags/items/nuggets/zinc.json
 173ed3768cb50e0927ca970c4a77511cb15fbdaa data/forge/tags/items/ores/aluminium.json
 fbdf03636db54e0e4afc163653fdf3b0259fb965 data/forge/tags/items/ores/copper.json
 6bac1a7679f4dbc3d1996049d087d51619b4dbb2 data/forge/tags/items/ores/lead.json
+ed2150c09503ded3f160f919eb3cee35796bd7d8 data/forge/tags/items/ores/originium.json
 041ded8d20af9073209d55dfbca50a919c9e943b data/forge/tags/items/ores/tin.json
 d31a76d582efd960034661e4636cc4916d17f330 data/forge/tags/items/ores/zinc.json
 6ef7b51b35e91497f358adfbfa15978122dda69b data/forge/tags/items/plates/aluminium.json

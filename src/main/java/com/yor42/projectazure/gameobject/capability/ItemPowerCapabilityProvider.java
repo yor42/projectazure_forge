@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.capability;
 
-import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorageItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;

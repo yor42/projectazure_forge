@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.entity.ranged;
 
 import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityTexas;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;

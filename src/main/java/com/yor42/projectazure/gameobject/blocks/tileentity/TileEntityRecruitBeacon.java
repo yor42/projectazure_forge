@@ -3,18 +3,19 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
+import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.intermod.SolarApocalypse;
+import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.block.BlockState;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
@@ -142,18 +143,34 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
             Main.LOGGER.error("Spawn FAILED: OWNER is NULL");
         }
         else if(worldReady) {
+            boolean isDupe = false;
+            if(!PAConfig.CONFIG.ALLOW_DUPLICATE.get()){
+                ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(owner);
+                for(AbstractEntityCompanion companion:capability.companionList){
+                    if(companion.getType() == this.RollResult){
+                        isDupe = true;
+                        break;
+                    }
+                }
+            }
             BlockPos blockpos;
-            //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
-            if(SolarApocalypse.isSunlightDangerous((ServerWorld) this.level)) {
-                BlockPos.Mutable CandidatePos = this.worldPosition.mutable();
-                CandidatePos = CandidatePos.move(this.level.getBlockState(this.worldPosition).getValue(FACING));
-                blockpos = CandidatePos;
+            if(!isDupe) {
+                //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
+                if (SolarApocalypse.isSunlightDangerous((ServerWorld) this.level)) {
+                    BlockPos.Mutable CandidatePos = this.worldPosition.mutable();
+                    CandidatePos = CandidatePos.move(this.level.getBlockState(this.worldPosition).getValue(FACING));
+                    blockpos = CandidatePos;
+                } else {
+                    blockpos = getRandomBlockposInRadius2D(this.getLevel(), this.getBlockPos(), 20, 10);
+                    spawn_sitting = false;
+                }
+                this.spawnEntity(blockpos, owner, spawn_sitting);
             }
-            else {
-                blockpos = getRandomBlockposInRadius2D(this.getLevel(), this.getBlockPos(), 20, 10);
-                spawn_sitting = false;
+            else{
+                blockpos = this.getBlockPos().relative(this.getLevel().getBlockState(this.getBlockPos()).getValue(FACING), 1);
+                ItemEntity entity = new ItemEntity(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), new ItemStack(registerItems.ORIGINIUM_PRIME.get(), 5));
+                this.level.addFreshEntity(entity);
             }
-            this.spawnEntity(blockpos, owner, spawn_sitting);
         }
     }
 
@@ -180,16 +197,6 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
                 Main.LOGGER.debug("Entity is Spawned at:" + pos);
             }
         }
-    }
-
-    @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-        super.load(state, nbt);
-    }
-
-    @Override
-    public CompoundNBT save(CompoundNBT compound) {
-        return super.save(compound);
     }
 
     @Override

@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.Main.PA_GROUP;
-import static com.yor42.projectazure.Main.PA_WEAPONS;
 
 public class ItemMedKit extends Item {
     public ItemMedKit() {

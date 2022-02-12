@@ -28,6 +28,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         copy(ModTags.Blocks.ORES_LEAD, ModTags.Items.ORES_LEAD);
         copy(ModTags.Blocks.ORES_ALUMINIUM, ModTags.Items.ORES_ALUMINIUM);
         copy(ModTags.Blocks.ORES_ZINC, ModTags.Items.ORES_ZINC);
+        copy(ModTags.Blocks.ORES_ORIROCK, ModTags.Items.ORES_ORIROCK);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
 
         this.tag(ModTags.Items.INGOT_ALUMINIUM).add(registerItems.INGOT_ALUMINIUM.get());

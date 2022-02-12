@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.storages;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 public class CustomEnergyStorageItem implements IEnergyStorage {
     private final ItemStack stack;

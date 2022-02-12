@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.misc;
 
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
