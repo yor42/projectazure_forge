@@ -6,7 +6,6 @@ import com.yor42.projectazure.client.model.items.ModelDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
-import net.minecraft.item.Item;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
