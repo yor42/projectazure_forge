@@ -52,22 +52,22 @@ public class registerManager {
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MODID);
 
     //Container
-    private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<>(ContainerKansenInventory::new);
+    private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<>((IContainerFactory<ContainerKansenInventory>)ContainerKansenInventory::new);
     public static final RegistryObject<ContainerType<ContainerKansenInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> SHIP_INVENTORY);
 
     private static final ContainerType<RiggingContainer> RIGGING_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<RiggingContainer>)RiggingContainer::new);
     public static final RegistryObject<ContainerType<RiggingContainer>> RIGGING_INVENTORY = CONTAINER.register("rigging_inventory", () -> RIGGING_INVENTORY_TYPE);
 
-    public static final ContainerType<ContainerBAInventory> BA_INVENTORY_TYPE = new ContainerType<>(ContainerBAInventory::new);
+    public static final ContainerType<ContainerBAInventory> BA_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<ContainerBAInventory>)ContainerBAInventory::new);
     public static final RegistryObject<ContainerType<ContainerBAInventory>> BA_CONTAINER = CONTAINER.register("bluearchive_inventory", () -> BA_INVENTORY_TYPE);
 
-    public static final ContainerType<ContainerAKNInventory> AKN_INVENTORY_TYPE = new ContainerType<>(ContainerAKNInventory::new);
+    public static final ContainerType<ContainerAKNInventory> AKN_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<ContainerAKNInventory>)ContainerAKNInventory::new);
     public static final RegistryObject<ContainerType<ContainerAKNInventory>> AKN_CONTAINER = CONTAINER.register("arknights_inventory", () -> AKN_INVENTORY_TYPE);
 
-    public static final ContainerType<ContainerGFLInventory> GFL_INVENTORY_TYPE = new ContainerType<>(ContainerGFLInventory::new);
+    public static final ContainerType<ContainerGFLInventory> GFL_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<ContainerGFLInventory>)ContainerGFLInventory::new);
     public static final RegistryObject<ContainerType<ContainerGFLInventory>> GFL_CONTAINER = CONTAINER.register("girlsfrontline_inventory", () -> GFL_INVENTORY_TYPE);
 
-    public static final ContainerType<ContainerCLSInventory> CLS_INVENTORY_TYPE = new ContainerType<>(ContainerCLSInventory::new);
+    public static final ContainerType<ContainerCLSInventory> CLS_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<ContainerCLSInventory>)ContainerCLSInventory::new);
     public static final RegistryObject<ContainerType<ContainerCLSInventory>> CLS_CONTAINER = CONTAINER.register("closers_inventory", () -> CLS_INVENTORY_TYPE);
 
     public static final ContainerType<ContainerMetalPress> METAL_PRESS_CONTAINER_TYPE = IForgeContainerType.create(ContainerMetalPress::new);

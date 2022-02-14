@@ -216,7 +216,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
 
     @Override
     protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this));
+        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull

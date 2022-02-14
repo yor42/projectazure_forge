@@ -179,7 +179,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     protected void openGUI(ServerPlayerEntity player){
-        NetworkHooks.openGui(player, new ContainerKansenInventory.Supplier(this));
+        NetworkHooks.openGui(player, new ContainerKansenInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
     }
 
 

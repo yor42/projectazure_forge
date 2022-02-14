@@ -9,6 +9,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
@@ -23,8 +24,8 @@ import static com.yor42.projectazure.setup.register.registerManager.CLS_INVENTOR
 public class ContainerCLSInventory extends Container {
 
     public final AbstractEntityCompanion companion;
-    public ContainerCLSInventory(int id, PlayerInventory inventory) {
-        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), null);
+    public ContainerCLSInventory(int id, PlayerInventory inventory, PacketBuffer data) {
+        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
     public ContainerCLSInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(CLS_INVENTORY_TYPE, id);

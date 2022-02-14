@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SplashPotionItem;
 import net.minecraft.item.UseAction;
@@ -34,35 +35,33 @@ public class CompanionHealandEatFoodGoal extends Goal {
         if(this.FoodCooldown > 0){
             this.FoodCooldown--;
         }
-        if(this.companion.isCriticallyInjured()){
+        else if(this.companion.isCriticallyInjured()){
             return false;
         }
-        int InventoryFood = this.getFoodIndex(true);
-        if(this.companion.isEating()){
-            return true;
-        }
-        if(this.companion.getHealth()<this.companion.getMaxHealth()) {
-            if(this.FoodCooldown == 0) {
-
-                if (this.getFoodHand(true).isPresent()) {
-                    this.FoodHand = this.getFoodHand(true).get();
-                    boolean val = this.companion.isEating() || !this.companion.isAggressive() && this.companion.getTarget() == null;
-                    return val;
-                } else if (InventoryFood >-1 && this.companion.getItemSwapIndexOffHand() == -1) {
-                    this.ChangeItem(InventoryFood);
-                    this.FoodCooldown = 15;
-                }
-            }
-        }
-        else if(this.companion.getFoodStats().getFoodLevel()<10){
+        else if(this.companion.getFoodStats().getFoodLevel()<20){
+            int InventoryFood = this.getFoodIndex(false);
             if(this.FoodCooldown == 0) {
                 if (this.companion.tickCount % 10 == 0) {
                     InventoryFood = this.getFoodIndex(false);
                 }
                 if (this.getFoodHand(false).isPresent()) {
                     this.FoodHand = this.getFoodHand(false).get();
-                    return this.companion.isEating() || !this.companion.isAggressive() && this.companion.getTarget() == null || this.companion.getFoodStats().getFoodLevel()<7;
+                    boolean value = this.companion.isEating() || (!this.companion.isAggressive() && this.companion.getTarget() == null) || this.companion.getFoodStats().getFoodLevel()<20;
+                    return value;
                 } else if (InventoryFood >-1&& this.companion.getItemSwapIndexOffHand() == -1) {
+                    this.ChangeItem(InventoryFood);
+                    this.FoodCooldown = 15;
+                }
+            }
+        }
+        else if(this.companion.getHealth()<this.companion.getMaxHealth()) {
+            if(this.FoodCooldown == 0) {
+                int InventoryFood = this.getFoodIndex(true);
+                if (this.getFoodHand(true).isPresent()) {
+                    this.FoodHand = this.getFoodHand(true).get();
+                    boolean val = this.companion.isEating() || !this.companion.isAggressive() && this.companion.getTarget() == null;
+                    return val;
+                } else if (InventoryFood >-1 && this.companion.getItemSwapIndexOffHand() == -1) {
                     this.ChangeItem(InventoryFood);
                     this.FoodCooldown = 15;
                 }
@@ -127,7 +126,7 @@ public class CompanionHealandEatFoodGoal extends Goal {
             }
             return this.companion.canEat(stack.getItem().getFoodProperties().canAlwaysEat());
         }
-        else if(IncludeHealingPotion) {
+        if(IncludeHealingPotion) {
             if (stack.getUseAnimation() == UseAction.DRINK && !(stack.getItem() instanceof SplashPotionItem) && stack.getCount() > 0) {
                 for (EffectInstance effectinstance : PotionUtils.getMobEffects(stack)) {
                     if (doesPotionHeal(effectinstance.getEffect().getEffect())) {
@@ -136,7 +135,6 @@ public class CompanionHealandEatFoodGoal extends Goal {
                 }
                 return false;
             }
-            else return stack.getItem() instanceof ItemBandage;
         }
         return false;
     }
@@ -160,13 +158,13 @@ public class CompanionHealandEatFoodGoal extends Goal {
         if (!list.isEmpty() && this.companion.getFoodStats().getFoodLevel()>5) {
             for (LivingEntity mob : list) {
                 if (mob != null) {
-                    if (mob instanceof MobEntity && (((MobEntity) mob).getTarget() instanceof AbstractEntityCompanion || ((MobEntity) mob).getTarget() == this.companion.getOwner())) {
+                    if (mob instanceof MonsterEntity) {
                         return false;
                     }
                 }
             }
         }
 
-        return this.companion.isUsingItem() && this.companion.getTarget() == null && this.companion.getHealth() < this.companion.getMaxHealth() || this.companion.getTarget() != null && this.companion.getHealth() < this.companion.getMaxHealth() / 2 + 2 && this.companion.isEating() || this.companion.getFoodStats().getFoodLevel()<7;
+        return this.companion.isUsingItem() || this.companion.getItemInHand(this.companion.getUsedItemHand()).isEdible();
     }
 }

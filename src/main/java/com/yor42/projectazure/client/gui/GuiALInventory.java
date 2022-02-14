@@ -30,7 +30,8 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
 
     private final EntityKansenBase host;
     private final enums.ALAffection affectionLevel;
-    private final double affection, morale;
+    private double affection=0D;
+    private double morale;
     private final int backgroundWidth = 176;
     private final int backgroundHeight = 193;
     private final PlayerInventory inventory;
@@ -40,9 +41,10 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
     public GuiALInventory(ContainerKansenInventory container, PlayerInventory playerinventory, ITextComponent titleIn) {
         super(container, playerinventory, titleIn);
         this.host = container.entity;
-        assert this.host != null;
-        this.affection = this.host.getAffection();
-        this.morale = this.host.getMorale();
+        if(container.entity != null) {
+            this.affection = this.host.getAffection();
+            this.morale = this.host.getMorale();
+        }
         this.affectionLevel = this.affectionValuetoLevel();
         this.inventory = playerinventory;
     }

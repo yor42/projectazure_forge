@@ -2192,7 +2192,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 if (!player.isCreative()) {
                     player.setItemInHand(hand, stack);
                 }
-                this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
+                this.playSound(SoundEvents.GENERIC_EAT, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
                 return ActionResultType.SUCCESS;
             }
             //Potion

@@ -212,7 +212,7 @@ public class EntitySylvi extends AbstractCompanionMagicUser{
 
     @Override
     protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerCLSInventory.Supplier(this));
+        NetworkHooks.openGui(player, new ContainerCLSInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull

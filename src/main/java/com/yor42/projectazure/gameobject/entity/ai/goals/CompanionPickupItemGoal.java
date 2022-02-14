@@ -71,7 +71,7 @@ public class CompanionPickupItemGoal extends Goal {
             if (target!=null) {
                 this.host.getNavigation().moveTo(target, 1.0F);
 
-                if (this.host.distanceToSqr(target) < 1.5) {
+                if (this.host.distanceTo(target) <= 1.5) {
                     this.host.pickupExpOrb(target);
                 }
             }
