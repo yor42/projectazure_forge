@@ -25,6 +25,7 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
@@ -89,7 +90,7 @@ public class ForgeBusEventHandler {
                 entity.stopRiding();
                 if (entity instanceof AbstractEntityCompanion) {
                     boolean isInjured = ((AbstractEntityCompanion) entity).isCriticallyInjured();
-                    if (isInjured) {
+                    if (isInjured || world.isNight()) {
                         BlockState state = world.getBlockState(pos);
                         if (state.isBed(world, pos, (LivingEntity) entity)) {
                             pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
@@ -98,7 +99,9 @@ public class ForgeBusEventHandler {
                         }
                         break;
                     }
-
+                    else if(((AbstractEntityCompanion) entity).isDeadOrDying()){
+                        player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
+                    }
                 }
             }
         }

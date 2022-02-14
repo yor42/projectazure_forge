@@ -172,6 +172,7 @@
   "item.tooltip.chargeprogress": "Charge Progress: %s",
   "item.tooltip.chargefailed_nobattery": "Charge FAILED: No Battery!",
   "item.tooltip.ready": "READY!",
+  "item.tooltip.not_revived": "Companion is not revived yet. Use Defibtillator first!",
   "item.projectazure.ammo_generic": "Generic Shell",
 
   "block.projectazure.recruit_beacon": "Recruit Beacon",
