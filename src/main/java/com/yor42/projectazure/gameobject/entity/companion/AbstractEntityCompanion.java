@@ -909,7 +909,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isEating(){
-        return this.getEntityData().get(EATING);
+        if(this.isUsingItem()) {
+            return this.getItemInHand(this.getUsedItemHand()).isEdible();
+        }
+        return false;
     }
 
     public void setEating(boolean value){

@@ -46,7 +46,7 @@ public class CompanionHealandEatFoodGoal extends Goal {
                 }
                 if (this.getFoodHand(false).isPresent()) {
                     this.FoodHand = this.getFoodHand(false).get();
-                    boolean value = this.companion.isEating() || (!this.companion.isAggressive() && this.companion.getTarget() == null) || this.companion.getFoodStats().getFoodLevel()<20;
+                    boolean value = (this.companion.isEating() || (!this.companion.isAggressive() && this.companion.getTarget() == null) || (this.companion.getHealth()<=10)) && this.companion.getFoodStats().getFoodLevel()<20;
                     return value;
                 } else if (InventoryFood >-1&& this.companion.getItemSwapIndexOffHand() == -1) {
                     this.ChangeItem(InventoryFood);

@@ -25,7 +25,7 @@ public class ContainerCLSInventory extends Container {
 
     public final AbstractEntityCompanion companion;
     public ContainerCLSInventory(int id, PlayerInventory inventory, PacketBuffer data) {
-        this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
+        this(id, inventory, new ItemStackHandler(16), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
     public ContainerCLSInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(CLS_INVENTORY_TYPE, id);
@@ -54,25 +54,28 @@ public class ContainerCLSInventory extends Container {
                 this.addSlot(new SlotItemHandler(entityInventory, n + 3 * m, 154 + n * 18, 28 + m * 18));
             }
         }
-
-        for (int m = 0; m < 4; m++) {
-            for (int n = 0; n < 2; n++) {
-                this.addSlot(new SlotItemHandler(EntityAmmo, n + 2 * m, 180 + n * 18, 11 + m * 18) {
-                    @Override
-                    public boolean mayPlace(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemMagazine;
-                    }
-                });
+        if(EntityAmmo.getSlots()<0) {
+            for (int m = 0; m < 4; m++) {
+                for (int n = 0; n < 2; n++) {
+                    this.addSlot(new SlotItemHandler(EntityAmmo, n + 2 * m, 180 + n * 18, 11 + m * 18) {
+                        @Override
+                        public boolean mayPlace(@Nonnull ItemStack stack) {
+                            return stack.getItem() instanceof ItemMagazine;
+                        }
+                    });
+                }
             }
         }
 
-        for(int l = 0; l<companion.getSkillItemCount(); l++){
-            this.addSlot(new SlotItemHandler(entityInventory, 12+l, 7, 58+l*18){
-                @Override
-                public boolean mayPlace(@Nonnull ItemStack stack) {
-                    return ContainerCLSInventory.this.companion.isSkillItem(stack);
-                }
-            });
+        if(this.companion.getSkillItemCount()<0) {
+            for (int l = 0; l < companion.getSkillItemCount(); l++) {
+                this.addSlot(new SlotItemHandler(entityInventory, 12 + l, 7, 58 + l * 18) {
+                    @Override
+                    public boolean mayPlace(@Nonnull ItemStack stack) {
+                        return ContainerCLSInventory.this.companion.isSkillItem(stack);
+                    }
+                });
+            }
         }
 
         for (int i = 0; i < 3; ++i) {
