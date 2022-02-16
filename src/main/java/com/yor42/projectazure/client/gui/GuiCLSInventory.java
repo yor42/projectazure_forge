@@ -17,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -60,6 +61,7 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
         stack.pushPose();
         this.font.draw(stack, this.title, (float)this.titleLabelX, (float)this.titleLabelY, 0xe3eef4);
         this.font.draw(stack, this.inventory.getDisplayName(), (float)this.inventoryLabelX, (float)this.inventoryLabelY, 0xe3eef4);
+        this.font.draw(stack, new TranslationTextComponent("gui.ammostorage.title"), this.imageWidth+6, 10, 16777215);
         stack.popPose();
         stack.pushPose();
         stack.scale(0.75F, 0.75F, 0.75F);
@@ -104,6 +106,8 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        this.blit(matrixStack, this.leftPos + this.imageWidth + 4, this.topPos + 9, 214, 0, 42, 87);
+
         //this.blit(matrixStack, this.leftPos + this.imageWidth + 4, this.topPos + 9, 178, 102, 39, 87);
         for(int l = 0; l<this.host.getSkillItemCount(); l++){
             //this.blit(matrixStack, this.leftPos-21, this.topPos+57+(19*l), 41, 0, 238, 18);

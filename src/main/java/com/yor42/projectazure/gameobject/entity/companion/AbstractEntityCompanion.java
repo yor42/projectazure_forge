@@ -320,7 +320,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
     };
-    public ItemStackHandler AmmoStorage = new ItemStackHandler(0){
+    public ItemStackHandler AmmoStorage = new ItemStackHandler(8){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 

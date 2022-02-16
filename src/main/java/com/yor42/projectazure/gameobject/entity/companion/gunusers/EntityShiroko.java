@@ -199,7 +199,7 @@ public class EntityShiroko extends EntityGunUserBase {
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg", false).addAnimation("sit_injured_leg_idle", true));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
+                    event.getController().setAnimation(builder.addAnimation("animation.shiroko.sit_start").addAnimation("animation.shiroko.sit"));
                 }
             }
             return PlayState.CONTINUE;

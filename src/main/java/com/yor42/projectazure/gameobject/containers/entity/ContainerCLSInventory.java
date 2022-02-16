@@ -32,12 +32,12 @@ public class ContainerCLSInventory extends Container {
 
         this.companion = companion;
         //ZA HANDO
-        for(int k = 0; k<2; k++) {
-            this.addSlot(new SlotItemHandler(EntityEquipment, k, 52, 58+(19*k)));
+        for (int k = 0; k < 2; k++) {
+            this.addSlot(new SlotItemHandler(EntityEquipment, k, 52, 58 + (19 * k)));
         }
 
         for (int l = 0; l < 4; l++) {
-            this.addSlot(new SlotItemHandler(EntityEquipment, 2 + l, 131, 20+ l * 18) {
+            this.addSlot(new SlotItemHandler(EntityEquipment, 2 + l, 131, 20 + l * 18) {
                 public int getMaxStackSize() {
                     return 1;
                 }
@@ -54,38 +54,36 @@ public class ContainerCLSInventory extends Container {
                 this.addSlot(new SlotItemHandler(entityInventory, n + 3 * m, 154 + n * 18, 28 + m * 18));
             }
         }
-        if(EntityAmmo.getSlots()<0) {
-            for (int m = 0; m < 4; m++) {
-                for (int n = 0; n < 2; n++) {
-                    this.addSlot(new SlotItemHandler(EntityAmmo, n + 2 * m, 180 + n * 18, 11 + m * 18) {
-                        @Override
-                        public boolean mayPlace(@Nonnull ItemStack stack) {
-                            return stack.getItem() instanceof ItemMagazine;
-                        }
-                    });
-                }
-            }
-        }
 
-        if(this.companion.getSkillItemCount()<0) {
-            for (int l = 0; l < companion.getSkillItemCount(); l++) {
-                this.addSlot(new SlotItemHandler(entityInventory, 12 + l, 7, 58 + l * 18) {
+
+        for (int m = 0; m < 4; m++) {
+            for (int n = 0; n < 2; n++) {
+                this.addSlot(new SlotItemHandler(EntityAmmo, n + (2 * m), 222 + n * 18, 21 + m * 18) {
                     @Override
                     public boolean mayPlace(@Nonnull ItemStack stack) {
-                        return ContainerCLSInventory.this.companion.isSkillItem(stack);
+                        return stack.getItem() instanceof ItemMagazine;
                     }
                 });
             }
         }
 
+        for (int l = 0; l < companion.getSkillItemCount(); l++) {
+            this.addSlot(new SlotItemHandler(entityInventory, 12 + l, 7, 58 + l * 18) {
+                @Override
+                public boolean mayPlace(@Nonnull ItemStack stack) {
+                    return ContainerCLSInventory.this.companion.isSkillItem(stack);
+                }
+            });
+        }
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inventory, j + i * 9 + 9, 12 + j * 18, 113 + i * 18));
+                this.addSlot(new Slot(inventory, j + i * 9 + 9, 12 + j * 18, 114 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inventory, k, 12 + k * 18, 170));
+            this.addSlot(new Slot(inventory, k, 12 + k * 18, 172));
         }
     }
 

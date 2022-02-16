@@ -59,7 +59,7 @@ public class ContainerAKNInventory extends Container {
             }
         }
 
-        if(this.companion instanceof EntityGunUserBase) {
+        if(EntityAmmo.getSlots()>0) {
             for (int m = 0; m < 4; m++) {
                 for (int n = 0; n < 2; n++) {
                     this.addSlot(new SlotItemHandler(EntityAmmo, n + 2 * m, 180 + n * 18, 13 + m * 18) {

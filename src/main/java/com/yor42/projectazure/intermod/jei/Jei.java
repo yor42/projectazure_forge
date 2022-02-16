@@ -1,8 +1,6 @@
 package com.yor42.projectazure.intermod.jei;
 
-import com.yor42.projectazure.client.gui.GuiALInventory;
-import com.yor42.projectazure.client.gui.GuiGFLInventory;
-import com.yor42.projectazure.client.gui.guiBAInventory;
+import com.yor42.projectazure.client.gui.*;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
@@ -66,6 +64,32 @@ public class Jei implements IModPlugin {
             @Nonnull
             @Override
             public List<Rectangle2d> getGuiExtraAreas(GuiGFLInventory containerScreen) {
+                List<Rectangle2d> rects = new ArrayList<>();
+                int guiLeft = containerScreen.getGuiLeft();
+                int guiTop = containerScreen.getGuiTop();
+                int xSize = containerScreen.getXSize();
+                rects.add(new Rectangle2d(guiLeft+xSize, guiTop, 43, 90));
+                return rects;
+            }
+        });
+
+        registration.addGuiContainerHandler(GuiAKNInventory.class, new IGuiContainerHandler<GuiAKNInventory>() {
+            @Nonnull
+            @Override
+            public List<Rectangle2d> getGuiExtraAreas(GuiAKNInventory containerScreen) {
+                List<Rectangle2d> rects = new ArrayList<>();
+                int guiLeft = containerScreen.getGuiLeft();
+                int guiTop = containerScreen.getGuiTop();
+                int xSize = containerScreen.getXSize();
+                rects.add(new Rectangle2d(guiLeft+xSize, guiTop, 43, 90));
+                return rects;
+            }
+        });
+
+        registration.addGuiContainerHandler(GuiCLSInventory.class, new IGuiContainerHandler<GuiCLSInventory>() {
+            @Nonnull
+            @Override
+            public List<Rectangle2d> getGuiExtraAreas(GuiCLSInventory containerScreen) {
                 List<Rectangle2d> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getGuiLeft();
                 int guiTop = containerScreen.getGuiTop();

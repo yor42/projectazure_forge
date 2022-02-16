@@ -107,7 +107,10 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         this.renderEntity(x, y);
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-        this.blit(matrixStack, this.leftPos + this.imageWidth + 4, this.topPos + 9, 214, 0, 42, 87);
+
+        if(this.host.getAmmoStorage().getSlots()>0) {
+            this.blit(matrixStack, this.leftPos + this.imageWidth + 4, this.topPos + 9, 214, 0, 42, 87);
+        }
 
         this.blit(matrixStack, this.leftPos-23, this.topPos+7, 114, 7, 20, 10);
         for(int l = 0; l<this.host.getSkillItemCount(); l++){
