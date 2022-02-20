@@ -2161,8 +2161,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 else if(this.isSleeping()){
                     this.stopSleeping();
                 }
-                this.startRiding(player, true);
-                return ActionResultType.SUCCESS;
+                boolean isobstructed = false;
+                for(int i=1; i<5; i++){
+                    if(player.level.getBlockState(player.blockPosition().above(i)).isSuffocating(player.level, player.blockPosition().above(i))){
+                        isobstructed = true;
+                    }
+                }
+
+                if(isobstructed){
+                    return ActionResultType.PASS;
+                }
+                else {
+                    this.startRiding(player, true);
+                    return ActionResultType.SUCCESS;
+                }
             }
             else if (this.getVehicle() != null) {
                 this.stopRiding();
@@ -2694,7 +2706,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     @MethodsReturnNonnullByDefault
     public EntitySize getDimensions(@ParametersAreNonnullByDefault Pose poseIn) {
-        if(this.isOrderedToSit()){
+        if(this.isOrderedToSit() || this.getVehicle() != null){
             return new EntitySize(this.getBbWidth(), this.getSitHeight(), false);
         }
         return super.getDimensions(poseIn);
