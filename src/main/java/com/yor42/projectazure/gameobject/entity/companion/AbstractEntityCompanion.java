@@ -2162,7 +2162,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     this.stopSleeping();
                 }
                 boolean isobstructed = false;
-                for(int i=1; i<5; i++){
+                for(int i=0; i<4; i++){
                     if(player.level.getBlockState(player.blockPosition().above(i)).isSuffocating(player.level, player.blockPosition().above(i))){
                         isobstructed = true;
                     }
@@ -2196,9 +2196,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             else if(this.isOnFire() && HeldItem == Items.WATER_BUCKET){
                 this.clearFire();
                 this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
-                if(!player.isCreative()) {
-                    player.setItemInHand(hand, HeldItem.getContainerItem(heldstacks));
-                }
             }
             //food
             else if (HeldItem != registerItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
@@ -2369,8 +2366,21 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         return ActionResultType.SUCCESS;
                     }
                     else if (this.isDoingVerticalInteraction(player, 0.2F, -1)) {
-                        if(player.isShiftKeyDown() && player.getPassengers().isEmpty()) {
-                            this.startRiding(player, true);
+                        if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit()) {
+                            boolean isobstructed = false;
+                            for(int i=0; i<4; i++){
+                                if(player.level.getBlockState(player.blockPosition().above(i)).isSuffocating(player.level, player.blockPosition().above(i))){
+                                    isobstructed = true;
+                                }
+                            }
+
+                            if(isobstructed){
+                                return ActionResultType.PASS;
+                            }
+                            else {
+                                this.startRiding(player, true);
+                                return ActionResultType.SUCCESS;
+                            }
                         }
                         else {
                             this.SwitchSittingStatus();
