@@ -36,6 +36,15 @@ public class ResourceUtils {
             return ModResourceLocation("animations/entity/kansen/"+FileName);
     }
 
+    public static ResourceLocation AnimationEntityKanmusuLocation(String FileName){
+        if (!FileName.contains(".animation.json"))
+            return ModResourceLocation("animations/entity/kanmusu/"+FileName+".animation.json");
+        else if (!FileName.contains(".json"))
+            return ModResourceLocation("animations/entity/kanmusu/"+FileName+".json");
+        else
+            return ModResourceLocation("animations/entity/kanmusu/"+FileName);
+    }
+
     public static ResourceLocation TextureLocation(String Filename) {
         return ModResourceLocation("textures/"+Filename+".png");
     }

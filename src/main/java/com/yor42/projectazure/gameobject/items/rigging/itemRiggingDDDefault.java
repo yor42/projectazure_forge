@@ -73,7 +73,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
     @Override
     public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         matrixStackIn.pushPose();
-        GeoModelProvider modelRiggingProvider = ((ItemRiggingBase) entitylivingbaseIn.getRigging().getItem()).getModel();
+        GeoModelProvider modelRiggingProvider = this.getModel();
         IBone hostbone = entityModel.getModel(entityModel.getModelLocation(null)).getBone("Body").get();
         if (entityModel.getModel(entityModel.getModelLocation(null)).getBone("Body").isPresent()) {
             matrixStackIn.translate(hostbone.getPositionX() / 16, (hostbone.getPositionY() + 36.6) / 16, hostbone.getPositionZ() / 16);
@@ -81,7 +81,8 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
 
 
         RenderType type = RenderType.entitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
-        this.render(modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        GeoModel riggingmodel = modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null));
+        this.render(riggingmodel, entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
         matrixStackIn.popPose();
         IMultiInventory inventories = MultiInvUtil.getCap(entitylivingbaseIn.getRigging());
 

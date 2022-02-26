@@ -68,7 +68,8 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
             matrixStackIn.translate(hostbone.getPositionX() / 16, (hostbone.getPositionY() + riggingoffset) / 16, (hostbone.getPositionZ() - 1) / 16);
         }
         RenderType type = RenderType.entitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
-        this.render(modelRiggingProvider.getModel(entityModel.getModelLocation(null)), entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+        GeoModel riggingmodel = modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null));
+        this.render(riggingmodel, entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
         matrixStackIn.popPose();
 
         IMultiInventory inventories = MultiInvUtil.getCap(entitylivingbaseIn.getRigging());

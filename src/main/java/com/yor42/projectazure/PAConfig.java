@@ -124,6 +124,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue SylviAttackDamage;
         public final ForgeConfigSpec.DoubleValue SylviMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue YamatoHealth;
+        public final ForgeConfigSpec.DoubleValue YamatoSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue YamatoAttackDamage;
+        public final ForgeConfigSpec.DoubleValue YamatoMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -260,11 +265,6 @@ public class PAConfig {
             SchwarzAttackDamage = builder.defineInRange("Attack Damage of Schwarz", 2.0F, 0, 1024);
             SchwarzMovementSpeed = builder.defineInRange("Movement speed of Schwarz", 0.4F, 0, 2);
 
-            SylviHealth = builder.defineInRange("Max Health of Sylvi Lee", 20D, 1, 1024);
-            SylviSwimSpeed = builder.defineInRange("Swim Speed of Sylvi Lee", 2.5, 0, 1024);
-            SylviAttackDamage = builder.defineInRange("Attack Damage of Sylvi Lee" , 2.0F, 0, 1024);
-            SylviMovementSpeed = builder.defineInRange("Movement speed of Sylvi Lee", 0.4F, 0, 2);
-
             AmiyaHealth = builder.defineInRange("Max Health of Amiya", 20D, 1, 1024);
             AmiyaSwimSpeed = builder.defineInRange("Swim Speed of Amiya", 2.5, 0, 1024);
             AmiyaAttackDamage = builder.defineInRange("Attack Damage of Amiya", 2.0F, 0, 1024);
@@ -295,6 +295,18 @@ public class PAConfig {
             GangwonSwimSpeed = builder.defineInRange("Swim Speed of Gangwon", 2.5, 0, 1024);
             GangwonAttackDamage = builder.defineInRange("Attack Damage of Gangwon", 2.0F, 0, 1024);
             GangwonMovementSpeed = builder.defineInRange("Movement speed of Gangwon", 0.35F, 0, 2);
+
+            builder.pop().push("Closers");
+            SylviHealth = builder.defineInRange("Max Health of Sylvi Lee", 20D, 1, 1024);
+            SylviSwimSpeed = builder.defineInRange("Swim Speed of Sylvi Lee", 2.5, 0, 1024);
+            SylviAttackDamage = builder.defineInRange("Attack Damage of Sylvi Lee" , 2.0F, 0, 1024);
+            SylviMovementSpeed = builder.defineInRange("Movement speed of Sylvi Lee", 0.4F, 0, 2);
+
+            builder.pop().push("Kantai Collection");
+            YamatoHealth = builder.defineInRange("Max Health of Yamato Lee", 40D, 1, 1024);
+            YamatoSwimSpeed = builder.defineInRange("Swim Speed of Yamato Lee", 2.5, 0, 1024);
+            YamatoAttackDamage = builder.defineInRange("Attack Damage of Yamato Lee" , 2.0F, 0, 1024);
+            YamatoMovementSpeed = builder.defineInRange("Movement speed of Yamato Lee", 0.4F, 0, 2);
 
             builder.pop().push("Girl's Frontline");
             M4A1Health = builder.defineInRange("Max Health of M4A1", 40D, 1, 1024);

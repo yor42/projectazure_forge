@@ -1,6 +1,7 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityEnterprise;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityYamato;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -13,28 +14,27 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.*;
 
-public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
+public class YamatoModel extends AnimatedGeoModel<EntityYamato> {
 
     private int blinkinterval = 0;
     private long LastBlinkTime = 0;
-
     @Override
-    public ResourceLocation getModelLocation(EntityEnterprise entityEnterprise) {
-        return GeoModelEntityLocation("modelenterprise");
+    public ResourceLocation getModelLocation(EntityYamato object) {
+        return GeoModelEntityLocation("modelyamato");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityEnterprise entityEnterprise) {
-        return TextureEntityLocation("modelenterprise");
+    public ResourceLocation getTextureLocation(EntityYamato object) {
+        return TextureEntityLocation("modelyamato");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityEnterprise entityEnterprise) {
-        return AnimationEntityKansenLocation("enterprise");
+    public ResourceLocation getAnimationFileLocation(EntityYamato animatable) {
+        return AnimationEntityKanmusuLocation("yamato");
     }
 
     @Override
-    public void setLivingAnimations(EntityEnterprise entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setLivingAnimations(EntityYamato entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
@@ -47,7 +47,6 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
         IBone Faint = this.getAnimationProcessor().getBone("faint");
         IBone Injured = this.getAnimationProcessor().getBone("injured");
-        IBone Backhair = this.getAnimationProcessor().getBone("bone24");
 
         IBone body = this.getAnimationProcessor().getBone("Body");
         if(entity.isDeadOrDying()|| (entity.isSleeping() && entity.isCriticallyInjured())){
@@ -81,8 +80,8 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             PatFace.setHidden(true);
             SleepFace.setHidden(true);
             Flushed.setHidden(true);
-            Faint.setHidden(true);
             Angry1.setHidden(true);
+            Faint.setHidden(true);
             Angry2.setHidden(false);
             Injured.setHidden(true);
         }
@@ -93,8 +92,8 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             PatFace.setHidden(true);
             SleepFace.setHidden(true);
             Flushed.setHidden(true);
-            Faint.setHidden(true);
             Angry1.setHidden(true);
+            Faint.setHidden(true);
             Angry2.setHidden(false);
             Injured.setHidden(true);
         }
@@ -129,8 +128,8 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             PatFace.setHidden(true);
             SleepFace.setHidden(false);
             Flushed.setHidden(true);
-            Faint.setHidden(true);
             Angry1.setHidden(true);
+            Faint.setHidden(true);
             Angry2.setHidden(true);
             Injured.setHidden(true);
         }
@@ -146,8 +145,8 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
                     PatFace.setHidden(true);
                     SleepFace.setHidden(true);
                     Flushed.setHidden(true);
-                    Faint.setHidden(true);
                     Angry1.setHidden(true);
+                    Faint.setHidden(true);
                     Angry2.setHidden(true);
                     Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
@@ -158,8 +157,8 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
                     EyeclosedFace.setHidden(true);
                     PatFace.setHidden(true);
                     SleepFace.setHidden(true);
-                    Faint.setHidden(true);
                     Flushed.setHidden(true);
+                    Faint.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
                     Injured.setHidden(true);
@@ -174,7 +173,6 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
         if(!(entity.isBeingPatted()||entity.isSleeping())) {
             head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
             head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
-            Backhair.setRotationX(-extraData.headPitch * ((float) Math.PI / 180F));
         }
 
         if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
@@ -191,4 +189,5 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             body.setPositionY(-45);
         }
     }
+
 }
