@@ -79,7 +79,6 @@ public class CompanionHealandEatFoodGoal extends Goal {
             this.companion.setItemSwapIndexOffHand(-1);
         }
         this.FoodHand = null;
-        this.companion.setEating(false);
         this.companion.releaseUsingItem();
     }
 
@@ -147,7 +146,6 @@ public class CompanionHealandEatFoodGoal extends Goal {
     public void start() {
         if(this.FoodHand != null){
             this.companion.startUsingItem(this.FoodHand);
-            this.companion.setEating(true);
         }
     }
 

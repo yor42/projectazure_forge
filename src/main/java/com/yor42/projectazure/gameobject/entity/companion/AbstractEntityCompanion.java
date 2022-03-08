@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
+import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
@@ -41,16 +42,22 @@ import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.entity.ai.brain.sensor.Sensor;
+import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -98,6 +105,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.Predicate;
 
 import static com.yor42.projectazure.libs.utils.BlockStateUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
@@ -105,7 +113,7 @@ import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
-public abstract class AbstractEntityCompanion extends TameableEntity implements IAnimatable, IAnimationTickable {
+public abstract class AbstractEntityCompanion extends TameableEntity implements ICrossbowUser, IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
@@ -359,7 +367,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> NONVANILLAMELEEATTACKDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> SKILLDELAYTICK = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Boolean> EATING = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> CHARGING_CROSSBOW = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> USING_SKILL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Float> MORALE = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> EXP = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
@@ -395,6 +403,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> RELOAD_TIMER_MAINHAND = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> RELOAD_TIMER_OFFHAND = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
+    private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES);
+
+
     public abstract enums.EntityType getEntityType();
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -545,7 +558,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             compound.putDouble("HomePosY", this.entityData.get(HOMEPOS).get().getY());
             compound.putDouble("HomePosZ", this.entityData.get(HOMEPOS).get().getZ());
         }
-        compound.putBoolean("eating", this.entityData.get(EATING));
+        compound.putBoolean("charging_crossbow", this.entityData.get(CHARGING_CROSSBOW));
         compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
         compound.putBoolean("isforcewokenup", this.entityData.get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.entityData.get(EXP));
@@ -600,7 +613,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
         this.entityData.set(SITTING, compound.getBoolean("issitting"));
         this.entityData.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
-        this.entityData.set(EATING, compound.getBoolean("eating"));
+        this.entityData.set(CHARGING_CROSSBOW, compound.getBoolean("charging_crossbow"));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.awakeningLevel = compound.getInt("awaken");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
@@ -915,8 +928,57 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return false;
     }
 
-    public void setEating(boolean value){
-        this.entityData.set(EATING, value);
+    public void setChargingCrossbow(boolean value){
+        this.entityData.set(CHARGING_CROSSBOW, value);
+    }
+
+    @Override
+    public void shootCrossbowProjectile(LivingEntity p_230284_1_, ItemStack p_230284_2_, ProjectileEntity p_230284_3_, float p_230284_4_) {
+        this.shootCrossbowProjectile(this, p_230284_1_, p_230284_3_, p_230284_4_, 1.6F);
+    }
+
+    @Override
+    public void onCrossbowAttackPerformed() {
+        this.noActionTime = 0;
+    }
+
+    public ItemStack getProjectile(ItemStack p_213356_1_) {
+        if (!(p_213356_1_.getItem() instanceof ShootableItem)) {
+            return ItemStack.EMPTY;
+        } else {
+            Predicate<ItemStack> predicate = ((ShootableItem)p_213356_1_.getItem()).getSupportedHeldProjectiles();
+            ItemStack itemstack = ShootableItem.getHeldProjectile(this, predicate);
+            if (!itemstack.isEmpty()) {
+                return itemstack;
+            } else {
+                predicate = ((ShootableItem)p_213356_1_.getItem()).getAllSupportedProjectiles();
+
+                for(int i = 0; i < this.getAmmoStorage().getSlots(); ++i) {
+                    ItemStack itemstack1 = this.getAmmoStorage().getStackInSlot(i);
+                    if (predicate.test(itemstack1)) {
+                        return itemstack1;
+                    }
+                }
+
+                return ItemStack.EMPTY;
+            }
+        }
+    }
+
+    public void performRangedAttack(LivingEntity p_82196_1_, float p_82196_2_) {
+
+        ItemStack itemstack = this.getProjectile(this.getItemInHand(MAIN_HAND));
+        ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
+        AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(this.level, itemstack, this);
+        if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
+            abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
+        double d0 = p_82196_1_.getX() - this.getX();
+        double d1 = p_82196_1_.getY(0.3333333333333333D) - abstractarrowentity.getY();
+        double d2 = p_82196_1_.getZ() - this.getZ();
+        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
+        this.playSound(SoundEvents.ARROW_SHOOT,1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addFreshEntity(abstractarrowentity);
     }
 
     public boolean isFreeRoaming() {
@@ -1138,7 +1200,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.define(EXP, 0.0F);
         this.entityData.define(LIMITBREAKLEVEL, 0);
         this.entityData.define(MORALE, 0.0F);
-        this.entityData.define(EATING, false);
+        this.entityData.define(CHARGING_CROSSBOW, false);
         this.entityData.define(LEVEL, 0);
         this.entityData.define(AFFECTION, 0.0F);
         this.entityData.define(SITTING, false);
@@ -2735,6 +2797,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public int tickTimer() {
         return this.tickCount;
+    }
+
+    public Brain<AbstractEntityCompanion> getBrain() {
+        return (Brain<AbstractEntityCompanion>)super.getBrain();
+    }
+
+    protected Brain.BrainCodec<AbstractEntityCompanion> brainProvider() {
+        return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
     }
 
     @Nullable
