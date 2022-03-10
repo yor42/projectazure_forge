@@ -3,6 +3,9 @@ package com.yor42.projectazure.client.model.entity.ranged;
 import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import net.minecraft.client.renderer.model.ModelHelper;
+import net.minecraft.entity.monster.AbstractIllagerEntity;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -48,6 +51,10 @@ public class ModelSchwarz extends AnimatedGeoModel<EntitySchwarz> {
         IBone Sleep = this.getAnimationProcessor().getBone("Sleeping");
         IBone Faint = this.getAnimationProcessor().getBone("faint");
         IBone Injured = this.getAnimationProcessor().getBone("injured");
+
+        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
+        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
+        IBone Head = this.getAnimationProcessor().getBone("Head");
 
 
         IBone body = this.getAnimationProcessor().getBone("Body");
@@ -204,6 +211,12 @@ public class ModelSchwarz extends AnimatedGeoModel<EntitySchwarz> {
         }
         else if(entity.isSleeping()){
             body.setPositionY(-36);
+        }
+
+        if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
+            ModelHelper.animateCrossbowCharge(RightArm, LeftArm, entity, true);
+        } else if (entity.isChargingCrossbow()) {
+            ModelHelper.animateCrossbowHold(RightArm, LeftArm, Head, true);
         }
     }
 }

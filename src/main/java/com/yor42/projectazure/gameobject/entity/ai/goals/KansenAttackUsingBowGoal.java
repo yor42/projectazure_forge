@@ -1,8 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
-import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.BowItem;
@@ -10,90 +12,84 @@ import net.minecraft.util.Hand;
 
 import java.util.EnumSet;
 
-public class KansenAttackUsingBowGoal extends Goal {
-    private EntityKansenBase host;
+public class KansenAttackUsingBowGoal<T extends AbstractEntityCompanion & IRangedAttackMob> extends Goal {
+    private final T mob;
+    private final double speedModifier;
+    private int attackIntervalMin;
+    private final float attackRadiusSqr;
+    private int attackTime = -1;
     private int seeTime;
-    private int strafingTime = -1;
-    private final double moveSpeedAmp;
-    private final float maxAttackDistance;
-    private int attackCooldown;
     private boolean strafingClockwise;
     private boolean strafingBackwards;
-    private int attackTime = -1;
+    private int strafingTime = -1;
 
-    public KansenAttackUsingBowGoal(EntityKansenBase entity, double moveSpeedAmpIn, int attackCooldownIn, float maxAttackDistanceIn){
-        this.host = entity;
-        this.moveSpeedAmp = moveSpeedAmpIn;
-        this.maxAttackDistance = maxAttackDistanceIn;
-        this.attackCooldown = attackCooldownIn;
+    public KansenAttackUsingBowGoal(T mob, double speedmodifier, int attackspeed, float attackRadius){
+        this.mob = mob;
+        this.speedModifier = speedmodifier;
+        this.attackIntervalMin = attackspeed;
+        this.attackRadiusSqr = attackRadius * attackRadius;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
-    @Override
+    public void setMinAttackInterval(int p_189428_1_) {
+        this.attackIntervalMin = p_189428_1_;
+    }
+
     public boolean canUse() {
-        LivingEntity target = this.host.getTarget();
-        if(target != null && target.isAlive() && this.host.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem) {
-            for (int i = 0; i < this.host.getInventory().getSlots(); i++) {
-                if (this.host.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return this.mob.getTarget() != null && this.isHoldingBow();
+    }
+
+    protected boolean isHoldingBow() {
+        return this.mob.getMainHandItem().getItem() instanceof BowItem;
     }
 
     public boolean canContinueToUse() {
-        return (this.canUse() || !this.host.getNavigation().isDone()) && this.host.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() instanceof BowItem;
+        return (this.canUse() || !this.mob.getNavigation().isDone()) && this.isHoldingBow();
     }
 
     public void start() {
         super.start();
-        this.host.setAggressive(true);
+        this.mob.setAggressive(true);
     }
 
-    @Override
     public void stop() {
         super.stop();
-        this.host.setAggressive(false);
+        this.mob.setAggressive(false);
         this.seeTime = 0;
-        this.host.setUsingbow(false);
-        this.host.stopUsingItem();
         this.attackTime = -1;
+        this.mob.stopUsingItem();
     }
 
-    @Override
     public void tick() {
-        super.tick();
-        LivingEntity targetEntity = this.host.getTarget();
-        if(targetEntity != null){
-            double distance = this.host.distanceToSqr(targetEntity);
-            boolean cansee = this.host.getSensing().canSee(targetEntity);
-            boolean isSeeing = this.seeTime>0;
-
-            if (cansee != isSeeing) {
+        LivingEntity livingentity = this.mob.getTarget();
+        if (livingentity != null) {
+            double d0 = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
+            boolean flag = this.mob.getSensing().canSee(livingentity);
+            boolean flag1 = this.seeTime > 0;
+            if (flag != flag1) {
                 this.seeTime = 0;
             }
 
-            if (cansee) {
+            if (flag) {
                 ++this.seeTime;
             } else {
                 --this.seeTime;
             }
 
-            if (!(distance > (double)this.maxAttackDistance) && this.seeTime >= 20) {
-                this.host.getNavigation().stop();
+            if (!(d0 > (double)this.attackRadiusSqr) && this.seeTime >= 20) {
+                this.mob.getNavigation().stop();
                 ++this.strafingTime;
             } else {
-                this.host.getNavigation().moveTo(targetEntity, this.moveSpeedAmp);
+                this.mob.getNavigation().moveTo(livingentity, this.speedModifier);
                 this.strafingTime = -1;
             }
 
             if (this.strafingTime >= 20) {
-                if ((double)this.host.getRandom().nextFloat() < 0.3D) {
+                if ((double)this.mob.getRandom().nextFloat() < 0.3D) {
                     this.strafingClockwise = !this.strafingClockwise;
                 }
 
-                if ((double)this.host.getRandom().nextFloat() < 0.3D) {
+                if ((double)this.mob.getRandom().nextFloat() < 0.3D) {
                     this.strafingBackwards = !this.strafingBackwards;
                 }
 
@@ -101,32 +97,31 @@ public class KansenAttackUsingBowGoal extends Goal {
             }
 
             if (this.strafingTime > -1) {
-                if (distance > (double)(this.maxAttackDistance * 0.75F)) {
+                if (d0 > (double)(this.attackRadiusSqr * 0.75F)) {
                     this.strafingBackwards = false;
-                } else if (distance < (double)(this.maxAttackDistance * 0.25F)) {
+                } else if (d0 < (double)(this.attackRadiusSqr * 0.25F)) {
                     this.strafingBackwards = true;
                 }
 
-                this.host.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
-                this.host.lookAt(targetEntity, 30.0F, 30.0F);
+                this.mob.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                this.mob.lookAt(livingentity, 30.0F, 30.0F);
             } else {
-                this.host.getLookControl().setLookAt(targetEntity, 30.0F, 30.0F);
+                this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
             }
 
-            if (this.host.isUsingItem()) {
-                if (!cansee && this.seeTime < -60) {
-                    this.host.stopUsingItem();
-                } else if (cansee) {
-                    int i = this.host.getTicksUsingItem();
+            if (this.mob.isUsingItem()) {
+                if (!flag && this.seeTime < -60) {
+                    this.mob.stopUsingItem();
+                } else if (flag) {
+                    int i = this.mob.getTicksUsingItem();
                     if (i >= 20) {
-                        this.host.stopUsingItem();
-                        this.host.ShootArrow(targetEntity, BowItem.getPowerForTime(i));
-                        this.attackTime = this.attackCooldown;
+                        this.mob.stopUsingItem();
+                        this.mob.performRangedAttack(livingentity, BowItem.getPowerForTime(i));
+                        this.attackTime = this.attackIntervalMin;
                     }
                 }
             } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-                this.host.startUsingItem(Hand.MAIN_HAND);
-                this.host.setUsingbow(true);
+                this.mob.startUsingItem(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof BowItem));
             }
 
         }

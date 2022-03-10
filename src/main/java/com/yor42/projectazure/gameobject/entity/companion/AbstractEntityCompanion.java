@@ -932,6 +932,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(CHARGING_CROSSBOW, value);
     }
 
+    public boolean isChargingCrossbow(){
+        this.entityData.get(CHARGING_CROSSBOW);
+    }
+
     @Override
     public void shootCrossbowProjectile(LivingEntity p_230284_1_, ItemStack p_230284_2_, ProjectileEntity p_230284_3_, float p_230284_4_) {
         this.shootCrossbowProjectile(this, p_230284_1_, p_230284_3_, p_230284_4_, 1.6F);
@@ -2811,5 +2815,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public ModifiableAttributeInstance getAttribute(Attribute attribute) {
         return super.getAttribute(attribute);
+    }
+
+    public enum ARMPOSES{
+        IDLE,
+        SLEEPING,
+        PAT,
+        SITTING,
+        SWIMMING,
+        WALKING,
+        RUNNING,
+        LEWDING,
+        OPENING_DOOR,
+        USING_GUN,
+        RELOADING_GUN,
+        SWINGING,
+        MELEEATTACK,
+        HOLDING_BOW,
+        CHARGING_BOW,
+        HOLDING_CROSSBOW,
+        CHARGING_CROSSBOW
     }
 }

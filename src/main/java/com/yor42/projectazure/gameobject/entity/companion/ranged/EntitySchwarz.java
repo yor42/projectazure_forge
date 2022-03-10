@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
 import net.minecraft.util.Hand;
@@ -134,6 +135,9 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
 
             return PlayState.CONTINUE;
+        }
+        else if(this.getMainHandItem().getItem() instanceof CrossbowItem){
+            return PlayState.STOP;
         }
         else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
