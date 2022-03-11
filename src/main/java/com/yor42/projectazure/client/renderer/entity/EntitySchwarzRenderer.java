@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -52,9 +53,13 @@ public class EntitySchwarzRenderer extends GeoCompanionRenderer<EntitySchwarz> {
         if (bone.getName().equals("itemOffHand")){
             stack.pushPose();
             stack.mulPose(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.MAINHAND);
+            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.OFFHAND);
             stack.translate(-0.6F, 0.2F, 1.4F);
             stack.scale(1.5F, 1.5F, 1.5F);
+            if(mainHandStack.getItem() instanceof ShieldItem){
+                stack.mulPose(Vector3f.YP.rotationDegrees(180));
+                stack.translate(0,0,-0.5);
+            }
             if(!mainHandStack.isEmpty()){
                 Item gunItem = this.entity.getGunStack().getItem();
                 if(!this.entity.isReloadingMainHand() && this.entity.isUsingGun() && gunItem instanceof ItemGunBase && ((ItemGunBase)gunItem).isTwoHanded()){
@@ -67,11 +72,10 @@ public class EntitySchwarzRenderer extends GeoCompanionRenderer<EntitySchwarz> {
         else if (bone.getName().equals("itemMainHand")){
             stack.pushPose();
             stack.mulPose(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.OFFHAND);
+            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.MAINHAND);
             float xvalue = 0.6F;
             if(mainHandStack.isShield(this.entity)){
                 stack.mulPose(Vector3f.ZP.rotationDegrees(180));
-                xvalue = -0.6F;
             }
             stack.translate(xvalue, 0.2F, 1.4F);
             stack.scale(1.5F, 1.5F, 1.5F);

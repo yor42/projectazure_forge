@@ -15,10 +15,10 @@ public class AnimationUtils {
     public static void GeckolibanimateCrossbowHold(IBone p_239104_0_, IBone p_239104_1_, IBone p_239104_2_, boolean p_239104_3_) {
         IBone modelrenderer = p_239104_3_ ? p_239104_0_ : p_239104_1_;
         IBone modelrenderer1 = p_239104_3_ ? p_239104_1_ : p_239104_0_;
-        modelrenderer.setRotationY((p_239104_3_ ? -0.3F : 0.3F) + p_239104_2_.getRotationY());
-        modelrenderer1.setRotationY((p_239104_3_ ? 0.6F : -0.6F) + p_239104_2_.getRotationY());
-        modelrenderer.setRotationX((-(float)Math.PI / 2F) + p_239104_2_.getRotationX() + 0.1F);
-        modelrenderer1.setRotationX(-1.5F + p_239104_2_.getRotationX());
+        modelrenderer.setRotationY((p_239104_3_ ? 0.3F : -0.3F) + p_239104_2_.getRotationY());
+        modelrenderer1.setRotationY((p_239104_3_ ? -0.6F : 0.6F) + p_239104_2_.getRotationY());
+        modelrenderer.setRotationX(((float)Math.PI / 2F) + p_239104_2_.getRotationX() + 0.1F);
+        modelrenderer1.setRotationX(1.5F + p_239104_2_.getRotationX());
     }
 
     public static void GeckolibanimateCrossbowCharge(IBone p_239102_0_, IBone p_239102_1_, LivingEntity p_239102_2_, boolean isMainHand) {

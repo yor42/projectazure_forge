@@ -933,7 +933,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isChargingCrossbow(){
-        this.entityData.get(CHARGING_CROSSBOW);
+       return this.entityData.get(CHARGING_CROSSBOW);
     }
 
     @Override

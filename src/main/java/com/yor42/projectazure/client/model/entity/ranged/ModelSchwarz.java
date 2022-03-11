@@ -2,7 +2,9 @@ package com.yor42.projectazure.client.model.entity.ranged;
 
 import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import net.minecraft.client.renderer.entity.model.ModelUtils;
 import net.minecraft.client.renderer.model.ModelHelper;
 import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.item.CrossbowItem;
@@ -213,10 +215,10 @@ public class ModelSchwarz extends AnimatedGeoModel<EntitySchwarz> {
             body.setPositionY(-36);
         }
 
-        if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
-            ModelHelper.animateCrossbowCharge(RightArm, LeftArm, entity, true);
+        if (!(entity.isOrderedToSit()||entity.isBeingPatted()||entity.isSleeping()||entity.isinQinteraction()) && entity.getMainHandItem().getItem() instanceof CrossbowItem) {
+            AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, Head, true);
         } else if (entity.isChargingCrossbow()) {
-            ModelHelper.animateCrossbowHold(RightArm, LeftArm, Head, true);
+            AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
         }
     }
 }
