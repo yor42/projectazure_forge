@@ -52,6 +52,7 @@ import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -332,7 +333,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 
-            return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof ItemMagazine;
+            return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof ItemMagazine || stack.getItem() instanceof ArrowItem;
         }
     };
 
@@ -558,7 +559,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             compound.putDouble("HomePosY", this.entityData.get(HOMEPOS).get().getY());
             compound.putDouble("HomePosZ", this.entityData.get(HOMEPOS).get().getZ());
         }
-        compound.putBoolean("charging_crossbow", this.entityData.get(CHARGING_CROSSBOW));
         compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
         compound.putBoolean("isforcewokenup", this.entityData.get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.entityData.get(EXP));
@@ -613,7 +613,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
         this.entityData.set(SITTING, compound.getBoolean("issitting"));
         this.entityData.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
-        this.entityData.set(CHARGING_CROSSBOW, compound.getBoolean("charging_crossbow"));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.awakeningLevel = compound.getInt("awaken");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
@@ -939,6 +938,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void shootCrossbowProjectile(LivingEntity p_230284_1_, ItemStack p_230284_2_, ProjectileEntity p_230284_3_, float p_230284_4_) {
         this.shootCrossbowProjectile(this, p_230284_1_, p_230284_3_, p_230284_4_, 1.6F);
+    }
+
+    @Override
+    public void performCrossbowAttack(LivingEntity p_234281_1_, float p_234281_2_) {
+        Hand hand = ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof CrossbowItem);
+        ItemStack itemstack = this.getItemInHand(hand);
+        if (this.getMainHandItem().getItem() instanceof CrossbowItem) {
+            CrossbowItem.performShooting(this.level, this, hand, itemstack, p_234281_2_, (float)(14 - p_234281_1_.level.getDifficulty().getId() * 4));
+        }
+
+        this.onCrossbowAttackPerformed();
     }
 
     @Override
@@ -2035,15 +2045,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.goalSelector.addGoal(13, new CompanionUseShieldGoal(this));
         this.goalSelector.addGoal(14, new WorkGoal(this, 1.0D));
         this.goalSelector.addGoal(15, new CompanionUseGunGoal(this, 40, 0.6));
-        this.goalSelector.addGoal(16, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(17, new CompanionVanillaMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(18, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(19, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
-        this.goalSelector.addGoal(20, new CompanionOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(21, new CompanionFreeroamGoal(this, 60, true));
-        this.goalSelector.addGoal(22, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(23, new CompanionLookplayerGoal(this));
-        this.goalSelector.addGoal(24, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(16, new CompanionUseCrossbowGoal<>(this, 1.0D, 8.0F));
+        this.goalSelector.addGoal(17, new KansenAttackUsingBowGoal<>(this, 1.0D, 20, 15.0F));
+        this.goalSelector.addGoal(18, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
+        this.goalSelector.addGoal(19, new CompanionVanillaMeleeGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(20, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(21, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
+        this.goalSelector.addGoal(22, new CompanionOpenDoorGoal(this, true));
+        this.goalSelector.addGoal(23, new CompanionFreeroamGoal(this, 60, true));
+        this.goalSelector.addGoal(24, new CompanionPickupItemGoal(this));
+        this.goalSelector.addGoal(25, new CompanionLookplayerGoal(this));
+        this.goalSelector.addGoal(26, new LookRandomlyGoal(this));
 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));

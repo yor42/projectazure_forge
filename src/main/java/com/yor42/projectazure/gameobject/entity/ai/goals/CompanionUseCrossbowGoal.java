@@ -1,15 +1,20 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.client.renderer.entity.PillagerRenderer;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.ICrossbowUser;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.BowItem;
+import net.minecraft.item.ArrowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.RangedInteger;
 
 import java.util.EnumSet;
@@ -21,6 +26,7 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRange
     private final double speedModifier;
     private final float attackRadiusSqr;
     private int seeTime;
+    ItemStack AmmoStack = ItemStack.EMPTY;
     private int attackDelay;
     private int updatePathDelay;
 
@@ -33,7 +39,18 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRange
 
     @Override
     public boolean canUse() {
-        return this.isValidTarget() && this.isHoldingCrossbow();
+        this.getAmmo();
+        return this.isValidTarget() && this.isHoldingCrossbow() && !this.AmmoStack.isEmpty();
+    }
+
+    private void getAmmo() {
+        for(int i=0; i<this.mob.getAmmoStorage().getSlots(); i++){
+            if(this.mob.getAmmoStorage().getStackInSlot(i).getItem() instanceof ArrowItem){
+                this.AmmoStack = this.mob.getAmmoStorage().getStackInSlot(i);
+                return;
+            }
+        };
+        this.AmmoStack = ItemStack.EMPTY;
     }
 
     private boolean isHoldingCrossbow() {
@@ -106,6 +123,8 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRange
                 if (i >= CrossbowItem.getChargeDuration(itemstack)) {
                     this.mob.releaseUsingItem();
                     this.crossbowState = CrossbowState.CHARGED;
+                    ItemStack itemstack1 = this.mob.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
+                    this.tryLoadProjectiles(this.mob, itemstack1);
                     this.attackDelay = 20 + this.mob.getRandom().nextInt(20);
                     this.mob.setChargingCrossbow(false);
                 }
@@ -122,6 +141,68 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRange
             }
 
         }
+    }
+
+    private boolean tryLoadProjectiles(T p_220021_0_, ItemStack p_220021_1_) {
+        int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MULTISHOT, p_220021_1_);
+        int j = i == 0 ? 1 : 3;
+        ItemStack itemstack = p_220021_0_.getProjectile(p_220021_1_);
+        ItemStack itemstack1 = itemstack.copy();
+
+        for(int k = 0; k < j; ++k) {
+            if (k > 0) {
+                itemstack = itemstack1.copy();
+            }
+
+            if (!loadProjectile(p_220021_0_, p_220021_1_, itemstack, k > 0, false)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean loadProjectile(T p_220023_0_, ItemStack p_220023_1_, ItemStack stack, boolean p_220023_3_, boolean p_220023_4_) {
+        if (stack.isEmpty()) {
+            return false;
+        } else {
+            boolean flag = p_220023_4_ && stack.getItem() instanceof ArrowItem;
+            ItemStack itemstack;
+            if (!flag && !p_220023_4_ && !p_220023_3_) {
+                itemstack = stack.split(1);
+                for(int i=0; i<p_220023_0_.getAmmoStorage().getSlots(); i++){
+                    if(p_220023_0_.getAmmoStorage().getStackInSlot(i) == stack){
+                        p_220023_0_.getAmmoStorage().setStackInSlot(i, ItemStack.EMPTY);
+                        break;
+                    }
+                }
+            } else {
+                itemstack = stack.copy();
+            }
+
+            addChargedProjectile(p_220023_1_, itemstack);
+            return true;
+        }
+    }
+
+    public static void setCharged(ItemStack p_220011_0_, boolean p_220011_1_) {
+        CompoundNBT compoundnbt = p_220011_0_.getOrCreateTag();
+        compoundnbt.putBoolean("Charged", p_220011_1_);
+    }
+
+    private static void addChargedProjectile(ItemStack p_220029_0_, ItemStack p_220029_1_) {
+        CompoundNBT compoundnbt = p_220029_0_.getOrCreateTag();
+        ListNBT listnbt;
+        if (compoundnbt.contains("ChargedProjectiles", 9)) {
+            listnbt = compoundnbt.getList("ChargedProjectiles", 10);
+        } else {
+            listnbt = new ListNBT();
+        }
+
+        CompoundNBT compoundnbt1 = new CompoundNBT();
+        p_220029_1_.save(compoundnbt1);
+        listnbt.add(compoundnbt1);
+        compoundnbt.put("ChargedProjectiles", listnbt);
     }
 
     private boolean canRun() {

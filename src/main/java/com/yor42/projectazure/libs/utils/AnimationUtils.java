@@ -24,16 +24,16 @@ public class AnimationUtils {
     public static void GeckolibanimateCrossbowCharge(IBone p_239102_0_, IBone p_239102_1_, LivingEntity p_239102_2_, boolean isMainHand) {
         IBone bone = isMainHand ? p_239102_0_ : p_239102_1_;
         IBone bone1 = isMainHand ? p_239102_1_ : p_239102_0_;
-        bone.setRotationY(isMainHand ? -0.8F : 0.8F);
-        bone.setRotationX(-0.97079635F);
+        bone.setRotationY(isMainHand ? 0.8F : -0.8F);
+        bone.setRotationX(0.97079635F);
         bone1.setRotationX(bone.getRotationX());
 
         float f = (float) CrossbowItem.getChargeDuration(p_239102_2_.getUseItem());
         float f1 = MathHelper.clamp((float)p_239102_2_.getTicksUsingItem(), 0.0F, f);
         float f2 = f1 / f;
 
-        bone1.setRotationY(MathHelper.lerp(f2, 0.4F, 0.85F) * (float)(isMainHand ? 1 : -1));
-        bone1.setRotationX(MathHelper.lerp(f2, bone1.getRotationX(), (-(float)Math.PI / 2F)));
+        bone1.setRotationY(MathHelper.lerp(f2, 0.4F, 0.85F) * (float)(isMainHand ? -1 : 1));
+        bone1.setRotationX(MathHelper.lerp(f2, bone1.getRotationX(), ((float)Math.PI / 2F)));
     }
 
     public static <T extends MobEntity> void GeckolibswingWeaponDown(IBone bone1, IBone bone2, T mob, float p_239103_3_, float p_239103_4_) {
