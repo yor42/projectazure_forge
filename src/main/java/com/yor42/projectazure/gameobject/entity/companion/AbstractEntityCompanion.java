@@ -110,6 +110,7 @@ import java.util.function.Predicate;
 
 import static com.yor42.projectazure.libs.utils.BlockStateUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
+import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
@@ -342,6 +343,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private int ItemSwapIndexOffhand = -1;
     private int ItemSwapIndexMainHand = -1;
     protected int lastAggroedTimeStamp = 0;
+    protected int toldtomovecount = 0;
     protected boolean isSwimmingUp;
     protected boolean shouldBeSitting;
     protected boolean isMeleeing;
@@ -1113,7 +1115,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if(this.getVehicle() != null && source.getEntity() == this.getVehicle()) {
+        if(this.getVehicle() != null && source.getEntity() == this.getVehicle() || source == DamageSource.IN_WALL) {
             return false;
         }
         else if(source.getEntity() instanceof TameableEntity && this.getOwner() != null && ((TameableEntity) source.getEntity()).isOwnedBy(this.getOwner())){
@@ -1122,8 +1124,44 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         else if(source.getEntity() instanceof AbstractEntityDrone && ((AbstractEntityDrone) source.getEntity()).getOwner().isPresent() && (((AbstractEntityDrone) source.getEntity()).getOwner().get() == this ||  (((AbstractEntityDrone) source.getEntity()).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) source.getEntity()).getOwner().get()).isOwnedBy(this.getOwner())))){
             return false;
         }
+        if(source.getEntity() instanceof PlayerEntity && this.isOwnedBy((LivingEntity) source.getEntity())){
+            if(this.toldtomovecount >=3){
+                this.toldtomovecount = 0;
+                Vector3d loc = this.WanderRNG();
+                if(loc != null) {
+                    this.getNavigation().moveTo(loc.x, loc.y, loc.z, 1);
+                }
+            }
+            else{
+                this.toldtomovecount +=1;
+            }
+            return false;
+        }
 
         return super.hurt(source, amount);
+    }
+
+    protected Vector3d WanderRNG() {
+
+        if (!this.getStayCenterPos().isPresent()){
+            this.setStayCenterPos(this.blockPosition());
+        }
+
+        BlockPos homepos = this.getStayCenterPos().get();
+        BlockPos originPosition;
+        boolean flag = false;
+
+        if (this.isWithinRestriction()) {
+            homepos = this.getRestrictCenter();
+            flag = this.getCommandSenderWorld().dimension() == World.OVERWORLD && this.blockPosition().closerThan(homepos, 32);
+        }
+
+        originPosition = flag? homepos : this.getStayCenterPos().get();
+
+        int x = ((int)(getRand().nextFloat()*6)-3);
+        int z = ((int)(getRand().nextFloat()*6)-3);
+
+        return new Vector3d(originPosition.getX()+x, originPosition.getY(), originPosition.getZ()+z);
     }
 
     public int getShieldCoolDown(){

@@ -21,6 +21,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -114,7 +115,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     public void setShipFire(int seconds) {
         int i = seconds * 20;
-        i = ProtectionEnchantment.getFireAfterDampener((LivingEntity)this, i);
+        i = ProtectionEnchantment.getFireAfterDampener(this, i);
 
         if (this.getShipFireTicks() < i) {
             this.ForceShipFireTicks(i);
@@ -148,10 +149,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public boolean canUseRigging(){
-        if(this.getRigging().getItem() instanceof ItemRiggingBase)
-            return true;
-        else
-            return false;
+        return this.getRigging().getItem() instanceof ItemRiggingBase;
     }
 
     public boolean Hasrigging(){
@@ -161,10 +159,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public boolean isSailing(){
         if(this.isInWater() && this.canUseRigging()){
             ItemStack rigging = this.getRigging();
-            boolean hasfuel = rigging.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).map((fluidtank)-> {
+            return rigging.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).map((fluidtank)-> {
                 int amount =fluidtank.getFluidInTank(0).getAmount();
                 return amount>0;}).orElse(false);
-            return hasfuel;
         }
         return false;
     }
@@ -213,17 +210,29 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return true;
     }
 
+    @Override
     @ParametersAreNonnullByDefault
     public boolean hurt(DamageSource source, float amount) {
-
+        if (source.getEntity() instanceof PlayerEntity && this.isOwnedBy((LivingEntity) source.getEntity())) {
+            if (this.toldtomovecount >= 3) {
+                this.toldtomovecount = 0;
+                Vector3d loc = this.WanderRNG();
+                if (loc != null) {
+                    this.getNavigation().moveTo(loc.x, loc.y, loc.z, 1);
+                }
+            } else {
+                this.toldtomovecount += 1;
+            }
+            return false;
+        }
         float DamageMultiplier = 1.0F;
         float ignoreArmorChance = RangedFloatRandom(0.05F, 0.1F);
-        if(this.hasRigging()&& (!(source==DamageSource.FALL)||!(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance)))){
+        if (this.hasRigging() && (!(source == DamageSource.FALL) || !(source == DamageSource.GENERIC && rollBooleanRNG(ignoreArmorChance)))) {
             DamageMultiplier = getRiggingedDamageModifier();
             DamageItem(amount, this.getRigging());
             this.playSound(SoundEvents.IRON_GOLEM_HURT, 1.0F, 1.0f);
         }
-        return super.hurt(source, amount*DamageMultiplier);
+        return super.hurt(source, amount * DamageMultiplier);
     }
 
 
@@ -246,9 +255,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 this.level.addParticle(ParticleTypes.CLOUD, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
             }
             if(!PAConfig.CONFIG.RiggingInfiniteFuel.get() && this.tickCount%2 == 0) {
-                this.getRigging().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent((fluidtank) -> {
-                    fluidtank.drain(1, IFluidHandler.FluidAction.EXECUTE);
-                });
+                this.getRigging().getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent((fluidtank) -> fluidtank.drain(1, IFluidHandler.FluidAction.EXECUTE));
             }
         }
         else if(modifiableattributeinstance != null){

@@ -214,11 +214,12 @@ public class ModelSchwarz extends AnimatedGeoModel<EntitySchwarz> {
         else if(entity.isSleeping()){
             body.setPositionY(-36);
         }
-        if (entity.isChargingCrossbow()) {
-            AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
-        }
-        else if (!(entity.isOrderedToSit()||entity.isBeingPatted()||entity.isSleeping()||entity.isinQinteraction()) && entity.getMainHandItem().getItem() instanceof CrossbowItem) {
-            AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, Head, true);
+        if(!(entity.isOrderedToSit()||entity.isBeingPatted()||entity.isSleeping()||entity.isinQinteraction())) {
+            if (entity.isChargingCrossbow()) {
+                AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
+            } else if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
+                AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, Head, true);
+            }
         }
     }
 }
