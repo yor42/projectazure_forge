@@ -40,7 +40,7 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRange
     @Override
     public boolean canUse() {
         this.getAmmo();
-        return this.isValidTarget() && this.isHoldingCrossbow() && !this.AmmoStack.isEmpty();
+        return this.mob.canUseCrossbow && this.isValidTarget() && this.isHoldingCrossbow() && !this.AmmoStack.isEmpty();
     }
 
     private void getAmmo() {

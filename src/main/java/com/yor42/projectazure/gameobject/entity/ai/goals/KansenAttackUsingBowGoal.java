@@ -36,7 +36,7 @@ public class KansenAttackUsingBowGoal<T extends AbstractEntityCompanion & IRange
     }
 
     public boolean canUse() {
-        return this.mob.getTarget() != null && this.isHoldingBow();
+        return this.mob.canUseBow && this.mob.getTarget() != null && this.isHoldingBow();
     }
 
     protected boolean isHoldingBow() {

@@ -91,6 +91,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
 
     public EntityEnterprise(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+        this.canUseBow = true;
     }
 
     @Override

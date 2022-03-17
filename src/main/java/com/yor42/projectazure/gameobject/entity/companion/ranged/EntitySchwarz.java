@@ -36,6 +36,7 @@ import static com.yor42.projectazure.libs.enums.EntityType.OPERATOR;
 public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
     public EntitySchwarz(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+        this.canUseCrossbow = true;
     }
 
     @Override

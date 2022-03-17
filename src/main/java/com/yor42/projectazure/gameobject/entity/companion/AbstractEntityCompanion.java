@@ -359,7 +359,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private final PathNavigator sailingNav;
     protected CompanionFoodStats foodStats = new CompanionFoodStats();
     private List<ExperienceOrbEntity> nearbyExpList;
-
+    public boolean canUseCrossbow;
+    public boolean canUseBow;
     protected long lastSlept, lastWokenup;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
     protected int StartedMeleeAttackTimeStamp = -1;
@@ -429,6 +430,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         };
         this.noCulling = true;
+        this.canUseCrossbow = false;
+        this.canUseBow = false;
     }
 
     public void setdead(boolean value){
