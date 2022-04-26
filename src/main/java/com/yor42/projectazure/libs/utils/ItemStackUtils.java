@@ -15,9 +15,9 @@ import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.text.Color;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -121,7 +121,7 @@ public class ItemStackUtils {
     public static ItemStack serializePlane(AbstractEntityPlanes plane) {
         ItemStack planeStack = new ItemStack(plane.getPlaneItem());
         setCurrentDamage(planeStack, (int) (plane.getMaxHealth()-plane.getHealth()));
-        CompoundNBT nbt = planeStack.getOrCreateTag();
+        CompoundTag nbt = planeStack.getOrCreateTag();
 
         if(!plane.hasPayload()){
             nbt.putInt("armDelay", plane.getPlaneItem().getreloadTime());
@@ -274,7 +274,7 @@ public class ItemStackUtils {
     }
 
     public static boolean isOutOfAmmo(ItemStack equipment){
-        CompoundNBT compoundNBT = equipment.getOrCreateTag();
+        CompoundTag compoundNBT = equipment.getOrCreateTag();
         if(equipment.getItem() instanceof ICraftingTableReloadable){
             return compoundNBT.getInt("Ammo")<= 0;
         }
@@ -282,7 +282,7 @@ public class ItemStackUtils {
     }
 
     public static void useAmmo(ItemStack stack){
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
+        CompoundTag compoundNBT = stack.getOrCreateTag();
         int prevammo =  compoundNBT.getInt("Ammo");
         compoundNBT.putInt("Ammo", prevammo-1);
     }
@@ -292,7 +292,7 @@ public class ItemStackUtils {
     }
 
     public static void setAmmo(ItemStack stack, int count){
-        CompoundNBT compoundNBT = stack.getOrCreateTag();
+        CompoundTag compoundNBT = stack.getOrCreateTag();
         if(stack.getItem() instanceof ICraftingTableReloadable){
             compoundNBT.putInt("Ammo", count);
         }
@@ -300,7 +300,7 @@ public class ItemStackUtils {
 
     public static void setAmmoFull(ItemStack stack){
         if(stack.getItem() instanceof ICraftingTableReloadable) {
-            CompoundNBT compoundNBT = stack.getOrCreateTag();
+            CompoundTag compoundNBT = stack.getOrCreateTag();
             compoundNBT.putInt("Ammo", ((ICraftingTableReloadable) stack.getItem()).getMaxAmmo());
         }
     }
@@ -314,7 +314,7 @@ public class ItemStackUtils {
     }
 
     public static int getRemainingAmmo(ItemStack equipment){
-        CompoundNBT compoundNBT = equipment.getOrCreateTag();
+        CompoundTag compoundNBT = equipment.getOrCreateTag();
         if(equipment.getItem() instanceof ICraftingTableReloadable){
             return compoundNBT.getInt("Ammo");
         }
@@ -323,13 +323,13 @@ public class ItemStackUtils {
 
 
     public static int getDelayofEquipment(ItemStack Equipment){
-        CompoundNBT tags = Equipment.getOrCreateTag();
+        CompoundTag tags = Equipment.getOrCreateTag();
         return tags.getInt("delay");
     }
 
     public static void setEquipmentDelay (ItemStack equipment){
         if(equipment.getItem() instanceof ItemEquipmentBase){
-            CompoundNBT tags = equipment.getOrCreateTag();
+            CompoundTag tags = equipment.getOrCreateTag();
             ItemEquipmentBase equipmentItem = (ItemEquipmentBase)(equipment.getItem());
             tags.putInt("delay", equipmentItem.getFiredelay());
         }

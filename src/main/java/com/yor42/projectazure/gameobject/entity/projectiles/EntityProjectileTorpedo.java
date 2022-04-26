@@ -15,7 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -33,22 +33,22 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public EntityProjectileTorpedo(double p_i50174_2_, double p_i50174_4_, double p_i50174_6_, double p_i50174_8_, double p_i50174_10_, double p_i50174_12_, World p_i50174_14_) {
+    public EntityProjectileTorpedo(double p_i50174_2_, double p_i50174_4_, double p_i50174_6_, double p_i50174_8_, double p_i50174_10_, double p_i50174_12_, Level p_i50174_14_) {
         super(registerManager.PROJECTILETORPEDO, p_i50174_2_, p_i50174_4_, p_i50174_6_, p_i50174_8_, p_i50174_10_, p_i50174_12_, p_i50174_14_);
     }
 
-    public EntityProjectileTorpedo(LivingEntity ShooterIn, double AccelX, double AccelY, double AccelZ, World WorldIn) {
+    public EntityProjectileTorpedo(LivingEntity ShooterIn, double AccelX, double AccelY, double AccelZ, Level WorldIn) {
         super(registerManager.PROJECTILETORPEDO, ShooterIn, AccelX, AccelY, AccelZ, WorldIn);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public EntityProjectileTorpedo(World worldIn, double x, double y, double z, double motionXIn, double motionYIn, double motionZIn) {
+    public EntityProjectileTorpedo(Level worldIn, double x, double y, double z, double motionXIn, double motionYIn, double motionZIn) {
         this(registerManager.PROJECTILETORPEDO, worldIn);
         this.moveTo(x, y, z, this.yRot, this.xRot);
         this.setDeltaMovement(motionXIn, motionYIn, motionZIn);
     }
 
-    public EntityProjectileTorpedo(EntityType<EntityProjectileTorpedo> TypeIn, World world) {
+    public EntityProjectileTorpedo(EntityType<EntityProjectileTorpedo> TypeIn, Level world) {
         super(TypeIn, world);
     }
 

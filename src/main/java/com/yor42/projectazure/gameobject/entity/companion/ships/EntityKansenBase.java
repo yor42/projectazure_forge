@@ -22,26 +22,26 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
@@ -88,7 +88,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return this.factory;
     }
 
-    protected EntityKansenBase(EntityType<? extends TameableEntity> type, World worldIn) {
+    protected EntityKansenBase(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
         this.AmmoStorage.setSize(8);
@@ -127,13 +127,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("shipfire", this.getShipFireTicks());
         compound.put("rigging",this.RiggingSlot.serializeNBT());
     }
 
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.ForceShipFireTicks(compound.getInt("shipfire"));
         if(compound.contains("rigging"))
@@ -175,8 +175,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         }
     }
 
-    protected void openGUI(ServerPlayerEntity player){
-        NetworkHooks.openGui(player, new ContainerKansenInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+    protected void openGUI(ServerPlayer player){
+        NetworkHooks.openGui(player, new ContainerKansenInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
 

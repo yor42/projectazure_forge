@@ -5,7 +5,7 @@ import net.minecraft.block.BedBlock;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 
 import java.util.EnumSet;
 
@@ -20,7 +20,7 @@ public class CompanionSleepGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        boolean flag = this.companion.getHOMEPOS().isPresent() && this.companion.getCommandSenderWorld().dimension() == World.OVERWORLD;
+        boolean flag = this.companion.getHOMEPOS().isPresent() && this.companion.getCommandSenderWorld().dimension() == Level.OVERWORLD;
         if(flag){
             if(this.companion.getCommandSenderWorld().isNight() && !this.companion.isForceWaken()){
 

@@ -1,10 +1,10 @@
 package com.yor42.projectazure.client.renderer.entity.projectile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.entity.misc.ModelArtsProjectile;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -34,10 +34,10 @@ public class EntityArtsProjectileRenderer extends EntityRenderer<EntityArtsProje
     }
 
     @Override
-    public void render(@Nonnull EntityArtsProjectile entityIn, float entityYaw, float partialTicks, @Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(@Nonnull EntityArtsProjectile entityIn, float entityYaw, float partialTicks, @Nonnull MatrixStack matrixStackIn, @Nonnull MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         Model model = new ModelArtsProjectile();
-        IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
+        VertexConsumer  builder = bufferIn.getBuffer(RENDER_TYPE);
         matrixStackIn.pushPose();
         matrixStackIn.translate(0, -1.2, 0);
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));

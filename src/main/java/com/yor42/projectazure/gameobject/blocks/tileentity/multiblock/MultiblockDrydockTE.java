@@ -3,17 +3,17 @@ package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -156,7 +156,7 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+    protected <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().transitionLengthTicks = 20;
         boolean flag = this.getLevel()!= null && this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).hasProperty(POWERED) && this.getLevel().getBlockState(this.getBlockPos()).getValue(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).getValue(POWERED);
@@ -179,12 +179,12 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tile.drydock");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("tile.drydock");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected Container createMenu(int id, Inventory player) {
         return new ContainerDryDock(id, player, this.inventory, this.fields);
     }
 

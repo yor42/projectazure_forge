@@ -3,16 +3,16 @@ package com.yor42.projectazure.gameobject.blocks;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockBaseTE;
 import com.yor42.projectazure.libs.utils.MultiblockHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import javax.annotation.Nullable;
 
@@ -43,7 +43,7 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
     }
 
     //update multi-block structure state
-    public static void updateMultiBlockState(boolean mbState, World world, BlockPos pos)
+    public static void updateMultiBlockState(boolean mbState, Level world, BlockPos pos)
     {
         //check block exists
         BlockState state = world.getBlockState(pos);
@@ -62,8 +62,8 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
     }
 
     @Override
-    public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
-        TileEntity tile = worldIn.getBlockEntity(pos);
+    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+        BlockEntity tile = worldIn.getBlockEntity(pos);
 
         if(!worldIn.isClientSide && tile instanceof MultiblockBaseTE)
         {
@@ -79,8 +79,8 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
     }
 
     @Override
-    public void onBlockExploded(BlockState state, World world, BlockPos pos, Explosion explosion) {
-        TileEntity tile = world.getBlockEntity(pos);
+    public void onBlockExploded(BlockState state, Level world, BlockPos pos, Explosion explosion) {
+        BlockEntity tile = world.getBlockEntity(pos);
 
         if(!world.isClientSide && tile instanceof MultiblockBaseTE)
         {

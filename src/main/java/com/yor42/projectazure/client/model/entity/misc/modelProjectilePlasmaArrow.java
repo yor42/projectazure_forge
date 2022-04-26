@@ -4,7 +4,7 @@ package com.yor42.projectazure.client.model.entity.misc;// Made with Blockbench 
 
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityPlasmaArrow;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -38,7 +38,7 @@ public class modelProjectilePlasmaArrow extends EntityModel<EntityPlasmaArrow> {
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStackIn, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderToBuffer(MatrixStack matrixStackIn, VertexConsumer  bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		bb_main.render(matrixStackIn, bufferIn, packedLightIn, packedOverlayIn);
 	}
 }

@@ -10,11 +10,11 @@ package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 import com.yor42.projectazure.gameobject.blocks.AbstractMultiBlockBase;
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 
 public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
@@ -30,7 +30,7 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("masterX", masterPos.getX());
         compound.putInt("masterY", masterPos.getY());
@@ -42,7 +42,7 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.masterPos = new BlockPos(nbt.getInt("masterX"), nbt.getInt("masterY"), nbt.getInt("masterZ"));
         this.structType = nbt.getInt("structType");
@@ -67,7 +67,7 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
             //check master again
             if (hasMaster)
             {
-                TileEntity tile = this.level.getBlockEntity(this.masterPos);
+                BlockEntity tile = this.level.getBlockEntity(this.masterPos);
 
                 if (tile instanceof MultiblockBaseTE)
                 {
@@ -97,7 +97,7 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
 
     //setter
     /** set multi-block structure type, NOT blockstate!! */
-    public void setStructType(int type, World world)
+    public void setStructType(int type, Level world)
     {
         //set type
         this.structType = type;

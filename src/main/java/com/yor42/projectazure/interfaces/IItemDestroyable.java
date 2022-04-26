@@ -1,6 +1,6 @@
 package com.yor42.projectazure.interfaces;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public interface IItemDestroyable {
 

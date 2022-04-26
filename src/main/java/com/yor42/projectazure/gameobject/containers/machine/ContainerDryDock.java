@@ -3,14 +3,14 @@ package com.yor42.projectazure.gameobject.containers.machine;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.setup.register.registerItems;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -22,7 +22,7 @@ public class ContainerDryDock extends Container {
 
     private final IIntArray field;
 
-    public ContainerDryDock(int id, PlayerInventory inventory, PacketBuffer buffer) {
+    public ContainerDryDock(int id, Inventory inventory, PacketBuffer buffer) {
         this(id, inventory, new ItemStackHandler(9), new IIntArray() {
 
             final int[] values = buffer.readVarIntArray();
@@ -44,7 +44,7 @@ public class ContainerDryDock extends Container {
         });
     }
 
-    public ContainerDryDock(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field){
+    public ContainerDryDock(int id, Inventory inventory, ItemStackHandler Inventory, IIntArray field){
         super(DRYDOCK_CONTAINER_TYPE, id);
         this.field = field;
         addDataSlots(this.field);

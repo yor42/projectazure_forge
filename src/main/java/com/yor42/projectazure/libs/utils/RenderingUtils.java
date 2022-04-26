@@ -1,21 +1,40 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderState;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
-public class RenderingUtils {
+import java.util.function.Function;
+
+public class RenderingUtils extends RenderStateShard {
+
+    private static final Function<ResourceLocation, RenderType> GUI_CUTOUT;
+
+    static{
+        GUI_CUTOUT = Util.memoize(texture -> createDefault(
+                "gui_"+texture,
+                DefaultVertexFormat.POSITION_COLOR_TEX,
+                VertexFormat.Mode.QUADS,
+                makeGuiState(texture).createCompositeState(false)
+        ));
+    }
+
+
+    public RenderingUtils(String p_110161_, Runnable p_110162_, Runnable p_110163_) {
+        super(p_110161_, p_110162_, p_110163_);
+    }
     /*
      *  BluSunrize
      *  Copyright (c) 2021
@@ -23,28 +42,30 @@ public class RenderingUtils {
      *  This code is licensed under "Blu's License of Common Sense"
      *  Details can be found in the license file in the root folder of this project
      */
-    public static void drawRepeatedFluidSpriteGui(IRenderTypeBuffer buffer, MatrixStack stack, FluidStack fluid, float x, float y, float w, float h)
+    public static void drawRepeatedFluidSpriteGui(MultiBufferSource buffer, PoseStack stack, FluidStack fluid, float x, float y, float w, float h)
     {
-        RenderType renderType = getGui(PlayerContainer.BLOCK_ATLAS);
-        IVertexBuilder builder = buffer.getBuffer(renderType);
+        RenderType renderType = getGui(InventoryMenu.BLOCK_ATLAS);
+        VertexConsumer  builder = buffer.getBuffer(renderType);
         drawRepeatedFluidSprite(builder, stack, fluid, x, y, w, h);
     }
 
-    public static RenderType getGui(ResourceLocation texture)
+    public static RenderType getGui(ResourceLocation tex)
     {
-        return RenderType.create(
-                "gui_"+texture,
-                DefaultVertexFormats.POSITION_COLOR_TEX,
-                GL11.GL_QUADS,
-                256,
-                RenderType.State.builder()
-                        .setTextureState(new RenderState.TextureState(texture, false, false))
-                        .setAlphaState(new RenderState.AlphaState(0.5F))
-                        .createCompositeState(false)
-        );
+        return GUI_CUTOUT.apply(tex);
     }
 
-    public static void drawRepeatedFluidSprite(IVertexBuilder builder, MatrixStack transform, FluidStack fluid, float x, float y, float w, float h)
+    private static RenderType createDefault(String name, VertexFormat format, VertexFormat.Mode mode, RenderType.CompositeState state)
+    {
+        return RenderType.create(name, format, mode, 256, false, false, state);
+    }
+    private static RenderType.CompositeState.CompositeStateBuilder makeGuiState(ResourceLocation texture)
+    {
+        return RenderType.CompositeState.builder()
+                .setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                .setShaderState(POSITION_COLOR_TEX_SHADER);
+    }
+
+    public static void drawRepeatedFluidSprite(VertexConsumer  builder, PoseStack transform, FluidStack fluid, float x, float y, float w, float h)
     {
         TextureAtlasSprite sprite = getSprite(fluid.getFluid().getAttributes().getStillTexture(fluid));
         int col = fluid.getFluid().getAttributes().getColor(fluid);
@@ -55,7 +76,7 @@ public class RenderingUtils {
                     sprite.getU0(), sprite.getU1(), sprite.getV0(), sprite.getV1(),
                     (col >> 16&255)/255.0f, (col >> 8&255)/255.0f, (col&255)/255.0f, 1);
     }
-    public static void drawRepeatedSprite(IVertexBuilder builder, MatrixStack transform, float x, float y, float w,
+    public static void drawRepeatedSprite(VertexConsumer  builder, PoseStack transform, float x, float y, float w,
                                           float h, int iconWidth, int iconHeight, float uMin, float uMax, float vMin, float vMax,
                                           float r, float g, float b, float alpha)
     {
@@ -85,14 +106,14 @@ public class RenderingUtils {
         }
     }
     public static void drawTexturedColoredRect(
-            IVertexBuilder builder, MatrixStack transform,
+            VertexConsumer  builder, PoseStack transform,
             float x, float y, float w, float h,
             float r, float g, float b, float alpha,
             float u0, float u1, float v0, float v1
     )
     {
         TransformingVertexBuilder innerBuilder = new TransformingVertexBuilder(builder, transform);
-        innerBuilder.setColor(r, g, b, alpha);
+        innerBuilder.defaultColor((int)(255*r), (int)(255*g), (int)(255*b), (int)(255*alpha));
         innerBuilder.setLight(LightTexture.pack(15, 15));
         innerBuilder.setOverlay(OverlayTexture.NO_OVERLAY);
         innerBuilder.setNormal(1, 1, 1);
@@ -100,9 +121,10 @@ public class RenderingUtils {
         innerBuilder.vertex(x+w, y+h, 0).uv(u1, v1).endVertex();
         innerBuilder.vertex(x+w, y, 0).uv(u1, v0).endVertex();
         innerBuilder.vertex(x, y, 0).uv(u0, v0).endVertex();
+        innerBuilder.unsetDefaultColor();
     }
     public static TextureAtlasSprite getSprite(ResourceLocation rl)
     {
-        return Minecraft.getInstance().getModelManager().getAtlas(PlayerContainer.BLOCK_ATLAS).getSprite(rl);
+        return Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(rl);
     }
 }

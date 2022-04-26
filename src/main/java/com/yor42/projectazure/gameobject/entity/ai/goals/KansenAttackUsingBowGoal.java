@@ -5,10 +5,7 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArrowItem;
 import net.minecraft.item.BowItem;
-import net.minecraft.util.Hand;
 
 import java.util.EnumSet;
 

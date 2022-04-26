@@ -3,9 +3,9 @@ package com.yor42.projectazure.network.packets;
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -30,8 +30,8 @@ public class StartRecruitPacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity sender = ctx.get().getSender();
             if(sender != null){
-                World world = sender.getLevel();
-                TileEntity TE = world.getBlockEntity(msg.pos);
+                Level world = sender.getLevel();
+                BlockEntity TE = world.getBlockEntity(msg.pos);
                 if(TE instanceof AbstractTileEntityGacha){
                     ((AbstractTileEntityGacha) TE).StartMachine(sender);
                 }

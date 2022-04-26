@@ -5,11 +5,11 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.utils.ItemStackWithChance;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 

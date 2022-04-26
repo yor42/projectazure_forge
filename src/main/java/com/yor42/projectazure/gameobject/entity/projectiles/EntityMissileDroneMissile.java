@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -34,7 +34,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     protected static final DataParameter<Optional<UUID>> TARGET = EntityDataManager.defineId(EntityMissileDroneMissile.class, DataSerializers.OPTIONAL_UUID);
     private static final double TURNLIMIT = 9 * Math.PI;
 
-    public EntityMissileDroneMissile(EntityType<EntityMissileDroneMissile> p_i50173_1_, World p_i50173_2_) {
+    public EntityMissileDroneMissile(EntityType<EntityMissileDroneMissile> p_i50173_1_, Level p_i50173_2_) {
         super(p_i50173_1_, p_i50173_2_);
     }
 
@@ -71,13 +71,13 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compoundNBT) {
+    public void addAdditionalSaveData(CompoundTag compoundNBT) {
         super.addAdditionalSaveData(compoundNBT);
         this.getTargetUUID().ifPresent((UUID)->compoundNBT.putUUID("target", UUID));
     }
 
     @Override
-    public void readAdditionalSaveData(@ParametersAreNonnullByDefault CompoundNBT compoundNBT) {
+    public void readAdditionalSaveData(@ParametersAreNonnullByDefault CompoundTag compoundNBT) {
         super.readAdditionalSaveData(compoundNBT);
         if(compoundNBT.contains("target")){
             this.getEntityData().set(TARGET, Optional.of(compoundNBT.getUUID("target")));

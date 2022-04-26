@@ -6,14 +6,14 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ChatFormatting;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -49,11 +49,11 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ItemPowerCapabilityProvider(stack, 40000);
     }
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
+    public ActionResult<ItemStack> use(@Nonnull Level world, PlayerEntity player, @Nonnull Hand hand) {
 
         ItemStack stack= player.getItemInHand(hand);
         if(stack.getItem() instanceof ItemDefibCharger){
@@ -92,7 +92,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
+    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
         super.inventoryTick(stack, world, p_77663_3_, p_77663_4_, p_77663_5_);
         if(isOn(stack)){
             int chargeprogress = getChargeProgress(stack);
@@ -111,7 +111,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                         setCharging(stack, false);
                         if(p_77663_3_ instanceof PlayerEntity) {
                             PlayerEntity player = (PlayerEntity) p_77663_3_;
-                            player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargefailed_nobattery").withStyle(TextFormatting.RED), true);
+                            player.displayClientMessage(new TranslatableComponent("item.tooltip.chargefailed_nobattery").withStyle(ChatFormatting.RED), true);
                         }
                     }
                     setChargeProgress(stack, charge);
@@ -141,9 +141,9 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
             PlayerEntity player = (PlayerEntity) p_77663_3_;
             if (ShouldCharging(stack)) {
                 int charge = (int) (((float) getChargeProgress(stack) / 100) * 100);
-                player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargeprogress", charge + "%").withStyle(TextFormatting.AQUA), true);
+                player.displayClientMessage(new TranslatableComponent("item.tooltip.chargeprogress", charge + "%").withStyle(ChatFormatting.AQUA), true);
             } else if (getChargeProgress(stack) == 100) {
-                player.displayClientMessage(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN), true);
+                player.displayClientMessage(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN), true);
             }
         }
 
@@ -159,7 +159,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
+    public void onArmorTick(ItemStack stack, Level world, PlayerEntity player) {
         super.onArmorTick(stack, world, player);
         if(isOn(stack)){
             int chargeprogress = getChargeProgress(stack);
@@ -203,10 +203,10 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
 
         if(ShouldCharging(stack)){
             int charge = (int) (((float)getChargeProgress(stack)/100)*100);
-            player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargeprogress", charge+"%").withStyle(TextFormatting.AQUA), true);
+            player.displayClientMessage(new TranslatableComponent("item.tooltip.chargeprogress", charge+"%").withStyle(ChatFormatting.AQUA), true);
         }
         else if(getChargeProgress(stack) == 100){
-            player.displayClientMessage(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN), true);
+            player.displayClientMessage(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN), true);
         }
 
         if(!world.isClientSide()) {
@@ -273,22 +273,22 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldin, @Nonnull List<ITextComponent> tooltips, @Nonnull ITooltipFlag tooltipadvanced) {
-        tooltips.add(new TranslationTextComponent(this.getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
-        stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((cap)->tooltips.add(new TranslationTextComponent("item.tooltip.energystored", cap.getEnergyStored()+"/"+cap.getMaxEnergyStored()).withStyle(TextFormatting.GRAY)));
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldin, @Nonnull List<Component> tooltips, @Nonnull ITooltipFlag tooltipadvanced) {
+        tooltips.add(new TranslatableComponent(this.getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
+        stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((cap)->tooltips.add(new TranslatableComponent("item.tooltip.energystored", cap.getEnergyStored()+"/"+cap.getMaxEnergyStored()).withStyle(ChatFormatting.GRAY)));
         if(ShouldCharging(stack)){
             int charge = (int) (((float)getChargeProgress(stack)/100)*100);
-            tooltips.add(new TranslationTextComponent("item.tooltip.energystored", charge+"%").withStyle(TextFormatting.AQUA));
+            tooltips.add(new TranslatableComponent("item.tooltip.energystored", charge+"%").withStyle(ChatFormatting.AQUA));
         }
         else if(getChargeProgress(stack) == 100){
-            tooltips.add(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN));
+            tooltips.add(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN));
         }
         super.appendHoverText(stack, worldin, tooltips, tooltipadvanced);
     }
 
     @Nullable
     @Override
-    public CompoundNBT getShareTag(ItemStack stack) {
+    public CompoundTag getShareTag(ItemStack stack) {
         return super.getShareTag(stack);
     }
 }

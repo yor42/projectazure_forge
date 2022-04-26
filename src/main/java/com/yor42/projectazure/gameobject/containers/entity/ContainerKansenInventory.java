@@ -5,47 +5,45 @@ import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.setup.register.registerManager;
-import mekanism.api.annotations.NonNull;
-import net.minecraft.entity.passive.horse.DonkeyEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerKansenInventory extends Container {
+public class ContainerKansenInventory extends AbstractContainerMenu {
 
-    private static final EquipmentSlotType[] EQUIPMENT = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
+    private static final EquipmentSlot[] EQUIPMENT = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
     private final IItemHandler AmmoStack;
     private final IItemHandler equipment;
     public final EntityKansenBase entity;
 
     //client
-    public ContainerKansenInventory(int id, PlayerInventory playerInventory, PacketBuffer data) {
+    public ContainerKansenInventory(int id, Inventory playerInventory, FriendlyByteBuf data) {
         this(id, playerInventory, new ItemStackHandler(12),  new ItemStackHandler(1), new ItemStackHandler(6), new ItemStackHandler(8), (EntityKansenBase) playerInventory.player.level.getEntity(data.readInt()));
     }
 
     //constructor for actual use
-    public ContainerKansenInventory(int id, PlayerInventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
+    public ContainerKansenInventory(int id, Inventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
         super(registerManager.SHIP_CONTAINER.get(), id);
         this.equipment = Equipments;
         this.AmmoStack = AmmoStorage;
         this.entity = entity;
+        
 //rigging
         this.addSlot(new SlotRigging(Rigging, 0, 152, 35, this.entity));
 
@@ -99,11 +97,11 @@ public class ContainerKansenInventory extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(@NotNull Player playerIn) {
         return true;
     }
 
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
@@ -170,7 +168,7 @@ public class ContainerKansenInventory extends Container {
         return itemstack;
     }
 
-    public static class Supplier implements INamedContainerProvider {
+    public static class Supplier implements MenuProvider {
         EntityKansenBase kansenEntity;
 
         public Supplier(EntityKansenBase kansenEntity) {
@@ -178,13 +176,13 @@ public class ContainerKansenInventory extends Container {
         }
 
         @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.shipinventory");
+        public Component getDisplayName() {
+            return new TranslatableComponent("gui.shipinventory");
         }
 
         @Nullable
         @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
+        public AbstractContainerMenu createMenu(int openContainerId, Inventory inventory, Player player) {
             return new ContainerKansenInventory(openContainerId, inventory, this.kansenEntity.getInventory(), this.kansenEntity.getShipRiggingStorage(), this.kansenEntity.getEquipment(), this.kansenEntity.getAmmoStorage(), this.kansenEntity);
         }
     }

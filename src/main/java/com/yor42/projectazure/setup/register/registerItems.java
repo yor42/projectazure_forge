@@ -20,7 +20,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
@@ -139,24 +139,24 @@ public class registerItems {
             .tab(PA_GROUP)
             .rarity(Rarity.EPIC)){
         @Override
-        public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
             if(worldIn != null && worldIn.isClientSide) {
                 if (Screen.hasShiftDown()) {
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.withBold(true).withColor(Color.fromRgb(0xff00fc)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip2"));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip3"));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x990000)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x999900)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.withBold(true).withColor(Color.fromRgb(0xff00fc)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip2"));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip3"));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x990000)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x999900)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
                 } else {
-                    ITextComponent shift = new StringTextComponent("[SHIFT]").withStyle(TextFormatting.YELLOW);
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e))));
-                    tooltip.add(new TranslationTextComponent("item.projectazure.energy_drink.shiftinfo", shift).withStyle(TextFormatting.GRAY));
+                    Component shift = new TextComponent("[SHIFT]").withStyle(ChatFormatting.YELLOW);
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e))));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.shiftinfo", shift).withStyle(ChatFormatting.GRAY));
                 }
             }
         }
@@ -180,10 +180,10 @@ public class registerItems {
             .tab(PA_GROUP)
             .rarity(Rarity.EPIC).stacksTo(1)));
 
-    public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket", ()-> new BucketItem(()->registerFluids.CRUDE_OIL_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> GASOLINE_BUCKET = ITEMS.register("gasoline_bucket", ()-> new BucketItem(()->registerFluids.GASOLINE_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> DIESEL_BUCKET = ITEMS.register("diesel_bucket", ()-> new BucketItem(()->registerFluids.DIESEL_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> FUEL_OIL_BUCKET = ITEMS.register("fuel_oil_bucket", ()-> new BucketItem(()->registerFluids.FUEL_OIL_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket", ()-> new BucketItem(()->registerFluids.CRUDE_OIL_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> GASOLINE_BUCKET = ITEMS.register("gasoline_bucket", ()-> new BucketItem(()->registerFluids.GASOLINE_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> DIESEL_BUCKET = ITEMS.register("diesel_bucket", ()-> new BucketItem(()->registerFluids.DIESEL_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> FUEL_OIL_BUCKET = ITEMS.register("fuel_oil_bucket", ()-> new BucketItem(()->registerFluids.FUEL_OIL_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(CreativeModeTab.TAB_MISC)));
 
 
     public static final RegistryObject<Item> WISDOM_CUBE = registerManager.ITEMS.register("wisdomcube", () -> new ItemBaseTooltip(new Item.Properties()
@@ -223,8 +223,8 @@ public class registerItems {
             .tab(PA_GROUP).stacksTo(1)){
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
@@ -233,15 +233,15 @@ public class registerItems {
             .tab(PA_GROUP).stacksTo(1))
     {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull ITooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
-            tooltip.add(new TranslationTextComponent("disc.brainpower.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
+            tooltip.add(new TranslatableComponent("disc.brainpower.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
         }
 
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
@@ -251,8 +251,8 @@ public class registerItems {
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
@@ -261,8 +261,8 @@ public class registerItems {
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
@@ -271,8 +271,8 @@ public class registerItems {
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
@@ -281,8 +281,8 @@ public class registerItems {
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
     });
 
@@ -291,14 +291,14 @@ public class registerItems {
     {
         @Nonnull
         @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
+        public Component getName(@Nonnull ItemStack stack) {
+            return new TranslatableComponent("item.projectazure.music_disc");
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
-            tooltip.add(new TranslationTextComponent("disc.enterthebeginning.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
+            tooltip.add(new TranslatableComponent("disc.enterthebeginning.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
         }
     });
 

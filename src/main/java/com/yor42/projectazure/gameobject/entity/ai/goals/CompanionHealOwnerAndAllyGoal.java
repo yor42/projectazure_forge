@@ -7,7 +7,6 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PotionEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SplashPotionItem;
 import net.minecraft.potion.*;
@@ -15,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.annotation.Nullable;

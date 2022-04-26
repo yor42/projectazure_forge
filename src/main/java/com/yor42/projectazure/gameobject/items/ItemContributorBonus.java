@@ -5,17 +5,17 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Rarity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ChatFormatting;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
@@ -39,18 +39,18 @@ public class ItemContributorBonus extends Item {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
+    public ActionResult<ItemStack> use(@Nonnull Level worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
 
         ItemStack cube = playerIn.getItemInHand(handIn);
 
         UUID PlayerUUID = playerIn.getUUID();
-        CompoundNBT compound = cube.getOrCreateTag();
+        CompoundTag compound = cube.getOrCreateTag();
 
         //openGui
         if(compound.hasUUID("owner")){
             UUID OwnerUUID = compound.getUUID("owner");
             if(!PlayerUUID.equals(OwnerUUID)) {
-                playerIn.sendMessage(new TranslationTextComponent("message.rewardbag.notowner"), UUID.randomUUID());
+                playerIn.sendMessage(new TranslatableComponent("message.rewardbag.notowner"), UUID.randomUUID());
                 return ActionResult.fail(cube);
             }
         }
@@ -58,7 +58,7 @@ public class ItemContributorBonus extends Item {
             ListNBT list = compound.getList("inventory", Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++)
             {
-                CompoundNBT ItemInfo = list.getCompound(i);
+                CompoundTag ItemInfo = list.getCompound(i);
                 ItemStack stack = ItemStack.of(ItemInfo);
                 int index = playerIn.inventory.getFreeSlot();
                 if(index>0){
@@ -75,31 +75,31 @@ public class ItemContributorBonus extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
         if (worldIn != null && worldIn.isClientSide) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-        CompoundNBT compound = stack.getOrCreateTag();
+    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn){
+        CompoundTag compound = stack.getOrCreateTag();
         UUID OwnerID = compound.getUUID("owner");
         @Nullable
         PlayerEntity owner = worldIn.getPlayerByUUID(OwnerID);
         if (owner != null) {
-            tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip.owner").withStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(owner.getDisplayName().getString()).withStyle(TextFormatting.YELLOW)));
+            tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip.owner").withStyle(ChatFormatting.GRAY).append(new TextComponent(": ")).append(new TextComponent(owner.getDisplayName().getString()).withStyle(ChatFormatting.YELLOW)));
         }
         else{
-            tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip.owner").withStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(OwnerID.toString()).withStyle(TextFormatting.RED)));
+            tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip.owner").withStyle(ChatFormatting.GRAY).append(new TextComponent(": ")).append(new TextComponent(OwnerID.toString()).withStyle(ChatFormatting.RED)));
         }
         if(compound.contains("inventory")){
-            tooltip.add(new TranslationTextComponent(stack.getItem().getDescriptionId()+".tooltip.content").withStyle(TextFormatting.YELLOW));
+            tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip.content").withStyle(ChatFormatting.YELLOW));
             ListNBT list = compound.getList("inventory", Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++) {
-                CompoundNBT ItemInfo = list.getCompound(i);
+                CompoundTag ItemInfo = list.getCompound(i);
                 ItemStack content = ItemStack.of(ItemInfo);
                 tooltip.add(content.getHoverName());
             }

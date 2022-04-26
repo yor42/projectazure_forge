@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 

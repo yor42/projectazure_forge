@@ -1,9 +1,9 @@
 {
-  "itemGroup.projectazure": "프로젝트: 애저",
-  "itemGroup.pa_machines": "프로젝트: 에저 - 기계",
-  "itemGroup.pa_resources": "프로젝트: 에저 - 자원",
-  "itemGroup.pa_ship": "프로젝트: 에저 - 엔티티",
-  "itemGroup.pa_weapons": "프로젝트: 에저 - 무기",
+  "CreativeModeTab.projectazure": "프로젝트: 애저",
+  "CreativeModeTab.pa_machines": "프로젝트: 에저 - 기계",
+  "CreativeModeTab.pa_resources": "프로젝트: 에저 - 자원",
+  "CreativeModeTab.pa_ship": "프로젝트: 에저 - 엔티티",
+  "CreativeModeTab.pa_weapons": "프로젝트: 에저 - 무기",
 
   "item.projectazure.rainbow_wisdomcube": "빛나는 성정큐브",
   "item.projectazure.wisdomcube": "성정큐브",

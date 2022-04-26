@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.crafting;
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -12,7 +11,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -35,7 +35,7 @@ public class PressingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(IInventory inv, Level worldIn) {
         return this.ingredient.test(inv.getItem(0)) && this.mold.test(inv.getItem(1));
     }
 

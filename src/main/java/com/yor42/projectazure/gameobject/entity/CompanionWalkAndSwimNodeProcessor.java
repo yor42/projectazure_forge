@@ -30,7 +30,7 @@ public class CompanionWalkAndSwimNodeProcessor extends WalkNodeProcessor {
     }
 
     public PathNodeType getBlockPathType(IBlockReader p_186330_1_, int p_186330_2_, int p_186330_3_, int p_186330_4_) {
-        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
         PathNodeType pathnodetype = getBlockPathTypeRaw(p_186330_1_, blockpos$mutable.set(p_186330_2_, p_186330_3_, p_186330_4_));
         if (pathnodetype == PathNodeType.WATER) {
             for(Direction direction : Direction.values()) {

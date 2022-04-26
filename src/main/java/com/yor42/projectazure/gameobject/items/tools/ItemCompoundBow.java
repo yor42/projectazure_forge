@@ -7,21 +7,21 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemCompoundBow extends BowItem {
     public ItemCompoundBow(Properties builder) {
         super(builder);
     }
 
-    public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+    public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity playerentity = (PlayerEntity)entityLiving;
             boolean flag = playerentity.abilities.instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
@@ -87,7 +87,7 @@ public class ItemCompoundBow extends BowItem {
         return f;
     }
 
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public ActionResult<ItemStack> use(Level worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getItemInHand(handIn);
         playerIn.startUsingItem(handIn);
         return ActionResult.consume(itemstack);

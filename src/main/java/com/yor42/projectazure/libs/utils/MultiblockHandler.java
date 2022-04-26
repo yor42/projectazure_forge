@@ -3,12 +3,12 @@ package com.yor42.projectazure.libs.utils;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockBaseTE;
 import com.yor42.projectazure.setup.register.registerBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +29,11 @@ public class MultiblockHandler {
      * (heavy grudge block is always at TOP-MIDDLE, so check X+-1 Y-2 Z+-1)
      */
 
-    public static int checkMultiBlockForm(World world, BlockPos pos){
+    public static int checkMultiBlockForm(Level world, BlockPos pos){
         return checkMultiBlockForm(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
-    public static int checkMultiBlockForm(World world, int xCoord, int yCoord, int zCoord)
+    public static int checkMultiBlockForm(Level world, int xCoord, int yCoord, int zCoord)
     {
         BlockState state;
         BlockPos pos;
@@ -79,7 +79,7 @@ public class MultiblockHandler {
 
                     if (blockType != Blocks.AIR)
                     {
-                        TileEntity t = world.getBlockEntity(pos);
+                        BlockEntity t = world.getBlockEntity(pos);
                         if (t instanceof MultiblockBaseTE && ((MultiblockBaseTE) t).hasMaster())
                         {
                             return -1;
@@ -100,18 +100,18 @@ public class MultiblockHandler {
      *
      *  type: 0:no MBS, 1:large shipyard, 2:-
      */
-    public static void setupStructure(World world, BlockPos pos, int type) {
+    public static void setupStructure(Level world, BlockPos pos, int type) {
         setupStructure(world, pos.getX(), pos.getY(), pos.getZ(), type);
     }
 
-    public static void setupStructure(World world, int xCoord, int yCoord, int zCoord, int type)
+    public static void setupStructure(Level world, int xCoord, int yCoord, int zCoord, int type)
     {
         List<MultiblockBaseTE> tiles = new ArrayList<MultiblockBaseTE>();  //all tile in structure
         BlockPos pos = null;
         BlockPos masterPos = new BlockPos(xCoord, yCoord, zCoord);
         MultiblockBaseTE masterTile = null;  //master tile
         MultiblockBaseTE tile2 = null;
-        TileEntity tile = null;
+        BlockEntity tile = null;
         Main.LOGGER.debug("DEBUG: setup structure type: "+type);
 
         //get all tile and master tile
@@ -166,7 +166,7 @@ public class MultiblockHandler {
     }
 
     //Reset tile multi, called from master block if struct broken
-    public static void resetStructure(World world, int xCoord, int yCoord, int zCoord)
+    public static void resetStructure(Level world, int xCoord, int yCoord, int zCoord)
     {
         Main.LOGGER.debug("DEBUG: reset struct: client? "+world.isClientSide+" "+xCoord+" "+yCoord+" "+zCoord);
 
@@ -176,7 +176,7 @@ public class MultiblockHandler {
             {
                 for (int z = zCoord - 1; z < zCoord + 2; z++)
                 {
-                    TileEntity tile = world.getBlockEntity(new BlockPos(x, y, z));
+                    BlockEntity tile = world.getBlockEntity(new BlockPos(x, y, z));
 
                     if (tile instanceof MultiblockBaseTE) resetTileMulti((MultiblockBaseTE)tile);
                 }

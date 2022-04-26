@@ -2,10 +2,10 @@ package com.yor42.projectazure.gameobject.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import javax.annotation.Nullable;
 

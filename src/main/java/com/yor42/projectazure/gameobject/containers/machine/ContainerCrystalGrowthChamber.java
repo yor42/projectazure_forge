@@ -2,13 +2,13 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.gameobject.items.ItemResource;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.ItemStackHandler;
@@ -23,7 +23,7 @@ public class ContainerCrystalGrowthChamber extends Container {
     private final IIntArray field;
     private final FluidStack waterTank, SolutionTank;
 
-    public ContainerCrystalGrowthChamber(int id, PlayerInventory inventory, PacketBuffer buffer){
+    public ContainerCrystalGrowthChamber(int id, Inventory inventory, PacketBuffer buffer){
         this(id, inventory, new ItemStackHandler(7), new IIntArray() {
 
             final int[] values = buffer.readVarIntArray();
@@ -45,7 +45,7 @@ public class ContainerCrystalGrowthChamber extends Container {
         }, buffer.readFluidStack(), buffer.readFluidStack());
     }
 
-    public ContainerCrystalGrowthChamber(int id, PlayerInventory inventory, ItemStackHandler itemStackHandler, IIntArray field, FluidStack waterTank, FluidStack solutionTank) {
+    public ContainerCrystalGrowthChamber(int id, Inventory inventory, ItemStackHandler itemStackHandler, IIntArray field, FluidStack waterTank, FluidStack solutionTank) {
         super(GROWTH_CHAMBER_CONTAINER_TYPE, id);
         this.field = field;
         this.waterTank = waterTank;

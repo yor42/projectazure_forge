@@ -9,13 +9,13 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -27,7 +27,7 @@ public class MultiblockStructureBlocks extends AbstractMultiBlockBase{
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, IBlockReader world) {
         return new MultiBlockReenforcedConcrete();
     }
 
@@ -38,9 +38,9 @@ public class MultiblockStructureBlocks extends AbstractMultiBlockBase{
 
     @SuppressWarnings("deprecation")
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, Level worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if(!worldIn.isClientSide() && !player.isShiftKeyDown()){
-            TileEntity TE= worldIn.getBlockEntity(pos);
+            BlockEntity TE= worldIn.getBlockEntity(pos);
             if(TE instanceof MultiblockBaseTE){
                 MultiblockBaseTE multiTE = (MultiblockBaseTE) TE;
                 if(multiTE.hasMaster()){
@@ -65,6 +65,6 @@ public class MultiblockStructureBlocks extends AbstractMultiBlockBase{
     }
 
     @Override
-    protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
+    protected void interactWith(Level worldIn, BlockPos pos, PlayerEntity player) {
     }
 }

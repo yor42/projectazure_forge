@@ -4,9 +4,9 @@ import com.yor42.projectazure.libs.enums;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 
 import static com.yor42.projectazure.Main.PA_RESOURCES;
 
@@ -30,7 +30,7 @@ public class PAOreBlockItem extends BlockItem {
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack) {
-        return new TranslationTextComponent(material).append(" ").append(new TranslationTextComponent(resourceType.getName()));
+    public Component getName(ItemStack stack) {
+        return new TranslatableComponent(material).append(" ").append(new TranslatableComponent(resourceType.getName()));
     }
 }

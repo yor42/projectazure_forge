@@ -5,14 +5,14 @@ import com.yor42.projectazure.gameobject.entity.pathfinding.CompanionWalkerNodeP
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 
 public class CompanionGroundPathNavigator extends GroundPathNavigator {
 
     protected boolean shouldAvoidSun;
     private final AbstractEntityCompanion companion;
 
-    public CompanionGroundPathNavigator(AbstractEntityCompanion entity, World world) {
+    public CompanionGroundPathNavigator(AbstractEntityCompanion entity, Level world) {
         super(entity, world);
         this.companion = entity;
     }

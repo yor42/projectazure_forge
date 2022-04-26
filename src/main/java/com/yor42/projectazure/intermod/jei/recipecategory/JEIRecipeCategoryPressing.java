@@ -10,10 +10,10 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 
 public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe> {
 
@@ -45,8 +45,8 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     }
 
     @Override
-    public ITextComponent getTitleAsTextComponent() {
-        return new TranslationTextComponent("recipe.pressing");
+    public Component getTitleAsTextComponent() {
+        return new TranslatableComponent("recipe.pressing");
     }
 
     @Override

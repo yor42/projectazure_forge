@@ -7,13 +7,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 
 import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_KNIFE;
 
@@ -22,11 +22,11 @@ public class ItemThrowableKnife extends SwordItem {
         super(p_i48460_1_, p_i48460_2_, p_i48460_3_, p_i48460_4_);
     }
 
-    public boolean canAttackBlock(BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
+    public boolean canAttackBlock(BlockState p_195938_1_, Level p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
         return !p_195938_4_.isCreative();
     }
 
-    public void releaseUsing(ItemStack p_77615_1_, World p_77615_2_, LivingEntity p_77615_3_, int p_77615_4_) {
+    public void releaseUsing(ItemStack p_77615_1_, Level p_77615_2_, LivingEntity p_77615_3_, int p_77615_4_) {
         if (p_77615_3_ instanceof PlayerEntity) {
             PlayerEntity playerentity = (PlayerEntity)p_77615_3_;
             int i = this.getUseDuration(p_77615_1_) - p_77615_4_;
@@ -64,7 +64,7 @@ public class ItemThrowableKnife extends SwordItem {
         return 72000;
     }
 
-    public ActionResult<ItemStack> use(World p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
+    public ActionResult<ItemStack> use(Level p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
         ItemStack itemstack = p_77659_2_.getItemInHand(p_77659_3_);
         if (itemstack.getDamageValue() >= itemstack.getMaxDamage() - 1) {
             return ActionResult.fail(itemstack);

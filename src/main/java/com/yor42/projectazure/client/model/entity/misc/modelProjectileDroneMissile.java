@@ -4,7 +4,7 @@ package com.yor42.projectazure.client.model.entity.misc;// Made with Blockbench 
 
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -43,7 +43,7 @@ public class modelProjectileDroneMissile extends EntityModel<EntityMissileDroneM
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStack, VertexConsumer  buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
 		Body.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 

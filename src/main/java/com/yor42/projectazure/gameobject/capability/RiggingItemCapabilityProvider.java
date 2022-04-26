@@ -4,8 +4,8 @@ import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInve
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandlerItemStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;

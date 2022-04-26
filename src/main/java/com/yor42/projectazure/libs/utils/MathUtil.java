@@ -1,19 +1,29 @@
 package com.yor42.projectazure.libs.utils;
 
+import com.mojang.math.Vector3d;
+import com.mojang.math.Vector4f;
 import com.yor42.projectazure.PAConfig;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector4f;
 import net.minecraft.util.text.Color;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.spawner.WorldEntitySpawner;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 import java.util.Random;
 
@@ -45,7 +55,7 @@ public class MathUtil {
         if(!isValueDegree){
             Value = RadianRoDegree(value);
         }
-        Result=clamp(Value,minDegree, maxDegree);
+        Result= Mth.clamp(Value,minDegree, maxDegree);
 
         if(ShouldReturnRadian){
             return DegreeToRadian(Result);
@@ -102,7 +112,7 @@ public class MathUtil {
             double x = entity1.getX() - entity2.getX();
             double y = entity1.getY() - entity2.getY();
             double z = entity1.getY() - entity2.getY();
-            double dist = MathHelper.sqrt(x * x + y * y + z * z);
+            double dist = Math.sqrt(x * x + y * y + z * z);
 
             if (dist > 1.0E-4D)
             {
@@ -117,7 +127,7 @@ public class MathUtil {
     }
 
     public static int ColorHexToInt(String HEX_VALUE){
-        Color color = Color.parseColor(HEX_VALUE);
+        TextColor color = TextColor.parseColor(HEX_VALUE);
         return color.getValue();
     }
 
@@ -133,28 +143,28 @@ public class MathUtil {
         return Tick2Minute(Tick)/60;
     }
 
-    public static StringTextComponent Tick2FormattedClock(int Tick){
+    public static TextComponent Tick2FormattedClock(int Tick){
 
         int millisecs = Tick%20*50;
         int second = Tick2Second(Tick)%60;
         int minute = Tick2Minute(Tick)%60;
         int hour = Tick2Hour(Tick);
 
-        return new StringTextComponent(String.format("%02d", hour)+":"+String.format("%02d", minute)+":"+String.format("%02d", second)+":"+String.format("%03d", millisecs));
+        return new TextComponent(String.format("%02d", hour)+":"+String.format("%02d", minute)+":"+String.format("%02d", second)+":"+String.format("%03d", millisecs));
     }
 
-    public static BlockPos getRandomBlockposInRadius2D(World world, BlockPos originPos, int maxRadius, int minRadius){
+    public static BlockPos getRandomBlockposInRadius2D(Level world, BlockPos originPos, int maxRadius, int minRadius){
         if(maxRadius-minRadius<0){
             throw new IllegalArgumentException("maxRadius must be larger then minRadius!");
         }
         double RandRadian = rand.nextFloat() * 2 * Math.PI;
         int tries = 0;
-        BlockPos.Mutable pos = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         do {
             double radius = ((maxRadius - minRadius) * rand.nextDouble()) + minRadius;
             int x = originPos.getX() + (int) (radius * Math.cos(RandRadian));
             int z = originPos.getZ() + (int) (radius * Math.sin(RandRadian));
-            int y = world.getHeight(Heightmap.Type.WORLD_SURFACE, x, z);
+            int y = world.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
             pos.set(x,y,z);
             tries++;
         }while(!WorldEntitySpawner.isSpawnPositionOk(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkSource().isEntityTickingChunk(new ChunkPos(pos)) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());

@@ -10,15 +10,15 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentGun;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.MenuProvider;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -30,7 +30,7 @@ public class RiggingContainer extends Container {
 
     public ItemStack riggingStack;
 
-    public RiggingContainer(int id, PlayerInventory playerInv, PacketBuffer data) {
+    public RiggingContainer(int id, Inventory playerInv, PacketBuffer data) {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = data.readItem();
 
@@ -53,7 +53,7 @@ public class RiggingContainer extends Container {
         }
     }
 
-    public RiggingContainer(int id, PlayerInventory playerInv, ItemStack riggingStack) {
+    public RiggingContainer(int id, Inventory playerInv, ItemStack riggingStack) {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = riggingStack;
 
@@ -157,7 +157,7 @@ public class RiggingContainer extends Container {
         }
     }
 
-    public static class Provider implements INamedContainerProvider {
+    public static class Provider implements MenuProvider {
         private final ItemStack stack;
 
         public Provider(ItemStack stack) {
@@ -166,12 +166,12 @@ public class RiggingContainer extends Container {
 
         @Nonnull
         @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.rigginginventory");
+        public Component getDisplayName() {
+            return new TranslatableComponent("gui.rigginginventory");
         }
 
         @Override
-        public Container createMenu(int windowId, @Nonnull PlayerInventory inventory, @Nonnull PlayerEntity player) {
+        public Container createMenu(int windowId, @Nonnull Inventory inventory, @Nonnull PlayerEntity player) {
             return new RiggingContainer(windowId, inventory, this.stack);
         }
     }

@@ -5,7 +5,7 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiBlock
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockDrydockTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockSteelFrame;
 import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 
@@ -22,7 +22,7 @@ public class registerTE {
     public static final RegistryObject<TileEntityType<MultiBlockReenforcedConcrete>> MULTIBLOCKSTRUCTURE_CONCRETE = register("multiblock_structure_concrete_te", MultiBlockReenforcedConcrete::new, registerBlocks.REENFORCEDCONCRETE);
     public static final RegistryObject<TileEntityType<MultiblockSteelFrame>> MULTIBLOCKSTRUCTURE_STEELFRAME = register("multiblock_structure_steel_te", MultiblockSteelFrame::new, registerBlocks.MACHINE_FRAME);
 
-    private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<? extends Block> block){
+    private static <T extends BlockEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<? extends Block> block){
 
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW
         //noinspection ConstantConditions

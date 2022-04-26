@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -136,19 +136,19 @@ public class MultiInvStackHandler implements IItemHandlerModifiable {
 
     protected void onContentsChanged(int slot) {}
 
-    public CompoundNBT serializeNBT() {
+    public CompoundTag serializeNBT() {
         NonNullList<ItemStack> stacks = this.stacks.get();
-        ListNBT items = new ListNBT();
+        ListTag items = new ListTag();
 
         for (int i = 0; i < stacks.size(); i++) {
             if (!stacks.get(i).isEmpty()) {
-                CompoundNBT item = new CompoundNBT();
+                CompoundTag item = new CompoundTag();
                 item.putInt("Slot", i);
                 stacks.get(i).save(item);
                 items.add(item);
             }
         }
-        CompoundNBT nbt = new CompoundNBT();
+        CompoundTag nbt = new CompoundTag();
         nbt.put("Items", items);
         return nbt;
     }

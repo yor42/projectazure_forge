@@ -4,10 +4,10 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 
@@ -59,7 +59,7 @@ public class GunFiredPacket{
     }
 
     public static short getAmmo(ItemStack stack){
-        CompoundNBT compound = stack.getOrCreateTag();
+        CompoundTag compound = stack.getOrCreateTag();
         return compound.getShort("ammo");
     }
 

@@ -17,8 +17,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -31,7 +30,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -56,7 +56,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     protected static final DataParameter<Integer> FUEL = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.INT);
     protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.OPTIONAL_UUID);
 
-    protected AbstractEntityDrone(EntityType<? extends CreatureEntity> type, World worldIn) {
+    protected AbstractEntityDrone(EntityType<? extends CreatureEntity> type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new FlyingMovementController(this, 20, true);
         this.navigation = new FlyingPathNavigator(this, worldIn);
@@ -127,7 +127,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("isreturning", this.isReturningToOwner());
         if(this.getOwnerUUID().isPresent()) {
@@ -138,7 +138,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setReturningtoOwner(compound.getBoolean("isreturning"));
         if (this.getServer() != null) {
@@ -173,7 +173,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         this.entityData.set(FUEL, value);
     }
 
-    public void serializePlane(World world) {
+    public void serializePlane(Level world) {
         if (!world.isClientSide()) {
             ItemEntity entity = new ItemEntity(this.getCommandSenderWorld(), this.getX(), this.getY(), this.getZ(), turnPlanetoItemStack());
             world.addFreshEntity(entity);
@@ -183,8 +183,8 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
     public ItemStack turnPlanetoItemStack(){
         ItemStack stack = new ItemStack(this.getDroneItem());
-        CompoundNBT nbt = stack.getOrCreateTag();
-        CompoundNBT planedata = new CompoundNBT();
+        CompoundTag nbt = stack.getOrCreateTag();
+        CompoundTag planedata = new CompoundTag();
         this.addAdditionalSaveData(planedata);
         nbt.put("planedata", planedata);
         nbt.putInt("fuel", this.getRemainingFuel());

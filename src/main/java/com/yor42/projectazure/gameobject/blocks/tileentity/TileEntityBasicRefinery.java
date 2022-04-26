@@ -7,22 +7,22 @@ import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.container.MenuProvider;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 import static com.yor42.projectazure.libs.utils.FluidPredicates.*;
 
-public class TileEntityBasicRefinery extends LockableTileEntity implements INamedContainerProvider, IRecipeHelperPopulator, ITickableTileEntity {
+public class TileEntityBasicRefinery extends LockableTileEntity implements MenuProvider, IRecipeHelperPopulator, ITickableTileEntity {
 
 
     private int burnTime = 0;
@@ -130,12 +130,12 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tileentity.basic_refinery");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("tileentity.basic_refinery");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected Container createMenu(int id, Inventory player) {
         return new ContainerBasicRefinery(id, player, this.ITEMHANDLER, this.fields, this.CrudeOilTank.getFluid(), this.GasolineTank.getFluid(), this.DieselTank.getFluid(), this.FuelOilTank.getFluid());
     }
 
@@ -338,13 +338,13 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.put("inventory", this.ITEMHANDLER.serializeNBT());
-        compound.put("crudeoiltank", this.CrudeOilTank.writeToNBT(new CompoundNBT()));
-        compound.put("gasolinetank", this.GasolineTank.writeToNBT(new CompoundNBT()));
-        compound.put("dieseltank", this.DieselTank.writeToNBT(new CompoundNBT()));
-        compound.put("fueloiltank", this.FuelOilTank.writeToNBT(new CompoundNBT()));
+        compound.put("crudeoiltank", this.CrudeOilTank.writeToNBT(new CompoundTag()));
+        compound.put("gasolinetank", this.GasolineTank.writeToNBT(new CompoundTag()));
+        compound.put("dieseltank", this.DieselTank.writeToNBT(new CompoundTag()));
+        compound.put("fueloiltank", this.FuelOilTank.writeToNBT(new CompoundTag()));
         compound.putInt("bitumentick", this.bitumentick);
         compound.putInt("totalburntime", this.totalBurntime);
         compound.putInt("burntime", this.burnTime);
@@ -353,7 +353,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
     }
 
     @Override
-    public void load(BlockState p_230337_1_, CompoundNBT compound) {
+    public void load(BlockState p_230337_1_, CompoundTag compound) {
         super.load(p_230337_1_, compound);
         this.ITEMHANDLER.deserializeNBT(compound.getCompound("inventory"));
         this.CrudeOilTank.readFromNBT(compound.getCompound("crudeoiltank"));

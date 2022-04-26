@@ -13,7 +13,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -39,7 +39,7 @@ public abstract class CrudeOilFluid extends FlowingFluid {
     }
 
     protected void beforeDestroyingBlock(IWorld worldIn, BlockPos pos, BlockState state) {
-        TileEntity tileentity = state.hasTileEntity() ? worldIn.getBlockEntity(pos) : null;
+        BlockEntity tileentity = state.hasTileEntity() ? worldIn.getBlockEntity(pos) : null;
         Block.dropResources(state, worldIn, pos, tileentity);
     }
 

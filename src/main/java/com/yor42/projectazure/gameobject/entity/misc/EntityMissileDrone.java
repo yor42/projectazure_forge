@@ -13,7 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -29,7 +29,7 @@ public class EntityMissileDrone extends AbstractEntityDrone{
 
     private static final int MAX_AMMO = 8;
 
-    public EntityMissileDrone(EntityType<? extends EntityMissileDrone> type, World worldIn) {
+    public EntityMissileDrone(EntityType<? extends EntityMissileDrone> type, Level worldIn) {
 
         super(type, worldIn);
     }

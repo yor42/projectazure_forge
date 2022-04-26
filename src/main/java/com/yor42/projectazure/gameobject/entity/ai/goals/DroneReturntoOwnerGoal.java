@@ -5,7 +5,7 @@ import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 

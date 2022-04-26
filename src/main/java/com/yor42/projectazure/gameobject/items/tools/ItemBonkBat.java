@@ -5,8 +5,8 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemBonkBat extends ItemBaseTooltip {
     public ItemBonkBat(Properties properties) {

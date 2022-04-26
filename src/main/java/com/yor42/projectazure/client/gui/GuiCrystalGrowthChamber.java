@@ -5,19 +5,18 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
 import com.yor42.projectazure.libs.utils.RenderingUtils;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Component;
 import net.minecraftforge.fluids.FluidStack;
 
-public class GuiCrystalGrowthChamber extends ContainerScreen<ContainerCrystalGrowthChamber> {
+public class GuiCrystalGrowthChamber extends AbstractContainerScreen<ContainerCrystalGrowthChamber> {
 
     private static final ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/crystal_growth_chamber.png");
 
-    public GuiCrystalGrowthChamber(ContainerCrystalGrowthChamber screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public GuiCrystalGrowthChamber(ContainerCrystalGrowthChamber screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
     }
 
@@ -30,7 +29,7 @@ public class GuiCrystalGrowthChamber extends ContainerScreen<ContainerCrystalGro
     }
 
     protected void renderTanks(MatrixStack matrixStack, float partialTicks, int x, int y){
-        IRenderTypeBuffer.Impl buffer = IRenderTypeBuffer.immediate(Tessellator.getInstance().getBuilder());
+        MultiBufferSource.Impl buffer = MultiBufferSource.immediate(Tessellator.getInstance().getBuilder());
         FluidStack stack = this.menu.getWaterTank();
         float height = 34*((float)this.menu.getWaterTankAmount()/this.menu.getWaterTankCapacity());
         RenderingUtils.drawRepeatedFluidSpriteGui(buffer, matrixStack, stack, this.leftPos+12,this.topPos+26+(34-height), 16, height);

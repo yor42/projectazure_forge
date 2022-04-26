@@ -3,14 +3,14 @@ package com.yor42.projectazure.gameobject.items.tools;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
@@ -35,7 +35,7 @@ public class ItemMedKit extends Item {
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
+    public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity) {
         if(entity instanceof PlayerEntity) {
             entity.heal(5);
             entity.addEffect(new EffectInstance(Effects.REGENERATION, 600, 1));
@@ -47,7 +47,7 @@ public class ItemMedKit extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
+    public ActionResult<ItemStack> use(Level p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
         ItemStack itemstack = p_77659_2_.getItemInHand(p_77659_3_);
         p_77659_2_.startUsingItem(p_77659_3_);
         return ActionResult.consume(itemstack);

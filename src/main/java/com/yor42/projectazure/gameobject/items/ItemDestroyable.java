@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.interfaces.IItemDestroyable;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentDamage;
 

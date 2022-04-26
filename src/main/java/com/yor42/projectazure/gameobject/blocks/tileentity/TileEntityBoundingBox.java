@@ -1,40 +1,40 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockBaseTE;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class TileEntityBoundingBox extends TileEntity {
+public class TileEntityBoundingBox extends BlockEntity {
 
-    protected TileEntity masterTile = null;
+    protected BlockEntity masterTile = null;
     protected boolean hasMaster;			//master flag
     private BlockPos masterPos = BlockPos.ZERO;
 
-    public TileEntityBoundingBox(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public TileEntityBoundingBox(BlockEntityType<?> p_155228_, BlockPos p_155229_, BlockState p_155230_) {
+        super(p_155228_, p_155229_, p_155230_);
     }
 
+
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putInt("masterX", masterPos.getX());
         compound.putInt("masterY", masterPos.getY());
         compound.putInt("masterZ", masterPos.getZ());
         compound.putBoolean("hasMaster", hasMaster);
-        return compound;
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.masterPos = new BlockPos(nbt.getInt("masterX"), nbt.getInt("masterY"), nbt.getInt("masterZ"));
         this.hasMaster = nbt.getBoolean("hasMaster");
     }
 
-    public TileEntity getMaster()
+    public BlockEntity getMaster()
     {
         if (this.masterTile != null)
         {
@@ -45,7 +45,7 @@ public class TileEntityBoundingBox extends TileEntity {
             //check master again
             if (hasMaster)
             {
-                TileEntity tile = this.level.getBlockEntity(this.masterPos);
+                BlockEntity tile = this.level.getBlockEntity(this.masterPos);
 
                 if (tile instanceof MultiblockBaseTE)
                 {
@@ -69,7 +69,7 @@ public class TileEntityBoundingBox extends TileEntity {
     }
 
 
-    public void setMaster(TileEntity master)
+    public void setMaster(BlockEntity master)
     {
         if (master != null && !master.isRemoved())
         {

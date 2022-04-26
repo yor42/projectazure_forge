@@ -14,7 +14,7 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import static com.yor42.projectazure.gameobject.misc.DamageSources.causeGunDamage;
@@ -23,22 +23,22 @@ public class EntityProjectileBullet extends ThrowableEntity {
 
     float damage;
 
-    protected EntityProjectileBullet(World worldIn, float damage) {
+    protected EntityProjectileBullet(Level worldIn, float damage) {
         super(registerManager.PROJECTILE_GUN_BULLET, worldIn);
         this.damage = damage;
     }
 
-    protected EntityProjectileBullet(double x, double y, double z, World worldIn, float damage) {
+    protected EntityProjectileBullet(double x, double y, double z, Level worldIn, float damage) {
         super(registerManager.PROJECTILE_GUN_BULLET, x, y, z, worldIn);
         this.damage = damage;
     }
 
-    public EntityProjectileBullet(LivingEntity shooter, World worldIn, float damage) {
+    public EntityProjectileBullet(LivingEntity shooter, Level worldIn, float damage) {
         super(registerManager.PROJECTILE_GUN_BULLET, shooter, worldIn);
         this.damage = damage;
     }
 
-    public EntityProjectileBullet(EntityType<EntityProjectileBullet> type, World world) {
+    public EntityProjectileBullet(EntityType<EntityProjectileBullet> type, Level world) {
         super(type, world);
     }
 

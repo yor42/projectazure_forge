@@ -6,15 +6,15 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,7 +33,7 @@ public class ItemCommandStick extends Item {
 
         PlayerEntity player = context.getPlayer();
         ItemStack holdingStack = context.getItemInHand();
-        World world = context.getLevel();
+        Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
         if(player != null){
@@ -44,7 +44,7 @@ public class ItemCommandStick extends Item {
                 }
 
                 if(!context.getLevel().isClientSide()) {
-                    CompoundNBT NBTTag = holdingStack.getOrCreateTag();
+                    CompoundTag NBTTag = holdingStack.getOrCreateTag();
                     BlockState state = world.getBlockState(pos);
                     Block block = state.getBlock();
                     if (state.isBed(world, pos, null)) {
@@ -52,12 +52,12 @@ public class ItemCommandStick extends Item {
                         NBTTag.putInt("BedX", pos.getX());
                         NBTTag.putInt("BedY", pos.getY());
                         NBTTag.putInt("BedZ", pos.getZ());
-                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.bedpos_saved", "[" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]"), true);
+                        player.displayClientMessage(new TranslatableComponent("message.commandstick.bedpos_saved", "[" + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + "]"), true);
                     } else {
                         NBTTag.remove("BedX");
                         NBTTag.remove("BedY");
                         NBTTag.remove("BedZ");
-                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.bedpos_cleared"), true);
+                        player.displayClientMessage(new TranslatableComponent("message.commandstick.bedpos_cleared"), true);
                     }
                     holdingStack.setTag(NBTTag);
                 }
@@ -67,10 +67,10 @@ public class ItemCommandStick extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        CompoundNBT compound = stack.getOrCreateTag();
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+        CompoundTag compound = stack.getOrCreateTag();
         if (compound.contains("BedX") && compound.contains("BedY") && compound.contains("BedZ")) {
-            tooltip.add(new TranslationTextComponent("item.tooltip.bed_position", "["+ compound.getInt("BedX")+", "+ compound.getInt("BedY")+", "+ compound.getInt("BedZ") +"]"));
+            tooltip.add(new TranslatableComponent("item.tooltip.bed_position", "["+ compound.getInt("BedX")+", "+ compound.getInt("BedY")+", "+ compound.getInt("BedZ") +"]"));
         }
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }

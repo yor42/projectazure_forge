@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class MultiInvUtil {
     public static IMultiInventory getCap(ItemStack stack) {

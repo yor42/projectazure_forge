@@ -12,16 +12,15 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.CreativeModeTab;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ChatFormatting;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -124,7 +123,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     }
 
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+    public ActionResult<ItemStack> use(Level worldIn, PlayerEntity playerIn, Hand handIn) {
 
         this.SecondaryAction(playerIn, playerIn.getItemInHand(handIn));
         return new ActionResult<>(ActionResultType.PASS, playerIn.getItemInHand(handIn));
@@ -156,7 +155,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     protected abstract void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem);
 
-    public boolean shootGun(ItemStack gun, World world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
+    public boolean shootGun(ItemStack gun, Level world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
         // Gets the item that the player is holding, should be this item.
         final int id = GeckoLibUtil.guaranteeIDForStack(gun, (ServerWorld) world);
         // Tell all nearby clients to trigger this item to animate
@@ -235,7 +234,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
         return false;
     }
 
-    public boolean shootGunLivingEntity(ItemStack gun, World world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
+    public boolean shootGunLivingEntity(ItemStack gun, Level world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
         entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
         if (!world.isClientSide()) {
             this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
@@ -244,7 +243,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
         return false;
     }
 
-    public void shootGunCompanion(ItemStack gun, World world, AbstractEntityCompanion entity, boolean zooming, Hand hand, @Nullable Entity target) {
+    public void shootGunCompanion(ItemStack gun, Level world, AbstractEntityCompanion entity, boolean zooming, Hand hand, @Nullable Entity target) {
         entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
         if (!world.isClientSide()) {
 
@@ -267,7 +266,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         super.fillItemCategory(group, items);
         if (this.allowdedIn(group)) {
             ItemStack stack = new ItemStack(this);
@@ -278,7 +277,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     public abstract enums.AmmoCalibur getAmmoType();
 
-    private void spawnProjectile(LivingEntity Shooter, World worldIn, ItemStack gunStack, float Accuracy, float Damage, Entity target, Hand hand) {
+    private void spawnProjectile(LivingEntity Shooter, Level worldIn, ItemStack gunStack, float Accuracy, float Damage, Entity target, Hand hand) {
         EntityProjectileBullet entity = new EntityProjectileBullet(Shooter, worldIn, Damage);
         if(target!=null){
             double d0 = target.getEyeY() - (double)1.1F;
@@ -302,29 +301,29 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new TranslationTextComponent("item.tooltip.gunclass").append(": ").withStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.getGunClass().getName()).withStyle(TextFormatting.BLUE)));
+        tooltip.add(new TranslatableComponent("item.tooltip.gunclass").append(": ").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent(this.getGunClass().getName()).withStyle(ChatFormatting.BLUE)));
         if (worldIn != null && worldIn.isClientSide) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, worldIn, tooltip, flagIn));
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
-        TextFormatting color;
+    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn){
+        ChatFormatting color;
 
         if(((float)getRemainingAmmo(stack)/this.magCap)<0.3F){
-            color = TextFormatting.RED;
+            color = ChatFormatting.RED;
         }
         else if(((float)getRemainingAmmo(stack)/this.magCap)<0.6F){
-            color = TextFormatting.YELLOW;
+            color = ChatFormatting.YELLOW;
         }
         else{
-            color = TextFormatting.GREEN;
+            color = ChatFormatting.GREEN;
         }
 
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.magCap).withStyle(color)));
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingammo").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(getRemainingAmmo(stack)+"/"+this.magCap).withStyle(color)));
     }
 
     @Override

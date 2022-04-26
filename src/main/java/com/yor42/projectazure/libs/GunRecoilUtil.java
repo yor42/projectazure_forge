@@ -3,7 +3,7 @@ package com.yor42.projectazure.libs;
 import com.yor42.projectazure.events.GunFireEvent;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 

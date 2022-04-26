@@ -1,16 +1,16 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.SplashPotionItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.potion.*;
 import net.minecraft.util.Hand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
@@ -156,7 +156,7 @@ public class CompanionHealandEatFoodGoal extends Goal {
         if (!list.isEmpty() && this.companion.getFoodStats().getFoodLevel()>5) {
             for (LivingEntity mob : list) {
                 if (mob != null) {
-                    if (mob instanceof MonsterEntity) {
+                    if (mob instanceof Monster) {
                         return false;
                     }
                 }

@@ -17,12 +17,12 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -37,7 +37,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknOp {
 
-    public EntityRosmontis(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityRosmontis(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -117,7 +117,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlot.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlot.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("openDoorL", false));
             }
             else{
@@ -288,7 +288,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     }
 
     @Override
-    public void ShootProjectile(World world, @Nonnull LivingEntity target) {
+    public void ShootProjectile(Level world, @Nonnull LivingEntity target) {
         EntityClaymore claymore = new EntityClaymore(registerManager.ENTITYTYPE_CLAYMORE, world);
         claymore.setPos(target.getX(), target.getY(), target.getZ());
         claymore.setOwnerId(this.getUUID());

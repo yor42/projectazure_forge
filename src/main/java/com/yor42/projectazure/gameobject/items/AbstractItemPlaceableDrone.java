@@ -8,14 +8,14 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.CreativeModeTab;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nullable;
@@ -35,7 +35,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, World worldIn, PlayerEntity playerIn) {
+    public void onCraftedBy(ItemStack stack, Level worldIn, PlayerEntity playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
         stack.getOrCreateTag().putString("planeUUID", UUID.randomUUID().toString());
     }
@@ -60,14 +60,14 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     public void AddInfotoDrone(ItemStack droneItem, AbstractEntityDrone drone){
-        CompoundNBT stackCompound = droneItem.getOrCreateTag();
+        CompoundTag stackCompound = droneItem.getOrCreateTag();
         if(stackCompound.contains("planedata")) {
             drone.readAdditionalSaveData(stackCompound.getCompound("planedata"));
         }
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if(group == this.getItemCategory()) {
             ItemStack stack = new ItemStack(this);
             ItemStackUtils.setCurrentHP(stack, this.getMaxHP());
@@ -78,24 +78,24 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int currentFuel = stack.getOrCreateTag().getInt("fuel");
         float fuelPercent = (float) currentFuel/this.getFuelCapacity();
-        TextFormatting color = TextFormatting.DARK_GREEN;
+        ChatFormatting color = ChatFormatting.DARK_GREEN;
         if(fuelPercent<0.6){
-            color = TextFormatting.GOLD;
+            color = ChatFormatting.GOLD;
         }
         else if(fuelPercent<0.3){
-            color = TextFormatting.DARK_RED;
+            color = ChatFormatting.DARK_RED;
         }
-        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(currentFuel+"/"+this.getFuelCapacity()).withStyle(color)));
+        tooltip.add(new TextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingfuel").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(currentFuel+"/"+this.getFuelCapacity()).withStyle(color)));
 
     }
 
     @Nullable
-    public AbstractEntityDrone CreateDrone(World world, ItemStack stack, LivingEntity owner){
+    public AbstractEntityDrone CreateDrone(Level world, ItemStack stack, LivingEntity owner){
         AbstractEntityDrone DroneEntity = this.getEntityType().create(world);
         if(DroneEntity != null) {
             this.AddInfotoDrone(stack, DroneEntity);

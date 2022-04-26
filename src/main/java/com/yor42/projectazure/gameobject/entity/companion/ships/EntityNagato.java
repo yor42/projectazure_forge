@@ -11,11 +11,11 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKansen {
-    public EntityNagato(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityNagato(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -59,7 +59,7 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlot.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlot.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("openDoorL", false));
             }
             else{

@@ -6,26 +6,26 @@ import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.MenuProvider;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -43,7 +43,7 @@ import java.util.function.Consumer;
 import static com.yor42.projectazure.libs.Constants.CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY;
 import static com.yor42.projectazure.setup.register.registerTE.CRYSTAL_GROWTH_CHAMBER;
 
-public class TileEntityCrystalGrowthChamber extends LockableTileEntity implements INamedContainerProvider, IRecipeHelperPopulator, IInventory, ITickableTileEntity {
+public class TileEntityCrystalGrowthChamber extends LockableTileEntity implements MenuProvider, IRecipeHelperPopulator, IInventory, ITickableTileEntity {
 
     public FluidTank waterTank = new FluidTank(8000, (fluidStack)->fluidStack.getFluid() == Fluids.WATER);
     public FluidTank SolutionTank = new FluidTank(CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY);
@@ -103,13 +103,13 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("block.projectazure.crystal_chamber");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("block.projectazure.crystal_chamber");
     }
 
     //TODO
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected Container createMenu(int id, Inventory player) {
         return new ContainerCrystalGrowthChamber(id, player, this.inventory, this.fields, this.getWaterTank().getFluid(), this.getSolutionTank().getFluid());
     }
 
@@ -355,7 +355,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    public void load (BlockState state, CompoundNBT nbt) {
+    public void load (BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.growthProgress = nbt.getInt("progress");
         this.MaxGrowthProgress = nbt.getInt("maxprogress");
@@ -366,13 +366,13 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
 
     @Nonnull
     @Override
-    public CompoundNBT save(@Nonnull CompoundNBT compound) {
+    public CompoundTag save(@Nonnull CompoundTag compound) {
         super.save(compound);
         compound.putInt("progress", this.growthProgress);
         compound.putInt("maxprogress", this.MaxGrowthProgress);
         compound.put("inventory", this.inventory.serializeNBT());
-        compound.put("water", this.waterTank.writeToNBT(new CompoundNBT()));
-        compound.put("solution", this.SolutionTank.writeToNBT(new CompoundNBT()));
+        compound.put("water", this.waterTank.writeToNBT(new CompoundTag()));
+        compound.put("solution", this.SolutionTank.writeToNBT(new CompoundTag()));
         return compound;
     }
 }

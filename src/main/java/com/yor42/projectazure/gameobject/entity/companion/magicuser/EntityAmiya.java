@@ -15,11 +15,11 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
-    public EntityAmiya(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityAmiya(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -107,7 +107,7 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlot.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlot.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("openDoorL", false));
             }
             else{
@@ -251,7 +251,7 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     }
 
     @Override
-    public void ShootProjectile(World world, @Nonnull LivingEntity target) {
+    public void ShootProjectile(Level world, @Nonnull LivingEntity target) {
         if(target.isAlive()){
             double x = target.getX() - (this.getX());
             double y = target.getY(0.5) - (this.getY(0.7));

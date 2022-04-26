@@ -16,12 +16,12 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -38,7 +38,7 @@ public class EntityShiroko extends EntityGunUserBase {
         return enums.EntityType.BLUEARCHIVE;
     }
 
-    public EntityShiroko(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityShiroko(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -92,7 +92,7 @@ public class EntityShiroko extends EntityGunUserBase {
             event.getController().setAnimation(builder.addAnimation("animation.shiroko.gun_shoot_twohanded"));
             return PlayState.CONTINUE;
         }else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlot.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlot.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.shiroko.openDoorL", false));
             }
             else{

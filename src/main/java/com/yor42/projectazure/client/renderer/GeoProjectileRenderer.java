@@ -2,7 +2,7 @@ package com.yor42.projectazure.client.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -43,7 +43,7 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
 
     @Override
     public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
-                       IRenderTypeBuffer bufferIn, int packedLightIn) {
+                       MultiBufferSource bufferIn, int packedLightIn) {
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityIn));
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(

@@ -15,7 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityCannonPelllet extends DamagingProjectileEntity {
@@ -23,18 +23,18 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     AmmoProperties properties;
     BlockPos originPos;
 
-    public EntityCannonPelllet(World worldIn, AmmoProperties ammotype){
+    public EntityCannonPelllet(Level worldIn, AmmoProperties ammotype){
         super(registerManager.PROJECTILECANNONSHELL,worldIn);
         this.properties = ammotype;
     }
 
-    public EntityCannonPelllet(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
+    public EntityCannonPelllet(Level worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
         super(registerManager.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.5), shooter.getZ());
     }
 
-    public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
+    public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, Level worldIn) {
         super(entityType,worldIn);
     }
 

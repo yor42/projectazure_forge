@@ -6,7 +6,7 @@ import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwor
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.Hand;
@@ -27,7 +27,7 @@ public class CompanionVanillaMeleeGoal extends MeleeAttackGoal {
 
     @Override
     public boolean canUse() {
-        Item item = this.entity.getItemBySlot(EquipmentSlotType.MAINHAND).getItem();
+        Item item = this.entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem();
         boolean isEquippingsword = item instanceof SwordItem;
 
 

@@ -3,11 +3,11 @@ package com.yor42.projectazure.gameobject.crafting;
 import com.yor42.projectazure.interfaces.IItemDestroyable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.REPAIRING;
@@ -22,7 +22,7 @@ public class RepairRecipe extends SpecialRecipe {
     }
 
     @Override
-    public boolean matches(CraftingInventory inv, World worldIn) {
+    public boolean matches(CraftingInventory inv, Level worldIn) {
         IItemDestroyable RepairTargetItem = null;
         this.RepairTarget = ItemStack.EMPTY;
         for(int i = 0; i < inv.getContainerSize(); ++i) {

@@ -1,9 +1,9 @@
 package com.yor42.projectazure.client.renderer.entity.projectile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -25,7 +25,7 @@ public class entityCannonPelletRenderer extends EntityRenderer<EntityCannonPelll
     }
 
     @Override
-    public void render(EntityCannonPelllet entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(EntityCannonPelllet entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.pushPose();
         matrixStackIn.scale(0.5F, 0.5F, 0.5F);
@@ -35,7 +35,7 @@ public class entityCannonPelletRenderer extends EntityRenderer<EntityCannonPelll
         MatrixStack.Entry matrixstack$entry = matrixStackIn.last();
         Matrix4f matrix4f = matrixstack$entry.pose();
         Matrix3f matrix3f = matrixstack$entry.normal();
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RENDER_TYPE);
+        VertexConsumer  ivertexbuilder = bufferIn.getBuffer(RENDER_TYPE);
         vertex(ivertexbuilder, matrix4f, matrix3f, packedLightIn, 0.0F, 0, 0, 1);
         vertex(ivertexbuilder, matrix4f, matrix3f, packedLightIn, 1.0F, 0, 1, 1);
         vertex(ivertexbuilder, matrix4f, matrix3f, packedLightIn, 1.0F, 1, 1, 0);
@@ -44,7 +44,7 @@ public class entityCannonPelletRenderer extends EntityRenderer<EntityCannonPelll
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
     }
 
-    private static void vertex(IVertexBuilder p_229045_0_, Matrix4f p_229045_1_, Matrix3f p_229045_2_, int p_229045_3_, float p_229045_4_, int p_229045_5_, int p_229045_6_, int p_229045_7_) {
+    private static void vertex(VertexConsumer  p_229045_0_, Matrix4f p_229045_1_, Matrix3f p_229045_2_, int p_229045_3_, float p_229045_4_, int p_229045_5_, int p_229045_6_, int p_229045_7_) {
         p_229045_0_.vertex(p_229045_1_, p_229045_4_ - 0.5F, (float)p_229045_5_ - 0.25F, 0.0F).color(255, 255, 255, 255).uv((float)p_229045_6_, (float)p_229045_7_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229045_3_).normal(p_229045_2_, 0.0F, 1.0F, 0.0F).endVertex();
     }
 

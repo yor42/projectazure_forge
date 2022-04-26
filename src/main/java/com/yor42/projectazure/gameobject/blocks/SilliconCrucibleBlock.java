@@ -2,14 +2,15 @@ package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBoundingBox;
 import com.yor42.projectazure.setup.register.registerBlocks;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -20,17 +21,17 @@ public class SilliconCrucibleBlock extends AbstractBigMachineBlock {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, IBlockReader world) {
         return null;
     }
 
     @Override
-    protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
+    protected void interactWith(Level worldIn, BlockPos pos, PlayerEntity player) {
 
     }
 
     @Override
-    public void setPlacedBy(World worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
         worldIn.setBlockAndUpdate(pos.above(), registerBlocks.BOUNDING_BOX.get().defaultBlockState());
         if(worldIn.getBlockEntity(pos.above()) instanceof TileEntityBoundingBox) {
@@ -39,7 +40,7 @@ public class SilliconCrucibleBlock extends AbstractBigMachineBlock {
     }
 
     @Override
-    public void DestroyBoundingBox(World worldIn, BlockPos pos, BlockState state, @Nullable PlayerEntity player) {
+    public void DestroyBoundingBox(Level worldIn, BlockPos pos, BlockState state, @Nullable Player player) {
         worldIn.destroyBlock(pos.above(), false, player);
     }
 }

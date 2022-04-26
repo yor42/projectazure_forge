@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.storages;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class CustomEnergyStorageItem implements IEnergyStorage {
@@ -56,25 +56,25 @@ public class CustomEnergyStorageItem implements IEnergyStorage {
     }
 
     public void setEnergyStored(int value){
-        CompoundNBT storage = this.getCompound();
+        CompoundTag storage = this.getCompound();
         storage.putInt("energy", value);
         this.stack.getOrCreateTag().put("energystorage", storage);
     }
 
     public void setMaxExtract(int value){
-        CompoundNBT storage = this.getCompound();
+        CompoundTag storage = this.getCompound();
         storage.putInt("maxExtract", value);
         this.stack.getOrCreateTag().put("energystorage", storage);
     }
 
     public void setMaxReceive(int value){
-        CompoundNBT storage = this.getCompound();
+        CompoundTag storage = this.getCompound();
         storage.putInt("maxReceive", value);
         this.stack.getOrCreateTag().put("energystorage", storage);
     }
 
     public void setCapacity(int value){
-        CompoundNBT storage = this.getCompound();
+        CompoundTag storage = this.getCompound();
         storage.putInt("capacity", value);
         this.stack.getOrCreateTag().put("energystorage", storage);
     }
@@ -101,7 +101,7 @@ public class CustomEnergyStorageItem implements IEnergyStorage {
         return this.getCompound().getInt("maxReceive") > 0;
     }
 
-    protected CompoundNBT getCompound(){
+    protected CompoundTag getCompound(){
         return this.stack.getOrCreateTag().getCompound("energystorage");
     }
 

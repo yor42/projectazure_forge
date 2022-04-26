@@ -16,7 +16,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.crafting.IRecipe;
@@ -25,8 +24,9 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
@@ -81,7 +81,7 @@ public class ForgeBusEventHandler {
 
     @SubscribeEvent
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event) {
-        World world = event.getWorld();
+        Level world = event.getWorld();
         PlayerEntity player = event.getPlayer();
         List<Entity> passengers = player.getPassengers();
         BlockPos pos = event.getPos();
@@ -100,7 +100,7 @@ public class ForgeBusEventHandler {
                         break;
                     }
                     else if(((AbstractEntityCompanion) entity).isDeadOrDying()){
-                        player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
+                        player.displayClientMessage(new TranslatableComponent("item.tooltip.not_revived"), true);
                     }
                 }
             }
@@ -115,7 +115,7 @@ public class ForgeBusEventHandler {
         Hand OtherHand = hand == MAIN_HAND?Hand.OFF_HAND:MAIN_HAND;
         ItemStack otherHandStack = player.getItemInHand(OtherHand);
         Entity target = event.getTarget();
-        World world = event.getWorld();
+        Level world = event.getWorld();
 
         if(target instanceof LivingEntity){
             if(stack.getItem() instanceof ItemDefibPaddle && otherHandStack.getItem() instanceof ItemDefibPaddle){

@@ -13,8 +13,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -22,7 +21,8 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -89,7 +89,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         return PlayState.CONTINUE;
     }
 
-    public EntityEnterprise(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityEnterprise(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
         this.canUseBow = true;
     }
@@ -133,7 +133,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlot.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlot.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("animation.enterprise.doorL", false));
             }
             else{

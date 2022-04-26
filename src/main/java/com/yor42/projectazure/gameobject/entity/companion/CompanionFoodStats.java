@@ -2,10 +2,10 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -87,7 +87,7 @@ public class CompanionFoodStats {
     /**
      * Reads the food data for the player.
      */
-    public void read(CompoundNBT compound) {
+    public void read(CompoundTag compound) {
         if (compound.contains("foodLevel", 99)) {
             this.foodLevel = compound.getInt("foodLevel");
             this.foodTimer = compound.getInt("foodTickTimer");
@@ -100,7 +100,7 @@ public class CompanionFoodStats {
     /**
      * Writes the food data for the player.
      */
-    public void write(CompoundNBT compound) {
+    public void write(CompoundTag compound) {
         compound.putInt("foodLevel", this.foodLevel);
         compound.putInt("foodTickTimer", this.foodTimer);
         compound.putFloat("foodSaturationLevel", this.foodSaturationLevel);

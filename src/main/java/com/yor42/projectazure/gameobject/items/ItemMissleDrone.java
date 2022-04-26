@@ -7,12 +7,12 @@ import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ChatFormatting;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -61,12 +61,12 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraf
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int ammo = ItemStackUtils.getRemainingAmmo(stack);
         float ammopercent = (float) ammo/this.getMaxAmmo();
-        TextFormatting color = ammopercent>=0.33? ammopercent>= 0.66? TextFormatting.DARK_GREEN:TextFormatting.GOLD:TextFormatting.DARK_RED;
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(ammo+"/"+this.getMaxAmmo()).withStyle(color)));
+        ChatFormatting color = ammopercent>=0.33? ammopercent>= 0.66? ChatFormatting.DARK_GREEN:ChatFormatting.GOLD:ChatFormatting.DARK_RED;
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingammo").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(ammo+"/"+this.getMaxAmmo()).withStyle(color)));
     }
 
     @Override

@@ -1,9 +1,9 @@
 {
-  "itemGroup.projectazure": "Project: Azure - Main",
-  "itemGroup.pa_machines": "Project: Azure - Machines",
-  "itemGroup.pa_resources": "Project: Azure - Resources",
-  "itemGroup.pa_ship": "Project: Azure - Companions",
-  "itemGroup.pa_weapons": "Project: Azure - Weapons",
+  "CreativeModeTab.projectazure": "Project: Azure - Main",
+  "CreativeModeTab.pa_machines": "Project: Azure - Machines",
+  "CreativeModeTab.pa_resources": "Project: Azure - Resources",
+  "CreativeModeTab.pa_ship": "Project: Azure - Companions",
+  "CreativeModeTab.pa_weapons": "Project: Azure - Weapons",
 
   "item.projectazure.rainbow_wisdomcube": "Rainbow Wisdom Cube",
   "item.projectazure.wisdomcube": "Wisdom Cube",

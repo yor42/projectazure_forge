@@ -12,9 +12,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.TorchBlock;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 

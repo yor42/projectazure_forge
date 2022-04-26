@@ -3,22 +3,24 @@ package com.yor42.projectazure.gameobject.crafting;
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class AlloyingRecipe implements IRecipe<IInventory> {
+public class AlloyingRecipe implements Recipe<?> {
 
     protected final Ingredient ingredient1, ingredient2;
     protected ItemStack result;
@@ -38,7 +40,7 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(IInventory inv, Level worldIn) {
 
         boolean isItemCorrect = (this.ingredient1.test(inv.getItem(0))||this.ingredient1.test(inv.getItem(1))) && (this.ingredient1.test(inv.getItem(0))||this.ingredient1.test(inv.getItem(1)));
         boolean isItemCountEnough = getIng1ItemCount(inv)>=this.ing1Count && getIng2ItemCount(inv)>=this.ing2Count;
@@ -67,8 +69,13 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public ItemStack assemble(IInventory inv) {
-        return this.result.copy();
+    public boolean matches(Container p_44002_, Level p_44003_) {
+        return false;
+    }
+
+    @Override
+    public ItemStack assemble(Container p_44001_) {
+        return null;
     }
 
     @Override
@@ -111,12 +118,12 @@ public class AlloyingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return registerRecipes.Serializers.ALLOYING.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return registerRecipes.Types.ALLOYING;
     }
 

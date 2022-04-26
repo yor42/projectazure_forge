@@ -2,15 +2,15 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.setup.register.registerFluids;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -28,7 +28,7 @@ public class ContainerBasicRefinery extends Container {
 
     public final FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
 
-    public ContainerBasicRefinery(int id, PlayerInventory inventory, PacketBuffer buffer) {
+    public ContainerBasicRefinery(int id, Inventory inventory, PacketBuffer buffer) {
         this(id, inventory, new ItemStackHandler(10), new IIntArray() {
 
             final int[] values = buffer.readVarIntArray();
@@ -50,7 +50,7 @@ public class ContainerBasicRefinery extends Container {
         }, buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack());
     }
 
-    public ContainerBasicRefinery(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {
+    public ContainerBasicRefinery(int id, Inventory inventory, ItemStackHandler Inventory, IIntArray field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {
         super(BASIC_REFINERY_CONTAINER_TYPE, id);
         this.field = field;
         this.crudeoilstack = CrudeOilStack;

@@ -8,20 +8,21 @@ import com.yor42.projectazure.gameobject.entity.ai.targetAI.PlaneInterceptGoal;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ambient.AmbientCreature;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -29,7 +30,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public abstract class AbstractEntityPlanes extends CreatureEntity implements IAnimatable {
+public abstract class AbstractEntityPlanes extends AmbientCreature implements IAnimatable {
 
     private AbstractEntityCompanion owner;
     private boolean hasPayloads;
@@ -40,15 +41,15 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     protected float attackdamage;
     private final boolean hasRadar;
 
-    protected AbstractEntityPlanes(EntityType<? extends CreatureEntity> type, World worldIn) {
+    protected AbstractEntityPlanes(EntityType<? extends AmbientCreature> type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new PlaneFlyMovementController(this, 20, true);
-        this.navigation = new FlyingPathNavigator(this, worldIn);
+        this.navigation = new FlyingPathNavigation(this, worldIn);
         this.isLifeLimited = false;
         this.hasRadar = false;
         this.isReturningToOwner = false;
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
         this.attackdamage = this.getPlaneItem().getAttackDamage();
     }
 
@@ -104,8 +105,8 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
         this.setNoGravity(this.isAlive());
         //in water = crash
         if(this.isInWater()){
-            this.level.explode(this, this.getX(), getY(), getZ(), 0.5F, Explosion.Mode.DESTROY);
-            this.remove();
+            this.level.explode(this, this.getX(), getY(), getZ(), 0.5F, Explosion.BlockInteraction.DESTROY);
+            this.remove(RemovalReason.KILLED);
         }
         if(this.isLimitedLifespan()) {
             if (this.tickCount >= this.getMaxOperativeTick()) {
@@ -169,7 +170,7 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
     @Override
     protected void tickDeath() {
-        Vector3d movement = this.getDeltaMovement();
+        Vec3 movement = this.getDeltaMovement();
         double d0 = this.getX() + movement.x;
         double d1 = this.getY() + movement.y;
         double d2 = this.getZ() + movement.z;
@@ -177,14 +178,14 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
         if(this.isOnGround() || isInWater()) {
             this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, Explosion.Mode.DESTROY);
-            this.remove();
+            this.remove(RemovalReason.KILLED);
         }
 
     }
 
     public void die(DamageSource cause) {
         if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, cause)) return;
-        if (!this.removed && !this.dead) {
+        if (!this.dead) {
             Entity entity = cause.getEntity();
             LivingEntity livingentity = this.getKillCredit();
             if (this.deathScore >= 0 && livingentity != null) {
@@ -203,9 +204,9 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
 
             this.dead = true;
             this.getCombatTracker().recheckStatus();
-            if (this.level instanceof ServerWorld) {
+            if (this.level instanceof ServerLevel) {
                 if (entity != null) {
-                    entity.killed((ServerWorld) this.level, this);
+                    entity.killed((ServerLevel) this.level, this);
                 }
             }
 
@@ -219,7 +220,7 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     }
 
     @Override
-    public void travel(Vector3d travelVector) {
+    public void travel(@NotNull Vec3 travelVector) {
         super.travel(travelVector);
         if (this.isOnGround())
         {
@@ -233,9 +234,8 @@ public abstract class AbstractEntityPlanes extends CreatureEntity implements IAn
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
-        NetworkHooks.getEntitySpawningPacket(this);
-        return super.getAddEntityPacket();
+    public Packet<?> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override

@@ -2,9 +2,9 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.libs.utils.ParticleUtils;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;

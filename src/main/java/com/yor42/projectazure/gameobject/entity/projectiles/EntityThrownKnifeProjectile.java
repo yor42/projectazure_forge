@@ -8,8 +8,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -18,7 +17,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -32,15 +32,15 @@ public class EntityThrownKnifeProjectile extends AbstractArrowEntity implements 
     private static final DataParameter<Boolean> SHOULDRETURN = EntityDataManager.defineId(EntityThrownKnifeProjectile.class, DataSerializers.BOOLEAN);
     private int previousDamage = 1;
     boolean dealtDamage = false;
-    public EntityThrownKnifeProjectile(EntityType<EntityThrownKnifeProjectile> type, World p_i48546_2_) {
+    public EntityThrownKnifeProjectile(EntityType<EntityThrownKnifeProjectile> type, Level p_i48546_2_) {
         super(type, p_i48546_2_);
     }
 
-    public EntityThrownKnifeProjectile(EntityType<EntityThrownKnifeProjectile> type, LivingEntity shooter, World world, ItemStack stack) {
+    public EntityThrownKnifeProjectile(EntityType<EntityThrownKnifeProjectile> type, LivingEntity shooter, Level world, ItemStack stack) {
         this(type, shooter, world, stack, false);
     }
 
-    protected EntityThrownKnifeProjectile(EntityType<EntityThrownKnifeProjectile> type, LivingEntity shooter, World world, ItemStack stack, boolean shouldReturnToOwner) {
+    protected EntityThrownKnifeProjectile(EntityType<EntityThrownKnifeProjectile> type, LivingEntity shooter, Level world, ItemStack stack, boolean shouldReturnToOwner) {
         super(type, shooter, world);
         this.previousDamage = stack.getDamageValue();
         this.entityData.set(SHOULDRETURN, shouldReturnToOwner);
@@ -90,7 +90,7 @@ public class EntityThrownKnifeProjectile extends AbstractArrowEntity implements 
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT comp) {
+    public void addAdditionalSaveData(CompoundTag comp) {
         super.save(comp);
         comp.putBoolean("shouldreturn", this.entityData.get(SHOULDRETURN));
         comp.putBoolean("dealtdamage", this.dealtDamage);
@@ -98,7 +98,7 @@ public class EntityThrownKnifeProjectile extends AbstractArrowEntity implements 
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(SHOULDRETURN, compound.getBoolean("shouldreturn"));
         this.dealtDamage = compound.getBoolean("dealtdamage");

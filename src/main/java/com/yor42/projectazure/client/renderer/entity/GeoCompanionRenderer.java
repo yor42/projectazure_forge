@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerModelPart;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ChatFormatting;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -37,7 +37,7 @@ public abstract class GeoCompanionRenderer<T extends LivingEntity & IAnimatable>
             matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(this.getDeathMaxRotation(entityLiving)));
             matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(270.0F));
         } else if (entityLiving.hasCustomName() || entityLiving instanceof PlayerEntity) {
-            String s = TextFormatting.stripFormatting(entityLiving.getName().getString());
+            String s = ChatFormatting.stripFormatting(entityLiving.getName().getString());
             if (("Dinnerbone".equals(s) || "Grumm".equals(s)) && (!(entityLiving instanceof PlayerEntity)
                     || ((PlayerEntity) entityLiving).isModelPartShown(PlayerModelPart.CAPE))) {
                 matrixStackIn.translate(0.0D, (double) (entityLiving.getBbHeight() + 0.1F), 0.0D);

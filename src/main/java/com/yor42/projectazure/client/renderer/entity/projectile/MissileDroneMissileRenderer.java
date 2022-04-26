@@ -1,10 +1,10 @@
 package com.yor42.projectazure.client.renderer.entity.projectile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.entity.misc.modelProjectileDroneMissile;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -31,10 +31,10 @@ public class MissileDroneMissileRenderer extends EntityRenderer<EntityMissileDro
     }
 
     @Override
-    public void render(EntityMissileDroneMissile entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(EntityMissileDroneMissile entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         Model model = new modelProjectileDroneMissile();
-        IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
+        VertexConsumer  builder = bufferIn.getBuffer(RENDER_TYPE);
         matrixStackIn.pushPose();
         matrixStackIn.translate(0,-0.7,0);
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));

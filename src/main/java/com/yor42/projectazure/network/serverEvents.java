@@ -6,22 +6,22 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
 import net.minecraft.world.server.ServerWorld;
 
 import static com.yor42.projectazure.libs.Constants.StarterList;
 
 public class serverEvents {
     public static void spawnStarter(ServerPlayerEntity player, int StarterID){
-        World world = player.level;
+        Level world = player.level;
         EntityType<?> entitytype;
 
         if(!world.isClientSide)
         {
             entitytype = StarterList[StarterID];
             if (entitytype == null){
-                player.sendMessage(new TranslationTextComponent("message.invalidstarter"), player.getUUID());
+                player.sendMessage(new TranslatableComponent("message.invalidstarter"), player.getUUID());
             }
             else{
                 EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerWorld)world, player.getUseItem(), player, player.blockPosition(), SpawnReason.SPAWN_EGG, false, false);

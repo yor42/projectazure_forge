@@ -1,6 +1,5 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
-import com.yor42.projectazure.gameobject.entity.companion.ships.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityYamato;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;

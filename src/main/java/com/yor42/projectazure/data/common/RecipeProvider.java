@@ -13,7 +13,7 @@ import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.data.*;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;

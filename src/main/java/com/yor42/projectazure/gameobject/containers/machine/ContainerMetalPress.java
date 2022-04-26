@@ -2,14 +2,14 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -22,11 +22,11 @@ public class ContainerMetalPress extends Container {
 
     private final IIntArray field;
 
-    public ContainerMetalPress(int id, PlayerInventory inventory, PacketBuffer buffer) {
+    public ContainerMetalPress(int id, Inventory inventory, PacketBuffer buffer) {
         this(id, inventory, new ItemStackHandler(3), new IntArray(4));
     }
 
-    public ContainerMetalPress(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
+    public ContainerMetalPress(int id, Inventory inventory, ItemStackHandler Inventory, IIntArray field) {
         super(METAL_PRESS_CONTAINER_TYPE, id);
 
         this.addSlot(new SlotItemHandler(Inventory, 0, 41, 35));

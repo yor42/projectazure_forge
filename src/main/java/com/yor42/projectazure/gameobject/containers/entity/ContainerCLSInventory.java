@@ -2,16 +2,17 @@ package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.inventory.container.MenuProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -21,13 +22,13 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.setup.register.registerManager.CLS_INVENTORY_TYPE;
 
-public class ContainerCLSInventory extends Container {
+public class ContainerCLSInventory extends AbstractContainerMenu {
 
     public final AbstractEntityCompanion companion;
-    public ContainerCLSInventory(int id, PlayerInventory inventory, PacketBuffer data) {
+    public ContainerCLSInventory(int id, Inventory inventory, PacketBuffer data) {
         this(id, inventory, new ItemStackHandler(16), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
-    public ContainerCLSInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
+    public ContainerCLSInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(CLS_INVENTORY_TYPE, id);
 
         this.companion = companion;
@@ -95,7 +96,7 @@ public class ContainerCLSInventory extends Container {
         return false;
     }
 
-    public static class Supplier implements INamedContainerProvider {
+    public static class Supplier implements MenuProvider {
 
         AbstractEntityCompanion companion;
 
@@ -104,13 +105,13 @@ public class ContainerCLSInventory extends Container {
         }
 
         @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.companioninventory");
+        public Component getDisplayName() {
+            return new TranslatableComponent("gui.companioninventory");
         }
 
         @Nullable
         @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
+        public Container createMenu(int openContainerId, Inventory inventory, PlayerEntity player) {
             return new ContainerCLSInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), this.companion);
         }
     }

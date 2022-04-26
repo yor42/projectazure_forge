@@ -11,8 +11,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,7 +34,7 @@ public class guiStarterSpawn extends Screen {
 
     private final int buttonWidth = 59;
 
-    public guiStarterSpawn(ITextComponent titleIn) {
+    public guiStarterSpawn(Component titleIn) {
         super(titleIn);
     }
 
@@ -56,8 +56,8 @@ public class guiStarterSpawn extends Screen {
                     Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex));
                     this.onClose();
                 });
-                this.addButton(button);
-                        //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslationTextComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
+                this.addWidget(button);
+                        //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslatableComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
             } /*else {
                 Button button = (Button) this.buttons.get(index);
                 //button.setMessage(getSkillEntryFormattedText(skill, entry.getValue()));
@@ -115,7 +115,7 @@ public class guiStarterSpawn extends Screen {
     }
 
     private void drawForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        drawString(matrixStack, this.font, new TranslationTextComponent("gui.selectstarter.title"), this.x+18, this.y+10, 14085119);
+        drawString(matrixStack, this.font, new TranslatableComponent("gui.selectstarter.title"), this.x+18, this.y+10, 14085119);
     }
 
     public int getBackgroundLeft(){
@@ -127,7 +127,7 @@ public class guiStarterSpawn extends Screen {
     }
 
     public String getNarrationMessage() {
-        return "Hello World";
+        return "Hello Level";
     }
 
     private buttonStarterSelect createButton(int x, int y, int width, int height, int idx, EntityType<?> type, Button.IPressable onPress) {

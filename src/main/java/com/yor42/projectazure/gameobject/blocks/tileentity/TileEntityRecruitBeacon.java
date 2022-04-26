@@ -12,18 +12,18 @@ import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -157,7 +157,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
             if(!isDupe) {
                 //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
                 if (SolarApocalypse.isSunlightDangerous((ServerWorld) this.level)) {
-                    BlockPos.Mutable CandidatePos = this.worldPosition.mutable();
+                    BlockPos.MutableBlockPos CandidatePos = this.worldPosition.mutable();
                     CandidatePos = CandidatePos.move(this.level.getBlockState(this.worldPosition).getValue(FACING));
                     blockpos = CandidatePos;
                 } else {
@@ -200,7 +200,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+    protected <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         return PlayState.STOP;
     }
 
@@ -260,12 +260,12 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("recruit_beacon");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("recruit_beacon");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected Container createMenu(int id, Inventory player) {
         return new ContainerRecruitBeacon(id, player, this.inventory, this.getFields());
     }
 }

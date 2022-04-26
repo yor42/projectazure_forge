@@ -8,12 +8,12 @@ import com.yor42.projectazure.libs.utils.ItemStackWithChance;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

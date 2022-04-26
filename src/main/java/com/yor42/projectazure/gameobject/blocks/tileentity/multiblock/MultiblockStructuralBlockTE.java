@@ -1,16 +1,16 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -36,7 +36,7 @@ public abstract class MultiblockStructuralBlockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+    protected <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         return PlayState.STOP;
     }
 
@@ -85,8 +85,8 @@ public abstract class MultiblockStructuralBlockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new StringTextComponent("Never Gonna Give you up");
+    protected Component getDefaultName() {
+        return new TextComponent("Never Gonna Give you up");
     }
 
     @Override
@@ -95,7 +95,7 @@ public abstract class MultiblockStructuralBlockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected Container createMenu(int id, Inventory player) {
         return null;
     }
 

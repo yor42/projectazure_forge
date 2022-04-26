@@ -12,18 +12,18 @@ import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -70,7 +70,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (worldIn == null) return; // thanks JEI very cool
 
@@ -78,23 +78,23 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         int fluidAmount = tank.getFluidInTank(0).getAmount();
         int fluidCapacity = tank.getTankCapacity(0);
         float fillRatio = (float) fluidAmount / fluidCapacity;
-        TextFormatting color;
+        ChatFormatting color;
         if (fillRatio < 0.3F) {
-            color = TextFormatting.RED;
+            color = ChatFormatting.RED;
         } else if (fillRatio < 0.6F) {
-            color = TextFormatting.YELLOW;
+            color = ChatFormatting.YELLOW;
         } else {
-            color = TextFormatting.GREEN;
+            color = ChatFormatting.GREEN;
         }
-        tooltip.add(new StringTextComponent("HP: " + getCurrentHP(stack) + "/" + this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingfuel").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(fluidAmount + "/" + fluidCapacity).append("mb").withStyle(color)));
-        tooltip.add(new TranslationTextComponent("rigging_valid_on.tooltip").append(" ").append(new TranslationTextComponent(this.validclass.getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(8900331))));
+        tooltip.add(new TextComponent("HP: " + getCurrentHP(stack) + "/" + this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingfuel").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(fluidAmount + "/" + fluidCapacity).append("mb").withStyle(color)));
+        tooltip.add(new TranslatableComponent("rigging_valid_on.tooltip").append(" ").append(new TranslatableComponent(this.validclass.getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(8900331))));
         if (worldIn.isClientSide) {
             TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, MultiInvUtil.getCap(stack), worldIn, tooltip, flagIn));
         }
 
         if (flagIn.isAdvanced()) {
-            tooltip.add(new StringTextComponent(stack.getOrCreateTag().toString()));
+            tooltip.add(new TextComponent(stack.getOrCreateTag().toString()));
         }
     }
 
@@ -103,20 +103,20 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, IMultiInventory inventories, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn){
+    public void addInformationAfterShift(ItemStack stack, IMultiInventory inventories, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn){
         Color CategoryColor = Color.parseColor("#6bb82d");
         for(int i = 0; i< inventories.getInventoryCount(); i++){
             IItemHandler Equipments = inventories.getInventory(i);
             enums.SLOTTYPE slottype = enums.SLOTTYPE.values()[i];
             //not really needed but its here to make mc to not add header of equipment that isnt supported by rigging
             if(Equipments.getSlots()>0) {
-                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
+                tooltip.add((new TextComponent("===").append(new TranslatableComponent(slottype.getName()).append(new TextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
                 for (int j = 0; j < Equipments.getSlots(); j++) {
                     ItemStack currentstack = Equipments.getStackInSlot(j);
                     if (currentstack.getItem() instanceof ItemEquipmentBase)
                         tooltip.add(currentstack.getHoverName().plainCopy().append(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.withColor(getHPColor(currentstack))));
                     else {
-                        tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(Color.fromRgb(7829367))));
+                        tooltip.add((new TextComponent("-").append(new TranslatableComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(Color.fromRgb(7829367))));
                     }
                 }
             }
@@ -125,7 +125,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, @Nonnull Hand hand) {
+    public ActionResult<ItemStack> use(Level world, PlayerEntity player, @Nonnull Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if(!world.isClientSide()) {
             if (player.isShiftKeyDown()) {
@@ -172,7 +172,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new RiggingItemCapabilityProvider(stack, null, this.getFuelTankCapacity(), this.createInventories(stack));
     }
 
@@ -205,6 +205,6 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @OnlyIn(Dist.CLIENT)
-    public abstract void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch);
+    public abstract void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch);
 
 }

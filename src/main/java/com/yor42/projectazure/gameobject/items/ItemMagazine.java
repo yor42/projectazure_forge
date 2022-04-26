@@ -4,14 +4,14 @@ import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.CreativeModeTab;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.ChatFormatting;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -48,7 +48,7 @@ public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloa
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         super.fillItemCategory(group, items);
         if (this.allowdedIn(group)) {
             ItemStack stack = new ItemStack(this);
@@ -58,20 +58,20 @@ public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloa
     }
 
     @Override
-    public void addInformationAfterShift(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.addInformationAfterShift(stack, worldIn, tooltip, flagIn);
-        TextFormatting color;
+        ChatFormatting color;
 
         if(((float)getRemainingAmmo(stack)/this.Ammocount)<0.3F){
-            color = TextFormatting.RED;
+            color = ChatFormatting.RED;
         }
         else if(((float)getRemainingAmmo(stack)/this.Ammocount)<0.6F){
-            color = TextFormatting.YELLOW;
+            color = ChatFormatting.YELLOW;
         }
         else{
-            color = TextFormatting.GREEN;
+            color = ChatFormatting.GREEN;
         }
 
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.Ammocount).withStyle(color)));
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingammo").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(getRemainingAmmo(stack)+"/"+this.Ammocount).withStyle(color)));
     }
 }

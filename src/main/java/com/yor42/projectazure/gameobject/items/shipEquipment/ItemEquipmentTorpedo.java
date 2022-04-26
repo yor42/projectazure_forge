@@ -4,9 +4,9 @@ import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -33,23 +33,23 @@ public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements 
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        TextFormatting color;
+        ChatFormatting color;
 
         if(((float)getRemainingAmmo(stack)/this.getMaxAmmo())<0.3F){
-            color = TextFormatting.RED;
+            color = ChatFormatting.RED;
         }
         else if(((float)getRemainingAmmo(stack)/this.getMaxAmmo())<0.6F){
-            color = TextFormatting.YELLOW;
+            color = ChatFormatting.YELLOW;
         }
         else{
-            color = TextFormatting.GREEN;
+            color = ChatFormatting.GREEN;
         }
 
         boolean isreloadable = this.isreloadable;
-        tooltip.add(new TranslationTextComponent("item.tooltip.remainingammo").append(": ").withStyle(TextFormatting.GRAY).append(new StringTextComponent(getRemainingAmmo(stack)+"/"+this.getMaxAmmo()).withStyle(color)));
-        tooltip.add(new TranslationTextComponent(isreloadable? "item.tooltip.torpedo_reloadable": "item.tooltip.torpedo_not_reloadable" ).setStyle(Style.EMPTY.withColor(Color.fromRgb(isreloadable? 0x00FF00:0xff0000))));
+        tooltip.add(new TranslatableComponent("item.tooltip.remainingammo").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(getRemainingAmmo(stack)+"/"+this.getMaxAmmo()).withStyle(color)));
+        tooltip.add(new TranslatableComponent(isreloadable? "item.tooltip.torpedo_reloadable": "item.tooltip.torpedo_not_reloadable" ).setStyle(Style.EMPTY.withColor(Color.fromRgb(isreloadable? 0x00FF00:0xff0000))));
     }
 
     @Override

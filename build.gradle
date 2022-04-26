@@ -1,23 +1,26 @@
 buildscript {
     repositories {
+        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath "org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin:1.1.1"
     }
 }
-
-apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.jetbrains.gradle.plugin.idea-ext'
 
-version = '0.5.7'
+version = '1.18.2-0.0.1'
 group = 'com.yor42.projecrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = project.archive_basename
-
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
@@ -26,7 +29,7 @@ minecraft {
     // stable_#            Stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'official', version: '1.18.2'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -38,7 +41,11 @@ minecraft {
             workingDirectory project.file('run')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
@@ -57,7 +64,7 @@ minecraft {
             workingDirectory project.file('run')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
@@ -71,14 +78,39 @@ minecraft {
                 }
             }
         }
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            workingDirectory project.file('run')
 
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            property 'forge.logging.console.level', 'debug'
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'examplemod'
+
+            mods {
+                projectazure {
+                    source sourceSets.main
+                }
+            }
+        }
         data {
             workingDirectory project.file('run')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.markers', 'REGISTRIES'
 
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
@@ -117,6 +149,9 @@ repositories {
     maven { // TOP
         name 'tterrag maven'
         url "https://maven.tterrag.com/"
+        metadataSources {
+            artifact()
+        }
     }
 
     flatDir {
@@ -128,22 +163,19 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.23'
+    minecraft "net.minecraftforge:forge:${mc_version}-${version_forge}"
 
     //Geckoilib
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.57')
-    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
-    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+    implementation fg.deobf('software.bernie.geckolib:geckolib-1.18-forge:3.0.15')
+    implementation "mcjty.theoneprobe:theoneprobe:${top_version}"
 
-    compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
+    //compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
     //compileOnly fg.deobf('com.chaosthedude:realistictorches:1.16.5:3.1.2')
 
     // JEI
     if (project.hasProperty('jei_version')) {
-        // compile against the JEI API but do not include it at runtime
-        compileOnly fg.deobf("mezz.jei:jei-${project.jei_version}:api")
-        // at runtime, use the full JEI jar
-        runtimeOnly fg.deobf("mezz.jei:jei-${project.jei_version}")
+        compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
+        runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
     }
 
     compileOnly "mekanism:Mekanism:${mekanism_version}:api"

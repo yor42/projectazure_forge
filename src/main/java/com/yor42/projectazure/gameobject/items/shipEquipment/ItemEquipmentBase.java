@@ -4,10 +4,10 @@ import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -68,10 +68,10 @@ public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnim
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
-        tooltip.add(new StringTextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
-        tooltip.add(new TranslationTextComponent("item.tooltip.equipmenttype").append(": ").withStyle(TextFormatting.GRAY).append(new TranslationTextComponent(this.slot.getName()).withStyle(TextFormatting.BLUE)));
+        tooltip.add(new TextComponent("HP: "+ getCurrentHP(stack)+"/"+this.getMaxHP()).setStyle(Style.EMPTY.withColor(getHPColor(stack))));
+        tooltip.add(new TranslatableComponent("item.tooltip.equipmenttype").append(": ").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent(this.slot.getName()).withStyle(ChatFormatting.BLUE)));
     }
 
     public ResourceLocation getTexture(){

@@ -3,11 +3,12 @@ package com.yor42.projectazure.client;
 import com.yor42.projectazure.client.gui.*;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 public class ClientRegisterManager {
 
     public static void registerScreen(){
-        ScreenManager.register(registerManager.SHIP_CONTAINER.get(), GuiALInventory::new);
+        MenuScreens.register(registerManager.SHIP_CONTAINER.get(), GuiALInventory::new);
         ScreenManager.register(registerManager.RIGGING_INVENTORY.get(), guiRiggingInventory::new);
         ScreenManager.register(registerManager.BA_CONTAINER.get(), guiBAInventory::new);
         ScreenManager.register(registerManager.GFL_CONTAINER.get(), GuiGFLInventory::new);

@@ -1,21 +1,20 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -23,16 +22,16 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerAKNInventory extends Container {
+public class ContainerAKNInventory extends AbstractContainerMenu {
 
     public final AbstractEntityCompanion companion;
 
     //C l i e n t
-    public ContainerAKNInventory(int id, PlayerInventory inventory, PacketBuffer data) {
+    public ContainerAKNInventory(int id, Inventory inventory, FriendlyByteBuf data) {
         this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 
-    public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
+    public ContainerAKNInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(registerManager.AKN_CONTAINER.get(), id);
         this.companion = companion;
         //mainhand
@@ -95,11 +94,11 @@ public class ContainerAKNInventory extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
-    public static class Supplier implements INamedContainerProvider {
+    public static class Supplier implements MenuProvider {
 
         AbstractEntityCompanion companion;
 
@@ -108,18 +107,18 @@ public class ContainerAKNInventory extends Container {
         }
 
         @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.companioninventory");
+        public Component getDisplayName() {
+            return new TranslatableComponent("gui.companioninventory");
         }
 
         @Nullable
         @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
+        public AbstractContainerMenu createMenu(int openContainerId, Inventory inventory, Player player) {
             return new ContainerAKNInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), companion);
         }
     }
 
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

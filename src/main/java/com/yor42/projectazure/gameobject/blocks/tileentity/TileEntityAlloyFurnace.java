@@ -7,26 +7,23 @@ import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -34,7 +31,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class TileEntityAlloyFurnace extends LockableTileEntity implements INamedContainerProvider, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
+public class TileEntityAlloyFurnace extends BlockEntity{
 
     ItemStackHandler inventory = new ItemStackHandler(4);
     private int burnTime;
@@ -80,7 +77,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     };
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
-    protected final IRecipeType<AlloyingRecipe> recipeType = registerRecipes.Types.ALLOYING;
+    protected final RecipeType<AlloyingRecipe> recipeType = registerRecipes.Types.ALLOYING;
 
     public TileEntityAlloyFurnace() {
         super(registerTE.ALLOY_FURNACE.get());
@@ -90,7 +87,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
         return this.burnTime > 0;
     }
 
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
         this.burnTime = nbt.getInt("BurnTime");
@@ -99,7 +96,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
 
         //This is where forge kicks in
         this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2));
-        CompoundNBT compoundnbt = nbt.getCompound("RecipesUsed");
+        CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
 
         for(String s : compoundnbt.getAllKeys()) {
             this.recipes.put(new ResourceLocation(s), compoundnbt.getInt(s));
@@ -107,13 +104,13 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
 
     }
 
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("CookTime", this.cookTime);
         compound.putInt("CookTimeTotal", this.cookTimeTotal);
         compound.put("inventory", this.inventory.serializeNBT());
-        CompoundNBT compoundnbt = new CompoundNBT();
+        CompoundTag compoundnbt = new CompoundTag();
         this.recipes.forEach((recipeId, craftedAmount) -> {
             compoundnbt.putInt(recipeId.toString(), craftedAmount);
         });
@@ -122,12 +119,12 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("alloy_furnace");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("alloy_furnace");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected Container createMenu(int id, Inventory player) {
         return new ContainerAlloyFurnace(id, player, this.inventory, this.machineInfo);
     }
     private final LazyOptional<ItemStackHandler> INVENTORY = LazyOptional.of(()->this.inventory);

@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.misc;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -19,13 +19,13 @@ public class DamageSourcesWithRandomMessages extends DamageSource {
 
     @Nonnull
     @Override
-    public ITextComponent getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
+    public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
 
         int randomMessage = new Random().nextInt(MessageCounts-1);
 
         LivingEntity livingentity = entityLivingBaseIn.getKillCredit();
         String s = "death.attack." + this.msgId+"_"+randomMessage;
         String s1 = s + ".player";
-        return livingentity != null ? new TranslationTextComponent(s1, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslationTextComponent(s, entityLivingBaseIn.getDisplayName());
+        return livingentity != null ? new TranslatableComponent(s1, entityLivingBaseIn.getDisplayName(), livingentity.getDisplayName()) : new TranslatableComponent(s, entityLivingBaseIn.getDisplayName());
     }
 }

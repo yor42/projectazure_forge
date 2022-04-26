@@ -4,15 +4,18 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -95,13 +98,13 @@ public class ProjectAzurePlayerCapability {
     }
 
     public static ICapabilityProvider createNewCapability(final PlayerEntity player) {
-        return new ICapabilitySerializable<CompoundNBT>() {
+        return new ICapabilitySerializable<CompoundTag>() {
 
             final ProjectAzurePlayerCapability inst = new ProjectAzurePlayerCapability(player);
             final LazyOptional<ProjectAzurePlayerCapability> opt = LazyOptional.of(() -> inst);
 
             @Override
-            public void deserializeNBT(CompoundNBT nbt) {
+            public void deserializeNBT(CompoundTag nbt) {
                 PA_PLAYER_CAPABILITY.getStorage().readNBT(PA_PLAYER_CAPABILITY, inst, null, nbt);
             }
 
@@ -112,14 +115,14 @@ public class ProjectAzurePlayerCapability {
             }
 
             @Override
-            public CompoundNBT serializeNBT() {
-                return (CompoundNBT) PA_PLAYER_CAPABILITY.getStorage().writeNBT(PA_PLAYER_CAPABILITY, inst, null);
+            public CompoundTag serializeNBT() {
+                return (CompoundTag) PA_PLAYER_CAPABILITY.getStorage().writeNBT(PA_PLAYER_CAPABILITY, inst, null);
             }
         };
     }
 
-    public CompoundNBT serializeNBT(){
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag serializeNBT(){
+        CompoundTag nbt = new CompoundTag();
         nbt.putInt("mainHandDelay", this.getMainHandFireDelay());
         nbt.putInt("offHandDelay", this.getOffHandFireDelay());
         ListNBT entityList = new ListNBT();
@@ -130,13 +133,13 @@ public class ProjectAzurePlayerCapability {
         return nbt;
     }
 
-    public void deserializeNBT(CompoundNBT compound){
+    public void deserializeNBT(CompoundTag compound){
         this.setMainHandFireDelay(compound.getInt("mainHandDelay"));
         this.setMainHandFireDelay(compound.getInt("offHandDelay"));
         ListNBT entities = compound.getList("companions", 0);
         for(int i=0; i<entities.size(); i++){
-            CompoundNBT nbt = entities.getCompound(i);
-            World world = this.player.getCommandSenderWorld();
+            CompoundTag nbt = entities.getCompound(i);
+            Level world = this.player.getCommandSenderWorld();
             if(!world.isClientSide()){
                 ServerWorld server = (ServerWorld) world;
                 Entity entity = server.getEntity(nbt.getUUID("UUID"));
@@ -162,7 +165,7 @@ public class ProjectAzurePlayerCapability {
 
         @Override
         public void readNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side, INBT nbt) {
-            instance.deserializeNBT((CompoundNBT) nbt);
+            instance.deserializeNBT((CompoundTag) nbt);
         }
     }
 

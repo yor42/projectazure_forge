@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
@@ -10,15 +10,16 @@ import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -37,11 +38,11 @@ public abstract class AbstractMachineBlock extends AbstractContainerBlock{
 
     @Nullable
     @Override
-    public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
+    public abstract BlockEntity createTileEntity(BlockState state, IBlockReader world);
 
     @SuppressWarnings("deprecation")
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public ActionResultType use(BlockState state, Level worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (worldIn.isClientSide) {
             return ActionResultType.SUCCESS;
         } else {
@@ -50,7 +51,7 @@ public abstract class AbstractMachineBlock extends AbstractContainerBlock{
         }
     }
 
-    protected abstract void interactWith(World worldIn, BlockPos pos, PlayerEntity player);
+    protected abstract void interactWith(Level worldIn, BlockPos pos, Player player);
 
     public BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
@@ -77,9 +78,9 @@ public abstract class AbstractMachineBlock extends AbstractContainerBlock{
     }
 
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            TileEntity te = worldIn.getBlockEntity(pos);
+            BlockEntity te = worldIn.getBlockEntity(pos);
             if (te instanceof TileEntityMetalPress) {
                 InventoryHelper.dropContents(worldIn, pos, (TileEntityMetalPress) te);
             }

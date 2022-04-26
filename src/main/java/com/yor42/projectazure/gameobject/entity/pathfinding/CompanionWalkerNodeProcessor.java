@@ -24,7 +24,7 @@ public class CompanionWalkerNodeProcessor extends WalkNodeProcessor {
     }
 
     public static int createLadderPathPointFor(int PathPointID, PathPoint[] PathPoints, PathPoint origin, Function<BlockPos, PathPoint> PathPointGetter, IBlockReader getter, MobEntity mob) {
-        BlockPos.Mutable pos = new BlockPos.Mutable(origin.x, origin.y + 1, origin.z);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(origin.x, origin.y + 1, origin.z);
         if (getter.getBlockState(pos).isLadder(mob.level, pos, mob) || getter.getBlockState(pos.below()).isLadder(mob.level, pos.below(), mob)) {
             PathPoint node = PathPointGetter.apply(pos);
             if (node != null && !node.closed) {

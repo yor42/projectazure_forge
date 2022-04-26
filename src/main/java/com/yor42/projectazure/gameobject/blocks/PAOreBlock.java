@@ -7,7 +7,7 @@ import net.minecraft.block.OreBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.TranslatableComponent;
 
 public class PAOreBlock extends OreBlock {
 
@@ -27,6 +27,6 @@ public class PAOreBlock extends OreBlock {
 
     @Override
     public IFormattableTextComponent getName() {
-        return new TranslationTextComponent(material).append(" ").append(new TranslationTextComponent(resourceType.getName()));
+        return new TranslatableComponent(material).append(" ").append(new TranslatableComponent(resourceType.getName()));
     }
 }

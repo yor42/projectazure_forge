@@ -5,10 +5,10 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -50,7 +50,7 @@ public class DoGunAnimationPacket {
 
     public static void handle(final DoGunAnimationPacket message, final Supplier<NetworkEvent.Context> ctx){
         ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            World clientWorld = ClientUtils.getClientWorld();;
+            Level clientWorld = ClientUtils.getClientWorld();;
             Entity entity =  clientWorld.getEntity(message.PlayerID);
 
             if(entity instanceof PlayerEntity){

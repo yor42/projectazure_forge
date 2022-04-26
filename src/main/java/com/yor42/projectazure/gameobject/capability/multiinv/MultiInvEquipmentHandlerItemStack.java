@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 

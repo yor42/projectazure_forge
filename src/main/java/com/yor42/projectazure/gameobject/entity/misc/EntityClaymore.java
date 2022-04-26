@@ -11,16 +11,16 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.inventory.EquipmentSlot;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.HandSide;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -50,7 +50,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(EntityClaymore.class, DataSerializers.OPTIONAL_UUID);
     protected final AnimationFactory factory = new AnimationFactory(this);
 
-    public EntityClaymore(EntityType<? extends LivingEntity> type, World worldIn) {
+    public EntityClaymore(EntityType<? extends LivingEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -139,7 +139,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         UUID uuid;
         if (compound.hasUUID("Owner")) {
             uuid = compound.getUUID("Owner");
@@ -163,17 +163,17 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
     }
 
     @Override
-    public ItemStack getItemBySlot(EquipmentSlotType slotIn) {
+    public ItemStack getItemBySlot(EquipmentSlot slotIn) {
         return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack) {
+    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
 
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         if (this.getOwnerId() != null) {
             compound.putUUID("owner", this.getOwnerId());
         }

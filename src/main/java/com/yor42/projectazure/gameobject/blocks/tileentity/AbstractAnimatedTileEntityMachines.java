@@ -6,15 +6,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.IRecipeHolder;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
@@ -107,14 +107,14 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     protected abstract boolean canProcess(IRecipe<?> irecipe);
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.ProcessTime = nbt.getInt("processtime");
         this.totalProcessTime = nbt.getInt("totalprocesstime");
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("processtime", this.ProcessTime);
         compound.putInt("totalprocesstime", this.totalProcessTime);
@@ -124,7 +124,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        CompoundNBT syncTag = super.getUpdateTag();
+        CompoundTag syncTag = super.getUpdateTag();
         syncTag.putInt("progress", this.ProcessTime);
         syncTag.putInt("totalprogress", this.totalProcessTime);
         return new SUpdateTileEntityPacket(worldPosition, 1, syncTag);
@@ -133,7 +133,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
-        CompoundNBT syncTag = pkt.getTag();
+        CompoundTag syncTag = pkt.getTag();
         this.totalProcessTime = syncTag.getInt("totalprogress");
         this.ProcessTime = syncTag.getInt("progress");
     }

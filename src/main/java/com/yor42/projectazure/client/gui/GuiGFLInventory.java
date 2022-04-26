@@ -7,29 +7,28 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> implements IHasContainer<ContainerGFLInventory> {
+public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInventory> implements IHasContainer<ContainerGFLInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/gfl_inventory.png");
     private final AbstractEntityCompanion host;
     private final double affection, morale;
 
-    public GuiGFLInventory(ContainerGFLInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    public GuiGFLInventory(ContainerGFLInventory screenContainer, Inventory inv, Component titleIn) {
         super(screenContainer, inv, titleIn);
         this.host = screenContainer.companion;
         this.affection = this.host.getAffection();
@@ -94,13 +93,13 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
 
         String AffectionString = String.format("%,.2f", this.host.getAffection())+"/"+this.host.getmaxAffection();
         int affectionwidth = (int) ((this.font.width(AffectionString)+8)*scalerate);
-        this.font.draw(matrixStack, new StringTextComponent(AffectionString), (140-((float)affectionwidth/2))/scalerate, 77/scalerate, 0x242424);
+        this.font.draw(matrixStack, new TextComponent(AffectionString), (140-((float)affectionwidth/2))/scalerate, 77/scalerate, 0x242424);
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, (int) (((133)-((float)affectionwidth/2))/scalerate), (int) (77/scalerate), 203, 72, 7, 7);
 
         int textwidth = (int) (this.font.width(this.host.getDisplayName().getString())*scalerate);
         this.font.draw(matrixStack, this.host.getDisplayName(), (42-textwidth)/scalerate, 81/scalerate, 0x242424);
-        this.font.draw(matrixStack, new StringTextComponent("Lv."+this.host.getLevel()), 43/scalerate, 82/scalerate, 0x242424);
+        this.font.draw(matrixStack, new TextComponent("Lv."+this.host.getLevel()), 43/scalerate, 82/scalerate, 0x242424);
         matrixStack.popPose();
 
         matrixStack.pushPose();
@@ -108,12 +107,12 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         matrixStack.scale(scalerate,scalerate,scalerate);
         String MaxHP = "MAX "+(int)this.host.getMaxHealth();
         int maxHPLength = (int) (this.font.width(MaxHP)*scalerate);
-        ITextComponent GunClass = new TranslationTextComponent(this.host.getGunSpecialty().getName());
+        Component GunClass = new TranslatableComponent(this.host.getGunSpecialty().getName());
         int gunNameLength = (int) (this.font.width(GunClass.getString())*scalerate);
-        this.font.draw(matrixStack, new StringTextComponent(MaxHP), (89-maxHPLength)/scalerate, (float) (92.5/scalerate), 0x7e8552);
-        this.font.draw(matrixStack, new StringTextComponent("HP "+ (int) this.host.getHealth()), 48/scalerate, (float) (92.5/scalerate), 0x242424);
-        this.font.draw(matrixStack, new StringTextComponent("FD "+ this.host.getFoodStats().getFoodLevel()), 48/scalerate, (float) (98.5/scalerate), 0x242424);
-        this.font.draw(matrixStack, new StringTextComponent("MR "+ (int) this.host.getMorale()), 72/scalerate, (float) (98.5/scalerate), 0x242424);
+        this.font.draw(matrixStack, new TextComponent(MaxHP), (89-maxHPLength)/scalerate, (float) (92.5/scalerate), 0x7e8552);
+        this.font.draw(matrixStack, new TextComponent("HP "+ (int) this.host.getHealth()), 48/scalerate, (float) (92.5/scalerate), 0x242424);
+        this.font.draw(matrixStack, new TextComponent("FD "+ this.host.getFoodStats().getFoodLevel()), 48/scalerate, (float) (98.5/scalerate), 0x242424);
+        this.font.draw(matrixStack, new TextComponent("MR "+ (int) this.host.getMorale()), 72/scalerate, (float) (98.5/scalerate), 0x242424);
         this.font.draw(matrixStack, GunClass, (41-gunNameLength)/scalerate, 88.5F/scalerate, 0x242424);
         matrixStack.popPose();
     }
@@ -137,7 +136,7 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         Button homebutton = new ImageButton(this.leftPos+1, this.topPos+64, 14,14, homeModeX, 188, 14,TEXTURE, action->switchBehavior());
         Button itembutton = new ImageButton(this.leftPos+16, this.topPos+64, 14,14, itemModeX, 216, 14,TEXTURE, action->switchItemBehavior());
 
-        this.addButton(homebutton);
-        this.addButton(itembutton);
+        this.addWidget(homebutton);
+        this.addWidget(itembutton);
     }
 }

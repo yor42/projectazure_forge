@@ -1,7 +1,7 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class ResourceUtils {
 

@@ -1,26 +1,20 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.ICrossbowUser;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.RangedInteger;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
 
-public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRangedAttackMob & ICrossbowUser> extends Goal {
-    public static final RangedInteger PATHFINDING_DELAY_RANGE = new RangedInteger(20, 40);
+public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & RangedAttackMob & CrossbowAttackMob> extends Goal {
+    public static final UniformInt PATHFINDING_DELAY_RANGE = TimeUtil.rangeOfSeconds(1, 2);
     private final T mob;
     private CrossbowState crossbowState = CrossbowState.UNCHARGED;
     private final double speedModifier;
@@ -54,9 +48,9 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRange
     }
 
     private boolean isHoldingCrossbow() {
-        return this.mob.getMainHandItem().getItem() instanceof CrossbowItem;
+        return this.mob.getHand(MAIN).getItem() instanceof CrossbowItem;
     }
-    
+
     private boolean isValidTarget() {
         return this.mob.getTarget() != null && this.mob.getTarget().isAlive();
     }
@@ -186,12 +180,12 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRange
     }
 
     public static void setCharged(ItemStack p_220011_0_, boolean p_220011_1_) {
-        CompoundNBT compoundnbt = p_220011_0_.getOrCreateTag();
+        CompoundTag compoundnbt = p_220011_0_.getOrCreateTag();
         compoundnbt.putBoolean("Charged", p_220011_1_);
     }
 
     private static void addChargedProjectile(ItemStack p_220029_0_, ItemStack p_220029_1_) {
-        CompoundNBT compoundnbt = p_220029_0_.getOrCreateTag();
+        CompoundTag compoundnbt = p_220029_0_.getOrCreateTag();
         ListNBT listnbt;
         if (compoundnbt.contains("ChargedProjectiles", 9)) {
             listnbt = compoundnbt.getList("ChargedProjectiles", 10);
@@ -199,7 +193,7 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & IRange
             listnbt = new ListNBT();
         }
 
-        CompoundNBT compoundnbt1 = new CompoundNBT();
+        CompoundTag compoundnbt1 = new CompoundTag();
         p_220029_1_.save(compoundnbt1);
         listnbt.add(compoundnbt1);
         compoundnbt.put("ChargedProjectiles", listnbt);

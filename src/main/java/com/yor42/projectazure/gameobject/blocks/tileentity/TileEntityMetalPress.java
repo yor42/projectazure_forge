@@ -6,17 +6,17 @@ import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -110,17 +110,17 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     @Override
-    protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("metal_press");
+    protected Component getDefaultName() {
+        return new TranslatableComponent("metal_press");
     }
 
     @Override
-    protected Container createMenu(int id, PlayerInventory player) {
+    protected Container createMenu(int id, Inventory player) {
         return new ContainerMetalPress(id, player, this.inventory, this.fields);
     }
 
     @Override
-    protected <P extends TileEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
+    protected <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
         event.getController().transitionLengthTicks = 0;
         boolean flag = this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).getValue(ACTIVE);

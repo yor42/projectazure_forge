@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -13,7 +12,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -40,7 +40,7 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
     }
 
     @Override
-    public boolean matches(@Nonnull TileEntityCrystalGrowthChamber inv, @Nonnull World worldIn) {
+    public boolean matches(@Nonnull TileEntityCrystalGrowthChamber inv, @Nonnull Level worldIn) {
         return this.seed.test(inv.getItem(0)) && this.solution == inv.getSolutionTank().getFluid().getFluid() && inv.getSolutionTank().getFluid().getAmount()>0;
     }
 

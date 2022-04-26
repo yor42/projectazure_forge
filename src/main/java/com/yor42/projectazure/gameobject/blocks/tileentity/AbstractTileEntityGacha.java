@@ -8,9 +8,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +125,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
                     }
                 }
             } else {
-                starter.sendMessage(new TranslationTextComponent("machine.notenoughresource"), starter.getUUID());
+                starter.sendMessage(new TranslatableComponent("machine.notenoughresource"), starter.getUUID());
             }
         }
     }
@@ -231,7 +231,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     protected boolean canProcess(){return true;};
 
     @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         super.save(compound);
         compound.putInt("processtime", this.ProcessTime);
         compound.putInt("totalprocesstime", this.totalProcessTime);
@@ -249,7 +249,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
+    public void load(BlockState state, CompoundTag nbt) {
         super.load(state, nbt);
         this.ProcessTime = nbt.getInt("processtime");
         this.totalProcessTime = nbt.getInt("totalprocesstime");

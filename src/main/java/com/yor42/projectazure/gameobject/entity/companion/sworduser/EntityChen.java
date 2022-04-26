@@ -16,15 +16,15 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -48,7 +48,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         return enums.EntityType.OPERATOR;
     }
 
-    public EntityChen(EntityType<? extends TameableEntity> type, World worldIn) {
+    public EntityChen(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -248,7 +248,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
+            if(this.getItemBySlot(EquipmentSlot.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlot.MAINHAND) != ItemStack.EMPTY){
                 event.getController().setAnimation(builder.addAnimation("opendoorL", false));
             }
             else{

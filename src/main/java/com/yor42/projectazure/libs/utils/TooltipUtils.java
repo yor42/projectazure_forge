@@ -1,10 +1,9 @@
 package com.yor42.projectazure.libs.utils;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -19,12 +18,12 @@ import java.util.List;
  */
 public final class TooltipUtils {
     @OnlyIn(Dist.CLIENT)
-    public static ITextComponent getShiftInfoTooltip() {
-        ITextComponent shift = new StringTextComponent("[SHIFT]").withStyle(TextFormatting.YELLOW);
-        return new TranslationTextComponent("item.tooltip.shiftinfo", shift).withStyle(TextFormatting.GRAY);
+    public static net.minecraft.network.chat.Component getShiftInfoTooltip() {
+        MutableComponent shift = new net.minecraft.network.chat.TextComponent("[SHIFT]").withStyle(ChatFormatting.YELLOW);
+        return new TranslatableComponent("item.tooltip.shiftinfo", shift).withStyle(ChatFormatting.GRAY);
     }
     @OnlyIn(Dist.CLIENT)
-    public static void addOnShift(List<ITextComponent> tooltip, Runnable lambda) {
+    public static void addOnShift(List<net.minecraft.network.chat.Component> tooltip, Runnable lambda) {
         if (Screen.hasShiftDown()) {
             lambda.run();
         } else {

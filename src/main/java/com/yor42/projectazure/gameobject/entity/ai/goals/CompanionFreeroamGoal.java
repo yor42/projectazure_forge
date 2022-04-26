@@ -5,7 +5,7 @@ import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -80,7 +80,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
 
         if (this.entityCompanion.isWithinRestriction()) {
             homepos = this.entityCompanion.getRestrictCenter();
-            flag = this.entityCompanion.getCommandSenderWorld().dimension() == World.OVERWORLD && this.entityCompanion.blockPosition().closerThan(homepos, 32);
+            flag = this.entityCompanion.getCommandSenderWorld().dimension() == Level.OVERWORLD && this.entityCompanion.blockPosition().closerThan(homepos, 32);
         }
 
         originPosition = flag? homepos : this.entityCompanion.getStayCenterPos().get();

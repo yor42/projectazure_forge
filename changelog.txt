@@ -429,7 +429,7 @@ Build: 1.16.3-34.1.11 - Tue Oct 06 19:38:36 GMT 2020
 	richard:
 		Add back patches to Screen allowing for item tooltips to be auto wrapped again (#7378)
 		
-		Only deals with the methods receiving an ItemStack or ITextComponent(s), the methods that take IReorderingProcessor(s) are left alone.
+		Only deals with the methods receiving an ItemStack or Component(s), the methods that take IReorderingProcessor(s) are left alone.
 
 =========
 Build: 1.16.3-34.1.10 - Mon Oct 05 14:34:56 GMT 2020

@@ -35,11 +35,11 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
+import net.minecraft.core.BlockPos;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.brain.Brain;
@@ -48,11 +48,8 @@ import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,26 +57,33 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.EntityDataSerializers;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityEntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.TranslatableComponent;
 import net.minecraft.village.PointOfInterestType;
-import net.minecraft.world.*;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -115,35 +119,35 @@ import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
-public abstract class AbstractEntityCompanion extends TameableEntity implements ICrossbowUser, IAnimatable, IAnimationTickable {
+public abstract class AbstractEntityCompanion extends TamableAnimal implements CrossbowAttackMob, IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
 
-        private final EquipmentSlotType[] EQUIPMENTSLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
+        private final EquipmentSlot[] EQUIPMENTSLOTS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
         @Override
         public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-            EquipmentSlotType slottype;
+            EquipmentSlot slottype;
 
             switch (slot) {
                 case 1:
-                    slottype = EquipmentSlotType.OFFHAND;
+                    slottype = EquipmentSlot.OFFHAND;
                     break;
                 case 2:
-                    slottype = EquipmentSlotType.HEAD;
+                    slottype = EquipmentSlot.HEAD;
                     break;
                 case 3:
-                    slottype = EquipmentSlotType.CHEST;
+                    slottype = EquipmentSlot.CHEST;
                     break;
                 case 4:
-                    slottype = EquipmentSlotType.LEGS;
+                    slottype = EquipmentSlot.LEGS;
                     break;
                 case 5:
-                    slottype = EquipmentSlotType.FEET;
+                    slottype = EquipmentSlot.FEET;
                     break;
                 default:
-                    slottype = EquipmentSlotType.MAINHAND;
+                    slottype = EquipmentSlot.MAINHAND;
             }
             AbstractEntityCompanion.this.setItemSlot(slottype, stack);
         }
@@ -156,26 +160,26 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         @Nonnull
         @Override
         public ItemStack getStackInSlot(int slot) {
-            EquipmentSlotType slottype;
+            EquipmentSlot slottype;
 
             switch (slot) {
                 case 1:
-                    slottype = EquipmentSlotType.OFFHAND;
+                    slottype = EquipmentSlot.OFFHAND;
                     break;
                 case 2:
-                    slottype = EquipmentSlotType.HEAD;
+                    slottype = EquipmentSlot.HEAD;
                     break;
                 case 3:
-                    slottype = EquipmentSlotType.CHEST;
+                    slottype = EquipmentSlot.CHEST;
                     break;
                 case 4:
-                    slottype = EquipmentSlotType.LEGS;
+                    slottype = EquipmentSlot.LEGS;
                     break;
                 case 5:
-                    slottype = EquipmentSlotType.FEET;
+                    slottype = EquipmentSlot.FEET;
                     break;
                 default:
-                    slottype = EquipmentSlotType.MAINHAND;
+                    slottype = EquipmentSlot.MAINHAND;
             }
             return AbstractEntityCompanion.this.getItemBySlot(slottype);
         }
@@ -282,9 +286,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if (!super.startRiding(p_184205_1_, p_184205_2_)) {
             return false;
         } else {
-            if (p_184205_1_ instanceof BoatEntity) {
-                this.yRotO = p_184205_1_.yRot;
-                this.yRot = p_184205_1_.yRot;
+            if (p_184205_1_ instanceof Boat) {
+                this.yRotO = p_184205_1_.yRotO;
+                this.yBodyRotO = p_184205_1_.yRotO;
             }
 
             return true;
@@ -325,7 +329,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         protected void onLoad() {
             super.onLoad();
             for(int i=0; i<AbstractEntityCompanion.this.getSkillItemCount(); i++){
-                DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
+                EntityDataAccessor<ItemStack>[] stacks = new EntityDataAccessor[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
                 AbstractEntityCompanion.this.getEntityData().set(stacks[i], this.getStackInSlot(12+i));
             }
         }
@@ -368,52 +372,52 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected int StartedSpellAttackTimeStamp = -1;
 
     //I'd really like to get off from datamanager's wild ride.
-    protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> NONVANILLAMELEEATTACKDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> SKILLDELAYTICK = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Boolean> CHARGING_CROSSBOW = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> USING_SKILL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Float> MORALE = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Float> EXP = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Integer> LIMITBREAKLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> LEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> ANGRYTIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> INJURYCURETIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Float> AFFECTION = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Boolean> SITTING = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> CRITICALLYINJURED = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> OPENINGDOOR = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> MELEEATTACKING = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> USINGBOW = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Integer> MAXPATEFFECTCOUNT = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> PATEFFECTCOUNT = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> PAT_ANIMATION_TIME = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> QUESTIONABLE_INTERACTION_ANIMATION_TIME = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> INTERACTION_WARNING_COUNT = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Boolean> OATHED = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> PICKUP_ITEM = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> ISFREEROAMING = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Optional<BlockPos>> STAYPOINT = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
-    protected static final DataParameter<Optional<BlockPos>> HOMEPOS = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
-    protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
-    protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Boolean> ISUSINGGUN = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
-    protected static final DataParameter<Integer> HEAL_TIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<ItemStack> SKILL_ITEM_0 = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.ITEM_STACK);
-    protected static final DataParameter<ItemStack> SKILL_ITEM_1 = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.ITEM_STACK);
-    protected static final DataParameter<ItemStack> SKILL_ITEM_2 = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.ITEM_STACK);
-    protected static final DataParameter<ItemStack> SKILL_ITEM_3 = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.ITEM_STACK);
-    protected static final DataParameter<Integer> RELOAD_TIMER_MAINHAND = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> RELOAD_TIMER_OFFHAND = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> SPELLDELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityEntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> NONVANILLAMELEEATTACKDELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> SKILLDELAYTICK = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> CHARGING_CROSSBOW = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> USING_SKILL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Float> MORALE = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> EXP = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Integer> LIMITBREAKLEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> LEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> ANGRYTIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> INJURYCURETIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Float> AFFECTION = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Boolean> SITTING = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> CRITICALLYINJURED = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> OPENINGDOOR = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> MELEEATTACKING = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> USINGBOW = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Integer> MAXPATEFFECTCOUNT = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> PATEFFECTCOUNT = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> PATCOOLDOWN = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> PAT_ANIMATION_TIME = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> QUESTIONABLE_INTERACTION_ANIMATION_TIME = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> INTERACTION_WARNING_COUNT = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Boolean> OATHED = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> PICKUP_ITEM = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> ISFREEROAMING = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Optional<BlockPos>> STAYPOINT = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    protected static final EntityDataAccessor<Optional<BlockPos>> HOMEPOS = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    protected static final EntityDataAccessor<Float> VALID_HOME_DISTANCE = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Boolean> ISFORCEWOKENUP = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Boolean> ISUSINGGUN = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
+    protected static final EntityDataAccessor<Integer> HEAL_TIMER = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<ItemStack> SKILL_ITEM_0 = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<ItemStack> SKILL_ITEM_1 = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<ItemStack> SKILL_ITEM_2 = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<ItemStack> SKILL_ITEM_3 = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.ITEM_STACK);
+    protected static final EntityDataAccessor<Integer> RELOAD_TIMER_MAINHAND = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> RELOAD_TIMER_OFFHAND = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> FOODLEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES);
 
 
     public abstract enums.EntityType getEntityType();
-    protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
+    protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
         this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
@@ -530,14 +534,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 ItemStack itemstack = this.getInventory().getStackInSlot(i);
                 if ((!damageSource.isFire() || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {
                     int j = i;
-                    itemstack.hurtAndBreak((int) damage, this, (p_214023_1_) -> p_214023_1_.broadcastBreakEvent(EquipmentSlotType.byTypeAndIndex(EquipmentSlotType.Group.ARMOR, j)));
+                    itemstack.hurtAndBreak((int) damage, this, (p_214023_1_) -> p_214023_1_.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Group.ARMOR, j)));
                 }
             }
         }
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("spelldelay", this.getEntityData().get(SPELLDELAY));
         compound.putFloat("affection", this.entityData.get(AFFECTION));
@@ -585,7 +589,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("SwapIndexOffHand", this.ItemSwapIndexOffhand);
     }
 
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.getEntityData().set(SPELLDELAY, compound.getInt("spelldelay"));
         this.entityData.set(AFFECTION, compound.getFloat("affection"));
@@ -780,7 +784,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.setLimitBreakLv(0);
             this.addAffection(-20);
             ItemStack stack = new ItemStack(registerItems.STASIS_CRYSTAL.get());
-            CompoundNBT nbt = stack.getOrCreateTag();
+            CompoundTag nbt = stack.getOrCreateTag();
             nbt.putInt("cost", 10+this.getLevel());
             nbt.put("entity", this.serializeNBT());
             this.spawnAtLocation(stack);
@@ -1086,9 +1090,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.useItem.hurtAndBreak(i, this, (entity) -> entity.broadcastBreakEvent(hand));
                 if (this.useItem.isEmpty()) {
                     if (hand == MAIN_HAND) {
-                        this.setItemSlot(EquipmentSlotType.MAINHAND, ItemStack.EMPTY);
+                        this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                     } else {
-                        this.setItemSlot(EquipmentSlotType.OFFHAND, ItemStack.EMPTY);
+                        this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                     }
                     this.useItem = ItemStack.EMPTY;
                     this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.getRandom().nextFloat() * 0.4F);
@@ -1156,7 +1160,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         if (this.isWithinRestriction()) {
             homepos = this.getRestrictCenter();
-            flag = this.getCommandSenderWorld().dimension() == World.OVERWORLD && this.blockPosition().closerThan(homepos, 32);
+            flag = this.getCommandSenderWorld().dimension() == Level.OVERWORLD && this.blockPosition().closerThan(homepos, 32);
         }
 
         originPosition = flag? homepos : this.getStayCenterPos().get();
@@ -1377,7 +1381,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @MethodsReturnNonnullByDefault
-    public ItemStack eat(World WorldIn, ItemStack foodStack) {
+    public ItemStack eat(Level WorldIn, ItemStack foodStack) {
         this.getFoodStats().consume(foodStack.getItem(), foodStack);
         if(!this.getCommandSenderWorld().isClientSide()) {
             Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, foodStack));
@@ -1750,7 +1754,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
             //Very cheap fix to Datamanager not syncing
             for(int i=0; i<this.getSkillItemCount(); i++){
-                DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
+                EntityDataAccessor<ItemStack>[] stacks = new EntityDataAccessor[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
                 ItemStack serverSideItem = this.getInventory().getStackInSlot(12+i);
                 this.getEntityData().set(stacks[i], serverSideItem);
             }
@@ -1869,7 +1873,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setSkillItemSlotContent(int index, ItemStack stack){
-        DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
+        EntityDataAccessor<ItemStack>[] stacks = new EntityDataAccessor[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
         this.getInventory().setStackInSlot(12+index, stack);
         this.getEntityData().set(stacks[index], stack);
     }
@@ -1959,7 +1963,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void ShootArrow(LivingEntity target, float distanceFactor) {
         ItemStack itemstack = this.findArrow();
-        AbstractArrowEntity abstractarrowentity = this.fireArrow(itemstack, distanceFactor, this.getItemBySlot(EquipmentSlotType.MAINHAND));
+        AbstractArrowEntity abstractarrowentity = this.fireArrow(itemstack, distanceFactor, this.getItemBySlot(EquipmentSlot.MAINHAND));
         if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
             abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
         double d0 = target.getX() - this.getX();
@@ -2037,7 +2041,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public ItemStack getSkillItem(int index){
         if(this.getCommandSenderWorld().isClientSide){
-            DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
+            EntityDataAccessor<ItemStack>[] stacks = new EntityDataAccessor[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
             ItemStack stack = this.getEntityData().get(stacks[index]);
             return stack;
         }
@@ -2301,7 +2305,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
             else if (HeldItem instanceof ArmorItem || HeldItem instanceof TieredItem) {
                 ItemStack stack = player.getItemInHand(hand).copy();
-                EquipmentSlotType type = getEquipmentSlotForItem(stack);
+                EquipmentSlot type = getEquipmentSlotForItem(stack);
                 ItemStack EquippedStack = this.getItemBySlot(type).copy();
                 if (stack.canEquip(type, this)) {
                     this.setItemSlot(type, stack);
@@ -2344,7 +2348,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 return ActionResultType.SUCCESS;
             } else if (heldstacks.getItem() == registerItems.OATHRING.get()) {
                 if (this.getAffection() < 100 && !player.isCreative()) {
-                    player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUUID());
+                    player.sendMessage(new TranslatableComponent("entity.not_enough_affection"), this.getUUID());
                     return ActionResultType.FAIL;
                 } else {
                     if (!this.isOathed()) {
@@ -2379,7 +2383,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     return ActionResultType.SUCCESS;
                 }
             } else if (heldstacks.getItem() instanceof ItemCommandStick) {
-                CompoundNBT compound = heldstacks.getOrCreateTag();
+                CompoundTag compound = heldstacks.getOrCreateTag();
                 if (player.isShiftKeyDown()) {
                     if(!this.getCommandSenderWorld().isClientSide()) {
                         if (compound.contains("BedX") && compound.contains("BedY") && compound.contains("BedZ")) {
@@ -2402,23 +2406,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                         }
                                     }
                                     if(duplicatedComp == this){
-                                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_same_companion_same_bed", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]"), true);
+                                        player.displayClientMessage(new TranslatableComponent("message.commandstick.entity_bedpos_same_companion_same_bed", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]"), true);
                                     }
                                     else if(isBedDuplicate){
-                                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed_duplicate", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]", this.getDisplayName(), duplicatedComp.getDisplayName()), true);
+                                        player.displayClientMessage(new TranslatableComponent("message.commandstick.entity_bedpos_failed_duplicate", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]", this.getDisplayName(), duplicatedComp.getDisplayName()), true);
                                     }
                                     else {
                                         this.clearHomePos();
                                         this.setHomePos(BedPos);
-                                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_applied", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]", this.getDisplayName()), true);
+                                        player.displayClientMessage(new TranslatableComponent("message.commandstick.entity_bedpos_applied", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]", this.getDisplayName()), true);
                                     }
                                 }
                             } else {
-                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed", "["+ BedPos.getX()+", "+ BedPos.getY()+", "+ BedPos.getZ() +"]", this.getDisplayName()), true);
+                                player.displayClientMessage(new TranslatableComponent("message.commandstick.entity_bedpos_failed", "["+ BedPos.getX()+", "+ BedPos.getY()+", "+ BedPos.getZ() +"]", this.getDisplayName()), true);
                             }
                         } else if (this.hasHomePos()) {
                             this.clearHomePos();
-                            player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_cleared", this.getDisplayName()), true);
+                            player.displayClientMessage(new TranslatableComponent("message.commandstick.entity_bedpos_cleared", this.getDisplayName()), true);
                         }
                     }
                     return ActionResultType.CONSUME;
@@ -2644,7 +2648,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             if(orbEntity.throwTime <= 0 && this.expdelay <= 0){
                 this.take(orbEntity, 1);
                 this.expdelay = 2;
-                Map.Entry<EquipmentSlotType, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
+                Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
                 if (entry != null) {
                     ItemStack itemstack = entry.getValue();
                     if (!itemstack.isEmpty() && itemstack.isDamaged()) {
@@ -2664,7 +2668,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public boolean canBeLeashed(PlayerEntity player) {
         if(this.getOwner() == player){
-            player.displayClientMessage(new TranslationTextComponent("message.easteregg.leash"), true);
+            player.displayClientMessage(new TranslatableComponent("message.easteregg.leash"), true);
         }
         return false;
     }

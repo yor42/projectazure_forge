@@ -2,24 +2,29 @@ package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
 import com.yor42.projectazure.setup.register.registerBlocks;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -27,7 +32,7 @@ import java.util.Random;
 public class AlloyFurnaceBlock extends AbstractMachineBlock {
 
     public AlloyFurnaceBlock() {
-        super((AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).lightLevel(registerBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
+        super((BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).lightLevel(registerBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
     }
 
     @Override
@@ -37,25 +42,25 @@ public class AlloyFurnaceBlock extends AbstractMachineBlock {
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world){
+    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
         return new TileEntityAlloyFurnace();
     }
 
     @Override
-    public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult use(Level p_60665_, Player p_60666_, InteractionHand p_60667_, BlockHitResult p_60668_) {
         if (worldIn.isClientSide) {
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
-            this.interactWith(worldIn, pos, player);
-            return ActionResultType.CONSUME;
+            this.interactWith(worldIn, hit.getBlockPos(), player);
+            return InteractionResult.CONSUME;
         }
     }
 
-    public void interactWith(World worldIn, BlockPos pos, PlayerEntity player){
-        TileEntity TileentityAtPos = worldIn.getBlockEntity(pos);
-        if(TileentityAtPos instanceof TileEntityAlloyFurnace && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
+    public void interactWith(Level worldIn, BlockPos pos, Player player){
+        BlockEntity TileentityAtPos = worldIn.getBlockEntity(pos);
+        if(TileentityAtPos instanceof TileEntityAlloyFurnace && player instanceof ServerPlayer && !worldIn.isClientSide()){
             TileEntityAlloyFurnace TE = (TileEntityAlloyFurnace) TileentityAtPos;
-            NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
+            NetworkHooks.openGui((ServerPlayer) player, TE, TE::encodeExtraData);
             player.awardStat(Stats.INTERACT_WITH_FURNACE);
         }
     }
@@ -69,13 +74,13 @@ public class AlloyFurnaceBlock extends AbstractMachineBlock {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    public void animateTick(BlockState stateIn, Level worldIn, BlockPos pos, Random rand) {
         if (stateIn.getValue(ACTIVE)) {
             double d0 = (double)pos.getX() + 0.5D;
             double d1 = pos.getY();
             double d2 = (double)pos.getZ() + 0.5D;
             if (rand.nextDouble() < 0.1D) {
-                worldIn.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                worldIn.playLocalSound(d0, d1, d2, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
             }
 
             Direction direction = stateIn.getValue(FACING);
@@ -91,9 +96,9 @@ public class AlloyFurnaceBlock extends AbstractMachineBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            TileEntity te = worldIn.getBlockEntity(pos);
+            BlockEntity te = worldIn.getBlockEntity(pos);
             if (te instanceof TileEntityAlloyFurnace) {
                 InventoryHelper.dropContents(worldIn, pos, (TileEntityAlloyFurnace) te);
             }

@@ -11,10 +11,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -36,11 +36,11 @@ public class ModBusEventHandler {
     public void playerLogin(PlayerEvent.PlayerLoggedInEvent event){
         if (!event.getPlayer().level.isClientSide) {
 
-            CompoundNBT playerData = event.getPlayer().getPersistentData();
-            CompoundNBT data;
+            CompoundTag playerData = event.getPlayer().getPersistentData();
+            CompoundTag data;
 
             if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
-                data = new CompoundNBT();
+                data = new CompoundTag();
             } else {
                 data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
             }
@@ -57,7 +57,7 @@ public class ModBusEventHandler {
                 boolean isNecrom = player.getUUID().equals(NecromID);
 
                 ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
-                CompoundNBT nbt = cubeStack.getOrCreateTag();
+                CompoundTag nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
                 cubeStack.setTag(nbt);
                 player.inventory.setItem(player.inventory.getFreeSlot(), cubeStack);
@@ -89,11 +89,11 @@ public class ModBusEventHandler {
 
                 if(!stacks.isEmpty()){
                     ItemStack stack = new ItemStack(isDev? registerItems.DEVELOPER_BONUS.get():registerItems.CONTRIBUTOR_BONUS.get());
-                    CompoundNBT compound = stack.getOrCreateTag();
+                    CompoundTag compound = stack.getOrCreateTag();
                     compound.putUUID("owner", player.getUUID());
                     ListNBT stackList = new ListNBT();
                     for(Item item:stacks){
-                        CompoundNBT itemTag = new CompoundNBT();
+                        CompoundTag itemTag = new CompoundTag();
                         new ItemStack(item).save(itemTag);
                         stackList.add(itemTag);
                     }
@@ -107,7 +107,7 @@ public class ModBusEventHandler {
                 if(data.contains("carrying_companion")){
                     ListNBT list = data.getList("carrying_companion", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
                     for(int i = 0; i<list.size(); i++){
-                        CompoundNBT compound = list.getCompound(i);
+                        CompoundTag compound = list.getCompound(i);
                         Optional<Entity> entity = EntityType.create(compound, player.level);
                         entity.ifPresent((ent)->{
                             if(ent instanceof AbstractEntityCompanion){
@@ -130,7 +130,7 @@ public class ModBusEventHandler {
     public void PlayerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
         if (!event.getPlayer().level.isClientSide) {
             PlayerEntity player = event.getPlayer();
-            CompoundNBT playerData = event.getPlayer().getPersistentData();
+            CompoundTag playerData = event.getPlayer().getPersistentData();
             if(!player.getPassengers().isEmpty()){
                 ListNBT listnbt1 = new ListNBT();
 
@@ -139,7 +139,7 @@ public class ModBusEventHandler {
 
                         entity.stopRiding();
                         ((AbstractEntityCompanion) entity).setOrderedToSit(true);
-                        CompoundNBT compoundnbt = new CompoundNBT();
+                        CompoundTag compoundnbt = new CompoundTag();
                         if (entity.saveAsPassenger(compoundnbt)) {
                             listnbt1.add(compoundnbt);
                         }

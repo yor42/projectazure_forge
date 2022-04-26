@@ -5,15 +5,15 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion implements ISpellUser {
 
-    public AbstractCompanionMagicUser(EntityType<? extends TameableEntity> type, World worldIn) {
+    public AbstractCompanionMagicUser(EntityType<? extends TameableEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 

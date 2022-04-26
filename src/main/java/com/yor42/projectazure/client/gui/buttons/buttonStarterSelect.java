@@ -10,7 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,7 +92,7 @@ public class buttonStarterSelect extends ImageButton {
         blit(matrixStack, this.x+2, this.y+2, logox, logoy, 53, 53, 256, 256);
 
         if (this.entityType != null) {
-            World world = Minecraft.getInstance().level;
+            Level world = Minecraft.getInstance().level;
                 if (world != null){
                     Entity entity;
 

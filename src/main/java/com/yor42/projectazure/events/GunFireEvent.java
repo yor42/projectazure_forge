@@ -1,7 +1,7 @@
 package com.yor42.projectazure.events;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Cancelable;
 
@@ -14,7 +14,7 @@ public class GunFireEvent extends PlayerEvent {
 
     private final ItemStack gun;
 
-    public GunFireEvent(PlayerEntity player, ItemStack gun) {
+    public GunFireEvent(Player player, ItemStack gun) {
         super(player);
         this.gun = gun;
     }
@@ -30,7 +30,7 @@ public class GunFireEvent extends PlayerEvent {
     @Cancelable
     public static class PreFire extends GunFireEvent
     {
-        public PreFire(PlayerEntity player, ItemStack stack)
+        public PreFire(Player player, ItemStack stack)
         {
             super(player, stack);
         }
@@ -39,7 +39,7 @@ public class GunFireEvent extends PlayerEvent {
     @Cancelable
     public static class PostFire extends GunFireEvent
     {
-        public PostFire(PlayerEntity player, ItemStack stack)
+        public PostFire(Player player, ItemStack stack)
         {
             super(player, stack);
         }

@@ -1,12 +1,12 @@
 package com.yor42.projectazure.client.renderer.block;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.block.ModelRecruitBeacon;
 import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
@@ -19,7 +19,7 @@ import java.util.Objects;
 public class MachineRecruitBeaconRenderer extends GeoBlockRenderer<TileEntityRecruitBeacon> {
 
     private TileEntityRecruitBeacon entity;
-    private IRenderTypeBuffer rtb;
+    private MultiBufferSource rtb;
     private ResourceLocation texture;
 
     public MachineRecruitBeaconRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
@@ -27,19 +27,19 @@ public class MachineRecruitBeaconRenderer extends GeoBlockRenderer<TileEntityRec
     }
 
     @Override
-    public RenderType getRenderType(TileEntityRecruitBeacon animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+    public RenderType getRenderType(TileEntityRecruitBeacon animatable, float partialTicks, MatrixStack stack, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer  vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
         return RenderType.entitySmoothCutout(textureLocation);
     }
 
     @Override
-    public void renderEarly(TileEntityRecruitBeacon animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+    public void renderEarly(TileEntityRecruitBeacon animatable, MatrixStack stackIn, float ticks, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer  vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         this.rtb = renderTypeBuffer;
         this.entity = animatable;
         this.texture = this.getTextureLocation(animatable);
     }
 
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, MatrixStack stack, VertexConsumer  bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if(this.entity.getLevel() != null && this.entity.getLevel().getBlockState(this.entity.getBlockPos()).hasProperty(RecruitBeaconBlock.POWERED)) {
             if (Objects.equals(bone.getName(), "on")) {
                 bone.setHidden(!this.entity.getLevel().getBlockState(this.entity.getBlockPos()).getValue(RecruitBeaconBlock.POWERED));

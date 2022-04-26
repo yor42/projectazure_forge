@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +34,7 @@ public class WorkGoal extends MoveEntityForWorkGoal {
 
     @Override
     public boolean canUse() {
-        Item handItem = this.host.getItemBySlot(EquipmentSlotType.MAINHAND).getItem();
+        Item handItem = this.host.getItemBySlot(EquipmentSlot.MAINHAND).getItem();
 
         if(!this.isItemWorkable(handItem)){
             return false;
@@ -80,7 +80,7 @@ public class WorkGoal extends MoveEntityForWorkGoal {
 
     @Override
     public boolean canContinueToUse() {
-        ItemStack handItemstack = this.host.getItemBySlot(EquipmentSlotType.MAINHAND);
+        ItemStack handItemstack = this.host.getItemBySlot(EquipmentSlot.MAINHAND);
         if(this.host.isSleeping() || handItemstack == ItemStack.EMPTY){
             return false;
         }
@@ -99,7 +99,7 @@ public class WorkGoal extends MoveEntityForWorkGoal {
                 if(!this.host.swinging){
                     this.host.swing(MAIN_HAND);
                 }
-                ItemStack mainHandStack = this.host.getItemBySlot(EquipmentSlotType.MAINHAND);
+                ItemStack mainHandStack = this.host.getItemBySlot(EquipmentSlot.MAINHAND);
                 BlockState BlockAboveDestinationState = this.host.level.getBlockState(blockpos);
                 Block blockAboveDestination = BlockAboveDestinationState.getBlock();
 
@@ -158,7 +158,7 @@ public class WorkGoal extends MoveEntityForWorkGoal {
                 }
                 if (this.breakingTime > 60.0F) {
                     this.host.level.destroyBlock(blockpos, true);
-                    mainHandStack.hurtAndBreak(1, this.host, b -> b.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+                    mainHandStack.hurtAndBreak(1, this.host, b -> b.broadcastBreakEvent(EquipmentSlot.MAINHAND));
                     this.breakingTime = 0;
                 }
 

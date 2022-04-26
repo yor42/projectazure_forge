@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.items;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.items.ModelDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import net.minecraft.client.renderer.LightTexture;
@@ -32,7 +32,7 @@ public class ItemDefibChargerRenderer extends GeoItemRenderer<ItemDefibCharger> 
     }
 
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, MatrixStack stack, VertexConsumer  bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         boolean shouldRender = this.shouldRender(bone);
         if(shouldRender) {
             if (bone.getName().contains("emissive")) {

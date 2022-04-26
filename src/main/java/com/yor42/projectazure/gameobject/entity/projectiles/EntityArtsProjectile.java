@@ -16,7 +16,7 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -27,15 +27,15 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
     private float damage = 5.0F;
     @Nullable
     private EffectInstance Effect;
-    public EntityArtsProjectile(EntityType<? extends DamagingProjectileEntity> entityType, World worldin) {
+    public EntityArtsProjectile(EntityType<? extends DamagingProjectileEntity> entityType, Level worldin) {
         super(entityType, worldin);
     }
 
-    public EntityArtsProjectile(World worldIn, LivingEntity shooter){
+    public EntityArtsProjectile(Level worldIn, LivingEntity shooter){
         this(worldIn, shooter, 5.0F, null);
     }
 
-    public EntityArtsProjectile(World worldIn, LivingEntity shooter, float damage, @Nullable EffectInstance effect) {
+    public EntityArtsProjectile(Level worldIn, LivingEntity shooter, float damage, @Nullable EffectInstance effect) {
         super(registerManager.PROJECTILEARTS_ENTITYTYPE, shooter, 0, 0, 0, worldIn);
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.7F), shooter.getZ());
         this.damage = damage;

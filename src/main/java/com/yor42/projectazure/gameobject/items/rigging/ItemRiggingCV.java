@@ -4,10 +4,10 @@ import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.util.text.Component;
+import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.Level;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -26,12 +26,12 @@ public abstract class ItemRiggingCV extends ItemRiggingBase {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if (worldIn == null) return; // thanks JEI very cool
 
         if (getHangerSlots() > 0) {
-            tooltip.add(new TranslationTextComponent("item.tooltip.hanger_slot_usage").append(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
+            tooltip.add(new TranslatableComponent("item.tooltip.hanger_slot_usage").append(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
         }
     }
 

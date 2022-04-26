@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.Level;
 
 import javax.annotation.Nonnull;
 
@@ -20,6 +20,6 @@ public interface ISpellUser {
     boolean shouldUseSpell();
     void setSpellDelay(int delay);
 
-    void ShootProjectile(World world, @Nonnull LivingEntity target);
+    void ShootProjectile(Level world, @Nonnull LivingEntity target);
     void StartShootingEntityUsingSpell(LivingEntity target);
 }

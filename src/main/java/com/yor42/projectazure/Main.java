@@ -18,11 +18,13 @@ import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -35,10 +37,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
+import software.bernie.example.client.renderer.entity.ExampleGeoRenderer;
+import software.bernie.example.registry.EntityRegistry;
 import software.bernie.geckolib3.GeckoLib;
 
 import java.util.stream.Stream;
@@ -54,35 +58,35 @@ public class Main
     public static final SimpleChannel NETWORK = registerNetwork.getNetworkChannel();
     public static final CrushingRecipeCache CRUSHING_REGISTRY = new CrushingRecipeCache();
 
-    public static ItemGroup PA_GROUP = new ItemGroup(MODID) {
+    public static CreativeModeTab PA_GROUP = new CreativeModeTab(MODID) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
         }
     };
 
-    public static ItemGroup PA_SHIPS = new ItemGroup("pa_ship") {
+    public static CreativeModeTab PA_SHIPS = new CreativeModeTab("pa_ship") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerItems.WISDOM_CUBE.get());
         }
     };
 
-    public static ItemGroup PA_RESOURCES = new ItemGroup("pa_resources") {
+    public static CreativeModeTab PA_RESOURCES = new CreativeModeTab("pa_resources") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerItems.INGOT_COPPER.get().asItem());
         }
     };
 
-    public static ItemGroup PA_MACHINES = new ItemGroup("pa_machines") {
+    public static CreativeModeTab PA_MACHINES = new CreativeModeTab("pa_machines") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerBlocks.METAL_PRESS.get().asItem());
         }
     };
 
-    public static ItemGroup PA_WEAPONS = new ItemGroup("pa_weapons") {
+    public static CreativeModeTab PA_WEAPONS = new CreativeModeTab("pa_weapons") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerItems.BONKBAT.get());
@@ -131,6 +135,49 @@ public class Main
         });
     }
 
+    @SubscribeEvent
+    public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(EntityRegistry.GEO_EXAMPLE_ENTITY.get(), ExampleGeoRenderer::new);
+        event.registerEntityRenderer(registerManager.AYANAMI.get(), entityAyanamiRenderer::new);
+        event.registerEntityRenderer(registerManager.JAVELIN.get(), entityJavelinRenderer::new);
+        event.registerEntityRenderer(registerManager.Z23.get(), entityZ23Renderer::new);
+        event.registerEntityRenderer(registerManager.LAFFEY.get(), EntityLaffeyRenderer::new);
+        event.registerEntityRenderer(registerManager.GANGWON.get(), entityGangwonRenderer::new);
+        event.registerEntityRenderer(registerManager.SHIROKO.get(), entityShirokoRenderer::new);
+        event.registerEntityRenderer(registerManager.ENTERPRISE.get(), entityEnterpriseRenderer::new);
+        event.registerEntityRenderer(registerManager.NAGATO.get(), entityNagatoRenderer::new);
+        event.registerEntityRenderer(registerManager.CHEN.get(), EntityChenRenderer::new);
+        event.registerEntityRenderer(registerManager.MUDROCK.get(), EntityMudrockRenderer::new);
+        event.registerEntityRenderer(registerManager.ROSMONTIS.get(), EntityRosmontisRenderer::new);
+        event.registerEntityRenderer(registerManager.TALULAH.get(), EntityTalulahRenderer::new);
+        event.registerEntityRenderer(registerManager.AMIYA.get(), EntityAmiyaRenderer::new);
+        event.registerEntityRenderer(registerManager.M4A1.get(), EntityM4A1Renderer::new);
+        event.registerEntityRenderer(registerManager.TEXAS.get(), EntityTexasRenderer::new);
+        event.registerEntityRenderer(registerManager.FROSTNOVA.get(), EntityFrostNovaRenderer::new);
+        event.registerEntityRenderer(registerManager.LAPPLAND.get(), EntityLapplandRenderer::new);
+        event.registerEntityRenderer(registerManager.SIEGE.get(), EntitySiegeRenderer::new);
+        event.registerEntityRenderer(registerManager.SCHWARZ.get(), EntitySchwarzRenderer::new);
+        event.registerEntityRenderer(registerManager.SYLVI.get(), EntitySylviRenderer::new);
+        event.registerEntityRenderer(registerManager.YAMATO.get(), EntityYamatoRenderer::new);
+
+        event.registerEntityRenderer(registerManager.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
+
+        event.registerEntityRenderer(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
+        event.registerEntityRenderer(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
+        event.registerEntityRenderer(registerManager.PROJECTILEARTS.get(), EntityArtsProjectileRenderer::new);
+        event.registerEntityRenderer(registerManager.GUN_BULLET.get(), EntityGunBulletRenderer::new);
+        event.registerEntityRenderer(registerManager.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
+        event.registerEntityRenderer(registerManager.THROWN_KNIFE.get(), EntityThrownKnifeRenderer::new);
+
+        event.registerEntityRenderer(registerManager.CLAYMORE.get(), EntityClaymoreRenderer::new);
+
+        event.registerBlockEntityRenderer(registerTE.METAL_PRESS.get(), MachineMetalPressRenderer::new);
+        event.registerBlockEntityRenderer(registerTE.DRYDOCK.get(), DrydockControllerRenderer::new);
+        event.registerBlockEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
+
+        event.registerEntityRenderer(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
+    }
+
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.AYANAMI.get(), entityAyanamiRenderer::new);
@@ -170,9 +217,8 @@ public class Main
         ClientRegistry.bindTileEntityRenderer(registerTE.DRYDOCK.get(), DrydockControllerRenderer::new);
         ClientRegistry.bindTileEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
 
-        ModBusEventHandlerClient.setup();
-
         RenderingRegistry.registerEntityRenderingHandler(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
+        ModBusEventHandlerClient.setup();
         ClientRegisterManager.registerScreen();
     }
 

@@ -1,11 +1,11 @@
 package com.yor42.projectazure.libs.utils;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ItemParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -13,7 +13,7 @@ public class ParticleUtils {
 
     @OnlyIn(Dist.CLIENT)
     public static void spawnCannonParticleModerate(double X, double Y, double Z, double NormalLookX, double NormalLookZ){
-        World world = ClientUtils.getClientWorld();
+        Level world = ClientUtils.getClientWorld();
         for (int i = 0; i < 24; i++)
         {
             double ran1 = MathUtil.getRand().nextFloat() - 0.5F;
@@ -28,7 +28,7 @@ public class ParticleUtils {
 
     @OnlyIn(Dist.CLIENT)
     public static void spawnPatHeartParticle(int EntityID){
-        World world = ClientUtils.getClientWorld();
+        Level world = ClientUtils.getClientWorld();
         Entity target = world.getEntity(EntityID);
         if(target != null) {
             double d0 = MathUtil.rand.nextGaussian() * 0.02D;
@@ -40,7 +40,7 @@ public class ParticleUtils {
 
     @OnlyIn(Dist.CLIENT)
     public static void spawnPatSmokeParticle(int EntityID){
-        World world = ClientUtils.getClientWorld();
+        Level world = ClientUtils.getClientWorld();
         Entity target = world.getEntity(EntityID);
         if(target != null) {
             double d0 = MathUtil.rand.nextGaussian() * 0.02D;
@@ -52,19 +52,19 @@ public class ParticleUtils {
     }
 
     public static void SpawnItemParticles(int EntityID, ItemStack stack) {
-        World world = ClientUtils.getClientWorld();
+        Level world = ClientUtils.getClientWorld();
         Entity target = world.getEntity(EntityID);
         if(target != null) {
             for (int i = 0; i < 16; ++i) {
-                Vector3d vector3d = new Vector3d(((double) MathUtil.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
-                vector3d = vector3d.xRot(-target.xRot * ((float) Math.PI / 180F));
-                vector3d = vector3d.yRot(-target.yRot * ((float) Math.PI / 180F));
+                Vec3 vector3d = new Vec3(((double) MathUtil.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
+                vector3d = vector3d.xRot(-target.xRotO * ((float) Math.PI / 180F));
+                vector3d = vector3d.yRot(-target.yRotO * ((float) Math.PI / 180F));
                 double d0 = (double) (-MathUtil.rand.nextFloat()) * 0.6D - 0.3D;
-                Vector3d vector3d1 = new Vector3d(((double) MathUtil.rand.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
-                vector3d1 = vector3d1.xRot(-target.xRot * ((float) Math.PI / 180F));
-                vector3d1 = vector3d1.yRot(-target.yRot * ((float) Math.PI / 180F));
+                Vec3 vector3d1 = new Vec3(((double) MathUtil.rand.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
+                vector3d1 = vector3d1.xRot(-target.xRotO * ((float) Math.PI / 180F));
+                vector3d1 = vector3d1.yRot(-target.yRotO * ((float) Math.PI / 180F));
                 vector3d1 = vector3d1.add(target.getX(), target.getEyeY(), target.getZ());
-                world.addParticle(new ItemParticleData(ParticleTypes.ITEM, stack), vector3d1.x, vector3d1.y, vector3d1.z, vector3d.x, vector3d.y + 0.05D, vector3d.z);
+                world.addParticle(new ItemParticleOption(ParticleTypes.ITEM, stack), vector3d1.x, vector3d1.y, vector3d1.z, vector3d.x, vector3d.y + 0.05D, vector3d.z);
             }
         }
 

@@ -3,14 +3,14 @@ package com.yor42.projectazure.gameobject.containers.machine;
 import com.yor42.projectazure.gameobject.containers.slots.FuelSlotItemhandler;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.setup.register.registerManager;
+import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -19,11 +19,11 @@ public class ContainerAlloyFurnace extends Container {
 
     private final IIntArray field;
 
-    public ContainerAlloyFurnace(int id, PlayerInventory inventory, PacketBuffer buffer) {
+    public ContainerAlloyFurnace(int id, Inventory inventory, PacketBuffer buffer) {
         this(id, inventory, new ItemStackHandler(4), new IntArray(4));
     }
 
-    public ContainerAlloyFurnace(int id, PlayerInventory inventory, ItemStackHandler machineInventory, IIntArray machineInfo){
+    public ContainerAlloyFurnace(int id, Inventory inventory, ItemStackHandler machineInventory, IIntArray machineInfo){
         super(registerManager.CONTAINER_ALLOY_FURNACE_CONTAINER_TYPE, id);
         this.field = machineInfo;
         addDataSlots(this.field);
