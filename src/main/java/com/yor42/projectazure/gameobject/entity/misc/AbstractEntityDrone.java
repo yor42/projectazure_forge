@@ -58,7 +58,7 @@ public abstract class AbstractEntityDrone extends PathfinderMob implements IAnim
     protected static final EntityDataAccessor<Integer> FUEL = SynchedEntityData.defineId(AbstractEntityDrone.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(AbstractEntityDrone.class, EntityDataSerializers.OPTIONAL_UUID);
 
-    protected AbstractEntityDrone(EntityType<? extends AmbientCreature> type, Level worldIn) {
+    protected AbstractEntityDrone(EntityType<? extends PathfinderMob> type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new FlyingMoveControl(this, 20, true);
         this.navigation = new FlyingPathNavigation(this, worldIn);

@@ -6,19 +6,19 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlot;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.Level;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 
 public class EntityM4A1 extends EntityGunUserBase{
 
-    public EntityM4A1(EntityType<? extends TameableEntity> type, Level worldIn) {
+    public EntityM4A1(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -64,7 +64,7 @@ public class EntityM4A1 extends EntityGunUserBase{
             return PlayState.CONTINUE;
         }
         else if (this.swinging) {
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND ? "swingR" : "swingL"));
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == InteractionHand.MAIN_HAND ? "swingR" : "swingL"));
             return PlayState.CONTINUE;
         }
         else if (this.isBeingPatted()) {
@@ -88,9 +88,9 @@ public class EntityM4A1 extends EntityGunUserBase{
             return PlayState.CONTINUE;
         }
         else if (this.isEating()) {
-            if (this.getUsedItemHand() == Hand.MAIN_HAND) {
+            if (this.getUsedItemHand() == InteractionHand.MAIN_HAND) {
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
-            } else if (this.getUsedItemHand() == Hand.OFF_HAND) {
+            } else if (this.getUsedItemHand() == InteractionHand.OFF_HAND) {
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
@@ -205,9 +205,9 @@ public class EntityM4A1 extends EntityGunUserBase{
         return PlayState.CONTINUE;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.M4A1MovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.M4A1SwimSpeed.get())
@@ -246,7 +246,7 @@ public class EntityM4A1 extends EntityGunUserBase{
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerGFLInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+    protected void openGUI(ServerPlayer player) {
+        NetworkHooks.openGui(player, new ContainerGFLInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 }

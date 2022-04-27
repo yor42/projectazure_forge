@@ -116,7 +116,7 @@ public class EntityMissileDrone extends AbstractEntityDrone{
         this.targetSelector.addGoal(1, new DroneOwnerAttackedTargetGoal(this));
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
         return MobEntity.createMobAttributes()
                 //Attribute

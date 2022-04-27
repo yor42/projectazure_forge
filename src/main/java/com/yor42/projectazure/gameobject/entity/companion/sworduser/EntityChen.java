@@ -9,24 +9,20 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.TieredItem;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Level;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -48,7 +44,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         return enums.EntityType.OPERATOR;
     }
 
-    public EntityChen(EntityType<? extends TameableEntity> type, Level worldIn) {
+    public EntityChen(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -94,12 +90,12 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         this.playSound(getAttackSound(), 1F, 0.8F + this.getRandom().nextFloat() * 0.4F);
         if(AttackCount == 2){
-            target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage+3);
+            target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this): DamageSource.mobAttack(this), damage+3);
             this.AttackCount = 0;
         }
         else{
             target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage*0.5F);
-            target.knockback(0.09F, MathHelper.sin(this.yRot * ((float)Math.PI / 180F)), -MathHelper.cos(this.yRot * ((float)Math.PI / 180F)));
+            target.knockback(0.09F, Mth.sin(this.getYRot() * ((float)Math.PI / 180F)), -Mth.cos(this.getYRot() * ((float)Math.PI / 180F)));
         }
     }
 
@@ -214,7 +210,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == InteractionHand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
         else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
@@ -234,10 +230,10 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
 
@@ -314,9 +310,9 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         }
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ChenMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ChenSwimSpeed.get())
@@ -331,8 +327,8 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+    protected void openGUI(ServerPlayer player) {
+        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull

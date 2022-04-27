@@ -2,18 +2,18 @@ package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.world.Level;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion implements ISpellUser {
 
-    public AbstractCompanionMagicUser(EntityType<? extends TameableEntity> type, Level worldIn) {
+    public AbstractCompanionMagicUser(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -28,7 +28,7 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
     }
 
     @Override
-    public ItemStack getItemInHand(Hand p_184586_1_) {
+    public ItemStack getItemInHand(InteractionHand p_184586_1_) {
         return super.getItemInHand(p_184586_1_);
     }
 

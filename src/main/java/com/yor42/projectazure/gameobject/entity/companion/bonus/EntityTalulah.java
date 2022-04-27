@@ -9,24 +9,20 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.TieredItem;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.Level;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -40,7 +36,7 @@ import static com.yor42.projectazure.libs.enums.EntityType.REUNION;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IMeleeAttacker, ISpellUser {
-    public EntityTalulah(EntityType<? extends TameableEntity> type, Level worldIn) {
+    public EntityTalulah(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -63,7 +59,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == InteractionHand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
         else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
@@ -79,10 +75,10 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
 
@@ -215,8 +211,8 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+    protected void openGUI(ServerPlayer player) {
+        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull
@@ -302,8 +298,8 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public Hand getSpellUsingHand() {
-        return Hand.OFF_HAND;
+    public InteractionHand getSpellUsingHand() {
+        return InteractionHand.OFF_HAND;
     }
 
     @Override
@@ -359,9 +355,9 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         return null;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.TalulahMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.TalulahSwimSpeed.get())

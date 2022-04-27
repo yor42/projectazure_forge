@@ -8,21 +8,21 @@ import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlot;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.TieredItem;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.Level;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.enums.EntityType.OPERATOR;
 
 public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
-    public EntitySchwarz(EntityType<? extends TameableEntity> type, Level worldIn) {
+    public EntitySchwarz(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
         this.canUseCrossbow = true;
     }
@@ -60,7 +60,7 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == InteractionHand.MAIN_HAND?"swingR":"swingL", true));
 
             return PlayState.CONTINUE;
         }
@@ -78,10 +78,10 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
 
@@ -232,8 +232,8 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+    protected void openGUI(ServerPlayer player) {
+        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
     @Nonnull
     @Override
@@ -241,9 +241,9 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
         return enums.CompanionRarity.STAR_6;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.SchwarzMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.SchwarzSwimSpeed.get())

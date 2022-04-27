@@ -4,20 +4,20 @@ import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
+import static net.minecraft.world.entity.Entity.RemovalReason.DISCARDED;
 
 public class EntityCannonPelllet extends AbstractHurtingProjectile {
 
@@ -35,7 +35,7 @@ public class EntityCannonPelllet extends AbstractHurtingProjectile {
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.5), shooter.getZ());
     }
 
-    public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, Level worldIn) {
+    public EntityCannonPelllet(EntityType<? extends AbstractHurtingProjectile> entityType, Level worldIn) {
         super(entityType,worldIn);
     }
 
@@ -63,7 +63,7 @@ public class EntityCannonPelllet extends AbstractHurtingProjectile {
     }
 
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHit(HitResult result) {
         if(this.properties != null) {
             super.onHit(result);
 
@@ -71,15 +71,15 @@ public class EntityCannonPelllet extends AbstractHurtingProjectile {
 
                 if (this.properties.ShouldDamageMultipleComponent()) {
                     boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner());
-                    this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float) 1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+                    this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float) 1, this.properties.isFiery(), flag ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE);
                 }
             }
         }
-        this.remove();
+        this.remove(RemovalReason.KILLED);
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityHitResult result) {
         Entity target = result.getEntity();
         double DistanceMultiplier = Math.min(400/distanceToSqr(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
         if(this.properties != null) {
@@ -87,28 +87,28 @@ public class EntityCannonPelllet extends AbstractHurtingProjectile {
                 ((EntityKansenBase) target).attackEntityFromCannon(DamageSources.causeCannonDamage(this, this.getOwner()), this.properties, DistanceMultiplier);
             } else target.hurt(DamageSources.causeCannonDamage(this, this.getOwner()), (float) (this.properties.getMaxDamage() * 1.2));
         }
-        this.remove();
+        this.remove(RemovalReason.KILLED);
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        Vector3d vector3d = (new Vector3d(x, y, z)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale((double)velocity);
+        Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale((double)velocity);
         this.setDeltaMovement(vector3d);
-        float f = MathHelper.sqrt(getHorizontalDistanceSqr(vector3d));
-        this.yRot = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
-        this.xRot = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
-        this.yRotO = this.yRot;
-        this.xRotO = this.xRot;
+        float f = Mth.sqrt((float) distanceToSqr(vector3d));
+        this.setYRot((float)(Mth.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI)));
+        this.setXRot((float)(Mth.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI)));
+        this.yRotO = this.getXRot();
+        this.xRotO = this.getYRot();
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
     public void tick() {
         if(this.tickCount == 600 || this.isInWater()){
-            this.remove();
+            this.remove(DISCARDED);
         }
         super.tick();
     }

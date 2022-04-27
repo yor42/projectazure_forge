@@ -10,7 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.TamableAnimal;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.util.Hand;
@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import static com.yor42.projectazure.libs.enums.EntityType.CLOSER;
 
 public class EntitySylvi extends AbstractCompanionMagicUser{
-    public EntitySylvi(EntityType<? extends TameableEntity> type, Level worldIn) {
+    public EntitySylvi(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
@@ -240,7 +240,7 @@ public class EntitySylvi extends AbstractCompanionMagicUser{
 
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
         return MobEntity.createMobAttributes()
                 //Attribute

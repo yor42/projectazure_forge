@@ -4,26 +4,21 @@ import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmon
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.EntityDataAccessor;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.SynchedEntityData;
-import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.HandSide;
-import net.minecraft.world.Level;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.players.OldUsersConverter;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -42,7 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static net.minecraft.util.HandSide.RIGHT;
+import static net.minecraft.world.entity.HumanoidArm.RIGHT;
 
 public class EntityClaymore extends LivingEntity implements IAnimatable {
 
@@ -75,7 +70,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
         if(!this.getCommandSenderWorld().isClientSide()) {
             try {
                 UUID uuid = this.getOwnerId();
-                return uuid == null ? null : ((ServerWorld)this.level).getEntity(this.getOwnerId());
+                return uuid == null ? null : ((ServerLevel)this.level).getEntity(this.getOwnerId());
             } catch (IllegalArgumentException illegalargumentexception) {
                 return null;
             }
@@ -125,7 +120,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
                         }
                     }
                 }
-                this.remove();
+                this.remove(RemovalReason.DISCARDED);
             }
         }
     }
@@ -133,7 +128,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
 
     @Override
-    public HandSide getMainArm() {
+    public HumanoidArm getMainArm() {
         return RIGHT;
     }
 
@@ -145,7 +140,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
             uuid = compound.getUUID("Owner");
         } else {
             String s = compound.getString("Owner");
-            uuid = PreYggdrasilConverter.convertMobOwnerIfNecessary(this.getServer(), s);
+            uuid = OldUsersConverter.convertMobOwnerIfNecessary(this.getServer(), s);
         }
 
         if (uuid != null) {
@@ -181,7 +176,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -213,9 +208,9 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
         return this.factory;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, 0)
                 .add(ForgeMod.SWIM_SPEED.get(), 0)

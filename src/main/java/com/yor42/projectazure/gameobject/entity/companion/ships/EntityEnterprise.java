@@ -7,22 +7,18 @@ import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.inventory.EquipmentSlot;
-import net.minecraft.network.datasync.EntityDataAccessor;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.SynchedEntityData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.Level;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -89,7 +85,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         return PlayState.CONTINUE;
     }
 
-    public EntityEnterprise(EntityType<? extends TameableEntity> type, Level worldIn) {
+    public EntityEnterprise(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
         this.canUseBow = true;
     }
@@ -129,7 +125,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.attackAnim>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == InteractionHand.MAIN_HAND?"swingR":"swingL"));
             return PlayState.CONTINUE;
         }
         else if(this.isOpeningDoor()){
@@ -164,10 +160,10 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
@@ -257,9 +253,9 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         return enums.CompanionRarity.STAR_5;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.EnterpriseMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.EnterpriseSwimSpeed.get())

@@ -4,7 +4,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 
 public interface IAttributeable {
 
-    static AttributeModifierMap.MutableAttribute MutableAttribute() {
+    static AttributeSupplier.Builder MutableAttribute() {
         return null;
     }
 

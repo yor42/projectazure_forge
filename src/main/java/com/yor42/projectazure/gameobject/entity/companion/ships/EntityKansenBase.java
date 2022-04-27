@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.ships;
 
+import com.mojang.math.Vector3d;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
@@ -15,34 +16,22 @@ import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.enchantment.ProtectionEnchantment;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.datasync.EntityDataAccessor;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.SynchedEntityData;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Level;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.Level;
@@ -50,10 +39,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
@@ -253,13 +242,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public void aiStep() {
         super.aiStep();
 
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
+        AttributeInstance modifiableattributeinstance = this.getAttribute(ForgeMod.SWIM_SPEED.get());
         if (this.isSailing()) {
             this.kansenFloat();
             if (modifiableattributeinstance != null && modifiableattributeinstance.getModifier(SAILING_SPEED_MODIFIER) == null) {
                 modifiableattributeinstance.addTransientModifier(SAILING_SPEED_BOOST);
             }
-            Vector3d vector3d = this.getDeltaMovement();
+            Vec3 vector3d = this.getDeltaMovement();
             double d0 = this.getX() + vector3d.x;
             double d1 = this.getY() + vector3d.y;
             double d2 = this.getZ() + vector3d.z;
@@ -340,7 +329,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
             ItemStack Ammostack = this.findAmmo(this.getActiveShellCategory());
             if (Ammostack.getItem() instanceof ItemCannonshell) {
-                Vector3d vector3d = this.getViewVector(1.0F);
+                Vec3 vector3d = this.getViewVector(1.0F);
                 double x = target.getX() - (this.getX());
                 double y = this.getY(0.5) - (this.getY(0.5));
                 double z = target.getZ() - (this.getZ());
@@ -363,7 +352,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     public void AttackUsingTorpedo(LivingEntity target, float distanceFactor){
         boolean shouldFire = this.isSailing() && canUseTorpedo(this.getRigging());
         if(shouldFire){
-            Vector3d vector3d = this.getViewVector(1.0F);
+            Vec3 vector3d = this.getViewVector(1.0F);
             double d2 = target.getX() - (this.getX() + vector3d.x * 4.0D);
             double d3 = target.getY(0.5D) - this.getY() - 0.5D;
             double d4 = target.getZ() - (this.getZ() + vector3d.z * 4.0D);
@@ -380,7 +369,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     private void kansenFloat() {
-        Vector3d vec3d = this.getDeltaMovement();
+        Vec3 vec3d = this.getDeltaMovement();
         if(this.getFluidHeight(FluidTags.WATER)>0.3)
             this.setDeltaMovement(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-3F : 0.0F), vec3d.z);
         else if (vec3d.y>0){

@@ -5,12 +5,12 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneB
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.world.Level;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -68,9 +68,9 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
         return (ItemEquipmentPlaneBase) registerItems.EQUIPMENT_PLANE_F4FWildcat.get();
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, 1.0F)
                 .add(ForgeMod.SWIM_SPEED.get(), 0.0F)

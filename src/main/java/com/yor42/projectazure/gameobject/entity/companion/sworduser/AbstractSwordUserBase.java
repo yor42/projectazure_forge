@@ -4,15 +4,20 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.TamableAnimal;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
 import net.minecraft.world.Level;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public abstract class AbstractSwordUserBase extends AbstractEntityCompanion implements IMeleeAttacker {
 
-    protected AbstractSwordUserBase(EntityType<? extends TameableEntity> type, Level worldIn) {
+    protected AbstractSwordUserBase(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }
 
