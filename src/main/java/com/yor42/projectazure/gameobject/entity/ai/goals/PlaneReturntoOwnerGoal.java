@@ -2,7 +2,8 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
@@ -45,7 +46,7 @@ public class PlaneReturntoOwnerGoal extends Goal {
                             if(PlaneStack == ItemStack.EMPTY)
                                 break;
                         }
-                        this.entity.remove();
+                        this.entity.remove(Entity.RemovalReason.DISCARDED);
                     }
                 }
             }

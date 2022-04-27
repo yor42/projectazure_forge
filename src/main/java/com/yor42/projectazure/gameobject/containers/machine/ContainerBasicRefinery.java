@@ -2,15 +2,14 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.setup.register.registerFluids;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -21,36 +20,34 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.setup.register.registerManager.BASIC_REFINERY_CONTAINER_TYPE;
+import static net.minecraft.world.item.crafting.RecipeType.SMELTING;
 
-public class ContainerBasicRefinery extends Container {
+public class ContainerBasicRefinery extends AbstractContainerMenu {
 
-    private final IIntArray field;
+    private final ContainerData field;
 
     public final FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
 
-    public ContainerBasicRefinery(int id, Inventory inventory, FriendlyByteBuf  buffer) {
-        this(id, inventory, new ItemStackHandler(10), new IIntArray() {
-
-            final int[] values = buffer.readVarIntArray();
-
+    public ContainerBasicRefinery(int id, Inventory inventory, FriendlyByteBuf buffer) {
+        this(id, inventory, new ItemStackHandler(10), new ContainerData() {
             @Override
-            public int get(int index) {
-                return values[index];
+            public int get(int p_39284_) {
+                return 0;
             }
 
             @Override
-            public void set(int index, int value) {
-                values[index] = value;
+            public void set(int p_39285_, int p_39286_) {
+
             }
 
             @Override
             public int getCount() {
-                return values.length;
+                return 0;
             }
         }, buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack());
     }
 
-    public ContainerBasicRefinery(int id, Inventory inventory, ItemStackHandler Inventory, IIntArray field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {
+    public ContainerBasicRefinery(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {
         super(BASIC_REFINERY_CONTAINER_TYPE, id);
         this.field = field;
         this.crudeoilstack = CrudeOilStack;
@@ -90,7 +87,7 @@ public class ContainerBasicRefinery extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
@@ -115,7 +112,7 @@ public class ContainerBasicRefinery extends Container {
 
         @Override
         public boolean mayPlace(ItemStack stack) {
-            return ForgeHooks.getBurnTime(stack, IRecipeType.SMELTING)>0;
+            return ForgeHooks.getBurnTime(stack, SMELTING)>0;
         }
     }
 
@@ -159,7 +156,7 @@ public class ContainerBasicRefinery extends Container {
     }
 
     @Nonnull
-    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(@Nonnull Player playerIn, int index) {
         ItemStack CopyofStackinSlot = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

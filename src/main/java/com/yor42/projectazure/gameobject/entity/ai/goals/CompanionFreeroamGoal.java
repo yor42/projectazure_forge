@@ -1,18 +1,18 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
-public class CompanionFreeroamGoal extends RandomWalkingGoal {
+public class CompanionFreeroamGoal extends RandomStrollGoal {
 
     private final AbstractEntityCompanion entityCompanion;
     private final boolean shouldStopBeforeMove;
@@ -46,7 +46,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
             }
         }
 
-        Vector3d vector3d = this.getPosition();
+        Vec3 vector3d = this.getPosition();
         if (vector3d == null) {
             return false;
         } else {
@@ -68,7 +68,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
 
     @Nullable
     @Override
-    protected Vector3d getPosition() {
+    protected Vec3 getPosition() {
 
         if (!this.entityCompanion.getStayCenterPos().isPresent()){
             this.entityCompanion.setStayCenterPos(this.entityCompanion.blockPosition());
@@ -88,7 +88,7 @@ public class CompanionFreeroamGoal extends RandomWalkingGoal {
         int x = ((int)(getRand().nextFloat()*20)-10);
         int z = ((int)(getRand().nextFloat()*20)-10);
 
-        return new Vector3d(originPosition.getX()+x, originPosition.getY(), originPosition.getZ()+z);
+        return new Vec3(originPosition.getX()+x, originPosition.getY(), originPosition.getZ()+z);
     }
 
     public void stop() {

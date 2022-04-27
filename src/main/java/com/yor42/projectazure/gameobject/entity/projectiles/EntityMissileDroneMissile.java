@@ -8,9 +8,9 @@ import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataAccessor;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.SynchedEntityData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +19,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.Level;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -32,7 +33,7 @@ import java.util.UUID;
 public class EntityMissileDroneMissile extends AbstractHurtingProjectile {
     @Nullable
     protected LivingEntity targetEntity;
-    protected static final DataParameter<Optional<UUID>> TARGET = EntityDataManager.defineId(EntityMissileDroneMissile.class, DataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> TARGET = SynchedEntityData.defineId(EntityMissileDroneMissile.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final double TURNLIMIT = 9 * Math.PI;
 
     public EntityMissileDroneMissile(EntityType<EntityMissileDroneMissile> p_i50173_1_, Level p_i50173_2_) {

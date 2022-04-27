@@ -2,12 +2,12 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.gameobject.items.ItemResource;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -18,13 +18,13 @@ import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.setup.register.registerManager.GROWTH_CHAMBER_CONTAINER_TYPE;
 
-public class ContainerCrystalGrowthChamber extends Container {
+public class ContainerCrystalGrowthChamber extends AbstractContainerMenu {
 
-    private final IIntArray field;
+    private final ContainerData field;
     private final FluidStack waterTank, SolutionTank;
 
     public ContainerCrystalGrowthChamber(int id, Inventory inventory, FriendlyByteBuf  buffer){
-        this(id, inventory, new ItemStackHandler(7), new IIntArray() {
+        this(id, inventory, new ItemStackHandler(7), new ContainerData() {
 
             final int[] values = buffer.readVarIntArray();
 
@@ -45,7 +45,7 @@ public class ContainerCrystalGrowthChamber extends Container {
         }, buffer.readFluidStack(), buffer.readFluidStack());
     }
 
-    public ContainerCrystalGrowthChamber(int id, Inventory inventory, ItemStackHandler itemStackHandler, IIntArray field, FluidStack waterTank, FluidStack solutionTank) {
+    public ContainerCrystalGrowthChamber(int id, Inventory inventory, ItemStackHandler itemStackHandler, ContainerData field, FluidStack waterTank, FluidStack solutionTank) {
         super(GROWTH_CHAMBER_CONTAINER_TYPE, id);
         this.field = field;
         this.waterTank = waterTank;
@@ -109,12 +109,12 @@ public class ContainerCrystalGrowthChamber extends Container {
         return (int)(length*pixels);
     }
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         ItemStack itemstack1 = slot.getItem();

@@ -7,11 +7,11 @@ import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -61,7 +61,7 @@ public class KansenLaunchPlaneGoal extends Goal {
         boolean canFire = this.entity.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
 
         if (flag && canFire){
-            boolean flag2 =this.entity.getSensing().canSee(this.entity.getTarget()) && EntityHasPlanes(this.entity);
+            boolean flag2 =this.entity.getSensing().hasLineOfSight(this.entity.getTarget()) && EntityHasPlanes(this.entity);
 
             if(flag2) {
                 this.targetEntity = entity.getTarget();
@@ -87,7 +87,7 @@ public class KansenLaunchPlaneGoal extends Goal {
     public void tick() {
         super.tick();
         double d0 = this.entity.distanceToSqr(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ());
-        boolean flag = this.entity.getSensing().canSee(this.targetEntity);
+        boolean flag = this.entity.getSensing().hasLineOfSight(this.targetEntity);
         Entity targetEntity = this.entity.getTarget();
         if(targetEntity!= null) {
             if (flag) {
@@ -121,11 +121,11 @@ public class KansenLaunchPlaneGoal extends Goal {
                             if (planeEntity != null) {
                                 this.entity.LaunchPlane(planestack, planeEntity, this.targetEntity, (IItemHandlerModifiable) hanger, hangerIndex);
                             }
-                            float f = MathHelper.sqrt(d0) / this.attackRadius;
-                            this.PlaneDelay = MathHelper.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
+                            float f = Mth.sqrt((float) d0) / this.attackRadius;
+                            this.PlaneDelay = Mth.floor(f * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
                         } else if (this.PlaneDelay < 0) {
-                            float f2 = MathHelper.sqrt(d0) / this.attackRadius;
-                            this.PlaneDelay = MathHelper.floor(f2 * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
+                            float f2 = Mth.sqrt((float) d0) / this.attackRadius;
+                            this.PlaneDelay = Mth.floor(f2 * (float) (this.maxRangedAttackTime - this.attackIntervalMin) + (float) this.attackIntervalMin) * this.entity.getPlanetoLaunch();
                         }
                     }
                 }

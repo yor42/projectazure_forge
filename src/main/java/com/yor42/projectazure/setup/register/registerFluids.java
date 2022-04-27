@@ -3,7 +3,10 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.gameobject.blocks.fluid.*;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 public class registerFluids {
 

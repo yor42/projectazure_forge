@@ -2,14 +2,14 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.setup.register.registerItems;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -18,12 +18,12 @@ import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.setup.register.registerManager.DRYDOCK_CONTAINER_TYPE;
 
-public class ContainerDryDock extends Container {
+public class ContainerDryDock extends AbstractContainerMenu {
 
-    private final IIntArray field;
+    private final ContainerData field;
 
     public ContainerDryDock(int id, Inventory inventory, FriendlyByteBuf  buffer) {
-        this(id, inventory, new ItemStackHandler(9), new IIntArray() {
+        this(id, inventory, new ItemStackHandler(9), new ContainerData() {
 
             final int[] values = buffer.readVarIntArray();
 
@@ -44,7 +44,7 @@ public class ContainerDryDock extends Container {
         });
     }
 
-    public ContainerDryDock(int id, Inventory inventory, ItemStackHandler Inventory, IIntArray field){
+    public ContainerDryDock(int id, Inventory inventory, ItemStackHandler Inventory, ContainerData field){
         super(DRYDOCK_CONTAINER_TYPE, id);
         this.field = field;
         addDataSlots(this.field);
@@ -60,7 +60,7 @@ public class ContainerDryDock extends Container {
             this.addSlot(new SlotItemHandler(Inventory, 1+i, 10+18*i, 33){
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
-                    return stack.getItem().is(ModTags.Items.INGOT_ALUMINIUM);
+                    return stack.is(ModTags.Items.INGOT_ALUMINIUM);
                 }
             });
         }
@@ -68,7 +68,7 @@ public class ContainerDryDock extends Container {
             this.addSlot(new SlotItemHandler(Inventory, 3+i, 10+18*i, 56){
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
-                    return stack.getItem().is(ModTags.Items.INGOT_STEEL);
+                    return stack.is(ModTags.Items.INGOT_STEEL);
                 }
             });
         }
@@ -76,7 +76,7 @@ public class ContainerDryDock extends Container {
             this.addSlot(new SlotItemHandler(Inventory, 5+i, 115+18*i, 33){
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
-                    return stack.getItem().is(ModTags.Items.INGOT_COPPER);
+                    return stack.is(ModTags.Items.INGOT_COPPER);
                 }
             });
         }
@@ -84,7 +84,7 @@ public class ContainerDryDock extends Container {
             this.addSlot(new SlotItemHandler(Inventory, 7+i, 115+18*i, 56){
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
-                    return stack.getItem().is(ModTags.Items.INGOT_ZINC);
+                    return stack.is(ModTags.Items.INGOT_ZINC);
                 }
             });
         }
@@ -108,7 +108,7 @@ public class ContainerDryDock extends Container {
         return new BlockPos(this.field.get(4),this.field.get(5),this.field.get(6));
     }
 
-    public IIntArray getField() {
+    public ContainerData getField() {
         return this.field;
     }
 
@@ -120,7 +120,7 @@ public class ContainerDryDock extends Container {
     }
     @MethodsReturnNonnullByDefault
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
 
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -139,22 +139,22 @@ public class ContainerDryDock extends Container {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().is(ModTags.Items.INGOT_ALUMINIUM)) {
+                else if (itemstack1.is(ModTags.Items.INGOT_ALUMINIUM)) {
                     if (!this.moveItemStackTo(itemstack1, 1, 3, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().is(ModTags.Items.INGOT_STEEL)) {
+                else if (itemstack1.is(ModTags.Items.INGOT_STEEL)) {
                     if (!this.moveItemStackTo(itemstack1, 3, 5, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().is(ModTags.Items.INGOT_COPPER)) {
+                else if (itemstack1.is(ModTags.Items.INGOT_COPPER)) {
                     if (!this.moveItemStackTo(itemstack1, 5, 7, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem().is(ModTags.Items.INGOT_ZINC)) {
+                else if (itemstack1.is(ModTags.Items.INGOT_ZINC)) {
                     if (!this.moveItemStackTo(itemstack1, 7, 9, false)) {
                         return ItemStack.EMPTY;
                     }
@@ -178,7 +178,7 @@ public class ContainerDryDock extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 }

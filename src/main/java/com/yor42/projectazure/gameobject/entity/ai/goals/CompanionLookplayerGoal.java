@@ -1,13 +1,13 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.player.Player;
 
-public class CompanionLookplayerGoal extends LookAtGoal {
+public class CompanionLookplayerGoal extends LookAtPlayerGoal {
     private final AbstractEntityCompanion entity;
     public CompanionLookplayerGoal(AbstractEntityCompanion p_i1631_1_) {
-        super(p_i1631_1_, PlayerEntity.class, 8.0F);
+        super(p_i1631_1_, Player.class, 8.0F);
         this.entity = p_i1631_1_;
     }
 

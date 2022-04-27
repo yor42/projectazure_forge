@@ -1,29 +1,32 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.item.SplashPotionItem;
-import net.minecraft.item.UseAction;
-import net.minecraft.potion.*;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SplashPotionItem;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import static net.minecraft.util.Hand.OFF_HAND;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.OFF_HAND;
 
 public class CompanionHealandEatFoodGoal extends Goal {
 
     private final AbstractEntityCompanion companion;
     @Nullable
-    private Hand FoodHand = null;
+    private InteractionHand FoodHand = null;
     int FoodCooldown=0;
 
     public CompanionHealandEatFoodGoal(AbstractEntityCompanion companion){
@@ -89,9 +92,9 @@ public class CompanionHealandEatFoodGoal extends Goal {
         this.companion.setItemSwapIndexOffHand(index);
     }
 
-    private Optional<Hand> getFoodHand(boolean includeHealingPotion){
+    private Optional<InteractionHand> getFoodHand(boolean includeHealingPotion){
         if(this.shouldEat(this.companion.getMainHandItem(), includeHealingPotion)){
-            return Optional.of(Hand.MAIN_HAND);
+            return Optional.of(MAIN_HAND);
         }
         else if(this.shouldEat(this.companion.getOffhandItem(), includeHealingPotion)) {
             return Optional.of(OFF_HAND);
@@ -114,11 +117,11 @@ public class CompanionHealandEatFoodGoal extends Goal {
 
     private boolean shouldEat(ItemStack stack, boolean IncludeHealingPotion){
         //Food
-        if(stack.getUseAnimation() == UseAction.EAT && stack.getCount() > 0 && stack.isEdible()){
+        if(stack.getUseAnimation() == UseAnim.EAT && stack.getCount() > 0 && stack.isEdible()){
             if(!stack.getItem().getFoodProperties().getEffects().isEmpty()){
                 for(int i =0; i<stack.getItem().getFoodProperties().getEffects().size(); i++){
                     MobEffectInstance instance = stack.getItem().getFoodProperties().getEffects().get(i).getFirst();
-                    if(instance.getEffect().getCategory() == EffectType.HARMFUL){
+                    if(instance.getEffect().getCategory() == MobEffectCategory.HARMFUL){
                         return false;
                     }
                 }
@@ -126,9 +129,9 @@ public class CompanionHealandEatFoodGoal extends Goal {
             return this.companion.canEat(stack.getItem().getFoodProperties().canAlwaysEat());
         }
         if(IncludeHealingPotion) {
-            if (stack.getUseAnimation() == UseAction.DRINK && !(stack.getItem() instanceof SplashPotionItem) && stack.getCount() > 0) {
+            if (stack.getUseAnimation() == UseAnim.DRINK && !(stack.getItem() instanceof SplashPotionItem) && stack.getCount() > 0) {
                 for (MobEffectInstance MobEffectInstance : PotionUtils.getMobEffects(stack)) {
-                    if (doesPotionHeal(MobEffectInstance.getEffect().getEffect())) {
+                    if (doesPotionHeal(MobEffectInstance.getEffect())) {
                         return true;
                     }
                 }
@@ -138,8 +141,8 @@ public class CompanionHealandEatFoodGoal extends Goal {
         return false;
     }
 
-    private boolean doesPotionHeal(Effect effect){
-        return effect == Effects.HEAL || effect == Effects.REGENERATION;
+    private boolean doesPotionHeal(MobEffect effect){
+        return effect == MobEffects.HEAL || effect == MobEffects.REGENERATION;
     }
 
     @Override

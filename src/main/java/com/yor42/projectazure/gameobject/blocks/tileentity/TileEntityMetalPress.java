@@ -89,7 +89,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
             return true;
         }
         else if(index == 1){
-            return stack.getItem().is(ModTags.Items.EXTRUSION_MOLD);
+            return stack.is(ModTags.Items.EXTRUSION_MOLD);
         }
         else{
             return false;

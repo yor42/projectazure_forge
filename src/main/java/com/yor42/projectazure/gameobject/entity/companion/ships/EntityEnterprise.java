@@ -14,9 +14,9 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.inventory.EquipmentSlot;
-import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataAccessor;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.SynchedEntityData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 
 public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAzurLaneKansen {
 
-    protected static final DataParameter<Integer> INVINCIBLE_TIMER = EntityDataManager.defineId(EntityEnterprise.class, DataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> INVINCIBLE_TIMER = SynchedEntityData.defineId(EntityEnterprise.class, EntityDataSerializers.INT);
 
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {

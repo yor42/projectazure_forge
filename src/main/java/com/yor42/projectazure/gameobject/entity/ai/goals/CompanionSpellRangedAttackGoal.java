@@ -3,8 +3,8 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -79,7 +79,7 @@ public class CompanionSpellRangedAttackGoal extends Goal {
     public void tick() {
         if(this.target != null) {
             double distance = this.hostEntity.distanceTo(this.target);
-            boolean canSee = this.hostEntity.getSensing().canSee(this.target);
+            boolean canSee = this.hostEntity.getSensing().hasLineOfSight(this.target);
 
             boolean isTooclose = distance <=this.maxAttackDistance*0.5 && !(this.hostEntity instanceof IMeleeAttacker) ;
             boolean isTooFar = distance > (double)this.maxAttackDistance;

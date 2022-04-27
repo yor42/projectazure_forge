@@ -3,17 +3,17 @@ package com.yor42.projectazure.gameobject.crafting;
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.Level;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.CRYSTALIZING;
 
-public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChamber> {
+public class CrystalizingRecipe implements Recipe<TileEntityCrystalGrowthChamber> {
 
     protected final Fluid solution;
     protected final ItemStack output;
@@ -89,23 +89,23 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return CRYSTALIZING.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return registerRecipes.Types.CRYSTALIZING;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CrystalizingRecipe>{
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrystalizingRecipe>{
         @Override
         public CrystalizingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             Ingredient seed = Ingredient.fromJson(json.get("seed"));
-            ResourceLocation FluidID = new ResourceLocation(JSONUtils.getAsString(json, "solution"));
+            ResourceLocation FluidID = new ResourceLocation(GsonHelper.getAsString(json, "solution"));
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(FluidID);
-            int growthTime = JSONUtils.getAsInt(json, "growthtime", 1800);
-            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getAsString(json, "result"));
+            int growthTime = GsonHelper.getAsInt(json, "growthtime", 1800);
+            ResourceLocation ItemID = new ResourceLocation(GsonHelper.getAsString(json, "result"));
             ItemStack result = new ItemStack(ForgeRegistries.ITEMS.getValue(ItemID), 1);
             return new CrystalizingRecipe(recipeId, seed, fluid, growthTime, result);
         }

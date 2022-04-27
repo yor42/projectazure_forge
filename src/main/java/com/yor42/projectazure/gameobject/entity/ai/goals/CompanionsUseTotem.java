@@ -1,13 +1,14 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import static net.minecraft.util.Hand.OFF_HAND;
+import static net.minecraft.world.InteractionHand.OFF_HAND;
+
 
 public class CompanionsUseTotem extends Goal {
 
@@ -46,7 +47,7 @@ public class CompanionsUseTotem extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        boolean flag1 = (this.companion.getRemainingFireTicks() > 0 || this.companion.hasEffect(Effects.WITHER) || this.companion.tickCount - this.companion.getLastHurtByMobTimestamp()<400);
+        boolean flag1 = (this.companion.getRemainingFireTicks() > 0 || this.companion.hasEffect(MobEffects.WITHER) || this.companion.tickCount - this.companion.getLastHurtByMobTimestamp()<400);
         boolean value = this.companion.getHealth()<8;
         boolean canuseTotem = this.companion.getOffhandItem().getItem() == Items.TOTEM_OF_UNDYING || this.hasTotem().getKey() != ItemStack.EMPTY;
         return value && flag1 && canuseTotem;
@@ -62,7 +63,7 @@ public class CompanionsUseTotem extends Goal {
 
     @Override
     public void tick() {
-        if(this.companion.getOffhandItem() == ItemStack.EMPTY && this.companion.hasEffect(Effects.REGENERATION) && this.companion.hasEffect(Effects.ABSORPTION)){
+        if(this.companion.getOffhandItem() == ItemStack.EMPTY && this.companion.hasEffect(MobEffects.REGENERATION) && this.companion.hasEffect(MobEffects.ABSORPTION)){
             this.stop();
         }
     }

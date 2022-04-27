@@ -2,24 +2,24 @@ package com.yor42.projectazure.gameobject.crafting;
 
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.Level;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
 
-public class PressingRecipe implements IRecipe<IInventory> {
+public class PressingRecipe implements Recipe<Container> {
 
     protected final Ingredient ingredient, mold;
     protected final ItemStack result;
@@ -35,7 +35,7 @@ public class PressingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches(IInventory inv, Level worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         return this.ingredient.test(inv.getItem(0)) && this.mold.test(inv.getItem(1));
     }
 
@@ -52,7 +52,7 @@ public class PressingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public ItemStack assemble(IInventory inv) {
+    public ItemStack assemble(Container inv) {
         return this.result.copy();
     }
 
@@ -72,26 +72,26 @@ public class PressingRecipe implements IRecipe<IInventory> {
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return registerRecipes.Serializers.PRESSING.get();
     }
 
     @Override
-    public IRecipeType<?> getType() {
+    public RecipeType<?> getType() {
         return registerRecipes.Types.PRESSING;
     }
 
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<PressingRecipe>{
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<PressingRecipe>{
         //ReadFromJson
         @Override
         public PressingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
             Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
             Ingredient mold = Ingredient.fromJson(json.get("mold"));
-            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getAsString(json, "result"));
-            int processtime = JSONUtils.getAsInt(json, "processtime", 200);
-            int count = JSONUtils.getAsInt(json, "count", 1);
+            ResourceLocation ItemID = new ResourceLocation(GsonHelper.getAsString(json, "result"));
+            int processtime = GsonHelper.getAsInt(json, "processtime", 200);
+            int count = GsonHelper.getAsInt(json, "count", 1);
             ItemStack result = new ItemStack(ForgeRegistries.ITEMS.getValue(ItemID), count);
 
             return new PressingRecipe(recipeId, ingredient, mold, processtime, result);

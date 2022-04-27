@@ -1,15 +1,15 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.IFluidBlock;
 
 import javax.annotation.Nullable;
@@ -74,12 +74,12 @@ abstract class MoveEntityForWorkGoal extends Goal {
             BlockPos CurrentPos = pos.offset(i % diameter, i / diameter / diameter, (i / diameter) % diameter);
 
             BlockState state = this.host.getCommandSenderWorld().getBlockState(CurrentPos);
-            if (state.isAir(this.host.getCommandSenderWorld(), CurrentPos) || state.getDestroySpeed(this.host.getCommandSenderWorld(), CurrentPos) < 0) {
+            if (state.isAir() || state.getDestroySpeed(this.host.getCommandSenderWorld(), CurrentPos) < 0) {
                 //Skip air and unbreakable blocks
                 continue;
             }
             block = state.getBlock();
-            if (block instanceof FlowingFluidBlock || block instanceof IFluidBlock) {
+            if (state.getMaterial().isLiquid() || block instanceof IFluidBlock) {
                 //Skip liquids
                 continue;
             }
@@ -106,17 +106,19 @@ abstract class MoveEntityForWorkGoal extends Goal {
     }
 
     private boolean canSeeBlock(BlockPos blockpos1){
-        Vector3d hostPositionVec = new Vector3d(this.host.getX(), this.host.getEyeY(), this.host.getZ());
-        Vector3d targetVec = new Vector3d(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
-        RayTraceContext rayTraceContext = new RayTraceContext(hostPositionVec, targetVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this.host);
-        BlockRayTraceResult RayTraceResult = this.host.level.clip(rayTraceContext);
-        BlockPos hitpos = RayTraceResult.getBlockPos();
+        Vec3 hostPositionVec = new Vec3(this.host.getX(), this.host.getEyeY(), this.host.getZ());
+        Vec3 targetVec = new Vec3(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
+        if (targetVec.distanceTo(hostPositionVec) > 128.0D) {
+            return false;
+        } else {
+            BlockPos hitpos = this.host.level.clip(new ClipContext(hostPositionVec, targetVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.host)).getBlockPos();
+            boolean isXEqual = hitpos.getX() == blockpos1.getX();
+            boolean isYEqual = hitpos.getY() == blockpos1.getY();
+            boolean isZEqual = hitpos.getZ() == blockpos1.getZ();
 
-        boolean isXEqual = hitpos.getX() == blockpos1.getX();
-        boolean isYEqual = hitpos.getY() == blockpos1.getY();
-        boolean isZEqual = hitpos.getZ() == blockpos1.getZ();
+            return isXEqual && isYEqual && isZEqual;
+        }
 
-        return isXEqual && isYEqual && isZEqual;
     }
 
     @Override
@@ -134,7 +136,7 @@ abstract class MoveEntityForWorkGoal extends Goal {
     {
         if(this.BlockPosBelowTarget != null) {
             BlockPos blockpos = this.BlockPosBelowTarget.above();
-            if (blockpos.distSqr(this.host.getX(), this.host.getY(), this.host.getZ(), true) <= 4d) {
+            if (blockpos.distSqr(new Vec3i(this.host.getX(), this.host.getY(), this.host.getZ())) <= 4d) {
                 this.work = true;
                 this.host.getNavigation().stop();
             } else {
@@ -143,5 +145,5 @@ abstract class MoveEntityForWorkGoal extends Goal {
         }
     }
 
-    abstract boolean shouldMoveTo(IWorldReader worldIn, BlockPos pos);
+    abstract boolean shouldMoveTo(Level worldIn, BlockPos pos);
 }

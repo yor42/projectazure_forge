@@ -1,8 +1,9 @@
 package com.yor42.projectazure.client.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.resources.ResourceLocation;
 
 public class buttonKansenInventoryTab extends ImageButton {
 
@@ -15,7 +16,7 @@ public class buttonKansenInventoryTab extends ImageButton {
 
     ResourceLocation TEXTURE;
 
-    public buttonKansenInventoryTab(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int indextoSkip, IPressable onPressIn) {
+    public buttonKansenInventoryTab(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int indextoSkip, Button.OnPress onPressIn) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, onPressIn);
         this.TEXTURE = resourceLocationIn;
         this.x = xIn;
@@ -28,7 +29,7 @@ public class buttonKansenInventoryTab extends ImageButton {
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.renderButton(matrixStack, mouseX, mouseY, partialTicks);
         for (int i = 0; i < 5; i++){
             if(this.InttoSkip == i)

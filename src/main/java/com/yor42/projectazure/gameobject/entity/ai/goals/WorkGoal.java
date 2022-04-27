@@ -1,20 +1,22 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlot;
-import net.minecraft.item.*;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.OreBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 
 import java.util.EnumSet;
-
-import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
 
 /**
  * Basically fork of Furenzu's work AI but with less intrusion and possibility for world break.
@@ -39,43 +41,11 @@ public class WorkGoal extends MoveEntityForWorkGoal {
         if(!this.isItemWorkable(handItem)){
             return false;
         }
-        if(!(this.host.getOwner() instanceof PlayerEntity)){
+        if(!(this.host.getOwner() instanceof Player)){
             return false;
         }
 
         return super.canUse();
-    }
-
-    @Override
-    boolean shouldMoveTo(IWorldReader worldIn, BlockPos pos) {
-        Block targetBlock = worldIn.getBlockState(pos).getBlock();
-        Item mainHandItem = this.host.getItemInHand(MAIN_HAND).getItem();
-        BlockPos pos1 = pos.above();
-        BlockState blockstate1blockabove = worldIn.getBlockState(pos1);
-
-        if(this.isItemSeed(mainHandItem)){
-            if(targetBlock == Blocks.FARMLAND){
-                return blockstate1blockabove.getMaterial() == Material.AIR;
-            }
-        }
-        else {
-            BlockPos pos3 = pos.above();
-            Block blockup = worldIn.getBlockState(pos3).getBlock();
-            BlockState iblockstate = worldIn.getBlockState(pos3);
-
-            if (mainHandItem == Items.BONE_MEAL) {
-                return blockup instanceof CropsBlock && !((CropsBlock) blockup).isMaxAge(iblockstate);
-            } else if (mainHandItem instanceof HoeItem) {
-                return blockup == Blocks.MELON || blockup == Blocks.PUMPKIN || (blockup instanceof CropsBlock && ((CropsBlock) blockup).isMaxAge(iblockstate));
-            } else if (mainHandItem.isCorrectToolForDrops(iblockstate)) {
-                if (mainHandItem instanceof PickaxeItem) {
-                    return blockup instanceof OreBlock;
-                }
-            }
-
-        }
-
-        return false;
     }
 
     @Override
@@ -105,7 +75,7 @@ public class WorkGoal extends MoveEntityForWorkGoal {
 
                 if (mainHandStack.getItem() == Items.BONE_MEAL) {
                     this.host.level.levelEvent(2005, blockpos, 0);
-                    this.host.level.setBlockAndUpdate(blockpos, ((CropsBlock) blockAboveDestination).getStateForAge(((CropsBlock) blockAboveDestination).getMaxAge()));
+                    this.host.level.setBlockAndUpdate(blockpos, ((CropBlock) blockAboveDestination).getStateForAge(((CropBlock) blockAboveDestination).getMaxAge()));
                     mainHandStack.shrink(1);
                 } else if (BlockAboveDestinationState.getMaterial() == Material.AIR && blockAboveDestination.defaultBlockState().getBlock() == Blocks.FARMLAND) {
 
@@ -169,6 +139,38 @@ public class WorkGoal extends MoveEntityForWorkGoal {
         }
     }
 
+    @Override
+    boolean shouldMoveTo(net.minecraft.world.level.Level worldIn, BlockPos pos) {
+        Block targetBlock = worldIn.getBlockState(pos).getBlock();
+        Item mainHandItem = this.host.getItemInHand(MAIN_HAND).getItem();
+        BlockPos pos1 = pos.above();
+        BlockState blockstate1blockabove = worldIn.getBlockState(pos1);
+
+        if(this.isItemSeed(mainHandItem)){
+            if(targetBlock == Blocks.FARMLAND){
+                return blockstate1blockabove.getMaterial() == Material.AIR;
+            }
+        }
+        else {
+            BlockPos pos3 = pos.above();
+            Block blockup = worldIn.getBlockState(pos3).getBlock();
+            BlockState iblockstate = worldIn.getBlockState(pos3);
+
+            if (mainHandItem == Items.BONE_MEAL) {
+                return blockup instanceof CropBlock && !((CropBlock) blockup).isMaxAge(iblockstate);
+            } else if (mainHandItem instanceof HoeItem) {
+                return blockup == Blocks.MELON || blockup == Blocks.PUMPKIN || (blockup instanceof CropBlock && ((CropBlock) blockup).isMaxAge(iblockstate));
+            } else if (mainHandItem.isCorrectToolForDrops(iblockstate)) {
+                if (mainHandItem instanceof PickaxeItem) {
+                    return blockup instanceof OreBlock;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
     private void BlockDropItem(ItemStack stack, float offsetY)
     {
 
@@ -185,7 +187,7 @@ public class WorkGoal extends MoveEntityForWorkGoal {
     }
 
     private boolean isItemTool(Item item){
-        return item instanceof ToolItem;
+        return item instanceof DiggerItem;
     }
 
     private boolean isItemSeed(Item item){

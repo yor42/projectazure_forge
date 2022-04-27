@@ -8,25 +8,26 @@ import com.chaosthedude.realistictorches.items.UnlitTorchItem;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import net.minecraft.block.Block;
-import net.minecraft.block.TorchBlock;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.TorchBlock;
 
 import java.util.EnumSet;
 
-import static net.minecraft.util.Hand.MAIN_HAND;
-import static net.minecraft.util.Hand.OFF_HAND;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.OFF_HAND;
+
 
 public class CompanionPlaceTorchGoal extends Goal {
 
     private final AbstractEntityCompanion companion;
     private boolean isHoldingRealistictorches;
     private Block torchBlock;
-    private Hand torchHand;
+    private InteractionHand torchHand;
 
     public CompanionPlaceTorchGoal(AbstractEntityCompanion companion){
         this.companion = companion;

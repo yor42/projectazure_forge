@@ -18,6 +18,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.Level;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
@@ -29,6 +30,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static net.minecraft.world.InteractionHand.OFF_HAND;
 
 public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     public EntityAmiya(EntityType<? extends TameableEntity> type, Level worldIn) {
@@ -236,8 +239,8 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     }
 
     @Override
-    public Hand getSpellUsingHand() {
-        return Hand.OFF_HAND;
+    public InteractionHand getSpellUsingHand() {
+        return OFF_HAND;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

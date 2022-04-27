@@ -1,16 +1,16 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 import java.util.EnumSet;
 
@@ -117,15 +117,15 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
         } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
             return false;
         } else {
-            this.host.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.host.yRot, this.host.xRot);
+            this.host.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, this.host.getYRot(), this.host.getXRot());
             this.host.getNavigation().stop();
             return true;
         }
     }
 
     private boolean isTeleportFriendlyBlock(BlockPos pos) {
-        PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(host.getCommandSenderWorld(), pos.mutable());
-        if (pathnodetype != PathNodeType.WALKABLE) {
+        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(host.getCommandSenderWorld(), pos.mutable());
+        if (pathnodetype != BlockPathTypes.WALKABLE) {
             return false;
         } else {
             BlockState blockstate = this.host.getCommandSenderWorld().getBlockState(pos.below());
@@ -166,15 +166,15 @@ public class CompanionFollowOwnerGoal extends FollowOwnerGoal {
         }
         else
         {
-            this.host.moveTo((double)p_226328_1_ + 0.5D, (double)p_226328_2_, (double)p_226328_3_ + 0.5D, this.host.yRot, this.host.xRot);
+            this.host.moveTo((double)p_226328_1_ + 0.5D, (double)p_226328_2_, (double)p_226328_3_ + 0.5D, this.host.getYRot(), this.host.getXRot());
             return true;
         }
     }
 
     private boolean canTeleportTo(BlockPos pos)
     {
-        PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(this.host.getCommandSenderWorld(), pos.mutable());
-        if(pathnodetype == PathNodeType.DANGER_FIRE || pathnodetype == PathNodeType.DAMAGE_FIRE)
+        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(this.host.getCommandSenderWorld(), pos.mutable());
+        if(pathnodetype == BlockPathTypes.DANGER_FIRE || pathnodetype == BlockPathTypes.DAMAGE_FIRE)
         {
             return false;
         }

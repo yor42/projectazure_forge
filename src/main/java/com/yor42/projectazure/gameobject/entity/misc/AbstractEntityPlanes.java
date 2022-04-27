@@ -15,6 +15,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.level.Explosion;
@@ -30,7 +31,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public abstract class AbstractEntityPlanes extends AmbientCreature implements IAnimatable {
+public abstract class AbstractEntityPlanes extends PathfinderMob implements IAnimatable {
 
     private AbstractEntityCompanion owner;
     private boolean hasPayloads;
@@ -41,7 +42,7 @@ public abstract class AbstractEntityPlanes extends AmbientCreature implements IA
     protected float attackdamage;
     private final boolean hasRadar;
 
-    protected AbstractEntityPlanes(EntityType<? extends AmbientCreature> type, Level worldIn) {
+    protected AbstractEntityPlanes(EntityType<? extends PathfinderMob> type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new PlaneFlyMovementController(this, 20, true);
         this.navigation = new FlyingPathNavigation(this, worldIn);
@@ -177,7 +178,7 @@ public abstract class AbstractEntityPlanes extends AmbientCreature implements IA
         this.level.addParticle(ParticleTypes.SMOKE, d0, d1 + 0.5D, d2, 0.0D, 0.0D, 0.0D);
 
         if(this.isOnGround() || isInWater()) {
-            this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, Explosion.Mode.DESTROY);
+            this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, Explosion.BlockInteraction.DESTROY);
             this.remove(RemovalReason.KILLED);
         }
 

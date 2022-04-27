@@ -1,16 +1,17 @@
 package com.yor42.projectazure.client.gui.buttons;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.Level;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class buttonStarterSelect extends ImageButton {
     private final int index;
 
 
-    public buttonStarterSelect(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int xDiffTextIn, ResourceLocation resourceLocationIn, int idx , EntityType type , IPressable onPressIn) {
+    public buttonStarterSelect(int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int xDiffTextIn, ResourceLocation resourceLocationIn, int idx , EntityType<?> type , Button.OnPress onPressIn) {
         super(xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, xDiffTextIn, resourceLocationIn, onPressIn);
         this.x = xIn;
         this.y = yIn;
@@ -45,13 +46,13 @@ public class buttonStarterSelect extends ImageButton {
     }
 
     @Override
-    public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         int logox, logoy;
 
         Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().bind(this.resourceLocation);
+        minecraft.getTextureManager().getTexture(this.resourceLocation);
         int i = this.xTexStart;
-        if (this.isHovered()) {
+        if (this.isHovered) {
             i += this.xDiffText;
         }
 
@@ -59,35 +60,31 @@ public class buttonStarterSelect extends ImageButton {
         blit(matrixStack, this.x, this.y, (float)i, (float)yTexStart, this.width, this.height, 256, 256);
 
 
-
-        switch (this.index){
-            case 0:
+        switch (this.index) {
+            case 0 -> {
                 logox = 109;
                 logoy = 127;
-                break;
-
-            case 1:
+            }
+            case 1 -> {
                 logox = 163;
                 logoy = 181;
-                break;
-
-            case 2:
+            }
+            case 2 -> {
                 logox = 55;
                 logoy = 127;
-                break;
-            case 3:
+            }
+            case 3 -> {
                 logox = 163;
                 logoy = 127;
-                break;
-
-            default:
+            }
+            default -> {
                 logox = 1;
                 logoy = 127;
-                break;
+            }
         }
 
         /** Cache of entities for each entity type */
-        final Map<EntityType<?>,Entity> ENTITY_MAP = new HashMap<>();
+        final Map<EntityType<?>, Entity> ENTITY_MAP = new HashMap<>();
 
         blit(matrixStack, this.x+2, this.y+2, logox, logoy, 53, 53, 256, 256);
 
@@ -115,7 +112,7 @@ public class buttonStarterSelect extends ImageButton {
         }
 
 
-        if (this.isHovered()) {
+        if (this.isHovered) {
             this.renderToolTip(matrixStack, mouseX, mouseY);
         }
 

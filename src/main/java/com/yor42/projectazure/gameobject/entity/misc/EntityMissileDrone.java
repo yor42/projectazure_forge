@@ -10,10 +10,11 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.Item;
-import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataAccessor;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.SynchedEntityData;
 import net.minecraft.world.Level;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -25,7 +26,7 @@ import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_D
 
 public class EntityMissileDrone extends AbstractEntityDrone{
 
-    protected static final DataParameter<Integer> FireTick = EntityDataManager.defineId(EntityMissileDrone.class, DataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> FireTick = SynchedEntityData.defineId(EntityMissileDrone.class, EntityDataSerializers.INT);
 
     private static final int MAX_AMMO = 8;
 

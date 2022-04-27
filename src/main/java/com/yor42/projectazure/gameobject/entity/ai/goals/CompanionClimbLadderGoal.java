@@ -1,10 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 /*
@@ -49,7 +49,7 @@ public class CompanionClimbLadderGoal extends Goal {
         if (i + 1 < this.path.getNodeCount()) {
             int y = this.path.getNode(i).y;
             this.entity.setDeltaMovement(this.entity.getDeltaMovement().multiply(0, 0, 0));
-            PathPoint pointNext = this.path.getNode(i + 1);
+            Node pointNext = this.path.getNode(i + 1);
             BlockState down = this.entity.level.getBlockState(this.entity.blockPosition().below());
             double yMotion;
             if (pointNext.y < y || (pointNext.y == y && !down.getBlock().isLadder(down, this.entity.level,this.entity.blockPosition().below(), this.entity))) {

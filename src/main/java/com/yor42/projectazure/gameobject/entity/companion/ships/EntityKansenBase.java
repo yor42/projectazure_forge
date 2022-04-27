@@ -24,9 +24,12 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataAccessor;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
@@ -34,7 +37,16 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Level;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.ProtectionEnchantment;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -60,8 +72,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
     private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",5F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
-    private static final DataParameter<Integer> SHIP_FIRE_TICK = EntityDataManager.defineId(EntityKansenBase.class, DataSerializers.INT);
-    private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.defineId(EntityKansenBase.class, DataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<Integer> SHIP_FIRE_TICK = SynchedEntityData.defineId(EntityKansenBase.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<ItemStack> ITEM_RIGGING = SynchedEntityData.defineId(EntityKansenBase.class, EntityDataSerializers.ITEM_STACK);
 
     public ItemStackHandler RiggingSlot = new ItemStackHandler(1) {
         @Override
@@ -88,7 +100,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return this.factory;
     }
 
-    protected EntityKansenBase(EntityType<? extends TameableEntity> type, Level worldIn) {
+    protected EntityKansenBase(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
         this.AmmoStorage.setSize(8);
@@ -213,10 +225,10 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     @Override
     @ParametersAreNonnullByDefault
     public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() instanceof PlayerEntity && this.isOwnedBy((LivingEntity) source.getEntity())) {
+        if (source.getEntity() instanceof Player && this.isOwnedBy((LivingEntity) source.getEntity())) {
             if (this.toldtomovecount >= 3) {
                 this.toldtomovecount = 0;
-                Vector3d loc = this.WanderRNG();
+                Vec3 loc = this.WanderRNG();
                 if (loc != null) {
                     this.getNavigation().moveTo(loc.x, loc.y, loc.z, 1);
                 }

@@ -25,7 +25,9 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.Component;
 import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -65,11 +67,11 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
    private int growthProgress = 0;
     private int MaxGrowthProgress;
     private IRecipe<? extends IInventory> currentRecipe;
-    protected final IRecipeType<? extends CrystalizingRecipe> recipeType;
+    protected final RecipeType<? extends CrystalizingRecipe> recipeType;
 
     private final int[] FieldArray = {this.growthProgress,this.MaxGrowthProgress,this.waterTank.getFluidAmount(), this.waterTank.getCapacity(),this.SolutionTank.getFluidAmount(), this.SolutionTank.getCapacity()};
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch(index){

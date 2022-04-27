@@ -47,6 +47,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -68,6 +69,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -962,15 +964,15 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public ItemStack getProjectile(ItemStack p_213356_1_) {
-        if (!(p_213356_1_.getItem() instanceof ShootableItem)) {
+        if (!(p_213356_1_.getItem() instanceof ProjectileWeaponItem)) {
             return ItemStack.EMPTY;
         } else {
-            Predicate<ItemStack> predicate = ((ShootableItem)p_213356_1_.getItem()).getSupportedHeldProjectiles();
-            ItemStack itemstack = ShootableItem.getHeldProjectile(this, predicate);
+            Predicate<ItemStack> predicate = ((ProjectileWeaponItem)p_213356_1_.getItem()).getSupportedHeldProjectiles();
+            ItemStack itemstack = ProjectileWeaponItem.getHeldProjectile(this, predicate);
             if (!itemstack.isEmpty()) {
                 return itemstack;
             } else {
-                predicate = ((ShootableItem)p_213356_1_.getItem()).getAllSupportedProjectiles();
+                predicate = ((ProjectileWeaponItem)p_213356_1_.getItem()).getAllSupportedProjectiles();
 
                 for(int i = 0; i < this.getAmmoStorage().getSlots(); ++i) {
                     ItemStack itemstack1 = this.getAmmoStorage().getStackInSlot(i);
@@ -988,13 +990,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
         ItemStack itemstack = this.getProjectile(this.getItemInHand(MAIN_HAND));
         ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
-        AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(this.level, itemstack, this);
-        if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
+        AbstractArrow abstractarrowentity = arrowitem.createArrow(this.level, itemstack, this);
+        if (this.getMainHandItem().getItem() instanceof BowItem)
             abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
         double d0 = p_82196_1_.getX() - this.getX();
         double d1 = p_82196_1_.getY(0.3333333333333333D) - abstractarrowentity.getY();
         double d2 = p_82196_1_.getZ() - this.getZ();
-        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+        double d3 = Mth.sqrt((float) (d0 * d0 + d2 * d2));
         abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
         this.playSound(SoundEvents.ARROW_SHOOT,1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(abstractarrowentity);
@@ -1015,15 +1017,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         }
     }
 
-    /*
-        looks like this is for getting a child entity.
-        we don't need these.
-         */
-    @Nullable
-    @Override
-    public AgeableMob getBreedOffspring(@Nonnull ServerLevel p_241840_1_, @Nonnull AgeableEntity p_241840_2_) {
-        return null;
-    }
 
     /*
     No. just No.
@@ -1144,7 +1137,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return super.hurt(source, amount);
     }
 
-    protected Vector3d WanderRNG() {
+    protected Vec3 WanderRNG() {
 
         if (!this.getStayCenterPos().isPresent()){
             this.setStayCenterPos(this.blockPosition());
@@ -1164,7 +1157,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         int x = ((int)(getRand().nextFloat()*6)-3);
         int z = ((int)(getRand().nextFloat()*6)-3);
 
-        return new Vector3d(originPosition.getX()+x, originPosition.getY(), originPosition.getZ()+z);
+        return new Vec3(originPosition.getX()+x, originPosition.getY(), originPosition.getZ()+z);
     }
 
     public int getShieldCoolDown(){

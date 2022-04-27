@@ -1,14 +1,15 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-import static net.minecraft.entity.ai.goal.Goal.Flag.LOOK;
-import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
+import static net.minecraft.world.entity.ai.goal.Goal.Flag.LOOK;
+import static net.minecraft.world.entity.ai.goal.Goal.Flag.MOVE;
+
 
 public class DroneRangedAttackGoal extends Goal {
 
@@ -59,7 +60,7 @@ public class DroneRangedAttackGoal extends Goal {
 
     public void tick() {
         if (this.target != null) {
-            boolean lvt_3_1_ = this.drone.getSensing().canSee(this.target);
+            boolean lvt_3_1_ = this.drone.getSensing().hasLineOfSight(this.target);
             if (lvt_3_1_) {
                 this.drone.getLookControl().setLookAt(this.target, 10.0F, (float) this.drone.getMaxHeadXRot());
                 ++this.seeTime;

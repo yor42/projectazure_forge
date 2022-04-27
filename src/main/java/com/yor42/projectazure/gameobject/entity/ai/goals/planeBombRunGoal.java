@@ -3,14 +3,15 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.serializePlane;
+import static net.minecraft.world.entity.Entity.RemovalReason.DISCARDED;
 
 public class planeBombRunGoal extends Goal {
 
@@ -28,7 +29,7 @@ public class planeBombRunGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.entity.getMoveControl().hasWanted() && this.entity.getTarget() != null && this.entity.getTarget().isAlive() && this.entity.hasPayload() && this.entity.getSensing().canSee(this.entity.getTarget());
+        return this.entity.getMoveControl().hasWanted() && this.entity.getTarget() != null && this.entity.getTarget().isAlive() && this.entity.hasPayload() && this.entity.getSensing().hasLineOfSight(this.entity.getTarget());
     }
 
     @Override
@@ -97,7 +98,7 @@ public class planeBombRunGoal extends Goal {
                             if(PlaneStack == ItemStack.EMPTY)
                                 break;
                         }
-                        this.entity.remove();
+                        this.entity.remove(DISCARDED);
                     }
                 }
             }

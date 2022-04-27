@@ -1,9 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
+import com.mojang.math.Vector3d;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -11,7 +12,7 @@ import java.util.EnumSet;
 public class CompanionMoveToRecruitStationGoal extends Goal {
 
     private final AbstractEntityCompanion host;
-    Vector3d NextPos;
+    Vec3 NextPos;
 
     public CompanionMoveToRecruitStationGoal(AbstractEntityCompanion companion){
         this.host = companion;
@@ -42,9 +43,9 @@ public class CompanionMoveToRecruitStationGoal extends Goal {
     }
 
     @Nullable
-    protected Vector3d getPosition() {
+    protected Vec3 getPosition() {
         if(this.host.getRecruitStationPos().isPresent()) {
-            return RandomPositionGenerator.getPosTowards(this.host, 10, 7, Vector3d.atCenterOf(this.host.getRecruitStationPos().get()));
+            return LandRandomPos.getPosTowards(this.host, 10, 7, Vec3.atCenterOf(this.host.getRecruitStationPos().get()));
         }
         else{
             return null;

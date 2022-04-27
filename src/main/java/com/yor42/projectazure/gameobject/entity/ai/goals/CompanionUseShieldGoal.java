@@ -2,14 +2,14 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.RavagerEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
 
 import java.util.EnumSet;
 
@@ -29,7 +29,7 @@ public class CompanionUseShieldGoal extends Goal {
             return false;
         }
 
-        return companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion) && raiseShield() && companion.getShieldCoolDown() == 0;
+        return companion.getOffhandItem().getItem().canPerformAction(companion.getOffhandItem(), net.minecraftforge.common.ToolActions.SHIELD_BLOCK) && raiseShield() && companion.getShieldCoolDown() == 0;
     }
 
     @Override
@@ -46,8 +46,8 @@ public class CompanionUseShieldGoal extends Goal {
 
     @Override
     public void start() {
-        if (companion.getOffhandItem().getItem().isShield(companion.getOffhandItem(), companion))
-            companion.startUsingItem(Hand.OFF_HAND);
+        if (companion.getOffhandItem().getItem().canPerformAction(companion.getOffhandItem(), net.minecraftforge.common.ToolActions.SHIELD_BLOCK))
+            companion.startUsingItem(InteractionHand.OFF_HAND);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class CompanionUseShieldGoal extends Goal {
 
         if (target != null && companion.getShieldCoolDown() == 0) {
             boolean ranged = companion.getMainHandItem().getItem() instanceof CrossbowItem || companion.getMainHandItem().getItem() instanceof BowItem || companion.getMainHandItem().getItem() instanceof ItemGunBase;
-            return companion.distanceTo(target) <= 4.0D || target instanceof CreeperEntity || target instanceof IRangedAttackMob && target.distanceTo(companion) >= 5.0D && !ranged || target instanceof RavagerEntity;
+            return companion.distanceTo(target) <= 4.0D || target instanceof Creeper || target instanceof RangedAttackMob && target.distanceTo(companion) >= 5.0D && !ranged || target instanceof Ravager;
         }
         return false;
     }

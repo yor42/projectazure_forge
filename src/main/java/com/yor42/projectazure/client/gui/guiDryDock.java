@@ -1,6 +1,5 @@
 package com.yor42.projectazure.client.gui;
 
-import com.mojang.blaze3d.matrix.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
@@ -10,16 +9,10 @@ import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.network.packets.StartRecruitPacket;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.Inventory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslatableComponent;
 import net.minecraft.world.entity.player.Inventory;
 
 public class guiDryDock extends AbstractContainerScreen<ContainerDryDock> {

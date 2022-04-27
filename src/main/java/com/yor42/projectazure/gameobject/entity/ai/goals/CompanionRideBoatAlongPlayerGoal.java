@@ -1,17 +1,17 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -46,7 +46,7 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
 
         Entity Boat = Owner.getVehicle();
 
-        boolean flag = Boat instanceof BoatEntity && Boat.getPassengers().size()<2;
+        boolean flag = Boat instanceof net.minecraft.world.entity.vehicle.Boat && Boat.getPassengers().size()<2;
 
         if (flag) {
             this.boat = Boat;
@@ -54,7 +54,7 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
             return !this.entity.canUseRigging() && !this.entity.isOrderedToSit();
         }
         else{
-            List<Entity> possibleBoat = this.entity.getCommandSenderWorld().getEntities(this.entity, this.entity.getBoundingBox().expandTowards(10, 2, 10), (entity) -> entity instanceof BoatEntity && entity.getPassengers().size() < 2 && entity.isEyeInFluid(FluidTags.WATER));
+            List<Entity> possibleBoat = this.entity.getCommandSenderWorld().getEntities(this.entity, this.entity.getBoundingBox().expandTowards(10, 2, 10), (entity) -> entity instanceof Boat && entity.getPassengers().size() < 2 && entity.isEyeInFluid(FluidTags.WATER));
             if(!possibleBoat.isEmpty()) {
                 this.boat = possibleBoat.get(possibleBoat.size() <= 1 ? 0 : this.entity.getRandom().nextInt(possibleBoat.size()));
                 if (this.boat != null) {
@@ -86,19 +86,19 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
         if (this.entity.getOwner() != null) {
             Entity Boat = this.entity.getOwner().getVehicle();
 
-            if (Boat instanceof BoatEntity && this.entity.getVehicle() != Boat && Boat.getPassengers().size() >= 2) {
+            if (Boat instanceof Boat && this.entity.getVehicle() != Boat && Boat.getPassengers().size() >= 2) {
                 this.entity.getNavigation().stop();
 
             }
 
             if (this.entity.tickCount % 10 == 0) {
 
-                boolean flag = Boat instanceof BoatEntity && Boat.getPassengers().size() < 2;
+                boolean flag = Boat instanceof Boat && Boat.getPassengers().size() < 2;
                 if (flag) {
                     this.boat = Boat;
                     this.sameBoatWithOwner = true;
                 } else {
-                    List<Entity> possibleBoat = this.entity.getCommandSenderWorld().getEntities(this.entity, this.entity.getBoundingBox().expandTowards(20, 2, 20), (entity) -> (entity instanceof BoatEntity && ((entity.getPassengers().size() < 2) || (entity.getControllingPassenger() instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) entity.getControllingPassenger()).getOwner() == this.entity.getOwner()))));
+                    List<Entity> possibleBoat = this.entity.getCommandSenderWorld().getEntities(this.entity, this.entity.getBoundingBox().expandTowards(20, 2, 20), (entity) -> (entity instanceof Boat && ((entity.getPassengers().size() < 2) || (entity.getControllingPassenger() instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) entity.getControllingPassenger()).getOwner() == this.entity.getOwner()))));
                     boolean hasboat = !possibleBoat.isEmpty();
 
                     if (hasboat) {
@@ -110,7 +110,7 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
                 }
             }
 
-            if (this.boat != null && this.boat instanceof BoatEntity && this.entity.getOwner() != null) {
+            if (this.boat != null && this.boat instanceof Boat && this.entity.getOwner() != null) {
                 if (this.boat.getPassengers().size()<2 && this.sameBoatWithOwner) {
                     double distanceSq = this.entity.distanceToSqr(this.boat.getX(), this.boat.getY(), this.boat.getZ());
                     if (distanceSq <= 3.0 && !this.entity.isPassengerOfSameVehicle(this.boat)) {
@@ -130,10 +130,10 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
                         }
                     } else if (this.entity.getVehicle() == this.boat) {
                         this.entity.getLookControl().setLookAt(this.entity.getOwner(), 30.0F, 30.0F);
-                        this.entity.setPathfindingMalus(PathNodeType.WATER, 1.0F);
-                        this.entity.setPathfindingMalus(PathNodeType.WALKABLE, -1F);
+                        this.entity.setPathfindingMalus(BlockPathTypes.WATER, 1.0F);
+                        this.entity.setPathfindingMalus(BlockPathTypes.WALKABLE, -1F);
                         Path path = this.entity.getNavigation().createPath(this.entity.getOwner(), 3);
-                        controlBoat((BoatEntity) this.boat, this.entity, path);
+                        controlBoat((Boat) this.boat, this.entity, path);
                     } else {
                         this.entity.getNavigation().moveTo(this.boat, this.movespeed);
                         this.entity.getLookControl().setLookAt(this.entity.getOwner(), 30.0F, 30.0F);
@@ -144,12 +144,12 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
         }
     }
 
-    private void controlBoat(BoatEntity boat, TameableEntity controller, Path path) {
+    private void controlBoat(Boat boat, TamableAnimal controller, Path path) {
         LivingEntity owner = controller.getOwner();
         if(owner != null && controller == boat.getControllingPassenger()) {
             if(path != null) {
 
-                Vector3d vector3d2 = path.getNextEntityPos(this.entity);
+                Vec3 vector3d2 = path.getNextEntityPos(this.entity);
                     if (Math.sqrt(controller.distanceToSqr(vector3d2)) < 5) {
                         if(!path.isDone()) {
                             path.advance();
@@ -179,10 +179,10 @@ public class CompanionRideBoatAlongPlayerGoal extends Goal {
                     double d0 = boat.getX() - blockpos.getX();
                     double d1 = boat.getZ() - blockpos.getZ();
                     float f = 0.04F;
-                    float oldyaw = boat.yRot;
-                    boat.setDeltaMovement(boat.getDeltaMovement().add(MathHelper.sin(-boat.yRot * ((float) Math.PI / 180F)) * f, 0.0D, (double) (MathHelper.cos(boat.yRot * ((float) Math.PI / 180F)) * f)));
-                    boat.yRot = (float) (MathHelper.atan2(d1, d0) * (double) (180F / (float) Math.PI)) + 90.0F;
-                    float newyaw = boat.yRot;
+                    float oldyaw = boat.getYRot();
+                    boat.setDeltaMovement(boat.getDeltaMovement().add(Mth.sin(-boat.getYRot() * ((float) Math.PI / 180F)) * f, 0.0D, (double) (Mth.cos(boat.getYRot() * ((float) Math.PI / 180F)) * f)));
+                    boat.setYRot((float) (Mth.atan2(d1, d0) * (double) (180F / (float) Math.PI)) + 90.0F);
+                    float newyaw = boat.getYRot();
                     float x1 = (float) Math.sqrt(boat.getDeltaMovement().x()*boat.getDeltaMovement().x()+boat.getDeltaMovement().z()*boat.getDeltaMovement().z());
                     boat.setPaddleState(oldyaw - newyaw < -0 || x1>0.2, oldyaw - newyaw > 0 || x1>0.2);
                 }

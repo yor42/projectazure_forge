@@ -2,15 +2,14 @@ package com.yor42.projectazure.gameobject.crafting;
 
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -20,7 +19,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class AlloyingRecipe implements Recipe<?> {
+public class AlloyingRecipe implements Recipe<Container> {
 
     protected final Ingredient ingredient1, ingredient2;
     protected ItemStack result;
@@ -40,7 +39,7 @@ public class AlloyingRecipe implements Recipe<?> {
     }
 
     @Override
-    public boolean matches(IInventory inv, Level worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
 
         boolean isItemCorrect = (this.ingredient1.test(inv.getItem(0))||this.ingredient1.test(inv.getItem(1))) && (this.ingredient1.test(inv.getItem(0))||this.ingredient1.test(inv.getItem(1)));
         boolean isItemCountEnough = getIng1ItemCount(inv)>=this.ing1Count && getIng2ItemCount(inv)>=this.ing2Count;
@@ -48,7 +47,7 @@ public class AlloyingRecipe implements Recipe<?> {
         return isItemCorrect && isItemCountEnough;
     }
 
-    private int getIng1ItemCount(IInventory inventory){
+    private int getIng1ItemCount(Container inventory){
         if(this.ingredient1.test(inventory.getItem(0))){
             return inventory.getItem(0).getCount();
         }
@@ -58,7 +57,7 @@ public class AlloyingRecipe implements Recipe<?> {
         return 0;
     }
 
-    private int getIng2ItemCount(IInventory inventory){
+    private int getIng2ItemCount(Container inventory){
         if(this.ingredient2.test(inventory.getItem(0))){
             return inventory.getItem(0).getCount();
         }
@@ -69,13 +68,8 @@ public class AlloyingRecipe implements Recipe<?> {
     }
 
     @Override
-    public boolean matches(Container p_44002_, Level p_44003_) {
-        return false;
-    }
-
-    @Override
     public ItemStack assemble(Container p_44001_) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -139,20 +133,20 @@ public class AlloyingRecipe implements Recipe<?> {
         return this.ing2Count;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<AlloyingRecipe>{
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<AlloyingRecipe>{
 
 
         @Override
         public AlloyingRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
             Ingredient ingredient1 = Ingredient.fromJson(json.get("ingredient1"));
-            int ing1count = JSONUtils.getAsInt(json, "ing1count", 1);
+            int ing1count = GsonHelper.getAsInt(json, "ing1count", 1);
             Ingredient ingredient2 = Ingredient.fromJson(json.get("ingredient2"));
-            int ing2count = JSONUtils.getAsInt(json, "ing2count", 1);
+            int ing2count = GsonHelper.getAsInt(json, "ing2count", 1);
 
-            ResourceLocation ItemID = new ResourceLocation(JSONUtils.getAsString(json, "result"));
-            int processtime = JSONUtils.getAsInt(json, "processtime", 200);
-            int resultcount = JSONUtils.getAsInt(json, "resultcount", 1);
+            ResourceLocation ItemID = new ResourceLocation(GsonHelper.getAsString(json, "result"));
+            int processtime = GsonHelper.getAsInt(json, "processtime", 200);
+            int resultcount = GsonHelper.getAsInt(json, "resultcount", 1);
 
             ItemStack result = new ItemStack(ForgeRegistries.ITEMS.getValue(ItemID), resultcount);
 

@@ -1,10 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.ai.targetAI;
 
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.TargetGoal;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 
 import java.util.EnumSet;
 
@@ -24,7 +24,7 @@ public class DroneOwnerAttackedTargetGoal extends TargetGoal {
             LivingEntity lvt_1_1_ = (LivingEntity) this.Drone.getOwner().get();
             this.attacker = lvt_1_1_.getLastHurtMob();
             int lvt_2_1_ = lvt_1_1_.getLastHurtMobTimestamp();
-            return lvt_2_1_ != this.timestamp && this.canAttack(this.attacker, EntityPredicate.DEFAULT) && this.Drone.shouldAttackEntity(this.attacker, lvt_1_1_);
+            return lvt_2_1_ != this.timestamp && this.canAttack(this.attacker, TargetingConditions.DEFAULT) && this.Drone.shouldAttackEntity(this.attacker, lvt_1_1_);
         } else {
             return false;
         }

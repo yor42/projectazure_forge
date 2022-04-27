@@ -2,9 +2,9 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
@@ -87,7 +87,7 @@ public class KansenRangedAttackGoal extends Goal {
     @Override
     public void tick() {
         double distance = this.entityHost.distanceToSqr(this.attackTarget.getX(), this.attackTarget.getY(), this.attackTarget.getZ());
-        boolean canSee = this.entityHost.getSensing().canSee(this.attackTarget);
+        boolean canSee = this.entityHost.getSensing().hasLineOfSight(this.attackTarget);
         if (canSee) {
             ++this.seeTime;
         } else {
@@ -127,20 +127,20 @@ public class KansenRangedAttackGoal extends Goal {
         else {
             this.entityHost.getLookControl().setLookAt(attackTarget, 30.0F, 30.0F);
         }
-        float f = MathHelper.sqrt(distance) / this.CannonattackRadius;
+        float f = Mth.sqrt((float) distance) / this.CannonattackRadius;
 
         if(--this.CannonAttackDelay == 0 && canSee && distance<=this.maxCannonAttackDistance) {
             this.entityHost.AttackUsingCannon(this.attackTarget);
-            this.CannonAttackDelay = MathHelper.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
+            this.CannonAttackDelay = Mth.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
         }
         else if(this.CannonAttackDelay <0){
-            this.CannonAttackDelay = MathHelper.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
+            this.CannonAttackDelay = Mth.floor(f * (float) (this.AttackIntervalMax - this.minAttackInterval) + (float) this.minAttackInterval);
         }
 
-        float f2 = MathHelper.sqrt(distance) / this.TorpedoAttackRadius;
+        float f2 = Mth.sqrt((float) distance) / this.TorpedoAttackRadius;
 
         if(--this.torpedoAttackDelay == 0 && canSee && distance<=this.maxTorpedoAttackDistance) {
-            float lvt_5_1_ = MathHelper.clamp(f2, 0.1F, 1.0F);
+            float lvt_5_1_ = Mth.clamp(f2, 0.1F, 1.0F);
             this.entityHost.AttackUsingTorpedo(this.attackTarget, lvt_5_1_);
             this.torpedoAttackDelay = (int) (300+(getRand().nextFloat()*140));
         }

@@ -14,9 +14,9 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.EntityDataAccessor;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.SynchedEntityData;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.HandSide;
 import net.minecraft.world.Level;
@@ -47,7 +47,7 @@ import static net.minecraft.util.HandSide.RIGHT;
 public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     public static final int life = 30;
-    protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(EntityClaymore.class, DataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityClaymore.class, EntityDataSerializers.OPTIONAL_UUID);
     protected final AnimationFactory factory = new AnimationFactory(this);
 
     public EntityClaymore(EntityType<? extends LivingEntity> type, Level worldIn) {
