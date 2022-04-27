@@ -1,11 +1,11 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.block.BedBlock;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -63,7 +63,7 @@ public class CompanionSleepGoal extends Goal {
                 this.companion.getNavigation().moveTo(pos.getX(), pos.getY(), pos.getZ(), 1);
             }
 
-            if (this.companion.distanceToSqr(Vector3d.atCenterOf(pos)) < 3) {
+            if (this.companion.distanceToSqr(Vec3.atCenterOf(pos)) < 3) {
                 if (!this.companion.isSleeping()) {
                     this.companion.startSleeping(pos);
                 }

@@ -13,7 +13,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.PathNavigationRegion;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Mirror;
@@ -38,7 +38,7 @@ public abstract class AbstractMachineBlock extends AbstractContainerBlock{
 
     @Nullable
     @Override
-    public abstract BlockEntity createTileEntity(BlockState state, IBlockReader world);
+    public abstract BlockEntity createTileEntity(BlockState state, PathNavigationRegion world);
 
     @SuppressWarnings("deprecation")
     @Override

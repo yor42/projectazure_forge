@@ -31,65 +31,47 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.PushReaction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.*;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.EntityDataSerializers;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityEntityDataSerializers;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.*;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.PotionUtils;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArrowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
+import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -115,9 +97,8 @@ import java.util.function.Predicate;
 import static com.yor42.projectazure.libs.utils.BlockStateUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
-import static net.minecraft.util.Hand.MAIN_HAND;
-import static net.minecraft.util.Hand.OFF_HAND;
-import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.OFF_HAND;
 
 public abstract class AbstractEntityCompanion extends TamableAnimal implements CrossbowAttackMob, IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
@@ -356,13 +337,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected int awakeningLevel;
     @Nullable
     public BlockPos RECRUIT_BEACON_POS;
-    private final MovementController SwimController;
-    private final MovementController MoveController;
-    protected final SwimmerPathNavigator swimmingNav;
-    private final GroundPathNavigator groundNav;
-    private final PathNavigator sailingNav;
+    private final MoveControl SwimController;
+    private final MoveControl MoveController;
+    protected final WaterBoundPathNavigation swimmingNav;
+    private final GroundPathNavigation groundNav;
+    private final PathNavigation sailingNav;
     protected CompanionFoodStats foodStats = new CompanionFoodStats();
-    private List<ExperienceOrbEntity> nearbyExpList;
+    private List<ExperienceOrb> nearbyExpList;
     public boolean canUseCrossbow;
     public boolean canUseBow;
     protected long lastSlept, lastWokenup;
@@ -372,7 +353,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected int StartedSpellAttackTimeStamp = -1;
 
     //I'd really like to get off from datamanager's wild ride.
-    protected static final EntityDataAccessor<Integer> SPELLDELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityEntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> SPELLDELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> NONVANILLAMELEEATTACKDELAY = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> SKILLDELAYTICK = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Boolean> CHARGING_CROSSBOW = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.BOOLEAN);
@@ -412,21 +393,21 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     protected static final EntityDataAccessor<Integer> RELOAD_TIMER_OFFHAND = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
     protected static final EntityDataAccessor<Integer> FOODLEVEL = SynchedEntityData.defineId(AbstractEntityCompanion.class, EntityDataSerializers.INT);
 
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
-    private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES);
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI, MemoryModuleType.GOLEM_DETECTED_RECENTLY);
+    private static final ImmutableList<SensorType<? extends Sensor<? super Villager>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES, SensorType.VILLAGER_BABIES, SensorType.SECONDARY_POIS, SensorType.GOLEM_DETECTED);
 
 
     public abstract enums.EntityType getEntityType();
-    protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, Level worldIn) {
+    protected AbstractEntityCompanion(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
         this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
         this.groundNav = new CompanionGroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimPathFinder(this);
         this.MoveController = new CompanionDefaultMovementController(this);
-        this.sailingNav = new SwimmerPathNavigator(this, worldIn){
+        this.sailingNav = new WaterBoundPathNavigation(this, worldIn){
             protected PathFinder createPathFinder(int p_179679_1_) {
-                this.nodeEvaluator = new WalkAndSwimNodeProcessor();
+                this.nodeEvaluator = new AmphibiousNodeEvaluator(false);
                 return new PathFinder(this.nodeEvaluator, p_179679_1_);
             }
             public boolean isStableDestination(BlockPos p_188555_1_) {
@@ -450,7 +431,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return this.entityData.get(OATHED);
     }
 
-    public int getLevel() {
+    public int getCompanionLevel() {
         return this.getEntityData().get(LEVEL);
     }
 
@@ -459,15 +440,15 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public void addLevel(int deltaLevel){
-        if(this.getLevel()+deltaLevel > this.getMaxLevel()){
+        if(this.getCompanionLevel()+deltaLevel > this.getMaxLevel()){
             return;
         }
-        this.setLevel(this.getLevel() + deltaLevel);
+        this.setLevel(this.getCompanionLevel() + deltaLevel);
     }
 
     public void onLevelup(){
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
-        modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH)+this.getLevel());
+        AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
+        modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH)+this.getCompanionLevel());
         this.heal(this.getMaxHealth());
     }
 
@@ -634,9 +615,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.ItemSwapIndexMainHand = compound.getInt("SwapIndexMainHand");
         this.ItemSwapIndexOffhand = compound.getInt("SwapIndexOffHand");
 
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
+        AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MAX_HEALTH);
         if(modifiableattributeinstance != null) {
-            modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH) + this.getLevel());
+            modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH) + this.getCompanionLevel());
         }
     }
 
@@ -712,7 +693,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayerEntity) {
             this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
         }
-        if (!this.removed && !this.dead) {
+        if (!this.dead && !this.dead) {
             Entity entity = p_70645_1_.getEntity();
             LivingEntity livingentity = this.getKillCredit();
             if (this.deathScore >= 0 && livingentity != null) {
@@ -724,9 +705,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             }
 
             this.getCombatTracker().recheckStatus();
-            if (this.level instanceof ServerWorld) {
+            if (this.level instanceof ServerLevel) {
                 if (entity != null) {
-                    entity.killed((ServerWorld)this.level, this);
+                    entity.killed((ServerLevel)this.level, this);
                 }
             }
             this.level.broadcastEntityEvent(this, (byte)3);
@@ -785,13 +766,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             this.addAffection(-20);
             ItemStack stack = new ItemStack(registerItems.STASIS_CRYSTAL.get());
             CompoundTag nbt = stack.getOrCreateTag();
-            nbt.putInt("cost", 10+this.getLevel());
+            nbt.putInt("cost", 10+this.getCompanionLevel());
             nbt.put("entity", this.serializeNBT());
             this.spawnAtLocation(stack);
         }
     }
 
-    public void setItemswapIndex(Hand hand, int value){
+    public void setItemswapIndex(InteractionHand hand, int value){
         if (hand == MAIN_HAND) {
             setItemSwapIndexMainHand(value);
         } else {
@@ -799,7 +780,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         }
     }
 
-    public Optional<Hand> getFreeHand(){
+    public Optional<InteractionHand> getFreeHand(){
         if(this.getItemSwapIndexMainHand() == -1){
             return Optional.of(MAIN_HAND);
         }
@@ -812,12 +793,12 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
 
-        if(target instanceof TameableEntity){
-            if(((TameableEntity) target).isOwnedBy(owner)){
+        if(target instanceof TamableAnimal){
+            if(((TamableAnimal) target).isOwnedBy(owner)){
                 return false;
             }
         }
-        else if(target instanceof PlayerEntity){
+        else if(target instanceof Player){
             return !this.isOwnedBy(target) && this.isPVPenabled();
         }
         if(target instanceof AbstractEntityDrone && ((AbstractEntityDrone)target).getOwner().isPresent() && (((AbstractEntityDrone) target).getOwner().get() == this ||  (((AbstractEntityDrone) target).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) target).getOwner().get()).isOwnedBy(this.getOwner())))){
@@ -951,7 +932,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     public void performCrossbowAttack(LivingEntity p_234281_1_, float p_234281_2_) {
-        Hand hand = ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof CrossbowItem);
+        Hand hand = ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof CrossbowItem);
         ItemStack itemstack = this.getItemInHand(hand);
         if (this.getMainHandItem().getItem() instanceof CrossbowItem) {
             CrossbowItem.performShooting(this.level, this, hand, itemstack, p_234281_2_, (float)(14 - p_234281_1_.level.getDifficulty().getId() * 4));
@@ -1025,7 +1006,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
          */
     @Nullable
     @Override
-    public AgeableEntity getBreedOffspring(@Nonnull ServerWorld p_241840_1_, @Nonnull AgeableEntity p_241840_2_) {
+    public AgeableMob getBreedOffspring(@Nonnull ServerLevel p_241840_1_, @Nonnull AgeableEntity p_241840_2_) {
         return null;
     }
 
@@ -1033,7 +1014,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     No. just No.
      */
     @Override
-    public boolean canMate(@Nonnull AnimalEntity otherAnimal) {
+    public boolean canMate(@Nonnull Animal otherAnimal) {
         return false;
     }
 
@@ -1409,7 +1390,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public double getMaxExp(){
-        return 10+(5*this.getLevel());
+        return 10+(5*this.getCompanionLevel());
     }
 
     public int getLimitBreakLv() {
@@ -1526,7 +1507,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         if(this.getExp()+deltaExp >= this.getMaxExp()) {
             this.setExp((float) (this.getExp()+deltaExp));
             this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
-            while(this.getExp()>this.getMaxExp() && this.getLevel() <= this.getMaxLevel()){
+            while(this.getExp()>this.getMaxExp() && this.getCompanionLevel() <= this.getMaxLevel()){
                 this.addLevel(1);
                 this.onLevelup();
                 this.setExp(this.getExp()-this.getMaxExp());
@@ -1546,7 +1527,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return false;
     }
 
-    private Optional<BlockPos> findHomePosition(ServerWorld world, AbstractEntityCompanion entity) {
+    private Optional<BlockPos> findHomePosition(ServerLevel world, AbstractEntityCompanion entity) {
         return world.getPoiManager().take(PointOfInterestType.HOME.getPredicate(), (pos) -> this.canReachHomePosition(entity, pos), entity.blockPosition(), 20);
     }
 
@@ -1582,7 +1563,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
 
         if(!this.getCommandSenderWorld().isClientSide() && this.tickCount % 200 == 0&& !this.getHOMEPOS().isPresent()){
-            Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getCommandSenderWorld(), this);
+            Optional<BlockPos> optional = this.findHomePosition((ServerLevel) this.getCommandSenderWorld(), this);
             optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 64));
         }
 
@@ -1894,7 +1875,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     public float getWalkTargetValue(@Nonnull BlockPos pos, IWorldReader worldIn) {
-        if(!worldIn.isClientSide() && SolarApocalypse.isSunlightDangerous((ServerWorld) worldIn)){
+        if(!worldIn.isClientSide() && SolarApocalypse.isSunlightDangerous((ServerLevel) worldIn)){
             return 0.0F-worldIn.getBrightness(LightType.SKY, pos);
         }
         else {
@@ -1976,7 +1957,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     protected AbstractArrowEntity fireArrow(ItemStack arrowStack, float distanceFactor, ItemStack ItemInHand) {
-        return ProjectileHelper.getMobArrow(this, arrowStack, distanceFactor);
+        return ProjectileUtil.getMobArrow(this, arrowStack, distanceFactor);
     }
 
     protected ItemStack findArrow() {
@@ -2716,7 +2697,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         NetworkHooks.getEntitySpawningPacket(this);
         return super.getAddEntityPacket();
     }
@@ -2838,7 +2819,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @SuppressWarnings("NullableProblems")
     @Override
     @MethodsReturnNonnullByDefault
-    public EntitySize getDimensions(@ParametersAreNonnullByDefault Pose poseIn) {
+    public EntityDimensions getDimensions(@ParametersAreNonnullByDefault Pose poseIn) {
         if(this.isOrderedToSit() || this.getVehicle() != null){
             return new EntitySize(this.getBbWidth(), this.getSitHeight(), false);
         }

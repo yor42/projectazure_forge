@@ -1,15 +1,15 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.BowItem;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.BowItem;
 
 import java.util.EnumSet;
 
-public class KansenAttackUsingBowGoal<T extends AbstractEntityCompanion & IRangedAttackMob> extends Goal {
+public class KansenAttackUsingBowGoal<T extends AbstractEntityCompanion & RangedAttackMob> extends Goal {
     private final T mob;
     private final double speedModifier;
     private int attackIntervalMin;
@@ -61,7 +61,7 @@ public class KansenAttackUsingBowGoal<T extends AbstractEntityCompanion & IRange
         LivingEntity livingentity = this.mob.getTarget();
         if (livingentity != null) {
             double d0 = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-            boolean flag = this.mob.getSensing().canSee(livingentity);
+            boolean flag = this.mob.getSensing().hasLineOfSight(livingentity);
             boolean flag1 = this.seeTime > 0;
             if (flag != flag1) {
                 this.seeTime = 0;
@@ -118,7 +118,7 @@ public class KansenAttackUsingBowGoal<T extends AbstractEntityCompanion & IRange
                     }
                 }
             } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-                this.mob.startUsingItem(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof BowItem));
+                this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof BowItem));
             }
 
         }

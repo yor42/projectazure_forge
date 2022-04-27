@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -90,7 +90,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
         if (this.level.isClientSide || (entity == null || !entity.removed) && this.level.hasChunkAt(this.blockPosition())) {
             super.tick();
 
-            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
+            RayTraceResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
             if (raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
@@ -144,7 +144,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
                 this.remove();
             }
 
-            RayTraceResult raytraceresult = ProjectileHelper.getHitResult(this, this::canHitEntity);
+            RayTraceResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
             if (raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
@@ -161,7 +161,7 @@ public class EntityMissileDroneMissile extends DamagingProjectileEntity {
 
          */
 
-        ProjectileHelper.rotateTowardsMovement(this, 0.5F);
+        ProjectileUtil.rotateTowardsMovement(this, 0.5F);
         if(this.getCommandSenderWorld().isClientSide()){
             this.level.addParticle(ParticleTypes.FLAME, this.getX() - vector3d.x, this.getY() - vector3d.y + 0.15D, this.getZ() - vector3d.z, 0.0D, 0.0D, 0.0D);
         }

@@ -144,7 +144,7 @@ public class GuiALInventory extends AbstractContainerScreen<ContainerKansenInven
         this.font.draw(PoseStack, this.host.getDisplayName(), (float)76/rendersize, (float)25/rendersize, 14085119);
         this.font.draw(PoseStack, new TranslatableComponent("gui.ammostorage.title"), (this.backgroundWidth+5)/rendersize, 6/rendersize, 14085119);
         PoseStack.popPose();
-        MutableComponent leveltext = new TextComponent("Lv.").append(Integer.toString(this.host.getLevel()));
+        MutableComponent leveltext = new TextComponent("Lv.").append(Integer.toString(this.host.getCompanionLevel()));
         this.font.draw(PoseStack, leveltext, (float)168-this.font.width(leveltext), (float)81, 14085119);
         this.renderAffection(PoseStack, mousex, mousey);
         this.renderMorale(PoseStack, mousex, mousey);

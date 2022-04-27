@@ -3,9 +3,12 @@ package com.yor42.projectazure.gameobject.entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.world.Level;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.level.Level;
 
-public class CompanionSwimPathNavigator extends SwimmerPathNavigator {
-    public CompanionSwimPathNavigator(MobEntity entitylivingIn, Level worldIn) {
+public class CompanionSwimPathNavigator extends WaterBoundPathNavigation {
+    public CompanionSwimPathNavigator(Mob entitylivingIn, Level worldIn) {
         super(entitylivingIn, worldIn);
         this.nodeEvaluator = new CompanionSwimNodeProcessor(false);
     }

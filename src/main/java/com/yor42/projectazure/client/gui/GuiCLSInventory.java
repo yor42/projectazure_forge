@@ -1,6 +1,5 @@
 package com.yor42.projectazure.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerCLSInventory;
@@ -70,7 +69,7 @@ public class GuiCLSInventory extends AbstractContainerScreen<ContainerCLSInvento
         stack.popPose();
         stack.pushPose();
         stack.scale(0.5F, 0.5F, 0.5F);
-        this.font.draw(stack, "Lv."+this.host.getLevel(), (float)17/0.5F, (float)19/0.5F, 0xffcd00);
+        this.font.draw(stack, "Lv."+this.host.getCompanionLevel(), (float)17/0.5F, (float)19/0.5F, 0xffcd00);
         stack.popPose();
     }
 

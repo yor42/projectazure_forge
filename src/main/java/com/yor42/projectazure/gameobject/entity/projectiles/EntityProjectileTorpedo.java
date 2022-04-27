@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -94,7 +94,7 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
 
         boolean flag = !this.isInWater();
 
-        ProjectileHelper.rotateTowardsMovement(this, 0.5F);
+        ProjectileUtil.rotateTowardsMovement(this, 0.5F);
         Vector3d vector3d4 = this.getDeltaMovement();
         if (flag) {
             this.setDeltaMovement(vector3d4.x, vector3d4.y - (double)0.1F, vector3d4.z);

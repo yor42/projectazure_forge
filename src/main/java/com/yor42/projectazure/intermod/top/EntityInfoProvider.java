@@ -58,7 +58,7 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
                 format = ChatFormatting.DARK_RED;
             }
             iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new TextComponent(((int)morale)+"/150").withStyle(format));
-            IFormattableTextComponent Leveltext = new TranslatableComponent("top.companion_level.message",companion.getLevel());
+            IFormattableTextComponent Leveltext = new TranslatableComponent("top.companion_level.message",companion.getCompanionLevel());
             if(probeMode == ProbeMode.EXTENDED){
                 Leveltext.append(new TextComponent(" ["+ ((int)Math.floor(companion.getExp()))+"/"+ ((int)Math.floor(companion.getMaxExp())) +"]"));
             }

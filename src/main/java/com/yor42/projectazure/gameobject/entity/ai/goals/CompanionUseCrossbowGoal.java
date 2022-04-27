@@ -103,7 +103,7 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & Ranged
             this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
             if (this.crossbowState == CrossbowState.UNCHARGED) {
                 if (!flag2) {
-                    this.mob.startUsingItem(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
+                    this.mob.startUsingItem(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
                     this.crossbowState = CrossbowState.CHARGING;
                     this.mob.setChargingCrossbow(true);
                 }
@@ -117,7 +117,7 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & Ranged
                 if (i >= CrossbowItem.getChargeDuration(itemstack)) {
                     this.mob.releaseUsingItem();
                     this.crossbowState = CrossbowState.CHARGED;
-                    ItemStack itemstack1 = this.mob.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
+                    ItemStack itemstack1 = this.mob.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
                     this.tryLoadProjectiles(this.mob, itemstack1);
                     this.attackDelay = 20 + this.mob.getRandom().nextInt(20);
                     this.mob.setChargingCrossbow(false);
@@ -129,7 +129,7 @@ public class CompanionUseCrossbowGoal<T extends AbstractEntityCompanion & Ranged
                 }
             } else if (this.crossbowState == CrossbowState.READY_TO_ATTACK && flag) {
                 this.mob.performCrossbowAttack(livingentity, 1.0F);
-                ItemStack itemstack1 = this.mob.getItemInHand(ProjectileHelper.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
+                ItemStack itemstack1 = this.mob.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this.mob, item -> item instanceof CrossbowItem));
                 CrossbowItem.setCharged(itemstack1, false);
                 this.crossbowState = CrossbowState.UNCHARGED;
             }

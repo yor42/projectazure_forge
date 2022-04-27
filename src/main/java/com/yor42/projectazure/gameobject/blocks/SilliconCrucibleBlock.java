@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.PathNavigationRegion;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -21,7 +21,7 @@ public class SilliconCrucibleBlock extends AbstractBigMachineBlock {
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, PathNavigationRegion world) {
         return null;
     }
 

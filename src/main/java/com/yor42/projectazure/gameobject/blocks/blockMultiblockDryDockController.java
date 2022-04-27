@@ -4,7 +4,7 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.Multiblock
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.PathNavigationRegion;
 
 import javax.annotation.Nullable;
 
@@ -16,7 +16,7 @@ public class blockMultiblockDryDockController extends MultiblockStructureBlocks{
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, PathNavigationRegion world) {
         return new MultiblockDrydockTE();
     }
 

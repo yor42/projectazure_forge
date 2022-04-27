@@ -8,7 +8,7 @@ import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.PathNavigationRegion;
 import net.minecraft.world.Region;
 
 public class CompanionWalkAndSwimNodeProcessor extends WalkNodeProcessor {
@@ -29,7 +29,7 @@ public class CompanionWalkAndSwimNodeProcessor extends WalkNodeProcessor {
         super.done();
     }
 
-    public PathNodeType getBlockPathType(IBlockReader p_186330_1_, int p_186330_2_, int p_186330_3_, int p_186330_4_) {
+    public PathNodeType getBlockPathType(PathNavigationRegion p_186330_1_, int p_186330_2_, int p_186330_3_, int p_186330_4_) {
         BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
         PathNodeType pathnodetype = getBlockPathTypeRaw(p_186330_1_, blockpos$mutable.set(p_186330_2_, p_186330_3_, p_186330_4_));
         if (pathnodetype == PathNodeType.WATER) {

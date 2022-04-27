@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.Hand;
@@ -62,7 +62,7 @@ public class EntityProjectileBullet extends ThrowableEntity {
     @Override
     public void tick() {
         super.tick();
-        ProjectileHelper.rotateTowardsMovement(this, 0.5F);
+        ProjectileUtil.rotateTowardsMovement(this, 0.5F);
     }
 
     @Override

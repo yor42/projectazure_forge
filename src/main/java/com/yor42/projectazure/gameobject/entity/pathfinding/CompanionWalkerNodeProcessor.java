@@ -1,11 +1,11 @@
 package com.yor42.projectazure.gameobject.entity.pathfinding;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.PathNavigationRegion;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;
@@ -16,34 +16,34 @@ import java.util.function.Function;
  *
  * I wish could write my own but I have 0 idea how AI works. sorry Flemmli97 ;C
  */
-public class CompanionWalkerNodeProcessor extends WalkNodeProcessor {
+public class CompanionWalkerNodeProcessor extends WalkNodeEvaluator {
     @Override
-    public int getNeighbors(@Nonnull PathPoint[] points, @Nonnull PathPoint origin) {
+    public int getNeighbors(@Nonnull Node[] points, @Nonnull Node origin) {
         int supervalue = super.getNeighbors(points, origin);
-        return createLadderPathPointFor(supervalue, points, origin, this::getNode, this.level, this.mob);
+        return createLadderNodeFor(supervalue, points, origin, this::getNode, this.level, this.mob);
     }
 
-    public static int createLadderPathPointFor(int PathPointID, PathPoint[] PathPoints, PathPoint origin, Function<BlockPos, PathPoint> PathPointGetter, IBlockReader getter, MobEntity mob) {
+    public static int createLadderNodeFor(int NodeID, Node[] Nodes, Node origin, Function<BlockPos, Node> NodeGetter, PathNavigationRegion getter, Mob mob) {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(origin.x, origin.y + 1, origin.z);
         if (getter.getBlockState(pos).isLadder(mob.level, pos, mob) || getter.getBlockState(pos.below()).isLadder(mob.level, pos.below(), mob)) {
-            PathPoint node = PathPointGetter.apply(pos);
+            Node node = NodeGetter.apply(pos);
             if (node != null && !node.closed) {
                 node.costMalus = 0;
-                node.type = PathNodeType.WALKABLE;
-                if (PathPointID + 1 < PathPoints.length)
-                    PathPoints[PathPointID++] = node;
+                node.type = BlockPathTypes.WALKABLE;
+                if (NodeID + 1 < Nodes.length)
+                    Nodes[NodeID++] = node;
             }
         }
         pos.set(pos.getX(), pos.getY() - 2, pos.getZ());
         if (getter.getBlockState(pos).isLadder(mob.level, pos, mob)) {
-            PathPoint node = PathPointGetter.apply(pos);
+            Node node = NodeGetter.apply(pos);
             if (node != null && !node.closed) {
                 node.costMalus = 0;
-                node.type = PathNodeType.WALKABLE;
-                if (PathPointID + 1 < PathPoints.length)
-                    PathPoints[PathPointID++] = node;
+                node.type = BlockPathTypes.WALKABLE;
+                if (NodeID + 1 < Nodes.length)
+                    Nodes[NodeID++] = node;
             }
         }
-        return PathPointID;
+        return NodeID;
     }
 }

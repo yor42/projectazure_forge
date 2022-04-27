@@ -14,7 +14,7 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.PathNavigationRegion;
 import net.minecraft.world.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -27,7 +27,7 @@ public class MultiblockStructureBlocks extends AbstractMultiBlockBase{
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, PathNavigationRegion world) {
         return new MultiBlockReenforcedConcrete();
     }
 

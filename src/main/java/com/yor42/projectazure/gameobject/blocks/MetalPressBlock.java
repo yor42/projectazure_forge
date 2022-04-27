@@ -9,7 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.PathNavigationRegion;
 import net.minecraft.world.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -24,7 +24,7 @@ public class MetalPressBlock extends AbstractElectricMachineBlock {
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, IBlockReader world) {
+    public BlockEntity createTileEntity(BlockState state, PathNavigationRegion world) {
         return new TileEntityMetalPress();
     }
 

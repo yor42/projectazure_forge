@@ -31,6 +31,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Level;
+import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -48,7 +49,7 @@ import java.util.UUID;
 
 import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
 
-public abstract class AbstractEntityDrone extends CreatureEntity implements IAnimatable {
+public abstract class AbstractEntityDrone extends AmbientCreature implements IAnimatable {
     public AnimationFactory factory = new AnimationFactory(this);
     private boolean isReturningToOwner = false;
 

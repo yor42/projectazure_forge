@@ -99,7 +99,7 @@ public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInvento
 
         int textwidth = (int) (this.font.width(this.host.getDisplayName().getString())*scalerate);
         this.font.draw(matrixStack, this.host.getDisplayName(), (42-textwidth)/scalerate, 81/scalerate, 0x242424);
-        this.font.draw(matrixStack, new TextComponent("Lv."+this.host.getLevel()), 43/scalerate, 82/scalerate, 0x242424);
+        this.font.draw(matrixStack, new TextComponent("Lv."+this.host.getCompanionLevel()), 43/scalerate, 82/scalerate, 0x242424);
         matrixStack.popPose();
 
         matrixStack.pushPose();
