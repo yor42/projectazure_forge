@@ -1,20 +1,20 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.state.properties.BedPart;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,9 +29,9 @@ public class ItemCommandStick extends Item {
 
     @Nonnull
     @Override
-    public ActionResultType useOn(@Nonnull ItemUseContext context) {
+    public InteractionResult useOn(@Nonnull UseOnContext context) {
 
-        PlayerEntity player = context.getPlayer();
+        Player player = context.getPlayer();
         ItemStack holdingStack = context.getItemInHand();
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
@@ -40,7 +40,7 @@ public class ItemCommandStick extends Item {
             if(player.isShiftKeyDown()){
 
                 if(context.getLevel().isClientSide()){
-                    return ActionResultType.CONSUME;
+                    return InteractionResult.CONSUME;
                 }
 
                 if(!context.getLevel().isClientSide()) {
@@ -67,7 +67,7 @@ public class ItemCommandStick extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         CompoundTag compound = stack.getOrCreateTag();
         if (compound.contains("BedX") && compound.contains("BedY") && compound.contains("BedZ")) {
             tooltip.add(new TranslatableComponent("item.tooltip.bed_position", "["+ compound.getInt("BedX")+", "+ compound.getInt("BedY")+", "+ compound.getInt("BedZ") +"]"));

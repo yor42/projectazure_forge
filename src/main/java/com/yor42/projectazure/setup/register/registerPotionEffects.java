@@ -4,21 +4,23 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.fml.RegistryObject;
 
 public class registerPotionEffects {
 
-    public static Effect ACUTE_ORIPATHY = new AcuteOripathyEffect();
+    public static MobEffect ACUTE_ORIPATHY = new AcuteOripathyEffect();
     public static RegistryObject<Effect> ACUTE_ORIPATHY_REGISTRY = registerManager.EFFECTS.register("acute_oripathy", ()->ACUTE_ORIPATHY);
 
-    public static class AcuteOripathyEffect extends Effect{
+    public static class AcuteOripathyEffect extends MobEffect{
 
         protected AcuteOripathyEffect() {
             super(EffectType.HARMFUL, 0x8b4235);
         }
 
         @Override
-        public void applyEffectTick(LivingEntity entityLivingBaseIn, int amplifier) {
+        public void applyEffectTick(Entity entityLivingBaseIn, int amplifier) {
             super.applyEffectTick(entityLivingBaseIn, amplifier);
             entityLivingBaseIn.hurt(DamageSources.ACUTE_ORIPATHY, 10F+(float) amplifier/2);
         }

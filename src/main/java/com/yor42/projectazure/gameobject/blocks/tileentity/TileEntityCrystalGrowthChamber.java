@@ -18,7 +18,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.Direction;
@@ -348,7 +348,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         return FluidStack.EMPTY;
     }
 
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf  buffer) {
         buffer.writeVarIntArray(this.FieldArray);
         buffer.writeFluidStack(this.waterTank.getFluid());
         buffer.writeFluidStack(this.SolutionTank.getFluid());

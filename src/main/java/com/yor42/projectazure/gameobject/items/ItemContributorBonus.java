@@ -1,24 +1,24 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.utils.TooltipUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ChatFormatting;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,7 +39,7 @@ public class ItemContributorBonus extends Item {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull Level worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level worldIn, Player playerIn, @Nonnull InteractionHand handIn) {
 
         ItemStack cube = playerIn.getItemInHand(handIn);
 
@@ -51,18 +51,18 @@ public class ItemContributorBonus extends Item {
             UUID OwnerUUID = compound.getUUID("owner");
             if(!PlayerUUID.equals(OwnerUUID)) {
                 playerIn.sendMessage(new TranslatableComponent("message.rewardbag.notowner"), UUID.randomUUID());
-                return ActionResult.fail(cube);
+                return InteractionResultHolder.fail(cube);
             }
         }
         if(compound.contains("inventory")){
-            ListNBT list = compound.getList("inventory", Constants.NBT.TAG_COMPOUND);
+            ListTag list = compound.getList("inventory", Tag.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++)
             {
                 CompoundTag ItemInfo = list.getCompound(i);
                 ItemStack stack = ItemStack.of(ItemInfo);
-                int index = playerIn.inventory.getFreeSlot();
+                int index = playerIn.getInventory().getFreeSlot();
                 if(index>0){
-                    playerIn.inventory.setItem(index, stack);
+                    playerIn.getInventory().setItem(index, stack);
                 }
                 else{
                     ItemEntity entity = new ItemEntity(worldIn, playerIn.getX(), playerIn.getY(),playerIn.getZ(), stack);
@@ -71,11 +71,11 @@ public class ItemContributorBonus extends Item {
             }
         }
         playerIn.getItemInHand(handIn).shrink(1);
-        return ActionResult.success(playerIn.getItemInHand(handIn));
+        return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
         if (worldIn != null && worldIn.isClientSide) {
@@ -84,11 +84,11 @@ public class ItemContributorBonus extends Item {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn){
+    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
         CompoundTag compound = stack.getOrCreateTag();
         UUID OwnerID = compound.getUUID("owner");
         @Nullable
-        PlayerEntity owner = worldIn.getPlayerByUUID(OwnerID);
+        Player owner = worldIn.getPlayerByUUID(OwnerID);
         if (owner != null) {
             tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip.owner").withStyle(ChatFormatting.GRAY).append(new TextComponent(": ")).append(new TextComponent(owner.getDisplayName().getString()).withStyle(ChatFormatting.YELLOW)));
         }
@@ -97,7 +97,7 @@ public class ItemContributorBonus extends Item {
         }
         if(compound.contains("inventory")){
             tooltip.add(new TranslatableComponent(stack.getItem().getDescriptionId()+".tooltip.content").withStyle(ChatFormatting.YELLOW));
-            ListNBT list = compound.getList("inventory", Constants.NBT.TAG_COMPOUND);
+            ListTag list = compound.getList("inventory", Tag.TAG_COMPOUND);
             for (int i = 0; i < list.size(); i++) {
                 CompoundTag ItemInfo = list.getCompound(i);
                 ItemStack content = ItemStack.of(ItemInfo);

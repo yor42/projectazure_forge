@@ -2,16 +2,16 @@ package com.yor42.projectazure.gameobject.capability;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.Level;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -30,14 +30,14 @@ public class ProjectAzurePlayerCapability {
     public int MainHandFireDelay = 0;
     public ArrayList<AbstractEntityCompanion> companionList = new ArrayList<>();
 
-    public PlayerEntity player;
+    public Player player;
 
     public static final ResourceLocation CapabilityID = ModResourceLocation("capability_paplayer");
 
     @CapabilityInject(ProjectAzurePlayerCapability.class)
     public static final Capability<ProjectAzurePlayerCapability> PA_PLAYER_CAPABILITY = null;
 
-    public ProjectAzurePlayerCapability(PlayerEntity player){
+    public ProjectAzurePlayerCapability(Player player){
         this.player = player;
     }
 
@@ -61,8 +61,8 @@ public class ProjectAzurePlayerCapability {
         this.MainHandFireDelay = rightHandFireDelay;
     }
 
-    public void setDelay(Hand handIn, int delay){
-        if (handIn == Hand.MAIN_HAND) {
+    public void setDelay(InteractionHand handIn, int delay){
+        if (handIn == InteractionHand.MAIN_HAND) {
             setMainHandFireDelay(delay);
         } else {
             setOffHandFireDelay(delay);
@@ -81,15 +81,15 @@ public class ProjectAzurePlayerCapability {
         this.companionList.remove(companion);
     }
 
-    public int getDelay(Hand handIn){
-        return handIn == Hand.MAIN_HAND? this.getMainHandFireDelay():getOffHandFireDelay();
+    public int getDelay(InteractionHand handIn){
+        return handIn == InteractionHand.MAIN_HAND? this.getMainHandFireDelay():getOffHandFireDelay();
     }
 
-    public static ProjectAzurePlayerCapability getCapability(@Nonnull PlayerEntity player){
+    public static ProjectAzurePlayerCapability getCapability(@Nonnull Player player){
         return player.getCapability(PA_PLAYER_CAPABILITY).orElseThrow(() -> new IllegalStateException("Failed to get PA Player Capability for player " + player));
     }
 
-    public static LazyOptional<ProjectAzurePlayerCapability> getOptional(@Nonnull PlayerEntity entity){
+    public static LazyOptional<ProjectAzurePlayerCapability> getOptional(@Nonnull Player entity){
         LazyOptional<ProjectAzurePlayerCapability> optional = entity.getCapability(PA_PLAYER_CAPABILITY, null).cast();
         if(!optional.isPresent()){
             Main.LOGGER.warn("Failed to get Player Capability!", new Throwable().fillInStackTrace());
@@ -97,7 +97,7 @@ public class ProjectAzurePlayerCapability {
         return optional;
     }
 
-    public static ICapabilityProvider createNewCapability(final PlayerEntity player) {
+    public static ICapabilityProvider createNewCapability(final Player player) {
         return new ICapabilitySerializable<CompoundTag>() {
 
             final ProjectAzurePlayerCapability inst = new ProjectAzurePlayerCapability(player);
@@ -125,7 +125,7 @@ public class ProjectAzurePlayerCapability {
         CompoundTag nbt = new CompoundTag();
         nbt.putInt("mainHandDelay", this.getMainHandFireDelay());
         nbt.putInt("offHandDelay", this.getOffHandFireDelay());
-        ListNBT entityList = new ListNBT();
+        ListTag entityList = new ListTag();
         for(AbstractEntityCompanion companion: this.companionList){
             entityList.add(companion.serializeNBT());
         }
@@ -136,12 +136,12 @@ public class ProjectAzurePlayerCapability {
     public void deserializeNBT(CompoundTag compound){
         this.setMainHandFireDelay(compound.getInt("mainHandDelay"));
         this.setMainHandFireDelay(compound.getInt("offHandDelay"));
-        ListNBT entities = compound.getList("companions", 0);
+        ListTag entities = compound.getList("companions", 0);
         for(int i=0; i<entities.size(); i++){
             CompoundTag nbt = entities.getCompound(i);
             Level world = this.player.getCommandSenderWorld();
             if(!world.isClientSide()){
-                ServerWorld server = (ServerWorld) world;
+                ServerLevel server = (ServerLevel) world;
                 Entity entity = server.getEntity(nbt.getUUID("UUID"));
                 if(entity instanceof AbstractEntityCompanion && ((AbstractEntityCompanion)entity).getOwner() == this.player){
                     this.companionList.add((AbstractEntityCompanion) entity);
@@ -158,13 +158,13 @@ public class ProjectAzurePlayerCapability {
 
         @Nullable
         @Override
-        public INBT writeNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side) {
+        public Tag writeNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side) {
             return instance.serializeNBT();
 
         }
 
         @Override
-        public void readNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side, INBT nbt) {
+        public void readNBT(Capability<ProjectAzurePlayerCapability> capability, ProjectAzurePlayerCapability instance, Direction side, Tag nbt) {
             instance.deserializeNBT((CompoundTag) nbt);
         }
     }

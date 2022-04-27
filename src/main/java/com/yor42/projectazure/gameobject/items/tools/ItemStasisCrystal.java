@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -9,12 +10,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.text.ChatFormatting;
 import net.minecraft.util.text.Component;
 import net.minecraft.util.text.TranslatableComponent;
 import net.minecraft.world.Level;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
@@ -70,7 +78,7 @@ public class ItemStasisCrystal extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, @Nonnull List<Component> list, @Nonnull ITooltipFlag p_77624_4_) {
+    public void appendHoverText(ItemStack stack, @Nullable Level p_77624_2_, @Nonnull List<Component> list, @Nonnull TooltipFlag p_77624_4_) {
         super.appendHoverText(stack, p_77624_2_, list, p_77624_4_);
         if(p_77624_2_ != null) {
             CompoundTag compound = stack.getOrCreateTag().getCompound("entity");

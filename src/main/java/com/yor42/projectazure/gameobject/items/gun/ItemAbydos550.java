@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.items.gun;
 
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -15,7 +15,7 @@ public class ItemAbydos550 extends ItemGunBase{
     }
 
     @Override
-    protected void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem) {
+    protected void SecondaryAction(Player playerIn, ItemStack heldItem) {
 
     }
 

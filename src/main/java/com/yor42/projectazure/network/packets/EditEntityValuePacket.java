@@ -3,7 +3,7 @@ package com.yor42.projectazure.network.packets;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
 
@@ -22,7 +22,7 @@ public class EditEntityValuePacket {
         this.value = value;
     }
 
-    public static EditEntityValuePacket decode (final PacketBuffer buffer){
+    public static EditEntityValuePacket decode (final FriendlyByteBuf  buffer){
         final int ID = buffer.readInt();
         final EditEntityValuePacket.ValueType ValueType = buffer.readEnum(EditEntityValuePacket.ValueType.class);
         final EditType editType = buffer.readEnum(EditType.class);
@@ -30,7 +30,7 @@ public class EditEntityValuePacket {
         return new EditEntityValuePacket(ID, ValueType, editType, value);
     }
 
-    public static void encode(final EditEntityValuePacket msg, final PacketBuffer buffer){
+    public static void encode(final EditEntityValuePacket msg, final FriendlyByteBuf  buffer){
         buffer.writeInt(msg.EntityID);
         buffer.writeEnum(msg.valueType);
         buffer.writeEnum(msg.editType);

@@ -4,19 +4,19 @@ import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.CreativeModeTab;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ChatFormatting;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -51,7 +51,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, Level worldIn, PlayerEntity playerIn) {
+    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
         stack.getOrCreateTag().putString("planeUUID", UUID.randomUUID().toString());
     }
@@ -79,7 +79,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int currentFuel = stack.getOrCreateTag().getInt("fuel");
         boolean isArmed = stack.getOrCreateTag().getBoolean("isArmed");

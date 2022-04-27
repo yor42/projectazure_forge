@@ -6,7 +6,7 @@ import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.IIntArray;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -23,7 +23,7 @@ public class ContainerCrystalGrowthChamber extends Container {
     private final IIntArray field;
     private final FluidStack waterTank, SolutionTank;
 
-    public ContainerCrystalGrowthChamber(int id, Inventory inventory, PacketBuffer buffer){
+    public ContainerCrystalGrowthChamber(int id, Inventory inventory, FriendlyByteBuf  buffer){
         this(id, inventory, new ItemStackHandler(7), new IIntArray() {
 
             final int[] values = buffer.readVarIntArray();

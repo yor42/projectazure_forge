@@ -20,7 +20,7 @@ public class syncRiggingCapabilityPacket {
 
 
 
-    public static syncRiggingCapabilityPacket decode(final PacketBuffer buffer)
+    public static syncRiggingCapabilityPacket decode(final FriendlyByteBuf  buffer)
     {
         final CompoundTag compound1 = buffer.readCompoundTag();
         final CompoundTag compound2 = buffer.readCompoundTag();
@@ -29,7 +29,7 @@ public class syncRiggingCapabilityPacket {
         return new syncRiggingCapabilityPacket(compound1, compound2, stack);
     }
 
-    public static void encode(final syncRiggingCapabilityPacket message, final PacketBuffer buffer){
+    public static void encode(final syncRiggingCapabilityPacket message, final FriendlyByteBuf  buffer){
         buffer.writeCompoundTag(message.InventoryCompound);
         buffer.writeCompoundTag(message.FuelTankCompound);
         buffer.writeItemStack(message.itemStack);

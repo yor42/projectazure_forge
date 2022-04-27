@@ -4,22 +4,24 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.text.*;
-import net.minecraft.world.Level;
+import net.minecraft.ChatFormatting;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.*;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
+import static net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH;
 
 public class ItemKansenSpawnEgg extends Item {
 
@@ -32,14 +34,14 @@ public class ItemKansenSpawnEgg extends Item {
 
     @Override
     @MethodsReturnNonnullByDefault
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         Level world = context.getLevel();
-
+        
         if(context.getPlayer() == null)
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
 
-        if (!(world instanceof ServerWorld)) {
-            return ActionResultType.SUCCESS;
+        if (!(world instanceof ServerLevel)) {
+            return InteractionResult.SUCCESS;
         }
         ItemStack itemstack = context.getItemInHand();
         context.getClickedPos();
@@ -59,10 +61,10 @@ public class ItemKansenSpawnEgg extends Item {
             if (!context.getPlayer().isCreative())
                 itemstack.shrink(1);
 
-            return ActionResultType.CONSUME;
+            return InteractionResult.CONSUME;
         }
 
-        return ActionResultType.CONSUME;
+        return InteractionResult.CONSUME;
 
     }
 
@@ -74,14 +76,14 @@ public class ItemKansenSpawnEgg extends Item {
 
     @Override
     @ParametersAreNonnullByDefault
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if(worldIn != null) {
             AbstractEntityCompanion entity = this.Entity.create(worldIn);
             if (entity!= null) {
 
                 enums.CompanionRarity rarity = entity.getRarity();
-                tooltip.add(new TranslatableComponent("tooltip.companion.rarity").append(": ").append(new TranslatableComponent(entity.getRarity().getTranslationkey()).setStyle(Style.EMPTY.withColor(Color.fromRgb(rarity.getColor())))).withStyle(ChatFormatting.GRAY));
+                tooltip.add(new TranslatableComponent("tooltip.companion.rarity").append(": ").append(new TranslatableComponent(entity.getRarity().getTranslationkey()).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(rarity.getColor())))).withStyle(ChatFormatting.GRAY));
                 tooltip.add(new TranslatableComponent("tooltip.companion.type").append(": ").append(new TranslatableComponent(entity.getEntityType().getName())).withStyle(ChatFormatting.GRAY));
                 if(entity instanceof EntityKansenBase){
                     tooltip.add(new TranslatableComponent("tooltip.companion.shipgirl_class").append(": ").append(new TranslatableComponent(((EntityKansenBase) entity).getShipClass().getName()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
@@ -94,7 +96,7 @@ public class ItemKansenSpawnEgg extends Item {
                     tooltip.add(new TranslatableComponent("tooltip.companion.gun_speciality").append(": ").append(new TranslatableComponent(entity.getGunSpecialty().getName()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GRAY));
                 }
                 if(entity.getAttribute(MAX_HEALTH) != null) {
-                    tooltip.add(new TranslatableComponent("tooltip.companion.maxhealth").append(": ").append(new TextComponent(String.format("%,.2f", entity.getAttribute(MAX_HEALTH).getBaseValue())).withStyle(Style.EMPTY.withColor(Color.fromRgb(0xFFC0CB)))).withStyle(ChatFormatting.GRAY));
+                    tooltip.add(new TranslatableComponent("tooltip.companion.maxhealth").append(": ").append(new TextComponent(String.format("%,.2f", entity.getAttribute(MAX_HEALTH).getBaseValue())).withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFC0CB)))).withStyle(ChatFormatting.GRAY));
                 }
             }
         }

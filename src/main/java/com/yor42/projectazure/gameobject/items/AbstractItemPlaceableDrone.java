@@ -4,18 +4,32 @@ import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.core.NonNullList;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.CreativeModeTab;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.*;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.Level;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nullable;
@@ -35,7 +49,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, Level worldIn, PlayerEntity playerIn) {
+    public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
         super.onCraftedBy(stack, worldIn, playerIn);
         stack.getOrCreateTag().putString("planeUUID", UUID.randomUUID().toString());
     }
@@ -78,7 +92,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         int currentFuel = stack.getOrCreateTag().getInt("fuel");
         float fuelPercent = (float) currentFuel/this.getFuelCapacity();
@@ -110,7 +124,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
 
         if(!context.getLevel().isClientSide() && context.getPlayer() != null && context.getPlayer().isShiftKeyDown()){
             AbstractEntityDrone DroneEntity = this.CreateDrone(context.getLevel(), context.getItemInHand(), context.getPlayer());
@@ -121,7 +135,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
                     stack.shrink(1);
                 }
             }
-            return ActionResultType.CONSUME;
+            return InteractionResult.CONSUME;
         }
 
         return super.useOn(context);

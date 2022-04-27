@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.MobEffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.text.ChatFormatting;
 import net.minecraft.util.text.Component;
@@ -59,7 +59,7 @@ public class ItemClaymore extends SwordItem implements IAnimatable {
                 }
             }
             int level = Math.min(claymorecount+(isSelected?2:1), 10);
-            ((PlayerEntity) entityIn).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 1, level, true, false));
+            ((PlayerEntity) entityIn).addEffect(new MobEffectInstance(Effects.MOVEMENT_SLOWDOWN, 1, level, true, false));
         }
     }
 }

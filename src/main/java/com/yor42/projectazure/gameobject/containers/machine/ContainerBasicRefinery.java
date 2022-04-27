@@ -8,7 +8,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.IIntArray;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
@@ -28,7 +28,7 @@ public class ContainerBasicRefinery extends Container {
 
     public final FluidStack crudeoilstack, gasolinestack, dieselstack, fueloilstack;
 
-    public ContainerBasicRefinery(int id, Inventory inventory, PacketBuffer buffer) {
+    public ContainerBasicRefinery(int id, Inventory inventory, FriendlyByteBuf  buffer) {
         this(id, inventory, new ItemStackHandler(10), new IIntArray() {
 
             final int[] values = buffer.readVarIntArray();

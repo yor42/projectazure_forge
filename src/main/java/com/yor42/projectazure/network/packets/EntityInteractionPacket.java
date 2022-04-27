@@ -5,7 +5,7 @@ import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -33,14 +33,14 @@ public class EntityInteractionPacket {
         this.pos = pos;
     }
 
-    public static EntityInteractionPacket decode (final PacketBuffer buffer){
+    public static EntityInteractionPacket decode (final FriendlyByteBuf  buffer){
         final int ID = buffer.readInt();
         final EntityBehaviorType BehaviorType = buffer.readEnum(EntityBehaviorType.class);
         final boolean value = buffer.readBoolean();
         return new EntityInteractionPacket(ID, BehaviorType, value);
     }
 
-    public static void encode(final EntityInteractionPacket msg, final PacketBuffer buffer){
+    public static void encode(final EntityInteractionPacket msg, final FriendlyByteBuf  buffer){
         buffer.writeInt(msg.EntityID);
         buffer.writeEnum(msg.behaviorType);
         buffer.writeBoolean(msg.value);

@@ -4,37 +4,39 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.ai.goals.DroneReturntoOwnerGoal;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Level;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.MoveBackToVillageGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.ai.util.HoverRandomPos;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ambient.AmbientCreature;
+import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -47,22 +49,21 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
-import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
 
-public abstract class AbstractEntityDrone extends AmbientCreature implements IAnimatable {
+public abstract class AbstractEntityDrone extends PathfinderMob implements IAnimatable {
     public AnimationFactory factory = new AnimationFactory(this);
     private boolean isReturningToOwner = false;
 
-    protected static final DataParameter<Integer> AMMO = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> FUEL = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.INT);
-    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Integer> AMMO = SynchedEntityData.defineId(AbstractEntityDrone.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> FUEL = SynchedEntityData.defineId(AbstractEntityDrone.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(AbstractEntityDrone.class, EntityDataSerializers.OPTIONAL_UUID);
 
-    protected AbstractEntityDrone(EntityType<? extends CreatureEntity> type, Level worldIn) {
+    protected AbstractEntityDrone(EntityType<? extends AmbientCreature> type, Level worldIn) {
         super(type, worldIn);
-        this.moveControl = new FlyingMovementController(this, 20, true);
-        this.navigation = new FlyingPathNavigator(this, worldIn);
-        this.setPathfindingMalus(PathNodeType.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+        this.moveControl = new FlyingMoveControl(this, 20, true);
+        this.navigation = new FlyingPathNavigation(this, worldIn);
+        this.setPathfindingMalus(BlockPathTypes.DANGER_FIRE, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
     }
 
     @Override
@@ -99,13 +100,13 @@ public abstract class AbstractEntityDrone extends AmbientCreature implements IAn
     public boolean shouldAttackEntity(LivingEntity targetEntity, LivingEntity owner){
 
         if(this.getOwner().isPresent()) {
-            if (targetEntity instanceof TameableEntity) {
+            if (targetEntity instanceof TamableAnimal) {
 
                 if(targetEntity instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) targetEntity).getOwner() != null){
                     return PAConfig.CONFIG.EnablePVP.get();
                 }
 
-                return !((TameableEntity) targetEntity).isOwnedBy((LivingEntity) this.getOwner().get());
+                return !((TamableAnimal) targetEntity).isOwnedBy((LivingEntity) this.getOwner().get());
             }
         }
         return true;
@@ -151,16 +152,16 @@ public abstract class AbstractEntityDrone extends AmbientCreature implements IAn
     }
 
     @Override
-    public ActionResultType interactAt(PlayerEntity player, Vector3d vec, Hand hand) {
+    public @NotNull InteractionResult interactAt(Player player, Vec3 vec, InteractionHand hand) {
 
         if (this.isOwner(player)) {
             if (player.isShiftKeyDown()) {
                 this.serializePlane(this.getCommandSenderWorld());
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
         else if(!this.getOwner().isPresent()){
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
 
         return super.interactAt(player, vec, hand);
@@ -178,7 +179,7 @@ public abstract class AbstractEntityDrone extends AmbientCreature implements IAn
         if (!world.isClientSide()) {
             ItemEntity entity = new ItemEntity(this.getCommandSenderWorld(), this.getX(), this.getY(), this.getZ(), turnPlanetoItemStack());
             world.addFreshEntity(entity);
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -244,13 +245,13 @@ public abstract class AbstractEntityDrone extends AmbientCreature implements IAn
     }
     public Optional<Entity> getOwner(){
         if(!this.getCommandSenderWorld().isClientSide() && this.getOwnerUUID().isPresent()){
-            return Optional.ofNullable(((ServerWorld)this.getCommandSenderWorld()).getEntity(this.getOwnerUUID().get()));
+            return Optional.ofNullable(((ServerLevel)this.getCommandSenderWorld()).getEntity(this.getOwnerUUID().get()));
         }
         return Optional.empty();
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -272,7 +273,7 @@ public abstract class AbstractEntityDrone extends AmbientCreature implements IAn
 
     class FlyRandomlyGoal extends Goal {
         FlyRandomlyGoal() {
-            this.setFlags(EnumSet.of(MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         /**
@@ -294,7 +295,7 @@ public abstract class AbstractEntityDrone extends AmbientCreature implements IAn
          * Execute a one shot task or start executing a continuous task
          */
         public void start() {
-            Vector3d vector3d = this.getRandomLocation();
+            Vec3 vector3d = this.getRandomLocation();
             if (vector3d != null) {
                 AbstractEntityDrone.this.navigation.moveTo(AbstractEntityDrone.this.navigation.createPath(new BlockPos(vector3d), 1), 1.0D);
             }
@@ -302,24 +303,25 @@ public abstract class AbstractEntityDrone extends AmbientCreature implements IAn
         }
 
         @Nullable
-        private Vector3d getRandomLocation() {
-            Vector3d vector3d;
-            if (AbstractEntityDrone.this.getOwner().isPresent()) {
-                Vector3d vector3d1 = AbstractEntityDrone.this.getOwner().get().position();
-                vector3d = vector3d1.subtract(AbstractEntityDrone.this.position()).normalize();
+        private Vec3 getRandomLocation() {
+            Vec3 vec3;
+            if (AbstractEntityDrone.this.getOwner().map((entity)-> AbstractEntityDrone.this.closerThan(entity,12)).orElse(false)) {
+                Vec3 vec31 = Vec3.atCenterOf(AbstractEntityDrone.this.getOwner().get().blockPosition());
+                vec3 = vec31.subtract(AbstractEntityDrone.this.position()).normalize();
             } else {
-                vector3d = AbstractEntityDrone.this.getViewVector(0.0F);
+                vec3 = AbstractEntityDrone.this.getViewVector(0.0F);
             }
 
-            Vector3d vector3d2 = RandomPositionGenerator.getAboveLandPos(AbstractEntityDrone.this, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
-            return vector3d2 != null ? vector3d2 : RandomPositionGenerator.getAirPos(AbstractEntityDrone.this, 8, 4, -2, vector3d, (float) Math.PI / 2F);
+            int i = 8;
+            Vec3 vec32 = HoverRandomPos.getPos(AbstractEntityDrone.this, 8, 7, vec3.x, vec3.z, ((float)Math.PI / 2F), 3, 1);
+            return vec32 != null ? vec32 : AirAndWaterRandomPos.getPos(AbstractEntityDrone.this, 8, 4, -2, vec3.x, vec3.z, (double)((float)Math.PI / 2F));
         }
     }
 
     class DroneFollowOwnerGoal extends Goal {
 
         public DroneFollowOwnerGoal() {
-            this.setFlags(EnumSet.of(MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
@@ -390,15 +392,15 @@ public abstract class AbstractEntityDrone extends AmbientCreature implements IAn
             } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
                 return false;
             } else {
-                AbstractEntityDrone.this.moveTo((double) x + 0.5D, y, (double) z + 0.5D, AbstractEntityDrone.this.yRot, AbstractEntityDrone.this.xRot);
+                AbstractEntityDrone.this.moveTo((double) x + 0.5D, y, (double) z + 0.5D, AbstractEntityDrone.this.getYRot(), AbstractEntityDrone.this.getXRot());
                 AbstractEntityDrone.this.getNavigation().stop();
                 return true;
             }
         }
 
         private boolean isTeleportFriendlyBlock(BlockPos pos) {
-            PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(AbstractEntityDrone.this.getCommandSenderWorld(), pos.mutable());
-            if (pathnodetype != PathNodeType.WALKABLE) {
+            BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(AbstractEntityDrone.this.getCommandSenderWorld(), pos.mutable());
+            if (pathnodetype != BlockPathTypes.WALKABLE) {
                 return false;
             } else {
                 BlockState blockstate = AbstractEntityDrone.this.getCommandSenderWorld().getBlockState(pos.below());

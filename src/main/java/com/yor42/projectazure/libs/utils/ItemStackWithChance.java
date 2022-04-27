@@ -2,7 +2,7 @@ package com.yor42.projectazure.libs.utils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +45,7 @@ public class ItemStackWithChance {
         }
     }
 
-    public static ItemStackWithChance read(PacketBuffer buffer) {
+    public static ItemStackWithChance read(FriendlyByteBuf  buffer) {
         final ItemStack stack = buffer.readItem();
         final float chance = buffer.readFloat();
         return new ItemStackWithChance(stack, chance);
@@ -67,7 +67,7 @@ public class ItemStackWithChance {
         return json;
     }
 
-    public void write(PacketBuffer buffer) {
+    public void write(FriendlyByteBuf  buffer) {
         buffer.writeItem(getStack());
         buffer.writeFloat(getChance());
     }

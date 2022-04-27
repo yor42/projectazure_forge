@@ -15,7 +15,7 @@ import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
@@ -210,7 +210,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf  buffer) {
         int[] var = {this.ProcessTime, this.totalProcessTime, this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored(), this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ()};
         buffer.writeVarIntArray(var);
     }

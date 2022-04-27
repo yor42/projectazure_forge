@@ -7,7 +7,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -99,7 +99,7 @@ public class PressingRecipe implements IRecipe<IInventory> {
         //ReadFromNetwork
         @Nullable
         @Override
-        public PressingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public PressingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf  buffer) {
             Ingredient ingredient = Ingredient.fromNetwork(buffer);
             Ingredient mold = Ingredient.fromNetwork(buffer);
             int processtime = buffer.readInt();
@@ -108,7 +108,7 @@ public class PressingRecipe implements IRecipe<IInventory> {
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, PressingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf  buffer, PressingRecipe recipe) {
             recipe.ingredient.toNetwork(buffer);
             recipe.mold.toNetwork(buffer);
             buffer.writeInt(recipe.processTick);

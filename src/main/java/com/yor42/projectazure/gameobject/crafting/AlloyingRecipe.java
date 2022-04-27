@@ -5,7 +5,7 @@ import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -161,7 +161,7 @@ public class AlloyingRecipe implements Recipe<?> {
 
         @Nullable
         @Override
-        public AlloyingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public AlloyingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf  buffer) {
 
             Ingredient ingredient1 = Ingredient.fromNetwork(buffer);
             int ing1count = buffer.readInt();
@@ -174,7 +174,7 @@ public class AlloyingRecipe implements Recipe<?> {
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, AlloyingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf  buffer, AlloyingRecipe recipe) {
             recipe.ingredient1.toNetwork(buffer);
             buffer.writeInt(recipe.ing1Count);
             recipe.ingredient2.toNetwork(buffer);

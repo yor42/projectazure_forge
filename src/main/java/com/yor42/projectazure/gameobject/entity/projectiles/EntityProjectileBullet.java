@@ -2,24 +2,27 @@ package com.yor42.projectazure.gameobject.entity.projectiles;
 
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.entity.projectile.ThrowableEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 
 import static com.yor42.projectazure.gameobject.misc.DamageSources.causeGunDamage;
 
-public class EntityProjectileBullet extends ThrowableEntity {
+public class EntityProjectileBullet extends ThrowableItemProjectile {
 
     float damage;
 
@@ -48,14 +51,14 @@ public class EntityProjectileBullet extends ThrowableEntity {
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult rayTraceResult) {
+    protected void onHitEntity(EntityHitResult rayTraceResult) {
 
         if(!level.isClientSide()) {
             Entity target = rayTraceResult.getEntity();
             Entity shooter = this.getOwner();
             target.hurt(causeGunDamage(this, shooter), this.damage);
             super.onHitEntity(rayTraceResult);
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -66,7 +69,7 @@ public class EntityProjectileBullet extends ThrowableEntity {
     }
 
     @Override
-    protected void onHitBlock(BlockRayTraceResult blockRayTraceResult) {
+    protected void onHitBlock(BlockHitResult blockRayTraceResult) {
         if(this.getCommandSenderWorld().isClientSide()){
             this.addBlockHitEffects(blockRayTraceResult);
         }
@@ -74,24 +77,24 @@ public class EntityProjectileBullet extends ThrowableEntity {
     }
 
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHit(HitResult result) {
         super.onHit(result);
-        this.remove();
+        this.remove(RemovalReason.DISCARDED);
     }
 
-    private void addBlockHitEffects(BlockRayTraceResult result){
+    private void addBlockHitEffects(BlockHitResult result){
         Minecraft.getInstance().particleEngine.addBlockHitEffects(result.getBlockPos(), result);
     }
 
-    public void ShootFromPlayer(Entity Shooter, float pitch, float yaw, float offset, float velocity, float inAccuracy, Hand firingHand) {
+    public void ShootFromPlayer(Entity Shooter, float pitch, float yaw, float offset, float velocity, float inAccuracy, InteractionHand firingHand) {
 
         this.setPos(Shooter.getX(), Shooter.getEyeY()-0.1F, Shooter.getZ());
 
-        float f = -MathHelper.sin(yaw * ((float)Math.PI / 180F)) * MathHelper.cos(pitch * ((float)Math.PI / 180F));
-        float f1 = -MathHelper.sin((pitch + offset) * ((float)Math.PI / 180F));
-        float f2 = MathHelper.cos(yaw * ((float)Math.PI / 180F)) * MathHelper.cos(pitch * ((float)Math.PI / 180F));
+        float f = -Mth.sin(yaw * ((float)Math.PI / 180F)) * Mth.cos(pitch * ((float)Math.PI / 180F));
+        float f1 = -Mth.sin((pitch + offset) * ((float)Math.PI / 180F));
+        float f2 = Mth.cos(yaw * ((float)Math.PI / 180F)) * Mth.cos(pitch * ((float)Math.PI / 180F));
         this.shoot((double)f, (double)f1, (double)f2, velocity, inAccuracy);
-        Vector3d vector3d = Shooter.getDeltaMovement();
+        Vec3 vector3d = Shooter.getDeltaMovement();
         this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, Shooter.isOnGround() ? 0.0D : vector3d.y, vector3d.z));
     }
 
@@ -101,12 +104,12 @@ public class EntityProjectileBullet extends ThrowableEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-
+    public Packet<?> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+    protected Item getDefaultItem() {
+        return Items.AIR;
     }
 }

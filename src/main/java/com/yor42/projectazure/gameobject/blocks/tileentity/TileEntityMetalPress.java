@@ -10,7 +10,7 @@ import net.minecraft.entity.player.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
@@ -80,7 +80,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         this.energyStorage.setMaxEnergy(15000);
     }
 
-    public void encodeExtraData(PacketBuffer buffer){
+    public void encodeExtraData(FriendlyByteBuf  buffer){
     }
 
     @Override

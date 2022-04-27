@@ -2,12 +2,14 @@ package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
+
+import static net.minecraft.world.entity.Entity.RemovalReason.DISCARDED;
 
 public class DroneReturntoOwnerGoal extends Goal {
 
@@ -58,11 +60,11 @@ public class DroneReturntoOwnerGoal extends Goal {
             if(this.entity.distanceTo(owner)>3){
                 ItemStack stack = this.entity.turnPlanetoItemStack();
                 boolean ItemInserted = false;
-                if(owner instanceof PlayerEntity){
-                    for(int i = 0; i< ((PlayerEntity) owner).inventory.getContainerSize(); i++){
-                        if(((PlayerEntity) owner).inventory.canPlaceItem(i, stack)){
-                            ((PlayerEntity) owner).inventory.setItem(i, stack);
-                            this.entity.remove();
+                if(owner instanceof Player){
+                    for(int i = 0; i< ((Player) owner).getInventory().getContainerSize(); i++){
+                        if(((Player) owner).getInventory().canPlaceItem(i, stack)){
+                            ((Player) owner).getInventory().setItem(i, stack);
+                            this.entity.remove(DISCARDED);
                             ItemInserted = true;
                             break;
                         }
@@ -73,7 +75,7 @@ public class DroneReturntoOwnerGoal extends Goal {
                         int index = 12+k;
                         if(((AbstractEntityCompanion) owner).getInventory().isItemValid(index, stack)){
                             ((AbstractEntityCompanion) owner).getInventory().setStackInSlot(index, stack);
-                            this.entity.remove();
+                            this.entity.remove(DISCARDED);
                             ItemInserted = true;
                             break;
                         }

@@ -15,13 +15,21 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemPlanef4Fwildcat
 import com.yor42.projectazure.gameobject.items.tools.*;
 import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.util.TooltipFlag;
 import net.minecraft.item.*;
+import net.minecraft.network.chat.*;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.*;
 import net.minecraft.world.Level;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -139,23 +147,23 @@ public class registerItems {
             .tab(PA_GROUP)
             .rarity(Rarity.EPIC)){
         @Override
-        public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+        public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
             if(worldIn != null && worldIn.isClientSide) {
                 if (Screen.hasShiftDown()) {
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.withBold(true).withColor(Color.fromRgb(0xff00fc)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip1").setStyle(Style.EMPTY.withBold(true).withColor(TextColor.fromRgb(0xff00fc)).withItalic(true)));
                     tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip2"));
                     tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip3"));
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x990000)).withItalic(true)));
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x999900)).withItalic(true)));
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip4").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x990000)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip5").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip6").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip7").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x999900)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip8").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip9").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.tooltip10").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e)).withItalic(true)));
                 } else {
                     Component shift = new TextComponent("[SHIFT]").withStyle(ChatFormatting.YELLOW);
-                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(0x5e5e5e))));
+                    tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.desc1").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x5e5e5e))));
                     tooltip.add(new TranslatableComponent("item.projectazure.energy_drink.shiftinfo", shift).withStyle(ChatFormatting.GRAY));
                 }
             }
@@ -233,9 +241,9 @@ public class registerItems {
             .tab(PA_GROUP).stacksTo(1))
     {
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
-            tooltip.add(new TranslatableComponent("disc.brainpower.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
+            tooltip.add(new TranslatableComponent("disc.brainpower.desc1").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(7829367))));
         }
 
         @Nonnull
@@ -296,9 +304,9 @@ public class registerItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+        public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
-            tooltip.add(new TranslatableComponent("disc.enterthebeginning.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
+            tooltip.add(new TranslatableComponent("disc.enterthebeginning.desc1").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(7829367))));
         }
     });
 

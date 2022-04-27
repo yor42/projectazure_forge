@@ -2,22 +2,24 @@ package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemDefibChargerRenderer;
 import com.yor42.projectazure.gameobject.capability.ItemPowerCapabilityProvider;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ChatFormatting;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -33,6 +35,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.setup.register.registerSounds.*;
@@ -43,7 +46,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     public static final String controllerName = "defibcharger_controller";
     public AnimationFactory factory = new AnimationFactory(this);
     public ItemDefibCharger() {
-        super(new Item.Properties().tab(PA_WEAPONS).stacksTo(1).setISTER(()->ItemDefibChargerRenderer::new));
+        super(new Item.Properties().tab(PA_WEAPONS).stacksTo(1));
         GeckoLibNetwork.registerSyncable(this);
     }
 
@@ -53,7 +56,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
         return new ItemPowerCapabilityProvider(stack, 40000);
     }
     @Override
-    public ActionResult<ItemStack> use(@Nonnull Level world, PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, Player player, @Nonnull InteractionHand hand) {
 
         ItemStack stack= player.getItemInHand(hand);
         if(stack.getItem() instanceof ItemDefibCharger){
@@ -62,10 +65,10 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
 
                 if(nextstate && stack.getCapability(CapabilityEnergy.ENERGY).map((e)-> e.extractEnergy(1, true)<=0).orElse(true)){
                     player.playSound(DEFIB_NOBATTERY, 1.0F, 1.0F);
-                    return ActionResult.fail(stack);
+                    return InteractionResultHolder.fail(stack);
                 }
                 if(!world.isClientSide()){
-                    final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+                    final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
 
                     int state = nextstate?ANIM_ON:ANIM_OFF;
 
@@ -80,7 +83,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
 
                 player.playSound(nextstate?DEFIB_POWERON:DEFIB_POWEROFF, 1.0F, 1.0F);
                 setOn(stack, nextstate);
-                return ActionResult.pass(stack);
+                return InteractionResultHolder.pass(stack);
             }
         }
         return super.use(world, player, hand);
@@ -109,8 +112,8 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                     int charge = Math.max(0, getChargeProgress(stack)-10);
                     if (charge <= 0) {
                         setCharging(stack, false);
-                        if(p_77663_3_ instanceof PlayerEntity) {
-                            PlayerEntity player = (PlayerEntity) p_77663_3_;
+                        if(p_77663_3_ instanceof Player) {
+                            Player player = (Player) p_77663_3_;
                             player.displayClientMessage(new TranslatableComponent("item.tooltip.chargefailed_nobattery").withStyle(ChatFormatting.RED), true);
                         }
                     }
@@ -127,7 +130,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                         setChargeProgress(stack, 0);
                         setCharging(stack, false);
                         if(!world.isClientSide()){
-                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
                             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> p_77663_3_);
                             GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
                         }
@@ -137,8 +140,8 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                 }
             }
         }
-        if(p_77663_3_ instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) p_77663_3_;
+        if(p_77663_3_ instanceof Player) {
+            Player player = (Player) p_77663_3_;
             if (ShouldCharging(stack)) {
                 int charge = (int) (((float) getChargeProgress(stack) / 100) * 100);
                 player.displayClientMessage(new TranslatableComponent("item.tooltip.chargeprogress", charge + "%").withStyle(ChatFormatting.AQUA), true);
@@ -148,7 +151,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
         }
 
         if(!world.isClientSide()) {
-            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
             final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             if (controller.getAnimationState() == AnimationState.Stopped) {
                 controller.markNeedsReload();
@@ -159,7 +162,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, Level world, PlayerEntity player) {
+    public void onArmorTick(ItemStack stack, Level world, Player player) {
         super.onArmorTick(stack, world, player);
         if(isOn(stack)){
             int chargeprogress = getChargeProgress(stack);
@@ -190,7 +193,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                         setChargeProgress(stack, 0);
                         setCharging(stack, false);
                         if(!world.isClientSide()){
-                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
                             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player);
                             GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
                         }
@@ -210,7 +213,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
         }
 
         if(!world.isClientSide()) {
-            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerLevel) world);
             final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             if (controller.getAnimationState() == AnimationState.Stopped) {
                 controller.markNeedsReload();
@@ -273,7 +276,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldin, @Nonnull List<Component> tooltips, @Nonnull ITooltipFlag tooltipadvanced) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldin, @Nonnull List<Component> tooltips, @Nonnull TooltipFlag tooltipadvanced) {
         tooltips.add(new TranslatableComponent(this.getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
         stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((cap)->tooltips.add(new TranslatableComponent("item.tooltip.energystored", cap.getEnergyStored()+"/"+cap.getMaxEnergyStored()).withStyle(ChatFormatting.GRAY)));
         if(ShouldCharging(stack)){
@@ -284,6 +287,19 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
             tooltips.add(new TranslatableComponent("item.tooltip.ready").withStyle(ChatFormatting.GREEN));
         }
         super.appendHoverText(stack, worldin, tooltips, tooltipadvanced);
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            private final BlockEntityWithoutLevelRenderer renderer = new ItemDefibChargerRenderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return renderer;
+            }
+        });
     }
 
     @Nullable

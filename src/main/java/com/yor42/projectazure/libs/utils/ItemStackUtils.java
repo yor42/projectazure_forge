@@ -13,10 +13,10 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneB
 import com.yor42.projectazure.gameobject.misc.RiggingInventories;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.text.Color;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -172,7 +172,7 @@ public class ItemStackUtils {
     }
 
 
-    public static ItemStack getPreparedWeapon(ItemStack rigging, enums.SLOTTYPE slottype, MobEntity Shooter){
+    public static ItemStack getPreparedWeapon(ItemStack rigging, enums.SLOTTYPE slottype, Mob Shooter){
 
         int inventory = slottype.ordinal();
 
@@ -197,7 +197,7 @@ public class ItemStackUtils {
         }).orElse(ItemStack.EMPTY);
     }
 
-    public static boolean isPlaneFuelReady(MobEntity entity, ItemStack planeStack){
+    public static boolean isPlaneFuelReady(Mob entity, ItemStack planeStack){
         if(planeStack.getItem() instanceof ItemEquipmentPlaneBase) {
             return planeStack.getOrCreateTag().getInt("fuel") >= getRequiredMinimumFuel(entity, (ItemEquipmentPlaneBase) planeStack.getItem());
         }
@@ -211,7 +211,7 @@ public class ItemStackUtils {
         return 0;
     }
 
-    public static float getRequiredMinimumFuel(MobEntity Shooter, ItemEquipmentPlaneBase planeItem){
+    public static float getRequiredMinimumFuel(Mob Shooter, ItemEquipmentPlaneBase planeItem){
         //Movement speed 0.1 = roughly 0.2 block/tick
         if(Shooter.getTarget() != null && Shooter.getTarget().isAlive()) {
             double distance = Shooter.distanceTo(Shooter.getTarget())*2.5;//2 way trip+ another 0.5X of fuel because minecraft entity are stupid
@@ -335,7 +335,7 @@ public class ItemStackUtils {
         }
     }
 
-    public static Color getHPColor(ItemStack stack){
+    public static TextColor getHPColor(ItemStack stack){
         float HP_Percent = 0;
         String ColorHex = "69b82d";
         if(stack.getItem() instanceof ItemDestroyable){
@@ -349,7 +349,7 @@ public class ItemStackUtils {
             ColorHex = "fff209";
         }
 
-        return Color.parseColor("#"+ColorHex);
+        return TextColor.parseColor("#"+ColorHex);
     }
 
 }

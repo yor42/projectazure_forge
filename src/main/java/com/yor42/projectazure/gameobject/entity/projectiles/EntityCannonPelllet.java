@@ -16,9 +16,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.Level;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-public class EntityCannonPelllet extends DamagingProjectileEntity {
+public class EntityCannonPelllet extends AbstractHurtingProjectile {
 
     AmmoProperties properties;
     BlockPos originPos;

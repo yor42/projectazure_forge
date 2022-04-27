@@ -117,7 +117,7 @@ public class CompanionHealandEatFoodGoal extends Goal {
         if(stack.getUseAnimation() == UseAction.EAT && stack.getCount() > 0 && stack.isEdible()){
             if(!stack.getItem().getFoodProperties().getEffects().isEmpty()){
                 for(int i =0; i<stack.getItem().getFoodProperties().getEffects().size(); i++){
-                    EffectInstance instance = stack.getItem().getFoodProperties().getEffects().get(i).getFirst();
+                    MobEffectInstance instance = stack.getItem().getFoodProperties().getEffects().get(i).getFirst();
                     if(instance.getEffect().getCategory() == EffectType.HARMFUL){
                         return false;
                     }
@@ -127,8 +127,8 @@ public class CompanionHealandEatFoodGoal extends Goal {
         }
         if(IncludeHealingPotion) {
             if (stack.getUseAnimation() == UseAction.DRINK && !(stack.getItem() instanceof SplashPotionItem) && stack.getCount() > 0) {
-                for (EffectInstance effectinstance : PotionUtils.getMobEffects(stack)) {
-                    if (doesPotionHeal(effectinstance.getEffect().getEffect())) {
+                for (MobEffectInstance MobEffectInstance : PotionUtils.getMobEffects(stack)) {
+                    if (doesPotionHeal(MobEffectInstance.getEffect().getEffect())) {
                         return true;
                     }
                 }

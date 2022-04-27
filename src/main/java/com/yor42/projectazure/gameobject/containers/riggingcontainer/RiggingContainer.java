@@ -10,14 +10,14 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentGun;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentTorpedo;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.MenuProvider;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
@@ -26,11 +26,11 @@ import java.util.function.Function;
 
 import static com.yor42.projectazure.setup.register.registerManager.RIGGING_INVENTORY;
 
-public class RiggingContainer extends Container {
+public class RiggingContainer extends AbstractContainerMenu {
 
     public ItemStack riggingStack;
 
-    public RiggingContainer(int id, Inventory playerInv, PacketBuffer data) {
+    public RiggingContainer(int id, Inventory playerInv, FriendlyByteBuf data) {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = data.readItem();
 
@@ -76,7 +76,7 @@ public class RiggingContainer extends Container {
         }
     }
 
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
         Slot slot = this.slots.get(index);
@@ -145,7 +145,7 @@ public class RiggingContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 
@@ -171,7 +171,7 @@ public class RiggingContainer extends Container {
         }
 
         @Override
-        public Container createMenu(int windowId, @Nonnull Inventory inventory, @Nonnull PlayerEntity player) {
+        public AbstractContainerMenu createMenu(int windowId, @Nonnull Inventory inventory, @Nonnull Player player) {
             return new RiggingContainer(windowId, inventory, this.stack);
         }
     }

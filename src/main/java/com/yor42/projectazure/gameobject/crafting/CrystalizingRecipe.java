@@ -8,7 +8,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -112,7 +112,7 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
 
         @Nullable
         @Override
-        public CrystalizingRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public CrystalizingRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf  buffer) {
             Ingredient seed = Ingredient.fromNetwork(buffer);
             FluidStack stack2Read =buffer.readFluidStack();
             ItemStack result = buffer.readItem();
@@ -122,7 +122,7 @@ public class CrystalizingRecipe implements IRecipe<TileEntityCrystalGrowthChambe
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, CrystalizingRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf  buffer, CrystalizingRecipe recipe) {
             recipe.seed.toNetwork(buffer);
             buffer.writeFluidStack(new FluidStack(recipe.solution, recipe.growthTime));
             buffer.writeItem(recipe.output);

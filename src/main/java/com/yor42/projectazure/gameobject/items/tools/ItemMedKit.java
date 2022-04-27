@@ -4,7 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.UseAction;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.MobEffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
@@ -38,8 +38,8 @@ public class ItemMedKit extends Item {
     public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity) {
         if(entity instanceof PlayerEntity) {
             entity.heal(5);
-            entity.addEffect(new EffectInstance(Effects.REGENERATION, 600, 1));
-            entity.addEffect(new EffectInstance(Effects.ABSORPTION, 300));
+            entity.addEffect(new MobEffectInstance(Effects.REGENERATION, 600, 1));
+            entity.addEffect(new MobEffectInstance(Effects.ABSORPTION, 300));
             ((PlayerEntity) entity).awardStat(Stats.ITEM_USED.get(this));
             stack.hurtAndBreak(1, entity, (entity1) -> entity1.broadcastBreakEvent(entity1.getUsedItemHand()));
         }

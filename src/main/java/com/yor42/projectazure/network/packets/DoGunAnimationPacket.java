@@ -5,7 +5,7 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.Hand;
 import net.minecraft.world.Level;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,7 @@ public class DoGunAnimationPacket {
         this.shouldPlayReloadAnimation = shouldPlayReloadAnimation;
     }
 
-    public static DoGunAnimationPacket decode(PacketBuffer buffer){
+    public static DoGunAnimationPacket decode(FriendlyByteBuf  buffer){
         final boolean isOffHand = buffer.readBoolean();
         final boolean isZooming = buffer.readBoolean();
         final int playerID = buffer.readInt();
@@ -41,7 +41,7 @@ public class DoGunAnimationPacket {
         return new DoGunAnimationPacket(isOffHand, isZooming, playerID, shouldPlayReloadanim);
     }
 
-    public static void encode(final DoGunAnimationPacket message, final PacketBuffer buffer){
+    public static void encode(final DoGunAnimationPacket message, final FriendlyByteBuf  buffer){
         buffer.writeBoolean(message.isOffHand);
         buffer.writeBoolean(message.isZooming);
         buffer.writeInt(message.PlayerID);

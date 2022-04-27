@@ -2,7 +2,7 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Level;
@@ -16,12 +16,12 @@ public class StartRecruitPacket {
         this.pos = pos;
     }
 
-    public static StartRecruitPacket decode (final PacketBuffer buffer){
+    public static StartRecruitPacket decode (final FriendlyByteBuf  buffer){
         final BlockPos pos = buffer.readBlockPos();
         return new StartRecruitPacket(pos);
     }
 
-    public static void encode(final StartRecruitPacket msg, final PacketBuffer buffer){
+    public static void encode(final StartRecruitPacket msg, final FriendlyByteBuf  buffer){
         buffer.writeBlockPos(msg.pos);
     }
 

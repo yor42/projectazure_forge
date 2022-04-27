@@ -2,7 +2,7 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.network.serverEvents;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -14,12 +14,12 @@ public class selectedStarterPacket {
         this.starterID = id;
     }
 
-    public static selectedStarterPacket decode (final PacketBuffer buffer){
+    public static selectedStarterPacket decode (final FriendlyByteBuf  buffer){
         final int starterid = buffer.readInt();
         return new selectedStarterPacket(starterid);
     }
 
-    public static void encode(final selectedStarterPacket msg, final PacketBuffer buffer){
+    public static void encode(final selectedStarterPacket msg, final FriendlyByteBuf  buffer){
         buffer.writeInt(msg.starterID);
     }
 

@@ -5,7 +5,7 @@ import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.Hand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -23,14 +23,14 @@ public class GunFiredPacket{
         this.offHand = isOffHand;
     }
 
-    public static GunFiredPacket decode(PacketBuffer buffer){
+    public static GunFiredPacket decode(FriendlyByteBuf  buffer){
         final boolean isZooming = buffer.readBoolean();
         final boolean isOffHand = buffer.readBoolean();
 
         return new GunFiredPacket(isZooming, isOffHand);
     }
 
-    public static void encode(final GunFiredPacket message, final PacketBuffer buffer){
+    public static void encode(final GunFiredPacket message, final FriendlyByteBuf  buffer){
         buffer.writeBoolean(message.isZooming);
         buffer.writeBoolean(message.offHand);
     }

@@ -31,22 +31,28 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -62,12 +68,19 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
 import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
@@ -75,6 +88,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -99,6 +113,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
 import static net.minecraft.world.InteractionHand.OFF_HAND;
+import static net.minecraftforge.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public abstract class AbstractEntityCompanion extends TamableAnimal implements CrossbowAttackMob, IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
@@ -515,7 +530,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 ItemStack itemstack = this.getInventory().getStackInSlot(i);
                 if ((!damageSource.isFire() || !itemstack.getItem().isFireResistant()) && itemstack.getItem() instanceof ArmorItem) {
                     int j = i;
-                    itemstack.hurtAndBreak((int) damage, this, (p_214023_1_) -> p_214023_1_.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Group.ARMOR, j)));
+                    itemstack.hurtAndBreak((int) damage, this, (p_214023_1_) -> p_214023_1_.broadcastBreakEvent(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, j)));
                 }
             }
         }
@@ -666,7 +681,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.ItemSwapIndexOffhand = value;
     }
 
-    public int getItemSwapIndex(Hand hand){
+    public int getItemSwapIndex(InteractionHand hand){
         return hand == MAIN_HAND? this.getItemSwapIndexMainHand() : this.getItemSwapIndexOffHand();
     }
 
@@ -690,10 +705,10 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     public void die(@Nonnull DamageSource p_70645_1_) {
         if (net.minecraftforge.common.ForgeHooks.onLivingDeath(this, p_70645_1_)) return;
-        if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayerEntity) {
+        if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer) {
             this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
         }
-        if (!this.dead && !this.dead) {
+        if (!this.isRemoved() && !this.dead) {
             Entity entity = p_70645_1_.getEntity();
             LivingEntity livingentity = this.getKillCredit();
             if (this.deathScore >= 0 && livingentity != null) {
@@ -879,7 +894,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.isSwimmingUp = swimmingUp;
     }
 
-    public void AttackUsingGun(LivingEntity target, ItemStack gun, Hand HandIn){
+    public void AttackUsingGun(LivingEntity target, ItemStack gun, InteractionHand HandIn){
         if(gun.getItem() instanceof ItemGunBase){
             AnimationController<?> gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
             gunAnimation.setAnimation(new AnimationBuilder().addAnimation("fire", false));
@@ -892,7 +907,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     {
         for(int i = 0; i < this.getInventory().getSlots(); ++i)
         {
-            if(this.canMergeStacks(this.getInventory().getStackInSlot(i).getStack(), itemStackIn, i))
+            if(this.canMergeStacks(this.getInventory().getStackInSlot(i), itemStackIn, i))
             {
                 return i;
             }
@@ -926,13 +941,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     @Override
-    public void shootCrossbowProjectile(LivingEntity p_230284_1_, ItemStack p_230284_2_, ProjectileEntity p_230284_3_, float p_230284_4_) {
+    public void shootCrossbowProjectile(LivingEntity p_230284_1_, ItemStack p_230284_2_, Projectile p_230284_3_, float p_230284_4_) {
         this.shootCrossbowProjectile(this, p_230284_1_, p_230284_3_, p_230284_4_, 1.6F);
     }
 
     @Override
     public void performCrossbowAttack(LivingEntity p_234281_1_, float p_234281_2_) {
-        Hand hand = ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof CrossbowItem);
+        InteractionHand hand = ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof CrossbowItem);
         ItemStack itemstack = this.getItemInHand(hand);
         if (this.getMainHandItem().getItem() instanceof CrossbowItem) {
             CrossbowItem.performShooting(this.level, this, hand, itemstack, p_234281_2_, (float)(14 - p_234281_1_.level.getDifficulty().getId() * 4));
@@ -1084,7 +1099,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     public double getMyRidingOffset() {
-        if(this.getVehicle() instanceof PlayerEntity){
+        if(this.getVehicle() instanceof Player){
             return 0.45D;
         }
         else {
@@ -1095,8 +1110,8 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @Override
     public void remove(boolean keepData) {
         super.remove(keepData);
-        if(!keepData && this.getOwner() instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) this.getOwner();
+        if(!keepData && this.getOwner() instanceof Player){
+            Player player = (Player) this.getOwner();
             ProjectAzurePlayerCapability.getCapability(player).removeCompanion(this);
         }
     }
@@ -1112,7 +1127,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         else if(source.getEntity() instanceof AbstractEntityDrone && ((AbstractEntityDrone) source.getEntity()).getOwner().isPresent() && (((AbstractEntityDrone) source.getEntity()).getOwner().get() == this ||  (((AbstractEntityDrone) source.getEntity()).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) source.getEntity()).getOwner().get()).isOwnedBy(this.getOwner())))){
             return false;
         }
-        if(source.getEntity() instanceof PlayerEntity && this.isOwnedBy((LivingEntity) source.getEntity())){
+        if(source.getEntity() instanceof Player && this.isOwnedBy((LivingEntity) source.getEntity())){
             if(this.toldtomovecount >=3){
                 this.toldtomovecount = 0;
                 Vector3d loc = this.WanderRNG();
@@ -1541,8 +1556,8 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public void aiStep() {
         super.aiStep();
 
-        if(this.getOwner() != null && this.getOwner() instanceof PlayerEntity && this.isAlive()){
-            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
+        if(this.getOwner() != null && this.getOwner() instanceof Player && this.isAlive()){
+            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((Player) this.getOwner());
             if(!cap.getCompanionList().contains(this)){
                 cap.addCompanion(this);
             }
@@ -1568,14 +1583,14 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         }
 
         if(this.hasEffect(Effects.HUNGER)){
-            EffectInstance hunger = this.getEffect(Effects.HUNGER);
+            MobEffectInstance hunger = this.getEffect(Effects.HUNGER);
             if((hunger != null ? hunger.getDuration() : 0) >0 && hunger.getEffect().isDurationEffectTick(hunger.getDuration(), hunger.getAmplifier())){
                 this.addExhaustion(0.005F * (float)(hunger.getAmplifier() + 1));
             }
         }
 
         if(this.hasEffect(Effects.SATURATION)){
-            EffectInstance Saturation = this.getEffect(Effects.SATURATION);
+            MobEffectInstance Saturation = this.getEffect(Effects.SATURATION);
             if((Saturation != null ? Saturation.getDuration() : 0) >0 && Saturation.getEffect().isDurationEffectTick(Saturation.getDuration(), Saturation.getAmplifier())){
                 this.getFoodStats().addStats(Saturation.getAmplifier() + 1, 1.0F);
             }
@@ -2204,7 +2219,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.lastWokenup = lastWokenup;
     }
 
-    public void tame(PlayerEntity player) {
+    public void tame(Player player) {
         this.setTame(true);
         this.setOwnerUUID(player.getUUID());
         ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(player);
@@ -2252,7 +2267,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Nonnull
     @Override
-    public ActionResultType interactAt(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
+    public InteractionResult interactAt(@Nonnull Player player, @Nonnull Vec3 vec, @Nonnull InteractionHand hand) {
 
         ItemStack heldstacks = player.getMainHandItem();
         Item HeldItem = heldstacks.getItem();
@@ -2260,7 +2275,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         if(this.isOwnedBy(player) && !(this instanceof EntityKansenBase && HeldItem instanceof ItemRiggingBase)) {
             if((this.isDeadOrDying() || this.isCriticallyInjured())){
                 if(player.getMainHandItem().getItem() instanceof ItemDefibPaddle || player.getOffhandItem().getItem() instanceof ItemDefibPaddle){
-                    return ActionResultType.PASS;
+                    return InteractionResult.PASS;
                 }
                 else if(this.isSleeping()){
                     this.stopSleeping();
@@ -2273,16 +2288,16 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 }
 
                 if(isobstructed){
-                    return ActionResultType.PASS;
+                    return InteractionResult.PASS;
                 }
                 else {
                     this.startRiding(player, true);
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             }
             else if (this.getVehicle() != null) {
                 this.stopRiding();
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             else if (HeldItem instanceof ArmorItem || HeldItem instanceof TieredItem) {
                 ItemStack stack = player.getItemInHand(hand).copy();
@@ -2293,7 +2308,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     if (stack == this.getItemBySlot(type)) {
                         player.setItemInHand(hand, EquippedStack);
                         this.playEquipSound(stack);
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
@@ -2309,28 +2324,28 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     player.setItemInHand(hand, stack);
                 }
                 this.playSound(SoundEvents.GENERIC_EAT, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
             //Potion
             else if (HeldItem instanceof PotionItem && !(HeldItem instanceof ThrowablePotionItem)) {
                 ItemStack stack = player.getItemInHand(hand);
-                for (EffectInstance effectinstance : PotionUtils.getMobEffects(stack)) {
-                    if (effectinstance.getEffect().isInstantenous()) {
-                        effectinstance.getEffect().applyInstantenousEffect(player, player, this, effectinstance.getAmplifier(), 1.0D);
+                for (MobEffectInstance MobEffectInstance : PotionUtils.getMobEffects(stack)) {
+                    if (MobEffectInstance.getEffect().isInstantenous()) {
+                        MobEffectInstance.getEffect().applyInstantenousEffect(player, player, this, MobEffectInstance.getAmplifier(), 1.0D);
                     } else {
-                        this.addEffect(new EffectInstance(effectinstance));
+                        this.addEffect(new MobEffectInstance(MobEffectInstance));
                     }
-                    this.addAffection(effectinstance.getEffect().isBeneficial() ? 0.05 : -0.075);
+                    this.addAffection(MobEffectInstance.getEffect().isBeneficial() ? 0.05 : -0.075);
                 }
                 this.playSound(SoundEvents.GENERIC_DRINK, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);
                 if (!player.isCreative()) {
                     player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
                 }
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             } else if (heldstacks.getItem() == registerItems.OATHRING.get()) {
                 if (this.getAffection() < 100 && !player.isCreative()) {
                     player.sendMessage(new TranslatableComponent("entity.not_enough_affection"), this.getUUID());
-                    return ActionResultType.FAIL;
+                    return InteractionResult.FAIL;
                 } else {
                     if (!this.isOathed()) {
                         if (player.isCreative()) {
@@ -2342,7 +2357,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         if(this.getOathSound()!= null) {
                             this.playSound(this.getOathSound(), 1.0f, 1.0f);
                         }
-                        return ActionResultType.CONSUME;
+                        return InteractionResult.CONSUME;
                     }
                 }
             } else if (heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()) {
@@ -2355,13 +2370,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     if (!this.level.isClientSide) {
                         this.doHeal(1.0f);
                         if (!player.isCreative()) {
-                            if (heldstacks.hurt(1, MathUtil.getRand(), (ServerPlayerEntity) player)) {
+                            if (heldstacks.hurt(1, MathUtil.getRand(), (ServerPlayer) player)) {
                                 heldstacks.shrink(1);
                             }
                         }
                         this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
                     }
-                    return ActionResultType.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             } else if (heldstacks.getItem() instanceof ItemCommandStick) {
                 CompoundTag compound = heldstacks.getOrCreateTag();
@@ -2370,9 +2385,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         if (compound.contains("BedX") && compound.contains("BedY") && compound.contains("BedZ")) {
                             BlockPos BedPos = new BlockPos(compound.getInt("BedX"), compound.getInt("BedY"), compound.getInt("BedZ"));
                             if (this.getCommandSenderWorld().getBlockState(BedPos).isBed(this.getCommandSenderWorld(), BedPos, this)) {
-                                if(this.getOwner() instanceof PlayerEntity) {
+                                if(this.getOwner() instanceof Player) {
 
-                                    ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity)this.getOwner());
+                                    ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((Player)this.getOwner());
                                     boolean isBedDuplicate = false;
                                     @Nullable
                                     AbstractEntityCompanion duplicatedComp = null;
@@ -2406,7 +2421,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                             player.displayClientMessage(new TranslatableComponent("message.commandstick.entity_bedpos_cleared", this.getDisplayName()), true);
                         }
                     }
-                    return ActionResultType.CONSUME;
+                    return InteractionResult.CONSUME;
                 }
             } else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
 
@@ -2438,11 +2453,11 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     interactionDirection = BlockStateUtil.RelativeDirection.RIGHT;
                 }
 
-                Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
+                Vec3 PlayerLook = player.getViewVector(1.0F).normalize();
                 float eyeHeight = (float) this.getEyeY();
 
 
-                Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
+                Vec3 EyeDelta = new Vec3(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
                 double EyeDeltaLength = EyeDelta.length();
                 EyeDelta = EyeDelta.normalize();
                 double EyeCheckFinal = PlayerLook.dot(EyeDelta);
@@ -2456,18 +2471,18 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                             this.forceWakeupCounter++;
                             this.forcewakeupExpireTimer = 20;
                         }
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     } else if (EyeCheckFinal > 0.998 && this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)==0) {
                         if (this.getCommandSenderWorld().isClientSide()) {
                             Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.PAT, true));
                         }
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                     else if (this.isDoingVerticalInteraction(player, 0.65F, -1) && interactionDirection==FRONT) {
                         if (this.getCommandSenderWorld().isClientSide()) {
                             Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.QUESTIONABLE, true));
                         }
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                     else if (this.isDoingVerticalInteraction(player, 0.2F, -1)) {
                         if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit()) {
@@ -2479,35 +2494,35 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                             }
 
                             if(isobstructed){
-                                return ActionResultType.PASS;
+                                return InteractionResult.PASS;
                             }
                             else {
                                 this.startRiding(player, true);
-                                return ActionResultType.SUCCESS;
+                                return InteractionResult.SUCCESS;
                             }
                         }
                         else {
                             this.SwitchSittingStatus();
                         }
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                         //this.setOrderedToSit(!this.isSitting());
                     }
                     else if(player.isShiftKeyDown()) {
                         if (!this.level.isClientSide) {
-                            this.openGUI((ServerPlayerEntity) player);
+                            this.openGUI((ServerPlayer) player);
                         }
                         this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
         else{
             if(player.getMainHandItem().getItem() == registerItems.Rainbow_Wisdom_Cube.get()&&!this.isTame()){
                 this.tame(player);
                 player.getItemInHand(hand).shrink(1);
-                return ActionResultType.CONSUME;
+                return InteractionResult.CONSUME;
             }
         }
         return super.interactAt(player, vec, hand);
@@ -2518,19 +2533,19 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public boolean isDoingVerticalInteraction(LivingEntity player, float heightpoint, float distance){
-        Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
-        Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), this.getY(heightpoint) - player.getEyeY(), this.getZ() - player.getZ());
+        Vec3 PlayerLook = player.getViewVector(1.0F).normalize();
+        Vec3 EyeDelta = new Vec3(this.getX() - player.getX(), this.getY(heightpoint) - player.getEyeY(), this.getZ() - player.getZ());
         EyeDelta = EyeDelta.normalize();
         double EyeCheckFinal = PlayerLook.dot(EyeDelta);
         return EyeCheckFinal > 0.998;
     }
 
     public boolean isDoingHeadpat(LivingEntity player, float distance){
-        Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
+        Vec3 PlayerLook = player.getViewVector(1.0F).normalize();
         float eyeHeight = (float) this.getEyeY();
 
 
-        Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
+        Vec3 EyeDelta = new Vec3(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
         double EyeDeltaLength = EyeDelta.length();
         EyeDelta = EyeDelta.normalize();
         double EyeCheckFinal = PlayerLook.dot(EyeDelta);
@@ -2564,7 +2579,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     @Override
-    protected float getVoicePitch() {
+    public float getVoicePitch() {
         return 0.9F+(this.getRandom().nextFloat()*0.2F);
     }
 
@@ -2624,9 +2639,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     }
 
-    public void pickupExpOrb(ExperienceOrbEntity orbEntity){
+    public void pickupExpOrb(ExperienceOrb orbEntity){
         if(!this.level.isClientSide){
-            if(orbEntity.throwTime <= 0 && this.expdelay <= 0){
+            if(orbEntity.invulnerableTime <= 0 && this.expdelay <= 0){
                 this.take(orbEntity, 1);
                 this.expdelay = 2;
                 Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
@@ -2641,13 +2656,13 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 if (orbEntity.value > 0) {
                     this.addExp(orbEntity.value);
                 }
-                orbEntity.remove();
+                orbEntity.remove(RemovalReason.DISCARDED);
             }
         }
     }
 
     @Override
-    public boolean canBeLeashed(PlayerEntity player) {
+    public boolean canBeLeashed(Player player) {
         if(this.getOwner() == player){
             player.displayClientMessage(new TranslatableComponent("message.easteregg.leash"), true);
         }
@@ -2656,14 +2671,14 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     protected void removeAfterChangingDimensions() {
-        if(this.getOwner() != null && this.getOwner() instanceof PlayerEntity){
-            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
+        if(this.getOwner() != null && this.getOwner() instanceof Player){
+            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((Player) this.getOwner());
             cap.removeCompanion(this);
         }
         super.removeAfterChangingDimensions();
     }
 
-    protected abstract void openGUI(ServerPlayerEntity player);
+    protected abstract void openGUI(ServerPlayer player);
 
     public void beingpatted(){
         if(this.entityData.get(MAXPATEFFECTCOUNT) == 0){
@@ -2781,7 +2796,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         for(int i = 0; i<this.getInventory().getSlots(); i++){
             itemstack1 = this.getInventory().insertItem(i, stack, false);
             if(itemstack1.isEmpty()){
-                target.remove();
+                target.remove(RemovalReason.DISCARDED);
                 break;
             }
 
@@ -2821,7 +2836,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     @MethodsReturnNonnullByDefault
     public EntityDimensions getDimensions(@ParametersAreNonnullByDefault Pose poseIn) {
         if(this.isOrderedToSit() || this.getVehicle() != null){
-            return new EntitySize(this.getBbWidth(), this.getSitHeight(), false);
+            return new EntityDimensions(this.getBbWidth(), this.getSitHeight(), false);
         }
         return super.getDimensions(poseIn);
     }
@@ -2841,18 +2856,12 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return this.tickCount;
     }
 
-    public Brain<AbstractEntityCompanion> getBrain() {
+    public Brain<?> getBrain() {
         return (Brain<AbstractEntityCompanion>)super.getBrain();
     }
 
-    protected Brain.BrainCodec<AbstractEntityCompanion> brainProvider() {
+    protected Brain.Provider<?> brainProvider() {
         return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
-    }
-
-    @Nullable
-    @Override
-    public ModifiableAttributeInstance getAttribute(Attribute attribute) {
-        return super.getAttribute(attribute);
     }
 
     public enum ARMPOSES{

@@ -14,7 +14,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
@@ -324,6 +324,6 @@ public class TileEntityAlloyFurnace extends BlockEntity{
         return this.level.getRecipeManager().getRecipeFor(this.recipeType, this, this.level).map(AlloyingRecipe::getProcessTick).orElse(200);
     }
 
-    public void encodeExtraData(PacketBuffer buffer) {
+    public void encodeExtraData(FriendlyByteBuf  buffer) {
     }
 }

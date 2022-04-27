@@ -1,19 +1,16 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
-import com.yor42.projectazure.client.renderer.items.ItemDefibPaddleRenderer;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ChatFormatting;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -29,21 +26,15 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
-import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     public AnimationFactory factory = new AnimationFactory(this);
     public static final String controllerName = "paddle_controller";
 
     public ItemDefibPaddle() {
-        super(new Properties().tab(PA_WEAPONS).setISTER(()->ItemDefibPaddleRenderer::new).stacksTo(1));
+        super(new Properties().tab(PA_WEAPONS).stacksTo(1));
         GeckoLibNetwork.registerSyncable(this);
-    }
-
-    @Nonnull
-    @Override
-    public ActionResultType interactLivingEntity(@Nonnull ItemStack p_111207_1_, @Nonnull PlayerEntity p_111207_2_, @Nonnull LivingEntity p_111207_3_, @Nonnull Hand p_111207_4_) {
-        return super.interactLivingEntity(p_111207_1_, p_111207_2_, p_111207_3_, p_111207_4_);
     }
 
     public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
@@ -62,13 +53,13 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull Level world, @Nonnull PlayerEntity entity, @Nonnull Hand hand) {
-        Hand oppositehand = hand == MAIN_HAND? Hand.OFF_HAND: MAIN_HAND;
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player entity, @Nonnull InteractionHand hand) {
+        InteractionHand oppositehand = hand == MAIN_HAND? InteractionHand.OFF_HAND: MAIN_HAND;
         if(entity.getItemInHand(oppositehand).getItem() instanceof ItemDefibPaddle) {
             if (entity.isCrouching()) {
                 ItemStack ChargerStack = ItemStack.EMPTY;
-                for (int i = 0; i < entity.inventory.getContainerSize(); i++) {
-                    ItemStack stack = entity.inventory.getItem(i);
+                for (int i = 0; i < entity.getInventory().getContainerSize(); i++) {
+                    ItemStack stack = entity.getInventory().getItem(i);
                     Item item = stack.getItem();
                     if (item instanceof ItemDefibCharger && ItemDefibCharger.isOn(stack) && ItemDefibCharger.getChargeProgress(stack)<100) {
                         if (stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(100, true) == 100).orElse(false)) {
@@ -92,7 +83,7 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void appendHoverText(@Nonnull ItemStack p_77624_1_, @Nullable Level p_77624_2_, @Nonnull List<Component> tooltips, ITooltipFlag p_77624_4_) {
+    public void appendHoverText(@Nonnull ItemStack p_77624_1_, @Nullable Level p_77624_2_, @Nonnull List<Component> tooltips, TooltipFlag p_77624_4_) {
         super.appendHoverText(p_77624_1_, p_77624_2_, tooltips, p_77624_4_);
         tooltips.add(new TranslatableComponent(this.getDescriptionId()+".tooltip").withStyle(ChatFormatting.GRAY));
 

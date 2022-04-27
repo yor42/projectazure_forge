@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.item.ItemStack;
@@ -154,7 +154,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends BlockEntity implem
         return this.inventory;
     }
 
-    public abstract void encodeExtraData(PacketBuffer buffer);
+    public abstract void encodeExtraData(FriendlyByteBuf  buffer);
 
     protected int getPowerConsumption(){
         return 100;

@@ -8,7 +8,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.MenuProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.text.Component;
 import net.minecraft.util.text.TranslatableComponent;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -26,7 +26,7 @@ public class ContainerGFLInventory extends AbstractContainerMenu {
 
     public final AbstractEntityCompanion companion;
 
-    public ContainerGFLInventory(int id, Inventory inventory, PacketBuffer data) {
+    public ContainerGFLInventory(int id, Inventory inventory, FriendlyByteBuf  data) {
         this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 

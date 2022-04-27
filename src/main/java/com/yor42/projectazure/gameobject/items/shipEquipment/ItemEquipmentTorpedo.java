@@ -3,10 +3,11 @@ package com.yor42.projectazure.gameobject.items.shipEquipment;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.text.*;
-import net.minecraft.world.Level;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -33,7 +34,7 @@ public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements 
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         ChatFormatting color;
 
@@ -49,7 +50,7 @@ public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements 
 
         boolean isreloadable = this.isreloadable;
         tooltip.add(new TranslatableComponent("item.tooltip.remainingammo").append(": ").withStyle(ChatFormatting.GRAY).append(new TextComponent(getRemainingAmmo(stack)+"/"+this.getMaxAmmo()).withStyle(color)));
-        tooltip.add(new TranslatableComponent(isreloadable? "item.tooltip.torpedo_reloadable": "item.tooltip.torpedo_not_reloadable" ).setStyle(Style.EMPTY.withColor(Color.fromRgb(isreloadable? 0x00FF00:0xff0000))));
+        tooltip.add(new TranslatableComponent(isreloadable? "item.tooltip.torpedo_reloadable": "item.tooltip.torpedo_not_reloadable" ).setStyle(Style.EMPTY.withColor(TextColor.fromRgb(isreloadable? 0x00FF00:0xff0000))));
     }
 
     @Override

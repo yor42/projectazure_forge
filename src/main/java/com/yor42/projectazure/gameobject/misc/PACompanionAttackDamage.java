@@ -1,11 +1,11 @@
 package com.yor42.projectazure.gameobject.misc;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -40,7 +40,7 @@ public class PACompanionAttackDamage extends DamageSource {
     }
 
     @Nullable
-    public Vector3d getSourcePosition() {
+    public Vec3 getSourcePosition() {
         return this.damageSourceEntity != null ? this.damageSourceEntity.position() : null;
     }
 }

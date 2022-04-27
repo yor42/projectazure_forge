@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
 
 public class slotInventory extends Slot {
 
@@ -17,7 +17,7 @@ public class slotInventory extends Slot {
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity playerIn) {
+    public boolean mayPickup(Player playerIn) {
         if(this.getHandler().getItem(this.index).getItem() instanceof ItemRiggingBase){
             return false;
         }

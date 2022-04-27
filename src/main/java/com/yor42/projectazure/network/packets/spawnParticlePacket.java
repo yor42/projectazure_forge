@@ -2,7 +2,7 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.libs.utils.ParticleUtils;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -99,7 +99,7 @@ public class spawnParticlePacket {
         this.NormalizedLookZ = NormalizedLookZ;
     }
 
-    public static spawnParticlePacket decode(PacketBuffer buffer){
+    public static spawnParticlePacket decode(FriendlyByteBuf  buffer){
         final int EntityID = buffer.readInt();
         final Particles ParticleID = buffer.readEnum(Particles.class);
         final double posX = buffer.readDouble();
@@ -113,7 +113,7 @@ public class spawnParticlePacket {
         return new spawnParticlePacket(EntityID, ParticleID, posX, posY, posZ, itemStack, NormalizedLookX, NormalizedLookY, NormalizedLookZ);
     }
 
-    public static void encode(final spawnParticlePacket message, final PacketBuffer buffer){
+    public static void encode(final spawnParticlePacket message, final FriendlyByteBuf  buffer){
         buffer.writeInt(message.EntityID);
         buffer.writeEnum(message.particleID);
         buffer.writeDouble(message.PosX);

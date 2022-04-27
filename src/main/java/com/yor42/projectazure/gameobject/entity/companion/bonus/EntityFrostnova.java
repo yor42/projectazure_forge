@@ -18,7 +18,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlot;
 import net.minecraft.item.TieredItem;
-import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.MobEffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
 import net.minecraft.world.Level;
@@ -249,7 +249,7 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
             double y = target.getY(0.5) - (this.getY(0.7));
             double z = target.getZ() - (this.getZ());
 
-            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this, 8F, new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 1));
+            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this, 8F, new MobEffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 1));
             projectile.shoot(x,y,z, 1.1F, 0.05F);
             projectile.setPos(this.getX(), this.getY(0.7), this.getZ());
             this.getCommandSenderWorld().addFreshEntity(projectile);

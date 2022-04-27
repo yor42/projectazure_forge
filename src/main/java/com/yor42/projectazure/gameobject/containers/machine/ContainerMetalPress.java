@@ -6,7 +6,7 @@ import net.minecraft.entity.player.Inventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IntArray;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +22,7 @@ public class ContainerMetalPress extends Container {
 
     private final IIntArray field;
 
-    public ContainerMetalPress(int id, Inventory inventory, PacketBuffer buffer) {
+    public ContainerMetalPress(int id, Inventory inventory, FriendlyByteBuf  buffer) {
         this(id, inventory, new ItemStackHandler(3), new IntArray(4));
     }
 

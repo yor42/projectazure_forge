@@ -8,23 +8,29 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.CreativeModeTab;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ChatFormatting;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -41,6 +47,7 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
+import static com.yor42.projectazure.libs.utils.MathUtil.rand;
 
 public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable,  ICraftingTableReloadable {
 
@@ -123,10 +130,10 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     }
 
     @Override
-    public ActionResult<ItemStack> use(Level worldIn, PlayerEntity playerIn, Hand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 
         this.SecondaryAction(playerIn, playerIn.getItemInHand(handIn));
-        return new ActionResult<>(ActionResultType.PASS, playerIn.getItemInHand(handIn));
+        return new InteractionResultHolder<>(InteractionResult.PASS, playerIn.getItemInHand(handIn));
     }
 
     public int getMaxAmmo(){
@@ -153,11 +160,11 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
         return this.MagItem;
     }
 
-    protected abstract void SecondaryAction(PlayerEntity playerIn, ItemStack heldItem);
+    protected abstract void SecondaryAction(Player playerIn, ItemStack heldItem);
 
-    public boolean shootGun(ItemStack gun, Level world, PlayerEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
+    public boolean shootGun(ItemStack gun, Level world, Player entity, boolean zooming, InteractionHand hand, @Nullable Entity target) {
         // Gets the item that the player is holding, should be this item.
-        final int id = GeckoLibUtil.guaranteeIDForStack(gun, (ServerWorld) world);
+        final int id = GeckoLibUtil.guaranteeIDForStack(gun, (ServerLevel) world);
         // Tell all nearby clients to trigger this item to animate
         final PacketDistributor.PacketTarget receiver = PacketDistributor.TRACKING_ENTITY_AND_SELF
                 .with(() -> entity);
@@ -172,8 +179,8 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
                     }
                     if (!world.isClientSide()) {
                         world.playSound(null, entity.getX(), entity.getY(),
-                                entity.getZ(), this.fireSound, SoundCategory.PLAYERS, 1.0F,
-                                1.0F / (random.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
+                                entity.getZ(), this.fireSound, SoundSource.PLAYERS, 1.0F,
+                                1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
 
                         GeckoLibNetwork.syncAnimation(receiver, this, id, FIRING);
 
@@ -191,12 +198,12 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
                 ItemStack AmmoStack = ItemStack.EMPTY;
 
-                for (int i = 0; i < entity.inventory.getContainerSize(); i++) {
-                    Item MagCandidate = entity.inventory.getItem(i).getItem();
+                for (int i = 0; i < entity.getInventory().getContainerSize(); i++) {
+                    Item MagCandidate = entity.getInventory().getItem(i).getItem();
 
                     if (MagCandidate == ((ItemGunBase) gun.getItem()).getMagItem()) {
-                        if (getRemainingAmmo(entity.inventory.getItem(i)) > 0) {
-                            AmmoStack = entity.inventory.getItem(i);
+                        if (getRemainingAmmo(entity.getInventory().getItem(i)) > 0) {
+                            AmmoStack = entity.getInventory().getItem(i);
                         }
                     }
                 }
@@ -221,20 +228,20 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
                         AmmoStack.shrink(1);
                         ItemStack EmptyMag = new ItemStack(((ItemGunBase) gun.getItem()).getMagItem());
                         emptyAmmo(EmptyMag);
-                        entity.inventory.add(EmptyMag);
+                        entity.getInventory().add(EmptyMag);
                     }
                     return true;
                 }
                 world.playSound(null, entity.getX(), entity.getY(),
-                        entity.getZ(), registerSounds.GUN_CLICK, SoundCategory.PLAYERS, 1.0F,
-                        1.0F / (random.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
+                        entity.getZ(), registerSounds.GUN_CLICK, SoundSource.PLAYERS, 1.0F,
+                        1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
                 capability.setDelay(hand, 30);
             }
         }
         return false;
     }
 
-    public boolean shootGunLivingEntity(ItemStack gun, Level world, LivingEntity entity, boolean zooming, Hand hand, @Nullable Entity target) {
+    public boolean shootGunLivingEntity(ItemStack gun, Level world, LivingEntity entity, boolean zooming, InteractionHand hand, @Nullable Entity target) {
         entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
         if (!world.isClientSide()) {
             this.spawnProjectile(entity, world, gun, this.accuracy, this.damage, target, hand);
@@ -243,15 +250,15 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
         return false;
     }
 
-    public void shootGunCompanion(ItemStack gun, Level world, AbstractEntityCompanion entity, boolean zooming, Hand hand, @Nullable Entity target) {
+    public void shootGunCompanion(ItemStack gun, Level world, AbstractEntityCompanion entity, boolean zooming, InteractionHand hand, @Nullable Entity target) {
         entity.playSound(this.fireSound, 1.0F, (getRand().nextFloat() - getRand().nextFloat()) * 0.2F + 1.0F);
         if (!world.isClientSide()) {
 
             float inaccuracymultiplier;
             float damagemultiplier;
             world.playSound(null, entity.getX(), entity.getY(),
-                    entity.getZ(), this.fireSound, SoundCategory.PLAYERS, 1.0F,
-                    1.0F / (random.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
+                    entity.getZ(), this.fireSound, SoundSource.NEUTRAL, 1.0F,
+                    1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 0.25F * 0.5F);
             if(entity.getGunSpecialty() != enums.GunClass.NONE) {
                 inaccuracymultiplier = entity.getGunSpecialty() == this.getGunClass() ? 0.9F : 1.2F;
                 damagemultiplier = entity.getGunSpecialty() == this.getGunClass() ? 1.1F : 0.85F;
@@ -277,18 +284,18 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     public abstract enums.AmmoCalibur getAmmoType();
 
-    private void spawnProjectile(LivingEntity Shooter, Level worldIn, ItemStack gunStack, float Accuracy, float Damage, Entity target, Hand hand) {
+    private void spawnProjectile(LivingEntity Shooter, Level worldIn, ItemStack gunStack, float Accuracy, float Damage, Entity target, InteractionHand hand) {
         EntityProjectileBullet entity = new EntityProjectileBullet(Shooter, worldIn, Damage);
         if(target!=null){
             double d0 = target.getEyeY() - (double)1.1F;
             double d1 = target.getX() - Shooter.getX();
             double d2 = d0 - entity.getY();
             double d3 = target.getZ() - Shooter.getZ();
-            float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.2F;
+            float f = Mth.sqrt((float) (d1 * d1 + d3 * d3)) * 0.2F;
             entity.shoot(d1, d2 + (double)f, d3, 10.0f, Accuracy);
         }
         else{
-            entity.ShootFromPlayer(Shooter, Shooter.xRot, Shooter.yRot, 0.0f, 5.0F, Accuracy, hand);
+            entity.ShootFromPlayer(Shooter, Shooter.getXRot(), Shooter.getYRot(), 0.0f, 5.0F, Accuracy, hand);
 
         }
         worldIn.addFreshEntity(entity);
@@ -301,7 +308,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
 
     @ParametersAreNonnullByDefault
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         tooltip.add(new TranslatableComponent("item.tooltip.gunclass").append(": ").withStyle(ChatFormatting.GRAY).append(new TranslatableComponent(this.getGunClass().getName()).withStyle(ChatFormatting.BLUE)));
         if (worldIn != null && worldIn.isClientSide) {
@@ -310,7 +317,7 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn){
+    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn){
         ChatFormatting color;
 
         if(((float)getRemainingAmmo(stack)/this.magCap)<0.3F){
@@ -338,13 +345,13 @@ public abstract class ItemGunBase extends Item implements IAnimatable, ISyncable
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        return 1-((float)getRemainingAmmo(stack)/this.magCap);
+    public int getBarWidth(ItemStack stack) {
+        return (int) ((1-((float)getRemainingAmmo(stack)/this.magCap))*13);
     }
 
 

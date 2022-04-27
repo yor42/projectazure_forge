@@ -3,31 +3,34 @@ package com.yor42.projectazure.gameobject.entity.projectiles;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathType;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityArtsProjectile extends DamagingProjectileEntity {
+import static net.minecraft.world.entity.Entity.RemovalReason.DISCARDED;
+
+public class EntityArtsProjectile extends AbstractHurtingProjectile {
     private BlockPos originPos;
     private float damage = 5.0F;
     @Nullable
-    private EffectInstance Effect;
-    public EntityArtsProjectile(EntityType<? extends DamagingProjectileEntity> entityType, Level worldin) {
+    private MobEffectInstance Effect;
+    public EntityArtsProjectile(EntityType<? extends AbstractHurtingProjectile> entityType, Level worldin) {
         super(entityType, worldin);
     }
 
@@ -35,7 +38,7 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
         this(worldIn, shooter, 5.0F, null);
     }
 
-    public EntityArtsProjectile(Level worldIn, LivingEntity shooter, float damage, @Nullable EffectInstance effect) {
+    public EntityArtsProjectile(Level worldIn, LivingEntity shooter, float damage, @Nullable MobEffectInstance effect) {
         super(registerManager.PROJECTILEARTS_ENTITYTYPE, shooter, 0, 0, 0, worldIn);
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.7F), shooter.getZ());
         this.damage = damage;
@@ -60,49 +63,49 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
     }
 
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHit(HitResult result) {
         BlockPos blockPosIn = this.blockPosition();
         Random random = new Random();
         super.onHit(result);
-        if(!this.getCommandSenderWorld().getBlockState(blockPosIn).isPathfindable(this.getCommandSenderWorld(), blockPosIn, PathType.AIR)) {
+        if(!this.getCommandSenderWorld().getBlockState(blockPosIn).isPathfindable(this.getCommandSenderWorld(), blockPosIn, PathComputationType.AIR)) {
             for (int i2 = 0; i2 < 8; ++i2) {
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE, (double) blockPosIn.getX() + random.nextDouble(), (double) blockPosIn.getY() + 1.2D, (double) blockPosIn.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
             }
-            this.remove();
+            this.remove(DISCARDED);
         }
     }
 
     @Override
-    public void remove() {
+    public void kill() {
         this.playSound(registerSounds.CHIMERA_PROJECTILE_HIT, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);
-        super.remove();
+        super.remove(DISCARDED);
     }
 
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        Vector3d vector3d = (new Vector3d(x, y, z)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale((double)velocity);
+        Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)inaccuracy).scale((double)velocity);
         this.setDeltaMovement(vector3d);
-        float f = MathHelper.sqrt(getHorizontalDistanceSqr(vector3d));
-        this.yRot = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
-        this.xRot = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
-        this.yRotO = this.yRot;
-        this.xRotO = this.xRot;
+        float f = Mth.sqrt((float) distanceToSqr(vector3d));
+        this.setYRot((float)(Mth.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI)));
+        this.setXRot((float)(Mth.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI)));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 
     @Override
     public void tick() {
         super.tick();
         if(this.tickCount == 600 || this.isInWater()){
-            this.remove();
+            this.remove(DISCARDED);
         }
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityHitResult result) {
         Entity target = result.getEntity();
         if(target != this.getOwner() && target instanceof LivingEntity) {
             LivingEntity LivingTarget = (LivingEntity)target;
@@ -112,7 +115,7 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
                 LivingTarget.addEffect(this.Effect);
             }
 
-            this.remove();
+            this.remove(DISCARDED);
         }
     }
 

@@ -226,9 +226,9 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
         for(int i = 0; i <this.companion.getInventory().getSlots(); i++){
             ItemStack stack = this.companion.getInventory().getStackInSlot(i);
             if(stack.getItem() instanceof SplashPotionItem){
-                List<EffectInstance> Effects = PotionUtils.getMobEffects(stack);
+                List<MobEffectInstance> Effects = PotionUtils.getMobEffects(stack);
                 if(!Effects.isEmpty()){
-                    for(EffectInstance effect : Effects){
+                    for(MobEffectInstance effect : Effects){
                         if(effect.getEffect().getCategory() == EffectType.HARMFUL){
                             return -1;
                         }
@@ -249,9 +249,9 @@ public class CompanionHealOwnerAndAllyGoal extends Goal {
     private Optional<Hand> getPotioninHand() {
         for(Hand hand : Hand.values()){
             if(this.companion.getItemInHand(hand).getItem() instanceof SplashPotionItem){
-                List<EffectInstance> Effects = PotionUtils.getMobEffects(this.companion.getItemInHand(hand));
+                List<MobEffectInstance> Effects = PotionUtils.getMobEffects(this.companion.getItemInHand(hand));
                 if(!Effects.isEmpty()){
-                    for(EffectInstance effect : Effects){
+                    for(MobEffectInstance effect : Effects){
                         if(effect.getEffect().getCategory() == EffectType.HARMFUL){
                             return Optional.empty();
                         }

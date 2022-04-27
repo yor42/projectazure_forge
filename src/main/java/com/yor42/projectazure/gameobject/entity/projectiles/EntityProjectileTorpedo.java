@@ -9,16 +9,31 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.Level;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -27,7 +42,9 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class EntityProjectileTorpedo extends DamagingProjectileEntity implements IAnimatable {
+import static net.minecraft.world.entity.Entity.RemovalReason.KILLED;
+
+public class EntityProjectileTorpedo extends AbstractHurtingProjectile implements IAnimatable {
 
     private float existingtime;
 
@@ -44,7 +61,7 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     @OnlyIn(Dist.CLIENT)
     public EntityProjectileTorpedo(Level worldIn, double x, double y, double z, double motionXIn, double motionYIn, double motionZIn) {
         this(registerManager.PROJECTILETORPEDO, worldIn);
-        this.moveTo(x, y, z, this.yRot, this.xRot);
+        this.moveTo(x, y, z, this.getXRot(), this.getYRot());
         this.setDeltaMovement(motionXIn, motionYIn, motionZIn);
     }
 
@@ -63,7 +80,7 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     }
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -95,7 +112,7 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
         boolean flag = !this.isInWater();
 
         ProjectileUtil.rotateTowardsMovement(this, 0.5F);
-        Vector3d vector3d4 = this.getDeltaMovement();
+        Vec3 vector3d4 = this.getDeltaMovement();
         if (flag) {
             this.setDeltaMovement(vector3d4.x, vector3d4.y - (double)0.1F, vector3d4.z);
         }
@@ -110,34 +127,34 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     }
 
     private void changeheading(){
-        Vector3d vector3d = this.getDeltaMovement();
+        Vec3 vector3d = this.getDeltaMovement();
 
         if (vector3d.lengthSqr() != 0.0D) {
-            float f = MathHelper.sqrt(Entity.getHorizontalDistanceSqr(vector3d));
-            this.yRot = (float)(MathHelper.atan2(vector3d.z, vector3d.x) * (double)(180F / (float)Math.PI)) + 90.0F;
+            float f = Mth.sqrt(Entity.getHorizontalDistanceSqr(vector3d));
+            this.setYRot((float)(Mth.atan2(vector3d.z, vector3d.x) * (double)(180F / (float)Math.PI)) + 90.0F);
 
-            while(this.xRot - this.xRotO >= 180.0F) {
+            while(this.getXRot() - this.xRotO >= 180.0F) {
                 this.xRotO += 360.0F;
             }
 
-            while(this.yRot - this.yRotO < -180.0F) {
+            while(this.getYRot() - this.yRotO < -180.0F) {
                 this.yRotO -= 360.0F;
             }
 
-            while(this.yRot - this.yRotO >= 180.0F) {
+            while(this.getYRot() - this.yRotO >= 180.0F) {
                 this.yRotO += 360.0F;
             }
         }
     }
 
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHit(HitResult result) {
         explode();
-        this.remove();
+        this.remove(KILLED);
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult result) {
+    protected void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
         entity.hurt(DamageSources.causeTorpedoDamage(this, this.getOwner()), 10F);
         explode();
@@ -151,12 +168,12 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     }
 
     private void explode(){
-        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 3.5F, PAConfig.CONFIG.EnableTorpedoBlockDamage.get()? Explosion.Mode.DESTROY:Explosion.Mode.NONE);
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 3.5F, PAConfig.CONFIG.EnableTorpedoBlockDamage.get()? Explosion.BlockInteraction.DESTROY:Explosion.BlockInteraction.NONE);
     }
 
     private void selfDestruct(){
-        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, Explosion.Mode.BREAK);
-        this.remove();
+        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, Explosion.BlockInteraction.BREAK);
+        this.remove(KILLED);
     }
 
     @Override

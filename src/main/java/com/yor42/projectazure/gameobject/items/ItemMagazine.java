@@ -3,15 +3,15 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.CreativeModeTab;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ChatFormatting;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,12 +30,12 @@ public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloa
     }
 
     @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        return 1.0-(double) getRemainingAmmo(stack)/this.Ammocount;
+    public int getBarWidth(ItemStack stack) {
+        return (int)((1.0-(double) getRemainingAmmo(stack)/this.Ammocount)*13);
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
@@ -58,7 +58,7 @@ public class ItemMagazine extends ItemBaseTooltip implements ICraftingTableReloa
     }
 
     @Override
-    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, ITooltipFlag flagIn) {
+    public void addInformationAfterShift(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.addInformationAfterShift(stack, worldIn, tooltip, flagIn);
         ChatFormatting color;
 
