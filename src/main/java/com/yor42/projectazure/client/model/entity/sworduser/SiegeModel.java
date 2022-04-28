@@ -3,7 +3,7 @@ package com.yor42.projectazure.client.model.entity.sworduser;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntitySiege;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;

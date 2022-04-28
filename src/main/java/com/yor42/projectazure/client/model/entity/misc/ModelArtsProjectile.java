@@ -1,41 +1,43 @@
-package com.yor42.projectazure.client.model.entity.misc;// Made with Blockbench 4.1.1
-// Exported for Minecraft version 1.15 - 1.16 with MCP mappings
+package com.yor42.projectazure.client.model.entity.misc;// Made with Blockbench 4.2.3
+// Exported for Minecraft version 1.17 - 1.18 with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.resources.ResourceLocation;
 
-public class ModelArtsProjectile extends EntityModel<Entity> {
-	private final ModelRenderer bone;
+public class ModelArtsProjectile extends EntityModel<EntityArtsProjectile> {
+	private final ModelPart bone;
 
-	public ModelArtsProjectile() {
-		texWidth = 32;
-		texHeight = 32;
+	public ModelArtsProjectile(ModelPart root) {
+		this.bone = root.getChild("bone");
+	}
 
-		bone = new ModelRenderer(this);
-		bone.setPos(0.0F, 24.0F, -5.5F);
-		bone.texOffs(0, 0).addBox(-2.5F, -2.5F, 4.0F, 5.0F, 5.0F, 7.0F, 0.0F, false);
-		bone.texOffs(12, 12).addBox(-1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 2.0F, 0.0F, false);
-		bone.texOffs(0, 12).addBox(-2.0F, -2.0F, 2.0F, 4.0F, 4.0F, 2.0F, 0.0F, false);
+	public static LayerDefinition createBodyLayer() {
+		MeshDefinition meshdefinition = new MeshDefinition();
+		PartDefinition partdefinition = meshdefinition.getRoot();
+
+		PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5F, -2.5F, 4.0F, 5.0F, 5.0F, 7.0F, new CubeDeformation(0.0F))
+		.texOffs(12, 12).addBox(-1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+		.texOffs(0, 12).addBox(-2.0F, -2.0F, 2.0F, 4.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, -5.5F));
+
+		return LayerDefinition.create(meshdefinition, 32, 32);
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		//previously the render function, render code was moved to a method below
+	public void setupAnim(EntityArtsProjectile entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, VertexConsumer  buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
-		bone.render(matrixStack, buffer, packedLight, packedOverlay);
-	}
-
-	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.xRot = x;
-		modelRenderer.yRot = y;
-		modelRenderer.zRot = z;
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }

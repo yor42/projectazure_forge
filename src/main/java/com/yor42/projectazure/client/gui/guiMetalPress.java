@@ -1,16 +1,15 @@
 package com.yor42.projectazure.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
-public class guiMetalPress extends AbstractContainerScreen<ContainerMetalPress> implements IHasContainer<ContainerMetalPress> {
+public class guiMetalPress extends AbstractContainerScreen<ContainerMetalPress> {
 
     private static final ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/metal_press.png");
 
@@ -22,7 +21,7 @@ public class guiMetalPress extends AbstractContainerScreen<ContainerMetalPress> 
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
 
         if(isHovering(157, 6,10,72,mouseX,mouseY)){
@@ -34,9 +33,8 @@ public class guiMetalPress extends AbstractContainerScreen<ContainerMetalPress> 
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+        this.minecraft.getTextureManager().getTexture(TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         int b = this.container.getprogressScaled(41);

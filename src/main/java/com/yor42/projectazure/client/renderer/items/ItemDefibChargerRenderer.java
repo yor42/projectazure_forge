@@ -1,11 +1,10 @@
 package com.yor42.projectazure.client.renderer.items;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.model.items.ModelDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
@@ -18,21 +17,8 @@ public class ItemDefibChargerRenderer extends GeoItemRenderer<ItemDefibCharger> 
         super(new ModelDefibCharger());
     }
 
-    static {
-        AnimationController.addModelFetcher((IAnimatable object) -> {
-            if (object instanceof ItemDefibCharger) {
-                ItemDefibCharger item = (ItemDefibCharger) object;
-                ItemStackTileEntityRenderer renderer = item.getItemStackTileEntityRenderer();
-                if (renderer instanceof GeoItemRenderer) {
-                    return (IAnimatableModel<Object>) ((GeoItemRenderer<?>) renderer).getGeoModelProvider();
-                }
-            }
-            return null;
-        });
-    }
-
     @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, VertexConsumer  bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer  bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         boolean shouldRender = this.shouldRender(bone);
         if(shouldRender) {
             if (bone.getName().contains("emissive")) {

@@ -2,10 +2,10 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.crafting.*;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
@@ -28,8 +28,8 @@ public class registerRecipes {
         public static final RegistryObject<RecipeSerializer<CrystalizingRecipe>> CRYSTALIZING = register("crystalizing", CrystalizingRecipe.Serializer::new);
 
         //Special Crafting Recipe
-        public static final RegistryObject<RecipeSerializer<ReloadRecipes>> RELOADING = register("reloading", ()-> new SpecialRecipeSerializer<>(ReloadRecipes::new));
-        public static final RegistryObject<RecipeSerializer<RepairRecipe>> REPAIRING = register("repairing", ()-> new SpecialRecipeSerializer<>(RepairRecipe::new));
+        public static final RegistryObject<RecipeSerializer<ReloadRecipes>> RELOADING = register("reloading", ()-> new SimpleRecipeSerializer<>(ReloadRecipes::new));
+        public static final RegistryObject<RecipeSerializer<RepairRecipe>> REPAIRING = register("repairing", ()-> new SimpleRecipeSerializer<>(RepairRecipe::new));
 
 
         private static <T extends Recipe<?>> RegistryObject<RecipeSerializer<T>> register(String name, Supplier<RecipeSerializer<T>> serializer){

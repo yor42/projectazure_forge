@@ -1,14 +1,14 @@
 package com.yor42.projectazure.client.renderer.layer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import com.yor42.projectazure.client.model.entity.misc.ModelClaymore;
 import com.yor42.projectazure.client.model.items.ModelItemClaymore;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
@@ -25,7 +25,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityRosmontis entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, EntityRosmontis entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         int SpellItemIndex = entityLivingBaseIn.getNextSkillItemindex();
         if(entityLivingBaseIn.isSkillItemInindex(0)){
             matrixStackIn.pushPose();

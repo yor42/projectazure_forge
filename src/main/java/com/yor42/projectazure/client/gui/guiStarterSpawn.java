@@ -1,23 +1,23 @@
 package com.yor42.projectazure.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.buttons.buttonStarterSelect;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.selectedStarterPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.EntityType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.ArrayList;
 
 import static com.yor42.projectazure.libs.Constants.StarterList;
 
@@ -36,20 +36,18 @@ public class guiStarterSpawn extends Screen {
     private int scrollBarFarLeft, lastScrollX;
 
     private final int buttonWidth = 59;
+    private ArrayList<Button> Buttons;
 
     public guiStarterSpawn(Component titleIn) {
         super(titleIn);
     }
 
     @Override
-    public void init(Minecraft minecraft, int width, int height) {
-        super.init(minecraft, width, height);
+    public void init() {
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2;
-        this.minecraft = minecraft;
         this.scrollBarFarLeft = this.x+13;
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.minecraft.getTextureManager().getTexture(TEXTURE);
         //this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         for(int index = 0; index < StarterList.length; index++) {
             int buttonHeight = 127;
@@ -59,6 +57,7 @@ public class guiStarterSpawn extends Screen {
                     Main.NETWORK.sendToServer(new selectedStarterPacket(finalIndex));
                     this.onClose();
                 });
+                this.Buttons.add(button);
                 this.addWidget(button);
                         //createButton(entityList[index], this.scrollBarFarLeft + (++index * buttonHeight), this.y+26, buttonWidth, buttonHeight, new TranslatableComponent("gui.selectstarter.select"+index), action -> Main.LOGGER.info("Player tried to spawn starter. but guess what. this doesnt do shit!"));
             } /*else {
@@ -76,7 +75,7 @@ public class guiStarterSpawn extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.drawBackgroundLayer(matrixStack, partialTicks, mouseX, mouseY);
@@ -84,14 +83,12 @@ public class guiStarterSpawn extends Screen {
         this.renderButtons(matrixStack,mouseX, mouseY, partialTicks);
     }
 
-    private void renderButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    private void renderButtons(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 
-        if(this.buttons.size() > 0) {
-            for (net.minecraft.client.gui.widget.Widget widget : this.buttons) {
+            for (Widget widget : this.Buttons) {
                 buttonStarterSelect button = (buttonStarterSelect) widget;
                 button.render(matrixStack, mouseX, mouseY, partialTicks);
             }
-        }
         //will be implemented when screen actually needs to be scrolled
         /*
         int position = Math.floorDiv(this.lastScrollX - this.scrollBarFarLeft, 20); // CORRECT - GETS THE 'INDEX"
@@ -111,13 +108,12 @@ public class guiStarterSpawn extends Screen {
          */
     }
 
-    private void drawBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+    private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        this.minecraft.getTextureManager().getTexture(TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
-    private void drawForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    private void drawForegroundLayer(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         drawString(matrixStack, this.font, new TranslatableComponent("gui.selectstarter.title"), this.x+18, this.y+10, 14085119);
     }
 
@@ -129,11 +125,11 @@ public class guiStarterSpawn extends Screen {
         return this.y;
     }
 
-    public String getNarrationMessage() {
-        return "Hello Level";
+    public Component getNarrationMessage() {
+        return new TranslatableComponent("Hello Level");
     }
 
-    private buttonStarterSelect createButton(int x, int y, int width, int height, int idx, EntityType<?> type, Button.IPressable onPress) {
+    private buttonStarterSelect createButton(int x, int y, int width, int height, int idx, EntityType<?> type, Button.OnPress onPress) {
         ResourceLocation TEXTURE1 = new ResourceLocation(Constants.MODID, "textures/gui/rainbow_cube_overlay.png");
         return new buttonStarterSelect(x, y, width, height, 0, 0, this.buttonWidth , TEXTURE1, idx, type, onPress);
     }

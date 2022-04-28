@@ -5,17 +5,17 @@ import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -29,22 +29,22 @@ public class CrystalizingRecipeBuilder {
     private final int growthTime;
     private final Advancement.Builder advancementBuilder = Advancement.Builder.advancement();
 
-    public CrystalizingRecipeBuilder(IItemProvider result, Ingredient seed, Fluid solution, int growthTime){
+    public CrystalizingRecipeBuilder(ItemLike result, Ingredient seed, Fluid solution, int growthTime){
         this.result = result.asItem();
         this.seed = seed;
         this.solution = solution;
         this.growthTime = growthTime;
     }
 
-    public static CrystalizingRecipeBuilder addRecipe(IItemProvider result, Ingredient seed, Fluid solution, int growthTime){
+    public static CrystalizingRecipeBuilder addRecipe(ItemLike result, Ingredient seed, Fluid solution, int growthTime){
         return new CrystalizingRecipeBuilder(result, seed, solution, growthTime);
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn) {
+    public void build(Consumer<FinishedRecipe> consumerIn) {
         this.build(consumerIn, Registry.ITEM.getKey(this.result));
     }
 
-    public CrystalizingRecipeBuilder addCriterion(String name, ICriterionInstance criterionIn) {
+    public CrystalizingRecipeBuilder addCriterion(String name, CriterionTriggerInstance criterionIn) {
         this.advancementBuilder.addCriterion(name, criterionIn);
         return this;
     }
@@ -55,7 +55,7 @@ public class CrystalizingRecipeBuilder {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
+    public void build(Consumer<FinishedRecipe> consumerIn, String save) {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
         ResourceLocation resourcelocation1 = new ResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
@@ -65,13 +65,13 @@ public class CrystalizingRecipeBuilder {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
+    public void build(Consumer<FinishedRecipe> consumerIn, ResourceLocation id) {
         this.validate(id);
-        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
+        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
         consumerIn.accept(new CrystalizingRecipeBuilder.Result(id, "", this.seed, this.result, this.growthTime, this.solution, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.CRYSTALIZING.get()));
     }
 
-    public static class Result implements IFinishedRecipe {
+    public static class Result implements FinishedRecipe {
         private final ResourceLocation id;
         private final Ingredient seed;
         private final Fluid solution;
@@ -80,9 +80,9 @@ public class CrystalizingRecipeBuilder {
         private final int GrowthTime;
         private final Advancement.Builder advancementBuilder;
         private final ResourceLocation advancementId;
-        private final IRecipeSerializer<CrystalizingRecipe> serializer;
+        private final RecipeSerializer<CrystalizingRecipe> serializer;
 
-        public Result(ResourceLocation idIn, String groupIn, Ingredient seedIn, Item resultIn, int growthTimeIn, Fluid fluidIn, Advancement.Builder advancementBuilderIn, ResourceLocation advancementIdIn, IRecipeSerializer<CrystalizingRecipe> serializerIn){
+        public Result(ResourceLocation idIn, String groupIn, Ingredient seedIn, Item resultIn, int growthTimeIn, Fluid fluidIn, Advancement.Builder advancementBuilderIn, ResourceLocation advancementIdIn, RecipeSerializer<CrystalizingRecipe> serializerIn){
             this.id = idIn;
             this.group = groupIn;
             this.seed = seedIn;
@@ -112,7 +112,7 @@ public class CrystalizingRecipeBuilder {
         }
 
         @Override
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return this.serializer;
         }
 

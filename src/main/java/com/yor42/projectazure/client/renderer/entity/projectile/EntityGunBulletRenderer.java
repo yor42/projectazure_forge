@@ -42,7 +42,7 @@ public class EntityGunBulletRenderer extends EntityRenderer<EntityProjectileBull
     public void render(@Nonnull EntityProjectileBullet entityIn, float entityYaw, float partialTicks, @Nonnull PoseStack matrixStackIn, @Nonnull MultiBufferSource bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 
-        Model model = new modelProjectileGunBullet(this.ctx.bakeLayer(RegisterModelLayers.MISSILE));
+        Model model = new modelProjectileGunBullet(this.ctx.bakeLayer(RegisterModelLayers.FIREARM_BULLET));
         VertexConsumer  builder = bufferIn.getBuffer(RENDER_TYPE);
         matrixStackIn.pushPose();
         matrixStackIn.translate(0, -1.2, 0);

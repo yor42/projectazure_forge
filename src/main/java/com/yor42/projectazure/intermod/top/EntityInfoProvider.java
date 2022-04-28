@@ -8,12 +8,13 @@ import mcjty.theoneprobe.api.IProbeHitEntityData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoEntityProvider;
 import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.*;
-import net.minecraft.world.Level;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class EntityInfoProvider implements IProbeInfoEntityProvider {
 
@@ -26,7 +27,7 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
     }
 
     @Override
-    public void addProbeEntityInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, PlayerEntity playerEntity, Level world, Entity entity, IProbeHitEntityData iProbeHitEntityData) {
+    public void addProbeEntityInfo(ProbeMode probeMode, IProbeInfo iProbeInfo, Player playerEntity, Level world, Entity entity, IProbeHitEntityData iProbeHitEntityData) {
         if(entity instanceof AbstractEntityCompanion){
             AbstractEntityCompanion companion = (AbstractEntityCompanion) entity;
             ItemStack gunstack = companion.getGunStack();
@@ -58,7 +59,7 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
                 format = ChatFormatting.DARK_RED;
             }
             iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new TextComponent(((int)morale)+"/150").withStyle(format));
-            IFormattableTextComponent Leveltext = new TranslatableComponent("top.companion_level.message",companion.getCompanionLevel());
+            BaseComponent Leveltext = new TranslatableComponent("top.companion_level.message",companion.getCompanionLevel());
             if(probeMode == ProbeMode.EXTENDED){
                 Leveltext.append(new TextComponent(" ["+ ((int)Math.floor(companion.getExp()))+"/"+ ((int)Math.floor(companion.getMaxExp())) +"]"));
             }
@@ -92,7 +93,7 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
                     color = 7829367;
                     textureX = 176;
                 }
-                iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new TextComponent(((int)morale)+"/150").setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
+                iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new TextComponent(((int)morale)+"/150").setStyle(Style.EMPTY.withColor(TextColor.fromRgb(color))));
             }
             if(companion.getLimitBreakLv()>0){
                 iProbeInfo.horizontal().text(new TranslatableComponent("top.companion_limit_break.message",companion.getLimitBreakLv()));

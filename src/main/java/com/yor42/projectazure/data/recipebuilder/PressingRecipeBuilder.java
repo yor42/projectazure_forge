@@ -5,16 +5,16 @@ import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -27,7 +27,7 @@ public class PressingRecipeBuilder {
     private final int processingTime, count;
     private final Advancement.Builder advancementBuilder = Advancement.Builder.advancement();
 
-    public PressingRecipeBuilder(IItemProvider result, Ingredient ingredient, Ingredient mold, int count, int processingTime) {
+    public PressingRecipeBuilder(ItemLike result, Ingredient ingredient, Ingredient mold, int count, int processingTime) {
         this.result = result.asItem();
         this.ingredient = ingredient;
         this.mold = mold;
@@ -35,23 +35,23 @@ public class PressingRecipeBuilder {
         this.processingTime = processingTime;
     }
 
-    public static PressingRecipeBuilder addRecipe(IItemProvider result, Ingredient ingredient, Ingredient mold, int count, int processingTime){
+    public static PressingRecipeBuilder addRecipe(ItemLike result, Ingredient ingredient, Ingredient mold, int count, int processingTime){
         return new PressingRecipeBuilder(result, ingredient, mold, count, processingTime);
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn) {
+    public void build(Consumer<FinishedRecipe> consumerIn) {
         this.build(consumerIn, Registry.ITEM.getKey(this.result));
     }
 
     /**
      * Adds a criterion needed to unlock the recipe.
      */
-    public PressingRecipeBuilder addCriterion(String name, ICriterionInstance criterionIn) {
+    public PressingRecipeBuilder addCriterion(String name, CriterionTriggerInstance criterionIn) {
         this.advancementBuilder.addCriterion(name, criterionIn);
         return this;
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
+    public void build(Consumer<FinishedRecipe> consumerIn, String save) {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
         ResourceLocation resourcelocation1 = new ResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
@@ -61,9 +61,9 @@ public class PressingRecipeBuilder {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
+    public void build(Consumer<FinishedRecipe> consumerIn, ResourceLocation id) {
         this.validate(id);
-        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
+        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
         consumerIn.accept(new PressingRecipeBuilder.Result(id, "", this.ingredient, this.mold, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.PRESSING.get()));
     }
 
@@ -73,7 +73,7 @@ public class PressingRecipeBuilder {
         }
     }
 
-    public static class Result implements IFinishedRecipe {
+    public static class Result implements FinishedRecipe {
         private final ResourceLocation id;
         private final Ingredient ingredient, mold;
         private final String group;
@@ -81,9 +81,9 @@ public class PressingRecipeBuilder {
         private final int cookingTime, count;
         private final Advancement.Builder advancementBuilder;
         private final ResourceLocation advancementId;
-        private final IRecipeSerializer<PressingRecipe> serializer;
+        private final RecipeSerializer<PressingRecipe> serializer;
 
-        public Result(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, Ingredient moldIn, Item resultIn, int count, int cookingTimeIn, Advancement.Builder advancementBuilderIn, ResourceLocation advancementIdIn, IRecipeSerializer<PressingRecipe> serializerIn) {
+        public Result(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, Ingredient moldIn, Item resultIn, int count, int cookingTimeIn, Advancement.Builder advancementBuilderIn, ResourceLocation advancementIdIn, RecipeSerializer<PressingRecipe> serializerIn) {
             this.id = idIn;
             this.group = groupIn;
             this.ingredient = ingredientIn;
@@ -109,7 +109,7 @@ public class PressingRecipeBuilder {
             json.addProperty("cookingtime", this.cookingTime);
         }
 
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return this.serializer;
         }
 

@@ -15,13 +15,13 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @JeiPlugin
@@ -36,12 +36,12 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(guiBAInventory.class, new IGuiContainerHandler<guiBAInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(guiBAInventory containerScreen) {
-                List<Rectangle2d> rects = new ArrayList<>();
+            public List<Rect2i> getGuiExtraAreas(guiBAInventory containerScreen) {
+                List<Rect2i> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getX();
                 int guiTop = containerScreen.getY();
                 int xSize = containerScreen.getBackgroundWidth();
-                rects.add(new Rectangle2d(guiLeft+xSize, guiTop, 43, 90));
+                rects.add(new Rect2i(guiLeft+xSize, guiTop, 43, 90));
                 return rects;
             }
         });
@@ -49,12 +49,12 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(GuiALInventory.class, new IGuiContainerHandler<GuiALInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(GuiALInventory containerScreen) {
-                List<Rectangle2d> rects = new ArrayList<>();
+            public List<Rect2i> getGuiExtraAreas(GuiALInventory containerScreen) {
+                List<Rect2i> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getX();
                 int guiTop = containerScreen.getY();
                 int xSize = containerScreen.getBackgroundWidth();
-                rects.add(new Rectangle2d(guiLeft+xSize, guiTop, 43, 90));
+                rects.add(new Rect2i(guiLeft+xSize, guiTop, 43, 90));
                 return rects;
             }
         });
@@ -63,12 +63,12 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(GuiGFLInventory.class, new IGuiContainerHandler<GuiGFLInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(GuiGFLInventory containerScreen) {
-                List<Rectangle2d> rects = new ArrayList<>();
+            public List<Rect2i> getGuiExtraAreas(GuiGFLInventory containerScreen) {
+                List<Rect2i> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getGuiLeft();
                 int guiTop = containerScreen.getGuiTop();
                 int xSize = containerScreen.getXSize();
-                rects.add(new Rectangle2d(guiLeft+xSize, guiTop, 43, 90));
+                rects.add(new Rect2i(guiLeft+xSize, guiTop, 43, 90));
                 return rects;
             }
         });
@@ -76,12 +76,12 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(GuiAKNInventory.class, new IGuiContainerHandler<GuiAKNInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(GuiAKNInventory containerScreen) {
-                List<Rectangle2d> rects = new ArrayList<>();
+            public List<Rect2i> getGuiExtraAreas(GuiAKNInventory containerScreen) {
+                List<Rect2i> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getGuiLeft();
                 int guiTop = containerScreen.getGuiTop();
                 int xSize = containerScreen.getXSize();
-                rects.add(new Rectangle2d(guiLeft+xSize, guiTop, 43, 90));
+                rects.add(new Rect2i(guiLeft+xSize, guiTop, 43, 90));
                 return rects;
             }
         });
@@ -89,12 +89,12 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(GuiCLSInventory.class, new IGuiContainerHandler<GuiCLSInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(GuiCLSInventory containerScreen) {
-                List<Rectangle2d> rects = new ArrayList<>();
+            public List<Rect2i> getGuiExtraAreas(GuiCLSInventory containerScreen) {
+                List<Rect2i> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getGuiLeft();
                 int guiTop = containerScreen.getGuiTop();
                 int xSize = containerScreen.getXSize();
-                rects.add(new Rectangle2d(guiLeft+xSize, guiTop, 43, 90));
+                rects.add(new Rect2i(guiLeft+xSize, guiTop, 43, 90));
                 return rects;
             }
         });
@@ -102,10 +102,9 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
-        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.PRESSING), JEIRecipeCategoryPressing.UID);
-        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.ALLOYING), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
+        registration.addRecipes(Collections.singleton(registerRecipes.Types.PRESSING), JEIRecipeCategoryPressing.UID);
+        registration.addRecipes(Collections.singleton(registerRecipes.Types.ALLOYING), JEIRecipeCategoryAlloying.UID);
+        registration.addRecipes(Collections.singleton(registerRecipes.Types.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.yor42.projectazure.client.model.block;
 import com.yor42.projectazure.gameobject.blocks.blockMultiblockDryDockController;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockDrydockTE;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractMultiBlockBase.FORMED;

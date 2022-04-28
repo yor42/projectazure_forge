@@ -4,31 +4,18 @@ import com.mojang.math.Vector3d;
 import com.mojang.math.Vector4f;
 import com.yor42.projectazure.PAConfig;
 import net.minecraft.core.BlockPos;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector4f;
-import net.minecraft.util.text.Color;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.world.Level;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.spawner.WorldEntitySpawner;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 import java.util.Random;
-
-import static net.minecraft.util.math.MathHelper.clamp;
 
 public class MathUtil {
     public static Random rand = new Random();
@@ -168,7 +155,7 @@ public class MathUtil {
             int y = world.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
             pos.set(x,y,z);
             tries++;
-        }while(!WorldEntitySpawner.isSpawnPositionOk(EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkSource().isEntityTickingChunk(new ChunkPos(pos)) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
+        }while(!NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
         if(tries >= PAConfig.CONFIG.BeaconFindSpawnPositionTries.get()){
             pos.set(originPos.getX(),originPos.getY(), originPos.getZ());
         }

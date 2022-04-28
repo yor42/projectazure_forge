@@ -1,28 +1,28 @@
 package com.yor42.projectazure.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ClientUtils;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TextComponent;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInventory> implements IHasContainer<ContainerGFLInventory> {
+public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/gfl_inventory.png");
     private final AbstractEntityCompanion host;
@@ -52,7 +52,7 @@ public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInvento
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderEntity(mouseX, mouseY);
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -61,9 +61,9 @@ public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInvento
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.pushPose();
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.minecraft.getTextureManager().getTexture(TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         for(int l = 0; l<host.getSkillItemCount(); l++){
@@ -85,7 +85,7 @@ public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInvento
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int x, int y) {
+    protected void renderLabels(PoseStack matrixStack, int x, int y) {
 
         matrixStack.pushPose();
         float scalerate = 0.75F;
@@ -94,7 +94,7 @@ public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInvento
         String AffectionString = String.format("%,.2f", this.host.getAffection())+"/"+this.host.getmaxAffection();
         int affectionwidth = (int) ((this.font.width(AffectionString)+8)*scalerate);
         this.font.draw(matrixStack, new TextComponent(AffectionString), (140-((float)affectionwidth/2))/scalerate, 77/scalerate, 0x242424);
-        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.minecraft.getTextureManager().getTexture(TEXTURE);
         this.blit(matrixStack, (int) (((133)-((float)affectionwidth/2))/scalerate), (int) (77/scalerate), 203, 72, 7, 7);
 
         int textwidth = (int) (this.font.width(this.host.getDisplayName().getString())*scalerate);

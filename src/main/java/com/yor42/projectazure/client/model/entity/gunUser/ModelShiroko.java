@@ -3,8 +3,8 @@ package com.yor42.projectazure.client.model.entity.gunUser;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -227,7 +227,7 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
         super.setMolangQueries(animatable, currentTick);
         MolangParser parser = GeckoLibCache.getInstance().parser;
         if(animatable instanceof AbstractEntityCompanion){
-            parser.setValue("query.head_pitch", ((LivingEntity)animatable).xRot);
+            parser.setValue("query.head_pitch", ((LivingEntity)animatable).getXRot());
             parser.setValue("query.head_yaw", ((LivingEntity)animatable).yHeadRot-((LivingEntity)animatable).yBodyRot);
 
             parser.setValue("query.prev_head_pitch", ((LivingEntity)animatable).xRotO * ((float) Math.PI / 180F));

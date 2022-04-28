@@ -6,6 +6,7 @@ package com.yor42.projectazure.client.model.entity.misc;// Made with Blockbench 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.yor42.projectazure.client.renderer.entity.projectile.EntityGunBulletRenderer;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -14,7 +15,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class modelProjectileGunBullet extends EntityModel<EntityGunBulletRenderer> {
+public class modelProjectileGunBullet extends EntityModel<EntityProjectileBullet> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "modelprojectilegunbullet"), "main");
 	private final ModelPart bb_main;
@@ -33,7 +34,7 @@ public class modelProjectileGunBullet extends EntityModel<EntityGunBulletRendere
 	}
 
 	@Override
-	public void setupAnim(EntityGunBulletRenderer entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(EntityProjectileBullet entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 	}
 
 	@Override

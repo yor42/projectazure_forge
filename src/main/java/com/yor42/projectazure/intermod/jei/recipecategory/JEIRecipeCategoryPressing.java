@@ -1,19 +1,24 @@
 package com.yor42.projectazure.intermod.jei.recipecategory;
 
+import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import static mezz.jei.api.recipe.RecipeIngredientRole.INPUT;
+import static mezz.jei.api.recipe.RecipeIngredientRole.OUTPUT;
+import static software.bernie.geckolib3.world.storage.GeckoLibIdTracker.Type.ITEM;
 
 public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe> {
 
@@ -22,7 +27,7 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_pressing");
 
     public JEIRecipeCategoryPressing(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(registerBlocks.METAL_PRESS.get().asItem()));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()));
 
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/metal_press.png");
         this.background = guiHelper.createDrawable(TEXTURE, 4,4, 165, 75);
@@ -40,13 +45,8 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     }
 
     @Override
-    public String getTitle() {
-        return "Pressing";
-    }
-
-    @Override
-    public Component getTitleAsTextComponent() {
-        return new TranslatableComponent("recipe.pressing");
+    public Component getTitle() {
+        return new TranslatableComponent("Pressing");
     }
 
     @Override
@@ -60,19 +60,12 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     }
 
     @Override
-    public void setIngredients(PressingRecipe pressingRecipe, IIngredients iIngredients) {
-        iIngredients.setInputIngredients(pressingRecipe.getIngredients());
-        iIngredients.setOutput(VanillaTypes.ITEM, pressingRecipe.getResultItem());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout iRecipeLayout, PressingRecipe pressingRecipe, IIngredients iIngredients) {
-        IGuiItemStackGroup itemStacks = iRecipeLayout.getItemStacks();
-
-        itemStacks.init(0, true, 36, 30);
-        itemStacks.init(1, true, 70, 30);
-        itemStacks.init(2, false, 111, 30);
-
-        itemStacks.set(iIngredients);
+    public void setRecipe(IRecipeLayoutBuilder builder, PressingRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(INPUT, 36, 30)
+                .addIngredients(recipe.getIngredients().get(0));
+        builder.addSlot(INPUT, 70, 30)
+                .addIngredients(recipe.getIngredients().get(1));
+        builder.addSlot(OUTPUT, 111, 30)
+                .addItemStack(recipe.getResultItem());
     }
 }

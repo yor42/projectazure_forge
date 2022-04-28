@@ -4,17 +4,19 @@ import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiFluidStackGroup;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import static com.yor42.projectazure.libs.Constants.CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY;
+import static mezz.jei.api.constants.VanillaTypes.ITEM;
+import static mezz.jei.api.recipe.RecipeIngredientRole.INPUT;
+import static mezz.jei.api.recipe.RecipeIngredientRole.OUTPUT;
 
 public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<CrystalizingRecipe> {
 
@@ -24,7 +26,7 @@ public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<Crystalizi
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_crystalizing");
 
     public JEIRecipeCategoryCrystalizing(IGuiHelper helper){
-        this.icon = helper.createDrawableIngredient(new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()));
+        this.icon = helper.createDrawableIngredient(ITEM, new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()));
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/crystal_growth_chamber.png");
         this.background = helper.createDrawable(TEXTURE, 4,3, 168, 80);
         this.Tank_Overlay = helper.createDrawable(TEXTURE, 176, 49, 18, 36);
@@ -42,8 +44,8 @@ public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<Crystalizi
     }
 
     @Override
-    public String getTitle() {
-        return "recipe.crystalizing";
+    public Component getTitle() {
+        return new TranslatableComponent( "recipe.crystalizing");
     }
 
     @Override
@@ -57,21 +59,12 @@ public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<Crystalizi
     }
 
     @Override
-    public void setIngredients(CrystalizingRecipe recipe, IIngredients ingredients) {
-        ingredients.setInputs(VanillaTypes.ITEM, recipe.getIngredientStack());
-        ingredients.setInputs(VanillaTypes.FLUID, recipe.getFluid());
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
-    }
+    public void setRecipe(IRecipeLayoutBuilder builder, CrystalizingRecipe recipe, IFocusGroup focuses) {
+        builder.addSlot(INPUT, 53, 2)
+                .addIngredients(recipe.getIngredients().get(0));
+        builder.addSlot(OUTPUT, 111, 31)
+                .addItemStack(recipe.getResultItem());
 
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, CrystalizingRecipe recipe, IIngredients ingredients) {
-        IGuiItemStackGroup itemStacks = recipeLayout.getItemStacks();
-        itemStacks.init(0, true, 53, 2);
-        itemStacks.init(4, false, 111, 31);
-        IGuiFluidStackGroup fluid = recipeLayout.getFluidStacks();
-        fluid.init(0, true, 53, 22, 18, 36, CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY, true, Tank_Overlay);
-        fluid.set(0, recipe.getFluid());
-
-        itemStacks.set(ingredients);
+        builder.addSlot(INPUT, 53, 22).setFluidRenderer(5000, true,  18, 36).setOverlay(Tank_Overlay, 0, 0).addIngredients(VanillaTypes.FLUID, recipe.getFluid());
     }
 }

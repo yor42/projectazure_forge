@@ -6,14 +6,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.libs.utils.ItemStackWithChance;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.tags.TagKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import java.util.function.Consumer;
  * Ex Nihilo Sequentia is Open Source and distributed under the
  * CC BY-NC-SA 4.0 License: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
  */
-public class CrushingRecipeBuilder implements IFinishedRecipe {
+public class CrushingRecipeBuilder implements FinishedRecipe {
 
     protected JsonArray conditions = null;
     protected JsonArray inputArray = null;
@@ -44,7 +44,7 @@ public class CrushingRecipeBuilder implements IFinishedRecipe {
         setMultipleResults(Integer.MAX_VALUE);
     }
 
-    public CrushingRecipeBuilder addDrop(IItemProvider drop) {
+    public CrushingRecipeBuilder addDrop(ItemLike drop) {
         return addDrop(drop, 1, 1.0F);
     }
 
@@ -53,15 +53,15 @@ public class CrushingRecipeBuilder implements IFinishedRecipe {
     }
 
 
-    public CrushingRecipeBuilder addDrop(IItemProvider drop, int count) {
+    public CrushingRecipeBuilder addDrop(ItemLike drop, int count) {
         return addDrop(drop, count, 1.0F);
     }
 
-    public CrushingRecipeBuilder addDrop(IItemProvider drop, float chance) {
+    public CrushingRecipeBuilder addDrop(ItemLike drop, float chance) {
         return addDrop(drop, 1, chance);
     }
 
-    public CrushingRecipeBuilder addDrop(IItemProvider drop, int count, float chance) {
+    public CrushingRecipeBuilder addDrop(ItemLike drop, int count, float chance) {
         return this.addResult(new ItemStackWithChance(new ItemStack(drop, count), chance));
     }
 
@@ -89,23 +89,19 @@ public class CrushingRecipeBuilder implements IFinishedRecipe {
         }
     }
 
-    public CrushingRecipeBuilder input(IItemProvider input) {
+    public CrushingRecipeBuilder input(ItemLike input) {
         return this.input(Ingredient.of(input));
     }
 
-    public CrushingRecipeBuilder input(ITag<Item> input) {
+    public CrushingRecipeBuilder input(TagKey<Item> input) {
         return this.input(Ingredient.of(input));
     }
 
-    protected CrushingRecipeBuilder addInput(IItemProvider input) {
+    protected CrushingRecipeBuilder addInput(ItemLike input) {
         return addInput(new ItemStack(input));
     }
 
-    protected CrushingRecipeBuilder addInput(ITag.INamedTag<Item> tag) {
-        return addInput(Ingredient.of(tag));
-    }
-
-    protected CrushingRecipeBuilder addInput(String id, IItemProvider block) {
+    protected CrushingRecipeBuilder addInput(String id, ItemLike block) {
         return this.addItem(id, new ItemStack(block));
     }
 
@@ -183,7 +179,7 @@ public class CrushingRecipeBuilder implements IFinishedRecipe {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> out, ResourceLocation id) {
+    public void build(Consumer<FinishedRecipe> out, ResourceLocation id) {
         Preconditions.checkArgument(isComplete(), "This recipe is incomplete.");
         this.id = id;
         out.accept(this);
@@ -195,7 +191,7 @@ public class CrushingRecipeBuilder implements IFinishedRecipe {
     }
 
     @Override
-    public IRecipeSerializer<?> getType() {
+    public RecipeSerializer<?> getType() {
         return registerRecipes.Serializers.CRUSHING.get();
     }
 

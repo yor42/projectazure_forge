@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RegisterModelLayers {
     public static final ModelLayerLocation MISSILE = register("missile");
     public static final ModelLayerLocation FIREARM_BULLET = register("bullet");
+    public static final ModelLayerLocation ARTS = register("arts");
 
     private static ModelLayerLocation register(String p_171296_) {
         ModelLayerLocation modellayerlocation = createLocation(p_171296_, "main");

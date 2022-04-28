@@ -3,18 +3,15 @@ package com.yor42.projectazure.data.recipebuilder;
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.advancements.*;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.Registry;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -27,7 +24,7 @@ public class AlloyingRecipeBuilder {
     private final int processingTime, count, ing1count, ing2count;
     private final Advancement.Builder advancementBuilder = Advancement.Builder.advancement();
 
-    public AlloyingRecipeBuilder(Ingredient ingredient1, int ing1Count, Ingredient ingredient2, int ing2Count, IItemProvider result, int count, int processingTime) {
+    public AlloyingRecipeBuilder(Ingredient ingredient1, int ing1Count, Ingredient ingredient2, int ing2Count, ItemLike result, int count, int processingTime) {
         this.result = result.asItem();
         this.count = count;
         this.ingredient1 = ingredient1;
@@ -37,23 +34,23 @@ public class AlloyingRecipeBuilder {
         this.processingTime = processingTime;
     }
 
-    public static AlloyingRecipeBuilder addRecipe(Ingredient ingredient1, int ing1Count, Ingredient ingredient2, int ing2Count, IItemProvider result, int count, int processingTime){
+    public static AlloyingRecipeBuilder addRecipe(Ingredient ingredient1, int ing1Count, Ingredient ingredient2, int ing2Count, ItemLike result, int count, int processingTime){
         return new AlloyingRecipeBuilder(ingredient1, ing1Count, ingredient2, ing2Count, result, count, processingTime);
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn) {
+    public void build(Consumer<FinishedRecipe> consumerIn) {
         this.build(consumerIn, Registry.ITEM.getKey(this.result));
     }
 
     /**
      * Adds a criterion needed to unlock the recipe.
      */
-    public AlloyingRecipeBuilder addCriterion(String name, ICriterionInstance criterionIn) {
+    public AlloyingRecipeBuilder addCriterion(String name, CriterionTriggerInstance criterionIn) {
         this.advancementBuilder.addCriterion(name, criterionIn);
         return this;
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
+    public void build(Consumer<FinishedRecipe> consumerIn, String save) {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
         ResourceLocation resourcelocation1 = new ResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
@@ -63,9 +60,9 @@ public class AlloyingRecipeBuilder {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
+    public void build(Consumer<FinishedRecipe> consumerIn, ResourceLocation id) {
         this.validate(id);
-        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
+        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
         consumerIn.accept(new AlloyingRecipeBuilder.Result(id, "", this.ingredient1, this.ing1count, this.ingredient2, this.ing2count, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.ALLOYING.get()));
     }
 
@@ -75,7 +72,7 @@ public class AlloyingRecipeBuilder {
         }
     }
 
-    public static class Result implements IFinishedRecipe {
+    public static class Result implements FinishedRecipe {
 
         private final ResourceLocation id;
         private final Ingredient ingredient1, ingredients2;
@@ -84,9 +81,9 @@ public class AlloyingRecipeBuilder {
         private final int cookingTime, outputcount, ing1count, ing2count;
         private final Advancement.Builder advancementBuilder;
         private final ResourceLocation advancementId;
-        private final IRecipeSerializer<AlloyingRecipe> serializer;
+        private final RecipeSerializer<AlloyingRecipe> serializer;
 
-        public Result(ResourceLocation id, String group, Ingredient ingredient1, int ing1count, Ingredient ingredient2, int ing2count,Item resultIn, int outputcount, int cookingTimeIn, Advancement.Builder advancementBuilderIn, ResourceLocation advancementIdIn, IRecipeSerializer<AlloyingRecipe> serializerIn){
+        public Result(ResourceLocation id, String group, Ingredient ingredient1, int ing1count, Ingredient ingredient2, int ing2count,Item resultIn, int outputcount, int cookingTimeIn, Advancement.Builder advancementBuilderIn, ResourceLocation advancementIdIn, RecipeSerializer<AlloyingRecipe> serializerIn){
             this.id = id;
             this.group = group;
             this.ingredient1 = ingredient1;
@@ -123,7 +120,7 @@ public class AlloyingRecipeBuilder {
         }
 
         @Override
-        public IRecipeSerializer<?> getType() {
+        public RecipeSerializer<?> getType() {
             return this.serializer;
         }
 

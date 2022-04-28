@@ -1,19 +1,20 @@
 package com.yor42.projectazure.client.renderer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
@@ -36,21 +37,21 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
 
     protected final AnimatedGeoModel<T> modelProvider;
 
-    protected GeoProjectileRenderer(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
+    protected GeoProjectileRenderer(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> modelProvider) {
         super(renderManager);
         this.modelProvider = modelProvider;
     }
 
     @Override
-    public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
+    public void render(T entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn,
                        MultiBufferSource bufferIn, int packedLightIn) {
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityIn));
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(
-                MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 180.0F));
+                Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 180.0F));
         matrixStackIn.mulPose(Vector3f.ZP
-                .rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
-        Minecraft.getInstance().textureManager.bind(getTextureLocation(entityIn));
+                .rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getYRot())));
+        Minecraft.getInstance().textureManager.getTexture(getTextureLocation(entityIn));
         Color renderColor = getRenderColor(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn);
         RenderType renderType = getRenderType(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn,
                 getTextureLocation(entityIn));
