@@ -22,6 +22,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
@@ -174,7 +175,7 @@ public class MathUtil {
         return pos;
     }
 
-    public static Vector3d rotateVector(Vector3d vec, Vector3d axis, double theta) {
+    public static Vec3 rotateVector(Vec3 vec, Vec3 axis, double theta) {
         double u = axis.x;
         double v = axis.y;
         double w = axis.z;
@@ -188,7 +189,7 @@ public class MathUtil {
         double zPrime = w*(u*vec.x + v*vec.y + w*vec.z)*(1d - Math.cos(theta))
                 + vec.z*Math.cos(theta)
                 + (-v*vec.x + u*vec.y)*Math.sin(theta);
-        return new Vector3d(xPrime, yPrime, zPrime);
+        return new Vec3(xPrime, yPrime, zPrime);
     }
 
 }

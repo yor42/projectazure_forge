@@ -2,21 +2,27 @@ package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.client.model.rigging.modelCVRiggingDefault;
+import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
+import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.items.IItemHandler;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
+
+import java.util.function.Consumer;
 
 public class ItemRiggingCVDefault extends ItemRiggingCV{
 
@@ -57,6 +63,19 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
     @Override
     public AnimatedGeoModel getModel() {
         return new modelCVRiggingDefault();
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            private final BlockEntityWithoutLevelRenderer renderer = new CVDefaultRiggingRenderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return renderer;
+            }
+        });
     }
 
     @Override

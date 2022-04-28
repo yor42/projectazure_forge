@@ -1,16 +1,16 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.UseAction;
-import net.minecraft.potion.MobEffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.Level;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
@@ -23,8 +23,8 @@ public class ItemMedKit extends Item {
 
     @Nonnull
     @Override
-    public UseAction getUseAnimation(@Nonnull ItemStack stack) {
-        return UseAction.EAT;
+    public UseAnim getUseAnimation(@Nonnull ItemStack stack) {
+        return UseAnim.EAT;
     }
 
 
@@ -36,20 +36,20 @@ public class ItemMedKit extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity) {
-        if(entity instanceof PlayerEntity) {
+        if(entity instanceof Player) {
             entity.heal(5);
-            entity.addEffect(new MobEffectInstance(Effects.REGENERATION, 600, 1));
-            entity.addEffect(new MobEffectInstance(Effects.ABSORPTION, 300));
-            ((PlayerEntity) entity).awardStat(Stats.ITEM_USED.get(this));
+            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 300));
+            ((Player) entity).awardStat(Stats.ITEM_USED.get(this));
             stack.hurtAndBreak(1, entity, (entity1) -> entity1.broadcastBreakEvent(entity1.getUsedItemHand()));
         }
         return super.finishUsingItem(stack, world, entity);
     }
 
     @Override
-    public ActionResult<ItemStack> use(Level p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
+    public InteractionResultHolder<ItemStack> use(Level p_77659_1_, Player p_77659_2_, InteractionHand p_77659_3_) {
         ItemStack itemstack = p_77659_2_.getItemInHand(p_77659_3_);
         p_77659_2_.startUsingItem(p_77659_3_);
-        return ActionResult.consume(itemstack);
+        return InteractionResultHolder.consume(itemstack);
     }
 }

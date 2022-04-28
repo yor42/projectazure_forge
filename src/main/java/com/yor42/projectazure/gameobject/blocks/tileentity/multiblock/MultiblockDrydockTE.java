@@ -1,5 +1,8 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
+import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractAnimatedTileEntityMachines;
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.registerManager;
@@ -15,6 +18,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -105,26 +111,6 @@ public class MultiblockDrydockTE extends MultiblockBaseTE implements MenuProvide
         }
     }
 
-    @Override
-    public void tick() {
-        boolean isActive = this.isActive();
-        boolean isPowered = this.isPowered();
-        boolean shouldSave = false;
-        super.tick();
-        if(this.level != null && !this.level.isClientSide){
-            if(isPowered!=this.isPowered() || this.isPowered() && !this.level.getBlockState(this.worldPosition).getValue(POWERED) || !this.isPowered() && this.level.getBlockState(this.worldPosition).getValue(POWERED)) {
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(POWERED, this.isPowered()), 2);
-                shouldSave = true;
-            }
-            if(isActive!=this.isActive()){
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ACTIVE, this.isActive()), 2);
-                shouldSave = true;
-            }
-        }
-
-        if(shouldSave){this.setChanged();}
-    }
-
     public MultiblockDrydockTE(BlockPos pos, BlockState state) {
         super(DRYDOCK.get(), pos, state);
         this.inventory.setSize(9);
@@ -198,5 +184,67 @@ public class MultiblockDrydockTE extends MultiblockBaseTE implements MenuProvide
         BlockPos pos = getBlockPos();
         AABB bb = new AABB(pos.offset(-2, -4, -2), pos.offset(2, 2, 2));
         return bb;
+    }
+
+    @Override
+    public int getContainerSize() {
+        return 0;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public ItemStack getItem(int p_18941_) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeItem(int p_18942_, int p_18943_) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int p_18951_) {
+        return null;
+    }
+
+    @Override
+    public void setItem(int p_18944_, ItemStack p_18945_) {
+
+    }
+
+    @Override
+    public boolean stillValid(Player p_18946_) {
+        return true;
+    }
+
+    @Override
+    public void clearContent() {
+
+    }
+
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
+        if (t instanceof MultiblockDrydockTE blockEntity) {
+            boolean isActive = blockEntity.isActive();
+            gachamachineTick(level, blockPos, blockState,blockEntity);
+            ////////////super
+            boolean isPowered = blockEntity.isPowered();
+            boolean shouldSave = false;
+            if(blockEntity.level != null && !blockEntity.level.isClientSide){
+                if(isPowered!=blockEntity.isPowered() || blockEntity.isPowered() && !blockEntity.level.getBlockState(blockEntity.worldPosition).getValue(POWERED) || !blockEntity.isPowered() && blockEntity.level.getBlockState(blockEntity.worldPosition).getValue(POWERED)) {
+                    blockEntity.level.setBlock(blockEntity.worldPosition, blockEntity.level.getBlockState(blockEntity.worldPosition).setValue(POWERED, blockEntity.isPowered()), 2);
+                    shouldSave = true;
+                }
+                if(isActive!=blockEntity.isActive()){
+                    blockEntity.level.setBlock(blockEntity.worldPosition, blockEntity.level.getBlockState(blockEntity.worldPosition).setValue(ACTIVE, blockEntity.isActive()), 2);
+                    shouldSave = true;
+                }
+            }
+
+            if(shouldSave){blockEntity.setChanged();}
+        }
     }
 }

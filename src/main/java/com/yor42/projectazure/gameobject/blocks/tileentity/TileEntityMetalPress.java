@@ -6,19 +6,12 @@ import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -26,6 +19,9 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -36,9 +32,10 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nullable;
 
+import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
 
-public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
+public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines implements MenuProvider {
 
     private final ContainerData fields = new ContainerData() {
         @Override
@@ -81,8 +78,8 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         }
     };
 
-    public TileEntityMetalPress() {
-        super(registerTE.METAL_PRESS.get());
+    public TileEntityMetalPress(BlockPos pos, BlockState state) {
+        super(registerTE.METAL_PRESS.get(), pos, state);
         this.recipeType = (RecipeType<? extends Recipe<Inventory>>) registerRecipes.Types.PRESSING;
         this.powerConsumption = 100;
         this.inventory.setSize(3);
@@ -124,7 +121,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     @Override
-    protected AbstractContainerMenu createMenu(int id, Inventory player, Player player1) {
+    public AbstractContainerMenu createMenu(int id, Inventory player, Player player1) {
         return new ContainerMetalPress(id, player, this.inventory, this.fields);
     }
 
@@ -148,10 +145,10 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     protected int getTargetProcessTime(){
-        return this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends PressingRecipe>)this.recipeType, this, this.level).map(PressingRecipe::getProcessTick).orElse(200);
+        return this.level.getRecipeManager().getRecipeFor((RecipeType<? extends PressingRecipe>)this.recipeType, this, this.level).map(PressingRecipe::getProcessTick).orElse(200);
     }
 
-    protected void process(IRecipe<?> irecipe) {
+    protected void process(Recipe<?> irecipe) {
 
         if(irecipe != null && this.canProcess(irecipe)){
             ItemStack ingredient = this.inventory.getStackInSlot(0);
@@ -190,7 +187,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
         }
     }
 
-    protected boolean canProcess(@Nullable IRecipe<?> recipeIn) {
+    protected boolean canProcess(@Nullable Recipe<?> recipeIn) {
         if (!this.inventory.getStackInSlot(0).isEmpty() && !this.inventory.getStackInSlot(1).isEmpty() && recipeIn != null) {
             ItemStack itemstack = recipeIn.getResultItem();
             if (itemstack.isEmpty()) {
@@ -209,6 +206,54 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
             }
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public int getContainerSize() {
+        return this.inventory.getSlots();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for(int i=0;i<this.inventory.getSlots(); i++){
+            if(!this.inventory.getStackInSlot(i).isEmpty()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int p_18941_) {
+        return this.inventory.getStackInSlot(p_18941_);
+    }
+
+    @Override
+    public ItemStack removeItem(int p_18942_, int p_18943_) {
+        return this.inventory.extractItem(p_18942_, p_18943_, false);
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int p_18951_) {
+        return this.inventory.extractItem(p_18951_, p_18951_, true);
+    }
+
+
+    @Override
+    public void setItem(int p_18944_, ItemStack p_18945_) {
+        this.inventory.setStackInSlot(p_18944_, p_18945_);
+    }
+
+    @Override
+    public boolean stillValid(Player p_18946_) {
+        return true;
+    }
+
+    @Override
+    public void clearContent() {
+        for(int i=0;i<this.inventory.getSlots(); i++){
+            this.inventory.setStackInSlot(i, ItemStack.EMPTY);
         }
     }
 

@@ -3,13 +3,11 @@ package com.yor42.projectazure.gameobject.blocks;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBoundingBox;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.world.PathNavigationRegion;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -21,12 +19,12 @@ public class SilliconCrucibleBlock extends AbstractBigMachineBlock {
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, PathNavigationRegion world) {
+    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
         return null;
     }
 
     @Override
-    protected void interactWith(Level worldIn, BlockPos pos, PlayerEntity player) {
+    protected void interactWith(Level worldIn, BlockPos pos, Player player) {
 
     }
 

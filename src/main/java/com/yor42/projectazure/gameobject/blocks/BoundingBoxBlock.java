@@ -1,20 +1,21 @@
 package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBoundingBox;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.MenuProvider;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.LevelReader;
-import net.minecraft.world.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
+
+import javax.annotation.Nullable;
 
 public class BoundingBoxBlock extends AbstractContainerBlock{
     public BoundingBoxBlock(Properties properties) {
@@ -22,34 +23,19 @@ public class BoundingBoxBlock extends AbstractContainerBlock{
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.INVISIBLE;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.INVISIBLE;
     }
 
     @Override
-    public boolean shouldNotifyBlockChange() {
-        return true;
-    }
-
-    @Override
-    public boolean canBeReplacedByLeaves(BlockState state, LevelReader world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public boolean canBeReplacedByLogs(BlockState state, LevelReader world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public ActionResultType use(BlockState state, Level worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
 
         BlockEntity tile = worldIn.getBlockEntity(pos);
         if(!worldIn.isClientSide && tile instanceof TileEntityBoundingBox) {
             TileEntityBoundingBox tile2 = (TileEntityBoundingBox) tile;
 
             if (tile2.hasMaster()) {
-                NetworkHooks.openGui((ServerPlayerEntity)player, (MenuProvider) worldIn.getBlockEntity(tile2.getMasterPos()));
+                NetworkHooks.openGui((ServerPlayer)player, (MenuProvider) worldIn.getBlockEntity(tile2.getMasterPos()));
             }
         }
 
@@ -57,7 +43,7 @@ public class BoundingBoxBlock extends AbstractContainerBlock{
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         BlockEntity tile = worldIn.getBlockEntity(pos);
 
         if(!worldIn.isClientSide && tile instanceof TileEntityBoundingBox) {
@@ -83,5 +69,11 @@ public class BoundingBoxBlock extends AbstractContainerBlock{
             }
         }
 
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
+        return null;
     }
 }

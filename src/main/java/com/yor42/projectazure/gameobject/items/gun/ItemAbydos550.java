@@ -1,13 +1,18 @@
 package com.yor42.projectazure.gameobject.items.gun;
 
+import com.yor42.projectazure.client.renderer.items.ItemAbydos550Renderer;
 import com.yor42.projectazure.libs.enums;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.IItemRenderProperties;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import java.util.function.Consumer;
 
 public class ItemAbydos550 extends ItemGunBase{
     public ItemAbydos550(boolean semiAuto, int minFiretime, int clipsize, int reloadtime, float damage, SoundEvent firesound, SoundEvent reloadsound, int roundsPerReload, float inaccuracy, Properties properties, boolean isTwohanded, Item magazine) {
@@ -17,6 +22,19 @@ public class ItemAbydos550 extends ItemGunBase{
     @Override
     protected void SecondaryAction(Player playerIn, ItemStack heldItem) {
 
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            private final BlockEntityWithoutLevelRenderer renderer = new ItemAbydos550Renderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return renderer;
+            }
+        });
     }
 
     @Override

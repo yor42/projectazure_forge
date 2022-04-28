@@ -1,10 +1,15 @@
 package com.yor42.projectazure.gameobject.blocks;
 
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockDrydockTE;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.world.PathNavigationRegion;
+import com.yor42.projectazure.setup.register.registerTE;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
@@ -16,12 +21,18 @@ public class blockMultiblockDryDockController extends MultiblockStructureBlocks{
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, PathNavigationRegion world) {
-        return new MultiblockDrydockTE();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new MultiblockDrydockTE(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_) {
+        return p_153214_ == registerTE.DRYDOCK.get() ? MultiblockDrydockTE::tick : null;
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state) {
-        return BlockRenderType.ENTITYBLOCK_ANIMATED;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 }

@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.items.rigging;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
+import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -10,11 +11,13 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.items.IItemHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -24,6 +27,8 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 
+import java.util.function.Consumer;
+
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable {
@@ -31,6 +36,19 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
     public itemRiggingDDDefault(Properties properties, int HP) {
         super(properties, HP);
         this.validclass = enums.shipClass.Destroyer;
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            private final BlockEntityWithoutLevelRenderer renderer = new DDDefaultRiggingRenderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return renderer;
+            }
+        });
     }
 
 

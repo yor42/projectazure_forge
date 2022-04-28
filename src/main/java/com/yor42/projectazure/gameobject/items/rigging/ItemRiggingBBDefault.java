@@ -1,8 +1,10 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
 import com.yor42.projectazure.client.model.rigging.modelBBRiggingDefault;
+import com.yor42.projectazure.client.renderer.items.BBDefaultRiggingRenderer;
+import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -10,16 +12,19 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.items.IItemHandler;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
+
+import java.util.function.Consumer;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
@@ -27,6 +32,19 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
     public ItemRiggingBBDefault(Properties properties, int HP) {
         super(properties, HP);
         this.validclass = enums.shipClass.Battleship;
+    }
+
+    @Override
+    public void initializeClient(Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            private final BlockEntityWithoutLevelRenderer renderer = new BBDefaultRiggingRenderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return renderer;
+            }
+        });
     }
 
     @Override
@@ -89,7 +107,7 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
 
             GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
             EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian((entitylivingbaseIn.getYHeadRot() - entitylivingbaseIn.yBodyRot)));
-            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.xRot, 7.5F, -12.5F, false, true));
+            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.getXRot(), 7.5F, -12.5F, false, true));
             this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.popPose();
         }
@@ -106,7 +124,7 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
 
             GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
             EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian((entitylivingbaseIn.getYHeadRot() - entitylivingbaseIn.yBodyRot)));
-            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.xRot, 7.5F, -12.5F, false, true));
+            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.getXRot(), 7.5F, -12.5F, false, true));
             this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.popPose();
         }
@@ -122,8 +140,8 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
             matrixStackIn.mulPose(new Quaternion(0, 0, 90, true));
 
             GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
-            EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.xRot));
-            EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-entitylivingbaseIn.yRot - entitylivingbaseIn.yBodyRot, 7.5F, -12.5F, false, true));
+            EquipmentModel.getBone("MountX").get().setRotationY(MathUtil.DegreeToRadian(entitylivingbaseIn.getXRot()));
+            EquipmentModel.getBone("Barrel").get().setRotationX(-MathUtil.LimitAngleMovement(-entitylivingbaseIn.getYRot() - entitylivingbaseIn.yBodyRot, 7.5F, -12.5F, false, true));
             this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.popPose();
         }
@@ -141,7 +159,7 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
 
             GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
             EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian((entitylivingbaseIn.getYHeadRot() - entitylivingbaseIn.yBodyRot)));
-            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.xRot, 7.5F, -12.5F, false, true));
+            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.getXRot(), 7.5F, -12.5F, false, true));
             this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.popPose();
         }
@@ -158,7 +176,7 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
 
             GeoModel EquipmentModel = (EquipmentItem.getEquipmentModel().getModel(EquipmentItem.getEquipmentModel().getModelLocation(null)));
             EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian((entitylivingbaseIn.getYHeadRot() - entitylivingbaseIn.yBodyRot)));
-            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.xRot, 7.5F, -12.5F, false, true));
+            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.getXRot(), 7.5F, -12.5F, false, true));
             this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
             matrixStackIn.popPose();
         }

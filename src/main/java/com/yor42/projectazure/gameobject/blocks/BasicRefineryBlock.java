@@ -1,15 +1,18 @@
 package com.yor42.projectazure.gameobject.blocks;
 
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.PathNavigationRegion;
-import net.minecraft.world.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
+import com.yor42.projectazure.setup.register.registerTE;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -19,35 +22,24 @@ public class BasicRefineryBlock extends AbstractMachineBlock {
         super(properties);
     }
 
+    @Nullable
     @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
+        return new TileEntityBasicRefinery(p_153215_, p_153216_);
     }
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, PathNavigationRegion world) {
-        return new TileEntityBasicRefinery();
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type) {
+        return type == registerTE.BASIC_REFINERY.get() ? TileEntityBasicRefinery::tick : null;
     }
 
     @Override
-    protected void interactWith(Level worldIn, BlockPos pos, PlayerEntity player) {
+    protected void interactWith(Level worldIn, BlockPos pos, Player player) {
         BlockEntity TileentityAtPos = worldIn.getBlockEntity(pos);
-        if(TileentityAtPos instanceof TileEntityBasicRefinery && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
+        if(TileentityAtPos instanceof TileEntityBasicRefinery && player instanceof ServerPlayer && !worldIn.isClientSide()){
             TileEntityBasicRefinery TE = (TileEntityBasicRefinery) TileentityAtPos;
-            NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
-        }
-    }
-
-
-    @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            BlockEntity te = worldIn.getBlockEntity(pos);
-            if (te instanceof TileEntityBasicRefinery) {
-                InventoryHelper.dropContents(worldIn, pos, (TileEntityBasicRefinery) te);
-            }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
+            NetworkHooks.openGui((ServerPlayer) player, TE, TE::encodeExtraData);
         }
     }
 }

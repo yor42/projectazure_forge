@@ -36,13 +36,13 @@ public class registerBlocks {
     public static final RegistryObject<Block> TIN_ORE = registerMetalOre_Stone("tin");
     public static final RegistryObject<Block> LEAD_ORE = registerMetalOre_Stone("lead");
     public static final RegistryObject<Block> ZINC_ORE = registerMetalOre_Stone("zinc");
-    public static final RegistryObject<Block> ORIROCK = register("orirock",() -> new OreBlock(BlockBehaviour.Properties.of(Material.STONE).harvestLevel(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> ORIROCK = register("orirock",() -> new OreBlock(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 3F)), Main.PA_RESOURCES);
 
     public static final RegistryObject<Block> CRUDE_OIL = register_noItem("crude_oil", ()->new LiquidBlock(()->registerFluids.CRUDE_OIL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> GASOLINE = register_noItem("gasoline", ()->new LiquidBlock(()->registerFluids.GASOLINE_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> DIESEL = register_noItem("diesel", ()->new LiquidBlock(()->registerFluids.DIESEL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> FUEL_OIL = register_noItem("fuel_oil", ()->new LiquidBlock(()->registerFluids.FUEL_OIL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> BOUNDING_BOX = register_noItem("boundingbox", ()->new BoundingBoxBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()));
+    public static final RegistryObject<Block> BOUNDING_BOX = register_noItem("boundingbox", ()->new BoundingBoxBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).sound(SoundType.METAL).noOcclusion()));
 
 
     public static final RegistryObject<Block> REENFORCED_PLANK = register("reenforced_plank",() -> new Block(BlockBehaviour.Properties.of(Material.WOOD).strength(4F, 6F)), Main.PA_RESOURCES);

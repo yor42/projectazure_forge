@@ -52,11 +52,6 @@ public abstract class AbstractMachineBlock extends AbstractContainerBlock{
     }
 
     @Override
-    public boolean shouldNotifyBlockChange() {
-        return true;
-    }
-
-    @Override
     public boolean canDropInventory(BlockState state) {
         return true;
     }

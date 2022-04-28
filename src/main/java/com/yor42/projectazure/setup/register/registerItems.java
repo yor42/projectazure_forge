@@ -16,19 +16,11 @@ import com.yor42.projectazure.gameobject.items.tools.*;
 import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.util.TooltipFlag;
-import net.minecraft.item.*;
 import net.minecraft.network.chat.*;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.*;
-import net.minecraft.world.Level;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
@@ -227,7 +219,7 @@ public class registerItems {
             .tab(PA_GROUP).stacksTo(1)));
 
     //I'M READY TO GO TONIIIIGHT YEAH THERES PARTY ALRIGHTTTTTTT WE DON'T NEED REASON FOR JOY OH YEAHHHHH
-    public static final RegistryObject<Item> DISC_FRIDAYNIGHT = registerManager.ITEMS.register("disc_fridaynight", () -> new MusicDiscItem(15, ()->registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
+    public static final RegistryObject<Item> DISC_FRIDAYNIGHT = registerManager.ITEMS.register("disc_fridaynight", () -> new RecordItem(15, ()->registerSounds.DISC_FRIDAY_NIGHT, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1)){
         @Nonnull
         @Override
@@ -237,7 +229,7 @@ public class registerItems {
     });
 
     //LET THE BASS KICK O-oooooooooo AAAA E A A I A U
-    public static final RegistryObject<Item> DISC_BRAINPOWER = registerManager.ITEMS.register("disc_brainpower", () -> new MusicDiscItem(15, ()->registerSounds.DISC_BRAINPOWER, new Item.Properties()
+    public static final RegistryObject<Item> DISC_BRAINPOWER = registerManager.ITEMS.register("disc_brainpower", () -> new RecordItem(15, ()->registerSounds.DISC_BRAINPOWER, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Override
@@ -254,7 +246,7 @@ public class registerItems {
     });
 
     //You know the rules and so do I
-    public static final RegistryObject<Item> DISC_RICKROLL = registerManager.ITEMS.register("disc_rickroll", () -> new MusicDiscItem(15, ()->registerSounds.DISC_RICKROLL, new Item.Properties()
+    public static final RegistryObject<Item> DISC_RICKROLL = registerManager.ITEMS.register("disc_rickroll", () -> new RecordItem(15, ()->registerSounds.DISC_RICKROLL, new Item.Properties()
             .tab(PA_WEAPONS).stacksTo(1))
     {
         @Nonnull
@@ -264,7 +256,7 @@ public class registerItems {
         }
     });
 
-    public static final RegistryObject<Item> DISC_CC5 = registerManager.ITEMS.register("disc_cc5", () -> new MusicDiscItem(15, ()->registerSounds.DISC_CC5, new Item.Properties()
+    public static final RegistryObject<Item> DISC_CC5 = registerManager.ITEMS.register("disc_cc5", () -> new RecordItem(15, ()->registerSounds.DISC_CC5, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
@@ -274,7 +266,7 @@ public class registerItems {
         }
     });
 
-    public static final RegistryObject<Item> DISC_SANDSTORM = registerManager.ITEMS.register("disc_sandstorm", () -> new MusicDiscItem(15, ()->registerSounds.DISC_SANDSTORM, new Item.Properties()
+    public static final RegistryObject<Item> DISC_SANDSTORM = registerManager.ITEMS.register("disc_sandstorm", () -> new RecordItem(15, ()->registerSounds.DISC_SANDSTORM, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
@@ -284,7 +276,7 @@ public class registerItems {
         }
     });
 
-    public static final RegistryObject<Item> DISC_SANDROLL = registerManager.ITEMS.register("disc_sandroll", () -> new MusicDiscItem(15, ()->registerSounds.DISC_SANDROLL, new Item.Properties()
+    public static final RegistryObject<Item> DISC_SANDROLL = registerManager.ITEMS.register("disc_sandroll", () -> new RecordItem(15, ()->registerSounds.DISC_SANDROLL, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
@@ -294,7 +286,7 @@ public class registerItems {
         }
     });
 
-    public static final RegistryObject<Item> DISC_ENTERTHEBEGINNING = registerManager.ITEMS.register("disc_enterthebeginning", () -> new MusicDiscItem(15, ()->registerSounds.DISC_ENTERTHEBEGINNING, new Item.Properties()
+    public static final RegistryObject<Item> DISC_ENTERTHEBEGINNING = registerManager.ITEMS.register("disc_enterthebeginning", () -> new RecordItem(15, ()->registerSounds.DISC_ENTERTHEBEGINNING, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
         @Nonnull
@@ -311,7 +303,6 @@ public class registerItems {
     });
 
     public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.LEVER_CLICK, 0, 0.5F, new Item.Properties()
-            .setISTER(() -> ItemAbydos550Renderer::new)
             .tab(PA_WEAPONS).stacksTo(1), true, MAGAZINE_5_56.get()));
 
     public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
@@ -333,34 +324,27 @@ public class registerItems {
     public static final RegistryObject<Item> COMMANDING_STICK = registerManager.ITEMS.register("commanding_stick", ItemCommandStick::new);
 
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = registerManager.ITEMS.register("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
-    .setISTER(() -> DDDefaultRiggingRenderer::new)
     .tab(PA_WEAPONS).stacksTo(1), 500));
 
     public static final RegistryObject<Item> CV_DEFAULT_RIGGING = registerManager.ITEMS.register("cv_default_rigging", () -> new ItemRiggingCVDefault(new Item.Properties()
-            .setISTER(() -> CVDefaultRiggingRenderer::new)
             .tab(PA_WEAPONS).stacksTo(1), 750));
 
     public static final RegistryObject<Item> BB_DEFAULT_RIGGING = registerManager.ITEMS.register("bb_default_rigging", () -> new ItemRiggingBBDefault(new Item.Properties()
-            .setISTER(() -> BBDefaultRiggingRenderer::new)
             .tab(PA_WEAPONS).stacksTo(1), 1200));
 
     public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = registerManager.ITEMS.register("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533Mm(new Item.Properties()
-            .setISTER(() -> equipment533mmTorpedoRenderer::new)
             .tab(PA_WEAPONS).stacksTo(1), 40));
 
     public static final RegistryObject<Item> EQUIPMENT_GUN_127MM = registerManager.ITEMS.register("equipment_gun_127mm", () -> new ItemEquipmentGun127Mm(new Item.Properties()
-            .setISTER(() -> Equipment127mmGunRenderer::new)
             .tab(PA_WEAPONS).stacksTo(1), 40));
 
     public static float WildcatHP = 30;
 
     public static final RegistryObject<Item> EQUIPMENT_PLANE_F4FWildcat = registerManager.ITEMS.register("equipment_plane_f4fwildcat", () -> new ItemPlanef4Fwildcat(new Item.Properties()
-            .setISTER(() -> ItemPlanef4fWildcatRenderer::new)
             .tab(PA_WEAPONS).stacksTo(1), (int) WildcatHP));
 
 
     public static final RegistryObject<Item> DRONE_BAMISSILE = registerManager.ITEMS.register("missiledrone", () -> new ItemMissleDrone(new Item.Properties()
-            .setISTER(() -> ItemMissileDroneRenderer::new)
             .tab(PA_WEAPONS).stacksTo(1),10, 20000));
 
     public static final RegistryObject<Item> SPAWM_AYANAMI = registerManager.ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(ENTITYTYPE_AYANAMI, new Item.Properties()

@@ -6,6 +6,8 @@ import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerTE;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.network.chat.Component;
@@ -18,7 +20,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -120,9 +124,8 @@ public class TileEntityBasicRefinery extends BlockEntity implements MenuProvider
         }
     };
 
-
-    public TileEntityBasicRefinery() {
-        super(registerTE.BASIC_REFINERY.get());
+    public TileEntityBasicRefinery(BlockPos p_153215_, BlockState p_153216_) {
+        super(registerTE.BASIC_REFINERY.get(), p_153215_, p_153216_);
     }
 
     @Override
@@ -191,135 +194,6 @@ public class TileEntityBasicRefinery extends BlockEntity implements MenuProvider
         return this.burnTime > 0;
     }
 
-    public void tick() {
-        boolean flag = this.isBurning();
-        boolean flag1 = false;
-        if (this.isBurning()) {
-            --this.burnTime;
-        }
-
-
-        for (int slot = 0; slot < 7; slot += 2) {
-            ItemStack stack = this.getItem(slot);
-            if (slot == 0) {
-                int finalSlot1 = slot;
-                NonNullConsumer<IFluidHandlerItem> TransferLiquids = (fluidHandler) -> {
-                    FluidTank tank = this.CrudeOilTank;
-
-                    ItemStack existingStack = this.ITEMHANDLER.getStackInSlot(1);
-                    int existingStacklimit = Math.min(existingStack.getMaxStackSize(), 64);
-                    int Itemcount = existingStack.getCount() + fluidHandler.getContainer().getCount();
-                    if (existingStack.isEmpty() || existingStacklimit >= Itemcount) {
-                        FluidActionResult result = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
-                        if (result.isSuccess()) {
-                            if (existingStack.isEmpty()) {
-                                this.ITEMHANDLER.setStackInSlot(1, result.getResult());
-                            } else {
-                                this.ITEMHANDLER.getStackInSlot(1).grow(result.getResult().getCount());
-                            }
-                            stack.shrink(1);
-                            this.ITEMHANDLER.setStackInSlot(finalSlot1, stack);
-                        }
-                    }
-                };
-                FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquids);
-            } else {
-                FluidTank tank;
-                switch (slot) {
-                    default: {
-                        tank = TileEntityBasicRefinery.this.GasolineTank;
-                        break;
-                    }
-                    case 4: {
-                        tank = TileEntityBasicRefinery.this.DieselTank;
-                        break;
-                    }
-                    case 6: {
-                        tank = TileEntityBasicRefinery.this.FuelOilTank;
-                        break;
-                    }
-                }
-                int finalSlot = slot;
-                NonNullConsumer<IFluidHandlerItem> TransferLiquidtoStack = (FluidHandler) -> {
-                    ItemStack existingStack = this.ITEMHANDLER.getStackInSlot(finalSlot + 1);
-                    int existingStacklimit = Math.min(existingStack.getMaxStackSize(), 64);
-                    int Itemcount = existingStack.getCount() + FluidHandler.getContainer().getCount();
-                    if (existingStack.isEmpty() || Itemcount <= existingStacklimit) {
-                        FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
-                        if (result.isSuccess()) {
-                            stack.shrink(1);
-                            if (existingStack.isEmpty()) {
-                                this.ITEMHANDLER.setStackInSlot(finalSlot + 1, result.getResult());
-                            } else {
-                                this.ITEMHANDLER.getStackInSlot(finalSlot + 1).grow(result.getResult().getCount());
-                            }
-                            this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
-                        }
-                    }
-                };
-                FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquidtoStack);
-            }
-        }
-
-        if (!this.getLevel().isClientSide) {
-            ItemStack itemstack = this.ITEMHANDLER.getStackInSlot(9);
-            if (this.isBurning() || this.CrudeOilTank.getFluidAmount() > 100 && !itemstack.isEmpty()) {
-                if (!this.isBurning() && this.CrudeOilTank.getFluidAmount() > 100) {
-                    this.burnTime = ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING);
-                    this.totalBurntime = this.burnTime;
-                    if (this.isBurning()) {
-                        flag1 = true;
-                        if (itemstack.hasContainerItem())
-                            this.ITEMHANDLER.setStackInSlot(9, itemstack.getContainerItem());
-                        else if (!itemstack.isEmpty()) {
-                            itemstack.shrink(1);
-                            if (itemstack.isEmpty()) {
-                                this.ITEMHANDLER.setStackInSlot(1, itemstack.getContainerItem());
-                            }
-                        }
-                    }
-                }
-
-                if (this.isBurning() && this.CrudeOilTank.getFluidAmount() > 100 && (this.ITEMHANDLER.getStackInSlot(8).isEmpty() || this.ITEMHANDLER.getStackInSlot(8).getCount() < 64)) {
-                    //Do process
-                    this.bitumentick++;
-                    this.isActive = 1;
-                    FluidStack stack = this.CrudeOilTank.drain(10, IFluidHandler.FluidAction.SIMULATE);
-                    int drainedAmount = stack.getAmount();
-                    int FuelOilAmount = (int) (drainedAmount * 0.3);
-                    int GasolineAmount = (int) (drainedAmount * 0.46);
-                    int DieselAmount = (int) (drainedAmount * 0.3);
-                    int DieselFill = this.DieselTank.fill(new FluidStack(registerFluids.DIESEL_SOURCE, DieselAmount), IFluidHandler.FluidAction.EXECUTE);
-                    int GasolineFill = this.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE, GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
-                    int FuelFill = this.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
-                    int MaxFill = Math.max(Math.max(DieselFill, GasolineFill), FuelFill);
-                    this.CrudeOilTank.drain(MaxFill == 0 ? 0 : 10, IFluidHandler.FluidAction.EXECUTE);
-                    if (this.bitumentick >= 600) {
-                        if (this.ITEMHANDLER.getStackInSlot(8).isEmpty()) {
-                            this.ITEMHANDLER.setStackInSlot(8, new ItemStack(registerItems.BITUMEN.get()));
-                        } else {
-                            this.ITEMHANDLER.getStackInSlot(8).grow(1);
-                        }
-                        this.bitumentick = 0;
-                    }
-                } else {
-                    this.isActive = 0;
-                }
-            }
-
-            if (flag != this.isBurning() && this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE)) {
-                flag1 = true;
-                this.getLevel().setBlock(this.worldPosition, this.getLevel().getBlockState(this.worldPosition).setValue(ACTIVE, this.isBurning()), 3);
-            }
-
-        }
-
-        if (flag1) {
-            this.setChanged();
-        }
-
-    }
-
     @Override
     public void saveAdditional(CompoundTag compound) {
         compound.put("inventory", this.ITEMHANDLER.serializeNBT());
@@ -381,5 +255,136 @@ public class TileEntityBasicRefinery extends BlockEntity implements MenuProvider
             }
         }
         return super.getCapability(capability, direction);
+    }
+
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
+        if(t instanceof TileEntityBasicRefinery){
+            TileEntityBasicRefinery machine = (TileEntityBasicRefinery) t;
+            boolean flag = machine.isBurning();
+            boolean flag1 = false;
+            if (machine.isBurning()) {
+                --machine.burnTime;
+            }
+
+
+            for (int slot = 0; slot < 7; slot += 2) {
+                ItemStack stack = machine.getItem(slot);
+                if (slot == 0) {
+                    int finalSlot1 = slot;
+                    NonNullConsumer<IFluidHandlerItem> TransferLiquids = (fluidHandler) -> {
+                        FluidTank tank = machine.CrudeOilTank;
+
+                        ItemStack existingStack = machine.ITEMHANDLER.getStackInSlot(1);
+                        int existingStacklimit = Math.min(existingStack.getMaxStackSize(), 64);
+                        int Itemcount = existingStack.getCount() + fluidHandler.getContainer().getCount();
+                        if (existingStack.isEmpty() || existingStacklimit >= Itemcount) {
+                            FluidActionResult result = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
+                            if (result.isSuccess()) {
+                                if (existingStack.isEmpty()) {
+                                    machine.ITEMHANDLER.setStackInSlot(1, result.getResult());
+                                } else {
+                                    machine.ITEMHANDLER.getStackInSlot(1).grow(result.getResult().getCount());
+                                }
+                                stack.shrink(1);
+                                machine.ITEMHANDLER.setStackInSlot(finalSlot1, stack);
+                            }
+                        }
+                    };
+                    FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquids);
+                } else {
+                    FluidTank tank;
+                    switch (slot) {
+                        default: {
+                            tank = machine.GasolineTank;
+                            break;
+                        }
+                        case 4: {
+                            tank = machine.DieselTank;
+                            break;
+                        }
+                        case 6: {
+                            tank = machine.FuelOilTank;
+                            break;
+                        }
+                    }
+                    int finalSlot = slot;
+                    NonNullConsumer<IFluidHandlerItem> TransferLiquidtoStack = (FluidHandler) -> {
+                        ItemStack existingStack = machine.ITEMHANDLER.getStackInSlot(finalSlot + 1);
+                        int existingStacklimit = Math.min(existingStack.getMaxStackSize(), 64);
+                        int Itemcount = existingStack.getCount() + FluidHandler.getContainer().getCount();
+                        if (existingStack.isEmpty() || Itemcount <= existingStacklimit) {
+                            FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
+                            if (result.isSuccess()) {
+                                stack.shrink(1);
+                                if (existingStack.isEmpty()) {
+                                    machine.ITEMHANDLER.setStackInSlot(finalSlot + 1, result.getResult());
+                                } else {
+                                    machine.ITEMHANDLER.getStackInSlot(finalSlot + 1).grow(result.getResult().getCount());
+                                }
+                                machine.ITEMHANDLER.setStackInSlot(finalSlot, stack);
+                            }
+                        }
+                    };
+                    FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquidtoStack);
+                }
+            }
+
+            if (!machine.getLevel().isClientSide) {
+                ItemStack itemstack = machine.ITEMHANDLER.getStackInSlot(9);
+                if (machine.isBurning() || machine.CrudeOilTank.getFluidAmount() > 100 && !itemstack.isEmpty()) {
+                    if (!machine.isBurning() && machine.CrudeOilTank.getFluidAmount() > 100) {
+                        machine.burnTime = ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING);
+                        machine.totalBurntime = machine.burnTime;
+                        if (machine.isBurning()) {
+                            flag1 = true;
+                            if (itemstack.hasContainerItem())
+                                machine.ITEMHANDLER.setStackInSlot(9, itemstack.getContainerItem());
+                            else if (!itemstack.isEmpty()) {
+                                itemstack.shrink(1);
+                                if (itemstack.isEmpty()) {
+                                    machine.ITEMHANDLER.setStackInSlot(1, itemstack.getContainerItem());
+                                }
+                            }
+                        }
+                    }
+
+                    if (machine.isBurning() && machine.CrudeOilTank.getFluidAmount() > 100 && (machine.ITEMHANDLER.getStackInSlot(8).isEmpty() || machine.ITEMHANDLER.getStackInSlot(8).getCount() < 64)) {
+                        //Do process
+                        machine.bitumentick++;
+                        machine.isActive = 1;
+                        FluidStack stack = machine.CrudeOilTank.drain(10, IFluidHandler.FluidAction.SIMULATE);
+                        int drainedAmount = stack.getAmount();
+                        int FuelOilAmount = (int) (drainedAmount * 0.3);
+                        int GasolineAmount = (int) (drainedAmount * 0.46);
+                        int DieselAmount = (int) (drainedAmount * 0.3);
+                        int DieselFill = machine.DieselTank.fill(new FluidStack(registerFluids.DIESEL_SOURCE, DieselAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int GasolineFill = machine.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE, GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int FuelFill = machine.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int MaxFill = Math.max(Math.max(DieselFill, GasolineFill), FuelFill);
+                        machine.CrudeOilTank.drain(MaxFill == 0 ? 0 : 10, IFluidHandler.FluidAction.EXECUTE);
+                        if (machine.bitumentick >= 600) {
+                            if (machine.ITEMHANDLER.getStackInSlot(8).isEmpty()) {
+                                machine.ITEMHANDLER.setStackInSlot(8, new ItemStack(registerItems.BITUMEN.get()));
+                            } else {
+                                machine.ITEMHANDLER.getStackInSlot(8).grow(1);
+                            }
+                            machine.bitumentick = 0;
+                        }
+                    } else {
+                        machine.isActive = 0;
+                    }
+                }
+
+                if (flag != machine.isBurning() && machine.getLevel().getBlockState(machine.getBlockPos()).hasProperty(ACTIVE)) {
+                    flag1 = true;
+                    machine.getLevel().setBlock(machine.worldPosition, machine.getLevel().getBlockState(machine.worldPosition).setValue(ACTIVE, machine.isBurning()), 3);
+                }
+
+            }
+
+            if (flag1) {
+                machine.setChanged();
+            }
+        }
     }
 }

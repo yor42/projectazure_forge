@@ -1,7 +1,9 @@
 package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
 import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -17,6 +19,8 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -36,8 +40,14 @@ public class AlloyFurnaceBlock extends AbstractMachineBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
-        return new TileEntityAlloyFurnace();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileEntityAlloyFurnace(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type) {
+        return type == registerTE.ALLOY_FURNACE.get() ? TileEntityAlloyFurnace::tick : null;
     }
 
     @Override
@@ -86,17 +96,6 @@ public class AlloyFurnaceBlock extends AbstractMachineBlock {
             double d7 = direction$axis == Direction.Axis.Z ? (double)direction.getStepZ() * 0.52D : d4;
             worldIn.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
             worldIn.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D);
-        }
-    }
-
-    @Override
-    public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            BlockEntity te = worldIn.getBlockEntity(pos);
-            if (te instanceof TileEntityAlloyFurnace) {
-                InventoryHelper.dropContents(worldIn, pos, (TileEntityAlloyFurnace) te);
-            }
-            super.onRemove(state, worldIn, pos, newState, isMoving);
         }
     }
 

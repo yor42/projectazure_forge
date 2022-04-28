@@ -14,6 +14,8 @@ import net.minecraft.world.inventory.RecipeHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -39,66 +41,6 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
 
     public boolean isPowered(){
         return this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();
-    }
-
-    @Override
-    public void tick() {
-        boolean isActive = this.isActive();
-        boolean shouldsave = false;
-        boolean isPowered = this.isPowered();
-
-        if (this.level != null && !this.level.isClientSide) {
-            ItemStack ingredient = this.inventory.getStackInSlot(0);
-            ItemStack mold = this.inventory.getStackInSlot(1);
-
-            if (!ingredient.isEmpty() && !mold.isEmpty()) {
-                Recipe<?> irecipe = this.level.getRecipeManager().getRecipeFor((RecipeType<? extends Recipe<AbstractAnimatedTileEntityMachines>>) this.recipeType, this, this.level).orElse(null);
-
-                boolean flag1 = this.energyStorage.getEnergyStored() >= this.powerConsumption;
-                boolean flag2 = this.canProcess(irecipe);
-
-                if (flag1 && flag2) {
-                    if (this.totalProcessTime == 0) {
-                        this.totalProcessTime = this.getTargetProcessTime();
-                    }
-                    shouldsave = true;
-                    this.ProcessTime++;
-                    this.energyStorage.extractEnergy(this.powerConsumption, false);
-                    if (this.ProcessTime == this.totalProcessTime) {
-                        this.ProcessTime = 0;
-                        this.totalProcessTime = this.getTargetProcessTime();
-                        this.process(irecipe);
-                    }
-                } else {
-                    this.ProcessTime = 0;
-                }
-            }
-            else {
-                this.ProcessTime = 0;
-            }
-
-        }
-        if(shouldsave){
-            this.setChanged();
-        }
-
-        if(this.level != null && !this.level.isClientSide){
-            if(isPowered!=this.isPowered() || this.isPowered() && !this.level.getBlockState(this.worldPosition).getValue(POWERED) || !this.isPowered() && this.level.getBlockState(this.worldPosition).getValue(POWERED)) {
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(POWERED, this.isPowered()), 2);
-            }
-            if(isActive!=this.isActive()){
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(ACTIVE, this.isActive()), 2);
-            }
-        }
-
-        if(!isActive && this.isActive()){
-            this.playsound();
-        }
-
-
-        if(this.getLevel() != null && isActive != this.isActive()) {
-            this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
-        }
     }
 
     protected abstract int getTargetProcessTime();
@@ -177,6 +119,64 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         return this.ProcessTime>0;
     }
 
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
+        if (t instanceof AbstractAnimatedTileEntityMachines machine) {
+            boolean isActive = machine.isActive();
+            boolean shouldsave = false;
+            boolean isPowered = machine.isPowered();
 
+            if (machine.level != null && !machine.level.isClientSide) {
+                ItemStack ingredient = machine.inventory.getStackInSlot(0);
+                ItemStack mold = machine.inventory.getStackInSlot(1);
+
+                if (!ingredient.isEmpty() && !mold.isEmpty()) {
+                    Recipe<?> irecipe = machine.level.getRecipeManager().getRecipeFor((RecipeType<? extends Recipe<AbstractAnimatedTileEntityMachines>>) machine.recipeType, machine, machine.level).orElse(null);
+
+                    boolean flag1 = machine.energyStorage.getEnergyStored() >= machine.powerConsumption;
+                    boolean flag2 = machine.canProcess(irecipe);
+
+                    if (flag1 && flag2) {
+                        if (machine.totalProcessTime == 0) {
+                            machine.totalProcessTime = machine.getTargetProcessTime();
+                        }
+                        shouldsave = true;
+                        machine.ProcessTime++;
+                        machine.energyStorage.extractEnergy(machine.powerConsumption, false);
+                        if (machine.ProcessTime == machine.totalProcessTime) {
+                            machine.ProcessTime = 0;
+                            machine.totalProcessTime = machine.getTargetProcessTime();
+                            machine.process(irecipe);
+                        }
+                    } else {
+                        machine.ProcessTime = 0;
+                    }
+                } else {
+                    machine.ProcessTime = 0;
+                }
+
+            }
+            if (shouldsave) {
+                machine.setChanged();
+            }
+
+            if (machine.level != null && !machine.level.isClientSide) {
+                if (isPowered != machine.isPowered() || machine.isPowered() && !machine.level.getBlockState(machine.worldPosition).getValue(POWERED) || !machine.isPowered() && machine.level.getBlockState(machine.worldPosition).getValue(POWERED)) {
+                    machine.level.setBlock(machine.worldPosition, machine.level.getBlockState(machine.worldPosition).setValue(POWERED, machine.isPowered()), 2);
+                }
+                if (isActive != machine.isActive()) {
+                    machine.level.setBlock(machine.worldPosition, machine.level.getBlockState(machine.worldPosition).setValue(ACTIVE, machine.isActive()), 2);
+                }
+            }
+
+            if (!isActive && machine.isActive()) {
+                machine.playsound();
+            }
+
+
+            if (machine.getLevel() != null && isActive != machine.isActive()) {
+                machine.getLevel().sendBlockUpdated(machine.getBlockPos(), machine.getBlockState(), machine.getBlockState(), 3);
+            }
+        }
+    }
 
 }

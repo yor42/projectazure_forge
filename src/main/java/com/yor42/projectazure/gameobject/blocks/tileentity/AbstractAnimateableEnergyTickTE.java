@@ -11,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,12 +44,6 @@ public abstract class AbstractAnimateableEnergyTickTE extends BlockEntity implem
     @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "controller_machine", 0, this::predicate_machine));
-    }
-
-    public void tick() {
-        if (this.level != null && this.level.hasNeighborSignal(this.getBlockPos()) && PAConfig.CONFIG.RedStonePoweredMachines.get()) {
-            this.energyStorage.receiveEnergy(1000, false);
-        }
     }
 
     protected abstract <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event);

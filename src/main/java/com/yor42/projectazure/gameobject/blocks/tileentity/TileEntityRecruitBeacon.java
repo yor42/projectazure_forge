@@ -15,12 +15,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf ;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -36,7 +43,7 @@ import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTI
 import static com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock.POWERED;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRandomBlockposInRadius2D;
 
-public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
+public class TileEntityRecruitBeacon extends AbstractTileEntityGacha implements MenuProvider {
     private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
@@ -84,29 +91,8 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         }
     };
 
-    @Override
-    public void tick() {
-        boolean isPowered = this.isPowered();
-        boolean isActive = this.isActive();
-        boolean shouldSave = false;
-        super.tick();
-        if(!(this.level != null && this.level.isClientSide)){
-            if(isPowered!=this.isPowered() || this.isPowered() && !this.level.getBlockState(this.worldPosition).getValue(POWERED) || !this.isPowered() && this.level.getBlockState(this.worldPosition).getValue(POWERED)) {
-                shouldSave = true;
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(POWERED, this.isPowered()), 2);
-            }
-            boolean flag = this.getLevel().getBlockState(this.getBlockPos()).hasProperty(ACTIVE) && this.getLevel().getBlockState(this.getBlockPos()).getValue(ACTIVE);
-            if(flag){
-                shouldSave = true;
-                this.level.setBlock(this.worldPosition, this.level.getBlockState(this.worldPosition).setValue(RecruitBeaconBlock.ACTIVE, this.isActive()), 2);
-            }
-        }
-
-        if(shouldSave){this.setChanged();}
-    }
-
-    public TileEntityRecruitBeacon() {
-        super(registerTE.RECRUIT_BEACON.get());
+    public TileEntityRecruitBeacon(BlockPos pos, BlockState state) {
+        super(registerTE.RECRUIT_BEACON.get(), pos, state);
         this.inventory.setSize(5);
         this.powerConsumption = 1000;
     }
@@ -256,12 +242,35 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    protected Component getDefaultName() {
+    public Component getDisplayName() {
         return new TranslatableComponent("recruit_beacon");
     }
 
     @Override
-    protected Container createMenu(int id, Inventory player) {
+    public AbstractContainerMenu createMenu(int id, Inventory player, Player entity) {
         return new ContainerRecruitBeacon(id, player, this.inventory, this.getFields());
+    }
+
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
+        if(t instanceof TileEntityRecruitBeacon blockEntity) {
+            gachamachineTick(level, blockPos, blockState,blockEntity);
+            boolean isPowered = blockEntity.isPowered();
+            boolean shouldSave = false;
+            if (!(blockEntity.level != null && blockEntity.level.isClientSide)) {
+                if (isPowered != blockEntity.isPowered() || blockEntity.isPowered() && !blockEntity.level.getBlockState(blockEntity.worldPosition).getValue(POWERED) || !blockEntity.isPowered() && blockEntity.level.getBlockState(blockEntity.worldPosition).getValue(POWERED)) {
+                    shouldSave = true;
+                    blockEntity.level.setBlock(blockEntity.worldPosition, blockEntity.level.getBlockState(blockEntity.worldPosition).setValue(POWERED, blockEntity.isPowered()), 2);
+                }
+                boolean flag = blockEntity.getLevel().getBlockState(blockEntity.getBlockPos()).hasProperty(ACTIVE) && blockEntity.getLevel().getBlockState(blockEntity.getBlockPos()).getValue(ACTIVE);
+                if (flag) {
+                    shouldSave = true;
+                    blockEntity.level.setBlock(blockEntity.worldPosition, blockEntity.level.getBlockState(blockEntity.worldPosition).setValue(RecruitBeaconBlock.ACTIVE, blockEntity.isActive()), 2);
+                }
+            }
+
+            if (shouldSave) {
+                blockEntity.setChanged();
+            }
+        }
     }
 }

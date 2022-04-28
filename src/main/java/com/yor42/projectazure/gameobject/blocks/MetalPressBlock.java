@@ -1,17 +1,20 @@
 package com.yor42.projectazure.gameobject.blocks;
 
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.PathNavigationRegion;
-import net.minecraft.world.Level;
-import net.minecraftforge.fml.network.NetworkHooks;
+import com.yor42.projectazure.setup.register.registerTE;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -19,20 +22,26 @@ public class MetalPressBlock extends AbstractElectricMachineBlock {
 
 
     public MetalPressBlock() {
-        super((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()));
+        super((BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).sound(SoundType.METAL).noOcclusion()));
     }
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, PathNavigationRegion world) {
-        return new TileEntityMetalPress();
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileEntityMetalPress(pos, state);
     }
 
-    protected void interactWith(Level worldIn, BlockPos pos, PlayerEntity player) {
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type) {
+        return type == registerTE.BASIC_REFINERY.get() ? TileEntityMetalPress::tick : null;
+    }
+
+    protected void interactWith(Level worldIn, BlockPos pos, Player player) {
         BlockEntity TileentityAtPos = worldIn.getBlockEntity(pos);
-        if(TileentityAtPos instanceof TileEntityMetalPress && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
+        if(TileentityAtPos instanceof TileEntityMetalPress && player instanceof ServerPlayer && !worldIn.isClientSide()){
             TileEntityMetalPress TE = (TileEntityMetalPress) TileentityAtPos;
-            NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
+            NetworkHooks.openGui((ServerPlayer) player, TE, TE::encodeExtraData);
         }
     }
 }

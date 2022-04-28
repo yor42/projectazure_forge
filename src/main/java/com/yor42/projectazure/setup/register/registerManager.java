@@ -180,7 +180,7 @@ public class registerManager {
     public static final EntityType<EntityF4fWildcat> PLANEF4FWildCat = EntityType.Builder.of(EntityF4fWildcat::new, MobCategory.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString());
     public static final RegistryObject<EntityType<EntityF4fWildcat>> F4FWildCat = ENTITIES.register("planef4fwildcat", () -> PLANEF4FWildCat);
 
-    public static final EntityType<EntityMissileDrone> ENTITYTYPE_MISSILEDRONE = EntityType.Builder.<EntityMissileDrone>of(EntityMissileDrone::new, MobCategory.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("missiledrone").toString());
+    public static final EntityType<EntityMissileDrone> ENTITYTYPE_MISSILEDRONE = EntityType.Builder.of(EntityMissileDrone::new, MobCategory.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("missiledrone").toString());
     public static final RegistryObject<EntityType<EntityMissileDrone>> MISSILEDRONE = ENTITIES.register("missiledrone", () -> ENTITYTYPE_MISSILEDRONE);
 
     public static void register() {
@@ -194,6 +194,7 @@ public class registerManager {
         TILE_ENTITY.register(eventbus);
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
+        RegisterModelLayers.register();
         registerBlocks.register();
         registerItems.register();
         registerBiomes.register();

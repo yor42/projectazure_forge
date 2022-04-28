@@ -10,6 +10,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -192,38 +194,6 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         this.registerRollEntry();
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        boolean isActive = this.isActive();
-        boolean shouldsave = false;
-        if (this.level != null && !this.level.isClientSide) {
-            boolean flag1 = this.energyStorage.getEnergyStored() >= this.powerConsumption;
-            boolean flag2 = canProcess() && this.shouldProcess && this.totalProcessTime>0;
-            if(flag1 && flag2){
-                shouldsave = true;
-                this.ProcessTime++;
-                this.energyStorage.extractEnergy(this.powerConsumption, false);
-                if(this.ProcessTime >= this.totalProcessTime){
-                    this.SpawnResultEntity((ServerPlayer) this.nextTaskStarter);
-                    this.resetMachine();
-                }
-            }
-        }
-        if(shouldsave){
-            this.setChanged();
-        }
-
-        if(!isActive && this.isActive()){
-            this.playsound();
-        }
-
-
-        if(this.getLevel() != null && isActive != this.isActive()) {
-            this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
-        }
-    }
-
     protected abstract void SpawnResultEntity(ServerPlayer owner);
 
     /*
@@ -269,6 +239,40 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     /*
     register Roll Entries here using addEntry(entity);
      */
+
+    public static <T extends AbstractTileEntityGacha> void gachamachineTick(Level level, BlockPos blockPos, BlockState blockState, T t){
+        if (t.level != null && t.level.hasNeighborSignal(t.getBlockPos()) && PAConfig.CONFIG.RedStonePoweredMachines.get()) {
+            t.energyStorage.receiveEnergy(1000, false);
+        }
+
+        boolean isActive = t.isActive();
+        boolean shouldsave = false;
+        if (t.level != null && !t.level.isClientSide) {
+            boolean flag1 = t.energyStorage.getEnergyStored() >= t.powerConsumption;
+            boolean flag2 = t.canProcess() && t.shouldProcess && t.totalProcessTime > 0;
+            if (flag1 && flag2) {
+                shouldsave = true;
+                t.ProcessTime++;
+                t.energyStorage.extractEnergy(t.powerConsumption, false);
+                if (t.ProcessTime >= t.totalProcessTime) {
+                    t.SpawnResultEntity((ServerPlayer) t.nextTaskStarter);
+                    t.resetMachine();
+                }
+            }
+        }
+        if (shouldsave) {
+            t.setChanged();
+        }
+
+        if (!isActive && t.isActive()) {
+            t.playsound();
+        }
+
+
+        if (t.getLevel() != null && isActive != t.isActive()) {
+            t.getLevel().sendBlockUpdated(t.getBlockPos(), t.getBlockState(), t.getBlockState(), 3);
+        }
+    }
 
     public abstract void registerRollEntry();
 

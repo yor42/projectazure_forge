@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf ;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -94,8 +96,8 @@ public class TileEntityCrystalGrowthChamber extends BlockEntity implements MenuP
         }
     };
 
-    public TileEntityCrystalGrowthChamber() {
-        super(CRYSTAL_GROWTH_CHAMBER.get());
+    public TileEntityCrystalGrowthChamber(BlockPos pos, BlockState state) {
+        super(CRYSTAL_GROWTH_CHAMBER.get(), pos, state);
         this.recipeType = registerRecipes.Types.CRYSTALIZING;
     }
 
@@ -162,77 +164,6 @@ public class TileEntityCrystalGrowthChamber extends BlockEntity implements MenuP
     public void clearContent() {
         for(int i=0;i<this.inventory.getSlots(); i++){
             this.inventory.setStackInSlot(i, ItemStack.EMPTY);
-        }
-    }
-
-    public void tick() {
-        boolean shouldsave = false;
-        if(!this.level.isClientSide()){
-            for(int i = 1; i<4; i++){
-                if(this.tryFillingSolutionTank(i)){
-                    break;
-                }
-            }
-
-            ItemStack stack = this.getItem(5);
-            Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
-                FluidTank tank = this.waterTank;
-                FluidActionResult actionresult = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
-                if (actionresult.isSuccess()) {
-                    ItemStack result = actionresult.getResult();
-                    if (TileEntityCrystalGrowthChamber.this.inventory.insertItem(6, result, true).isEmpty()) {
-                        if (TileEntityCrystalGrowthChamber.this.inventory.getStackInSlot(6).isEmpty()){
-                            TileEntityCrystalGrowthChamber.this.inventory.setStackInSlot(6, result);
-                        }
-                        else {
-                            TileEntityCrystalGrowthChamber.this.inventory.insertItem(6, result, false);
-                        }
-                        stack.shrink(1);
-                        TileEntityCrystalGrowthChamber.this.inventory.setStackInSlot(5, stack);
-                    }
-
-                }
-            };
-            FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
-
-            ItemStack SeedStack = this.inventory.getStackInSlot(0);
-            if(!this.SolutionTank.isEmpty()) {
-                if (!SeedStack.isEmpty()) {
-                    Recipe<? extends TileEntityCrystalGrowthChamber> recipe = this.level.getRecipeManager().getRecipeFor((RecipeType<? extends CrystalizingRecipe>) this.recipeType, this, this.level).orElse(null);
-                    if (this.isProcessable(recipe)) {
-                        if (this.currentRecipe == null) {
-                            this.currentRecipe = recipe;
-                        }
-                        if (this.MaxGrowthProgress == 0) {
-                            this.MaxGrowthProgress = this.getGrowthTime();
-                        }
-
-                        if (!this.isProcessing()) {
-                            shouldsave = true;
-                            this.growthProgress++;
-                            this.MaxGrowthProgress = this.getGrowthTime();
-                        } else {
-                            this.growthProgress++;
-                            if (this.MaxGrowthProgress != 0 && this.growthProgress == this.MaxGrowthProgress) {
-                                this.growthProgress = 0;
-                                this.MaxGrowthProgress = this.getGrowthTime();
-                                this.process(recipe);
-                                shouldsave = true;
-                            }
-                        }
-                        this.getSolutionTank().drain(1, IFluidHandler.FluidAction.EXECUTE);
-                    } else if (recipe != this.currentRecipe || this.inventory.getStackInSlot(0).isEmpty()) {
-                        this.growthProgress = 0;
-                    }
-                }
-                else{
-                    this.growthProgress = 0;
-                }
-            }
-        }
-
-        if (shouldsave) {
-            this.setChanged();
         }
     }
 
@@ -361,5 +292,79 @@ public class TileEntityCrystalGrowthChamber extends BlockEntity implements MenuP
         compound.put("inventory", this.inventory.serializeNBT());
         compound.put("water", this.waterTank.writeToNBT(new CompoundTag()));
         compound.put("solution", this.SolutionTank.writeToNBT(new CompoundTag()));
+    }
+
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
+        if(t instanceof TileEntityCrystalGrowthChamber){
+            TileEntityCrystalGrowthChamber chamber = (TileEntityCrystalGrowthChamber) t;
+            boolean shouldsave = false;
+            if(!chamber.level.isClientSide()){
+                for(int i = 1; i<4; i++){
+                    if(chamber.tryFillingSolutionTank(i)){
+                        break;
+                    }
+                }
+
+                ItemStack stack = chamber.getItem(5);
+                Consumer<FluidStack> TransferLiquids = (fluidstack) -> {
+                    FluidTank tank = chamber.waterTank;
+                    FluidActionResult actionresult = FluidUtil.tryEmptyContainer(stack, tank, tank.getCapacity(), null, true);
+                    if (actionresult.isSuccess()) {
+                        ItemStack result = actionresult.getResult();
+                        if (chamber.inventory.insertItem(6, result, true).isEmpty()) {
+                            if (chamber.inventory.getStackInSlot(6).isEmpty()){
+                                chamber.inventory.setStackInSlot(6, result);
+                            }
+                            else {
+                                chamber.inventory.insertItem(6, result, false);
+                            }
+                            stack.shrink(1);
+                            chamber.inventory.setStackInSlot(5, stack);
+                        }
+
+                    }
+                };
+                FluidUtil.getFluidContained(stack).ifPresent(TransferLiquids);
+
+                ItemStack SeedStack = chamber.inventory.getStackInSlot(0);
+                if(!chamber.SolutionTank.isEmpty()) {
+                    if (!SeedStack.isEmpty()) {
+                        Recipe<? extends TileEntityCrystalGrowthChamber> recipe = chamber.level.getRecipeManager().getRecipeFor((RecipeType<? extends CrystalizingRecipe>) chamber.recipeType, chamber, chamber.level).orElse(null);
+                        if (chamber.isProcessable(recipe)) {
+                            if (chamber.currentRecipe == null) {
+                                chamber.currentRecipe = recipe;
+                            }
+                            if (chamber.MaxGrowthProgress == 0) {
+                                chamber.MaxGrowthProgress = chamber.getGrowthTime();
+                            }
+
+                            if (!chamber.isProcessing()) {
+                                shouldsave = true;
+                                chamber.growthProgress++;
+                                chamber.MaxGrowthProgress = chamber.getGrowthTime();
+                            } else {
+                                chamber.growthProgress++;
+                                if (chamber.MaxGrowthProgress != 0 && chamber.growthProgress == chamber.MaxGrowthProgress) {
+                                    chamber.growthProgress = 0;
+                                    chamber.MaxGrowthProgress = chamber.getGrowthTime();
+                                    chamber.process(recipe);
+                                    shouldsave = true;
+                                }
+                            }
+                            chamber.getSolutionTank().drain(1, IFluidHandler.FluidAction.EXECUTE);
+                        } else if (recipe != chamber.currentRecipe || chamber.inventory.getStackInSlot(0).isEmpty()) {
+                            chamber.growthProgress = 0;
+                        }
+                    }
+                    else{
+                        chamber.growthProgress = 0;
+                    }
+                }
+            }
+
+            if (shouldsave) {
+                chamber.setChanged();
+            }
+        }
     }
 }

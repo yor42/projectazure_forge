@@ -5,19 +5,15 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerCLSInventory
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TamableAnimal;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlot;
-import net.minecraft.util.Hand;
-import net.minecraft.world.Level;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -53,7 +49,7 @@ public class EntitySylvi extends AbstractCompanionMagicUser{
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
+            event.getController().setAnimation(builder.addAnimation(this.swingingArm == InteractionHand.MAIN_HAND?"swingR":"swingL", true));
 
             return PlayState.CONTINUE;
         }
@@ -67,10 +63,10 @@ public class EntitySylvi extends AbstractCompanionMagicUser{
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
-            if(this.getUsedItemHand() == Hand.MAIN_HAND){
+            if(this.getUsedItemHand() == InteractionHand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else if(this.getUsedItemHand() == InteractionHand.OFF_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
 
@@ -211,8 +207,8 @@ public class EntitySylvi extends AbstractCompanionMagicUser{
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerCLSInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+    protected void openGUI(ServerPlayer player) {
+        NetworkHooks.openGui(player, new ContainerCLSInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull
@@ -232,7 +228,7 @@ public class EntitySylvi extends AbstractCompanionMagicUser{
     }
 
     @Override
-    public Hand getSpellUsingHand() {
+    public InteractionHand getSpellUsingHand() {
         return Hand.MAIN_HAND;
     }
     @Override
@@ -242,7 +238,7 @@ public class EntitySylvi extends AbstractCompanionMagicUser{
 
     public static AttributeSupplier.Builder MutableAttribute()
     {
-        return MobEntity.createMobAttributes()
+        return Mob.createMobAttributes()
                 //Attribute
                 .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.SylviMovementSpeed.get())
                 .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.SylviSwimSpeed.get())

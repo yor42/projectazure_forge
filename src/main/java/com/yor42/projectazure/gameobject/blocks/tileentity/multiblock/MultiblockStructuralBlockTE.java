@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.network.chat.Component;
@@ -8,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -21,8 +23,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class MultiblockStructuralBlockTE extends MultiblockBaseTE{
-    protected MultiblockStructuralBlockTE(BlockEntityType<?> typeIn) {
-        super(typeIn);
+    protected MultiblockStructuralBlockTE(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
+        super(typeIn, pos, state);
         this.energyStorage.setMaxEnergy(0);
         this.inventory = new ItemStackHandler(1){
             @Override
