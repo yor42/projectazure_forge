@@ -3,13 +3,13 @@ package com.yor42.projectazure.network.packets;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
@@ -37,12 +37,12 @@ public class GunFiredPacket{
 
     public static void handle(final GunFiredPacket message, final Supplier<NetworkEvent.Context> ctx){
         ctx.get().enqueueWork(() -> {
-            final PlayerEntity playerEntity = ctx.get().getSender();
+            final Player playerEntity = ctx.get().getSender();
             if(playerEntity != null) {
                 ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(playerEntity);
                 int mainDelay = capability.getMainHandFireDelay();
                 int offDelay = capability.getOffHandFireDelay();
-                Hand hand = message.offHand ? Hand.OFF_HAND : Hand.MAIN_HAND;
+                InteractionHand hand = message.offHand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
                 ItemStack heldStack = playerEntity.getItemInHand(hand);
 
                 if (!heldStack.isEmpty() && heldStack.getItem() instanceof ItemGunBase) {

@@ -1,12 +1,12 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Level;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -28,7 +28,7 @@ public class StartRecruitPacket {
     public static void handle(final StartRecruitPacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            ServerPlayerEntity sender = ctx.get().getSender();
+            ServerPlayer sender = ctx.get().getSender();
             if(sender != null){
                 Level world = sender.getLevel();
                 BlockEntity TE = world.getBlockEntity(msg.pos);

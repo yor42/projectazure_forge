@@ -5,29 +5,24 @@ import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IRecipeHelperPopulator;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.MenuProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
@@ -45,7 +40,7 @@ import java.util.function.Consumer;
 import static com.yor42.projectazure.libs.Constants.CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY;
 import static com.yor42.projectazure.setup.register.registerTE.CRYSTAL_GROWTH_CHAMBER;
 
-public class TileEntityCrystalGrowthChamber extends LockableTileEntity implements MenuProvider, IRecipeHelperPopulator, IInventory, ITickableTileEntity {
+public class TileEntityCrystalGrowthChamber extends BlockEntity implements MenuProvider, Container {
 
     public FluidTank waterTank = new FluidTank(8000, (fluidStack)->fluidStack.getFluid() == Fluids.WATER);
     public FluidTank SolutionTank = new FluidTank(CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY);
@@ -66,7 +61,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     };
    private int growthProgress = 0;
     private int MaxGrowthProgress;
-    private IRecipe<? extends IInventory> currentRecipe;
+    private Recipe<? extends TileEntityCrystalGrowthChamber> currentRecipe;
     protected final RecipeType<? extends CrystalizingRecipe> recipeType;
 
     private final int[] FieldArray = {this.growthProgress,this.MaxGrowthProgress,this.waterTank.getFluidAmount(), this.waterTank.getCapacity(),this.SolutionTank.getFluidAmount(), this.SolutionTank.getCapacity()};
@@ -105,13 +100,13 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    protected Component getDefaultName() {
+    public Component getDisplayName() {
         return new TranslatableComponent("block.projectazure.crystal_chamber");
     }
 
-    //TODO
+    @Nullable
     @Override
-    protected Container createMenu(int id, Inventory player) {
+    public AbstractContainerMenu createMenu(int id, Inventory player, Player p_39956_) {
         return new ContainerCrystalGrowthChamber(id, player, this.inventory, this.fields, this.getWaterTank().getFluid(), this.getSolutionTank().getFluid());
     }
 
@@ -159,7 +154,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return true;
     }
 
@@ -170,14 +165,6 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         }
     }
 
-    @Override
-    public void fillStackedContents(RecipeItemHelper helper) {
-        for(int i=0;i<this.inventory.getSlots();i++) {
-            helper.accountStack(this.inventory.getStackInSlot(i));
-        }
-    }
-
-    @Override
     public void tick() {
         boolean shouldsave = false;
         if(!this.level.isClientSide()){
@@ -211,7 +198,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
             ItemStack SeedStack = this.inventory.getStackInSlot(0);
             if(!this.SolutionTank.isEmpty()) {
                 if (!SeedStack.isEmpty()) {
-                    IRecipe<? extends IInventory> recipe = this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends CrystalizingRecipe>) this.recipeType, this, this.level).orElse(null);
+                    Recipe<? extends TileEntityCrystalGrowthChamber> recipe = this.level.getRecipeManager().getRecipeFor((RecipeType<? extends CrystalizingRecipe>) this.recipeType, this, this.level).orElse(null);
                     if (this.isProcessable(recipe)) {
                         if (this.currentRecipe == null) {
                             this.currentRecipe = recipe;
@@ -249,7 +236,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         }
     }
 
-    private void process(IRecipe<? extends IInventory> recipe) {
+    private void process(Recipe<? extends TileEntityCrystalGrowthChamber> recipe) {
         if (this.isProcessable(recipe)) {
             ItemStack seed = this.inventory.getStackInSlot(0);
             ItemStack itemstack1 = recipe.getResultItem();
@@ -276,7 +263,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         return this.getLevel().getRecipeManager().getRecipeFor(this.recipeType, this, this.getLevel()).map(CrystalizingRecipe::getGrowthTime).orElse(1800);
     }
 
-    private boolean isProcessable(IRecipe<? extends IInventory> recipe) {
+    private boolean isProcessable(Recipe<? extends TileEntityCrystalGrowthChamber> recipe) {
         if(recipe != null && !this.inventory.getStackInSlot(0).isEmpty()){
             ItemStack output = recipe.getResultItem();
             if(output.isEmpty()){
@@ -357,8 +344,8 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     @Override
-    public void load (BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
+    public void load (CompoundTag nbt) {
+        super.load(nbt);
         this.growthProgress = nbt.getInt("progress");
         this.MaxGrowthProgress = nbt.getInt("maxprogress");
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
@@ -368,13 +355,11 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
 
     @Nonnull
     @Override
-    public CompoundTag save(@Nonnull CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(@Nonnull CompoundTag compound) {
         compound.putInt("progress", this.growthProgress);
         compound.putInt("maxprogress", this.MaxGrowthProgress);
         compound.put("inventory", this.inventory.serializeNBT());
         compound.put("water", this.waterTank.writeToNBT(new CompoundTag()));
         compound.put("solution", this.SolutionTank.writeToNBT(new CompoundTag()));
-        return compound;
     }
 }

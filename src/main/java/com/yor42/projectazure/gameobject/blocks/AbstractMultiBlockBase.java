@@ -9,7 +9,7 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.LevelReader;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -33,12 +33,12 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(BlockState state, IWorldReader world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(BlockState state, LevelReader world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean canBeReplacedByLogs(BlockState state, IWorldReader world, BlockPos pos) {
+    public boolean canBeReplacedByLogs(BlockState state, LevelReader world, BlockPos pos) {
         return false;
     }
 

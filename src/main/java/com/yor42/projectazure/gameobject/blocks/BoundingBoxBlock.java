@@ -12,7 +12,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.LevelReader;
 import net.minecraft.world.Level;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -32,12 +32,12 @@ public class BoundingBoxBlock extends AbstractContainerBlock{
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(BlockState state, IWorldReader world, BlockPos pos) {
+    public boolean canBeReplacedByLeaves(BlockState state, LevelReader world, BlockPos pos) {
         return false;
     }
 
     @Override
-    public boolean canBeReplacedByLogs(BlockState state, IWorldReader world, BlockPos pos) {
+    public boolean canBeReplacedByLogs(BlockState state, LevelReader world, BlockPos pos) {
         return false;
     }
 

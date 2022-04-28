@@ -1,16 +1,13 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -24,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class MultiblockStructuralBlockTE extends MultiblockBaseTE{
-    protected MultiblockStructuralBlockTE(TileEntityType<?> typeIn) {
+    protected MultiblockStructuralBlockTE(BlockEntityType<?> typeIn) {
         super(typeIn);
         this.energyStorage.setMaxEnergy(0);
         this.inventory = new ItemStackHandler(1){
@@ -64,7 +61,7 @@ public abstract class MultiblockStructuralBlockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected void SpawnResultEntity(ServerPlayerEntity owner) {
+    protected void SpawnResultEntity(ServerPlayer owner) {
     }
 
     @Override
@@ -83,21 +80,5 @@ public abstract class MultiblockStructuralBlockTE extends MultiblockBaseTE{
         }
         return super.getCapability(capability, facing);
     }
-
-    @Override
-    protected Component getDefaultName() {
-        return new TextComponent("Never Gonna Give you up");
-    }
-
-    @Override
-    public boolean canOpen(PlayerEntity p_213904_1_) {
-        return false;
-    }
-
-    @Override
-    protected Container createMenu(int id, Inventory player) {
-        return null;
-    }
-
 
 }

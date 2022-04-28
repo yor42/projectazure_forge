@@ -11,20 +11,16 @@ import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -41,7 +37,7 @@ import static com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock.POWERE
 import static com.yor42.projectazure.libs.utils.MathUtil.getRandomBlockposInRadius2D;
 
 public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -130,7 +126,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
     }
 
     @Override
-    protected void SpawnResultEntity(ServerPlayerEntity owner) {
+    protected void SpawnResultEntity(ServerPlayer owner) {
 
         boolean worldReady = this.level != null && !this.level.isClientSide();
         boolean EntityTypeNotNull = this.RollResult != null;
@@ -156,14 +152,14 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
             BlockPos blockpos;
             if(!isDupe) {
                 //Special spawn mechanism for when sunlight is lava. probably Spawning In cave
-                if (SolarApocalypse.isSunlightDangerous((ServerWorld) this.level)) {
+                /*if (SolarApocalypse.isSunlightDangerous((ServerWorld) this.level)) {
                     BlockPos.MutableBlockPos CandidatePos = this.worldPosition.mutable();
                     CandidatePos = CandidatePos.move(this.level.getBlockState(this.worldPosition).getValue(FACING));
                     blockpos = CandidatePos;
-                } else {
+                } else */
                     blockpos = getRandomBlockposInRadius2D(this.getLevel(), this.getBlockPos(), 20, 10);
                     spawn_sitting = false;
-                }
+
                 this.spawnEntity(blockpos, owner, spawn_sitting);
             }
             else{
@@ -174,7 +170,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         }
     }
 
-    public void spawnEntity(BlockPos pos, ServerPlayerEntity owner, boolean spawn_sitting){
+    public void spawnEntity(BlockPos pos, ServerPlayer owner, boolean spawn_sitting){
         if(this.level != null) {
             AbstractEntityCompanion entityCompanion = this.RollResult.create(this.level);
             if (entityCompanion != null) {
@@ -255,7 +251,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
         }
     }
 
-    public IIntArray getFields(){
+    public ContainerData getFields(){
         return this.fields;
     }
 

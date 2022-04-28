@@ -2,18 +2,18 @@ package com.yor42.projectazure.network;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.setup.register.registerItems;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.Level;
 
 import static com.yor42.projectazure.libs.Constants.StarterList;
 
 public class serverEvents {
-    public static void spawnStarter(ServerPlayerEntity player, int StarterID){
+    public static void spawnStarter(ServerPlayer player, int StarterID){
         Level world = player.level;
         EntityType<?> entitytype;
 
@@ -24,13 +24,13 @@ public class serverEvents {
                 player.sendMessage(new TranslatableComponent("message.invalidstarter"), player.getUUID());
             }
             else{
-                EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerWorld)world, player.getUseItem(), player, player.blockPosition(), SpawnReason.SPAWN_EGG, false, false);
+                EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerLevel) world, player.getUseItem(), player, player.blockPosition(), MobSpawnType.SPAWN_EGG, false, false);
                 if (entity != null){
                     if(!player.isCreative()) {
-                        if(player.getItemInHand(Hand.MAIN_HAND).getItem() == registerItems.Rainbow_Wisdom_Cube.get())
-                            player.getItemInHand(Hand.MAIN_HAND).shrink(1);
+                        if(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == registerItems.Rainbow_Wisdom_Cube.get())
+                            player.getItemInHand(InteractionHand.MAIN_HAND).shrink(1);
                         else
-                            player.getItemInHand(Hand.OFF_HAND).shrink(1);
+                            player.getItemInHand(InteractionHand.OFF_HAND).shrink(1);
                     }
                     entity.tame(player);
                     entity.setAffection(40.0F);

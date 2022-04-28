@@ -6,39 +6,40 @@ import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf ;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.RecipeHolder;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
-public class TileEntityAlloyFurnace extends BlockEntity{
+public class TileEntityAlloyFurnace extends BlockEntity implements MenuProvider, RecipeHolder, net.minecraft.world.Container {
 
     ItemStackHandler inventory = new ItemStackHandler(4);
     private int burnTime;
     private int totalBurntime;
     private int cookTime;
     private int cookTimeTotal;
-    protected final IIntArray machineInfo = new IIntArray() {
+    protected final ContainerData machineInfo = new ContainerData() {
         public int get(int index) {
             switch(index) {
                 case 0:
@@ -87,15 +88,15 @@ public class TileEntityAlloyFurnace extends BlockEntity{
         return this.burnTime > 0;
     }
 
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.inventory.deserializeNBT(nbt.getCompound("inventory"));
         this.burnTime = nbt.getInt("BurnTime");
         this.cookTime = nbt.getInt("CookTime");
         this.cookTimeTotal = nbt.getInt("CookTimeTotal");
 
         //This is where forge kicks in
-        this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2));
+        this.totalBurntime = ForgeHooks.getBurnTime(this.inventory.getStackInSlot(2), RecipeType.SMELTING);
         CompoundTag compoundnbt = nbt.getCompound("RecipesUsed");
 
         for(String s : compoundnbt.getAllKeys()) {
@@ -104,8 +105,8 @@ public class TileEntityAlloyFurnace extends BlockEntity{
 
     }
 
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putInt("BurnTime", this.burnTime);
         compound.putInt("CookTime", this.cookTime);
         compound.putInt("CookTimeTotal", this.cookTimeTotal);
@@ -115,17 +116,12 @@ public class TileEntityAlloyFurnace extends BlockEntity{
             compoundnbt.putInt(recipeId.toString(), craftedAmount);
         });
         compound.put("RecipesUsed", compoundnbt);
-        return compound;
     }
 
+    @Nullable
     @Override
-    protected Component getDefaultName() {
-        return new TranslatableComponent("alloy_furnace");
-    }
-
-    @Override
-    protected Container createMenu(int id, Inventory player) {
-        return new ContainerAlloyFurnace(id, player, this.inventory, this.machineInfo);
+    public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+        return new ContainerAlloyFurnace(p_39954_, p_39955_, this.inventory, this.machineInfo);
     }
     private final LazyOptional<ItemStackHandler> INVENTORY = LazyOptional.of(()->this.inventory);
     @Override
@@ -137,68 +133,8 @@ public class TileEntityAlloyFurnace extends BlockEntity{
 
         return super.getCapability(cap, side);
     }
-
     @Override
-    public int getContainerSize() {
-        return 4;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        for(int i=0;i<this.inventory.getSlots();i++){
-            if(!this.inventory.getStackInSlot(i).isEmpty()){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public ItemStack getItem(int index) {
-        return this.inventory.getStackInSlot(index);
-    }
-
-    @Override
-    public ItemStack removeItem(int index, int count) {
-        ItemStack stack = this.inventory.getStackInSlot(index);
-        stack.shrink(count);
-        return stack;
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int index) {
-        if (index >=0 && index < this.inventory.getSlots()){
-            this.inventory.setStackInSlot(index, ItemStack.EMPTY);
-        }
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void setItem(int index, ItemStack stack) {
-        this.inventory.setStackInSlot(index, stack);
-    }
-
-    @Override
-    public boolean stillValid(PlayerEntity player) {
-        return true;
-    }
-
-    @Override
-    public void clearContent() {
-        for(int i=0;i<this.inventory.getSlots(); i++){
-            this.inventory.setStackInSlot(i, ItemStack.EMPTY);
-        }
-    }
-
-    @Override
-    public void fillStackedContents(RecipeItemHelper helper) {
-        for(int i=0;i<this.inventory.getSlots();i++) {
-            helper.accountStack(this.inventory.getStackInSlot(i));
-        }
-    }
-
-    @Override
-    public void setRecipeUsed(@Nullable IRecipe<?> recipe) {
+    public void setRecipeUsed(@Nullable Recipe<?> recipe) {
         if (recipe != null) {
             ResourceLocation resourcelocation = recipe.getId();
             this.recipes.addTo(resourcelocation, 1);
@@ -207,11 +143,10 @@ public class TileEntityAlloyFurnace extends BlockEntity{
 
     @Nullable
     @Override
-    public IRecipe<?> getRecipeUsed() {
+    public Recipe<?> getRecipeUsed() {
         return null;
     }
 
-    @Override
     public void tick() {
         boolean flag = this.isBurning();
         boolean flag1 = false;
@@ -222,14 +157,14 @@ public class TileEntityAlloyFurnace extends BlockEntity{
         if (!(this.level != null && this.level.isClientSide)) {
             ItemStack FuelStack = this.inventory.getStackInSlot(2);
             if (this.isBurning() || !FuelStack.isEmpty() && !this.inventory.getStackInSlot(0).isEmpty()&& !this.inventory.getStackInSlot(1).isEmpty()) {
-                IRecipe<?> irecipe = this.level.getRecipeManager().getRecipeFor(this.recipeType, this, this.level).orElse(null);
+                Recipe<?> irecipe = this.level.getRecipeManager().getRecipeFor((RecipeType<? extends Recipe<TileEntityAlloyFurnace>>)this.recipeType, this, this.level).orElse(null);
 
                 if(irecipe != null){
                     this.cookTimeTotal = this.getCookTime();
                 }
 
                 if (!this.isBurning() && this.canSmelt(irecipe)) {
-                    this.burnTime = ForgeHooks.getBurnTime(FuelStack, IRecipeType.BLASTING);
+                    this.burnTime = ForgeHooks.getBurnTime(FuelStack, RecipeType.BLASTING);
                     this.totalBurntime = this.burnTime;
                     if (this.isBurning()) {
                         flag1 = true;
@@ -256,7 +191,7 @@ public class TileEntityAlloyFurnace extends BlockEntity{
                     this.cookTime = 0;
                 }
             } else if (!this.isBurning() && this.cookTime > 0) {
-                this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
+                this.cookTime = Mth.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
             }
 
             if (flag != this.isBurning()) {
@@ -270,7 +205,7 @@ public class TileEntityAlloyFurnace extends BlockEntity{
         }
 
     }
-    protected boolean canSmelt(@Nullable IRecipe<?> recipeIn) {
+    protected boolean canSmelt(@Nullable Recipe<?> recipeIn) {
         if (!this.inventory.getStackInSlot(0).isEmpty()&&!this.inventory.getStackInSlot(1).isEmpty() && recipeIn != null) {
             ItemStack itemstack = recipeIn.getResultItem();
             if (itemstack.isEmpty()) {
@@ -281,7 +216,7 @@ public class TileEntityAlloyFurnace extends BlockEntity{
                     return true;
                 } else if (!outputstack.sameItem(itemstack)) {
                     return false;
-                } else if (outputstack.getCount() + itemstack.getCount() <= this.getMaxStackSize() && outputstack.getCount() + itemstack.getCount() <= outputstack.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
+                } else if (outputstack.getCount() + itemstack.getCount() <= outputstack.getMaxStackSize()&& outputstack.getCount() + itemstack.getCount() <= outputstack.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
                     return true;
                 } else {
                     return outputstack.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes
@@ -292,7 +227,7 @@ public class TileEntityAlloyFurnace extends BlockEntity{
         }
     }
 
-    private void smelt(@Nullable IRecipe<?> recipe) {
+    private void smelt(@Nullable Recipe<?> recipe) {
         if (recipe != null && this.canSmelt(recipe)) {
             ItemStack input1 = this.inventory.getStackInSlot(0);
             ItemStack input2 = this.inventory.getStackInSlot(1);
@@ -325,5 +260,58 @@ public class TileEntityAlloyFurnace extends BlockEntity{
     }
 
     public void encodeExtraData(FriendlyByteBuf  buffer) {
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return new TranslatableComponent("gui.alloyfurnace");
+    }
+
+    @Override
+    public int getContainerSize() {
+        return this.inventory.getSlots();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for(int i=0;i<this.inventory.getSlots(); i++){
+            if(!this.inventory.getStackInSlot(i).isEmpty()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack getItem(int p_18941_) {
+        return this.inventory.getStackInSlot(p_18941_);
+    }
+
+    @Override
+    public ItemStack removeItem(int p_18942_, int p_18943_) {
+        return this.inventory.extractItem(p_18942_, p_18943_, false);
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int p_18951_) {
+        return null;
+    }
+
+
+    @Override
+    public void setItem(int p_18944_, ItemStack p_18945_) {
+        this.inventory.setStackInSlot(p_18944_, p_18945_);
+    }
+
+    @Override
+    public boolean stillValid(Player p_18946_) {
+        return true;
+    }
+
+    @Override
+    public void clearContent() {
+        for(int i=0;i<this.inventory.getSlots(); i++){
+            this.inventory.setStackInSlot(i, ItemStack.EMPTY);
+        }
     }
 }

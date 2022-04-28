@@ -4,27 +4,20 @@ import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.item.Item;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.state.StateContainer;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.PathNavigationRegion;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.PathNavigationRegion;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -46,19 +39,19 @@ public abstract class CrudeOilFluid extends FlowingFluid {
         return false;
     }
 
-    protected void beforeDestroyingBlock(IWorld worldIn, BlockPos pos, BlockState state) {
-        BlockEntity tileentity = state.hasTileEntity() ? worldIn.getBlockEntity(pos) : null;
+    protected void beforeDestroyingBlock(LevelAccessor worldIn, BlockPos pos, BlockState state) {
+        BlockEntity tileentity = state.hasBlockEntity() ? worldIn.getBlockEntity(pos) : null;
         Block.dropResources(state, worldIn, pos, tileentity);
     }
 
 
     @Override
-    public int getSlopeFindDistance(IWorldReader worldIn) {
+    public int getSlopeFindDistance(LevelReader worldIn) {
         return 4;
     }
 
     @Override
-    public int getDropOff(IWorldReader worldIn) {
+    public int getDropOff(LevelReader worldIn) {
         return 2;
     }
 
@@ -68,12 +61,12 @@ public abstract class CrudeOilFluid extends FlowingFluid {
     }
 
     @Override
-    public boolean canBeReplacedWith(FluidState fluidState, PathNavigationRegion blockReader, BlockPos pos, Fluid fluid, Direction direction) {
+    protected boolean canBeReplacedWith(FluidState p_76127_, BlockGetter p_76128_, BlockPos p_76129_, Fluid fluid, Direction direction) {
         return direction == Direction.DOWN && !fluid.is(FluidTags.WATER);
     }
 
     @Override
-    public int getTickDelay(IWorldReader p_205569_1_) {
+    public int getTickDelay(LevelReader p_205569_1_) {
         return 10;
     }
 
@@ -94,7 +87,7 @@ public abstract class CrudeOilFluid extends FlowingFluid {
 
     @Override
     public BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.CRUDE_OIL.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getLegacyLevel(state));
+        return registerBlocks.CRUDE_OIL.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
@@ -103,7 +96,7 @@ public abstract class CrudeOilFluid extends FlowingFluid {
     }
 
     public static class Flowing extends CrudeOilFluid {
-        protected void createFluidStateDefinition(StateContainer.Builder<Fluid, FluidState> builder) {
+        protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }

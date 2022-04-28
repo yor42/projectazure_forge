@@ -7,9 +7,11 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.Multiblock
 import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -36,20 +38,22 @@ public class registerBlocks {
     public static final RegistryObject<Block> ZINC_ORE = registerMetalOre_Stone("zinc");
     public static final RegistryObject<Block> ORIROCK = register("orirock",() -> new OreBlock(BlockBehaviour.Properties.of(Material.STONE).harvestLevel(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
 
-    public static final RegistryObject<Block> CRUDE_OIL = register_noItem("crude_oil", ()->new FlowingFluidBlock(()->registerFluids.CRUDE_OIL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> GASOLINE = register_noItem("gasoline", ()->new FlowingFluidBlock(()->registerFluids.GASOLINE_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> DIESEL = register_noItem("diesel", ()->new FlowingFluidBlock(()->registerFluids.DIESEL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> FUEL_OIL = register_noItem("fuel_oil", ()->new FlowingFluidBlock(()->registerFluids.FUEL_OIL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> CRUDE_OIL = register_noItem("crude_oil", ()->new LiquidBlock(()->registerFluids.CRUDE_OIL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> GASOLINE = register_noItem("gasoline", ()->new LiquidBlock(()->registerFluids.GASOLINE_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> DIESEL = register_noItem("diesel", ()->new LiquidBlock(()->registerFluids.DIESEL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+    public static final RegistryObject<Block> FUEL_OIL = register_noItem("fuel_oil", ()->new LiquidBlock(()->registerFluids.FUEL_OIL_SOURCE, BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> BOUNDING_BOX = register_noItem("boundingbox", ()->new BoundingBoxBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()));
 
 
-    public static final RegistryObject<Block> REENFORCED_PLANK = register("reenforced_plank",() -> new Block(BlockBehaviour.Properties.of(Material.WOOD).harvestLevel(2).strength(4F, 6F)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> REENFORCED_PLANK = register("reenforced_plank",() -> new Block(BlockBehaviour.Properties.of(Material.WOOD).strength(4F, 6F)), Main.PA_RESOURCES);
 
 
     public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
-            new MultiblockStructureBlocks((BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
+            new MultiblockStructureBlocks((BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).sound(SoundType.METAL))){
+
+                @Nullable
                 @Override
-                public BlockEntity createTileEntity(@Nonnull BlockState state, @Nonnull BlockReader world) {
+                public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
                     return new MultiblockSteelFrame();
                 }
             }, Main.PA_RESOURCES);

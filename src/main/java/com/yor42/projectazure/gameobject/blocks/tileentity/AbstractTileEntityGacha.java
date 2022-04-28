@@ -4,13 +4,14 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     private double accumulatedWeight;
     protected int ProcessTime, totalProcessTime;
     protected EntityType<? extends AbstractEntityCompanion> RollResult;
-    protected PlayerEntity nextTaskStarter;
+    protected Player nextTaskStarter;
     protected int powerConsumption;
     protected boolean shouldProcess;
     private final Random rand = new Random();
@@ -104,7 +105,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
 
     protected abstract boolean canStartProcess();
 
-    public void StartMachine(ServerPlayerEntity starter) {
+    public void StartMachine(ServerPlayer starter) {
         if (starter != null) {
             if (this.canStartProcess() || starter.isCreative()) {
 
@@ -186,8 +187,8 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         return 0;
     }
 
-    protected AbstractTileEntityGacha(TileEntityType<?> typeIn) {
-        super(typeIn);
+    protected AbstractTileEntityGacha(BlockEntityType<?> typeIn, BlockPos p_155229_, BlockState p_155230_) {
+        super(typeIn, p_155229_, p_155230_);
         this.registerRollEntry();
     }
 
@@ -204,7 +205,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
                 this.ProcessTime++;
                 this.energyStorage.extractEnergy(this.powerConsumption, false);
                 if(this.ProcessTime >= this.totalProcessTime){
-                    this.SpawnResultEntity((ServerPlayerEntity) this.nextTaskStarter);
+                    this.SpawnResultEntity((ServerPlayer) this.nextTaskStarter);
                     this.resetMachine();
                 }
             }
@@ -223,7 +224,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
         }
     }
 
-    protected abstract void SpawnResultEntity(ServerPlayerEntity owner);
+    protected abstract void SpawnResultEntity(ServerPlayer owner);
 
     /*
     For Future usage of additional processing criteria
@@ -231,8 +232,8 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     protected boolean canProcess(){return true;};
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
+        super.saveAdditional(compound);
         compound.putInt("processtime", this.ProcessTime);
         compound.putInt("totalprocesstime", this.totalProcessTime);
         compound.putDouble("accumulatedWeight", this.accumulatedWeight);
@@ -241,7 +242,6 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
             compound.putUUID("taskOwner", this.nextTaskStarter.getUUID());
         }
         compound.putBoolean("shouldProcess", this.shouldProcess);
-        return compound;
     }
 
     /*
@@ -249,8 +249,8 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.ProcessTime = nbt.getInt("processtime");
         this.totalProcessTime = nbt.getInt("totalprocesstime");
         this.accumulatedWeight = nbt.getDouble("accumulatedWeight");

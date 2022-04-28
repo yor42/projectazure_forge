@@ -1,7 +1,7 @@
 package com.yor42.projectazure.libs;
 
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 
 public class Constants {
 

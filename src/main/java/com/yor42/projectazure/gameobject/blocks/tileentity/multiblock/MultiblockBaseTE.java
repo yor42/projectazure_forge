@@ -9,12 +9,12 @@ package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMultiBlockBase;
 import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
-import net.minecraft.block.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
@@ -25,25 +25,24 @@ public abstract class MultiblockBaseTE extends AbstractTileEntityGacha {
     protected int structType;						//MBS info
     private BlockPos masterPos = BlockPos.ZERO;	//master pos
 
-    protected MultiblockBaseTE(TileEntityType<?> typeIn) {
-        super(typeIn);
+    public MultiblockBaseTE(BlockEntityType<?> typeIn, BlockPos p_155229_, BlockState p_155230_) {
+        super(typeIn, p_155229_, p_155230_);
     }
 
+
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
+    public void saveAdditional(CompoundTag compound) {
         compound.putInt("masterX", masterPos.getX());
         compound.putInt("masterY", masterPos.getY());
         compound.putInt("masterZ", masterPos.getZ());
         compound.putInt("structType", structType);
         compound.putBoolean("hasMaster", hasMaster);
         compound.putBoolean("isMaster", isMaster);
-        return compound;
     }
 
     @Override
-    public void load(BlockState state, CompoundTag nbt) {
-        super.load(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         this.masterPos = new BlockPos(nbt.getInt("masterX"), nbt.getInt("masterY"), nbt.getInt("masterZ"));
         this.structType = nbt.getInt("structType");
         this.hasMaster = nbt.getBoolean("hasMaster");

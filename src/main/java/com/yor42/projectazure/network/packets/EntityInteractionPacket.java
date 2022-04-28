@@ -2,13 +2,13 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.BlockStateUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.network.NetworkEvent;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -49,9 +49,9 @@ public class EntityInteractionPacket {
     public static void handle(final EntityInteractionPacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            final ServerPlayerEntity playerEntity = ctx.get().getSender();
+            final ServerPlayer playerEntity = ctx.get().getSender();
             if(playerEntity != null) {
-                final ServerWorld world = Objects.requireNonNull(ctx.get().getSender()).getLevel();
+                final ServerLevel world = Objects.requireNonNull(ctx.get().getSender()).getLevel();
                 Entity entity = world.getEntity(msg.EntityID);
                 if(entity instanceof AbstractEntityCompanion){
                     switch(msg.behaviorType){

@@ -3,17 +3,21 @@ package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.entity.player.Inventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf ;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -25,9 +29,9 @@ import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBl
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;
 import static com.yor42.projectazure.setup.register.registerTE.DRYDOCK;
 
-public class MultiblockDrydockTE extends MultiblockBaseTE{
+public class MultiblockDrydockTE extends MultiblockBaseTE implements MenuProvider, Container {
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -74,7 +78,7 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
         }
     };
 
-    public IIntArray getFields(){
+    public ContainerData getFields(){
         return this.fields;
     }
 
@@ -121,15 +125,15 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
         if(shouldSave){this.setChanged();}
     }
 
-    public MultiblockDrydockTE() {
-        super(DRYDOCK.get());
+    public MultiblockDrydockTE(BlockPos pos, BlockState state) {
+        super(DRYDOCK.get(), pos, state);
         this.inventory.setSize(9);
         this.energyStorage.setMaxEnergy(30000);
         this.powerConsumption = 2000;
     }
 
     @Override
-    protected void SpawnResultEntity(ServerPlayerEntity owner) {
+    protected void SpawnResultEntity(ServerPlayer owner) {
         if(this.getLevel() != null && !this.getLevel().isClientSide()){
             AbstractEntityCompanion entity = this.getRollResult().create(this.getLevel());
             if(entity != null && owner != null){
@@ -179,20 +183,20 @@ public class MultiblockDrydockTE extends MultiblockBaseTE{
     }
 
     @Override
-    protected Component getDefaultName() {
+    public Component getDisplayName() {
         return new TranslatableComponent("tile.drydock");
     }
 
     @Override
-    protected Container createMenu(int id, Inventory player) {
+    public AbstractContainerMenu createMenu(int id, Inventory player, Player entity) {
         return new ContainerDryDock(id, player, this.inventory, this.fields);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
+    public AABB getRenderBoundingBox() {
         BlockPos pos = getBlockPos();
-        AxisAlignedBB bb = new AxisAlignedBB(pos.offset(-2, -4, -2), pos.offset(2, 2, 2));
+        AABB bb = new AABB(pos.offset(-2, -4, -2), pos.offset(2, 2, 2));
         return bb;
     }
 }

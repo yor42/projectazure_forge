@@ -3,21 +3,8 @@ package com.yor42.projectazure.gameobject.entity.projectiles;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.network.IPacket;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.Level;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -32,7 +19,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -130,7 +116,6 @@ public class EntityProjectileTorpedo extends AbstractHurtingProjectile implement
         Vec3 vector3d = this.getDeltaMovement();
 
         if (vector3d.lengthSqr() != 0.0D) {
-            float f = Mth.sqrt(Entity.getHorizontalDistanceSqr(vector3d));
             this.setYRot((float)(Mth.atan2(vector3d.z, vector3d.x) * (double)(180F / (float)Math.PI)) + 90.0F);
 
             while(this.getXRot() - this.xRotO >= 180.0F) {

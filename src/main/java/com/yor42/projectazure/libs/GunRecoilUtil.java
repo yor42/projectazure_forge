@@ -55,11 +55,11 @@ public class GunRecoilUtil {
 
         if(startProgress < 0.2F)
         {
-            mc.player.xRot -= ((endProgress - startProgress) / 0.2F) * this.cameraRecoil;
+            mc.player.setXRot(mc.player.getXRot() - ((endProgress - startProgress) / 0.2F) * this.cameraRecoil);
         }
         else
         {
-            mc.player.xRot += ((endProgress - startProgress) / 0.8F) * this.cameraRecoil;
+            mc.player.setXRot(mc.player.getXRot()+ ((endProgress - startProgress) / 0.8F) * this.cameraRecoil);
         }
 
         this.progressCameraRecoil += recoilAmount;

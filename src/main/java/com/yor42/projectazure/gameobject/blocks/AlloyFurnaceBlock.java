@@ -2,11 +2,9 @@ package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
 import com.yor42.projectazure.setup.register.registerBlocks;
-import net.minecraft.block.SoundType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,12 +31,7 @@ import java.util.Random;
 public class AlloyFurnaceBlock extends AbstractMachineBlock {
 
     public AlloyFurnaceBlock() {
-        super((BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).lightLevel(registerBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
+        super((BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).strength(5.0F,6.0F).lightLevel(registerBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
     }
 
     @Nullable
@@ -47,7 +41,7 @@ public class AlloyFurnaceBlock extends AbstractMachineBlock {
     }
 
     @Override
-    public InteractionResult use(Level p_60665_, Player p_60666_, InteractionHand p_60667_, BlockHitResult p_60668_) {
+    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (worldIn.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {

@@ -6,17 +6,26 @@ import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
+import net.minecraft.core.Direction;
 import net.minecraft.entity.player.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.network.FriendlyByteBuf ;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tileentity.BlockEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.Component;
 import net.minecraft.util.text.TranslatableComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.ItemStackHandler;
@@ -31,7 +40,7 @@ import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTI
 
 public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
 
-    private final IIntArray fields = new IIntArray() {
+    private final ContainerData fields = new ContainerData() {
         @Override
         public int get(int index) {
             switch (index) {
@@ -74,7 +83,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
 
     public TileEntityMetalPress() {
         super(registerTE.METAL_PRESS.get());
-        this.recipeType = registerRecipes.Types.PRESSING;
+        this.recipeType = (RecipeType<? extends Recipe<Inventory>>) registerRecipes.Types.PRESSING;
         this.powerConsumption = 100;
         this.inventory.setSize(3);
         this.energyStorage.setMaxEnergy(15000);
@@ -110,14 +119,16 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     }
 
     @Override
-    protected Component getDefaultName() {
+    public Component getDisplayName() {
         return new TranslatableComponent("metal_press");
     }
 
     @Override
-    protected Container createMenu(int id, Inventory player) {
+    protected AbstractContainerMenu createMenu(int id, Inventory player, Player player1) {
         return new ContainerMetalPress(id, player, this.inventory, this.fields);
     }
+
+
 
     @Override
     protected <P extends BlockEntity & IAnimatable> PlayState predicate_machine(AnimationEvent<P> event) {
