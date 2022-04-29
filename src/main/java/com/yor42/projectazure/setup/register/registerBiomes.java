@@ -1,6 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.libs.utils.ResourceUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraftforge.common.BiomeDictionary;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class registerBiomes {
+    /*
 
     private static final List<BiomeData> BiomeList = new ArrayList<>();
     public static Biome makeMirrorSea(){
@@ -28,7 +30,7 @@ public class registerBiomes {
         }
         biome.setRegistryName(ModResourceLocation);
 
-         */
+
         BiomeList.add(new BiomeData(BiomeID, biome, chance, climate));
     }
     private static BiomeGenerationSettings.Builder getOceanGenerationSettingsBuilder() {
@@ -54,12 +56,12 @@ public class registerBiomes {
 
     public static void register(){
         //addBiometoList("mirror_sea" , makeMirrorSea(), 10, BiomeManager.BiomeType.WARM);
-        /*
+
         for(BiomeData data:BiomeList){
             registerviaData(data);
         }
 
-         */
+
     }
 
     public static void registerviaData(BiomeData data){
@@ -102,5 +104,6 @@ public class registerBiomes {
             return this.type;
         }
     }
+    */
 
 }

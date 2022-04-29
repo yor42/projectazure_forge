@@ -10,32 +10,32 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerSounds;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.PotionItem;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.state.properties.BedPart;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -44,8 +44,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.minecraft.util.Hand.MAIN_HAND;
-import static net.minecraft.util.Hand.OFF_HAND;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.OFF_HAND;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeBusEventHandler {
@@ -82,7 +82,7 @@ public class ForgeBusEventHandler {
     @SubscribeEvent
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event) {
         Level world = event.getWorld();
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         List<Entity> passengers = player.getPassengers();
         BlockPos pos = event.getPos();
         if (!passengers.isEmpty() && player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
@@ -91,7 +91,7 @@ public class ForgeBusEventHandler {
                 if (entity instanceof AbstractEntityCompanion) {
                     boolean isInjured = ((AbstractEntityCompanion) entity).isCriticallyInjured();
                     if (isInjured || world.isNight()) {
-                        BlockState state = world.getBlockState(pos);
+                        var state = world.getBlockState(pos);
                         if (state.isBed(world, pos, (LivingEntity) entity)) {
                             pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
                             ((AbstractEntityCompanion) entity).startSleeping(pos);
@@ -109,10 +109,10 @@ public class ForgeBusEventHandler {
 
     @SubscribeEvent
     public static void OnplayerRightClickedEntity(PlayerInteractEvent.EntityInteract event){
-        PlayerEntity player = event.getPlayer();
-        Hand hand = event.getHand();
+        Player player = event.getPlayer();
+        InteractionHand hand = event.getHand();
         ItemStack stack = player.getItemInHand(hand);
-        Hand OtherHand = hand == MAIN_HAND?Hand.OFF_HAND:MAIN_HAND;
+        InteractionHand OtherHand = hand == MAIN_HAND? OFF_HAND:MAIN_HAND;
         ItemStack otherHandStack = player.getItemInHand(OtherHand);
         Entity target = event.getTarget();
         Level world = event.getWorld();
@@ -125,8 +125,8 @@ public class ForgeBusEventHandler {
                     return;
                 }
                 ItemStack ChargerStack = ItemStack.EMPTY;
-                for (int i = 0; i < player.inventory.getContainerSize(); i++) {
-                    ItemStack invstack = player.inventory.getItem(i);
+                for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                    ItemStack invstack = player.getInventory().getItem(i);
                     Item item = invstack.getItem();
                     if (item instanceof ItemDefibCharger && ItemDefibCharger.isOn(invstack) && ItemDefibCharger.getChargeProgress(invstack)==100) {
                         ChargerStack = invstack;
@@ -139,7 +139,7 @@ public class ForgeBusEventHandler {
                     if(!world.isClientSide()){
                         for(ItemStack itemstack : new ItemStack[]{stack, otherHandStack}) {
                             ItemDefibPaddle item = (ItemDefibPaddle) itemstack.getItem();
-                            final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) world);
+                            final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerLevel) world);
                             final AnimationController controller = GeckoLibUtil.getControllerForID(item.factory, id, ItemDefibPaddle.controllerName);
                             controller.markNeedsReload();
                             controller.setAnimation(new AnimationBuilder().addAnimation("shock"));
@@ -168,13 +168,13 @@ public class ForgeBusEventHandler {
     }
 
     @SubscribeEvent
-    public static void onServerStart(FMLServerStartingEvent event) {
+    public static void onServerStart(ServerStartingEvent event) {
         if (event.getServer().isDedicatedServer()) {
             loadcrushingRecipes(event.getServer().getRecipeManager());
         }
     }
 
-    private static <R extends IRecipe<?>> List<R> filterRecipes(Collection<IRecipe<?>> recipes, Class<R> recipeClass, IRecipeType<R> recipeType) {
+    private static <R extends Recipe<?>> List<R> filterRecipes(Collection<Recipe<?>> recipes, Class<R> recipeClass, RecipeType<R> recipeType) {
         return recipes.stream()
                 .filter(iRecipe -> iRecipe.getType() == recipeType)
                 .map(recipeClass::cast)
@@ -182,7 +182,7 @@ public class ForgeBusEventHandler {
     }
 
     private static void loadcrushingRecipes(RecipeManager manager) {
-        Collection<IRecipe<?>> recipes = manager.getRecipes();
+        Collection<Recipe<?>> recipes = manager.getRecipes();
         if (recipes.isEmpty()) {
             return;
         }

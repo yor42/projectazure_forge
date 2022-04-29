@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -11,7 +11,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -37,16 +36,16 @@ public class EntityProjectileTorpedo extends AbstractHurtingProjectile implement
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public EntityProjectileTorpedo(double p_i50174_2_, double p_i50174_4_, double p_i50174_6_, double p_i50174_8_, double p_i50174_10_, double p_i50174_12_, Level p_i50174_14_) {
-        super(registerManager.PROJECTILETORPEDO, p_i50174_2_, p_i50174_4_, p_i50174_6_, p_i50174_8_, p_i50174_10_, p_i50174_12_, p_i50174_14_);
+        super(Main.PROJECTILETORPEDO, p_i50174_2_, p_i50174_4_, p_i50174_6_, p_i50174_8_, p_i50174_10_, p_i50174_12_, p_i50174_14_);
     }
 
     public EntityProjectileTorpedo(LivingEntity ShooterIn, double AccelX, double AccelY, double AccelZ, Level WorldIn) {
-        super(registerManager.PROJECTILETORPEDO, ShooterIn, AccelX, AccelY, AccelZ, WorldIn);
+        super(Main.PROJECTILETORPEDO, ShooterIn, AccelX, AccelY, AccelZ, WorldIn);
     }
 
     @OnlyIn(Dist.CLIENT)
     public EntityProjectileTorpedo(Level worldIn, double x, double y, double z, double motionXIn, double motionYIn, double motionZIn) {
-        this(registerManager.PROJECTILETORPEDO, worldIn);
+        this(Main.PROJECTILETORPEDO, worldIn);
         this.moveTo(x, y, z, this.getXRot(), this.getYRot());
         this.setDeltaMovement(motionXIn, motionYIn, motionZIn);
     }

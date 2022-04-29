@@ -2,7 +2,6 @@ package com.yor42.projectazure.setup;
 
 import com.yor42.projectazure.gameobject.crafting.CrushingRecipe;
 import com.yor42.projectazure.libs.utils.ItemStackWithChance;
-import net.minecraft.block.Block;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 

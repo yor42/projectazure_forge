@@ -7,9 +7,13 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.Multiblock
 import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.OreBlock;
@@ -20,6 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
@@ -27,7 +33,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
-import java.util.logging.Level;
 
 public class registerBlocks {
 
@@ -53,24 +58,24 @@ public class registerBlocks {
 
                 @Nullable
                 @Override
-                public BlockEntity newBlockEntity(BlockPos p_153215_, BlockState p_153216_) {
-                    return new MultiblockSteelFrame();
+                public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+                    return new MultiblockSteelFrame(pos, state);
                 }
             }, Main.PA_RESOURCES);
 
 
     public static final RegistryObject<Block> METAL_PRESS = register_blockWithToolTiponItem("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> ALLOY_FURNACE = register_blockWithToolTiponItem("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);
-    public static final RegistryObject<Block> BASIC_REFINERY = register_blockWithToolTiponItem("basic_refinery", ()->new BasicRefineryBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).lightLevel(registerBlocks.getLightValueLit(8)).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> CRYSTAL_GROWTH_CHAMBER = register_blockWithToolTiponItem("crystal_growth_chamber", ()->new CrystalGrowthChamberBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).lightLevel((block)->0).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> BASIC_REFINERY = register_blockWithToolTiponItem("basic_refinery", ()->new BasicRefineryBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).lightLevel(registerBlocks.getLightValueLit(8)).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> CRYSTAL_GROWTH_CHAMBER = register_blockWithToolTiponItem("crystal_growth_chamber", ()->new CrystalGrowthChamberBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).lightLevel((block)->0).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> DRYDOCKCONTROLLER = register_blockWithToolTiponItem("drydock_controller",()-> new blockMultiblockDryDockController(BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> REENFORCEDCONCRETE = register_blockWithToolTiponItem("reenforced_concrete",()-> new MultiblockStructureBlocks(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> DRYDOCKCONTROLLER = register_blockWithToolTiponItem("drydock_controller",()-> new blockMultiblockDryDockController(BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).sound(SoundType.METAL).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> REENFORCEDCONCRETE = register_blockWithToolTiponItem("reenforced_concrete",()-> new MultiblockStructureBlocks(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties().setISTER(()-> ItemRecruitBeaconRenderer::new));
+    public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties(), new ItemRecruitBeaconRenderer());
 
     private static <T extends Block> RegistryObject<T> register_noItem(String name, Supplier<T> block){
-        return registerManager.BLOCKS.register(name, block);
+        return Main.BLOCKS.register(name, block);
     }
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block, CreativeModeTab group){
@@ -79,9 +84,9 @@ public class registerBlocks {
 
     private static <T extends Block> RegistryObject<T> register_blockWithToolTiponItem(String name, Supplier<T> block, CreativeModeTab group){
         RegistryObject<T> ret = register_noItem(name, block);
-        registerManager.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(group)){
+        Main.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(group)){
             @Override
-            public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<MutableComponent> tooltip, @Nonnull TooltipFlag flagIn) {
+            public void appendHoverText(@Nonnull ItemStack stack, @Nullable Level worldIn, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag flagIn) {
                 super.appendHoverText(stack, worldIn, tooltip, flagIn);
                 if (worldIn != null && worldIn.isClientSide) {
                     TooltipUtils.addOnShift(tooltip, () -> addInformationAfterShift(stack, tooltip));
@@ -99,14 +104,14 @@ public class registerBlocks {
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block, CreativeModeTab group, Item.Properties properties){
         RegistryObject<T> ret = register_noItem(name, block);
-        registerManager.ITEMS.register(name, () -> new BlockItem(ret.get(), properties));
+        Main.ITEMS.register(name, () -> new BlockItem(ret.get(), properties));
         return ret;
     }
 
 
-    private static <T extends Block> RegistryObject<T> registerAnimatedMachines(String name, Supplier<T> block, CreativeModeTab group, Item.Properties properties){
+    private static <T extends Block> RegistryObject<T> registerAnimatedMachines(String name, Supplier<T> block, CreativeModeTab group, Item.Properties properties, BlockEntityWithoutLevelRenderer renderer){
         RegistryObject<T> ret = register_noItem(name, block);
-        registerManager.ITEMS.register(name, () -> new AnimateableMachineBlockItems(ret.get(), properties.tab(group), true));
+        Main.ITEMS.register(name, () -> new AnimateableMachineBlockItems(ret.get(), properties.tab(group), true, renderer));
         return ret;
     }
 
@@ -116,7 +121,7 @@ public class registerBlocks {
 
     private static RegistryObject<Block> registerMetalOre(String registryName, String materialName){
         RegistryObject<Block> ret = register_noItem(registryName, () -> new PAOreBlock(materialName));
-        registerManager.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName));
+        Main.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName));
         return ret;
     }
 
@@ -125,7 +130,6 @@ public class registerBlocks {
             return state.getValue(AbstractMachineBlock.ACTIVE) ? lightValue : 0;
         };
     }
-
-    public static void register(){}
-
+    @SubscribeEvent
+    public static void register(RegistryEvent.Register<Block> event){};
 }

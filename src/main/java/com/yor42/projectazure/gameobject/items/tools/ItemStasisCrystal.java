@@ -2,28 +2,20 @@ package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.text.ChatFormatting;
-import net.minecraft.util.text.Component;
-import net.minecraft.util.text.TranslatableComponent;
-import net.minecraft.world.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,22 +28,22 @@ public class ItemStasisCrystal extends Item {
     }
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         Level world = context.getLevel();
 
         if(context.getPlayer() == null)
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
 
-        if (!(world instanceof ServerWorld)) {
-            return ActionResultType.SUCCESS;
+        if (!(world instanceof ServerLevel)) {
+            return InteractionResult.SUCCESS;
         }
         ItemStack itemstack = context.getItemInHand();
         int level = itemstack.getOrCreateTag().getInt("cost");
         CompoundTag compound = itemstack.getOrCreateTag().getCompound("entity");
-        PlayerEntity player = context.getPlayer();
+        Player player = context.getPlayer();
         if(player.experienceLevel<level){
             player.displayClientMessage(new TranslatableComponent("message.stasiscrystal.notenoughlevel", level), true);
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
 
         Optional<Entity> entity = EntityType.create(compound, world);
@@ -59,7 +51,7 @@ public class ItemStasisCrystal extends Item {
             if(spawnedEntity instanceof AbstractEntityCompanion) {
                 if(((AbstractEntityCompanion) spawnedEntity).getOwner()!= null && player != ((AbstractEntityCompanion) spawnedEntity).getOwner()){
                     player.displayClientMessage(new TranslatableComponent("message.stasiscrystal.notowner", ((AbstractEntityCompanion) spawnedEntity).getOwner().getDisplayName()), true);
-                    return ActionResultType.FAIL;
+                    return InteractionResult.FAIL;
                 }
                 AbstractEntityCompanion companion = (AbstractEntityCompanion)spawnedEntity;
                 companion.setPos(context.getClickedPos().getX() + 0.5, context.getClickedPos().getY() + 1.1F, context.getClickedPos().getZ() + 0.5);
@@ -68,13 +60,13 @@ public class ItemStasisCrystal extends Item {
                     itemstack.shrink(1);
                     player.giveExperienceLevels(-level);
                 }
-                return ActionResultType.CONSUME;
+                return InteractionResult.CONSUME;
             }
             else{
-                return ActionResultType.PASS;
+                return InteractionResult.PASS;
             }
         });
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override

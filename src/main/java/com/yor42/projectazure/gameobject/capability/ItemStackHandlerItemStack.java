@@ -1,12 +1,12 @@
 package com.yor42.projectazure.gameobject.capability;
 
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -48,7 +48,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
     public ItemStack getStackInSlot(int slot) {
         validateSlotIndex(slot);
         CompoundTag nbt = this.getContainerNBT();
-        ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
         CompoundTag itemTags = tagList.getCompound(slot);
         if(slot == itemTags.getInt("Slot"))
             return ItemStack.of(itemTags);
@@ -70,7 +70,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
     {
         validateSlotIndex(slot);
         CompoundTag nbt = this.getContainerNBT();
-        ListNBT tagList = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
         CompoundTag itemTags = tagList.getCompound(slot);
         if(slot == itemTags.getInt("Slot")){
             CompoundTag itemTag = new CompoundTag();
@@ -199,7 +199,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
     }
 
     private void setSize(int newsize) {
-        ListNBT nbtTagList = new ListNBT();
+        ListTag nbtTagList = new ListTag();
         for (int i = 0; i < newsize; i++){
             CompoundTag itemTag = new CompoundTag();
             itemTag.putInt("Slot", i);
@@ -217,7 +217,7 @@ public class ItemStackHandlerItemStack implements IItemHandler, ICapabilityProvi
 
     protected void validateSlotIndex(int slot)
     {
-        ListNBT tagList = getContainerNBT().getList("Items", Constants.NBT.TAG_COMPOUND);
+        ListTag tagList = getContainerNBT().getList("Items", Tag.TAG_COMPOUND);
         if (slot>this.size || slot>=tagList.size())
             throw new RuntimeException("Slot " + slot + " not in valid range - [0," + Math.max(this.size, tagList.size()) + ")");
     }

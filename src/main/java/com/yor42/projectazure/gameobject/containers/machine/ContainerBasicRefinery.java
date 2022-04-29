@@ -19,7 +19,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.BASIC_REFINERY_CONTAINER_TYPE;
+import static com.yor42.projectazure.Main.BASIC_REFINERY_CONTAINER_TYPE;
 import static net.minecraft.world.item.crafting.RecipeType.SMELTING;
 
 public class ContainerBasicRefinery extends AbstractContainerMenu {

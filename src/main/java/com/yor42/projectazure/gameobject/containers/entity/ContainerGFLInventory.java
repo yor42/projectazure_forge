@@ -19,7 +19,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.setup.register.registerManager.GFL_INVENTORY_TYPE;
+import static com.yor42.projectazure.Main.GFL_INVENTORY_TYPE;
 
 public class ContainerGFLInventory extends AbstractContainerMenu {
 

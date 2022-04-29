@@ -1,18 +1,14 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiBlockReenforcedConcrete;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockDrydockTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockSteelFrame;
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.tileentity.BlockEntityType;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.function.Supplier;
 
 public class registerTE {
 
@@ -25,13 +21,11 @@ public class registerTE {
     public static final RegistryObject<BlockEntityType<MultiBlockReenforcedConcrete>> MULTIBLOCKSTRUCTURE_CONCRETE = register("multiblock_structure_concrete_te", MultiBlockReenforcedConcrete::new, registerBlocks.REENFORCEDCONCRETE);
     public static final RegistryObject<BlockEntityType<MultiblockSteelFrame>> MULTIBLOCKSTRUCTURE_STEELFRAME = register("multiblock_structure_steel_te", MultiblockSteelFrame::new, registerBlocks.MACHINE_FRAME);
 
-    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<? extends Block> block){
+    private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, RegistryObject<? extends Block> block){
 
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW
         //noinspection ConstantConditions
-        return registerManager.TILE_ENTITY.register(name, () -> BlockEntityType.Builder.of(factory, block.get()).build(null));
+        return Main.TILE_ENTITY.register(name, () -> BlockEntityType.Builder.of(factory, block.get()).build(null));
     }
-
-    static void register(){}
 
 }

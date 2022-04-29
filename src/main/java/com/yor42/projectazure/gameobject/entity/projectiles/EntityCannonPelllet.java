@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
@@ -25,12 +25,12 @@ public class EntityCannonPelllet extends AbstractHurtingProjectile {
     BlockPos originPos;
 
     public EntityCannonPelllet(Level worldIn, AmmoProperties ammotype){
-        super(registerManager.PROJECTILECANNONSHELL,worldIn);
+        super(Main.PROJECTILECANNONSHELL,worldIn);
         this.properties = ammotype;
     }
 
     public EntityCannonPelllet(Level worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
-        super(registerManager.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
+        super(Main.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.5), shooter.getZ());
     }

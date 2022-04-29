@@ -274,7 +274,7 @@ public class TileEntityAlloyFurnace extends BlockEntity implements MenuProvider,
             if (!(furnace.level != null && furnace.level.isClientSide)) {
                 ItemStack FuelStack = furnace.inventory.getStackInSlot(2);
                 if (furnace.isBurning() || !FuelStack.isEmpty() && !furnace.inventory.getStackInSlot(0).isEmpty() && !furnace.inventory.getStackInSlot(1).isEmpty()) {
-                    Recipe<?> irecipe = furnace.level.getRecipeManager().getRecipeFor((RecipeType<? extends Recipe<TileEntityAlloyFurnace>>) furnace.recipeType, furnace, furnace.level).orElse(null);
+                    Recipe<?> irecipe = furnace.level.getRecipeManager().getRecipeFor(furnace.recipeType, furnace, furnace.level).orElse(null);
 
                     if (irecipe != null) {
                         furnace.cookTimeTotal = furnace.getCookTime();

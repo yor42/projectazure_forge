@@ -1,10 +1,9 @@
 package com.yor42.projectazure.gameobject.items.shipEquipment;
 
-import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.items.ItemPlanef4fWildcatRenderer;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.client.IItemRenderProperties;
@@ -19,7 +18,7 @@ public class ItemPlanef4Fwildcat extends ItemEquipmentPlaneBase{
 
     @Override
     public EntityType<? extends AbstractEntityPlanes> getEntityType() {
-        return registerManager.PLANEF4FWildCat;
+        return Main.PLANEF4FWildCat;
     }
 
     @Override

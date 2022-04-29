@@ -2,16 +2,16 @@ package com.yor42.projectazure.gameobject.blocks;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockBaseTE;
 import com.yor42.projectazure.libs.utils.MultiblockHandler;
-import net.minecraft.block.Block;
 import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.BlockEntity;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.LevelReader;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 import javax.annotation.Nullable;
@@ -32,16 +32,6 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
         return state.hasProperty(FORMED) && state.getValue(FORMED);
     }
 
-    @Override
-    public boolean canBeReplacedByLeaves(BlockState state, LevelReader world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public boolean canBeReplacedByLogs(BlockState state, LevelReader world, BlockPos pos) {
-        return false;
-    }
-
     //update multi-block structure state
     public static void updateMultiBlockState(boolean mbState, Level world, BlockPos pos)
     {
@@ -57,12 +47,12 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         return super.getStateForPlacement(context).setValue(FORMED, false);
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, PlayerEntity player) {
+    public void playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         BlockEntity tile = worldIn.getBlockEntity(pos);
 
         if(!worldIn.isClientSide && tile instanceof MultiblockBaseTE)
@@ -94,8 +84,7 @@ public abstract class AbstractMultiBlockBase extends AbstractElectricMachineBloc
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FORMED);
     }
 }

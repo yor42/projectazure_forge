@@ -1,11 +1,8 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
-import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractAnimatedTileEntityMachines;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.network.chat.Component;
@@ -18,8 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -136,13 +131,13 @@ public class MultiblockDrydockTE extends MultiblockBaseTE implements MenuProvide
 
     @Override
     public void registerRollEntry() {
-        addEntry(registerManager.ENTITYTYPE_ENTERPRISE);
-        addEntry(registerManager.ENTITYTYPE_AYANAMI);
-        addEntry(registerManager.ENTITYTYPE_GANGWON);
-        addEntry(registerManager.ENTITYTYPE_NAGATO);
-        addEntry(registerManager.ENTITYTYPE_JAVELIN);
-        addEntry(registerManager.ENTITYTYPE_LAFFEY);
-        addEntry(registerManager.ENTITYTYPE_Z23);
+        addEntry(Main.ENTITYTYPE_ENTERPRISE);
+        addEntry(Main.ENTITYTYPE_AYANAMI);
+        addEntry(Main.ENTITYTYPE_GANGWON);
+        addEntry(Main.ENTITYTYPE_NAGATO);
+        addEntry(Main.ENTITYTYPE_JAVELIN);
+        addEntry(Main.ENTITYTYPE_LAFFEY);
+        addEntry(Main.ENTITYTYPE_Z23);
     }
 
     @Override

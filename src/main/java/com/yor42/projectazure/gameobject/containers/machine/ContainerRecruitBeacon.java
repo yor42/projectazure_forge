@@ -16,7 +16,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.RECRUIT_BEACON_CONTAINER_TYPE;
+import static com.yor42.projectazure.Main.RECRUIT_BEACON_CONTAINER_TYPE;
 
 public class ContainerRecruitBeacon extends AbstractContainerMenu {
 

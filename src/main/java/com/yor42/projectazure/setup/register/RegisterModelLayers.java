@@ -16,6 +16,4 @@ public class RegisterModelLayers {
     private static ModelLayerLocation createLocation(String p_171301_, String p_171302_) {
         return new ModelLayerLocation(new ResourceLocation(Constants.MODID, p_171301_), p_171302_);
     }
-
-    public static void register(){}
 }

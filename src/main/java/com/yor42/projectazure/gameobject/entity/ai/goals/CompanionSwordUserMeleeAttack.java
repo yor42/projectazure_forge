@@ -85,7 +85,7 @@ public class CompanionSwordUserMeleeAttack extends Goal {
     public void tick() {
         if(this.target != null) {
             double distance = this.hostEntity.distanceTo(this.target);
-            boolean canSee = this.hostEntity.getSensing().canSee(this.target);
+            boolean canSee = this.hostEntity.getSensing().hasLineOfSight(this.target);
 
             boolean isTooFar = distance >= this.host.getAttackRange(this.host.isTalentedWeaponinMainHand());
 

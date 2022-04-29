@@ -7,9 +7,7 @@ import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
-import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -221,19 +219,19 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha implements 
 
     @Override
     public void registerRollEntry() {
-        addEntry(registerManager.ENTITYTYPE_CHEN);
-        addEntry(registerManager.ENTITYTYPE_AMIYA);
-        addEntry(registerManager.ENTITYTYPE_ROSMONTIS);
-        addEntry(registerManager.ENTITYTYPE_MUDROCK);
-        addEntry(registerManager.ENTITYTYPE_TEXAS);
-        addEntry(registerManager.ENTITYTYPE_M4A1);
-        addEntry(registerManager.ENTITYTYPE_SHIROKO);
+        addEntry(Main.ENTITYTYPE_CHEN);
+        addEntry(Main.ENTITYTYPE_AMIYA);
+        addEntry(Main.ENTITYTYPE_ROSMONTIS);
+        addEntry(Main.ENTITYTYPE_MUDROCK);
+        addEntry(Main.ENTITYTYPE_TEXAS);
+        addEntry(Main.ENTITYTYPE_M4A1);
+        addEntry(Main.ENTITYTYPE_SHIROKO);
         if(PAConfig.CONFIG.shouldRecruitBeaconSpawnAllCompanions.get()){
-            addEntry(registerManager.ENTITYTYPE_ENTERPRISE);
-            addEntry(registerManager.ENTITYTYPE_AYANAMI);
-            addEntry(registerManager.ENTITYTYPE_JAVELIN);
-            addEntry(registerManager.ENTITYTYPE_GANGWON);
-            addEntry(registerManager.ENTITYTYPE_NAGATO);
+            addEntry(Main.ENTITYTYPE_ENTERPRISE);
+            addEntry(Main.ENTITYTYPE_AYANAMI);
+            addEntry(Main.ENTITYTYPE_JAVELIN);
+            addEntry(Main.ENTITYTYPE_GANGWON);
+            addEntry(Main.ENTITYTYPE_NAGATO);
         }
     }
 

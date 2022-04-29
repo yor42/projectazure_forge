@@ -69,7 +69,7 @@ public class CompanionDefaultMovementController extends MoveControl {
             BlockState lvt_11_1_ = this.mob.level.getBlockState(lvt_10_1_);
             Block lvt_12_1_ = lvt_11_1_.getBlock();
             VoxelShape lvt_13_1_ = lvt_11_1_.getCollisionShape(this.mob.level, lvt_10_1_);
-            if (lvt_5_2_ > (double)this.mob.maxUpStep && lvt_1_2_ * lvt_1_2_ + lvt_3_2_ * lvt_3_2_ < (double)Math.max(1.0F, this.mob.getBbWidth()) || !lvt_13_1_.isEmpty() && this.mob.getY() < lvt_13_1_.max(Direction.Axis.Y) + (double)lvt_10_1_.getY() && !this.companion.isSailing() && !lvt_12_1_.is(BlockTags.DOORS) && !lvt_12_1_.is(BlockTags.FENCES)) {
+            if (lvt_5_2_ > (double)this.mob.maxUpStep && lvt_1_2_ * lvt_1_2_ + lvt_3_2_ * lvt_3_2_ < (double)Math.max(1.0F, this.mob.getBbWidth()) || !lvt_13_1_.isEmpty() && this.mob.getY() < lvt_13_1_.max(Direction.Axis.Y) + (double)lvt_10_1_.getY() && !this.companion.isSailing() && !lvt_11_1_.is(BlockTags.DOORS) && !lvt_11_1_.is(BlockTags.FENCES)) {
                 this.mob.getJumpControl().jump();
                 this.operation = MoveControl.Operation.JUMPING;
             }

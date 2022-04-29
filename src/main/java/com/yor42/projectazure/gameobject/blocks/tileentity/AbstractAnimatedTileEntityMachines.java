@@ -30,7 +30,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
     protected final AnimationFactory factory = new AnimationFactory(this);
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
-    protected RecipeType<? extends Recipe<Inventory>> recipeType;
+    protected RecipeType<? extends Recipe<?>> recipeType;
 
     protected AbstractAnimatedTileEntityMachines(BlockEntityType<?> typeIn, BlockPos p_155229_, BlockState p_155230_) {
         super(typeIn, p_155229_, p_155230_);
@@ -117,66 +117,6 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
 
     public boolean isActive(){
         return this.ProcessTime>0;
-    }
-
-    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
-        if (t instanceof AbstractAnimatedTileEntityMachines machine) {
-            boolean isActive = machine.isActive();
-            boolean shouldsave = false;
-            boolean isPowered = machine.isPowered();
-
-            if (machine.level != null && !machine.level.isClientSide) {
-                ItemStack ingredient = machine.inventory.getStackInSlot(0);
-                ItemStack mold = machine.inventory.getStackInSlot(1);
-
-                if (!ingredient.isEmpty() && !mold.isEmpty()) {
-                    Recipe<?> irecipe = machine.level.getRecipeManager().getRecipeFor((RecipeType<? extends Recipe<AbstractAnimatedTileEntityMachines>>) machine.recipeType, machine, machine.level).orElse(null);
-
-                    boolean flag1 = machine.energyStorage.getEnergyStored() >= machine.powerConsumption;
-                    boolean flag2 = machine.canProcess(irecipe);
-
-                    if (flag1 && flag2) {
-                        if (machine.totalProcessTime == 0) {
-                            machine.totalProcessTime = machine.getTargetProcessTime();
-                        }
-                        shouldsave = true;
-                        machine.ProcessTime++;
-                        machine.energyStorage.extractEnergy(machine.powerConsumption, false);
-                        if (machine.ProcessTime == machine.totalProcessTime) {
-                            machine.ProcessTime = 0;
-                            machine.totalProcessTime = machine.getTargetProcessTime();
-                            machine.process(irecipe);
-                        }
-                    } else {
-                        machine.ProcessTime = 0;
-                    }
-                } else {
-                    machine.ProcessTime = 0;
-                }
-
-            }
-            if (shouldsave) {
-                machine.setChanged();
-            }
-
-            if (machine.level != null && !machine.level.isClientSide) {
-                if (isPowered != machine.isPowered() || machine.isPowered() && !machine.level.getBlockState(machine.worldPosition).getValue(POWERED) || !machine.isPowered() && machine.level.getBlockState(machine.worldPosition).getValue(POWERED)) {
-                    machine.level.setBlock(machine.worldPosition, machine.level.getBlockState(machine.worldPosition).setValue(POWERED, machine.isPowered()), 2);
-                }
-                if (isActive != machine.isActive()) {
-                    machine.level.setBlock(machine.worldPosition, machine.level.getBlockState(machine.worldPosition).setValue(ACTIVE, machine.isActive()), 2);
-                }
-            }
-
-            if (!isActive && machine.isActive()) {
-                machine.playsound();
-            }
-
-
-            if (machine.getLevel() != null && isActive != machine.isActive()) {
-                machine.getLevel().sendBlockUpdated(machine.getBlockPos(), machine.getBlockState(), machine.getBlockState(), 3);
-            }
-        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.crafting.*;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.world.item.crafting.Recipe;
@@ -17,7 +18,6 @@ public class registerRecipes {
         public static final RecipeType<CrushingRecipe> CRUSHING = RecipeType.register(Constants.MODID+":crushing");
         public static final RecipeType<AlloyingRecipe> ALLOYING = RecipeType.register(Constants.MODID+":alloying");
         public static final RecipeType<CrystalizingRecipe> CRYSTALIZING = RecipeType.register(Constants.MODID+":crystalizing");
-        public static void register(){}
     }
 
     public static class Serializers{
@@ -33,14 +33,12 @@ public class registerRecipes {
 
 
         private static <T extends Recipe<?>> RegistryObject<RecipeSerializer<T>> register(String name, Supplier<RecipeSerializer<T>> serializer){
-            return registerManager.RECIPE_SERIALIZERS.register(name, serializer);
+            return Main.RECIPE_SERIALIZERS.register(name, serializer);
         }
 
         private static <T extends Recipe<?>> RegistryObject<RecipeSerializer<T>> register_special_recipe(String name, Supplier<RecipeSerializer<T>> serializer){
-            return registerManager.RECIPE_SERIALIZERS.register(name, serializer);
+            return Main.RECIPE_SERIALIZERS.register(name, serializer);
         }
-
-        public static void register(){}
     }
 
 

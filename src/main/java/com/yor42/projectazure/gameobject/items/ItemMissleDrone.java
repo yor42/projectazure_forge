@@ -1,12 +1,11 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.yor42.projectazure.client.renderer.items.CVDefaultRiggingRenderer;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.items.ItemMissileDroneRenderer;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
@@ -50,7 +49,7 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraf
 
     @Override
     public EntityType<? extends AbstractEntityDrone> getEntityType() {
-        return registerManager.ENTITYTYPE_MISSILEDRONE;
+        return Main.ENTITYTYPE_MISSILEDRONE;
     }
 
     @Override

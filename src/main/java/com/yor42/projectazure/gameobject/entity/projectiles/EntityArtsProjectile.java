@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
-import com.yor42.projectazure.setup.register.registerManager;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -12,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
-import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.EntityHitResult;
@@ -39,7 +38,7 @@ public class EntityArtsProjectile extends AbstractHurtingProjectile {
     }
 
     public EntityArtsProjectile(Level worldIn, LivingEntity shooter, float damage, @Nullable MobEffectInstance effect) {
-        super(registerManager.PROJECTILEARTS_ENTITYTYPE, shooter, 0, 0, 0, worldIn);
+        super(Main.PROJECTILEARTS_ENTITYTYPE, shooter, 0, 0, 0, worldIn);
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.7F), shooter.getZ());
         this.damage = damage;
         this.Effect = effect;

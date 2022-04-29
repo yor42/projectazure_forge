@@ -34,6 +34,7 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
+import static com.yor42.projectazure.setup.register.registerRecipes.Types.PRESSING;
 
 public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines implements MenuProvider {
 
@@ -80,7 +81,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines imp
 
     public TileEntityMetalPress(BlockPos pos, BlockState state) {
         super(registerTE.METAL_PRESS.get(), pos, state);
-        this.recipeType = (RecipeType<? extends Recipe<Inventory>>) registerRecipes.Types.PRESSING;
+        this.recipeType = PRESSING;
         this.powerConsumption = 100;
         this.inventory.setSize(3);
         this.energyStorage.setMaxEnergy(15000);
@@ -260,5 +261,65 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines imp
     @Override
     public boolean isActive() {
         return this.fields.get(0)>0;
+    }
+
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
+        if (t instanceof TileEntityMetalPress machine) {
+            boolean isActive = machine.isActive();
+            boolean shouldsave = false;
+            boolean isPowered = machine.isPowered();
+
+            if (machine.level != null && !machine.level.isClientSide) {
+                ItemStack ingredient = machine.inventory.getStackInSlot(0);
+                ItemStack mold = machine.inventory.getStackInSlot(1);
+
+                if (!ingredient.isEmpty() && !mold.isEmpty()) {
+                    Recipe<?> irecipe = machine.level.getRecipeManager().getRecipeFor(PRESSING, machine, machine.level).orElse(null);
+
+                    boolean flag1 = machine.energyStorage.getEnergyStored() >= machine.powerConsumption;
+                    boolean flag2 = machine.canProcess(irecipe);
+
+                    if (flag1 && flag2) {
+                        if (machine.totalProcessTime == 0) {
+                            machine.totalProcessTime = machine.getTargetProcessTime();
+                        }
+                        shouldsave = true;
+                        machine.ProcessTime++;
+                        machine.energyStorage.extractEnergy(machine.powerConsumption, false);
+                        if (machine.ProcessTime == machine.totalProcessTime) {
+                            machine.ProcessTime = 0;
+                            machine.totalProcessTime = machine.getTargetProcessTime();
+                            machine.process(irecipe);
+                        }
+                    } else {
+                        machine.ProcessTime = 0;
+                    }
+                } else {
+                    machine.ProcessTime = 0;
+                }
+
+            }
+            if (shouldsave) {
+                machine.setChanged();
+            }
+
+            if (machine.level != null && !machine.level.isClientSide) {
+                if (isPowered != machine.isPowered() || machine.isPowered() && !machine.level.getBlockState(machine.worldPosition).getValue(POWERED) || !machine.isPowered() && machine.level.getBlockState(machine.worldPosition).getValue(POWERED)) {
+                    machine.level.setBlock(machine.worldPosition, machine.level.getBlockState(machine.worldPosition).setValue(POWERED, machine.isPowered()), 2);
+                }
+                if (isActive != machine.isActive()) {
+                    machine.level.setBlock(machine.worldPosition, machine.level.getBlockState(machine.worldPosition).setValue(ACTIVE, machine.isActive()), 2);
+                }
+            }
+
+            if (!isActive && machine.isActive()) {
+                machine.playsound();
+            }
+
+
+            if (machine.getLevel() != null && isActive != machine.isActive()) {
+                machine.getLevel().sendBlockUpdated(machine.getBlockPos(), machine.getBlockState(), machine.getBlockState(), 3);
+            }
+        }
     }
 }

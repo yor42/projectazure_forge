@@ -167,7 +167,7 @@ dependencies {
 
     //Geckoilib
     implementation fg.deobf('software.bernie.geckolib:geckolib-1.18-forge:3.0.15')
-    implementation "mcjty.theoneprobe:theoneprobe:${top_version}"
+    compileOnly "mcjty.theoneprobe:theoneprobe:${top_version}"
 
     //compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
     //compileOnly fg.deobf('com.chaosthedude:realistictorches:1.16.5:3.1.2')
@@ -179,13 +179,13 @@ dependencies {
     }
 
     compileOnly "mekanism:Mekanism:${mekanism_version}:api"
-
+    /*
     // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
-
+    */
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"

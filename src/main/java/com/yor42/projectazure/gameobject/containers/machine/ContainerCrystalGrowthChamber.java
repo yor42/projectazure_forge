@@ -16,7 +16,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.GROWTH_CHAMBER_CONTAINER_TYPE;
+import static com.yor42.projectazure.Main.GROWTH_CHAMBER_CONTAINER_TYPE;
 
 public class ContainerCrystalGrowthChamber extends AbstractContainerMenu {
 

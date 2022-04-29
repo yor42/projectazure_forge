@@ -1,10 +1,10 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.slots.SlotRigging;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -39,7 +39,7 @@ public class ContainerKansenInventory extends AbstractContainerMenu {
 
     //constructor for actual use
     public ContainerKansenInventory(int id, Inventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
-        super(registerManager.SHIP_CONTAINER.get(), id);
+        super(Main.SHIP_CONTAINER.get(), id);
         this.equipment = Equipments;
         this.AmmoStack = AmmoStorage;
         this.entity = entity;

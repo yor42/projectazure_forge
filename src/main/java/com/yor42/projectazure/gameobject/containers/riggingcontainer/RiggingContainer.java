@@ -24,7 +24,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import java.util.function.Function;
 
-import static com.yor42.projectazure.setup.register.registerManager.RIGGING_INVENTORY;
+import static com.yor42.projectazure.Main.RIGGING_INVENTORY;
 
 public class RiggingContainer extends AbstractContainerMenu {
 

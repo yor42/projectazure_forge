@@ -15,7 +15,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.METAL_PRESS_CONTAINER_TYPE;
+import static com.yor42.projectazure.Main.METAL_PRESS_CONTAINER_TYPE;
 
 public class ContainerMetalPress extends AbstractContainerMenu {
 

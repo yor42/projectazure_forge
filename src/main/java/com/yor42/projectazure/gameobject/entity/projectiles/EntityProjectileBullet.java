@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
@@ -9,7 +9,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.projectile.Snowball;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -27,17 +26,17 @@ public class EntityProjectileBullet extends ThrowableItemProjectile {
     float damage;
 
     protected EntityProjectileBullet(Level worldIn, float damage) {
-        super(registerManager.PROJECTILE_GUN_BULLET, worldIn);
+        super(Main.PROJECTILE_GUN_BULLET, worldIn);
         this.damage = damage;
     }
 
     protected EntityProjectileBullet(double x, double y, double z, Level worldIn, float damage) {
-        super(registerManager.PROJECTILE_GUN_BULLET, x, y, z, worldIn);
+        super(Main.PROJECTILE_GUN_BULLET, x, y, z, worldIn);
         this.damage = damage;
     }
 
     public EntityProjectileBullet(LivingEntity shooter, Level worldIn, float damage) {
-        super(registerManager.PROJECTILE_GUN_BULLET, shooter, worldIn);
+        super(Main.PROJECTILE_GUN_BULLET, shooter, worldIn);
         this.damage = damage;
     }
 

@@ -229,7 +229,7 @@ public class EntitySylvi extends AbstractCompanionMagicUser{
 
     @Override
     public InteractionHand getSpellUsingHand() {
-        return Hand.MAIN_HAND;
+        return InteractionHand.MAIN_HAND;
     }
     @Override
     public void ShootProjectile(Level world, @Nonnull LivingEntity target) {

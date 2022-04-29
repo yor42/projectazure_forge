@@ -1,6 +1,6 @@
 package com.yor42.projectazure.libs;
 
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.Main;
 import net.minecraft.world.entity.EntityType;
 
 public class Constants {
@@ -9,10 +9,10 @@ public class Constants {
 
     //Starter ID
     public static final EntityType<?>[] StarterList = {
-            registerManager.AYANAMI.get(),
-            registerManager.JAVELIN.get(),
-            registerManager.Z23.get(),
-            registerManager.LAFFEY.get()
+            Main.AYANAMI.get(),
+            Main.JAVELIN.get(),
+            Main.Z23.get(),
+            Main.LAFFEY.get()
     };
 
     public static final int CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY = 4000;

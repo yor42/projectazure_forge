@@ -61,8 +61,7 @@ public class BoundingBoxBlock extends AbstractContainerBlock{
     public void onBlockExploded(BlockState state, Level world, BlockPos pos, Explosion explosion) {
         BlockEntity tile = world.getBlockEntity(pos);
 
-        if(!world.isClientSide && tile instanceof TileEntityBoundingBox) {
-            TileEntityBoundingBox tile2 = (TileEntityBoundingBox) tile;
+        if(!world.isClientSide && tile instanceof TileEntityBoundingBox tile2) {
 
             if (tile2.hasMaster()) {
                 world.destroyBlock(tile2.getMasterPos(), true, null);

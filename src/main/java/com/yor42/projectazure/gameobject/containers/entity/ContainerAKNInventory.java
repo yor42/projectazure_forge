@@ -1,9 +1,9 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -32,7 +32,7 @@ public class ContainerAKNInventory extends AbstractContainerMenu {
     }
 
     public ContainerAKNInventory(int id, Inventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(registerManager.AKN_CONTAINER.get(), id);
+        super(Main.AKN_CONTAINER.get(), id);
         this.companion = companion;
         //mainhand
         this.addSlot(new SlotItemHandler(EntityEquipment, 0, 75, 80));

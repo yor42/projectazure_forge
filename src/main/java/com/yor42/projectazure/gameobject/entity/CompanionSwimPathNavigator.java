@@ -1,8 +1,5 @@
 package com.yor42.projectazure.gameobject.entity;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.world.Level;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;

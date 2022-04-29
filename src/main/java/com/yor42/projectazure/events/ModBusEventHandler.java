@@ -7,13 +7,14 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
 import com.yor42.projectazure.setup.register.registerItems;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -39,16 +40,16 @@ public class ModBusEventHandler {
             CompoundTag playerData = event.getPlayer().getPersistentData();
             CompoundTag data;
 
-            if (!playerData.contains(PlayerEntity.PERSISTED_NBT_TAG)) {
+            if (!playerData.contains(Player.PERSISTED_NBT_TAG)) {
                 data = new CompoundTag();
             } else {
-                data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
+                data = playerData.getCompound(Player.PERSISTED_NBT_TAG);
             }
 
             boolean flag = !data.getBoolean("PRJA:gotStarterCube");
 
             if (flag) {
-                PlayerEntity player = event.getPlayer();
+                Player player = event.getPlayer();
                 UUID yorUUID = UUID.fromString("d45160dc-ae0b-4f7c-b44a-b535a48182d2");
                 UUID AoichiID = UUID.fromString("d189319f-ee53-4e80-9472-7c5e4711642e");
                 UUID NecromID = UUID.fromString("23b61d99-fbe4-4202-a6e6-3d467a08f3ba");
@@ -60,7 +61,7 @@ public class ModBusEventHandler {
                 CompoundTag nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
                 cubeStack.setTag(nbt);
-                player.inventory.setItem(player.inventory.getFreeSlot(), cubeStack);
+                player.getInventory().setItem(player.getInventory().getFreeSlot(), cubeStack);
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
                     stacks.add(registerItems.SPAWN_NAGATO.get());
@@ -91,21 +92,21 @@ public class ModBusEventHandler {
                     ItemStack stack = new ItemStack(isDev? registerItems.DEVELOPER_BONUS.get():registerItems.CONTRIBUTOR_BONUS.get());
                     CompoundTag compound = stack.getOrCreateTag();
                     compound.putUUID("owner", player.getUUID());
-                    ListNBT stackList = new ListNBT();
+                    ListTag stackList = new ListTag();
                     for(Item item:stacks){
                         CompoundTag itemTag = new CompoundTag();
                         new ItemStack(item).save(itemTag);
                         stackList.add(itemTag);
                     }
                     compound.put("inventory", stackList);
-                    player.inventory.setItem(player.inventory.getFreeSlot(), stack);
+                    player.getInventory().setItem(player.getInventory().getFreeSlot(), stack);
                 }
 
                 data.putBoolean("PRJA:gotStarterCube", true);
-                playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
+                playerData.put(Player.PERSISTED_NBT_TAG, data);
 
                 if(data.contains("carrying_companion")){
-                    ListNBT list = data.getList("carrying_companion", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+                    ListTag list = data.getList("carrying_companion", Tag.TAG_COMPOUND);
                     for(int i = 0; i<list.size(); i++){
                         CompoundTag compound = list.getCompound(i);
                         Optional<Entity> entity = EntityType.create(compound, player.level);
@@ -129,10 +130,10 @@ public class ModBusEventHandler {
     @SubscribeEvent
     public void PlayerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
         if (!event.getPlayer().level.isClientSide) {
-            PlayerEntity player = event.getPlayer();
+            Player player = event.getPlayer();
             CompoundTag playerData = event.getPlayer().getPersistentData();
             if(!player.getPassengers().isEmpty()){
-                ListNBT listnbt1 = new ListNBT();
+                ListTag listnbt1 = new ListTag();
 
                 for(Entity entity : player.getPassengers()) {
                     if(entity instanceof AbstractEntityCompanion) {
@@ -164,9 +165,9 @@ public class ModBusEventHandler {
 
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof PlayerEntity) {
+        if (event.getObject() instanceof Player) {
             try {
-                event.addCapability(CapabilityID, ProjectAzurePlayerCapability.createNewCapability((PlayerEntity) event.getObject()));
+                event.addCapability(CapabilityID, ProjectAzurePlayerCapability.createNewCapability((Player) event.getObject()));
 
             }
             catch (Exception e) {

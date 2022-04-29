@@ -7,13 +7,14 @@ import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.GunFiredPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.HandSide;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.player.RemotePlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -47,7 +48,7 @@ public class ForgeBusEventHandlerClient {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onMouseEvent(InputEvent.RawMouseEvent event){
-        ClientPlayerEntity player = Minecraft.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         //check if game has focus
         if(Minecraft.getInstance().isWindowActive() && player != null && !Minecraft.getInstance().isPaused() && Minecraft.getInstance().screen == null){
             if(event.getButton() == GLFW_MOUSE_BUTTON_LEFT && player.getMainHandItem().getItem() instanceof ItemGunBase){
@@ -60,7 +61,7 @@ public class ForgeBusEventHandlerClient {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickEmpty event){
-        PlayerEntity player = event.getPlayer();
+        Player player = event.getPlayer();
         List<Entity> passengers = player.getPassengers();
         if(!passengers.isEmpty() && player.isShiftKeyDown()){
             for(Entity entity:passengers){
@@ -115,8 +116,8 @@ public class ForgeBusEventHandlerClient {
 
     @SubscribeEvent
     public static void RenderEntityEvent(RenderLivingEvent.Pre event){
-        if(event.getEntity() instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) event.getEntity();
+        if(event.getEntity() instanceof Player){
+            Player player = (Player) event.getEntity();
 
             ItemStack mainStack = player.getMainHandItem();
 
@@ -125,11 +126,11 @@ public class ForgeBusEventHandlerClient {
                 if(model instanceof PlayerModel){
                     PlayerModel<?> playermodel = (PlayerModel<?>) model;
 
-                    if(player.getMainArm() == HandSide.RIGHT){
-                        playermodel.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
+                    if(player.getMainArm() == HumanoidArm.RIGHT){
+                        playermodel.rightArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
                     }
                     else{
-                        playermodel.leftArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
+                        playermodel.leftArmPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
                     }
                 }
             }
