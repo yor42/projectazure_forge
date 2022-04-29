@@ -1,8 +1,8 @@
 package com.yor42.projectazure.data.common;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -17,11 +17,11 @@ public class BlockTagProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags() {
-        this.tag(ModTags.Blocks.ORES_ALUMINIUM).add(registerBlocks.BAUXITE_ORE.get());
-        this.tag(ModTags.Blocks.ORES_COPPER).add(registerBlocks.COPPER_ORE.get());
-        this.tag(ModTags.Blocks.ORES_LEAD).add(registerBlocks.LEAD_ORE.get());
-        this.tag(ModTags.Blocks.ORES_TIN).add(registerBlocks.TIN_ORE.get());
-        this.tag(ModTags.Blocks.ORES_ZINC).add(registerBlocks.ZINC_ORE.get());
-        this.tag(ModTags.Blocks.ORES_ORIROCK).add(registerBlocks.ORIROCK.get());
+        this.tag(ModTags.Blocks.ORES_ALUMINIUM).add(Main.BAUXITE_ORE.get());
+        this.tag(ModTags.Blocks.ORES_COPPER).add(Main.COPPER_ORE.get());
+        this.tag(ModTags.Blocks.ORES_LEAD).add(Main.LEAD_ORE.get());
+        this.tag(ModTags.Blocks.ORES_TIN).add(Main.TIN_ORE.get());
+        this.tag(ModTags.Blocks.ORES_ZINC).add(Main.ZINC_ORE.get());
+        this.tag(ModTags.Blocks.ORES_ORIROCK).add(Main.ORIROCK.get());
     }
 }

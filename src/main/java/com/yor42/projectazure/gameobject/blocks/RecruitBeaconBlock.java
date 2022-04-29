@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -33,7 +32,7 @@ public class RecruitBeaconBlock extends AbstractElectricMachineBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return type == registerTE.RECRUIT_BEACON.get() ? TileEntityRecruitBeacon::tick : null;
+        return type == Main.RECRUIT_BEACON_BLOCK_ENTITY.get() ? TileEntityRecruitBeacon::tick : null;
     }
 
     @Override

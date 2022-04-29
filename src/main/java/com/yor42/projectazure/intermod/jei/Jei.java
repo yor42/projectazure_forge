@@ -1,11 +1,12 @@
 package com.yor42.projectazure.intermod.jei;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.*;
+import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -14,7 +15,6 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -102,16 +102,16 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(Collections.singleton(registerRecipes.Types.PRESSING), JEIRecipeCategoryPressing.UID);
-        registration.addRecipes(Collections.singleton(registerRecipes.Types.ALLOYING), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipes(Collections.singleton(registerRecipes.Types.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
+        registration.addRecipes(Collections.singleton(RecipeTypes.PRESSING), JEIRecipeCategoryPressing.UID);
+        registration.addRecipes(Collections.singleton(RecipeTypes.ALLOYING), JEIRecipeCategoryAlloying.UID);
+        registration.addRecipes(Collections.singleton(RecipeTypes.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(registerBlocks.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.UID);
-        registration.addRecipeCatalyst(new ItemStack(registerBlocks.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipeCatalyst(new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.UID);
+        registration.addRecipeCatalyst(new ItemStack(Main.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.UID);
+        registration.addRecipeCatalyst(new ItemStack(Main.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.UID);
+        registration.addRecipeCatalyst(new ItemStack(Main.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.UID);
     }
 
     @Override

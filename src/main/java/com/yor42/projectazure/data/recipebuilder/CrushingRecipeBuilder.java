@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.utils.ItemStackWithChance;
-import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.TagKey;
 import net.minecraft.resources.ResourceLocation;
@@ -192,7 +192,7 @@ public class CrushingRecipeBuilder implements FinishedRecipe {
 
     @Override
     public RecipeSerializer<?> getType() {
-        return registerRecipes.Serializers.CRUSHING.get();
+        return Main.CRUSHING.get();
     }
 
     @Nullable

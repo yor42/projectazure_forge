@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.EntityType;
@@ -18,7 +18,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.gameobject.misc.DamageSources.PLANE_GUN;
-import static com.yor42.projectazure.setup.register.registerItems.WildcatHP;
+import static com.yor42.projectazure.Main.WildcatHP;
 
 public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatable{
 
@@ -65,7 +65,7 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
 
     @Override
     public ItemEquipmentPlaneBase getPlaneItem() {
-        return (ItemEquipmentPlaneBase) registerItems.EQUIPMENT_PLANE_F4FWildcat.get();
+        return (ItemEquipmentPlaneBase) Main.EQUIPMENT_PLANE_F4FWildcat.get();
     }
 
     public static AttributeSupplier.Builder MutableAttribute()

@@ -10,6 +10,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,16 +21,17 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH;
 
 public class ItemKansenSpawnEgg extends Item {
 
-    EntityType<? extends AbstractEntityCompanion> Entity;
+    Supplier<? extends EntityType<? extends AbstractEntityCompanion>> Entity;
 
-    public ItemKansenSpawnEgg(EntityType<? extends AbstractEntityCompanion> Entity, Properties properties) {
+    public ItemKansenSpawnEgg(Supplier<? extends EntityType<? extends AbstractEntityCompanion>> type, Properties properties) {
         super(properties);
-        this.Entity = Entity;
+        this.Entity = type;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class ItemKansenSpawnEgg extends Item {
         ItemStack itemstack = context.getItemInHand();
         context.getClickedPos();
 
-        AbstractEntityCompanion spawnedEntity = this.Entity.create(context.getLevel());
+        AbstractEntityCompanion spawnedEntity = this.Entity.get().create(context.getLevel());
 
         if(spawnedEntity!=null) {
             spawnedEntity.setPos(context.getClickedPos().getX()+0.5, context.getClickedPos().getY() + 1.1F, context.getClickedPos().getZ()+0.5);
@@ -71,7 +73,7 @@ public class ItemKansenSpawnEgg extends Item {
     @Override
     @ParametersAreNonnullByDefault
     public Component getName(ItemStack stack) {
-        return new TranslatableComponent("item.projectazure.spawnegg.spawn").append(this.Entity.getDescription());
+        return new TranslatableComponent("item.projectazure.spawnegg.spawn").append(this.Entity.get().getDescription());
     }
 
     @Override
@@ -79,7 +81,7 @@ public class ItemKansenSpawnEgg extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         if(worldIn != null) {
-            AbstractEntityCompanion entity = this.Entity.create(worldIn);
+            AbstractEntityCompanion entity = this.Entity.get().create(worldIn);
             if (entity!= null) {
 
                 enums.CompanionRarity rarity = entity.getRarity();

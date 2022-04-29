@@ -2,7 +2,6 @@ package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockBaseTE;
-import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -18,9 +17,9 @@ public class MultiblockHandler {
     private static final Block[][][][] MULTIBLOCKPATTERN =
             {
                     {
-                            {  { registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.REENFORCEDCONCRETE.get()}, { registerBlocks.REENFORCEDCONCRETE.get(), Blocks.AIR, registerBlocks.REENFORCEDCONCRETE.get()}, { registerBlocks.MACHINE_FRAME.get(), Blocks.AIR, registerBlocks.MACHINE_FRAME.get()}, {registerBlocks.MACHINE_FRAME.get(),Blocks.AIR,registerBlocks.MACHINE_FRAME.get()}  },	//x = 0
-                            {  { registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.MACHINE_FRAME.get(), registerBlocks.REENFORCEDCONCRETE.get()}, { Blocks.AIR, Blocks.AIR, Blocks.AIR}, { Blocks.AIR, Blocks.AIR, Blocks.AIR}, {Blocks.AIR, registerBlocks.DRYDOCKCONTROLLER.get(), Blocks.AIR}  },	//x = 1
-                            {  { registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.REENFORCEDCONCRETE.get(), registerBlocks.REENFORCEDCONCRETE.get()}, { registerBlocks.REENFORCEDCONCRETE.get(), Blocks.AIR, registerBlocks.REENFORCEDCONCRETE.get()}, { registerBlocks.MACHINE_FRAME.get(), Blocks.AIR, registerBlocks.MACHINE_FRAME.get()}, {registerBlocks.MACHINE_FRAME.get(),Blocks.AIR,registerBlocks.MACHINE_FRAME.get()}  }	//x = 2
+                            {  { Main.REENFORCEDCONCRETE.get(), Main.REENFORCEDCONCRETE.get(), Main.REENFORCEDCONCRETE.get()}, { Main.REENFORCEDCONCRETE.get(), Blocks.AIR, Main.REENFORCEDCONCRETE.get()}, { Main.MACHINE_FRAME.get(), Blocks.AIR, Main.MACHINE_FRAME.get()}, {Main.MACHINE_FRAME.get(),Blocks.AIR, Main.MACHINE_FRAME.get()}  },	//x = 0
+                            {  { Main.REENFORCEDCONCRETE.get(), Main.MACHINE_FRAME.get(), Main.REENFORCEDCONCRETE.get()}, { Blocks.AIR, Blocks.AIR, Blocks.AIR}, { Blocks.AIR, Blocks.AIR, Blocks.AIR}, {Blocks.AIR, Main.DRYDOCKCONTROLLER.get(), Blocks.AIR}  },	//x = 1
+                            {  { Main.REENFORCEDCONCRETE.get(), Main.REENFORCEDCONCRETE.get(), Main.REENFORCEDCONCRETE.get()}, { Main.REENFORCEDCONCRETE.get(), Blocks.AIR, Main.REENFORCEDCONCRETE.get()}, { Main.MACHINE_FRAME.get(), Blocks.AIR, Main.MACHINE_FRAME.get()}, {Main.MACHINE_FRAME.get(),Blocks.AIR, Main.MACHINE_FRAME.get()}  }	//x = 2
                     }
             };
 

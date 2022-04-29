@@ -6,7 +6,6 @@ import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -57,39 +56,39 @@ public class ModBusEventHandler {
                 boolean isAoichi = player.getUUID().equals(AoichiID);
                 boolean isNecrom = player.getUUID().equals(NecromID);
 
-                ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
+                ItemStack cubeStack = new ItemStack(Main.Rainbow_Wisdom_Cube.get());
                 CompoundTag nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
                 cubeStack.setTag(nbt);
                 player.getInventory().setItem(player.getInventory().getFreeSlot(), cubeStack);
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
-                    stacks.add(registerItems.SPAWN_NAGATO.get());
-                    stacks.add(registerItems.SPAWM_ENTERPRISE.get());
-                    stacks.add(registerItems.SPAWN_CHEN.get());
-                    stacks.add(registerItems.SPAWN_SHIROKO.get());
-                    stacks.add(registerItems.SPAWM_ENTERPRISE.get());
-                    stacks.add(registerItems.SPAWN_AMIYA.get());
-                    stacks.add(registerItems.SPAWN_MUDROCK.get());
-                    stacks.add(registerItems.SPAWN_Z23.get());
-                    stacks.add(registerItems.SPAWM_JAVELIN.get());
-                    stacks.add(registerItems.SPAWN_TALULAH.get());
-                    stacks.add(registerItems.SPAWN_M4A1.get());
-                    stacks.add(registerItems.SPAWN_TEXAS.get());
-                    stacks.add(registerItems.SPAWN_FROSTNOVA.get());
-                    stacks.add(registerItems.SPAWN_LAPPLAND.get());
-                    stacks.add(registerItems.SPAWN_SIEGE.get());
-                    stacks.add(registerItems.SPAWN_SCHWARZ.get());
+                    stacks.add(Main.SPAWN_NAGATO.get());
+                    stacks.add(Main.SPAWM_ENTERPRISE.get());
+                    stacks.add(Main.SPAWN_CHEN.get());
+                    stacks.add(Main.SPAWN_SHIROKO.get());
+                    stacks.add(Main.SPAWM_ENTERPRISE.get());
+                    stacks.add(Main.SPAWN_AMIYA.get());
+                    stacks.add(Main.SPAWN_MUDROCK.get());
+                    stacks.add(Main.SPAWN_Z23.get());
+                    stacks.add(Main.SPAWM_JAVELIN.get());
+                    stacks.add(Main.SPAWN_TALULAH.get());
+                    stacks.add(Main.SPAWN_M4A1.get());
+                    stacks.add(Main.SPAWN_TEXAS.get());
+                    stacks.add(Main.SPAWN_FROSTNOVA.get());
+                    stacks.add(Main.SPAWN_LAPPLAND.get());
+                    stacks.add(Main.SPAWN_SIEGE.get());
+                    stacks.add(Main.SPAWN_SCHWARZ.get());
                 }
                 else if(isAoichi){
-                    stacks.add(registerItems.SPAWN_MUDROCK.get());
-                    stacks.add(registerItems.SPAWN_ROSMONTIS.get());
+                    stacks.add(Main.SPAWN_MUDROCK.get());
+                    stacks.add(Main.SPAWN_ROSMONTIS.get());
                 }else if(isNecrom){
-                    stacks.add(registerItems.SPAWN_AMIYA.get());
+                    stacks.add(Main.SPAWN_AMIYA.get());
                 }
 
                 if(!stacks.isEmpty()){
-                    ItemStack stack = new ItemStack(isDev? registerItems.DEVELOPER_BONUS.get():registerItems.CONTRIBUTOR_BONUS.get());
+                    ItemStack stack = new ItemStack(isDev? Main.DEVELOPER_BONUS.get(): Main.CONTRIBUTOR_BONUS.get());
                     CompoundTag compound = stack.getOrCreateTag();
                     compound.putUUID("owner", player.getUUID());
                     ListTag stackList = new ListTag();

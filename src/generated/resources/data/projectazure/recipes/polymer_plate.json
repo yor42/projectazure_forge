@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "tag": "forge:tree_sap"
-  },
-  "result": "projectazure:polymer_plate",
-  "experience": 0.5,
-  "cookingtime": 200
-}

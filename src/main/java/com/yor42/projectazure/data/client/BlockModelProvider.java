@@ -1,7 +1,7 @@
 package com.yor42.projectazure.data.client;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -12,14 +12,14 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
 
     @Override
     protected void registerStatesAndModels() {
-        simpleBlock(registerBlocks.BAUXITE_ORE.get());
-        simpleBlock(registerBlocks.COPPER_ORE.get());
-        simpleBlock(registerBlocks.TIN_ORE.get());
-        simpleBlock(registerBlocks.LEAD_ORE.get());
-        simpleBlock(registerBlocks.ZINC_ORE.get());
-        simpleBlock(registerBlocks.MACHINE_FRAME.get());
-        simpleBlock(registerBlocks.ORIROCK.get());
-        simpleBlock(registerBlocks.REENFORCEDCONCRETE.get());
-        simpleBlock(registerBlocks.REENFORCED_PLANK.get());
+        simpleBlock(Main.BAUXITE_ORE.get());
+        simpleBlock(Main.COPPER_ORE.get());
+        simpleBlock(Main.TIN_ORE.get());
+        simpleBlock(Main.LEAD_ORE.get());
+        simpleBlock(Main.ZINC_ORE.get());
+        simpleBlock(Main.MACHINE_FRAME.get());
+        simpleBlock(Main.ORIROCK.get());
+        simpleBlock(Main.REENFORCEDCONCRETE.get());
+        simpleBlock(Main.REENFORCED_PLANK.get());
     }
 }

@@ -17,6 +17,9 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.IItemRenderProperties;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
@@ -31,10 +34,11 @@ import static com.yor42.projectazure.gameobject.items.materials.ModMaterials.CLA
 public class ItemClaymore extends SwordItem implements IAnimatable {
 
     AnimationFactory factory = new AnimationFactory(this);
+    public static final String controllerName = "defibcharger_controller";
 
     public ItemClaymore() {
         //Haha unstackable claymore
-        super(CLAYMORE,1,-3.9F,new Item.Properties().stacksTo(1));
+        super(CLAYMORE,1,-3.9F,new Item.Properties().stacksTo(1).tab(PA_WEAPONS));
     }
 
     @Override
@@ -52,6 +56,11 @@ public class ItemClaymore extends SwordItem implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+    }
+
+    private PlayState predicate(AnimationEvent animationEvent) {
+        return PlayState.STOP;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +11,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,17 +21,15 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.*;
-
 public abstract class NetherQuartzSolutionFluid extends FlowingFluid {
     @Override
     public Fluid getFlowing() {
-        return NETHER_QUARTZ_SOLUTION_FLOWING;
+        return Main.NETHER_QUARTZ_SOLUTION_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return NETHER_QUARTZ_SOLUTION_SOURCE;
+        return Main.NETHER_QUARTZ_SOLUTION_REGISTRY.get();
     }
 
     @Override
@@ -90,12 +87,12 @@ public abstract class NetherQuartzSolutionFluid extends FlowingFluid {
 
     @Override
     protected BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.GASOLINE.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        return Main.GASOLINE.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == GASOLINE_SOURCE || fluidIn == GASOLINE_FLOWING;
+        return fluidIn == Main.NETHER_QUARTZ_SOLUTION_FLOWING_REGISTRY.get() || fluidIn == Main.NETHER_QUARTZ_SOLUTION_REGISTRY.get();
     }
 
     public static class Flowing extends NetherQuartzSolutionFluid {

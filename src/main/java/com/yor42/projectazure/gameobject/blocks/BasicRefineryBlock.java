@@ -1,9 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks;
 
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -31,7 +29,7 @@ public class BasicRefineryBlock extends AbstractMachineBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type) {
-        return type == registerTE.BASIC_REFINERY.get() ? TileEntityBasicRefinery::tick : null;
+        return type == Main.BASIC_REFINERY_BLOCK_ENTITY.get() ? TileEntityBasicRefinery::tick : null;
     }
 
     @Override

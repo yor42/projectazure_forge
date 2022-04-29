@@ -5,7 +5,6 @@ import com.yor42.projectazure.client.renderer.items.ItemMissileDroneRenderer;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
@@ -49,7 +48,7 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraf
 
     @Override
     public EntityType<? extends AbstractEntityDrone> getEntityType() {
-        return Main.ENTITYTYPE_MISSILEDRONE;
+        return Main.MISSILEDRONE.get();
     }
 
     @Override
@@ -68,10 +67,10 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraf
 
     @Override
     public int getRepairAmount(ItemStack candidateItem) {
-        if(candidateItem.getItem() == registerItems.PLATE_STEEL.get()){
+        if(candidateItem.getItem() == Main.PLATE_STEEL.get()){
             return 2;
         }
-        else if(candidateItem.getItem() == registerItems.ADVANCED_CIRCUIT.get()){
+        else if(candidateItem.getItem() == Main.ADVANCED_CIRCUIT.get()){
             return 5;
         }
         return super.getRepairAmount(candidateItem);

@@ -1,9 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
-import com.yor42.projectazure.setup.register.registerFluids;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -12,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,12 +23,12 @@ import net.minecraftforge.fluids.FluidAttributes;
 public abstract class CrudeOilFluid extends FlowingFluid {
     @Override
     public Fluid getFlowing() {
-        return registerFluids.CRUDE_OIL_FLOWING;
+        return Main.CRUDE_OIL_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return registerFluids.CRUDE_OIL_SOURCE;
+        return Main.CRUDE_OIL_REGISTRY.get();
     }
 
     @Override
@@ -57,7 +54,7 @@ public abstract class CrudeOilFluid extends FlowingFluid {
 
     @Override
     public Item getBucket() {
-        return registerItems.CRUDE_OIL_BUCKET.get();
+        return Main.CRUDE_OIL_BUCKET.get();
     }
 
     @Override
@@ -87,12 +84,12 @@ public abstract class CrudeOilFluid extends FlowingFluid {
 
     @Override
     public BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.CRUDE_OIL.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        return Main.CRUDE_OIL.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == registerFluids.CRUDE_OIL_FLOWING || fluidIn == registerFluids.CRUDE_OIL_SOURCE;
+        return fluidIn == Main.CRUDE_OIL_REGISTRY.get() || fluidIn == Main.CRUDE_OIL_FLOWING_REGISTRY.get();
     }
 
     public static class Flowing extends CrudeOilFluid {

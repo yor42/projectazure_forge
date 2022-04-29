@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.crafting;
 
 import com.google.gson.JsonObject;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf ;
@@ -73,12 +74,12 @@ public class PressingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return registerRecipes.Serializers.PRESSING.get();
+        return Main.PRESSING.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return registerRecipes.Types.PRESSING;
+        return TYPE.Instance;
     }
 
 
@@ -114,5 +115,11 @@ public class PressingRecipe implements Recipe<Container> {
             buffer.writeInt(recipe.processTick);
             buffer.writeItem(recipe.result);
         }
+    }
+
+    public static class TYPE implements RecipeType<PressingRecipe> {
+        private TYPE() {}
+        public static final PressingRecipe.TYPE Instance = new PressingRecipe.TYPE();
+        public static final String ID = "crushing";
     }
 }

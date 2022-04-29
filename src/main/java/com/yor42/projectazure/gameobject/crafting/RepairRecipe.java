@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
-import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.REPAIRING;
+import static com.yor42.projectazure.Main.REPAIRING;
 
 public class RepairRecipe extends CustomRecipe {
 

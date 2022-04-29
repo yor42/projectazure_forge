@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -28,7 +28,7 @@ public class CrystalGrowthChamberBlock extends AbstractMachineBlock{
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_) {
-        return p_153214_ == registerTE.CRYSTAL_GROWTH_CHAMBER.get() ? TileEntityCrystalGrowthChamber::tick : null;
+        return p_153214_ == Main.CRYSTAL_GROWTH_CHAMBER_BLOCK_ENTITY.get() ? TileEntityCrystalGrowthChamber::tick : null;
     }
 
     @Override

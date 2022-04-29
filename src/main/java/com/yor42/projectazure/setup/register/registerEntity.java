@@ -24,30 +24,30 @@ public class registerEntity {
 
     @SubscribeEvent
     public static void RegisterAttributes(EntityAttributeCreationEvent event){
-        event.put(Main.ENTITYTYPE_AYANAMI, EntityAyanami.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_JAVELIN, EntityJavelin.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_GANGWON, EntityGangwon.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_ENTERPRISE, EntityEnterprise.MutableAttribute().build());
-        event.put(Main.PLANEF4FWildCat, EntityF4fWildcat.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_MISSILEDRONE, EntityMissileDrone.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_SHIROKO, EntityShiroko.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_NAGATO, EntityNagato.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_CHEN, EntityChen.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_ROSMONTIS, EntityRosmontis.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_TALULAH, EntityTalulah.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_Z23, EntityZ23.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_LAFFEY, EntityLaffey.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_M4A1, EntityM4A1.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_AMIYA, EntityAmiya.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_MUDROCK, EntityMudrock.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_TEXAS, EntityTexas.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_FROSTNOVA, EntityFrostnova.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_LAPPLAND, EntityLappland.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_SIEGE, EntitySiege.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_SCHWARZ, EntitySchwarz.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_SYLVI, EntitySylvi.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_YAMATO, EntityYamato.MutableAttribute().build());
-        event.put(Main.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().build());
+        event.put(Main.AYANAMI.get(), EntityAyanami.MutableAttribute().build());
+        event.put(Main.JAVELIN.get(), EntityJavelin.MutableAttribute().build());
+        event.put(Main.GANGWON.get(), EntityGangwon.MutableAttribute().build());
+        event.put(Main.ENTERPRISE.get(), EntityEnterprise.MutableAttribute().build());
+        event.put(Main.F4FWildCat.get(), EntityF4fWildcat.MutableAttribute().build());
+        event.put(Main.MISSILEDRONE.get(), EntityMissileDrone.MutableAttribute().build());
+        event.put(Main.SHIROKO.get(), EntityShiroko.MutableAttribute().build());
+        event.put(Main.NAGATO.get(), EntityNagato.MutableAttribute().build());
+        event.put(Main.CHEN.get(), EntityChen.MutableAttribute().build());
+        event.put(Main.ROSMONTIS.get(), EntityRosmontis.MutableAttribute().build());
+        event.put(Main.TALULAH.get(), EntityTalulah.MutableAttribute().build());
+        event.put(Main.Z23.get(), EntityZ23.MutableAttribute().build());
+        event.put(Main.LAFFEY.get(), EntityLaffey.MutableAttribute().build());
+        event.put(Main.M4A1.get(), EntityM4A1.MutableAttribute().build());
+        event.put(Main.AMIYA.get(), EntityAmiya.MutableAttribute().build());
+        event.put(Main.MUDROCK.get(), EntityMudrock.MutableAttribute().build());
+        event.put(Main.TEXAS.get(), EntityTexas.MutableAttribute().build());
+        event.put(Main.FROSTNOVA.get(), EntityFrostnova.MutableAttribute().build());
+        event.put(Main.LAPPLAND.get(), EntityLappland.MutableAttribute().build());
+        event.put(Main.SIEGE.get(), EntitySiege.MutableAttribute().build());
+        event.put(Main.SCHWARZ.get(), EntitySchwarz.MutableAttribute().build());
+        event.put(Main.SYLVI.get(), EntitySylvi.MutableAttribute().build());
+        event.put(Main.YAMATO.get(), EntityYamato.MutableAttribute().build());
+        event.put(Main.CLAYMORE.get(), EntityClaymore.MutableAttribute().build());
     }
 
 

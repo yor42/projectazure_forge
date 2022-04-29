@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.world.entity.player.Inventory;
@@ -51,14 +51,14 @@ this(id, inventory, new ItemStackHandler(5), new ContainerData() {
         this.addSlot(new SlotItemHandler(Inventory, 0, 19, 10){
             @Override
             public boolean mayPlace(@Nonnull ItemStack stack) {
-                return stack.getItem() == registerItems.HEADHUNTING_PCB.get();
+                return stack.getItem() == Main.HEADHUNTING_PCB.get();
             }
         });
         for(int i=0; i<2; i++){
             this.addSlot(new SlotItemHandler(Inventory, 1+i, 10+18*i, 33){
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
-                    return stack.getItem() == registerItems.ORUNDUM.get();
+                    return stack.getItem() == Main.ORUNDUM.get();
                 }
             });
         }
@@ -115,12 +115,12 @@ this(id, inventory, new ItemStackHandler(5), new ContainerData() {
 
                 slot.onQuickCraft(itemstack1, itemstack);
             } else {
-                if (itemstack1.getItem() == registerItems.HEADHUNTING_PCB.get()) {
+                if (itemstack1.getItem() == Main.HEADHUNTING_PCB.get()) {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (itemstack1.getItem() == registerItems.ORUNDUM.get()) {
+                else if (itemstack1.getItem() == Main.ORUNDUM.get()) {
                     if (!this.moveItemStackTo(itemstack1, 1, 3, false)) {
                         return ItemStack.EMPTY;
                     }

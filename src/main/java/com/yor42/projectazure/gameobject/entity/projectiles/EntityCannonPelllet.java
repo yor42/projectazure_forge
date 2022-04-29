@@ -25,12 +25,12 @@ public class EntityCannonPelllet extends AbstractHurtingProjectile {
     BlockPos originPos;
 
     public EntityCannonPelllet(Level worldIn, AmmoProperties ammotype){
-        super(Main.PROJECTILECANNONSHELL,worldIn);
+        super(Main.CANNONSHELL.get(),worldIn);
         this.properties = ammotype;
     }
 
     public EntityCannonPelllet(Level worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
-        super(Main.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
+        super(Main.CANNONSHELL.get(), shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.5), shooter.getZ());
     }

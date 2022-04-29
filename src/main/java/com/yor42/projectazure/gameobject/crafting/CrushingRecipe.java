@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.CRUSHING;
+import static com.yor42.projectazure.Main.CRUSHING;
 
 public class CrushingRecipe implements Recipe<Container> {
     public static final CrushingRecipe EMPTY = new CrushingRecipe(new ResourceLocation("empty"), Ingredient.EMPTY, new ArrayList<>());
@@ -98,7 +98,7 @@ public class CrushingRecipe implements Recipe<Container> {
     @Nonnull
     @Override
     public RecipeType<?> getType() {
-        return registerRecipes.Types.CRUSHING;
+        return TYPE.Instance;
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrushingRecipe>{
@@ -136,5 +136,11 @@ public class CrushingRecipe implements Recipe<Container> {
                 stack.write(buffer);
             }
         }
+
+    }
+    public static class TYPE implements RecipeType<CrushingRecipe> {
+        private TYPE() {}
+        public static final CrushingRecipe.TYPE Instance = new CrushingRecipe.TYPE();
+        public static final String ID = "crushing";
     }
 }

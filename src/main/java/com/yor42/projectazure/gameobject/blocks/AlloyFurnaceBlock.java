@@ -1,9 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
-import com.yor42.projectazure.setup.register.registerBlocks;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -35,7 +33,7 @@ import java.util.Random;
 public class AlloyFurnaceBlock extends AbstractMachineBlock {
 
     public AlloyFurnaceBlock() {
-        super((BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).strength(5.0F,6.0F).lightLevel(registerBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
+        super((BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).strength(5.0F,6.0F).lightLevel(Main.getLightValueLit(13)).sound(SoundType.STONE)));
     }
 
     @Nullable
@@ -47,7 +45,7 @@ public class AlloyFurnaceBlock extends AbstractMachineBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type) {
-        return type == registerTE.ALLOY_FURNACE.get() ? TileEntityAlloyFurnace::tick : null;
+        return type == Main.ALLOY_FURNACE_BLOCK_ENTITY.get() ? TileEntityAlloyFurnace::tick : null;
     }
 
     @Override

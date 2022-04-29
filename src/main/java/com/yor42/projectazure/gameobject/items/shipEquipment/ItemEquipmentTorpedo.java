@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.items.shipEquipment;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.item.ItemStack;
@@ -55,10 +55,10 @@ public abstract class ItemEquipmentTorpedo extends ItemEquipmentBase implements 
 
     @Override
     public int getRepairAmount(ItemStack candidateItem) {
-        if(candidateItem.getItem() == registerItems.PLATE_STEEL.get()){
+        if(candidateItem.getItem() == Main.PLATE_STEEL.get()){
             return 2;
         }
-        else if(candidateItem.getItem() == registerItems.MECHANICAL_PARTS.get()){
+        else if(candidateItem.getItem() == Main.MECHANICAL_PARTS.get()){
             return 4;
         }
         return super.getRepairAmount(candidateItem);

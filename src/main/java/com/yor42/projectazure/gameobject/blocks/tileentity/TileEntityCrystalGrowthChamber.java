@@ -1,9 +1,8 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
 import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
-import com.yor42.projectazure.setup.register.registerFluids;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,7 +39,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 import static com.yor42.projectazure.libs.Constants.CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY;
-import static com.yor42.projectazure.setup.register.registerTE.CRYSTAL_GROWTH_CHAMBER;
+import static com.yor42.projectazure.Main.CRYSTAL_GROWTH_CHAMBER_BLOCK_ENTITY;
 
 public class TileEntityCrystalGrowthChamber extends BlockEntity implements MenuProvider, Container {
 
@@ -97,8 +96,8 @@ public class TileEntityCrystalGrowthChamber extends BlockEntity implements MenuP
     };
 
     public TileEntityCrystalGrowthChamber(BlockPos pos, BlockState state) {
-        super(CRYSTAL_GROWTH_CHAMBER.get(), pos, state);
-        this.recipeType = registerRecipes.Types.CRYSTALIZING;
+        super(CRYSTAL_GROWTH_CHAMBER_BLOCK_ENTITY.get(), pos, state);
+        this.recipeType = CrystalizingRecipe.TYPE.Instance;
     }
 
     @Override
@@ -259,11 +258,11 @@ public class TileEntityCrystalGrowthChamber extends BlockEntity implements MenuP
     }
 
     public FluidStack getAmountfromItem(Item item){
-        if(item == registerItems.DUST_ORIGINIUM.get()){
-            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 400);
+        if(item == Main.DUST_ORIGINIUM.get()){
+            return new FluidStack(Main.ORIGINIUM_SOLUTION_REGISTRY.get(), 400);
         }
-        else if(item == registerItems.DUST_NETHER_QUARTZ.get()){
-            return new FluidStack(registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 800);
+        else if(item == Main.DUST_NETHER_QUARTZ.get()){
+            return new FluidStack(Main.NETHER_QUARTZ_SOLUTION_REGISTRY.get(), 800);
         }
         return FluidStack.EMPTY;
     }

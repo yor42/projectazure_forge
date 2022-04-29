@@ -1,12 +1,12 @@
 package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
@@ -288,7 +288,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.FLEXABLE_SWORD_THINGY.get()));
+        return new ArrayList<>(Collections.singletonList(Main.FLEXABLE_SWORD_THINGY.get()));
     }
 
     @Override

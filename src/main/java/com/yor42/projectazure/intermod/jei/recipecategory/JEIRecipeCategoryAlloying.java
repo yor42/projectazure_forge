@@ -1,24 +1,21 @@
 package com.yor42.projectazure.intermod.jei.recipecategory;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
-import mekanism.api.recipes.CombinerRecipe;
+import com.yor42.projectazure.setup.register.registerRecipes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nonnull;
-
-import static mezz.jei.api.constants.VanillaTypes.ITEM;
+import static com.yor42.projectazure.intermod.jei.RecipeTypes.ALLOYING;
+import static mezz.jei.api.constants.VanillaTypes.ITEM_STACK;
 import static mezz.jei.api.recipe.RecipeIngredientRole.INPUT;
 import static mezz.jei.api.recipe.RecipeIngredientRole.OUTPUT;
 
@@ -29,7 +26,7 @@ public class JEIRecipeCategoryAlloying extends BaseRecipeCategory<AlloyingRecipe
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_alloying");
 
     public JEIRecipeCategoryAlloying(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableIngredient(ITEM, new ItemStack(registerBlocks.ALLOY_FURNACE.get().asItem()));
+        this.icon = guiHelper.createDrawableIngredient(ITEM_STACK, new ItemStack(Main.ALLOY_FURNACE.get().asItem()));
 
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/alloy_furnace.png");
         this.background = guiHelper.createDrawable(TEXTURE, 4,4, 168, 75);
@@ -44,6 +41,11 @@ public class JEIRecipeCategoryAlloying extends BaseRecipeCategory<AlloyingRecipe
     @Override
     public Class<? extends AlloyingRecipe> getRecipeClass() {
         return AlloyingRecipe.class;
+    }
+
+    @Override
+    public RecipeType<AlloyingRecipe> getRecipeType() {
+        return ALLOYING;
     }
 
     @Override

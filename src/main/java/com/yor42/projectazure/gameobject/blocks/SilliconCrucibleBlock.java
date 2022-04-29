@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBoundingBox;
-import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -31,7 +31,7 @@ public class SilliconCrucibleBlock extends AbstractBigMachineBlock {
     @Override
     public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(worldIn, pos, state, placer, stack);
-        worldIn.setBlockAndUpdate(pos.above(), registerBlocks.BOUNDING_BOX.get().defaultBlockState());
+        worldIn.setBlockAndUpdate(pos.above(), Main.BOUNDING_BOX.get().defaultBlockState());
         if(worldIn.getBlockEntity(pos.above()) instanceof TileEntityBoundingBox) {
             ((TileEntityBoundingBox) worldIn.getBlockEntity(pos.above())).setMaster(worldIn.getBlockEntity(pos));
         }

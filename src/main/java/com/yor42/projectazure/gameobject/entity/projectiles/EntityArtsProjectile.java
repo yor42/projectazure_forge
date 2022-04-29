@@ -38,7 +38,7 @@ public class EntityArtsProjectile extends AbstractHurtingProjectile {
     }
 
     public EntityArtsProjectile(Level worldIn, LivingEntity shooter, float damage, @Nullable MobEffectInstance effect) {
-        super(Main.PROJECTILEARTS_ENTITYTYPE, shooter, 0, 0, 0, worldIn);
+        super(Main.PROJECTILEARTS.get(), shooter, 0, 0, 0, worldIn);
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.7F), shooter.getZ());
         this.damage = damage;
         this.Effect = effect;

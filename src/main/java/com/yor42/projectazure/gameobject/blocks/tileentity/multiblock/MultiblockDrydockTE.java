@@ -28,7 +28,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.ACTIVE;
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;
-import static com.yor42.projectazure.setup.register.registerTE.DRYDOCK;
+import static com.yor42.projectazure.Main.DRYDOCK_BLOCK_ENTITY;
 
 public class MultiblockDrydockTE extends MultiblockBaseTE implements MenuProvider, Container {
 
@@ -107,7 +107,7 @@ public class MultiblockDrydockTE extends MultiblockBaseTE implements MenuProvide
     }
 
     public MultiblockDrydockTE(BlockPos pos, BlockState state) {
-        super(DRYDOCK.get(), pos, state);
+        super(DRYDOCK_BLOCK_ENTITY.get(), pos, state);
         this.inventory.setSize(9);
         this.energyStorage.setMaxEnergy(30000);
         this.powerConsumption = 2000;
@@ -131,13 +131,13 @@ public class MultiblockDrydockTE extends MultiblockBaseTE implements MenuProvide
 
     @Override
     public void registerRollEntry() {
-        addEntry(Main.ENTITYTYPE_ENTERPRISE);
-        addEntry(Main.ENTITYTYPE_AYANAMI);
-        addEntry(Main.ENTITYTYPE_GANGWON);
-        addEntry(Main.ENTITYTYPE_NAGATO);
-        addEntry(Main.ENTITYTYPE_JAVELIN);
-        addEntry(Main.ENTITYTYPE_LAFFEY);
-        addEntry(Main.ENTITYTYPE_Z23);
+        addEntry(Main.ENTERPRISE.get());
+        addEntry(Main.AYANAMI.get());
+        addEntry(Main.GANGWON.get());
+        addEntry(Main.NAGATO.get());
+        addEntry(Main.JAVELIN.get());
+        addEntry(Main.LAFFEY.get());
+        addEntry(Main.Z23.get());
     }
 
     @Override

@@ -1,24 +1,24 @@
 package com.yor42.projectazure.intermod.jei.recipecategory;
 
-import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import static com.yor42.projectazure.intermod.jei.RecipeTypes.PRESSING;
+import static mezz.jei.api.constants.VanillaTypes.ITEM_STACK;
 import static mezz.jei.api.recipe.RecipeIngredientRole.INPUT;
 import static mezz.jei.api.recipe.RecipeIngredientRole.OUTPUT;
-import static software.bernie.geckolib3.world.storage.GeckoLibIdTracker.Type.ITEM;
 
 public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe> {
 
@@ -27,7 +27,7 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_pressing");
 
     public JEIRecipeCategoryPressing(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()));
+        this.icon = guiHelper.createDrawableIngredient(ITEM_STACK, new ItemStack(Main.CRYSTAL_GROWTH_CHAMBER.get().asItem()));
 
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/metal_press.png");
         this.background = guiHelper.createDrawable(TEXTURE, 4,4, 165, 75);
@@ -42,6 +42,11 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     @Override
     public Class<? extends PressingRecipe> getRecipeClass() {
         return PressingRecipe.class;
+    }
+
+    @Override
+    public RecipeType<PressingRecipe> getRecipeType() {
+        return PRESSING;
     }
 
     @Override

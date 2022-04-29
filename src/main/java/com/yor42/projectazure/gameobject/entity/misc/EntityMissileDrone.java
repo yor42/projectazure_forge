@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.ai.goals.DroneRangedAttackGoal;
 import com.yor42.projectazure.gameobject.entity.ai.targetAI.DroneOwnerAttackedTargetGoal;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityMissileDroneMissile;
@@ -20,8 +21,7 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
-import static com.yor42.projectazure.setup.register.registerItems.DRONE_BAMISSILE;
-import static com.yor42.projectazure.Main.PROJECTILE_DRONE_MISSILE;
+import static com.yor42.projectazure.Main.DRONE_BAMISSILE;
 
 public class EntityMissileDrone extends AbstractEntityDrone{
 
@@ -93,7 +93,7 @@ public class EntityMissileDrone extends AbstractEntityDrone{
         double y = target.getY() - (0.5D + this.getY(0.5D));
         double z = target.getZ() - (this.getZ());
 
-        EntityMissileDroneMissile droneMissile = PROJECTILE_DRONE_MISSILE.create(this.getCommandSenderWorld());
+        EntityMissileDroneMissile droneMissile = Main.DRONE_MISSILE.get().create(this.getCommandSenderWorld());
         if(droneMissile != null){
             droneMissile.shoot(this, target, x,y,z);
             this.setFiringTick(this.getFireingTick());

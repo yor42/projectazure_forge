@@ -1,8 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks;
 
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockDrydockTE;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
@@ -28,7 +27,7 @@ public class blockMultiblockDryDockController extends MultiblockStructureBlocks{
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_) {
-        return p_153214_ == registerTE.DRYDOCK.get() ? MultiblockDrydockTE::tick : null;
+        return p_153214_ == Main.DRYDOCK_BLOCK_ENTITY.get() ? MultiblockDrydockTE::tick : null;
     }
 
     @Override

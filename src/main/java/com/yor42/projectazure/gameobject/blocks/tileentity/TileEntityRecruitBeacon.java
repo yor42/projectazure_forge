@@ -7,8 +7,6 @@ import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability
 import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
-import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -90,7 +88,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha implements 
     };
 
     public TileEntityRecruitBeacon(BlockPos pos, BlockState state) {
-        super(registerTE.RECRUIT_BEACON.get(), pos, state);
+        super(Main.RECRUIT_BEACON_BLOCK_ENTITY.get(), pos, state);
         this.inventory.setSize(5);
         this.powerConsumption = 1000;
     }
@@ -148,7 +146,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha implements 
             }
             else{
                 blockpos = this.getBlockPos().relative(this.getLevel().getBlockState(this.getBlockPos()).getValue(FACING), 1);
-                ItemEntity entity = new ItemEntity(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), new ItemStack(registerItems.ORIGINIUM_PRIME.get(), 5));
+                ItemEntity entity = new ItemEntity(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), new ItemStack(Main.ORIGINIUM_PRIME.get(), 5));
                 this.level.addFreshEntity(entity);
             }
         }
@@ -219,19 +217,19 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha implements 
 
     @Override
     public void registerRollEntry() {
-        addEntry(Main.ENTITYTYPE_CHEN);
-        addEntry(Main.ENTITYTYPE_AMIYA);
-        addEntry(Main.ENTITYTYPE_ROSMONTIS);
-        addEntry(Main.ENTITYTYPE_MUDROCK);
-        addEntry(Main.ENTITYTYPE_TEXAS);
-        addEntry(Main.ENTITYTYPE_M4A1);
-        addEntry(Main.ENTITYTYPE_SHIROKO);
+        addEntry(Main.CHEN.get());
+        addEntry(Main.AMIYA.get());
+        addEntry(Main.ROSMONTIS.get());
+        addEntry(Main.MUDROCK.get());
+        addEntry(Main.TEXAS.get());
+        addEntry(Main.M4A1.get());
+        addEntry(Main.SHIROKO.get());
         if(PAConfig.CONFIG.shouldRecruitBeaconSpawnAllCompanions.get()){
-            addEntry(Main.ENTITYTYPE_ENTERPRISE);
-            addEntry(Main.ENTITYTYPE_AYANAMI);
-            addEntry(Main.ENTITYTYPE_JAVELIN);
-            addEntry(Main.ENTITYTYPE_GANGWON);
-            addEntry(Main.ENTITYTYPE_NAGATO);
+            addEntry(Main.ENTERPRISE.get());
+            addEntry(Main.AYANAMI.get());
+            addEntry(Main.JAVELIN.get());
+            addEntry(Main.GANGWON.get());
+            addEntry(Main.NAGATO.get());
         }
     }
 

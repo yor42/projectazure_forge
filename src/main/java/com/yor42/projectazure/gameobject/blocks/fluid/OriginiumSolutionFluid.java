@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -21,17 +21,15 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.*;
-
 public abstract class OriginiumSolutionFluid extends FlowingFluid {
     @Override
     public Fluid getFlowing() {
-        return ORIGINIUM_SOLUTION_FLOWING;
+        return Main.ORIGINIUM_SOLUTION_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return ORIGINIUM_SOLUTION_SOURCE;
+        return Main.ORIGINIUM_SOLUTION_REGISTRY.get();
     }
 
     @Override
@@ -89,12 +87,12 @@ public abstract class OriginiumSolutionFluid extends FlowingFluid {
 
     @Override
     protected BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.GASOLINE.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        return Main.GASOLINE.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == GASOLINE_SOURCE || fluidIn == GASOLINE_FLOWING;
+        return fluidIn == Main.ORIGINIUM_SOLUTION_FLOWING_REGISTRY.get() || fluidIn == Main.ORIGINIUM_SOLUTION_REGISTRY.get();
     }
 
     public static class Flowing extends OriginiumSolutionFluid {

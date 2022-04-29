@@ -1,11 +1,10 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerMetalPress;
 import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
-import com.yor42.projectazure.setup.register.registerRecipes;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf ;
@@ -34,7 +33,6 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock.POWERED;
 import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTIVE;
-import static com.yor42.projectazure.setup.register.registerRecipes.Types.PRESSING;
 
 public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines implements MenuProvider {
 
@@ -80,8 +78,8 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines imp
     };
 
     public TileEntityMetalPress(BlockPos pos, BlockState state) {
-        super(registerTE.METAL_PRESS.get(), pos, state);
-        this.recipeType = PRESSING;
+        super(Main.METAL_PRESS_BLOCK_ENTITY.get(), pos, state);
+        this.recipeType = PressingRecipe.TYPE.Instance;
         this.powerConsumption = 100;
         this.inventory.setSize(3);
         this.energyStorage.setMaxEnergy(15000);
@@ -274,7 +272,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines imp
                 ItemStack mold = machine.inventory.getStackInSlot(1);
 
                 if (!ingredient.isEmpty() && !mold.isEmpty()) {
-                    Recipe<?> irecipe = machine.level.getRecipeManager().getRecipeFor(PRESSING, machine, machine.level).orElse(null);
+                    Recipe<?> irecipe = machine.level.getRecipeManager().getRecipeFor(PressingRecipe.TYPE.Instance, machine, machine.level).orElse(null);
 
                     boolean flag1 = machine.energyStorage.getEnergyStored() >= machine.powerConsumption;
                     boolean flag2 = machine.canProcess(irecipe);

@@ -1,8 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.misc;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -97,7 +97,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
             if(this.tickCount>=life){
                 if(this.getOwner() != null && this.getOwner() instanceof EntityRosmontis){
-                    ItemStack stack = new ItemStack(registerItems.CLAYMORE.get());
+                    ItemStack stack = new ItemStack(Main.CLAYMORE_ITEM.get());
                     boolean isStored = false;
                     for(int i = 0; i<((EntityRosmontis) this.getOwner()).getSkillItemCount(); i++) {
                         if(((EntityRosmontis) this.getOwner()).getInventory().insertItem(12+i, stack, true).isEmpty()){

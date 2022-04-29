@@ -1,10 +1,11 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.AlloyFurnaceBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerAlloyFurnace;
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
+import com.yor42.projectazure.gameobject.crafting.CrushingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import com.yor42.projectazure.setup.register.registerTE;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,10 +31,8 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 
 public class TileEntityAlloyFurnace extends BlockEntity implements MenuProvider, RecipeHolder, net.minecraft.world.Container {
 
@@ -81,10 +80,10 @@ public class TileEntityAlloyFurnace extends BlockEntity implements MenuProvider,
     };
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
-    protected final RecipeType<AlloyingRecipe> recipeType = registerRecipes.Types.ALLOYING;
+    protected final RecipeType<AlloyingRecipe> recipeType = AlloyingRecipe.TYPE.Instance;
 
     public TileEntityAlloyFurnace(BlockPos pos, BlockState state) {
-        super(registerTE.ALLOY_FURNACE.get(), pos, state);
+        super(Main.ALLOY_FURNACE_BLOCK_ENTITY.get(), pos, state);
     }
 
     private boolean isBurning() {

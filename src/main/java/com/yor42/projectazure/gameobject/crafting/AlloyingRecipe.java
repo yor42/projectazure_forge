@@ -1,13 +1,13 @@
 package com.yor42.projectazure.gameobject.crafting;
 
 import com.google.gson.JsonObject;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -113,12 +113,12 @@ public class AlloyingRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return registerRecipes.Serializers.ALLOYING.get();
+        return Main.ALLOYING.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return registerRecipes.Types.ALLOYING;
+        return TYPE.Instance;
     }
 
     public int getProcessTick() {
@@ -176,5 +176,11 @@ public class AlloyingRecipe implements Recipe<Container> {
             buffer.writeInt(recipe.processTick);
             buffer.writeItem(recipe.result);
         }
+    }
+
+    public static class TYPE implements RecipeType<AlloyingRecipe> {
+        private TYPE() {}
+        public static final TYPE Instance = new TYPE();
+        public static final String ID = "alloying";
     }
 }

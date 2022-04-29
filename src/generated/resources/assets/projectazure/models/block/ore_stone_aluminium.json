@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "projectazure:block/ore_stone_aluminium"
-  }
-}

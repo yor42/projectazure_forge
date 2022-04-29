@@ -1,8 +1,8 @@
 package com.yor42.projectazure.data.recipebuilder;
 
 import com.google.gson.JsonObject;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
-import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.Registry;
@@ -63,7 +63,7 @@ public class AlloyingRecipeBuilder {
     public void build(Consumer<FinishedRecipe> consumerIn, ResourceLocation id) {
         this.validate(id);
         this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(RequirementsStrategy.OR);
-        consumerIn.accept(new AlloyingRecipeBuilder.Result(id, "", this.ingredient1, this.ing1count, this.ingredient2, this.ing2count, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.ALLOYING.get()));
+        consumerIn.accept(new AlloyingRecipeBuilder.Result(id, "", this.ingredient1, this.ing1count, this.ingredient2, this.ing2count, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), Main.ALLOYING.get()));
     }
 
     private void validate(ResourceLocation id) {

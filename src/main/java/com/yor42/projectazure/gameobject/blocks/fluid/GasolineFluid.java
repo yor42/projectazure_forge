@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
-import com.yor42.projectazure.setup.register.registerBlocks;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,18 +20,16 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.GASOLINE_FLOWING;
-import static com.yor42.projectazure.setup.register.registerFluids.GASOLINE_SOURCE;
 
 public abstract class GasolineFluid extends FlowingFluid {
     @Override
     public Fluid getFlowing() {
-        return GASOLINE_FLOWING;
+        return Main.GASOLINE_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return GASOLINE_SOURCE;
+        return Main.GASOLINE_REGISTRY.get();
     }
 
     @Override
@@ -59,7 +55,7 @@ public abstract class GasolineFluid extends FlowingFluid {
 
     @Override
     public Item getBucket() {
-        return registerItems.GASOLINE_BUCKET.get();
+        return Main.GASOLINE_BUCKET.get();
     }
 
     @Override
@@ -91,12 +87,12 @@ public abstract class GasolineFluid extends FlowingFluid {
 
     @Override
     protected BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.GASOLINE.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        return Main.GASOLINE.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == GASOLINE_SOURCE || fluidIn == GASOLINE_FLOWING;
+        return fluidIn == Main.GASOLINE_REGISTRY.get() || fluidIn == Main.GASOLINE_FLOWING_REGISTRY.get();
     }
 
     public static class Flowing extends GasolineFluid {

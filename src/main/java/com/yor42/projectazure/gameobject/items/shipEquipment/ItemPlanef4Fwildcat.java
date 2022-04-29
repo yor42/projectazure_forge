@@ -18,7 +18,7 @@ public class ItemPlanef4Fwildcat extends ItemEquipmentPlaneBase{
 
     @Override
     public EntityType<? extends AbstractEntityPlanes> getEntityType() {
-        return Main.PLANEF4FWildCat;
+        return Main.F4FWildCat.get();
     }
 
     @Override

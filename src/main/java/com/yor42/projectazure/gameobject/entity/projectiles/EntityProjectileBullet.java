@@ -26,17 +26,17 @@ public class EntityProjectileBullet extends ThrowableItemProjectile {
     float damage;
 
     protected EntityProjectileBullet(Level worldIn, float damage) {
-        super(Main.PROJECTILE_GUN_BULLET, worldIn);
+        super(Main.GUN_BULLET.get(), worldIn);
         this.damage = damage;
     }
 
     protected EntityProjectileBullet(double x, double y, double z, Level worldIn, float damage) {
-        super(Main.PROJECTILE_GUN_BULLET, x, y, z, worldIn);
+        super(Main.GUN_BULLET.get(), x, y, z, worldIn);
         this.damage = damage;
     }
 
     public EntityProjectileBullet(LivingEntity shooter, Level worldIn, float damage) {
-        super(Main.PROJECTILE_GUN_BULLET, shooter, worldIn);
+        super(Main.GUN_BULLET.get(), shooter, worldIn);
         this.damage = damage;
     }
 

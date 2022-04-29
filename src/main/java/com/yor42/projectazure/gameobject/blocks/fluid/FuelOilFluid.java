@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
-import com.yor42.projectazure.setup.register.registerBlocks;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -21,19 +20,16 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.FUEL_OIL_FLOWING;
-import static com.yor42.projectazure.setup.register.registerFluids.FUEL_OIL_SOURCE;
-
 public abstract class FuelOilFluid extends FlowingFluid {
 
     @Override
     public Fluid getFlowing() {
-        return FUEL_OIL_FLOWING;
+        return Main.FUEL_OIL_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return FUEL_OIL_SOURCE;
+        return Main.FUEL_OIL_REGISTRY.get();
     }
 
     @Override
@@ -59,7 +55,7 @@ public abstract class FuelOilFluid extends FlowingFluid {
 
     @Override
     public Item getBucket() {
-        return registerItems.FUEL_OIL_BUCKET.get();
+        return Main.FUEL_OIL_BUCKET.get();
     }
 
     @Override
@@ -91,12 +87,12 @@ public abstract class FuelOilFluid extends FlowingFluid {
 
     @Override
     protected BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.FUEL_OIL.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
+        return Main.FUEL_OIL.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == FUEL_OIL_SOURCE || fluidIn == FUEL_OIL_FLOWING;
+        return fluidIn == Main.FUEL_OIL_FLOWING_REGISTRY.get() || fluidIn == Main.FUEL_OIL_REGISTRY.get();
     }
 
     public static class Flowing extends FuelOilFluid {

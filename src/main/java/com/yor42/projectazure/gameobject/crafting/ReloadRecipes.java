@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.addAmmo;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
-import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.RELOADING;
+import static com.yor42.projectazure.Main.RELOADING;
 
 public class ReloadRecipes extends CustomRecipe {
 

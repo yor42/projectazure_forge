@@ -2,16 +2,15 @@ package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.model.rigging.modelBBRiggingDefault;
 import com.yor42.projectazure.client.renderer.items.BBDefaultRiggingRenderer;
-import com.yor42.projectazure.client.renderer.items.DDDefaultRiggingRenderer;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -185,7 +184,7 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
         stack = inventory.getStackInSlot(0);
         if (stack != ItemStack.EMPTY) {
             ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase) stack.getItem());
-            if (EquipmentItem == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
+            if (EquipmentItem == Main.EQUIPMENT_TORPEDO_533MM.get()) {
                 matrixStackIn.pushPose();
                 RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                 matrixStackIn.translate((0 + hostbone.getPositionX()) / 16, (-10 + hostbone.getPositionY() + riggingoffset) / 16, (26.75 + hostbone.getPositionZ()) / 16);

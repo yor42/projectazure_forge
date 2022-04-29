@@ -23,14 +23,12 @@ import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
-import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.BlockStateUtil;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -802,7 +800,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             this.setLevel(0);
             this.setLimitBreakLv(0);
             this.addAffection(-20);
-            ItemStack stack = new ItemStack(registerItems.STASIS_CRYSTAL.get());
+            ItemStack stack = new ItemStack(Main.STASIS_CRYSTAL.get());
             CompoundTag nbt = stack.getOrCreateTag();
             nbt.putInt("cost", 10+this.getCompanionLevel());
             nbt.put("entity", this.serializeNBT());
@@ -2334,7 +2332,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
             }
             //food
-            else if (HeldItem != registerItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
+            else if (HeldItem != Main.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
                 ItemStack stack = this.eat(this.getCommandSenderWorld(), player.getItemInHand(hand));
                 this.addAffection(0.03);
                 if (!player.isCreative()) {
@@ -2360,7 +2358,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
                 }
                 return InteractionResult.SUCCESS;
-            } else if (heldstacks.getItem() == registerItems.OATHRING.get()) {
+            } else if (heldstacks.getItem() == Main.OATHRING.get()) {
                 if (this.getAffection() < 100 && !player.isCreative()) {
                     player.sendMessage(new TranslatableComponent("entity.not_enough_affection"), this.getUUID());
                     return InteractionResult.FAIL;
@@ -2378,7 +2376,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         return InteractionResult.CONSUME;
                     }
                 }
-            } else if (heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()) {
+            } else if (heldstacks.getItem() == Main.ENERGY_DRINK_DEBUG.get()) {
                 this.setMorale(150);
                 if (!player.isCreative()) {
                     heldstacks.shrink(1);
@@ -2537,7 +2535,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             return InteractionResult.FAIL;
         }
         else{
-            if(player.getMainHandItem().getItem() == registerItems.Rainbow_Wisdom_Cube.get()&&!this.isTame()){
+            if(player.getMainHandItem().getItem() == Main.Rainbow_Wisdom_Cube.get()&&!this.isTame()){
                 this.tame(player);
                 player.getItemInHand(hand).shrink(1);
                 return InteractionResult.CONSUME;

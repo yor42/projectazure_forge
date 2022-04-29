@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.yor42.projectazure.setup.register.registerItems.WARHAMMER;
+import static com.yor42.projectazure.Main.WARHAMMER;
 
 public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
     public EntitySiege(EntityType<? extends TamableAnimal> type, Level worldIn) {

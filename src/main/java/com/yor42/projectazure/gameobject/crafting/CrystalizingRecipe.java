@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.setup.register.registerRecipes.Serializers.CRYSTALIZING;
+import static com.yor42.projectazure.Main.CRYSTALIZING;
 
 public class CrystalizingRecipe implements Recipe<TileEntityCrystalGrowthChamber> {
 
@@ -95,7 +95,7 @@ public class CrystalizingRecipe implements Recipe<TileEntityCrystalGrowthChamber
 
     @Override
     public RecipeType<?> getType() {
-        return registerRecipes.Types.CRYSTALIZING;
+        return TYPE.Instance;
     }
 
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrystalizingRecipe>{
@@ -127,5 +127,11 @@ public class CrystalizingRecipe implements Recipe<TileEntityCrystalGrowthChamber
             buffer.writeFluidStack(new FluidStack(recipe.solution, recipe.growthTime));
             buffer.writeItem(recipe.output);
         }
+    }
+
+    public static class TYPE implements RecipeType<CrystalizingRecipe> {
+        private TYPE() {}
+        public static final CrystalizingRecipe.TYPE Instance = new CrystalizingRecipe.TYPE();
+        public static final String ID = "crystalizing";
     }
 }

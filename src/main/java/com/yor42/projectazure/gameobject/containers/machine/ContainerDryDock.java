@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf ;
@@ -52,7 +52,7 @@ public class ContainerDryDock extends AbstractContainerMenu {
         this.addSlot(new SlotItemHandler(Inventory, 0, 19, 10){
             @Override
             public boolean mayPlace(@Nonnull ItemStack stack) {
-                return stack.getItem() == registerItems.WISDOM_CUBE.get();
+                return stack.getItem() == Main.WISDOM_CUBE.get();
             }
         });
 
@@ -134,7 +134,7 @@ public class ContainerDryDock extends AbstractContainerMenu {
 
                 slot.onQuickCraft(itemstack1, itemstack);
             } else {
-                if (itemstack1.getItem() == registerItems.WISDOM_CUBE.get()) {
+                if (itemstack1.getItem() == Main.WISDOM_CUBE.get()) {
                     if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }

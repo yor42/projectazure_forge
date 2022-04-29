@@ -285,7 +285,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
     @Override
     public void ShootProjectile(Level world, @Nonnull LivingEntity target) {
-        EntityClaymore claymore = new EntityClaymore(Main.ENTITYTYPE_CLAYMORE, world);
+        EntityClaymore claymore = new EntityClaymore(Main.CLAYMORE.get(), world);
         claymore.setPos(target.getX(), target.getY(), target.getZ());
         claymore.setOwnerId(this.getUUID());
         world.addFreshEntity(claymore);

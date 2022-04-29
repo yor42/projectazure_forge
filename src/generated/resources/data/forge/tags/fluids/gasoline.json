@@ -1,7 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "projectazure:gasoline_source",
-    "projectazure:gasoline_flowing"
-  ]
-}

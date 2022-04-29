@@ -27,24 +27,22 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class AnimateableMachineBlockItems extends BlockItem implements IAnimatable {
+public abstract class AnimateableMachineBlockItems extends BlockItem implements IAnimatable {
 
     protected final String controllerName = "Controller";
     public AnimationFactory factory = new AnimationFactory(this);
     private final boolean shouldAddShiftToolTip;
-    BlockEntityWithoutLevelRenderer render;
 
-    public AnimateableMachineBlockItems(Block blockIn, Properties builder, boolean shouldAddShiftToolTip, BlockEntityWithoutLevelRenderer render) {
+    public AnimateableMachineBlockItems(Block blockIn, Properties builder, boolean shouldAddShiftToolTip) {
         super(blockIn, builder);
         this.shouldAddShiftToolTip = shouldAddShiftToolTip;
-        this.render = render;
     }
 
     @Override
     public void initializeClient(Consumer<IItemRenderProperties> consumer) {
         super.initializeClient(consumer);
         consumer.accept(new IItemRenderProperties() {
-            private final BlockEntityWithoutLevelRenderer renderer = AnimateableMachineBlockItems.this.render;
+            private final BlockEntityWithoutLevelRenderer renderer = AnimateableMachineBlockItems.this.getRenderer();
 
             @Override
             public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
@@ -52,6 +50,8 @@ public class AnimateableMachineBlockItems extends BlockItem implements IAnimatab
             }
         });
     }
+
+    abstract protected BlockEntityWithoutLevelRenderer getRenderer();
 
     @Override
     public void registerControllers(AnimationData animationData) {

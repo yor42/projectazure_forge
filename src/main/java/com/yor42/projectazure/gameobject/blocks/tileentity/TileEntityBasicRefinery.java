@@ -1,11 +1,9 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerBasicRefinery;
 import com.yor42.projectazure.libs.utils.BlockStateUtil;
-import com.yor42.projectazure.setup.register.registerFluids;
-import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -125,7 +123,7 @@ public class TileEntityBasicRefinery extends BlockEntity implements MenuProvider
     };
 
     public TileEntityBasicRefinery(BlockPos p_153215_, BlockState p_153216_) {
-        super(registerTE.BASIC_REFINERY.get(), p_153215_, p_153216_);
+        super(Main.BASIC_REFINERY_BLOCK_ENTITY.get(), p_153215_, p_153216_);
     }
 
     @Override
@@ -357,14 +355,14 @@ public class TileEntityBasicRefinery extends BlockEntity implements MenuProvider
                         int FuelOilAmount = (int) (drainedAmount * 0.3);
                         int GasolineAmount = (int) (drainedAmount * 0.46);
                         int DieselAmount = (int) (drainedAmount * 0.3);
-                        int DieselFill = machine.DieselTank.fill(new FluidStack(registerFluids.DIESEL_SOURCE, DieselAmount), IFluidHandler.FluidAction.EXECUTE);
-                        int GasolineFill = machine.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE, GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
-                        int FuelFill = machine.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int DieselFill = machine.DieselTank.fill(new FluidStack(Main.DIESEL_REGISTRY.get(), DieselAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int GasolineFill = machine.GasolineTank.fill(new FluidStack(Main.GASOLINE_REGISTRY.get(), GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int FuelFill = machine.FuelOilTank.fill(new FluidStack(Main.FUEL_OIL_REGISTRY.get(), FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
                         int MaxFill = Math.max(Math.max(DieselFill, GasolineFill), FuelFill);
                         machine.CrudeOilTank.drain(MaxFill == 0 ? 0 : 10, IFluidHandler.FluidAction.EXECUTE);
                         if (machine.bitumentick >= 600) {
                             if (machine.ITEMHANDLER.getStackInSlot(8).isEmpty()) {
-                                machine.ITEMHANDLER.setStackInSlot(8, new ItemStack(registerItems.BITUMEN.get()));
+                                machine.ITEMHANDLER.setStackInSlot(8, new ItemStack(Main.BITUMEN.get()));
                             } else {
                                 machine.ITEMHANDLER.getStackInSlot(8).grow(1);
                             }

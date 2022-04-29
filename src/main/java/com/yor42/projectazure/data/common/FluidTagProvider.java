@@ -1,8 +1,8 @@
 package com.yor42.projectazure.data.common;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.setup.register.registerFluids;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -16,9 +16,9 @@ public class FluidTagProvider extends FluidTagsProvider {
 
     @Override
     protected void addTags() {
-        this.tag(ModTags.Fluids.DIESEL).add(registerFluids.DIESEL_SOURCE).add(registerFluids.DIESEL_FLOWING);
-        this.tag(ModTags.Fluids.GASOLINE).add(registerFluids.GASOLINE_SOURCE).add(registerFluids.GASOLINE_FLOWING);
-        this.tag(ModTags.Fluids.CRUDEOIL).add(registerFluids.CRUDE_OIL_SOURCE).add(registerFluids.CRUDE_OIL_FLOWING);
-        this.tag(ModTags.Fluids.FUELOIL).add(registerFluids.FUEL_OIL_SOURCE).add(registerFluids.FUEL_OIL_FLOWING);
+        this.tag(ModTags.Fluids.DIESEL).add(Main.DIESEL_REGISTRY.get()).add(Main.DIESEL_FLOWING_REGISTRY.get());
+        this.tag(ModTags.Fluids.GASOLINE).add(Main.GASOLINE_REGISTRY.get()).add(Main.GASOLINE_FLOWING_REGISTRY.get());
+        this.tag(ModTags.Fluids.CRUDEOIL).add(Main.CRUDE_OIL_REGISTRY.get()).add(Main.CRUDE_OIL_FLOWING_REGISTRY.get());
+        this.tag(ModTags.Fluids.FUELOIL).add(Main.FUEL_OIL_REGISTRY.get()).add(Main.FUEL_OIL_FLOWING_REGISTRY.get());
     }
 }

@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.setup.register.registerFluids;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -55,7 +55,7 @@ public class ContainerBasicRefinery extends AbstractContainerMenu {
         this.dieselstack=dieselstack;
         this.fueloilstack = fueloilstack;
 
-        this.addSlot(new CrudeOilBucketInSlot(Inventory, 0, 8, 7, registerFluids.CRUDE_OIL_SOURCE));
+        this.addSlot(new CrudeOilBucketInSlot(Inventory, 0, 8, 7, Main.CRUDE_OIL_REGISTRY.get()));
         this.addSlot(new BucketOutSlot(Inventory, 1, 8, 63));
 
         for(int i=0; i<3; i++){

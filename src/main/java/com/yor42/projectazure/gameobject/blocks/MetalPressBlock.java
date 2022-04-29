@@ -1,8 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks;
 
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicRefinery;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
-import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -34,7 +33,7 @@ public class MetalPressBlock extends AbstractElectricMachineBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> type) {
-        return type == registerTE.BASIC_REFINERY.get() ? TileEntityMetalPress::tick : null;
+        return type == Main.BASIC_REFINERY_BLOCK_ENTITY.get() ? TileEntityMetalPress::tick : null;
     }
 
     protected void interactWith(Level worldIn, BlockPos pos, Player player) {
