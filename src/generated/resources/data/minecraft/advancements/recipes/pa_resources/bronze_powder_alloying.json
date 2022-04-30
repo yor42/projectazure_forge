@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:bronze_powder_alloying"
+    ]
+  },
+  "criteria": {
+    "has_copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dusts/copper"
+          }
+        ]
+      }
+    },
+    "has_tin": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dusts/tin"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:bronze_powder_alloying"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_copper",
+      "has_tin",
+      "has_the_recipe"
+    ]
+  ]
+}

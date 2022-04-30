@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MPP",
+    "MMM",
+    "BSS"
+  ],
+  "key": {
+    "M": {
+      "item": "projectazure:machine_frame"
+    },
+    "P": {
+      "item": "projectazure:steel_pipe"
+    },
+    "B": {
+      "item": "minecraft:blast_furnace"
+    },
+    "S": {
+      "item": "minecraft:smooth_stone_slab"
+    }
+  },
+  "result": {
+    "item": "projectazure:basic_refinery"
+  }
+}

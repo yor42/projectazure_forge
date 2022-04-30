@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:mortar"
+    },
+    {
+      "tag": "forge:ingots/gold"
+    }
+  ],
+  "result": {
+    "item": "projectazure:dust_gold"
+  }
+}

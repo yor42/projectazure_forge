@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:pistol_grip"
+    ]
+  },
+  "criteria": {
+    "has_parts": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:mechanical_parts"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:pistol_grip"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_parts",
+      "has_the_recipe"
+    ]
+  ]
+}

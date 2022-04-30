@@ -1,0 +1,12 @@
+{
+  "type": "projectazure:pressing",
+  "ingredient": {
+    "tag": "minecraft:logs"
+  },
+  "mold": {
+    "item": "projectazure:mold_extraction"
+  },
+  "result": "projectazure:tree_sap",
+  "count": 1,
+  "cookingtime": 200
+}

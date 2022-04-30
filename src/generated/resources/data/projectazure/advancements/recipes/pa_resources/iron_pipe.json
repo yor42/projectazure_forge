@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:iron_pipe"
+    ]
+  },
+  "criteria": {
+    "has_ironplate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:plates/iron"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:iron_pipe"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ironplate",
+      "has_the_recipe"
+    ]
+  ]
+}

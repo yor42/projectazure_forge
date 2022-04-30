@@ -1,0 +1,13 @@
+{
+  "type": "projectazure:crushing",
+  "results": [
+    {
+      "chance": 1.0,
+      "item": "minecraft:gravel",
+      "count": 1
+    }
+  ],
+  "input": {
+    "item": "minecraft:cobblestone"
+  }
+}

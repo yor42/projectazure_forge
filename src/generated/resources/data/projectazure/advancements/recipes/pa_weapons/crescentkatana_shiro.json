@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:crescentkatana_shiro"
+    ]
+  },
+  "criteria": {
+    "has_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/iron"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:crescentkatana_shiro"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ingot",
+      "has_the_recipe"
+    ]
+  ]
+}

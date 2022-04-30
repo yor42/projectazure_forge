@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:fuel_oil_source",
+    "projectazure:fuel_oil_flowing"
+  ]
+}

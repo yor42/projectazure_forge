@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:equipment_gun_127mm"
+    ]
+  },
+  "criteria": {
+    "has_circuit": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:circuit_primitive"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:equipment_gun_127mm"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_circuit",
+      "has_the_recipe"
+    ]
+  ]
+}

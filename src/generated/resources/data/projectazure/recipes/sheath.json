@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  B",
+    " B ",
+    "L  "
+  ],
+  "key": {
+    "B": {
+      "tag": "forge:plates/steel"
+    },
+    "L": {
+      "item": "projectazure:steel_pipe"
+    }
+  },
+  "result": {
+    "item": "projectazure:sheath"
+  }
+}

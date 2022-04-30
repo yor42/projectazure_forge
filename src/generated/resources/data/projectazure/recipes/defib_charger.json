@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WPW",
+    "RBR",
+    "CIC"
+  ],
+  "key": {
+    "W": {
+      "item": "projectazure:copper_coil"
+    },
+    "C": {
+      "item": "projectazure:capacitor_primitive"
+    },
+    "P": {
+      "item": "minecraft:redstone_lamp"
+    },
+    "I": {
+      "tag": "forge:circuits/advanced"
+    },
+    "B": {
+      "item": "projectazure:headhunting_pcb"
+    },
+    "R": {
+      "item": "projectazure:resistor_primitive"
+    }
+  },
+  "result": {
+    "item": "projectazure:defib_charger"
+  }
+}

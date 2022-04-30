@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:circuit_advanced"
+    ]
+  },
+  "criteria": {
+    "has_orundum": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:orundum"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:circuit_advanced"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_orundum",
+      "has_the_recipe"
+    ]
+  ]
+}

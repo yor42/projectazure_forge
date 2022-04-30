@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BSP",
+    " L ",
+    " L "
+  ],
+  "key": {
+    "B": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "S": {
+      "tag": "forge:ingots/steel"
+    },
+    "P": {
+      "tag": "forge:plates/steel"
+    },
+    "L": {
+      "item": "projectazure:steel_pipe"
+    }
+  },
+  "result": {
+    "item": "projectazure:warhammer"
+  }
+}

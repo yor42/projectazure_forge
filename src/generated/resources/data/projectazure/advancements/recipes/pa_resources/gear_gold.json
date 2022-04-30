@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:gear_gold"
+    ]
+  },
+  "criteria": {
+    "has_plate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:plates/gold"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:gear_gold"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_plate",
+      "has_the_recipe"
+    ]
+  ]
+}

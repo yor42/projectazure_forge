@@ -1,0 +1,12 @@
+{
+  "type": "projectazure:pressing",
+  "ingredient": {
+    "tag": "forge:ingots/iron"
+  },
+  "mold": {
+    "item": "projectazure:mold_plate"
+  },
+  "result": "projectazure:plate_iron",
+  "count": 1,
+  "cookingtime": 200
+}

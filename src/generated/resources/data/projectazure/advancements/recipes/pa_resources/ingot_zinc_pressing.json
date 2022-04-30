@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:ingot_zinc_pressing"
+    ]
+  },
+  "criteria": {
+    "hasmold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:mold_plate"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:ingot_zinc_pressing"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasmold",
+      "has_the_recipe"
+    ]
+  ]
+}

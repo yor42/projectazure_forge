@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "projectazure:disc_sandstorm"
+    },
+    {
+      "item": "projectazure:disc_rickroll"
+    }
+  ],
+  "result": {
+    "item": "projectazure:disc_sandroll"
+  }
+}

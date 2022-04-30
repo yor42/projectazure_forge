@@ -1,0 +1,9 @@
+{
+  "type": "projectazure:crystalizing",
+  "seed": {
+    "item": "projectazure:quartz_seed"
+  },
+  "solution": "projectazure:nether_quartz_source",
+  "growthtime": 400,
+  "result": "minecraft:quartz"
+}

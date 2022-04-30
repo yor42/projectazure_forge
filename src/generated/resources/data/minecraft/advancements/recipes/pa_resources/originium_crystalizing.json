@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:originium_crystalizing"
+    ]
+  },
+  "criteria": {
+    "hasseed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:originium_seed"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:originium_crystalizing"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hasseed",
+      "has_the_recipe"
+    ]
+  ]
+}

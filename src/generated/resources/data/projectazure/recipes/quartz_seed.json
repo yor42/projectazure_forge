@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SQ",
+    "QS"
+  ],
+  "key": {
+    "S": {
+      "tag": "minecraft:sand"
+    },
+    "Q": {
+      "tag": "forge:gems/quartz"
+    }
+  },
+  "result": {
+    "item": "projectazure:quartz_seed",
+    "count": 4
+  }
+}

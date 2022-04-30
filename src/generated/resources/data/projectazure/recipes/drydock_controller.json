@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "COC",
+    "LFL",
+    "MAM"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:circuits/advanced"
+    },
+    "F": {
+      "item": "projectazure:machine_frame"
+    },
+    "A": {
+      "tag": "forge:gears/steel"
+    },
+    "L": {
+      "item": "minecraft:redstone_lamp"
+    },
+    "M": {
+      "item": "projectazure:motor_basic"
+    },
+    "O": {
+      "item": "projectazure:orundum"
+    }
+  },
+  "result": {
+    "item": "projectazure:drydock_controller"
+  }
+}

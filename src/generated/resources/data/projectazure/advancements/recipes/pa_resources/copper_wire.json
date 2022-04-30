@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:copper_wire"
+    ]
+  },
+  "criteria": {
+    "has_copper_plate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:plates/copper"
+          }
+        ]
+      }
+    },
+    "has_cutter": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:cutter"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:copper_wire"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_copper_plate",
+      "has_cutter",
+      "has_the_recipe"
+    ]
+  ]
+}

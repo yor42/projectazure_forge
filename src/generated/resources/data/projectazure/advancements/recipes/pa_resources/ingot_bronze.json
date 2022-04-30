@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:ingot_bronze"
+    ]
+  },
+  "criteria": {
+    "hastin": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/tin"
+          }
+        ]
+      }
+    },
+    "hascopper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/copper"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:ingot_bronze"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hastin",
+      "hascopper",
+      "has_the_recipe"
+    ]
+  ]
+}

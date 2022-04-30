@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:cv_default_rigging"
+    ]
+  },
+  "criteria": {
+    "has_dd_rigging": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:dd_default_rigging"
+            ]
+          }
+        ]
+      }
+    },
+    "has_motor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:motor_basic"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:cv_default_rigging"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dd_rigging",
+      "has_motor",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:mold_plate",
+    "projectazure:mold_wire",
+    "projectazure:mold_extraction"
+  ]
+}

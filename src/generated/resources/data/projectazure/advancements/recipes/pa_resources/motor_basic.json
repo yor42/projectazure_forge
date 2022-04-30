@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:motor_basic"
+    ]
+  },
+  "criteria": {
+    "has_coil": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:copper_coil"
+            ]
+          }
+        ]
+      }
+    },
+    "has_wire": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "projectazure:copper_wire"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:motor_basic"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_coil",
+      "has_wire",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PSS",
+    "BPS",
+    "EME"
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:plates/steel"
+    },
+    "B": {
+      "item": "projectazure:steel_pipe"
+    },
+    "P": {
+      "item": "projectazure:mechanical_parts"
+    },
+    "M": {
+      "item": "projectazure:motor_basic"
+    },
+    "E": {
+      "item": "projectazure:circuit_primitive"
+    }
+  },
+  "result": {
+    "item": "projectazure:equipment_gun_127mm"
+  }
+}
