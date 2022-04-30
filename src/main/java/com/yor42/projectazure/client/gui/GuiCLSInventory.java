@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerCLSInventory;
@@ -74,7 +75,7 @@ public class GuiCLSInventory extends AbstractContainerScreen<ContainerCLSInvento
     }
 
     private void renderValues(PoseStack PoseStack, int mouseX, int mouseY) {
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int health = ((int)(40*(this.host.getHealth()/this.host.getMaxHealth())));
         this.blit(PoseStack, this.leftPos+27,this.topPos+35, 18, 244, health, 6);
         this.blit(PoseStack, this.leftPos+33,this.topPos+195, 58, 251, ((int)(72*(this.host.getExp()/this.host.getMaxExp()))), 5);
@@ -101,7 +102,7 @@ public class GuiCLSInventory extends AbstractContainerScreen<ContainerCLSInvento
     @Override
     protected void renderBg(PoseStack PoseStack, float partialTicks, int mouseX, int mouseY) {
         PoseStack.pushPose();
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(PoseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         this.blit(PoseStack, this.leftPos + this.imageWidth + 4, this.topPos + 9, 214, 0, 42, 87);
 

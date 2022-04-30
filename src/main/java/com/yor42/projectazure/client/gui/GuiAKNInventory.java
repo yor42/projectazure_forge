@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
@@ -45,7 +46,7 @@ public class GuiAKNInventory  extends AbstractContainerScreen<ContainerAKNInvent
     }
 
     private void renderValues(PoseStack PoseStack, int mouseX, int mouseY) {
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int affectionlv1_scaled = (int)(46*Math.min(this.host.getAffection(), 100)/100);
         int affectionlv2_scaled = (int)(46*Math.min(this.host.getAffection()-100, 100)/100);
         int morale_scaled = (int)(35*this.host.getMorale()/150);
@@ -104,7 +105,7 @@ public class GuiAKNInventory  extends AbstractContainerScreen<ContainerAKNInvent
     protected void renderBg(PoseStack PoseStack, float partialTicks, int x, int y) {
         PoseStack.pushPose();
         this.renderEntity(x, y);
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(PoseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         if(this.host.getAmmoStorage().getSlots()>0) {

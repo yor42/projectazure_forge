@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerAlloyFurnace;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
@@ -28,7 +29,7 @@ public class guiAlloyFurnace extends AbstractContainerScreen<ContainerAlloyFurna
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         if (this.container.isBurning()) {

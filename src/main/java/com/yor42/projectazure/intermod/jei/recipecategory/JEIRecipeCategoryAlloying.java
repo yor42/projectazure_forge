@@ -3,7 +3,6 @@ package com.yor42.projectazure.intermod.jei.recipecategory;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerRecipes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;

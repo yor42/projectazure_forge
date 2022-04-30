@@ -34,7 +34,7 @@ public class guiDryDock extends AbstractContainerScreen<ContainerDryDock> {
 
     @Override
     protected void renderBg(PoseStack PoseStack, float partialTicks, int x, int y) {
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(PoseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         int p = this.container.getStoredPowerScaled(71);

@@ -50,7 +50,7 @@ public class guiBasicRefinery extends AbstractContainerScreen<ContainerBasicRefi
         RenderingUtils.drawRepeatedFluidSpriteGui(buffer, PoseStack, stack, this.leftPos+115,this.topPos+27+(32-height), 12, height);
         buffer.endBatch();
 
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(PoseStack, this.leftPos + 9, this.topPos + 26, 176, 31, 14, 34);
         this.blit(PoseStack, this.leftPos + 68, this.topPos + 26, 176, 31, 14, 34);
         this.blit(PoseStack, this.leftPos + 91, this.topPos + 26, 176, 31, 14, 34);
@@ -59,7 +59,7 @@ public class guiBasicRefinery extends AbstractContainerScreen<ContainerBasicRefi
 
     @Override
     protected void renderBg(PoseStack PoseStack, float partialTicks, int x, int y) {
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.leftPos;
         int j = this.topPos;
         this.blit(PoseStack, i, j, 0, 0, this.imageWidth, this.imageHeight);

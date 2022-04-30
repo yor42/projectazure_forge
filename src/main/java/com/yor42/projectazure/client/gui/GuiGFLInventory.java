@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerGFLInventory;
@@ -63,7 +64,7 @@ public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInvento
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
         matrixStack.pushPose();
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         for(int l = 0; l<host.getSkillItemCount(); l++){
@@ -94,7 +95,7 @@ public class GuiGFLInventory extends AbstractContainerScreen<ContainerGFLInvento
         String AffectionString = String.format("%,.2f", this.host.getAffection())+"/"+this.host.getmaxAffection();
         int affectionwidth = (int) ((this.font.width(AffectionString)+8)*scalerate);
         this.font.draw(matrixStack, new TextComponent(AffectionString), (140-((float)affectionwidth/2))/scalerate, 77/scalerate, 0x242424);
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(matrixStack, (int) (((133)-((float)affectionwidth/2))/scalerate), (int) (77/scalerate), 203, 72, 7, 7);
 
         int textwidth = (int) (this.font.width(this.host.getDisplayName().getString())*scalerate);

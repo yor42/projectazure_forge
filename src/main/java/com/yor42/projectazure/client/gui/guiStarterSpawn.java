@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.AbstractFurnaceScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -36,10 +37,11 @@ public class guiStarterSpawn extends Screen {
     private int scrollBarFarLeft, lastScrollX;
 
     private final int buttonWidth = 59;
-    private ArrayList<Button> Buttons;
+    private final ArrayList<Button> Buttons;
 
     public guiStarterSpawn(Component titleIn) {
         super(titleIn);
+        this.Buttons = new ArrayList<>();
     }
 
     @Override
@@ -47,8 +49,9 @@ public class guiStarterSpawn extends Screen {
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2;
         this.scrollBarFarLeft = this.x+13;
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         //this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        this.Buttons.clear();
         for(int index = 0; index < StarterList.length; index++) {
             int buttonHeight = 127;
             if (this.notYetPopulated) {
@@ -109,7 +112,7 @@ public class guiStarterSpawn extends Screen {
     }
 
     private void drawBackgroundLayer(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 

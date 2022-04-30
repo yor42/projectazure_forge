@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.renderer;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
@@ -51,7 +52,7 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
                 Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 180.0F));
         matrixStackIn.mulPose(Vector3f.ZP
                 .rotationDegrees(Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getYRot())));
-        Minecraft.getInstance().textureManager.getTexture(getTextureLocation(entityIn));
+        RenderSystem.setShaderTexture(0, getTextureLocation(entityIn));
         Color renderColor = getRenderColor(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn);
         RenderType renderType = getRenderType(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn,
                 getTextureLocation(entityIn));

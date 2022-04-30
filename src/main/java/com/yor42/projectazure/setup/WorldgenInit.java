@@ -1,18 +1,5 @@
 package com.yor42.projectazure.setup;
 
-import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.setup.register.registerBlocks;
-import net.minecraft.data.worldgen.features.FeatureUtils;
-import net.minecraft.data.worldgen.features.OreFeatures;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.registries.RegistryObject;
-
 public class WorldgenInit {
     /*
     public static void registerWorldgen(final BiomeLoadingEvent event){

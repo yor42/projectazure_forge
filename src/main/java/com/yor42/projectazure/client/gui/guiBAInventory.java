@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
@@ -119,7 +120,7 @@ public class guiBAInventory extends AbstractContainerScreen<ContainerBAInventory
 
     private void renderAffection(PoseStack PoseStack, int mousex, int mousey) {
         PoseStack.pushPose();
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int textureY = 1;
         int textureX = 176;
 
@@ -189,7 +190,7 @@ public class guiBAInventory extends AbstractContainerScreen<ContainerBAInventory
 
     private void renderMorale(PoseStack PoseStack, int mousex, int mousey) {
         PoseStack.pushPose();
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int textureY = 13;
         int textureX = 176;
 
@@ -330,7 +331,7 @@ public class guiBAInventory extends AbstractContainerScreen<ContainerBAInventory
 
         int expVal = (int)(49*this.host.getExp()/this.host.getMaxExp());
         PoseStack.pushPose();
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(PoseStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         for(int i = 0; i<this.host.getSkillItemCount(); i++) {
             this.blit(PoseStack, this.x + 67, this.y + 34+i*18, 1, 194, 17, 17);

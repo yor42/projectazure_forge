@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.crafting;
 
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf ;
 import net.minecraft.resources.ResourceLocation;

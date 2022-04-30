@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -50,7 +51,7 @@ public class guiRiggingInventory extends AbstractContainerScreen<RiggingContaine
 
     @Override
     protected void renderBg(PoseStack PoseStack, float partialTicks, int x, int y) {
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(PoseStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         this.renderSlotBackgrounds(PoseStack);
     }

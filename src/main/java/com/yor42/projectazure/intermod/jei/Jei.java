@@ -2,12 +2,10 @@ package com.yor42.projectazure.intermod.jei;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.*;
-import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;

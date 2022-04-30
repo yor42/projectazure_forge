@@ -1121,8 +1121,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     @Override
     public void remove(Entity.RemovalReason removal) {
-        if(this.getOwner() instanceof Player){
-            Player player = (Player) this.getOwner();
+        if(this.getOwner() instanceof Player player){
             ProjectAzurePlayerCapability.getCapability(player).removeCompanion(this);
         }
         super.remove(removal);

@@ -8,7 +8,6 @@ import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;

@@ -4,8 +4,6 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.AlloyFurnaceBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerAlloyFurnace;
 import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
-import com.yor42.projectazure.gameobject.crafting.CrushingRecipe;
-import com.yor42.projectazure.setup.register.registerRecipes;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
 import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
-import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

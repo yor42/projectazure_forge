@@ -48,9 +48,7 @@ public class buttonStarterSelect extends ImageButton {
     @Override
     public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         int logox, logoy;
-
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.getTextureManager().getTexture(this.resourceLocation);
+        RenderSystem.setShaderTexture(0, this.resourceLocation);
         int i = this.xTexStart;
         if (this.isHovered) {
             i += this.xDiffText;

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
@@ -130,7 +131,7 @@ public class GuiALInventory extends AbstractContainerScreen<ContainerKansenInven
     @Override
     protected void renderBg(PoseStack PoseStack, float partialTicks, int x, int y) {
         PoseStack.pushPose();
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(PoseStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
         this.blit(PoseStack, this.x+backgroundWidth, this.y, 176, 104, 43, 90);
         PoseStack.popPose();
@@ -227,7 +228,7 @@ public class GuiALInventory extends AbstractContainerScreen<ContainerKansenInven
 
     private void renderAffection(PoseStack PoseStack, int mousex, int mousey) {
         PoseStack.pushPose();
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int textureY = 1;
         int textureX = 176;
 
@@ -276,7 +277,7 @@ public class GuiALInventory extends AbstractContainerScreen<ContainerKansenInven
 
     private void renderMorale(PoseStack PoseStack, int mousex, int mousey) {
         PoseStack.pushPose();
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         int textureY = 13;
         int textureX = 176;
 

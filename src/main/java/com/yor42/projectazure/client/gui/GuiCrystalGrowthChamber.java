@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
@@ -39,7 +40,7 @@ public class GuiCrystalGrowthChamber extends AbstractContainerScreen<ContainerCr
         RenderingUtils.drawRepeatedFluidSpriteGui(buffer, PoseStack, stack, this.leftPos+58,this.topPos+26+(34-height), 16, height);
         buffer.endBatch();
 
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
 
         this.blit(PoseStack, this.leftPos + 57, this.topPos + 25, 176, 49, 18, 36);
         this.blit(PoseStack, this.leftPos + 11, this.topPos + 25, 176, 85, 18, 36);
@@ -59,7 +60,7 @@ public class GuiCrystalGrowthChamber extends AbstractContainerScreen<ContainerCr
 
     @Override
     protected void renderBg(PoseStack PoseStack, float partialTicks, int x, int y) {
-        this.minecraft.getTextureManager().getTexture(TEXTURE);
+        RenderSystem.setShaderTexture(0, TEXTURE);
         this.blit(PoseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         int b = this.menu.getprogressScaled(24);
         this.blit(PoseStack, this.leftPos + 80, this.topPos + 35, 176, 14, b, 17);
