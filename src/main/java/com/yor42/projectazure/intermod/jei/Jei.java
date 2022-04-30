@@ -100,9 +100,9 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(Collections.singleton(RecipeTypes.PRESSING), JEIRecipeCategoryPressing.UID);
-        registration.addRecipes(Collections.singleton(RecipeTypes.ALLOYING), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipes(Collections.singleton(RecipeTypes.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
+        registration.addRecipes(Collections.singleton(RecipeTypes.PRESSING), RecipeTypes.PRESSING.getUid());
+        registration.addRecipes(Collections.singleton(RecipeTypes.ALLOYING), RecipeTypes.ALLOYING.getUid());
+        registration.addRecipes(Collections.singleton(RecipeTypes.CRYSTALIZING), RecipeTypes.CRYSTALIZING.getUid());
     }
 
     @Override

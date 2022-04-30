@@ -305,6 +305,19 @@ public class Main
             return new ItemStack(METAL_PRESS.get().asItem());
         }
     };
+
+    public static CreativeModeTab PA_WEAPONS = new CreativeModeTab("pa_weapons") {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(BONKBAT.get());
+        }
+    };
+    public static CreativeModeTab PA_RESOURCES = new CreativeModeTab("pa_resources") {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(INGOT_COPPER.get().asItem());
+        }
+    };
     public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, PA_MACHINES, new Item.Properties());
     public static final RegistryObject<BlockEntityType<TileEntityRecruitBeacon>> RECRUIT_BEACON_BLOCK_ENTITY = register_block_entities("recruit_beacon_te", TileEntityRecruitBeacon::new, RECRUIT_BEACON);
     public static final RegistryObject<Block> REENFORCEDCONCRETE = register_blockWithToolTiponItem("reenforced_concrete",()-> new MultiblockStructureBlocks(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).sound(SoundType.STONE).noOcclusion()), PA_MACHINES);
@@ -320,13 +333,6 @@ public class Main
     public static final RegistryObject<Block> METAL_PRESS = register_blockWithToolTiponItem("metal_press", MetalPressBlock::new, PA_MACHINES);
     public static final RegistryObject<BlockEntityType<TileEntityMetalPress>> METAL_PRESS_BLOCK_ENTITY = register_block_entities("metal_press_te", TileEntityMetalPress::new, METAL_PRESS);
 
-
-    public static CreativeModeTab PA_WEAPONS = new CreativeModeTab("pa_weapons") {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(BONKBAT.get());
-        }
-    };
     public static final RegistryObject<Item> BANDAGE_ROLL = ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()
             .tab(PA_GROUP)));
     public static final RegistryObject<Item> DISC_ENTERTHEBEGINNING = ITEMS.register("disc_enterthebeginning", () -> new RecordItem(15, ()->registerSounds.DISC_ENTERTHEBEGINNING, new Item.Properties()
@@ -506,12 +512,6 @@ public class Main
     public static final RegistryObject<Item> SPAWM_AYANAMI = ITEMS.register("spawnayanami", () -> new ItemKansenSpawnEgg(AYANAMI, new Item.Properties()
             .tab(PA_SHIPS)));
 
-    public static CreativeModeTab PA_RESOURCES = new CreativeModeTab("pa_resources") {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(INGOT_COPPER.get().asItem());
-        }
-    };
     public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
             new MultiblockStructureBlocks((BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).sound(SoundType.METAL))){
 
