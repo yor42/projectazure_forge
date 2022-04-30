@@ -31,7 +31,7 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addGuiContainerHandler(guiBAInventory.class, new IGuiContainerHandler<guiBAInventory>() {
+        registration.addGuiContainerHandler(guiBAInventory.class, new IGuiContainerHandler<>() {
             @Nonnull
             @Override
             public List<Rect2i> getGuiExtraAreas(guiBAInventory containerScreen) {
@@ -39,12 +39,12 @@ public class Jei implements IModPlugin {
                 int guiLeft = containerScreen.getX();
                 int guiTop = containerScreen.getY();
                 int xSize = containerScreen.getBackgroundWidth();
-                rects.add(new Rect2i(guiLeft+xSize, guiTop, 43, 90));
+                rects.add(new Rect2i(guiLeft + xSize, guiTop, 43, 90));
                 return rects;
             }
         });
 
-        registration.addGuiContainerHandler(GuiALInventory.class, new IGuiContainerHandler<GuiALInventory>() {
+        registration.addGuiContainerHandler(GuiALInventory.class, new IGuiContainerHandler<>() {
             @Nonnull
             @Override
             public List<Rect2i> getGuiExtraAreas(GuiALInventory containerScreen) {
@@ -52,13 +52,13 @@ public class Jei implements IModPlugin {
                 int guiLeft = containerScreen.getX();
                 int guiTop = containerScreen.getY();
                 int xSize = containerScreen.getBackgroundWidth();
-                rects.add(new Rect2i(guiLeft+xSize, guiTop, 43, 90));
+                rects.add(new Rect2i(guiLeft + xSize, guiTop, 43, 90));
                 return rects;
             }
         });
 
 
-        registration.addGuiContainerHandler(GuiGFLInventory.class, new IGuiContainerHandler<GuiGFLInventory>() {
+        registration.addGuiContainerHandler(GuiGFLInventory.class, new IGuiContainerHandler<>() {
             @Nonnull
             @Override
             public List<Rect2i> getGuiExtraAreas(GuiGFLInventory containerScreen) {
@@ -71,7 +71,7 @@ public class Jei implements IModPlugin {
             }
         });
 
-        registration.addGuiContainerHandler(GuiAKNInventory.class, new IGuiContainerHandler<GuiAKNInventory>() {
+        registration.addGuiContainerHandler(GuiAKNInventory.class, new IGuiContainerHandler<>() {
             @Nonnull
             @Override
             public List<Rect2i> getGuiExtraAreas(GuiAKNInventory containerScreen) {
@@ -84,7 +84,7 @@ public class Jei implements IModPlugin {
             }
         });
 
-        registration.addGuiContainerHandler(GuiCLSInventory.class, new IGuiContainerHandler<GuiCLSInventory>() {
+        registration.addGuiContainerHandler(GuiCLSInventory.class, new IGuiContainerHandler<>() {
             @Nonnull
             @Override
             public List<Rect2i> getGuiExtraAreas(GuiCLSInventory containerScreen) {
@@ -107,9 +107,9 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(Main.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.UID);
-        registration.addRecipeCatalyst(new ItemStack(Main.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipeCatalyst(new ItemStack(Main.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.UID);
+        registration.addRecipeCatalyst(new ItemStack(Main.METAL_PRESS.get().asItem()), RecipeTypes.PRESSING);
+        registration.addRecipeCatalyst(new ItemStack(Main.ALLOY_FURNACE.get().asItem()), RecipeTypes.ALLOYING);
+        registration.addRecipeCatalyst(new ItemStack(Main.CRYSTAL_GROWTH_CHAMBER.get().asItem()), RecipeTypes.CRYSTALIZING);
     }
 
     @Override
