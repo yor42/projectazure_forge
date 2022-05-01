@@ -35,15 +35,15 @@
   "item.projectazure.originite": "오리지늄 조각",
   "item.projectazure.originium_prime": "순오리지늄",
 
-  "item.projectazure.developer_bonus": "Project:Azure Developer Supply Package",
-  "item.projectazure.developer_bonus.tooltip": "Supply Pack provided to Project:Azure Developer for live server debugging.",
-  "item.projectazure.developer_bonus.tooltip.owner": "Owner: ",
-  "item.projectazure.developer_bonus.tooltip.content": "Contents: ",
+  "item.projectazure.developer_bonus": "프로젝트:애저 개발자 지원 패키지",
+  "item.projectazure.developer_bonus.tooltip": "프로젝트 애저 개발자에게 지급되는 서버 디버깅용 패키지",
+  "item.projectazure.developer_bonus.tooltip.owner": "소유자: ",
+  "item.projectazure.developer_bonus.tooltip.content": "구성품: ",
 
-  "item.projectazure.contributor_bonus": "Project:Azure Contributor Gift Package",
-  "item.projectazure.contributor_bonus.tooltip": "Thank-you gift for Contributor of Project:Azure and Something to flex others to.",
-  "item.projectazure.contributor_bonus.tooltip.owner": "Owner: ",
-  "item.projectazure.contributor_bonus.tooltip.content": "Contents: ",
+  "item.projectazure.contributor_bonus": "프로젝트:애저 개발자 지원 패키지",
+  "item.projectazure.contributor_bonus.tooltip": "프로젝트 애저 기여자들에게 보내는 감사 선물이자 자랑질용 아이템",
+  "item.projectazure.contributor_bonus.tooltip.owner": "소유자: ",
+  "item.projectazure.contributor_bonus.tooltip.content": "구성품: ",
 
   "item.projectazure.headhunting_pcb": "신호 증폭 회로",
 
@@ -74,17 +74,37 @@
   "item.projectazure.disc_brainpower.desc": "Noma - 브레인 파워 (롱 버전)",
   "item.projectazure.disc_rickroll.desc": "릭 애스틀리 - Never Gonna Give You Up",
   "item.projectazure.disc_enterthebeginning.desc": "Edvard.S - Enter the Beginning",
-  "disc.enterthebeginning.desc1": "EZ2ON is good game. Buy it. Suffer with me. :gun: - Dev",
+  "disc.enterthebeginning.desc1": "EZ2ON 재밌어오. 사세오. - Dev",
+  "item.projectazure.disc_cc5.desc": "Hyperglyph - Get this party started (Arknights CC5 Lobby theme)",
+  "item.projectazure.disc_sandstorm.desc": "Darude - Sandstorm",
+  "item.projectazure.disc_sandroll.desc": "Rick Astley vs Darude feat. groboclone - Sandroll",
 
   "item.projectazure.equipment_torpedo_533mm": "533mm 4연장 어뢰",
   "item.projectazure.equipment_gun_127mm": "127mm 단장포",
   "item.projectazure.equipment_plane_f4fwildcat": "F4F 와일드캣",
 
-  "item.projectazure.sheath": "Raythean Sword",
-  "item.projectazure.sheath.tooltip": "Black Sword made from steel.",
-  "item.projectazure.chixiao": "Chi Xiao",
-  "item.projectazure.chixiao.tooltip": "Red Sword made from mysterious material. its heavy.",
+  "item.projectazure.sheath": "레이신 검",
+  "item.projectazure.sheath.tooltip": "강철로 만든 검은 검.",
+  "item.projectazure.chixiao": "적소",
+  "item.projectazure.chixiao.tooltip": "앰버 오리지늄으로 만든 붉은 검집의 검. \n 원 소유주와 달리 아츠 능력이 없는 사람에게는 일반 검일 뿐이지만,\n칼빵(+광석병) 앞에서는 모두가 평등합니다.",
+  "item.projectazure.crescentkatana_shiro": "반월검 - 백",
+  "item.projectazure.crescentkatana_shiro.tooltip": "손잡이 부근에 반달 모양의 날이 달린 검.",
+  "item.projectazure.crescentkatana_kuro": "반월검 - 흑",
+  "item.projectazure.tactical_knife": "전술 나이프",
+  "item.projectazure.crescentkatana_kuro.tooltip": "손잡이 부근에 반달 모양의 날이 달린 검.",
+  "item.projectazure.warhammer": "워해머",
+  "item.projectazure.warhammer.tooltip": "강철로 만든 무겁고 단단한 전투 망치.",
+  "item.projectazure.claymore": "클레이모어",
+  "item.projectazure.claymore.tooltip": "강철 합금으로 만든 말도 안되게 큰 클레이모어.\n이걸 어떻게 들고 다녀야 할 지 감도 안 옵니다.",
+  "item.projectazure.sledgehammer": "슬레지해머",
 
+  "item.projectazure.stasis_crystal": "안정화 수정",
+
+  "item.projectazure.defib_paddle": "제세동기 패들",
+  "item.projectazure.defib_paddle.tooltip": "이유 불문으로 빈사 상태의 동료를 부활시킵니다.\n양손에 패들과, 인벤토리 내 충전 상태의 본체가 필요합니다.",
+  "item.projectazure.defib_paddle.tooltip.nocharger": "오류: 준비된 충전기가 없습니다!",
+  "item.projectazure.defib_charger": "제세동기 충전기",
+  "item.projectazure.defib_charger.tooltip": "빈사 상태의 동료를 부활시키는데 사용되는 제세동기 본체입니다.",
 
   "item.projectazure.abydos550": "화이트팽 465",
 
@@ -100,7 +120,7 @@
 
   "item.projectazure.energy_drink.tooltip1": "수능을 앞둔 고3의 노하우로 만들어진 궁극의 에너지 드링크!",
   "item.projectazure.energy_drink.tooltip2": "벼락치기? 미룬 과제? 문제 없습니다!",
-  "item.projectazure.energy_drink.tooltip3": "이 불경한 혼합물은 당신을 말 그대로 끝까지 쥐어짤 겁니다!",
+  "item.projectazure.energy_drink.tooltip3": "이 불경한 화합물은 당신을 말 그대로 끝까지 쥐어짤 겁니다!",
   "item.projectazure.energy_drink.tooltip4": "- 주의사항 -",
   "item.projectazure.energy_drink.tooltip5": "다음과 같은 부작용이 발생할 수 있습니다:",
   "item.projectazure.energy_drink.tooltip6": "손떨림, 현기증, 심박수 증가, 광석병, 사망",
@@ -134,6 +154,8 @@
   "tooltip.companion.shipgirl_class": "함선 분류",
   "tooltip.companion.gun_speciality": "주무기",
   "tooltip.companion.maxhealth": "최대 체력",
+  "tooltip.companion.name": "엔티티: ",
+  "tooltip.companion.cost": "부활 비용: %s",
 
   "item.projectazure.spawnegg.spawn": "생성: ",
 
@@ -146,7 +168,11 @@
   "item.tooltip.remainingammo": "남은 탄환",
   "item.tooltip.remainingfuel": "남은 연료",
   "item.tooltip.hanger_slot_usage": "격납고 사용량",
-
+  "item.tooltip.energystored": "저장된 에너지: %s",
+  "item.tooltip.chargeprogress": "충전 진행도: %s",
+  "item.tooltip.chargefailed_nobattery": "충전 실패: 전원이 부족합니다!",
+  "item.tooltip.ready": "제세동 준비 완료",
+  "item.tooltip.not_revived": "해당 동료는 빈사 상태입니다. 제세동기를 사용하세요!",
   "item.projectazure.ammo_generic": "통상탄",
 
   "block.projectazure.recruit_beacon": "모집 신호기",
@@ -218,12 +244,12 @@
   "battleship": "전함",
   "aircraft_carrier": "항공모함",
 
-  "affection.disappointed": "Disappointed",
-  "affection.stranger": "Stranger",
-  "affection.friendly": "Friendly",
-  "affection.crush": "Crush",
-  "affection.love": "Love",
-  "affection.oath": "Oath",
+  "affection.disappointed": "실망",
+  "affection.stranger": "낯섦",
+  "affection.friendly": "호김",
+  "affection.crush": "친밀",
+  "affection.love": "사랑",
+  "affection.oath": "서약",
 
   "rarity.c": "일반",
   "rarity.uc": "고급",
@@ -244,7 +270,7 @@
   "operator.reunion": "Reunion",
 
   "akn_operator": "오퍼레이터 / 명일방주",
-  "akn_reunion": "Reunion/Arknights",
+  "akn_reunion": "리유니온/명일방주",
   "bluearchive": "블루 아카이브",
   "al_kansen": "함선소녀 / 벽람항로",
   "gfl_tdoll": "전술인형 / 소녀전선",
@@ -254,6 +280,7 @@
   "entity.projectazure.entityz23": "KMS Z23",
   "entity.projectazure.entitygangwon": "ROKS 강원",
   "entity.projectazure.entitynagato": "IJN 나가토",
+  "entity.projectazure.entityyamato": "IJN 야마토",
   "entity.projectazure.entitylaffey": "USS 라피",
   "entity.projectazure.entityenterprise": "USS 엔터프라이즈",
 
@@ -263,9 +290,15 @@
 
   "entity.projectazure.entitychen": "첸",
   "entity.projectazure.entityamiya": "아미야",
-  "entity.projectazure.entityrosmontis": "Rosmontis",
-  "entity.projectazure.entitymudrock": "Mudrock",
-  "entity.projectazure.entitytalulah": "Talulah",
+  "entity.projectazure.entityrosmontis": "로즈몬티스",
+  "entity.projectazure.entitymudrock": "머드락",
+  "entity.projectazure.entitytalulah": "탈룰라",
+  "entity.projectazure.entityfrostnova": "프로스트노바",
+  "entity.projectazure.entitytexas": "텍사스",
+  "entity.projectazure.entitylappland": "라플란드",
+  "entity.projectazure.entitysiege": "시즈",
+  "entity.projectazure.entitysylvi": "이슬비",
+  "entity.projectazure.entityschwarz": "슈바르츠",
 
   "entity.projectazure.missiledrone": "미사일 드론",
 
@@ -283,11 +316,11 @@
   "guntype.handgun": "권총",
   "guntype.sniper": "저격총",
 
-  "morale.really_happy": "Excited",
-  "morale.happy": "Happy",
-  "morale.neutral": "Neutral",
-  "morale.tired": "Tired",
-  "morale.exhaused": "Exhausted",
+  "morale.really_happy": "신남",
+  "morale.happy": "행복함",
+  "morale.neutral": "보통",
+  "morale.tired": "피곤함",
+  "morale.exhaused": "탈진함",
 
   "plane.fighter": "전투기",
   "plane.torpedo_bomber": "어뢰폭격기",
@@ -311,6 +344,7 @@
   "steel": "강철",
   "coal": "석탄",
   "lead": "납",
+  "gold": "금",
   "nether_quartz": "네더 석영",
   "originium": "오리지늄",
 
@@ -320,7 +354,7 @@
 
   "effect.projectazure.acute_oripathy": "급성 광석병",
 
-  "message.rainbow_cube.notowner": "이 큐브가 당신의 손을 거부하는듯 합니다. 이 큐브는 당신 것이 아닌 것 같습니다.",
+  "message.rainbow_cube.notowner": "큐브가 당신의 손을 거부합니다. 이 큐브는 당신 것이 아닌 것 같습니다.",
 
   "message.commandstick.bedpos_saved": "침대 위치 %s가 지휘봉에 저장되었습니다.",
   "message.commandstick.bedpos_cleared": "지휘봉에 저장된 침대 위치를 지웠습니다.",
@@ -331,23 +365,27 @@
   "message.commandstick.entity_bedpos_cleared": "%s의 침대 위치를 지웠습니다.",
   "message.commandstick.entity_bedpos_same_companion_same_bed": "해당 동료가 이미 그 침대에 배정되어 있습니다.",
 
+  "message.stasiscrystal.notenoughlevel": "레벨이 부족합니다: 이 엔티티를 부활시키려면 %s 레벨이 필요합니다.",
+  "message.stasiscrystal.cost": "레벨이 부족합니다: 이 엔티티를 부활시키려면 %s 레벨이 필요합니다.",
+  "message.stasiscrystal.notowner": "당신은 이 엔티티의 주인이 아닙니다! 소유주: %s.",
+
   "death.attack.bonk": "%1$s이(가) 백병원으로 보내졌습니다.",
 
-  "death.attack.arts_projectile_0": "%1$s was murdered by arts from %2$s",
-  "death.attack.arts_projectile_1": "%1$s was cooked by %2$s's arts",
-  "death.attack.arts_projectile_2": "%1$s was not so good at dodgeball and got destroyed by %2$s's arts. yikes.",
-  "death.attack.arts_projectile_3": "%1$s turned into pile of originium by %2$s's arts",
-  "death.attack.arts_projectile_4": "%1$s was suck at dodging %2$s's spicy magic ball",
+  "death.attack.arts_projectile_0": "%1$s 이(가) %2$s 의 아츠로 살해당했습니다.",
+  "death.attack.arts_projectile_1": "%1$s 이(가) %2$s 의 아츠로 요리당했습니다.",
+  "death.attack.arts_projectile_2": "%1$s 이(가) %2$s 의 아츠를 피하는데 실패했습니다.",
+  "death.attack.arts_projectile_3": "%1$s 이(가) %2$s 의 아츠로 인해 오리지늄 더미로 변했습니다.",
+  "death.attack.arts_projectile_4": "%1$s 이(가) %2$s 의 언럭키 마법구를 피하는데 실패했습니다.",
 
-  "death.attack.revenge_0": "%1$s \"provoked\" %2$s",
-  "death.attack.revenge_1": "%1$s tried to lewd %2$s. and got his justice served hot.",
-  "death.attack.revenge_2": "%1$s got absolutely DESTROYED trying to lewd %2$s. DESERVED.",
-  "death.attack.revenge_3": "%1$s got slapped while trying to lewd %2$s",
-  "death.attack.revenge_4": "%1$s got his justice served.",
+  "death.attack.revenge_0": "%1$s 이(가) %2$s 을(를) \"자극\"했습니다.",
+  "death.attack.revenge_1": "%1$s 이(가) %2$s 을(를) 괴롭히다 복수당했습니다.",
+  "death.attack.revenge_2": "%1$s 이(가) %2$s 을(를) 괴롭히려다가 역으로 당했습니다. 고소하네요.",
+  "death.attack.revenge_3": "%1$s 이(가) %2$s 을(를) 괴롭히다 역으로 박살났습니다.",
+  "death.attack.revenge_4": "%1$s 이(가) 정의구현 당했습니다.",
 
-  "death.attack.claymore_0": "%1$s got crushed by claymore",
-  "death.attack.claymore_1": "%1$s was crushed to death by a flying claymore",
-  "death.attack.claymore_2": "%1$s was compressed by flying claymore",
+  "death.attack.claymore_0": "%1$s 이(가) 클레이모어에 깔렸습니다.",
+  "death.attack.claymore_1": "%1$s 이(가) 날아다니는 클레이모어에 깔려 죽었습니다.",
+  "death.attack.claymore_2": "%1$s 이(가) 날아다니는 클레이모어에 의해 납작해졌습니다.",
 
   "death.attack.arts_projectile_0.item": "%1$s was murdered by arts from %2$s using %3$s",
   "death.attack.arts_projectile_1.item": "%1$s was cooked by %2$s's arts casted using %3$s",
@@ -356,7 +394,7 @@
   "death.attack.arts_projectile_4.item": "%2$s was suck at dodging %2$s's spicy magic ball from %3$s",
 
   "death.attack.ate_originium_prime_0": "%1$s 가 방금 오리지늄을 먹었습니다. ..세상에나.",
-  "death.attack.ate_originium_prime_1": "%1$s 이(가) 방금 오리지늄의 맛을 깨우쳤습니다.",
+  "death.attack.ate_originium_prime_1": "%1$s 이(가) 방금 오리지늄의 맛을 깨우쳤습니다. 둘이 먹다 둘 다 죽어도 모르는 맛이라는군요.",
   "death.attack.ate_originium_prime_2": "%1$s 이(가) 아츠를 배우려고 시도했으나, 이 모드에는 구현되어 있지 않았습니다.",
   "death.attack.ate_originium_prime_3": "%1$s 이(가) 이성을 회복하려다 실패했습니다.",
   "death.attack.ate_originium_prime_4": "%1$s 이(가) 급성 오리지늄 중독으로 사망했습니다.",
@@ -364,4 +402,6 @@
   "top.companion_level.message": "레벨: %s",
   "top.companion_limit_break.message": "한계 돌파: %s",
   "top.companion_owner.message": "지휘관: %s"
+
+
 }
