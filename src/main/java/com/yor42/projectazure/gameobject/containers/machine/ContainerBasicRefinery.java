@@ -30,19 +30,20 @@ public class ContainerBasicRefinery extends AbstractContainerMenu {
 
     public ContainerBasicRefinery(int id, Inventory inventory, FriendlyByteBuf buffer) {
         this(id, inventory, new ItemStackHandler(10), new ContainerData() {
+            final int[] arr = buffer.readVarIntArray();
             @Override
-            public int get(int p_39284_) {
-                return 0;
+            public int get(int index) {
+                return arr[index];
             }
 
             @Override
-            public void set(int p_39285_, int p_39286_) {
-
+            public void set(int index, int val) {
+                arr[index] = val;
             }
 
             @Override
             public int getCount() {
-                return 0;
+                return arr.length;
             }
         }, buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack(), buffer.readFluidStack());
     }

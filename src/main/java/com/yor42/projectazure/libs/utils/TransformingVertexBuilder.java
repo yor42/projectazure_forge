@@ -3,35 +3,56 @@ package com.yor42.projectazure.libs.utils;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormatElement;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
+
+import static com.mojang.blaze3d.vertex.DefaultVertexFormat.*;
 
 public class TransformingVertexBuilder implements VertexConsumer
 {
     private final VertexConsumer base;
     private final PoseStack transform;
-    ObjectWithGlobal<Vec2> uv = new ObjectWithGlobal<>();
-    ObjectWithGlobal<Vec3> pos = new ObjectWithGlobal<>();
-    ObjectWithGlobal<Vec2i> overlay = new ObjectWithGlobal<>();
-    ObjectWithGlobal<Vec2i> lightmap = new ObjectWithGlobal<>();
-    ObjectWithGlobal<Vector3f> normal = new ObjectWithGlobal<>();
-    ObjectWithGlobal<Vector4f> color = new ObjectWithGlobal<>();
+    private final List<ObjectWithGlobal<?>> allObjects = new ArrayList<>();
+    private final ObjectWithGlobal<Vec2> uv = new ObjectWithGlobal<>(this);
+    private final ObjectWithGlobal<Vec3> pos = new ObjectWithGlobal<>(this);
+    private final ObjectWithGlobal<Vec2i> overlay = new ObjectWithGlobal<>(this);
+    private final ObjectWithGlobal<Vec2i> lightmap = new ObjectWithGlobal<>(this);
+    private final ObjectWithGlobal<Vector3f> normal = new ObjectWithGlobal<>(this);
+    private final ObjectWithGlobal<Vector4f> color = new ObjectWithGlobal<>(this);
+    private final VertexFormat format;
 
-    public TransformingVertexBuilder(VertexConsumer base, PoseStack transform)
+    public TransformingVertexBuilder(VertexConsumer base, PoseStack transform, VertexFormat format)
     {
         this.base = base;
         this.transform = transform;
+        this.format = format;
     }
 
-    public TransformingVertexBuilder(VertexConsumer base)
+    public TransformingVertexBuilder(VertexConsumer base, VertexFormat format)
     {
-        this(base, new PoseStack());
+        this(base, new PoseStack(), format);
+    }
+
+    public TransformingVertexBuilder(MultiBufferSource buffer, RenderType type, PoseStack transform)
+    {
+        this(buffer.getBuffer(type), transform, type.format());
+    }
+
+    public TransformingVertexBuilder(MultiBufferSource buffer, RenderType type)
+    {
+        this(buffer, type, new PoseStack());
     }
 
     @Nonnull
@@ -85,35 +106,47 @@ public class TransformingVertexBuilder implements VertexConsumer
     @Override
     public void endVertex()
     {
-        pos.ifPresent(pos -> base.vertex(transform.last().pose(), (float)pos.x, (float)pos.y, (float)pos.z));
-        color.ifPresent(c -> base.color(c.x(), c.y(), c.z(), c.w()));
-        uv.ifPresent(uv -> base.uv(uv.x, uv.y));
-        overlay.ifPresent(overlay -> base.overlayCoords(overlay.x, overlay.y));
-        lightmap.ifPresent(lightmap -> base.uv2(lightmap.x, lightmap.y));
-        normal.ifPresent(
-                normal -> base.normal(transform.last().normal(), normal.x(), normal.y(), normal.z())
-        );
+        for(VertexFormatElement element : format.getElements())
+        {
+            if(element==ELEMENT_POSITION)
+                pos.ifPresent(pos -> base.vertex(transform.last().pose(), (float)pos.x, (float)pos.y, (float)pos.z));
+            else if(element==ELEMENT_COLOR)
+                color.ifPresent(c -> base.color(c.x(), c.y(), c.z(), c.w()));
+            else if(element==ELEMENT_UV0)
+                uv.ifPresent(uv -> base.uv(uv.x, uv.y));
+            else if(element==ELEMENT_UV1)
+                overlay.ifPresent(overlay -> base.overlayCoords(overlay.x, overlay.y));
+            else if(element==ELEMENT_UV2)
+                lightmap.ifPresent(lightmap -> base.uv2(lightmap.x, lightmap.y));
+            else if(element==ELEMENT_NORMAL)
+                normal.ifPresent(
+                        normal -> base.normal(transform.last().normal(), normal.x(), normal.y(), normal.z())
+                );
+        }
         base.endVertex();
+        allObjects.forEach(ObjectWithGlobal::clear);
+    }
+
+    public void defaultColor(float r, float g, float b, float a)
+    {
+        color.setGlobal(new Vector4f(r, g, b, a));
     }
 
     @Override
-    public void defaultColor(int p_166901_, int p_166902_, int p_166903_, int p_166904_) {
-
+    public void defaultColor(int r, int g, int b, int a)
+    {
+        defaultColor(r/255f, g/255f, b/255f, a/255f);
     }
 
     @Override
-    public void unsetDefaultColor() {
-
+    public void unsetDefaultColor()
+    {
+        color.setGlobal(null);
     }
 
     public void setLight(int light)
     {
         lightmap.setGlobal(new Vec2i(light&255, light >> 16));
-    }
-
-    public void setColor(float r, float g, float b, float a)
-    {
-        color.setGlobal(new Vector4f(r, g, b, a));
     }
 
     public void setNormal(float x, float y, float z)
@@ -125,32 +158,27 @@ public class TransformingVertexBuilder implements VertexConsumer
 
     public void setOverlay(int packedOverlayIn)
     {
-        overlay.setGlobal(new Vec2i(
-                packedOverlayIn&0xffff,
-                packedOverlayIn >> 16
-        ));
+        overlay.setGlobal(new Vec2i(packedOverlayIn&0xffff, packedOverlayIn >> 16));
     }
 
-    private static class Vec2i
+    private record Vec2i(int x, int y)
     {
-        final int x, y;
-
-        private Vec2i(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
     }
 
     private static class ObjectWithGlobal<T>
     {
         @Nullable
-        T obj;
-        boolean isGlobal;
+        private T obj;
+        private boolean isGlobal;
+
+        public ObjectWithGlobal(TransformingVertexBuilder builder)
+        {
+            builder.allObjects.add(this);
+        }
 
         public void putData(T newVal)
         {
-            Preconditions.checkState(obj==null);
+            Preconditions.checkState(obj==null||(isGlobal&&obj.equals(newVal)));
             obj = newVal;
         }
 
@@ -177,6 +205,12 @@ public class TransformingVertexBuilder implements VertexConsumer
         {
             if(hasValue())
                 out.accept(read());
+        }
+
+        public void clear()
+        {
+            if(!isGlobal)
+                obj = null;
         }
     }
 }

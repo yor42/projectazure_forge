@@ -86,6 +86,8 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines imp
     }
 
     public void encodeExtraData(FriendlyByteBuf  buffer){
+        int[] arr = {this.ProcessTime, this.totalProcessTime, this.energyStorage.getEnergyStored(), this.energyStorage.getMaxEnergyStored()};
+        buffer.writeVarIntArray(arr);
     }
 
     @Override
