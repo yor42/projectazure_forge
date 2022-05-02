@@ -202,6 +202,8 @@ public class TileEntityAlloyFurnace extends BlockEntity implements MenuProvider,
     }
 
     public void encodeExtraData(FriendlyByteBuf  buffer) {
+        int[] data = {this.burnTime, this.totalBurntime, this.cookTime,this.cookTimeTotal};
+        buffer.writeVarIntArray(data);
     }
 
     @Override

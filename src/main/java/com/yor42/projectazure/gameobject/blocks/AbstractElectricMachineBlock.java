@@ -30,6 +30,7 @@ public abstract class AbstractElectricMachineBlock extends AbstractMachineBlock 
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, ACTIVE, POWERED);
+        super.createBlockStateDefinition(builder);
+        builder.add(POWERED);
     }
 }
