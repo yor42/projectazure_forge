@@ -119,6 +119,6 @@ public class PressingRecipe implements Recipe<Container> {
     public static class TYPE implements RecipeType<PressingRecipe> {
         private TYPE() {}
         public static final PressingRecipe.TYPE Instance = new PressingRecipe.TYPE();
-        public static final String ID = "crushing";
+        public static final String ID = "pressing";
     }
 }

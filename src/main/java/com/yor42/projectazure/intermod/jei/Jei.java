@@ -2,6 +2,9 @@ package com.yor42.projectazure.intermod.jei;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.*;
+import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
+import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
+import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
@@ -9,21 +12,35 @@ import com.yor42.projectazure.libs.utils.ResourceUtils;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.StonecutterRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JeiPlugin
 public class Jei implements IModPlugin {
+
+    private IRecipeCategory<PressingRecipe> pressingCategory;
+    private IRecipeCategory<AlloyingRecipe> alloyingCategory;
+    private IRecipeCategory<CrystalizingRecipe> crystalizingCategory;
+
     @Override
     public ResourceLocation getPluginUid() {
         return ResourceUtils.ModResourceLocation("jei_plugin");
@@ -100,9 +117,10 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(Collections.singleton(RecipeTypes.PRESSING), RecipeTypes.PRESSING.getUid());
-        registration.addRecipes(Collections.singleton(RecipeTypes.ALLOYING), RecipeTypes.ALLOYING.getUid());
-        registration.addRecipes(Collections.singleton(RecipeTypes.CRYSTALIZING), RecipeTypes.CRYSTALIZING.getUid());
+        registration.addRecipes(RecipeTypes.PRESSING, getPressingRecipes(this.pressingCategory));
+        registration.addRecipes(RecipeTypes.ALLOYING, getAlloyingRecipes(this.alloyingCategory));
+        registration.addRecipes(RecipeTypes.CRYSTALIZING, getCrystalizingRecipes(this.crystalizingCategory));
+
     }
 
     @Override
@@ -114,8 +132,47 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new JEIRecipeCategoryPressing(registration.getJeiHelpers().getGuiHelper()));
-        registration.addRecipeCategories(new JEIRecipeCategoryAlloying(registration.getJeiHelpers().getGuiHelper()));
-        registration.addRecipeCategories(new JEIRecipeCategoryCrystalizing(registration.getJeiHelpers().getGuiHelper()));
+        this.pressingCategory = new JEIRecipeCategoryPressing(registration.getJeiHelpers().getGuiHelper());
+        this.alloyingCategory = new JEIRecipeCategoryAlloying(registration.getJeiHelpers().getGuiHelper());
+        this.crystalizingCategory = new JEIRecipeCategoryCrystalizing(registration.getJeiHelpers().getGuiHelper());
+        registration.addRecipeCategories(pressingCategory);
+        registration.addRecipeCategories(this.alloyingCategory);
+        registration.addRecipeCategories(this.crystalizingCategory);
+    }
+
+    public List<PressingRecipe> getPressingRecipes(IRecipeCategory<PressingRecipe> Category) {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientLevel world = minecraft.level;
+        RecipeManager recipeManager = world.getRecipeManager();
+        CategoryRecipeValidator<PressingRecipe> validator = new CategoryRecipeValidator<>(Category, 2);
+        return getValidHandledRecipes(recipeManager, PressingRecipe.TYPE.Instance, validator);
+    }
+
+    public List<AlloyingRecipe> getAlloyingRecipes(IRecipeCategory<AlloyingRecipe> Category) {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientLevel world = minecraft.level;
+        RecipeManager recipeManager = world.getRecipeManager();
+        CategoryRecipeValidator<AlloyingRecipe> validator = new CategoryRecipeValidator<>(Category, 2);
+        return getValidHandledRecipes(recipeManager, AlloyingRecipe.TYPE.Instance, validator);
+    }
+
+    public List<CrystalizingRecipe> getCrystalizingRecipes(IRecipeCategory<CrystalizingRecipe> Category) {
+        Minecraft minecraft = Minecraft.getInstance();
+        ClientLevel world = minecraft.level;
+        RecipeManager recipeManager = world.getRecipeManager();
+        CategoryRecipeValidator<CrystalizingRecipe> validator = new CategoryRecipeValidator<>(Category, 2);
+        return getValidHandledRecipes(recipeManager, CrystalizingRecipe.TYPE.Instance, validator);
+    }
+
+
+    private static <C extends Container, T extends Recipe<C>> List<T> getValidHandledRecipes(
+            RecipeManager recipeManager,
+            RecipeType<T> recipeType,
+            CategoryRecipeValidator<T> validator
+    ) {
+        return recipeManager.getAllRecipesFor(recipeType)
+                .stream()
+                .filter(r -> validator.isRecipeValid(r) && validator.isRecipeHandled(r))
+                .collect(Collectors.toList());
     }
 }
