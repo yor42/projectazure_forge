@@ -15,6 +15,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
@@ -23,35 +24,8 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class EntityAmiyaRenderer extends GeoCompanionRenderer<EntityAmiya> {
-
-    private AbstractEntityCompanion entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
-
     public EntityAmiyaRenderer(EntityRendererManager renderManager) {
         super(renderManager, new AmiyaModel());
-        this.shadowRadius = 0.4F;
-    }
-
-    @Override
-    public void renderEarly(EntityAmiya animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-    }
-
-    @Override
-    public void render(EntityAmiya entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
-    }
-
-    @Override
-    public RenderType getRenderType(EntityAmiya animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entitySmoothCutout(textureLocation);
     }
 
     @Override
@@ -59,6 +33,10 @@ public class EntityAmiyaRenderer extends GeoCompanionRenderer<EntityAmiya> {
         return TextureEntityLocation("modelamiya");
     }
 
+    @Override
+    protected Vector3d getHandItemCoordinate() {
+        return new Vector3d(0.5F, 0.1F, 1.3F);
+    }
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if (bone.getName().equals("itemMainHand")){

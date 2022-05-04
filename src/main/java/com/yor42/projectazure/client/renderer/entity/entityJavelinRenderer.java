@@ -17,6 +17,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
@@ -32,6 +33,11 @@ public class entityJavelinRenderer extends GeoCompanionRenderer<EntityJavelin> {
     @Override
     public ResourceLocation getTextureLocation(EntityJavelin entity) {
         return new ResourceLocation(Constants.MODID, "textures/entity/entityjavelin.png");
+    }
+
+    @Override
+    protected Vector3d getHandItemCoordinate() {
+        return new Vector3d(0.6F, 0.1, 1.35F);
     }
 
     @Override

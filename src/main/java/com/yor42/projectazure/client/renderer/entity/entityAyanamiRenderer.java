@@ -17,6 +17,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
@@ -31,6 +32,11 @@ public class entityAyanamiRenderer extends GeoCompanionRenderer<EntityAyanami> {
     @Override
     public ResourceLocation getTextureLocation(EntityAyanami entity) {
         return new ResourceLocation(Constants.MODID, "textures/entity/modelayanami.png");
+    }
+
+    @Override
+    protected Vector3d getHandItemCoordinate() {
+        return new Vector3d(0.6F, 0.1, 1.35F);
     }
 
     @Override
@@ -67,14 +73,22 @@ public class entityAyanamiRenderer extends GeoCompanionRenderer<EntityAyanami> {
             stack.popPose();
         }
         /*
-        else if (bone.getName().equals("Body")){
-            stack.push();
-            ItemStack rigging = this.entity.getRigging();
-            stack.translate(bone.getPositionX()/16, bone.getPositionY()/16, bone.getPositionZ()/16);
-            if(!rigging.isEmpty()){
-                Minecraft.getInstance().getItemRenderer().renderItem(rigging, ItemCameraTransforms.TransformType.NONE, packedLightIn, packedOverlayIn, stack, this.rtb);
+        else if (bone.getName().equals("itemOffHand")){
+            stack.pushPose();
+            stack.mulPose(Vector3f.XP.rotationDegrees(-90));
+            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.OFFHAND);
+            float xvalue = -0.6F;
+            if(mainHandStack.isShield(this.entity)){
+                stack.mulPose(Vector3f.ZP.rotationDegrees(180));
+                xvalue = 0.6F;
             }
-            stack.pop();
+            stack.translate(xvalue, 0.1, 1.35F);
+            stack.scale(1.5F, 1.5F, 1.5F);
+            if(!mainHandStack.isEmpty()){
+                Minecraft.getInstance().getItemRenderer().renderStatic(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
+            }
+            stack.popPose();
+        }
         }
 
          */

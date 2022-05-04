@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
@@ -33,6 +34,11 @@ public class EntityFrostNovaRenderer extends GeoCompanionRenderer<EntityFrostnov
     @Override
     public ResourceLocation getTextureLocation(@Nonnull EntityFrostnova entity) {
         return TextureEntityLocation("modelfrostnova");
+    }
+
+    @Override
+    protected Vector3d getHandItemCoordinate() {
+        return new Vector3d(0.6F, 0.1, 1.5F);
     }
 
     @Override

@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
@@ -27,6 +28,12 @@ public class EntitySchwarzRenderer extends GeoCompanionRenderer<EntitySchwarz> {
     public EntitySchwarzRenderer(EntityRendererManager renderManager) {
         super(renderManager, new ModelSchwarz());
     }
+
+    @Override
+    protected Vector3d getHandItemCoordinate() {
+        return new Vector3d(-0.6F, 0.2F, 1.4F);
+    }
+
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if (bone.getName().equals("itemOffHand")){
