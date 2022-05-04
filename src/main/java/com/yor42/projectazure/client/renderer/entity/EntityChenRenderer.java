@@ -25,30 +25,8 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class EntityChenRenderer extends GeoCompanionRenderer<EntityChen> {
-
-    private AbstractEntityCompanion entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
-
     public EntityChenRenderer(EntityRendererManager renderManager) {
         super(renderManager, new ChenModel());
-        this.shadowRadius = 0.4F;
-    }
-
-    @Override
-    public void renderEarly(EntityChen animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-    }
-
-    @Override
-    public void render(@Nonnull EntityChen entity, float entityYaw, float partialTicks, MatrixStack stack, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
     }
 
     @Nonnull
@@ -56,12 +34,6 @@ public class EntityChenRenderer extends GeoCompanionRenderer<EntityChen> {
     public ResourceLocation getTextureLocation(@Nonnull EntityChen entity) {
         return TextureEntityLocation("modelchen");
     }
-
-    @Override
-    public RenderType getRenderType(EntityChen animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entitySmoothCutout(textureLocation);
-    }
-
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if (bone.getName().equals("itemMainHand")){

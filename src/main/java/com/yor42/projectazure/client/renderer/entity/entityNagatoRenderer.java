@@ -25,41 +25,14 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocat
 
 public class entityNagatoRenderer extends GeoCompanionRenderer<EntityNagato> {
 
-    private EntityKansenBase entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
-
     public entityNagatoRenderer(EntityRendererManager renderManager) {
         super(renderManager, new nagatoModel());
         this.addLayer(new NagatoRiggingLayer(this));
-        this.shadowRadius = 0.4F;
-    }
-
-    @Override
-    public void renderEarly(EntityNagato animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-    }
-
-    @Override
-    public void render(EntityNagato entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityNagato entity) {
         return TextureEntityLocation("modelnagato");
-    }
-
-    @Override
-    public RenderType getRenderType(EntityNagato animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entitySmoothCutout(textureLocation);
     }
 
     @Override

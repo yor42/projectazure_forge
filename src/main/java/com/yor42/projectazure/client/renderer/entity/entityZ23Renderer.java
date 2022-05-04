@@ -24,42 +24,15 @@ import javax.annotation.Nullable;
 
 public class entityZ23Renderer extends GeoCompanionRenderer<EntityZ23> {
 
-    private EntityKansenBase entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
-
-    @Override
-    public void renderEarly(EntityZ23 animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-    }
-
     public entityZ23Renderer(EntityRendererManager renderManager) {
         super(renderManager, new Z23Model());
         this.addLayer(new Z23RiggingLayer(this));
-        this.shadowRadius = 0.4F;
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityZ23 entity) {
         return new ResourceLocation(Constants.MODID, "textures/entity/entitynimi.png");
     }
-
-    @Override
-    public void render(EntityZ23 entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
-    }
-
-    @Override
-    public RenderType getRenderType(EntityZ23 animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entitySmoothCutout(textureLocation);
-    }
-
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         if (bone.getName().equals("itemMainHand")){

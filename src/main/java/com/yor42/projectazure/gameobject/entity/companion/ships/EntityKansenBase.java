@@ -199,15 +199,14 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return 1;
     }
 
-    public boolean attackEntityFromCannon(DamageSource source, AmmoProperties property, double distanceMultiplier) {
+    public void attackEntityFromCannon(DamageSource source, AmmoProperties property, double distanceMultiplier) {
         if(rollBooleanRNG((float) (property.getRawhitChance()*distanceMultiplier))) {
             if (this.hasRigging()) {
                 DamageItem(property.getDamage(enums.DamageType.RIGGING), this.getRigging());
                 DamageComponent(property.getDamage(enums.DamageType.COMPONENT), this.getRigging(), property.ShouldDamageMultipleComponent());
             }
-            return super.hurt(source, property.getDamage(enums.DamageType.ENTITY));
+            super.hurt(source, property.getDamage(enums.DamageType.ENTITY));
         }
-        return true;
     }
 
     @Override

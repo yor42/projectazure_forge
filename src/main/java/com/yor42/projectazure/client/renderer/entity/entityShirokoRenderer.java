@@ -26,41 +26,15 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocat
 
 public class entityShirokoRenderer extends GeoCompanionRenderer<EntityShiroko> {
 
-    private AbstractEntityCompanion entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
-
     public entityShirokoRenderer(EntityRendererManager renderManager) {
         super(renderManager, new ModelShiroko());
         this.shadowRadius = 0.3F;
     }
 
     @Override
-    public void renderEarly(EntityShiroko animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-    }
-
-    @Override
-    public void render(EntityShiroko entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
-    }
-
-    @Override
     public ResourceLocation getTextureLocation(EntityShiroko entity) {
         return TextureEntityLocation("entityshiroko");
     }
-
-    @Override
-    public RenderType getRenderType(EntityShiroko animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entitySmoothCutout(textureLocation);
-    }
-
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {

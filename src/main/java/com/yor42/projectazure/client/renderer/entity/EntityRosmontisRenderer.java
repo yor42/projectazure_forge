@@ -25,37 +25,10 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocat
 
 public class EntityRosmontisRenderer extends GeoCompanionRenderer<EntityRosmontis> {
 
-    private AbstractEntityCompanion entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
-
     public EntityRosmontisRenderer(EntityRendererManager renderManager) {
         super(renderManager, new RosmontisModel());
         this.addLayer(new RosmontisClaymoreLayer(this));
-        this.shadowRadius = 0.4F;
     }
-
-    @Override
-    public void renderEarly(EntityRosmontis animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-    }
-
-    @Override
-    public void render(EntityRosmontis entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
-    }
-
-    @Override
-    public RenderType getRenderType(EntityRosmontis animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entitySmoothCutout(textureLocation);
-    }
-
     @Override
     public ResourceLocation getTextureLocation(EntityRosmontis entity) {
         return TextureEntityLocation("modelrosmontis");

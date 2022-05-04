@@ -23,41 +23,14 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import javax.annotation.Nullable;
 
 public class entityAyanamiRenderer extends GeoCompanionRenderer<EntityAyanami> {
-
-    private EntityKansenBase entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
-
-    @Override
-    public void renderEarly(EntityAyanami animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-    }
-
     public entityAyanamiRenderer(EntityRendererManager renderManager) {
         super(renderManager, new ayanamiModel());
         this.addLayer(new AyanamiRiggingLayer(this));
-        this.shadowRadius = 0.4F;
-    }
-
-    @Override
-    public void render(EntityAyanami entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityAyanami entity) {
         return new ResourceLocation(Constants.MODID, "textures/entity/modelayanami.png");
-    }
-
-    @Override
-    public RenderType getRenderType(EntityAyanami animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entitySmoothCutout(textureLocation);
     }
 
     @Override

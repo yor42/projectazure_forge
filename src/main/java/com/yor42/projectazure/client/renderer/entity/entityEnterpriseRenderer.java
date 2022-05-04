@@ -25,40 +25,14 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class entityEnterpriseRenderer extends GeoCompanionRenderer<EntityEnterprise> {
-    private EntityKansenBase entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
 
     public entityEnterpriseRenderer(EntityRendererManager renderManager) {
         super(renderManager, new enterpriseModel());
         this.addLayer(new EnterpriseRiggingLayer(this));
-        this.shadowRadius = 0.4F;
     }
-
-    @Override
-    public void renderEarly(EntityEnterprise animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-    }
-
-    @Override
-    public void render(EntityEnterprise entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
-    }
-
     @Override
     public ResourceLocation getTextureLocation(@Nonnull EntityEnterprise entity) {
         return TextureEntityLocation("modelenterprise");
-    }
-
-    @Override
-    public RenderType getRenderType(EntityEnterprise animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return RenderType.entitySmoothCutout(textureLocation);
     }
 
     @Override

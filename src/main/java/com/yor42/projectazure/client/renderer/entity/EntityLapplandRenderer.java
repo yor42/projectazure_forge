@@ -22,29 +22,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class EntityLapplandRenderer extends GeoCompanionRenderer<EntityLappland> {
-
-    private AbstractEntityCompanion entity;
-    private IRenderTypeBuffer rtb;
-    private ResourceLocation texture;
-
     public EntityLapplandRenderer(EntityRendererManager renderManager) {
         super(renderManager, new LapplandModel());
-    }
-
-    @Override
-    public void renderEarly(EntityLappland animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        this.rtb = renderTypeBuffer;
-        this.entity = animatable;
-        this.texture = this.getTextureLocation(animatable);
-        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
-    }
-
-    @Override
-    public void render(@Nonnull EntityLappland entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        stack.pushPose();
-        stack.scale(0.4F, 0.4F, 0.4F);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        stack.popPose();
     }
 
     @Override
