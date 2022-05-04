@@ -29,49 +29,10 @@ public class EntitySchwarzRenderer extends GeoCompanionRenderer<EntitySchwarz> {
         super(renderManager, new ModelSchwarz());
     }
 
+    @Nonnull
     @Override
     protected Vector3d getHandItemCoordinate() {
         return new Vector3d(-0.6F, 0.2F, 1.4F);
     }
 
-    @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if (bone.getName().equals("itemOffHand")){
-            stack.pushPose();
-            stack.mulPose(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.OFFHAND);
-            stack.translate(-0.6F, 0.2F, 1.4F);
-            stack.scale(1.5F, 1.5F, 1.5F);
-            if(mainHandStack.getItem() instanceof ShieldItem){
-                stack.mulPose(Vector3f.YP.rotationDegrees(180));
-                stack.translate(0,0,-0.5);
-            }
-            if(!mainHandStack.isEmpty()){
-                Item gunItem = this.entity.getGunStack().getItem();
-                if(!this.entity.isReloadingMainHand() && this.entity.isUsingGun() && gunItem instanceof ItemGunBase && ((ItemGunBase)gunItem).isTwoHanded()){
-                    stack.mulPose(Vector3f.XN.rotationDegrees(27.5F));
-                }
-                Minecraft.getInstance().getItemRenderer().renderStatic(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
-            }
-            stack.popPose();
-        }
-        else if (bone.getName().equals("itemMainHand")){
-            stack.pushPose();
-            stack.mulPose(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.MAINHAND);
-            float xvalue = 0.6F;
-            if(mainHandStack.isShield(this.entity)){
-                stack.mulPose(Vector3f.ZP.rotationDegrees(180));
-            }
-            stack.translate(xvalue, 0.2F, 1.4F);
-            stack.scale(1.5F, 1.5F, 1.5F);
-            if(!mainHandStack.isEmpty()){
-                Minecraft.getInstance().getItemRenderer().renderStatic(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
-            }
-            stack.popPose();
-        }
-
-        bufferIn = rtb.getBuffer(RenderType.entitySmoothCutout(texture));
-        super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-    }
 }
