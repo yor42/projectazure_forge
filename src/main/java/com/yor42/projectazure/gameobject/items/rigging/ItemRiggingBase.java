@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.capability.RiggingItemCapabilityProvider;
+import com.yor42.projectazure.gameobject.capability.multiinv.RiggingItemCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvEquipmentHandlerItemStack;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandlerItemStack;

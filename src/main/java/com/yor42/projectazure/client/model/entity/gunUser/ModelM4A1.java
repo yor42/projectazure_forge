@@ -97,7 +97,7 @@ public class ModelM4A1 extends AnimatedGeoModel<EntityM4A1> {
             Faint.setHidden(false);
             Injured.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);

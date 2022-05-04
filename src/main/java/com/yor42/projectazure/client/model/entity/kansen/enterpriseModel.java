@@ -98,7 +98,7 @@ public class enterpriseModel extends AnimatedGeoModel<EntityEnterprise> {
             Angry2.setHidden(false);
             Injured.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);

@@ -80,7 +80,7 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
             Angry1.setHidden(false);
             Angry2.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             faint.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);

@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.capability;
+package com.yor42.projectazure.gameobject.capability.multiinv;
 
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;

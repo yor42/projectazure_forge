@@ -4,9 +4,6 @@ import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.client.renderer.entity.model.ModelUtils;
-import net.minecraft.client.renderer.model.ModelHelper;
-import net.minecraft.entity.monster.AbstractIllagerEntity;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -108,7 +105,7 @@ public class ModelSchwarz extends AnimatedGeoModel<EntitySchwarz> {
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -214,7 +211,7 @@ public class ModelSchwarz extends AnimatedGeoModel<EntitySchwarz> {
         else if(entity.isSleeping()){
             body.setPositionY(-36);
         }
-        if(!(entity.isOrderedToSit()||entity.isBeingPatted()||entity.isSleeping()||entity.isinQinteraction())) {
+        if(!(entity.isOrderedToSit()||entity.isBeingPatted()||entity.isSleeping()||entity.islewded())) {
             if (entity.isChargingCrossbow()) {
                 AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
             } else if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {

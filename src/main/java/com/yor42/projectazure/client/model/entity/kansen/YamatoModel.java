@@ -1,6 +1,5 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
-import com.yor42.projectazure.gameobject.entity.companion.ships.EntityEnterprise;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityYamato;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
@@ -97,7 +96,7 @@ public class YamatoModel extends AnimatedGeoModel<EntityYamato> {
             Angry2.setHidden(false);
             Injured.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);

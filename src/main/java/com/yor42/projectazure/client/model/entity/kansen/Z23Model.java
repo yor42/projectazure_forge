@@ -75,7 +75,7 @@ public class Z23Model extends AnimatedGeoModel<EntityZ23> {
             Angry1.setHidden(false);
             Angry2.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             fainted.setHidden(true);
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);

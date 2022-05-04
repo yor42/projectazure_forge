@@ -99,7 +99,7 @@ public class RosmontisModel extends AnimatedGeoModel<EntityRosmontis> {
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);

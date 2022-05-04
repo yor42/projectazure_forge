@@ -104,7 +104,7 @@ public class SylviModel extends AnimatedGeoModel<EntitySylvi> {
             Injured.setHidden(true);
             Sleep.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);

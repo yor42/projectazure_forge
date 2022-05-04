@@ -85,7 +85,7 @@ public class gangwonModel extends AnimatedGeoModel<EntityGangwon> {
             SleepFace.setHidden(true);
             Angry.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             faint.setHidden(true);
             NormalFace.setHidden(true);
             PatFace.setHidden(true);

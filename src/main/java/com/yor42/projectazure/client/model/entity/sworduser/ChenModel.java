@@ -102,7 +102,7 @@ public class ChenModel extends AnimatedGeoModel<EntityChen> {
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);

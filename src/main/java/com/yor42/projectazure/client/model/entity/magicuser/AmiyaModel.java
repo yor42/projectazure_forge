@@ -88,7 +88,7 @@ public class AmiyaModel extends AnimatedGeoModel<EntityAmiya> {
             Angry.setHidden(true);
             Flushed.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             fainted.setHidden(true);
             NormalFace.setHidden(true);
             PatFace.setHidden(true);

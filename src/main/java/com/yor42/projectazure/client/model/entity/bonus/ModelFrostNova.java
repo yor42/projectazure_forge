@@ -82,7 +82,7 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
             Angry2.setHidden(true);
             Faint.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);

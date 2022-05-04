@@ -92,7 +92,7 @@ public class javelinModel extends AnimatedGeoModel<EntityJavelin> {
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
-        else if(entity.isinQinteraction()){
+        else if(entity.islewded()){
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             PatFace.setHidden(true);

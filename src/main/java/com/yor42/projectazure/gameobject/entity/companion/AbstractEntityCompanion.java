@@ -2237,7 +2237,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.isSleeping()? PushReaction.IGNORE:super.getPistonPushReaction();
     }
 
-    public boolean isinQinteraction(){
+    public boolean islewded(){
         return this.getEntityData().get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0;
     }
 
