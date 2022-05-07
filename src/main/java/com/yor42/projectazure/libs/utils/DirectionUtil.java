@@ -11,9 +11,19 @@ import net.minecraft.world.IWorldReader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Optional;
+import java.util.function.Function;
 
-public class BlockStateUtil {
+public class DirectionUtil {
+
+    public static final Direction[] VALUES = Direction.values();
+    public static final Direction[] BY_HORIZONTAL_INDEX = Arrays.stream(VALUES)
+            .filter((direction) -> direction.getAxis().isHorizontal())
+            .sorted(Comparator.comparingInt(Direction::get2DDataValue))
+            .toArray(Direction[]::new);
+
     public static RelativeDirection getRelativeDirection(Direction direction, Direction MachineFacings) {
         switch (MachineFacings) {
             case NORTH:{
@@ -144,11 +154,28 @@ public class BlockStateUtil {
     }
 
     public enum RelativeDirection {
-        FRONT,
-        LEFT,
-        RIGHT,
-        BACK,
-        UP,
-        DOWN;
+        FRONT(Function.identity(), Direction.Axis.Z),
+        LEFT(Direction::getCounterClockWise, Direction.Axis.X),
+        RIGHT(Direction::getClockWise, Direction.Axis.X),
+        BACK(Direction::getOpposite, Direction.Axis.Z),
+        UP(f -> Direction.UP, Direction.Axis.Y),
+        DOWN(f -> Direction.DOWN, Direction.Axis.Y);
+
+        final Function<Direction, Direction> actualFacing;
+        public final Direction.Axis axis;
+
+        RelativeDirection(Function<Direction, Direction> actualFacing, Direction.Axis axis) {
+            this.actualFacing = actualFacing;
+            this.axis = axis;
+        }
+
+        public Direction getActualFacing(Direction facing) {
+            return actualFacing.apply(facing);
+        }
+
+        public boolean isSameAxis(RelativeDirection dir) {
+            return this.axis == dir.axis;
+        }
+
     }
 }

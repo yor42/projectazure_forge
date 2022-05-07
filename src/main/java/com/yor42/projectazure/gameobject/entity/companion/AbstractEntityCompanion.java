@@ -25,7 +25,7 @@ import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.BlockStateUtil;
+import com.yor42.projectazure.libs.utils.DirectionUtil;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
@@ -51,8 +51,6 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -108,7 +106,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.yor42.projectazure.libs.utils.BlockStateUtil.RelativeDirection.FRONT;
+import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static net.minecraft.util.Hand.MAIN_HAND;
@@ -2425,7 +2423,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             } else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
 
-                BlockStateUtil.RelativeDirection interactionDirection;
+                DirectionUtil.RelativeDirection interactionDirection;
                 float entityHitAngle = (float) ((Math.atan2(player.getZ() - getZ(), player.getX() - getX()) * (180 / Math.PI) - 90) % 360);
                 float entityAttackingAngle = yBodyRot % 360;
                 if (entityHitAngle < 0) {
@@ -2444,13 +2442,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     interactionDirection = FRONT;
                 }
                 else if(entityRelativeAngle>45 && entityRelativeAngle<135){
-                    interactionDirection = BlockStateUtil.RelativeDirection.RIGHT;
+                    interactionDirection = DirectionUtil.RelativeDirection.RIGHT;
                 }
                 else if(entityRelativeAngle>135 && entityRelativeAngle<225){
-                    interactionDirection = BlockStateUtil.RelativeDirection.BACK;
+                    interactionDirection = DirectionUtil.RelativeDirection.BACK;
                 }
                 else{
-                    interactionDirection = BlockStateUtil.RelativeDirection.RIGHT;
+                    interactionDirection = DirectionUtil.RelativeDirection.RIGHT;
                 }
 
                 Vector3d PlayerLook = player.getViewVector(1.0F).normalize();

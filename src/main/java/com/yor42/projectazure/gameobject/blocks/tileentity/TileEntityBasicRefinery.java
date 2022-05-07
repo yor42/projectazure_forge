@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerBasicRefinery;
-import com.yor42.projectazure.libs.utils.BlockStateUtil;
+import com.yor42.projectazure.libs.utils.DirectionUtil;
 import com.yor42.projectazure.setup.register.registerFluids;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerTE;
@@ -388,7 +388,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         }
         else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
             if(this.getBlockState().hasProperty(AbstractMachineBlock.FACING))
-            switch (BlockStateUtil.getRelativeDirection(direction, this.getLevel().getBlockState(this.getBlockPos()).getValue(AbstractMachineBlock.FACING))){
+            switch (DirectionUtil.getRelativeDirection(direction, this.getLevel().getBlockState(this.getBlockPos()).getValue(AbstractMachineBlock.FACING))){
                 case LEFT:
                     return this.crudeTankCap.cast();
                 case FRONT:

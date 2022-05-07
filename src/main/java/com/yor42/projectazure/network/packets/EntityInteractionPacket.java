@@ -1,7 +1,7 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.libs.utils.BlockStateUtil;
+import com.yor42.projectazure.libs.utils.DirectionUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -73,7 +73,7 @@ public class EntityInteractionPacket {
                         case STOP_RIDING:
                             entity.stopRiding();
                             if(msg.pos != null) {
-                                BlockStateUtil.getAvailableBedPos(world, msg.pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
+                                DirectionUtil.getAvailableBedPos(world, msg.pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
                                 if (((AbstractEntityCompanion) entity).isCriticallyInjured()) {
                                     ((AbstractEntityCompanion) entity).setInjurycuretimer(0);
                                 }
