@@ -44,6 +44,7 @@ public class CompanionUseSkillGoal extends Goal {
         if(!this.isSkillFinished) {
             if(this.companion.performSkillTick(this.companion.getTarget(), this.SkillTimer)){
                 this.isSkillFinished = true;
+                this.SkillTimer = 0;
             }
             this.SkillTimer++;
         }

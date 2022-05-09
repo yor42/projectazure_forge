@@ -393,7 +393,6 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
     @Override
     public boolean performOneTimeSkill(LivingEntity target) {
         if(!this.HealTarget.isEmpty()) {
-            this.setSkillAnimationTime(this.SkillAnimationLength());
             return false;
         }
         return true;
@@ -401,7 +400,10 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public boolean performSkillTick(LivingEntity target, int Timer) {
-        if(Timer == 13){
+        if(Timer == 0){
+            this.setSkillAnimationTime(this.SkillAnimationLength());
+        }
+        else if(Timer == 20){
             if(!this.HealTarget.isEmpty()) {
                 Entity entity2heal = HealTarget.get(0);
                 if(this.getHealth()/this.getMaxHealth()<=0.5F){
