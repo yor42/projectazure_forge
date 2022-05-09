@@ -17,22 +17,22 @@ public class CompanionUseSkillGoal extends Goal {
     @Override
     public boolean canUse() {
 
-        if(this.companion.isCriticallyInjured()){
+        if(this.companion.isCriticallyInjured() || this.companion.isSleeping()){
             return false;
         }
 
-        return this.companion.canUseSkill() && this.companion.getSkillDelayTick() == 0 && !this.isSkillFinished && this.companion.getTarget() != null && this.companion.getTarget().isAlive();
+        return this.companion.canUseSkill(this.companion.getTarget());
     }
 
     @Override
     public boolean canContinueToUse() {
-        return this.companion.canUseSkill() && this.companion.getSkillDelayTick() == 0 && !this.isSkillFinished;
+        return this.companion.canUseSkill(this.companion.getTarget()) && !this.isSkillFinished;
     }
 
     @Override
     public void start() {
-        if(this.companion.getTarget() != null && !this.isSkillFinished) {
-            this.companion.setUsingSkill(false);
+        if(!this.isSkillFinished) {
+            this.companion.setUsingSkill(true);
             if(this.companion.performOneTimeSkill(this.companion.getTarget())){
                 this.isSkillFinished = true;
             }
@@ -41,7 +41,7 @@ public class CompanionUseSkillGoal extends Goal {
 
     @Override
     public void tick() {
-        if(this.companion.getTarget() != null && !this.isSkillFinished) {
+        if(!this.isSkillFinished) {
             if(this.companion.performSkillTick(this.companion.getTarget(), this.SkillTimer)){
                 this.isSkillFinished = true;
             }

@@ -28,10 +28,15 @@ public class EntitySiegeRenderer extends GeoCompanionRenderer<EntitySiege>{
         super(renderManager, new SiegeModel());
     }
 
+    @Override
+    protected boolean isLeftHanded() {
+        return false;
+    }
+
     @Nonnull
     @Override
     protected Vector3d getHandItemCoordinate() {
-        return new Vector3d(-0.6F, 0.2F, 1.65F);
+        return new Vector3d(0.6F, 0.2F, 1.65F);
     }
 
 }

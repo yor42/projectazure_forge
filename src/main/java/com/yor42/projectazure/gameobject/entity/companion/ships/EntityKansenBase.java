@@ -376,7 +376,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Override
-    public boolean canUseSkill() {
-        return this.canUseCannonOrTorpedo() && this.isSailing();
+    public boolean canUseSkill(LivingEntity target) {
+        return super.canUseSkill(target) && this.canUseCannonOrTorpedo() && this.isSailing();
     }
 }

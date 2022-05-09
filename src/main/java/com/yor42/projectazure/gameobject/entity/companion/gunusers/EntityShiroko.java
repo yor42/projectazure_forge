@@ -257,7 +257,12 @@ public class EntityShiroko extends EntityGunUserBase {
     }
 
     @Override
-    public boolean canUseSkill() {
+    public boolean canUseSkill(LivingEntity target) {
+
+        if(!super.canUseSkill(target)){
+            return false;
+        }
+
         ItemStack droneStack = this.getInventory().getStackInSlot(12);
         if(droneStack.getItem() instanceof ItemMissleDrone) {
             boolean hasSkillItem = this.isSkillItem(droneStack);

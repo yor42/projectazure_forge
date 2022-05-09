@@ -46,6 +46,8 @@ import static com.yor42.projectazure.libs.enums.CompanionRarity.STAR_5;
 import static com.yor42.projectazure.setup.register.registerItems.WARHAMMER;
 
 public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
+    public List<Entity> HealTarget = new ArrayList<>();
+
     public EntityNearl(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -369,6 +371,50 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
 
     }
 
+    @Override
+    public boolean canUseSkill(LivingEntity target) {
+        int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
+        if(currentspelldelay == 0 && this.getSkillPoints()>=6){
+            if((this.getHealth()/this.getMaxHealth())<=0.5F){
+                return true;
+            }
+            else if(this.getSkillPoints()>=6 && this.getOwner()!=null){
+                List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(10, 2, 10), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
+                if(!HealTarget.isEmpty()){
+                    this.HealTarget = HealTarget;
+                    return true;
+                };
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean performOneTimeSkill(LivingEntity target) {
+        if(!this.HealTarget.isEmpty()) {
+            Entity entity2heal = HealTarget.get(0);
+
+            for (Entity entity : HealTarget) {
+                if (entity2heal instanceof LivingEntity && entity instanceof LivingEntity) {
+                    if (((LivingEntity) entity).getHealth() <= ((LivingEntity) entity2heal).getHealth()) {
+                        entity2heal = entity;
+                    }
+                }
+            }
+            if (entity2heal instanceof LivingEntity) {
+                ((LivingEntity) entity2heal).heal(Math.max(5, this.getAttackDamageMainHand()));
+                for(int i = 0; i < 5; ++i) {
+                    double d0 = this.random.nextGaussian() * 0.02D;
+                    double d1 = this.random.nextGaussian() * 0.02D;
+                    double d2 = this.random.nextGaussian() * 0.02D;
+                    this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, entity2heal.getRandomX(1.0D), entity2heal.getRandomY() + 1.0D, entity2heal.getRandomZ(1.0D), d0, d1, d2);
+                }
+            }
+        }
+        this.setSkillAnimationTime(this.SkillAnimationLength());
+        return true;
+    }
+
     public int SkillAnimationLength(){
         return 18;
     }
@@ -376,9 +422,6 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(DamageSource.mobAttack(this), this.getAttackDamageMainHand());
-        if(this.getSkillPoints()>=6 && this.getOwner()!=null){
-            List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(10, 2, 10), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
-        }
         target.playSound(registerSounds.WARHAMMER_HIT, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
     }
 

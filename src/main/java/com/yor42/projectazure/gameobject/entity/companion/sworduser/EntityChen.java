@@ -367,8 +367,8 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public boolean canUseSkill() {
-        return this.hasSkillItem();
+    public boolean canUseSkill(LivingEntity target) {
+        return super.canUseSkill(target) && this.hasSkillItem();
     }
 
     @Override

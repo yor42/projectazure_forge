@@ -2072,8 +2072,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(USING_SKILL, value);
     }
 
-    public boolean canUseSkill(){
-        return false;
+    public boolean canUseSkill(@Nullable LivingEntity target){
+        return this.getSkillDelayTick() == 0 && this.getTarget() != null && this.getTarget().isAlive();
     }
 
     public void setSkillDelay(){

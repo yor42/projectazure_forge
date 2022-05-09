@@ -79,13 +79,17 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         //PA end;
     }
 
+    protected boolean isLeftHanded(){
+        return false;
+    }
+
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         Vector3d ItemPosition = this.getHandItemCoordinate();
         if (bone.getName().equals("itemMainHand")) {
             stack.pushPose();
             stack.mulPose(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.MAINHAND);
+            ItemStack mainHandStack = this.isLeftHanded()? this.entity.getItemBySlot(EquipmentSlotType.OFFHAND) :this.entity.getItemBySlot(EquipmentSlotType.MAINHAND);
             stack.translate(ItemPosition.x, ItemPosition.y, ItemPosition.z);
             stack.scale(1.5F, 1.5F, 1.5F);
             if (!mainHandStack.isEmpty()) {
@@ -99,7 +103,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         } else if (bone.getName().equals("itemOffHand")) {
             stack.pushPose();
             stack.mulPose(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.entity.getItemBySlot(EquipmentSlotType.OFFHAND);
+            ItemStack mainHandStack = this.isLeftHanded()?this.entity.getItemBySlot(EquipmentSlotType.MAINHAND) :this.entity.getItemBySlot(EquipmentSlotType.OFFHAND);
             float xvalue = (float) (ItemPosition.x*-1);
             if (mainHandStack.isShield(this.entity)) {
                 stack.mulPose(Vector3f.ZP.rotationDegrees(180));
