@@ -2,22 +2,28 @@ package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
+import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
@@ -30,8 +36,11 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
 
 import static com.yor42.projectazure.libs.enums.CompanionRarity.STAR_5;
 import static com.yor42.projectazure.setup.register.registerItems.WARHAMMER;
@@ -71,6 +80,19 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
+    public void aiStep() {
+        super.aiStep();
+        if(this.tickCount%20==0){
+            this.addSkillPoints();
+        }
+    }
+
+    @Override
+    public int maxSkillPoint() {
+        return 12;
+    }
+
+    @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
         if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
@@ -96,6 +118,10 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
         }
         else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.getSkillAnimationTime()>0){
+            event.getController().setAnimation(builder.addAnimation("skill_arm", false));
             return PlayState.CONTINUE;
         }
         else if(this.isNonVanillaMeleeAttacking()){
@@ -127,7 +153,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
 
             return PlayState.CONTINUE;
         }
-        if(this.isOrderedToSit()|| this.getVehicle() != null){
+        else if(this.isOrderedToSit()|| this.getVehicle() != null){
             if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
                 return PlayState.CONTINUE;
@@ -229,7 +255,11 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
-        if(this.isNonVanillaMeleeAttacking()){
+        else if(this.getSkillAnimationTime()>0){
+            event.getController().setAnimation(builder.addAnimation("skill_leg", false));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isNonVanillaMeleeAttacking()){
             event.getController().setAnimation(builder.addAnimation("meleeattack_leg", false));
             return PlayState.CONTINUE;
         }
@@ -292,9 +322,63 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
         return 3;
     }
 
+    public void UpdateandPerformNonVanillaMeleeAttack(){
+        List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(5, 2, 5), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
+        int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
+        @Nullable
+        LivingEntity target = this.getTarget();
+        if (currentspelldelay > 0) {
+            this.getNavigation().stop();
+            if (target == null || !target.isAlive()) {
+                this.setMeleeAttackDelay(0);
+                this.AttackCount = 0;
+            }
+            else if(this.getSkillPoints()>=6 && (this.getHealth()/this.getMaxHealth())<=0.5F){
+                this.heal(this.getAttackDamageMainHand()*1.1F);
+                this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+                this.addSkillPoints(-6);
+                this.setSkillAnimationTime(this.SkillAnimationLength());
+            }
+            else if(this.getSkillPoints()>=6 && !HealTarget.isEmpty()){
+                LivingEntity entity2heal = (LivingEntity) HealTarget.get(0);
+                for(Entity entity:HealTarget){
+                    if(entity instanceof LivingEntity && entity2heal.getHealth() > ((LivingEntity) entity).getHealth()){
+                        entity2heal = (LivingEntity) entity;
+                    }
+                }
+                entity2heal.heal(this.getAttackDamageMainHand()*1.1F);
+                this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, entity2heal.getRandomX(0.5D), entity2heal.getRandomY() - 0.25D, entity2heal.getRandomZ(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
+                this.addSkillPoints(-6);
+                this.setSkillAnimationTime(this.SkillAnimationLength());
+            }
+            else {
+                this.lookAt(target, 30.0F, 30.0F);
+                this.setMeleeAttackDelay(currentspelldelay - 1);
+                int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
+                if (!this.getMeleeAnimationAudioCueDelay().isEmpty() && this.getMeleeAnimationAudioCueDelay().contains(delay)) {
+                    this.playMeleeAttackPreSound();
+                }
+                if (this.getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {
+                    this.AttackCount += 1;
+                    this.PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
+                }
+            }
+        } else if (this.AttackCount > 0) {
+            this.AttackCount = 0;
+        }
+
+    }
+
+    public int SkillAnimationLength(){
+        return 18;
+    }
+
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(DamageSource.mobAttack(this), this.getAttackDamageMainHand());
+        if(this.getSkillPoints()>=6 && this.getOwner()!=null){
+            List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(10, 2, 10), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
+        }
         target.playSound(registerSounds.WARHAMMER_HIT, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
     }
 

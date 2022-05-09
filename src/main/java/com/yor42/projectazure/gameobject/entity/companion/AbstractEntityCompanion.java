@@ -398,6 +398,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISUSINGGUN = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Integer> HEAL_TIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> SKILL_POINTS = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> SKILL_ANIMATION_TIME = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<ItemStack> SKILL_ITEM_0 = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.ITEM_STACK);
     protected static final DataParameter<ItemStack> SKILL_ITEM_1 = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.ITEM_STACK);
     protected static final DataParameter<ItemStack> SKILL_ITEM_2 = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.ITEM_STACK);
@@ -1275,6 +1277,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.define(ISFREEROAMING, false);
         this.entityData.define(VALID_HOME_DISTANCE, -1.0f);
         this.entityData.define(HEAL_TIMER, 0);
+        this.entityData.define(SKILL_POINTS, 0);
+        this.entityData.define(SKILL_ANIMATION_TIME, 0);
         this.entityData.define(RELOAD_TIMER_MAINHAND, 0);
         this.entityData.define(RELOAD_TIMER_OFFHAND, 0);
         this.entityData.define(PICKUP_ITEM, false);
@@ -1549,7 +1553,44 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return path != null && path.canReach();
     }
 
+    public int getSkillPoints(){
+        return this.entityData.get(SKILL_POINTS);
+    }
 
+    public void setSkillPoints(int points) {
+        this.entityData.set(SKILL_POINTS, points);
+    }
+
+    public void addSkillPoints(int points) {
+        int previousValue = this.getSkillPoints();
+        int value = previousValue + points;
+        if(this.maxSkillPoint()>0){
+            value = Math.min(value, this.maxSkillPoint());
+        }
+        this.setSkillPoints(Math.max(0, value));
+    }
+
+    public void addSkillPoints() {
+        this.addSkillPoints(1);
+    }
+
+    public int maxSkillPoint(){
+        return 0;
+    }
+
+    public int getSkillAnimationTime(){
+        return this.entityData.get(SKILL_ANIMATION_TIME);
+    }
+
+    public void setSkillAnimationTime(int value){
+        this.entityData.set(SKILL_ANIMATION_TIME, value);
+    }
+
+    public void addSkillAnimationTime(int points) {
+        int previousValue = this.getSkillAnimationTime();
+        int value = previousValue + points;
+        this.setSkillAnimationTime(Math.max(0, value));
+    }
     @Override
     public void aiStep() {
         super.aiStep();
@@ -1701,32 +1742,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
 
 
-            if(this instanceof IMeleeAttacker) {
-                int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
-                @Nullable
-                LivingEntity target = this.getTarget();
-                if (currentspelldelay > 0) {
-                    this.getNavigation().stop();
-                    if (target == null || !target.isAlive()) {
-                        this.setMeleeAttackDelay(0);
-                        this.AttackCount = 0;
-                    } else {
-                        this.lookAt(target, 30.0F, 30.0F);
-                        this.setMeleeAttackDelay(currentspelldelay - 1);
-                        int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
-                        if(!((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().isEmpty() && ((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().contains(delay)){
-                            this.playMeleeAttackPreSound();
-                        }
-                        if (((IMeleeAttacker)this).getAttackDamageDelay().contains(delay) && this.distanceTo(target)<=((IMeleeAttacker)this).getAttackRange(((IMeleeAttacker)this).isTalentedWeaponinMainHand())) {
-                            this.AttackCount+=1;
-                            ((IMeleeAttacker)this).PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
-                        }
-                    }
-                }
-                else if(this.AttackCount>0){
-                    this.AttackCount = 0;
-                }
-
+            this.UpdateandPerformNonVanillaMeleeAttack();
+            if(this.getSkillAnimationTime()>0){
+                this.addSkillAnimationTime(-1);
+                this.getNavigation().stop();
             }
 
             if(this instanceof ISpellUser) {
@@ -1846,6 +1865,34 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(!this.getCommandSenderWorld().isClientSide() && this.isFreeRoaming() && (this.getCommandSenderWorld().isNight() && this.isOrderedToSit() && this.isInHomeRangefromCurrenPos() && this.getNavigation().createPath(this.getHOMEPOS().get(), 0) != null && this.getNavigation().createPath(this.getHOMEPOS().get(), 0).canReach())){
             this.shouldBeSitting = this.isOrderedToSit();
             this.setOrderedToSit(false);
+        }
+    }
+
+    public void UpdateandPerformNonVanillaMeleeAttack(){
+        if(this instanceof IMeleeAttacker) {
+            int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
+            @Nullable
+            LivingEntity target = this.getTarget();
+            if (currentspelldelay > 0) {
+                this.getNavigation().stop();
+                if (target == null || !target.isAlive()) {
+                    this.setMeleeAttackDelay(0);
+                    this.AttackCount = 0;
+                } else {
+                    this.lookAt(target, 30.0F, 30.0F);
+                    this.setMeleeAttackDelay(currentspelldelay - 1);
+                    int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
+                    if (!((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().isEmpty() && ((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().contains(delay)) {
+                        this.playMeleeAttackPreSound();
+                    }
+                    if (((IMeleeAttacker) this).getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {
+                        this.AttackCount += 1;
+                        ((IMeleeAttacker) this).PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
+                    }
+                }
+            } else if (this.AttackCount > 0) {
+                this.AttackCount = 0;
+            }
         }
     }
 
