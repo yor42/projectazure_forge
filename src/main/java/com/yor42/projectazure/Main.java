@@ -154,7 +154,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.SCHWARZ.get(), EntitySchwarzRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.SYLVI.get(), EntitySylviRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.YAMATO.get(), EntityYamatoRenderer::new);
-
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.NEARL.get(), EntityNearlRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);

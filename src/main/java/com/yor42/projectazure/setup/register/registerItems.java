@@ -404,6 +404,9 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWN_SIEGE = registerManager.ITEMS.register("spawnsiege", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SIEGE, new Item.Properties()
             .tab(PA_SHIPS)));
 
+    public static final RegistryObject<Item> SPAWN_NEARL = registerManager.ITEMS.register("spawnnearl", () -> new ItemKansenSpawnEgg(ENTITYTYPE_NEARL, new Item.Properties()
+            .tab(PA_SHIPS)));
+
     public static final RegistryObject<Item> SPAWN_SCHWARZ = registerManager.ITEMS.register("spawnschwarz", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SCHWARZ, new Item.Properties()
             .tab(PA_SHIPS)));
 

@@ -89,6 +89,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue SiegeAttackDamage;
         public final ForgeConfigSpec.DoubleValue SiegeMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue NearlHealth;
+        public final ForgeConfigSpec.DoubleValue NearlSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue NearlAttackDamage;
+        public final ForgeConfigSpec.DoubleValue NearlMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue SchwarzHealth;
         public final ForgeConfigSpec.DoubleValue SchwarzSwimSpeed;
         public final ForgeConfigSpec.DoubleValue SchwarzAttackDamage;
@@ -259,6 +264,11 @@ public class PAConfig {
             SiegeSwimSpeed = builder.defineInRange("Swim Speed of Siege", 2.5, 0, 1024);
             SiegeAttackDamage = builder.defineInRange("Attack Damage of Siege", 2.0F, 0, 1024);
             SiegeMovementSpeed = builder.defineInRange("Movement speed of Siege", 0.4F, 0, 2);
+
+            NearlHealth = builder.defineInRange("Max Health of Nearl", 20D, 1, 1024);
+            NearlSwimSpeed = builder.defineInRange("Swim Speed of Nearl", 2.5, 0, 1024);
+            NearlAttackDamage = builder.defineInRange("Attack Damage of Nearl", 2.0F, 0, 1024);
+            NearlMovementSpeed = builder.defineInRange("Movement speed of Nearl", 0.4F, 0, 2);
 
             SchwarzHealth = builder.defineInRange("Max Health of Schwarz", 20D, 1, 1024);
             SchwarzSwimSpeed = builder.defineInRange("Swim Speed of Schwarz", 2.5, 0, 1024);

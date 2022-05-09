@@ -42,6 +42,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_LAPPLAND, EntityLappland.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SIEGE, EntitySiege.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SCHWARZ, EntitySchwarz.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_NEARL, EntityNearl.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SYLVI, EntitySylvi.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_YAMATO, EntityYamato.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().build());
