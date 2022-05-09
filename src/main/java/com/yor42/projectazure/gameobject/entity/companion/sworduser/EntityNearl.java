@@ -26,6 +26,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -392,27 +393,52 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
     @Override
     public boolean performOneTimeSkill(LivingEntity target) {
         if(!this.HealTarget.isEmpty()) {
-            Entity entity2heal = HealTarget.get(0);
+            this.setSkillAnimationTime(this.SkillAnimationLength());
+            return false;
+        }
+        return true;
+    }
 
-            for (Entity entity : HealTarget) {
-                if (entity2heal instanceof LivingEntity && entity instanceof LivingEntity) {
-                    if (((LivingEntity) entity).getHealth() <= ((LivingEntity) entity2heal).getHealth()) {
-                        entity2heal = entity;
+    @Override
+    public boolean performSkillTick(LivingEntity target, int Timer) {
+        if(Timer == 13){
+            if(!this.HealTarget.isEmpty()) {
+                Entity entity2heal = HealTarget.get(0);
+                if(this.getHealth()/this.getMaxHealth()<=0.5F){
+                    entity2heal = this;
+                }
+                else {
+                    for (Entity entity : HealTarget) {
+                        if (entity2heal instanceof LivingEntity && entity instanceof LivingEntity) {
+                            if (((LivingEntity) entity).getHealth() <= ((LivingEntity) entity2heal).getHealth()) {
+                                entity2heal = entity;
+                            }
+                        }
                     }
                 }
-            }
-            if (entity2heal instanceof LivingEntity) {
-                ((LivingEntity) entity2heal).heal(Math.max(5, this.getAttackDamageMainHand()));
-                for(int i = 0; i < 5; ++i) {
-                    double d0 = this.random.nextGaussian() * 0.02D;
-                    double d1 = this.random.nextGaussian() * 0.02D;
-                    double d2 = this.random.nextGaussian() * 0.02D;
-                    this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, entity2heal.getRandomX(1.0D), entity2heal.getRandomY() + 1.0D, entity2heal.getRandomZ(1.0D), d0, d1, d2);
+
+                if (entity2heal instanceof LivingEntity) {
+                    ((LivingEntity) entity2heal).heal(Math.max(5, this.getAttackDamageMainHand()));
+                    for(int i = 0; i < 5; ++i) {
+                        double d0 = this.random.nextGaussian() * 0.02D;
+                        double d1 = this.random.nextGaussian() * 0.02D;
+                        double d2 = this.random.nextGaussian() * 0.02D;
+                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, entity2heal.getRandomX(1.0D), entity2heal.getRandomY() + 1.0D, entity2heal.getRandomZ(1.0D), d0, d1, d2);
+                    }
+                    this.addMorale(-1);
+                    this.playSound(registerSounds.NEARL_HEAL, 0.8F+(this.random.nextFloat()*0.4F), 0.8F+(this.random.nextFloat()*0.4F));
+                    this.getCommandSenderWorld().playSound(null, entity2heal.blockPosition(), registerSounds.HEAL_BOOST, SoundCategory.NEUTRAL, 0.8F+(this.random.nextFloat()*0.4F), 0.8F+(this.random.nextFloat()*0.4F));
                 }
+                return true;
             }
         }
-        this.setSkillAnimationTime(this.SkillAnimationLength());
-        return true;
+        return false;
+    }
+
+    @Override
+    public void resetSkill() {
+        super.resetSkill();
+        this.HealTarget.clear();
     }
 
     public int SkillAnimationLength(){

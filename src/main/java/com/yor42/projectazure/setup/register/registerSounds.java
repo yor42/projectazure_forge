@@ -48,6 +48,9 @@ public final class registerSounds {
 
     public static final SoundEvent CLAYMORE_IMPACT = registerSoundEvent("claymore_hit");
 
+    public static final SoundEvent NEARL_HEAL = registerSoundEvent("nearl_heal");
+    public static final SoundEvent HEAL_BOOST = registerSoundEvent("heal_boost");
+
     public static final SoundEvent CHIMERA_PROJECTILE_LAUNCH = registerSoundEvent("chimera_projectile_launch");
     public static final SoundEvent CHIMERA_PROJECTILE_HIT = registerSoundEvent("chimera_projectile_impact");
 

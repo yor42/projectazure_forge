@@ -2341,6 +2341,20 @@
       }
     ]
   },
+  "nearl_heal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/nearl_heal"
+      }
+    ]
+  },
+  "heal_boost": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/healboost"
+      }
+    ]
+  },
   "sheath_hit": {
     "sounds": [
       {
