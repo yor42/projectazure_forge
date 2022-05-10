@@ -27,9 +27,14 @@ public class EntityLapplandRenderer extends GeoCompanionRenderer<EntityLappland>
         super(renderManager, new LapplandModel());
     }
 
+    @Override
+    protected boolean isLeftHanded() {
+        return true;
+    }
+
     @Nonnull
     @Override
     protected Vector3d getHandItemCoordinate() {
-        return new Vector3d(-0.6F, 0.2F, 1.4F);
+        return new Vector3d(0.6F, 0.2F, 1.4F);
     }
 }

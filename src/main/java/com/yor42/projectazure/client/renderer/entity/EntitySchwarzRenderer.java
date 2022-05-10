@@ -32,7 +32,7 @@ public class EntitySchwarzRenderer extends GeoCompanionRenderer<EntitySchwarz> {
     @Nonnull
     @Override
     protected Vector3d getHandItemCoordinate() {
-        return new Vector3d(-0.6F, 0.2F, 1.4F);
+        return new Vector3d(0.6F, 0.2F, 1.4F);
     }
 
 }
