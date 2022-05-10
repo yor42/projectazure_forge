@@ -1900,6 +1900,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.getEntityData().get(SKILL_ITEM_1);
     }
 
+    /*
+    Play sounds that should play before hitsound here. Weapon swinging for example.
+     */
     public void playMeleeAttackPreSound(){}
 
     public int getNonVanillaMeleeAttackDelay(){
@@ -2056,6 +2059,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return true;
     }
 
+    /*
+    Execute skills that requires loops here.
+    Target = as it says, Target entity of host.
+    Timer = ticks elapsed after skill activated
+     */
     public boolean performSkillTick(LivingEntity target, int Timer){
         return true;
     }

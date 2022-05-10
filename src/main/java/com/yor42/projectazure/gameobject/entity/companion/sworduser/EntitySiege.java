@@ -7,12 +7,14 @@ import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -27,18 +29,29 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static com.yor42.projectazure.setup.register.registerItems.WARHAMMER;
 
 public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
     public EntitySiege(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
+    }
+
+    @Override
+    public void registerControllers(AnimationData animationData) {
+        AnimationController UpperBodycontroller = new AnimationController<>(this, "controller_lowerbody", 0, this::predicate_lowerbody);
+        animationData.addAnimationController(UpperBodycontroller);
+        animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 0, this::predicate_upperbody));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_head", 0, this::predicate_head));
     }
 
     @Override
@@ -72,6 +85,10 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
         }
         else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.getSkillAnimationTime()>0){
+            event.getController().setAnimation(builder.addAnimation("leaping_hammer_arm", false));
             return PlayState.CONTINUE;
         }
         else if(this.isNonVanillaMeleeAttacking()){
@@ -167,11 +184,61 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
         return PlayState.CONTINUE;
     }
 
+    public boolean canUseSkill(@Nullable LivingEntity target){
+        boolean val = this.getNonVanillaMeleeAttackDelay() == 0 && this.getTarget() != null && this.getTarget().isAlive() && this.getSkillPoints()>=12 && this.isSkillItem(this.getMainHandItem());
+        return val;
+    }
+
+    @Override
+    public boolean isSkillItem(ItemStack stack) {
+        return this.isTalentedWeapon(stack);
+    }
+
+    @Override
+    public boolean performOneTimeSkill(LivingEntity target) {
+        boolean val = this.getTarget() != null && this.getTarget().isAlive() && this.getSkillPoints()>=12;
+        return !val;
+    }
+
+    @Override
+    public boolean performSkillTick(LivingEntity target, int Timer) {
+        if(target != null && this.getOwner() != null){
+            if(Timer == 0){
+                this.setSkillAnimationTime(this.getInitialMeleeAttackDelay());
+                this.playSound(registerSounds.LEAPHAMMER_START, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
+            }
+            else if(this.getAttackDamageDelay().contains(Timer)){
+                List<Entity> AttackTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(2, 2, 2), (entity) -> entity instanceof LivingEntity && (!EntitySiege.this.isOwnedBy((LivingEntity) entity) && !(entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntitySiege.this.getOwner()))) && (PAConfig.CONFIG.EnablePVP.get() && entity instanceof PlayerEntity));
+                for(Entity entity : AttackTarget){
+                    if(entity instanceof LivingEntity){
+                        entity.hurt(DamageSource.mobAttack(this), this.getAttackDamageMainHand()*2.2F);
+                    }
+                }
+                this.playSound(registerSounds.LEAPHAMMER_HIT, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
+                this.addSkillPoints(-12);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if(this.tickCount%20==0){
+            this.addSkillPoints();
+        }
+    }
+
+    @Override
+    public int maxSkillPoint() {
+        return 24;
+    }
+
     @Override
     public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
         return new ArrayList<>(Collections.singletonList(20));
     }
-
     @Override
     public void playMeleeAttackPreSound() {
         this.playSound(registerSounds.WARHAMMER_SWING, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
@@ -215,7 +282,11 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
-        if(this.isNonVanillaMeleeAttacking()){
+        else if(this.getSkillAnimationTime()>0){
+            event.getController().setAnimation(builder.addAnimation("leaping_hammer_leg", false));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isNonVanillaMeleeAttacking()){
             event.getController().setAnimation(builder.addAnimation("meleeattack_leg", false));
             return PlayState.CONTINUE;
         }
@@ -261,6 +332,11 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
         return new ArrayList<>(Collections.singletonList(WARHAMMER.get()));
+    }
+
+    @Override
+    public boolean isDuelWielding() {
+        return false;
     }
 
     @Override

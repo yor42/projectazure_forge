@@ -326,7 +326,6 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
     }
 
     public void UpdateandPerformNonVanillaMeleeAttack(){
-        List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(5, 2, 5), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
         int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
         @Nullable
         LivingEntity target = this.getTarget();
@@ -336,24 +335,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
                 this.setMeleeAttackDelay(0);
                 this.AttackCount = 0;
             }
-            else if(this.getSkillPoints()>=6 && (this.getHealth()/this.getMaxHealth())<=0.5F){
-                this.heal(this.getAttackDamageMainHand()*1.1F);
-                this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
-                this.addSkillPoints(-6);
-                this.setSkillAnimationTime(this.SkillAnimationLength());
-            }
-            else if(this.getSkillPoints()>=6 && !HealTarget.isEmpty()){
-                LivingEntity entity2heal = (LivingEntity) HealTarget.get(0);
-                for(Entity entity:HealTarget){
-                    if(entity instanceof LivingEntity && entity2heal.getHealth() > ((LivingEntity) entity).getHealth()){
-                        entity2heal = (LivingEntity) entity;
-                    }
-                }
-                entity2heal.heal(this.getAttackDamageMainHand()*1.1F);
-                this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, entity2heal.getRandomX(0.5D), entity2heal.getRandomY() - 0.25D, entity2heal.getRandomZ(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
-                this.addSkillPoints(-6);
-                this.setSkillAnimationTime(this.SkillAnimationLength());
-            }
+
             else {
                 this.lookAt(target, 30.0F, 30.0F);
                 this.setMeleeAttackDelay(currentspelldelay - 1);
@@ -392,10 +374,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public boolean performOneTimeSkill(LivingEntity target) {
-        if(!this.HealTarget.isEmpty()) {
-            return false;
-        }
-        return true;
+        return this.HealTarget.isEmpty();
     }
 
     @Override

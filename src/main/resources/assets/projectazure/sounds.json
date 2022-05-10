@@ -2355,6 +2355,20 @@
       }
     ]
   },
+  "leaphammer_start": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/siege/leaphammer_start"
+      }
+    ]
+  },
+  "leaphammer_hit": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/siege/leaphammer_hit"
+      }
+    ]
+  },
   "sheath_hit": {
     "sounds": [
       {
@@ -2386,21 +2400,21 @@
   "warhammer_swing": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/lappland/sword_swing"
+        "name": "projectazure:entity/akn/lappland/hammer_swing"
       }
     ]
   },
   "warhammer_hit": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/schwarz/hammer_hit"
+        "name": "projectazure:entity/akn/siege/hammer_hit"
       }
     ]
   },
   "sword_swing": {
     "sounds": [
       {
-        "name": "projectazure:entity/akn/schwarz/hammer_swing"
+        "name": "projectazure:entity/akn/siege/sword_swing"
       }
     ]
   },
