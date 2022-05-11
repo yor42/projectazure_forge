@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.items.gun;
 
-import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;

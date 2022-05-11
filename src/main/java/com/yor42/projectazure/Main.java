@@ -11,7 +11,7 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatR
 import com.yor42.projectazure.client.renderer.entity.projectile.*;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.events.ModBusEventHandlerClient;
-import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;

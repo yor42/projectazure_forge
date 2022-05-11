@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.capability;
+package com.yor42.projectazure.gameobject.capability.playercapability;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
@@ -25,7 +26,9 @@ public class ProjectAzurePlayerCapability {
 
     public int OffHandFireDelay = 0;
     public int MainHandFireDelay = 0;
+    //looks Kinda Unoptimal if you ask me...
     public ArrayList<AbstractEntityCompanion> companionList = new ArrayList<>();
+    public ArrayList<CompanionTeams> TeamList = new ArrayList<>();
 
     public PlayerEntity player;
 
@@ -126,6 +129,11 @@ public class ProjectAzurePlayerCapability {
         for(AbstractEntityCompanion companion: this.companionList){
             entityList.add(companion.serializeNBT());
         }
+        ListNBT TeamList = new ListNBT();
+        for(CompanionTeams team: this.TeamList){
+            TeamList.add(team.serializeNBT());
+        }
+        nbt.put("teams", TeamList);
         nbt.put("companions", entityList);
         return nbt;
     }
@@ -133,7 +141,7 @@ public class ProjectAzurePlayerCapability {
     public void deserializeNBT(CompoundNBT compound){
         this.setMainHandFireDelay(compound.getInt("mainHandDelay"));
         this.setMainHandFireDelay(compound.getInt("offHandDelay"));
-        ListNBT entities = compound.getList("companions", 0);
+        ListNBT entities = compound.getList("companions", Constants.NBT.TAG_COMPOUND);
         for(int i=0; i<entities.size(); i++){
             CompoundNBT nbt = entities.getCompound(i);
             World world = this.player.getCommandSenderWorld();
@@ -144,6 +152,11 @@ public class ProjectAzurePlayerCapability {
                     this.companionList.add((AbstractEntityCompanion) entity);
                 }
             }
+        }
+        ListNBT teams = compound.getList("teams", Constants.NBT.TAG_COMPOUND);
+        for(int i=0; i<teams.size(); i++){
+            CompoundNBT nbt = teams.get(i);
+            this.TeamList.add(CompanionTeams.deserializeNBT(nbt))
         }
     }
 

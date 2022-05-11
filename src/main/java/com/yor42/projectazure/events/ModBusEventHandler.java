@@ -2,7 +2,7 @@ package com.yor42.projectazure.events;
 
 import com.google.common.base.Throwables;
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
@@ -27,7 +27,7 @@ import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability.CapabilityID;
+import static com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability.CapabilityID;
 
 @Mod.EventBusSubscriber(modid = Constants.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModBusEventHandler {

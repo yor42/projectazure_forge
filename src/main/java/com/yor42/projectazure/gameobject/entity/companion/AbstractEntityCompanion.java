@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.capability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
