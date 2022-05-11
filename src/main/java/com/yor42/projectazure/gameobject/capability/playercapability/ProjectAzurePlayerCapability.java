@@ -155,8 +155,8 @@ public class ProjectAzurePlayerCapability {
         }
         ListNBT teams = compound.getList("teams", Constants.NBT.TAG_COMPOUND);
         for(int i=0; i<teams.size(); i++){
-            CompoundNBT nbt = teams.get(i);
-            this.TeamList.add(CompanionTeams.deserializeNBT(nbt))
+            CompoundNBT nbt = teams.getCompound(i);
+            this.TeamList.add(CompanionTeams.deserializeNBT(nbt));
         }
     }
 

@@ -17,32 +17,28 @@ import java.util.UUID;
 
 public class CompanionTeams {
 
-    private final UUID[] teammates;
+    private final ArrayList<UUID> teammates;
     private final UUID OwnerUUID, TeamUUID;
     @Nullable
     private IFormattableTextComponent CustomName;
 
-    private CompanionTeams(int teamsize, UUID TeamUUID, UUID OwnerUUID){
-        this.teammates = new UUID[teamsize];
-        this.TeamUUID = TeamUUID;
-        this.OwnerUUID = OwnerUUID;
+    private CompanionTeams(UUID TeamUUID, UUID OwnerUUID){
+        this(new ArrayList<UUID>(), TeamUUID, OwnerUUID, null);
     }
 
-    private CompanionTeams(UUID[] entries, UUID TeamUUID, UUID OwnerUUID,@Nullable IFormattableTextComponent customname){
+    private CompanionTeams(ArrayList<UUID> entries, UUID TeamUUID, UUID OwnerUUID,@Nullable IFormattableTextComponent customname){
         this.teammates = entries;
         this.TeamUUID = TeamUUID;
         this.OwnerUUID = OwnerUUID;
         this.CustomName = customname;
     }
-
-    public CompanionTeams(UUID TeamUUID, UUID OwnerUUID){
-        this(5, TeamUUID, OwnerUUID);
-    }
-
     public CompanionTeams(UUID OwnerUUID){
-        this(5, UUID.randomUUID(), OwnerUUID);
+        this(UUID.randomUUID(), OwnerUUID);
     }
 
+    public void setCustomName(IFormattableTextComponent customname){
+        this.CustomName = customname;
+    }
     public UUID getOwnerUUID(){
         return this.OwnerUUID;
     }
@@ -76,14 +72,10 @@ public class CompanionTeams {
         nbt.putUUID("teamUUID", this.TeamUUID);
         nbt.putUUID("ownerUUID", this.OwnerUUID);
         ListNBT list = new ListNBT();
-        nbt.putUUID("teamSize", this.teammates.length);
-        for(int i=0; i<this.teammates.length; i++){
-            if(this.teammates[i] != null){
-                CompoundNBT entry = new CompoundNBT();
-                entry.putInt("index", i);
-                entry.putUUID("UUID", this.teammates[i]);
-                list.add(entry);
-            }
+        for(UUID id : this.teammates){
+            CompoundNBT entry = new CompoundNBT();
+            entry.putUUID("UUID", id);
+            list.add(entry);
         }
         nbt.put("entries", list);
         if(this.CustomName != null) {
@@ -96,12 +88,11 @@ public class CompanionTeams {
         UUID TeamUUID = compound.getUUID("teamUUID");
         UUID OwnerUUID = compound.getUUID("ownerUUID");
         ListNBT list = compound.getList("entries", Constants.NBT.TAG_COMPOUND);
-        UUID[] Teamentries = new UUID[compound.getInt("teamSize")]
+        List<UUID> entries = new ArrayList<UUID>();
         for(int i = 0; i < tagList.size(); i++){
             CompoundNBT entry = tagList.get(i);
-            int index = entry.getInt("index");
             UUID TeammateUUID = entry.getUUID("UUID");
-            Teamentries[index] = TeammateUUID;
+            entries.add(TeammateUUID);
         }
         IFormattableTextComponent customname;
 
@@ -109,6 +100,6 @@ public class CompanionTeams {
             customname = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
         }
 
-        return new CompanionTeams(Teamentries, TeamUUID, OwnerUUID, customname);
+        return new CompanionTeams(entries, TeamUUID, OwnerUUID, customname);
     }
 }
