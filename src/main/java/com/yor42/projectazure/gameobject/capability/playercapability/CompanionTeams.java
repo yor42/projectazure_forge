@@ -57,6 +57,16 @@ public class CompanionTeams {
         return false;
     }
 
+    @Nullable
+    public UUID getMemberUUID(int index){
+        try{
+            return this.teammates[index];
+        }
+        catch (IndexOutOfBoundsException e){
+            return null;
+        }
+    }
+
     public ITextComponent getDisplayName(){
         return this.CustomName != null? this.CustomName:new TranslationTextComponent("gui.teams.name");
     }
