@@ -1,13 +1,12 @@
-package com.yor42.projectazure.client.gui;
+package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeacon;
+import com.yor42.projectazure.gameobject.containers.machine.ContainerDryDock;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.network.packets.StartRecruitPacket;
-import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
@@ -16,14 +15,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class guiRecruitBeacon extends ContainerScreen<ContainerRecruitBeacon> implements IHasContainer<ContainerRecruitBeacon> {
+public class guiDryDock extends ContainerScreen<ContainerDryDock> {
 
-    private static final ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/recruit_beacon.png");
+    private final ContainerDryDock container;
 
-    private final ContainerRecruitBeacon container;
-
-
-    public guiRecruitBeacon(ContainerRecruitBeacon screenContainer, PlayerInventory inv, ITextComponent titleIn) {
+    private static final ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/dry_dock.png");
+    public guiDryDock(ContainerDryDock screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
         this.container = screenContainer;
     }
@@ -33,17 +30,6 @@ public class guiRecruitBeacon extends ContainerScreen<ContainerRecruitBeacon> im
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
-        if(isHovering(157, 6,10,72,mouseX,mouseY)){
-            this.renderTooltip(matrixStack, new StringTextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), mouseX,mouseY);
-        }
-        this.renderButtons(matrixStack, mouseX, mouseY, partialTicks);
-    }
-
-    private void renderButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        Button button = new Button(this.leftPos+102,this.topPos+61,50,16,new TranslationTextComponent("gui.machine.start"), (action)-> {
-            Main.NETWORK.sendToServer(new StartRecruitPacket(this.container.getBlockPos()));
-        });
-        this.addButton(button);
     }
 
     @Override
@@ -58,20 +44,30 @@ public class guiRecruitBeacon extends ContainerScreen<ContainerRecruitBeacon> im
 
     @Override
     protected void renderLabels(MatrixStack matrixStack, int x, int y) {
-
         this.font.draw(matrixStack, this.title, 51, 7, 0x00FF00);
 
         float renderScale = 0.6F;
         matrixStack.pushPose();
         matrixStack.scale(renderScale, renderScale, renderScale);
-        this.font.draw(matrixStack, new TranslationTextComponent("gui.recruitbeacon_remainingtime").append(":"), 51/renderScale,38/renderScale, 0x00FF00);
+        this.font.draw(matrixStack, new TranslationTextComponent("gui.construction_eta").append(":"), 51/renderScale,39/renderScale, 0x00FF00);
         matrixStack.popPose();
 
-        renderScale = 1.5F;
+        renderScale = 0.95F;
         matrixStack.pushPose();
         matrixStack.scale(renderScale, renderScale, renderScale);
         StringTextComponent RemainingTime = MathUtil.Tick2FormattedClock(container.getRemainingTick());
-        this.font.draw(matrixStack, RemainingTime, 51/renderScale,45/renderScale, 0x00FF00);
+        this.font.draw(matrixStack, RemainingTime, 51/renderScale,46/renderScale, 0x00FF00);
         matrixStack.popPose();
+        this.renderButtons();
+        if(isHovering(157, 6,10,72,x,y)){
+            this.renderTooltip(matrixStack, new StringTextComponent(this.container.getField().get(2)+"/"+this.container.getField().get(3)), x,y);
+        }
+    }
+
+    private void renderButtons() {
+        Button button = new Button(this.leftPos+49,this.topPos+60,61,16,new TranslationTextComponent("gui.machine.start"), (action)-> {
+            Main.NETWORK.sendToServer(new StartRecruitPacket(this.container.getBlockPos()));
+        });
+        this.addButton(button);
     }
 }

@@ -19,6 +19,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -59,6 +61,17 @@ public class ProjectAzurePlayerCapability {
 
     public void setMainHandFireDelay(int rightHandFireDelay) {
         this.MainHandFireDelay = rightHandFireDelay;
+    }
+
+    public Optional<CompanionTeams> getTeambyUUID(UUID uuid) {
+        if(!this.TeamList.isEmpty()) {
+            for (CompanionTeams team : this.TeamList) {
+                if (team.getTeamUUID() == uuid) {
+                    return Optional.of(team);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     public void setDelay(Hand handIn, int delay){

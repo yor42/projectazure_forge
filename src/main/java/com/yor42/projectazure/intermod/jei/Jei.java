@@ -1,6 +1,6 @@
 package com.yor42.projectazure.intermod.jei;
 
-import com.yor42.projectazure.client.gui.*;
+import com.yor42.projectazure.client.gui.container.*;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;

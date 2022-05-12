@@ -1,4 +1,4 @@
-package com.yor42.projectazure.client.gui;
+package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.Main;

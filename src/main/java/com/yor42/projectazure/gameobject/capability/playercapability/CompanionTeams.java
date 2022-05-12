@@ -44,11 +44,8 @@ public class CompanionTeams {
     }
 
     public boolean addEntitytoTeam(AbstractEntityCompanion entity){
-        for(int i=0; i<this.teammates.length; i++){
-            if(this.teammates[i] == null){
-                this.teammates[i] = entity.getUUID();
-                return true;
-            }
+        if(teammates.size()<5){
+            this.teammates.add(entity.getUUID());
         }
         return false;
     }
@@ -56,11 +53,15 @@ public class CompanionTeams {
     @Nullable
     public UUID getMemberUUID(int index){
         try{
-            return this.teammates[index];
+            return this.teammates.get(index);
         }
         catch (IndexOutOfBoundsException e){
             return null;
         }
+    }
+
+    public UUID getTeamUUID(){
+        return this.TeamUUID;
     }
 
     public ITextComponent getDisplayName(){

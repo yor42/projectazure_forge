@@ -1,6 +1,6 @@
 package com.yor42.projectazure.client;
 
-import com.yor42.projectazure.client.gui.*;
+import com.yor42.projectazure.client.gui.container.*;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.gui.ScreenManager;
 
