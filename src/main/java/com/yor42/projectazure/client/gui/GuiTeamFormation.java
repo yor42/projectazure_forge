@@ -1,9 +1,8 @@
 package com.yor42.projectazure.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeams;
+import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.TeamNameChangedPacket;
 import net.minecraft.client.Minecraft;
@@ -18,7 +17,7 @@ public class GuiTeamFormation extends Screen {
 
     private int Subscreen = 0;
     private int x, y;
-    private CompanionTeams editingTeam;
+    private CompanionTeam editingTeam;
     private final int backgroundWidth = this.Subscreen == 0? 248:155;
     private final int backgroundHeight = this.Subscreen == 0?219:167;
 

@@ -3,36 +3,34 @@ package com.yor42.projectazure.gameobject.capability.playercapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CompanionTeams {
+public class CompanionTeam {
 
     private final ArrayList<UUID> teammates;
     private final UUID OwnerUUID, TeamUUID;
     @Nullable
     private IFormattableTextComponent CustomName;
 
-    private CompanionTeams(UUID TeamUUID, UUID OwnerUUID){
-        this(new ArrayList<UUID>(), TeamUUID, OwnerUUID, null);
+    private CompanionTeam(UUID TeamUUID, UUID OwnerUUID){
+        this(new ArrayList<>(), TeamUUID, OwnerUUID, null);
     }
 
-    private CompanionTeams(ArrayList<UUID> entries, UUID TeamUUID, UUID OwnerUUID,@Nullable IFormattableTextComponent customname){
+    private CompanionTeam(ArrayList<UUID> entries, UUID TeamUUID, UUID OwnerUUID, @Nullable IFormattableTextComponent customname){
         this.teammates = entries;
         this.TeamUUID = TeamUUID;
         this.OwnerUUID = OwnerUUID;
         this.CustomName = customname;
     }
-    public CompanionTeams(UUID OwnerUUID){
+    public CompanionTeam(UUID OwnerUUID){
         this(UUID.randomUUID(), OwnerUUID);
     }
 
@@ -85,22 +83,22 @@ public class CompanionTeams {
         return nbt;
     }
 
-    public static CompanionTeams deserializeNBT(CompoundNBT compound){
+    public static CompanionTeam deserializeNBT(CompoundNBT compound){
         UUID TeamUUID = compound.getUUID("teamUUID");
         UUID OwnerUUID = compound.getUUID("ownerUUID");
         ListNBT list = compound.getList("entries", Constants.NBT.TAG_COMPOUND);
-        List<UUID> entries = new ArrayList<UUID>();
-        for(int i = 0; i < tagList.size(); i++){
-            CompoundNBT entry = tagList.get(i);
+        ArrayList<UUID> entries = new ArrayList<UUID>();
+        for(int i = 0; i < list.size(); i++){
+            CompoundNBT entry = list.getCompound(i);
             UUID TeammateUUID = entry.getUUID("UUID");
             entries.add(TeammateUUID);
         }
-        IFormattableTextComponent customname;
+        IFormattableTextComponent customname=null;
 
         if (compound.contains("CustomName", 8)) {
             customname = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
         }
 
-        return new CompanionTeams(entries, TeamUUID, OwnerUUID, customname);
+        return new CompanionTeam(entries, TeamUUID, OwnerUUID, customname);
     }
 }

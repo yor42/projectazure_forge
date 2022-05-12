@@ -66,6 +66,12 @@ public class registerNetwork {
                 .consumer(TeamNameChangedPacket::handle)
                 .add();
 
+        channel.messageBuilder(SyncTeamListPacket.class,10)
+                .decoder(SyncTeamListPacket::decode)
+                .encoder(SyncTeamListPacket::encode)
+                .consumer(SyncTeamListPacket::handle)
+                .add();
+
         return channel;
     }
 

@@ -30,7 +30,7 @@ public class ProjectAzurePlayerCapability {
     public int MainHandFireDelay = 0;
     //looks Kinda Unoptimal if you ask me...
     public ArrayList<AbstractEntityCompanion> companionList = new ArrayList<>();
-    public ArrayList<CompanionTeams> TeamList = new ArrayList<>();
+    public ArrayList<CompanionTeam> TeamList = new ArrayList<>();
 
     public PlayerEntity player;
 
@@ -63,9 +63,9 @@ public class ProjectAzurePlayerCapability {
         this.MainHandFireDelay = rightHandFireDelay;
     }
 
-    public Optional<CompanionTeams> getTeambyUUID(UUID uuid) {
+    public Optional<CompanionTeam> getTeambyUUID(UUID uuid) {
         if(!this.TeamList.isEmpty()) {
-            for (CompanionTeams team : this.TeamList) {
+            for (CompanionTeam team : this.TeamList) {
                 if (team.getTeamUUID() == uuid) {
                     return Optional.of(team);
                 }
@@ -143,7 +143,7 @@ public class ProjectAzurePlayerCapability {
             entityList.add(companion.serializeNBT());
         }
         ListNBT TeamList = new ListNBT();
-        for(CompanionTeams team: this.TeamList){
+        for(CompanionTeam team: this.TeamList){
             TeamList.add(team.serializeNBT());
         }
         nbt.put("teams", TeamList);
@@ -169,7 +169,7 @@ public class ProjectAzurePlayerCapability {
         ListNBT teams = compound.getList("teams", Constants.NBT.TAG_COMPOUND);
         for(int i=0; i<teams.size(); i++){
             CompoundNBT nbt = teams.getCompound(i);
-            this.TeamList.add(CompanionTeams.deserializeNBT(nbt));
+            this.TeamList.add(CompanionTeam.deserializeNBT(nbt));
         }
     }
 
