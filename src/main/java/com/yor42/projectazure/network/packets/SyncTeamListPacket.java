@@ -30,6 +30,7 @@ public class SyncTeamListPacket {
     }
 
     public static void encode(final SyncTeamListPacket msg, final PacketBuffer buffer){
+        buffer.writeEnum(msg.action);
         buffer.writeNbt(msg.entry);
     }
 

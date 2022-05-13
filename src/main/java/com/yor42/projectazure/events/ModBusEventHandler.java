@@ -2,14 +2,17 @@ package com.yor42.projectazure.events;
 
 import com.google.common.base.Throwables;
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
+import com.yor42.projectazure.network.packets.SyncTeamListPacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -22,6 +25,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -121,6 +125,8 @@ public class ModBusEventHandler {
                     data.remove("carrying_companion");
                 }
             }
+            ServerPlayerEntity serverplayer = (ServerPlayerEntity) event.getPlayer();
+            ProjectAzureWorldSavedData.getSaveddata(serverplayer.getLevel()).SyncEntireTeamListtoPlayer(serverplayer);
 
         }
 
@@ -150,7 +156,7 @@ public class ModBusEventHandler {
                     playerData.put("carrying_companion", listnbt1);
                 }
 
- */
+ */             ProjectAzureWorldSavedData.TeamListCLIENT.clear();
 
             }
         }

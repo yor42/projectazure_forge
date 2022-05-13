@@ -72,6 +72,7 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
     @OnlyIn(Dist.CLIENT)
     public static void DeserializeandUpdateEntireClientList(CompoundNBT compound){
         ListNBT teams = compound.getList("teams", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+        TeamListCLIENT.clear();
         for(int i=0; i<teams.size(); i++){
             CompoundNBT nbt = teams.getCompound(i);
             TeamListCLIENT.add(CompanionTeam.deserializeNBT(nbt));
@@ -122,13 +123,21 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
         if(!processed){
             this.TeamList.add(team);
         }
-        this.SyncTeamEntriestoClient(team);
+        this.SyncEntireTeamListClient();
         this.setDirty();
     }
 
     public void removeTeam(CompanionTeam team){
         this.TeamList.remove(team);
         this.SyncTeamEntriestoClient(team, SyncTeamListPacket.ACTION.REMOVE);
+        this.setDirty();
+    }
+
+    public void removeTeambyUUID(UUID id){
+        if(!this.TeamList.isEmpty()) {
+            this.TeamList.removeIf(team -> team.getTeamUUID().equals(id));
+        }
+        this.SyncEntireTeamListClient();
         this.setDirty();
     }
 
@@ -168,6 +177,17 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
         }
         compound.put("teams", TeamList);
         Main.NETWORK.send(PacketDistributor.ALL.noArg(), new SyncTeamListPacket(compound, SyncTeamListPacket.ACTION.ADD_BATCH));
+        this.setDirty();
+    }
+
+    public void SyncEntireTeamListtoPlayer(ServerPlayerEntity player){
+        CompoundNBT compound = new CompoundNBT();
+        ListNBT TeamList = new ListNBT();
+        for(CompanionTeam team: this.TeamList){
+            TeamList.add(team.serializeNBT());
+        }
+        compound.put("teams", TeamList);
+        Main.NETWORK.send(PacketDistributor.PLAYER.with(()->player), new SyncTeamListPacket(compound, SyncTeamListPacket.ACTION.ADD_BATCH));
         this.setDirty();
     }
 

@@ -24,6 +24,12 @@ public class registerNetwork {
                 .consumer(selectedStarterPacket::handle)
                 .add();
 
+        channel.messageBuilder(SyncTeamListPacket.class,2)
+                .decoder(SyncTeamListPacket::decode)
+                .encoder(SyncTeamListPacket::encode)
+                .consumer(SyncTeamListPacket::handle)
+                .add();
+
         channel.messageBuilder(spawnParticlePacket.class, 3)
                 .decoder(spawnParticlePacket::decode)
                 .encoder(spawnParticlePacket::encode)
@@ -66,22 +72,16 @@ public class registerNetwork {
                 .consumer(TeamNameChangedPacket::handle)
                 .add();
 
-        channel.messageBuilder(SyncTeamListPacket.class,10)
-                .decoder(SyncTeamListPacket::decode)
-                .encoder(SyncTeamListPacket::encode)
-                .consumer(SyncTeamListPacket::handle)
-                .add();
-
-        channel.messageBuilder(SyncTeamListPacket.class,10)
-                .decoder(SyncTeamListPacket::decode)
-                .encoder(SyncTeamListPacket::encode)
-                .consumer(SyncTeamListPacket::handle)
-                .add();
-
-        channel.messageBuilder(CreateTeamPacket.class,11)
+        channel.messageBuilder(CreateTeamPacket.class,10)
                 .consumer(CreateTeamPacket::handle)
                 .decoder(CreateTeamPacket::decode)
                 .encoder(CreateTeamPacket::encode)
+                .add();
+
+        channel.messageBuilder(RemoveTeamPacket.class,11)
+                .consumer(RemoveTeamPacket::handle)
+                .decoder(RemoveTeamPacket::decode)
+                .encoder(RemoveTeamPacket::encode)
                 .add();
 
         return channel;

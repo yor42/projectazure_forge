@@ -239,6 +239,8 @@
 
   "gui.kansen_ammostorage_usage": "탄약고 사용량",
 
+  "gui.teamformation.createteam": "새 팀 만들기",
+
   "destroyer": "구축함",
   "light_cruiser": "경순양함",
   "battleship": "전함",
