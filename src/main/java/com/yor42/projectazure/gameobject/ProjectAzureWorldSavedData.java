@@ -123,11 +123,13 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
             this.TeamList.add(team);
         }
         this.SyncTeamEntriestoClient(team);
+        this.setDirty();
     }
 
     public void removeTeam(CompanionTeam team){
         this.TeamList.remove(team);
         this.SyncTeamEntriestoClient(team, SyncTeamListPacket.ACTION.REMOVE);
+        this.setDirty();
     }
 
     public Optional<CompanionTeam> getTeambyUUID(UUID uuid) {
@@ -139,6 +141,11 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
             }
         }
         return Optional.empty();
+    }
+
+    public void createteam(ServerPlayerEntity owner){
+        CompanionTeam newteam = new CompanionTeam(owner.getUUID(), owner.getDisplayName().getString());
+        this.addorModifyTeam(newteam);
     }
 
     public List<CompanionTeam> getPlayersTeam(PlayerEntity player){
@@ -161,6 +168,7 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
         }
         compound.put("teams", TeamList);
         Main.NETWORK.send(PacketDistributor.ALL.noArg(), new SyncTeamListPacket(compound, SyncTeamListPacket.ACTION.ADD_BATCH));
+        this.setDirty();
     }
 
     public static ProjectAzureWorldSavedData getSaveddata(ServerWorld world){

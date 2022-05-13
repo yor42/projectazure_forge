@@ -25,12 +25,10 @@ import java.util.UUID;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class ProjectAzurePlayerCapability {
-
     public int OffHandFireDelay = 0;
     public int MainHandFireDelay = 0;
     //looks Kinda Unoptimal if you ask me...
     public ArrayList<AbstractEntityCompanion> companionList = new ArrayList<>();
-    public ArrayList<CompanionTeam> TeamList = new ArrayList<>();
 
     public PlayerEntity player;
 
@@ -61,17 +59,6 @@ public class ProjectAzurePlayerCapability {
 
     public void setMainHandFireDelay(int rightHandFireDelay) {
         this.MainHandFireDelay = rightHandFireDelay;
-    }
-
-    public Optional<CompanionTeam> getTeambyUUID(UUID uuid) {
-        if(!this.TeamList.isEmpty()) {
-            for (CompanionTeam team : this.TeamList) {
-                if (team.getTeamUUID() == uuid) {
-                    return Optional.of(team);
-                }
-            }
-        }
-        return Optional.empty();
     }
 
     public void setDelay(Hand handIn, int delay){
@@ -142,11 +129,6 @@ public class ProjectAzurePlayerCapability {
         for(AbstractEntityCompanion companion: this.companionList){
             entityList.add(companion.serializeNBT());
         }
-        ListNBT TeamList = new ListNBT();
-        for(CompanionTeam team: this.TeamList){
-            TeamList.add(team.serializeNBT());
-        }
-        nbt.put("teams", TeamList);
         nbt.put("companions", entityList);
         return nbt;
     }
@@ -165,11 +147,6 @@ public class ProjectAzurePlayerCapability {
                     this.companionList.add((AbstractEntityCompanion) entity);
                 }
             }
-        }
-        ListNBT teams = compound.getList("teams", Constants.NBT.TAG_COMPOUND);
-        for(int i=0; i<teams.size(); i++){
-            CompoundNBT nbt = teams.getCompound(i);
-            this.TeamList.add(CompanionTeam.deserializeNBT(nbt));
         }
     }
 

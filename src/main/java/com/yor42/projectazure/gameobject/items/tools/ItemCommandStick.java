@@ -1,8 +1,11 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
+import com.yor42.projectazure.client.gui.GuiTeamFormation;
+import com.yor42.projectazure.client.gui.guiStarterSpawn;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -10,11 +13,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.BedPart;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -62,8 +68,18 @@ public class ItemCommandStick extends Item {
                     holdingStack.setTag(NBTTag);
                 }
             }
+            else if(world.isClientSide){
+                //openGui
+                this.openGUI();
+                return ActionResultType.SUCCESS;
+            }
         }
         return super.useOn(context);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void openGUI(){
+        Minecraft.getInstance().setScreen(new GuiTeamFormation(new TranslationTextComponent("gui.teamformation")));
     }
 
     @Override

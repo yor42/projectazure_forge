@@ -38,7 +38,7 @@ public class TeamNameChangedPacket {
             final ServerPlayerEntity playerEntity = ctx.get().getSender();
             if(playerEntity != null) {
                 ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(playerEntity);
-                capability.getTeambyUUID(msg.teamUUID).ifPresent((team)->team.setCustomName(new StringTextComponent(msg.name)));
+                //capability.getTeambyUUID(msg.teamUUID).ifPresent((team)->team.setCustomName(new StringTextComponent(msg.name)));
             }
         });
         ctx.get().setPacketHandled(true);

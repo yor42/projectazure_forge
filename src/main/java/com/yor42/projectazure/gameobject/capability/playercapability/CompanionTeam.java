@@ -17,21 +17,23 @@ public class CompanionTeam {
 
     private final ArrayList<UUID> teammates;
     private final UUID OwnerUUID, TeamUUID;
+    private String ownername;
     @Nullable
     private IFormattableTextComponent CustomName;
 
-    private CompanionTeam(UUID TeamUUID, UUID OwnerUUID){
-        this(new ArrayList<>(), TeamUUID, OwnerUUID, null);
+    private CompanionTeam(UUID TeamUUID, UUID OwnerUUID, String ownername){
+        this(new ArrayList<>(), TeamUUID, OwnerUUID, ownername, null);
     }
 
-    private CompanionTeam(ArrayList<UUID> entries, UUID TeamUUID, UUID OwnerUUID, @Nullable IFormattableTextComponent customname){
+    private CompanionTeam(ArrayList<UUID> entries, UUID TeamUUID, UUID OwnerUUID, String ownername, @Nullable IFormattableTextComponent customname){
         this.teammates = entries;
         this.TeamUUID = TeamUUID;
         this.OwnerUUID = OwnerUUID;
         this.CustomName = customname;
+        this.ownername = ownername;
     }
-    public CompanionTeam(UUID OwnerUUID){
-        this(UUID.randomUUID(), OwnerUUID);
+    public CompanionTeam(UUID OwnerUUID, String ownername){
+        this(UUID.randomUUID(), OwnerUUID, ownername);
     }
 
     public void setCustomName(IFormattableTextComponent customname){
@@ -63,13 +65,14 @@ public class CompanionTeam {
     }
 
     public ITextComponent getDisplayName(){
-        return this.CustomName != null? this.CustomName:new TranslationTextComponent("gui.teams.name");
+        return this.CustomName != null? this.CustomName:new TranslationTextComponent("gui.team.newname");
     }
 
     public CompoundNBT serializeNBT(){
         CompoundNBT nbt = new CompoundNBT();
         nbt.putUUID("teamUUID", this.TeamUUID);
         nbt.putUUID("ownerUUID", this.OwnerUUID);
+        nbt.putString("ownername", this.ownername);
         ListNBT list = new ListNBT();
         for(UUID id : this.teammates){
             CompoundNBT entry = new CompoundNBT();
@@ -86,6 +89,7 @@ public class CompanionTeam {
     public static CompanionTeam deserializeNBT(CompoundNBT compound){
         UUID TeamUUID = compound.getUUID("teamUUID");
         UUID OwnerUUID = compound.getUUID("ownerUUID");
+        String ownerName = compound.getString("ownerName");
         ListNBT list = compound.getList("entries", Constants.NBT.TAG_COMPOUND);
         ArrayList<UUID> entries = new ArrayList<UUID>();
         for(int i = 0; i < list.size(); i++){
@@ -99,6 +103,6 @@ public class CompanionTeam {
             customname = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
         }
 
-        return new CompanionTeam(entries, TeamUUID, OwnerUUID, customname);
+        return new CompanionTeam(entries, TeamUUID, OwnerUUID, ownerName, customname);
     }
 }
