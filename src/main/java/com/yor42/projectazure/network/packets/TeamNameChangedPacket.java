@@ -1,5 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
+import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
@@ -36,9 +37,9 @@ public class TeamNameChangedPacket {
     {
         ctx.get().enqueueWork(() -> {
             final ServerPlayerEntity playerEntity = ctx.get().getSender();
+            ServerWorld world = playerEntity.getLevel();
             if(playerEntity != null) {
-                ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(playerEntity);
-                //capability.getTeambyUUID(msg.teamUUID).ifPresent((team)->team.setCustomName(new StringTextComponent(msg.name)));
+                ProjectAzureWorldSavedData.getSaveddata(world).ChangeTeamName(msg.teamUUID, msg.name);
             }
         });
         ctx.get().setPacketHandled(true);

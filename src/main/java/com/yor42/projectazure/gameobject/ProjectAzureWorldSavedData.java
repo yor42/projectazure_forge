@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.api.distmarker.Dist;
@@ -155,6 +156,13 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
     public void createteam(ServerPlayerEntity owner){
         CompanionTeam newteam = new CompanionTeam(owner.getUUID(), owner.getDisplayName().getString());
         this.addorModifyTeam(newteam);
+    }
+
+    public void ChangeTeamName(UUID teamUUID, String name) {
+        this.getTeambyUUID(teamUUID).ifPresent((team)->{
+            team.setCustomName(new StringTextComponent(name));
+            this.addorModifyTeam(team);
+        });
     }
 
     public List<CompanionTeam> getPlayersTeam(PlayerEntity player){

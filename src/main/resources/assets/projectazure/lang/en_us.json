@@ -240,6 +240,9 @@
   "gui.kansen_ammostorage_usage": "Ammo Storage Usage",
 
   "gui.teamformation.createteam": "Create New Team",
+  "gui.teamformation.pages": "%s Pages",
+
+  "gui.team.newname": "New Team %s",
 
   "destroyer": "Destroyer",
   "light_cruiser": "Light Cruiser",
