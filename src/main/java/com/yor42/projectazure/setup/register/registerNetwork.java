@@ -84,6 +84,12 @@ public class registerNetwork {
                 .encoder(RemoveTeamPacket::encode)
                 .add();
 
+        channel.messageBuilder(EditTeamMemberPacket.class,12)
+                .consumer(EditTeamMemberPacket::handle)
+                .decoder(EditTeamMemberPacket::decode)
+                .encoder(EditTeamMemberPacket::encode)
+                .add();
+
         return channel;
     }
 

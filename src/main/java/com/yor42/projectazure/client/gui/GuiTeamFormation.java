@@ -5,8 +5,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.CreateTeamPacket;
+import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
 import com.yor42.projectazure.network.packets.RemoveTeamPacket;
 import com.yor42.projectazure.network.packets.TeamNameChangedPacket;
 import net.minecraft.client.Minecraft;
@@ -25,6 +28,8 @@ import net.minecraft.util.text.*;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class GuiTeamFormation extends Screen {
 
@@ -75,11 +80,13 @@ public class GuiTeamFormation extends Screen {
         this.notYetPopulated = true;
         this.buttons.clear();
         this.children.clear();
-        if(this.editingTeam!=null){
-            this.setInitialFocus(this.name);
-        }
         super.init();
-        
+        if(this.editingTeam != null&&this.Subscreen == 0){
+            this.name.setEditable(true);
+            this.name.setVisible(true);
+            this.name.setFocus(true);
+            this.setFocused(name);
+        }
     }
 
     private void subInit() {
@@ -151,21 +158,48 @@ public class GuiTeamFormation extends Screen {
                 if (5 * this.TeamListPage + i == this.player_teams.size()) {
                     if (this.notYetPopulated) {
                         //draw create team button here
-                        Button button = new CreateTeamButton(this.x + 126, this.y + 6 + 37 * i, 110, 37, new StringTextComponent(""), (runnable) -> this.addTeam());
+                        Button button = new CreateButton(this.x + 126, this.y + 6 + 37 * i, 110, 37, new TranslationTextComponent("gui.teamformation.createteam"), (runnable) -> this.addTeam());
                         this.addButton(button);
                     }
                 } else {
-                    CompanionTeam team = this.player_teams.get(i);
+                    CompanionTeam team = this.player_teams.get(i+(5*this.TeamListPage));
                     ITextComponent text = team.getDisplayName();
                     int x = 130;
                     int y = 10 + 37 * i;
-                    this.minecraft.font.drawShadow(matrixStack, text, this.x + x, this.y + y, (this.editingTeam != null && this.editingTeam.getTeamUUID().equals(team.getTeamUUID())) ? 0xFFFFFF00 : 0xFFFFFFFF);
+                    boolean isSelected = this.editingTeam != null && this.editingTeam.getTeamUUID().equals(team.getTeamUUID());
+                    this.minecraft.font.drawShadow(matrixStack, text, this.x + x, this.y + y, isSelected ? 0xFFFFFF00 : 0xFFFFFFFF);
                     if (this.notYetPopulated) {
                         Button button = new ImageButton(this.x + x + 96, this.y + y, 11, 11, 125, 0, 11, BUTTON_TEXTURE, (runnable) -> this.deleteTeam(team));
                         this.addButton(button);
                     }
                 }
                 i++;
+            }
+
+            if(this.editingTeam!= null && this.minecraft.player != null){
+                ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(this.minecraft.player);
+                ArrayList<UUID> members = this.editingTeam.getMembers();
+                List<AbstractEntityCompanion> entities = capability.getCompanionList().stream().filter((entity)-> members.contains(entity.getUUID())).collect(Collectors.toList());
+                for(int j=0; j<entities.size()+1; j++){
+                    int x = this.x + 8;
+                    int y = this.y + 65 + (29 * j);
+                    if(j==entities.size()){
+                        if (this.notYetPopulated) {
+                            //draw add member button here
+                            Button button = new CreateButton(x, y, 111, 29, new TranslationTextComponent("gui.teamformation.addmember"), true, (runnable) -> this.changeScreen(1));
+                            this.addButton(button);
+                        }
+                    }
+                    else {
+                        AbstractEntityCompanion entity = entities.get(j);
+                        if (this.notYetPopulated) {
+                            Button button = new ImageButton(x, y, 14, 29, 0, 0, 29, BUTTON_TEXTURE, (runnable) -> this.removeMeber(entity));
+                            this.addButton(button);
+                        }
+                        this.blit(matrixStack, x+11, y, 0, 211,97,29);
+
+                    }
+                }
             }
 
             IFormattableTextComponent text = new TranslationTextComponent("gui.teamformation.pages", (this.TeamListPage + 1) + "/" + (this.player_teams.size() / 5 + 1));
@@ -190,6 +224,13 @@ public class GuiTeamFormation extends Screen {
         }
     }
 
+    public void removeMeber(AbstractEntityCompanion member){
+        if(this.editingTeam!=null) {
+            Main.NETWORK.sendToServer(new EditTeamMemberPacket(this.editingTeam.getTeamUUID(), member.getUUID(), EditTeamMemberPacket.ACTION.REMOVE));
+            this.init();
+        }
+    }
+
     public void Scrollup(){
         this.TeamListPage--;
         this.init();
@@ -210,15 +251,12 @@ public class GuiTeamFormation extends Screen {
 
     protected boolean clickteam(double mouseX, double mouseY) {
         int i=0;
-        while(i<5 && 5* this.TeamListPage+i<this.player_teams.size()){
+        while(i<5 && (5* this.TeamListPage)+i<this.player_teams.size()){
             if(this.isHovering(116, 6+37*i,113, 37, mouseX, mouseY)){
                 CompanionTeam team = this.player_teams.get(5* this.TeamListPage+i);
                 this.editingTeam = team;
-                this.name.setEditable(true);
-                this.name.setVisible(true);
-                this.name.setFocus(true);
-                this.setFocused(this.name);
                 this.name.setValue(team.getDisplayName().getString());
+                this.init();
                 this.playDownSound(Minecraft.getInstance().getSoundManager());
                 return true;
             }
@@ -234,6 +272,7 @@ public class GuiTeamFormation extends Screen {
     public void changeScreen(int value){
         this.Subscreen = value;
         this.notYetPopulated = true;
+        this.init();
     }
 
     public void addTeam(){
@@ -244,7 +283,7 @@ public class GuiTeamFormation extends Screen {
 
     private void deleteTeam(CompanionTeam team) {
 
-        if(this.editingTeam == team){
+        if(this.editingTeam != null && this.editingTeam == team){
             this.editingTeam = null;
             this.name.setValue("");
             this.name.setEditable(false);
@@ -273,21 +312,30 @@ public class GuiTeamFormation extends Screen {
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
-    private static class CreateTeamButton extends Button {
+    private static class CreateButton extends Button {
 
-        public CreateTeamButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, ITextComponent p_i232255_5_, IPressable p_i232255_6_) {
+        private final boolean hasBG;
+
+        public CreateButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, ITextComponent p_i232255_5_, IPressable p_i232255_6_) {
+            this(p_i232255_1_, p_i232255_2_, p_i232255_3_, p_i232255_4_, p_i232255_5_, false,  p_i232255_6_);
+        }
+
+        public CreateButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, ITextComponent p_i232255_5_, boolean hasBG, IPressable p_i232255_6_) {
             super(p_i232255_1_, p_i232255_2_, p_i232255_3_, p_i232255_4_, p_i232255_5_, p_i232255_6_);
+            this.hasBG = hasBG;
         }
 
         @Override
         public void renderButton(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             FontRenderer font = minecraft.font;
-            IFormattableTextComponent text = new TranslationTextComponent("gui.teamformation.createteam");
-            IReorderingProcessor ireorderingprocessor = text.getVisualOrderText();
+            IReorderingProcessor ireorderingprocessor = this.getMessage().getVisualOrderText();
             int textWidth = font.width(ireorderingprocessor);
             int startX = (this.x+this.width/2) - (textWidth+20) / 2;
-            font.draw(matrix, text, startX+20, this.y + (this.height - 8) / 2, this.isHovered()?0xffff00:0xffffff);
+            if(this.hasBG){
+                this.blit(matrix, this.x, this.y, 14,this.isHovered()?29:0, 111,29);
+            }
+            font.draw(matrix, this.getMessage(), startX+20, this.y + (this.height - 8) / 2, this.isHovered()?0xffff00:0xffffff);
             minecraft.getTextureManager().bind(GuiTeamFormation.BUTTON_TEXTURE);
             RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
             RenderSystem.enableBlend();

@@ -240,6 +240,7 @@
   "gui.kansen_ammostorage_usage": "Ammo Storage Usage",
 
   "gui.teamformation.createteam": "Create New Team",
+  "gui.teamformation.addmember": "Add member",
   "gui.teamformation.pages": "%s Pages",
 
   "gui.team.newname": "New Team %s",

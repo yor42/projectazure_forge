@@ -96,7 +96,7 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
             CompoundNBT nbt = teams.getCompound(i);
             this.TeamList.add(CompanionTeam.deserializeNBT(nbt));
         }
-        this.SyncEntireTeamListClient();
+        //this.SyncEntireTeamListClient();
     }
 
     @Nonnull
@@ -145,7 +145,7 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
     public Optional<CompanionTeam> getTeambyUUID(UUID uuid) {
         if(!this.TeamList.isEmpty()) {
             for (CompanionTeam team : this.TeamList) {
-                if (team.getTeamUUID() == uuid) {
+                if (team.getTeamUUID().equals(uuid)) {
                     return Optional.of(team);
                 }
             }
@@ -167,6 +167,22 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
 
     public List<CompanionTeam> getPlayersTeam(PlayerEntity player){
         return this.TeamList.stream().filter((team)->team.getOwnerUUID().equals(player.getUUID())).collect(Collectors.toList());
+    }
+
+    public void addMember(UUID teamUUID, UUID memberUUID){
+        this.getTeambyUUID(teamUUID).ifPresent((team)->{
+            if(team.addEntitytoTeam(memberUUID)){
+                this.addorModifyTeam(team);
+            }
+        });
+    }
+
+    public void removeMember(UUID teamUUID, UUID memberUUID){
+        this.getTeambyUUID(teamUUID).ifPresent((team)->{
+            if(team.removeEntityfromTeam(memberUUID)){
+                this.addorModifyTeam(team);
+            }
+        });
     }
 
     private void SyncTeamEntriestoClient(CompanionTeam team, SyncTeamListPacket.ACTION action){

@@ -240,6 +240,7 @@
   "gui.kansen_ammostorage_usage": "탄약고 사용량",
 
   "gui.teamformation.createteam": "새 팀 만들기",
+  "gui.teamformation.addmember": "팀원 추가",
   "gui.teamformation.pages": "%s 페이지",
 
   "destroyer": "구축함",

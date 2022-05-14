@@ -43,9 +43,18 @@ public class CompanionTeam {
         return this.OwnerUUID;
     }
 
-    public boolean addEntitytoTeam(AbstractEntityCompanion entity){
-        if(teammates.size()<5){
-            this.teammates.add(entity.getUUID());
+    public boolean addEntitytoTeam(UUID uuid){
+        if(!this.isFull()){
+            this.teammates.add(uuid);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeEntityfromTeam(UUID uuid){
+        if(this.teammates.contains(uuid)){
+            this.teammates.remove(uuid);
+            return true;
         }
         return false;
     }
@@ -58,6 +67,14 @@ public class CompanionTeam {
         catch (IndexOutOfBoundsException e){
             return null;
         }
+    }
+
+    public boolean isFull(){
+        return this.teammates.size()<5;
+    }
+
+    public ArrayList<UUID> getMembers(){
+        return this.teammates;
     }
 
     public UUID getTeamUUID(){
