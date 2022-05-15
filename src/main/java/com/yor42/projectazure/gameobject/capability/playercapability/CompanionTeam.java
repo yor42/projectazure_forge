@@ -45,6 +45,11 @@ public class CompanionTeam {
 
     public boolean addEntitytoTeam(UUID uuid){
         if(!this.isFull()){
+            for(UUID id : this.teammates){
+                if(id.equals(uuid)){
+                    return false;
+                }
+            }
             this.teammates.add(uuid);
             return true;
         }
@@ -70,7 +75,7 @@ public class CompanionTeam {
     }
 
     public boolean isFull(){
-        return this.teammates.size()<5;
+        return this.teammates.size()>=5;
     }
 
     public ArrayList<UUID> getMembers(){

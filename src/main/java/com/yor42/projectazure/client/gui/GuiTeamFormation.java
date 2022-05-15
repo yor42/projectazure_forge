@@ -18,6 +18,7 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.util.IReorderingProcessor;
@@ -28,6 +29,7 @@ import net.minecraft.util.text.*;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,15 +40,19 @@ public class GuiTeamFormation extends Screen {
     private int x, y;
     private List<CompanionTeam> player_teams = new ArrayList<>();
     @Nullable
-    private CompanionTeam editingTeam;
-    private final int backgroundWidth = this.Subscreen == 0? 248:155;
-    private final int backgroundHeight = this.Subscreen == 0?219:167;
+    private UUID editingTeam;
+    private int backgroundWidth = 248;
+    private int backgroundHeight = 219;
     private boolean notYetPopulated = true;
-    boolean ignoreMouseRelease = false;
+    private boolean ignoreMouseRelease = false;
+    private boolean scrollbarClicked = false;
+    private int lastScrollY;
+    private int scrollBarTop;
 
     public static final ResourceLocation TEXTURE_MAINSCREEN = new ResourceLocation(Constants.MODID, "textures/gui/teammanagement.png");
     public static final ResourceLocation TEXTURE_SUBSCREEN = new ResourceLocation(Constants.MODID, "textures/gui/teamaddmember.png");
     private static final ResourceLocation BUTTON_TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/button_teamformation.png");
+    List<AbstractEntityCompanion> Entitycache = new ArrayList<>();
 
     private TextFieldWidget name;
 
@@ -60,9 +66,12 @@ public class GuiTeamFormation extends Screen {
         super.tick();
         this.name.tick();
         List<CompanionTeam> teams = this.player_teams;
+
+        ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(this.minecraft.player);
+        List<AbstractEntityCompanion> entities = capability.getCompanionList().stream().filter((entity) -> this.getEditingTeam().map((team)->team.getMembers().contains(entity.getUUID())).orElse(false)).collect(Collectors.toList());
+
         this.player_teams = ProjectAzureWorldSavedData.getPlayersTeamClient(this.minecraft.player);
-        if(teams.size()!=ProjectAzureWorldSavedData.getPlayersTeamClient(this.minecraft.player).size()){
-            this.notYetPopulated = true;
+        if(teams.size()!=ProjectAzureWorldSavedData.getPlayersTeamClient(this.minecraft.player).size() || this.Entitycache.size()!=entities.size()){
             this.init();
         }
     }
@@ -70,8 +79,6 @@ public class GuiTeamFormation extends Screen {
     @Override
     public void init(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
         super.init(p_231158_1_, p_231158_2_, p_231158_3_);
-        this.x = (this.width - backgroundWidth) / 2;
-        this.y = (this.height - backgroundHeight) / 2;
         this.subInit();
     }
 
@@ -81,11 +88,25 @@ public class GuiTeamFormation extends Screen {
         this.buttons.clear();
         this.children.clear();
         super.init();
-        if(this.editingTeam != null&&this.Subscreen == 0){
-            this.name.setEditable(true);
-            this.name.setVisible(true);
-            this.name.setFocus(true);
-            this.setFocused(name);
+        this.backgroundWidth = this.Subscreen == 0? 248:155;
+        this.backgroundHeight = this.Subscreen == 0?219:167;
+        this.x = (this.width - backgroundWidth) / 2;
+        this.y = (this.height - backgroundHeight) / 2;
+        this.scrollBarTop = this.y + 24;
+        this.lastScrollY = this.scrollBarTop;
+        if(this.editingTeam != null){
+            if(this.Subscreen == 0){
+                this.name.setEditable(true);
+                this.name.setVisible(true);
+                this.name.setFocus(true);
+                this.setFocused(name);
+            }
+            else{
+                this.name.setEditable(false);
+                this.name.setVisible(false);
+                this.name.setFocus(false);
+                this.setFocused(null);
+            }
         }
     }
 
@@ -96,7 +117,6 @@ public class GuiTeamFormation extends Screen {
         this.name.setTextColorUneditable(-1);
         this.name.setBordered(true);
         this.name.setMaxLength(35);
-        
         if(this.editingTeam == null||this.Subscreen != 0){
             this.name.setEditable(false);
             this.name.setVisible(false);
@@ -112,10 +132,19 @@ public class GuiTeamFormation extends Screen {
     }
 
     private void onNameChanged(String s) {
-        if(this.editingTeam!= null){
-            this.editingTeam.setCustomName(new StringTextComponent(s));
-            Main.NETWORK.sendToServer(new TeamNameChangedPacket(this.editingTeam.getTeamUUID(), s));
+        if(this.editingTeam!= null) {
+            Main.NETWORK.sendToServer(new TeamNameChangedPacket(this.editingTeam, s));
         }
+    }
+
+    public Optional<CompanionTeam> getEditingTeam(){
+
+        for(CompanionTeam team:this.player_teams){
+            if(team.getTeamUUID().equals(this.editingTeam)){
+                return Optional.of(team);
+            }
+        }
+        return Optional.empty();
     }
 
 
@@ -147,7 +176,39 @@ public class GuiTeamFormation extends Screen {
     }
 
     private void renderSubScreenButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(this.minecraft.player);
+        List<AbstractEntityCompanion> entities = capability.getCompanionList().stream().filter((entity)->{
+            for(CompanionTeam team:this.player_teams){
+                if(team.getMembers().contains(entity.getUUID())){
+                    return false;
+                }
+            }
+            return true;
+        }).collect(Collectors.toList());
+        if (this.scrollbarClicked) {
+            this.renderScroller(matrixStack, mouseY, entities.size());
+        } else {
+            this.renderScroller(matrixStack, this.lastScrollY, entities.size());
+        }
+        if(this.notYetPopulated) {
+            int i=-1;
+            for (AbstractEntityCompanion entity : entities) {
+                Button button = new EntityButton(this.x+8, this.y+24+(27*++i), 121, 27, entity, (runnable)->this.addMeber(entity));
+                this.addButton(button);
+            }
+        }
+        this.resolveAndRenderButtons(matrixStack, mouseX, mouseY, partialTicks);
+        this.notYetPopulated = false;
+    }
 
+    protected void renderScroller(MatrixStack stack, int drop, int entityCount) {
+        int maxy = this.y + 139;
+        if(entityCount>5) {
+            int scrollbarTop = this.scrollBarTop;
+            this.lastScrollY = Math.min(maxy, Math.max(scrollbarTop, drop));
+        }
+        this.minecraft.getTextureManager().bind(GuiTeamFormation.TEXTURE_SUBSCREEN);
+        this.blit(stack, this.x + 135, this.lastScrollY, this.scrollbarClicked || entityCount<=5 ? 167 : 155, 0, 12, 20);
     }
 
     private void renderMainScreenButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
@@ -166,7 +227,7 @@ public class GuiTeamFormation extends Screen {
                     ITextComponent text = team.getDisplayName();
                     int x = 130;
                     int y = 10 + 37 * i;
-                    boolean isSelected = this.editingTeam != null && this.editingTeam.getTeamUUID().equals(team.getTeamUUID());
+                    boolean isSelected = this.editingTeam != null && this.editingTeam.equals(team.getTeamUUID());
                     this.minecraft.font.drawShadow(matrixStack, text, this.x + x, this.y + y, isSelected ? 0xFFFFFF00 : 0xFFFFFFFF);
                     if (this.notYetPopulated) {
                         Button button = new ImageButton(this.x + x + 96, this.y + y, 11, 11, 125, 0, 11, BUTTON_TEXTURE, (runnable) -> this.deleteTeam(team));
@@ -178,27 +239,32 @@ public class GuiTeamFormation extends Screen {
 
             if(this.editingTeam!= null && this.minecraft.player != null){
                 ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(this.minecraft.player);
-                ArrayList<UUID> members = this.editingTeam.getMembers();
+                ArrayList<UUID> members = this.getEditingTeam().map(CompanionTeam::getMembers).orElse(new ArrayList<>());
                 List<AbstractEntityCompanion> entities = capability.getCompanionList().stream().filter((entity)-> members.contains(entity.getUUID())).collect(Collectors.toList());
+
                 for(int j=0; j<entities.size()+1; j++){
                     int x = this.x + 8;
                     int y = this.y + 65 + (29 * j);
-                    if(j==entities.size()){
+                    if(j<entities.size()){
+                        AbstractEntityCompanion entity = entities.get(j);
+                        if (this.notYetPopulated) {
+                            Button button = new ImageButton(x, y, 14, 29, 0, 0, 29, BUTTON_TEXTURE, (runnable) -> this.removeMeber(entity));
+                            this.addButton(button);
+                        }
+                        this.minecraft.getTextureManager().bind(BUTTON_TEXTURE);
+                        this.blit(matrixStack, x+12, y, 14, 0,97,29);
+                    }
+                    else {
                         if (this.notYetPopulated) {
                             //draw add member button here
                             Button button = new CreateButton(x, y, 111, 29, new TranslationTextComponent("gui.teamformation.addmember"), true, (runnable) -> this.changeScreen(1));
                             this.addButton(button);
                         }
                     }
-                    else {
-                        AbstractEntityCompanion entity = entities.get(j);
-                        if (this.notYetPopulated) {
-                            Button button = new ImageButton(x, y, 14, 29, 0, 0, 29, BUTTON_TEXTURE, (runnable) -> this.removeMeber(entity));
-                            this.addButton(button);
-                        }
-                        this.blit(matrixStack, x+11, y, 0, 211,97,29);
+                }
 
-                    }
+                if(this.notYetPopulated){
+                    this.Entitycache = entities;
                 }
             }
 
@@ -224,10 +290,36 @@ public class GuiTeamFormation extends Screen {
         }
     }
 
+    public void addMeber(AbstractEntityCompanion member){
+        if(this.editingTeam!=null) {
+            Main.NETWORK.sendToServer(new EditTeamMemberPacket(this.editingTeam, member.getUUID(), EditTeamMemberPacket.ACTION.ADD));
+        }
+        this.init();
+        this.changeScreen(0);
+    }
+
     public void removeMeber(AbstractEntityCompanion member){
         if(this.editingTeam!=null) {
-            Main.NETWORK.sendToServer(new EditTeamMemberPacket(this.editingTeam.getTeamUUID(), member.getUUID(), EditTeamMemberPacket.ACTION.REMOVE));
-            this.init();
+            Main.NETWORK.sendToServer(new EditTeamMemberPacket(this.editingTeam, member.getUUID(), EditTeamMemberPacket.ACTION.REMOVE));
+        }
+        this.init();
+    }
+
+    protected void resolveAndRenderButtons(MatrixStack stack, int mouseX, int mouseY, float delta) {
+        int position = Math.floorDiv(this.lastScrollY - this.scrollBarTop, 5); // CORRECT - GETS THE 'INDEX"
+        for (int i = 0; i < this.buttons.size(); i++) {
+            Widget button = this.buttons.get(i);
+            if(button instanceof EntityButton) {
+                if (i < position || i > position + 6) {
+                    button.visible = false;
+                    button.active = false;
+                } else {
+                    button.visible = true;
+                    button.active = true;
+                    button.y = this.scrollBarTop + ((i - position) * 27);
+                    button.render(stack, mouseX, mouseY, delta);
+                }
+            }
         }
     }
 
@@ -241,9 +333,16 @@ public class GuiTeamFormation extends Screen {
         this.init();
     }
 
+    private boolean hasMouseOnScrollBar(double mouseX, double mouseY) {
+        return mouseX >= this.x + 135 && mouseX <= this.x + 147 && mouseY >= this.y + 24 && mouseY <= this.y + 159;
+    }
+
     public boolean mouseReleased(double p_231048_1_, double p_231048_3_, int p_231048_5_) {
         if (p_231048_5_ == 0 && this.Subscreen == 0 && !this.ignoreMouseRelease) {
             return this.clickteam(p_231048_1_, p_231048_3_);
+        }
+        else if(this.Subscreen == 1){
+            this.scrollbarClicked = false;
         }
         this.ignoreMouseRelease = false;
         return super.mouseReleased(p_231048_1_, p_231048_3_, p_231048_5_);
@@ -254,7 +353,7 @@ public class GuiTeamFormation extends Screen {
         while(i<5 && (5* this.TeamListPage)+i<this.player_teams.size()){
             if(this.isHovering(116, 6+37*i,113, 37, mouseX, mouseY)){
                 CompanionTeam team = this.player_teams.get(5* this.TeamListPage+i);
-                this.editingTeam = team;
+                this.editingTeam = team.getTeamUUID();
                 this.name.setValue(team.getDisplayName().getString());
                 this.init();
                 this.playDownSound(Minecraft.getInstance().getSoundManager());
@@ -272,7 +371,18 @@ public class GuiTeamFormation extends Screen {
     public void changeScreen(int value){
         this.Subscreen = value;
         this.notYetPopulated = true;
+        this.scrollBarTop = this.y + 24;
+        this.lastScrollY = this.scrollBarTop;
         this.init();
+    }
+
+    @Override
+    public boolean mouseClicked(double p_231044_1_, double p_231044_3_, int p_231044_5_) {
+        if(this.hasMouseOnScrollBar(p_231044_1_, p_231044_3_)){
+            this.scrollbarClicked = true;
+            this.playDownSound(this.minecraft.getSoundManager());
+        }
+        return super.mouseClicked(p_231044_1_, p_231044_3_, p_231044_5_);
     }
 
     public void addTeam(){
@@ -283,7 +393,7 @@ public class GuiTeamFormation extends Screen {
 
     private void deleteTeam(CompanionTeam team) {
 
-        if(this.editingTeam != null && this.editingTeam == team){
+        if(team.getTeamUUID().equals(this.editingTeam)){
             this.editingTeam = null;
             this.name.setValue("");
             this.name.setEditable(false);
@@ -337,11 +447,24 @@ public class GuiTeamFormation extends Screen {
             }
             font.draw(matrix, this.getMessage(), startX+20, this.y + (this.height - 8) / 2, this.isHovered()?0xffff00:0xffffff);
             minecraft.getTextureManager().bind(GuiTeamFormation.BUTTON_TEXTURE);
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.enableDepthTest();
             this.blit(matrix, startX, this.y + (this.height - 16) / 2, 0,58, 16,16);
+        }
+    }
+
+    private static class EntityButton extends Button {
+        private final AbstractEntityCompanion entity;
+        public EntityButton(int p_i232255_1_, int p_i232255_2_, int p_i232255_3_, int p_i232255_4_, AbstractEntityCompanion p_i232255_5_, IPressable p_i232255_6_) {
+            super(p_i232255_1_, p_i232255_2_, p_i232255_3_, p_i232255_4_, p_i232255_5_.getDisplayName(), p_i232255_6_);
+            this.entity = p_i232255_5_;
+        }
+
+        @Override
+        public void renderButton(MatrixStack matrix, int mouseX, int mouseY, float partialTicks) {
+            Minecraft minecraft = Minecraft.getInstance();
+            FontRenderer font = minecraft.font;
+            minecraft.getTextureManager().bind(GuiTeamFormation.TEXTURE_SUBSCREEN);
+            this.blit(matrix, this.x, this.y, 0,this.isHovered()?194:167, 121,27);
+            font.draw(matrix, this.getMessage(), this.x+4, this.y + 4, this.isHovered()?0xffff00:0xffffff);
         }
     }
 }
