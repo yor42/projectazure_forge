@@ -28,6 +28,7 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.DirectionUtil;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -407,6 +408,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> RELOAD_TIMER_MAINHAND = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> RELOAD_TIMER_OFFHAND = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final DataParameter<Optional<UUID>> TeamUUID = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_UUID);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES);
@@ -579,6 +581,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.put("inventory", this.getInventory().serializeNBT());
         compound.putInt("shieldcooldown", this.shieldCoolDown);
         compound.put("ammostorage", this.getAmmoStorage().serializeNBT());
+        this.getEntityData().get(TeamUUID).ifPresent((UUID)->compound.putUUID("team", UUID));
         this.foodStats.write(compound);
         compound.putInt("attackdelay", this.getEntityData().get(NONVANILLAMELEEATTACKDELAY));
         compound.putInt("SwapIndexMainHand", this.ItemSwapIndexMainHand);
@@ -609,6 +612,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(hasHomePos) {
             this.entityData.set(HOMEPOS, Optional.of(new BlockPos(compound.getDouble("HomePosX"), compound.getDouble("HomePosY"), compound.getDouble("HomePosZ"))));
         }
+        this.getEntityData().set(TeamUUID, compound.hasUUID("team")? Optional.of(compound.getUUID("team")):Optional.empty());
         this.entityData.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
         this.shouldBeSitting = compound.getBoolean("shouldbeSitting");
         this.getEntityData().set(LEVEL, compound.getInt("level"));
@@ -699,6 +703,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             LivingEntity livingentity = this.getKillCredit();
             this.dropEquipment();
             this.createWitherRose(livingentity);
+            //Main.NETWORK.sendToServer(new EditTeamMemberPacket());
             this.remove(false);
         }
     }
@@ -1283,6 +1288,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.define(RELOAD_TIMER_OFFHAND, 0);
         this.entityData.define(PICKUP_ITEM, false);
         this.entityData.define(FOODLEVEL, 0);
+        this.entityData.define(TeamUUID, Optional.empty());
         this.entityData.define(ANGRYTIMER, 0);
         this.entityData.define(INJURYCURETIMER, -1);
         this.entityData.define(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 0);

@@ -252,7 +252,18 @@ public class GuiTeamFormation extends Screen {
                             this.addButton(button);
                         }
                         this.minecraft.getTextureManager().bind(BUTTON_TEXTURE);
-                        this.blit(matrixStack, x+12, y, 14, 0,97,29);
+                        this.blit(matrixStack, x+12, y, 14, 0,99,29);
+                        this.font.drawShadow(matrixStack, entity.getDisplayName(), x+15, y+4, 0xFFFFFF);
+                        matrixStack.pushPose();
+                        float renderscale = 0.8F;
+                        matrixStack.scale(renderscale,renderscale,renderscale);
+                        IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(TextFormatting.RED));
+                        float width = this.font.width(text)*renderscale;
+                        float textx =(float) (this.x+23)/renderscale;
+                        float texty = (float) (this.y + 79.5 + (29 * j))/renderscale;
+                        this.font.drawShadow(matrixStack, text, textx, texty, -1);
+                        this.font.drawShadow(matrixStack, new StringTextComponent("Lv.").withStyle(TextFormatting.WHITE).append(new StringTextComponent(Integer.toString(entity.getLevel())).withStyle(TextFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
+                        matrixStack.popPose();
                     }
                     else {
                         if (this.notYetPopulated) {
@@ -273,7 +284,7 @@ public class GuiTeamFormation extends Screen {
             int textWidth = this.font.width(ireorderingprocessor);
             int x = this.x + 182 - (textWidth + 40) / 2;
             int y = this.y + 204;
-            this.font.draw(matrixStack, text, x + 20, this.y + 200, 0xFFFFFF);
+            this.font.drawShadow(matrixStack, text, x + 20, this.y + 200, 0xFFFFFF);
             if (this.notYetPopulated) {
                 if ((1 + this.TeamListPage) * 5 <= this.player_teams.size()) {
                     Button button = new ImageButton(x+8+textWidth+16, y-8, 16, 16, 141, 22, 17, BUTTON_TEXTURE, (runnable) -> this.Scrolldown());
@@ -445,7 +456,7 @@ public class GuiTeamFormation extends Screen {
             if(this.hasBG){
                 this.blit(matrix, this.x, this.y, 14,this.isHovered()?29:0, 111,29);
             }
-            font.draw(matrix, this.getMessage(), startX+20, this.y + (this.height - 8) / 2, this.isHovered()?0xffff00:0xffffff);
+            font.drawShadow(matrix, this.getMessage(), startX+20, this.y + (this.height - 8) / 2, this.isHovered()?0xffff00:0xffffff);
             minecraft.getTextureManager().bind(GuiTeamFormation.BUTTON_TEXTURE);
             this.blit(matrix, startX, this.y + (this.height - 16) / 2, 0,58, 16,16);
         }
