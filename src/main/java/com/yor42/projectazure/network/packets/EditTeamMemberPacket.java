@@ -1,6 +1,8 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.server.ServerWorld;
@@ -35,16 +37,26 @@ public class EditTeamMemberPacket {
     public static void handle(final EditTeamMemberPacket msg, final Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() -> {
-            final ServerPlayerEntity playerEntity = ctx.get().getSender();
-            ServerWorld world = playerEntity.getLevel();
-            ProjectAzureWorldSavedData data = ProjectAzureWorldSavedData.getSaveddata(world);
-            switch (msg.action){
-                case REMOVE:
-                    data.removeMember(msg.teamUUID, msg.memberUUID);
-                    break;
-                case ADD:
-                    data.addMember(msg.teamUUID, msg.memberUUID);
-                    break;
+            final ServerPlayerEntity playerEntity = ctx.get().getSender(
+            );
+            if (playerEntity != null) {
+                ServerWorld world = playerEntity.getLevel();
+                ProjectAzureWorldSavedData data = ProjectAzureWorldSavedData.getSaveddata(world);
+                Entity entity = world.getEntity(msg.memberUUID);
+                switch (msg.action) {
+                    case REMOVE:
+                        data.removeMember(msg.teamUUID, msg.memberUUID);
+                        if(entity instanceof AbstractEntityCompanion){
+                            ((AbstractEntityCompanion) entity).removeTeam();
+                        }
+                        break;
+                    case ADD:
+                        data.addMember(msg.teamUUID, msg.memberUUID);
+                        if(entity instanceof AbstractEntityCompanion) {
+                            ((AbstractEntityCompanion) entity).setTeam(msg.teamUUID);
+                        }
+                        break;
+                }
             }
         });
         ctx.get().setPacketHandled(true);

@@ -37,8 +37,8 @@ public class TeamNameChangedPacket {
     {
         ctx.get().enqueueWork(() -> {
             final ServerPlayerEntity playerEntity = ctx.get().getSender();
-            ServerWorld world = playerEntity.getLevel();
             if(playerEntity != null) {
+                ServerWorld world = playerEntity.getLevel();
                 ProjectAzureWorldSavedData.getSaveddata(world).ChangeTeamName(msg.teamUUID, msg.name);
             }
         });

@@ -3,6 +3,8 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import com.google.common.collect.ImmutableList;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
@@ -412,8 +414,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES);
-
-
     public abstract enums.EntityType getEntityType();
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -436,6 +436,34 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.canUseBow = false;
     }
 
+    public void setTeam(UUID team) {
+        this.getEntityData().set(TeamUUID, Optional.of(team));
+    }
+
+    public void removeTeam(){
+        this.getEntityData().set(TeamUUID, Optional.empty());
+    }
+
+    public Optional<UUID> getTeamUUID(){
+        return this.getEntityData().get(TeamUUID);
+    }
+
+    public Optional<CompanionTeam> getCompanionTeam(){
+        if(this.getCommandSenderWorld().isClientSide()){
+            return this.getColpanionTeamClient();
+        }
+        else{
+            ServerWorld world = (ServerWorld) this.getCommandSenderWorld();
+            return this.getTeamUUID().flatMap((UUID)->{
+                return ProjectAzureWorldSavedData.getSaveddata(world).getTeambyUUID(UUID);
+            });
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private Optional<CompanionTeam> getColpanionTeamClient(){
+        return this.getTeamUUID().flatMap(UUID -> ProjectAzureWorldSavedData.getTeambyUUIDClient(uuid));
+    }
     public void setdead(boolean value){
         this.dead = value;
     }
@@ -1114,11 +1142,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public void remove(boolean keepData) {
-        super.remove(keepData);
-        if(!keepData && this.getOwner() instanceof PlayerEntity){
+        if(this.getOwner() instanceof PlayerEntity){
             PlayerEntity player = (PlayerEntity) this.getOwner();
             ProjectAzurePlayerCapability.getCapability(player).removeCompanion(this);
         }
+        if(!this.getCommandSenderWorld().isClientSide()){
+            this.getTeamUUID().ifPresent((team)-> ProjectAzureWorldSavedData.getSaveddata((ServerWorld) this.getCommandSenderWorld()).removeMember(team, this.getUUID()));
+        }
+        this.removeTeam();
+        super.remove(keepData);
     }
 
     @Override

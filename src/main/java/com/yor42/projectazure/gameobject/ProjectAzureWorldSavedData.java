@@ -85,6 +85,17 @@ public class ProjectAzureWorldSavedData extends WorldSavedData {
         return TeamListCLIENT.stream().filter((team)->team.getOwnerUUID().equals(player.getUUID())).collect(Collectors.toList());
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static Optional<CompanionTeam> getTeambyUUIDClient(UUID TeamUUID){
+        if(!TeamListCLIENT.isEmpty()) {
+            for (CompanionTeam team : TeamListCLIENT) {
+                if (team.getTeamUUID().equals(TeamUUID)) {
+                    return Optional.of(team);
+                }
+            }
+        }
+        return Optional.empty();
+    }
     public ProjectAzureWorldSavedData() {
         super(ID);
     }

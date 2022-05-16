@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -55,6 +56,7 @@ public class ItemStasisCrystal extends Item {
                 }
                 AbstractEntityCompanion companion = (AbstractEntityCompanion)spawnedEntity;
                 companion.setPos(context.getClickedPos().getX() + 0.5, context.getClickedPos().getY() + 1.1F, context.getClickedPos().getZ() + 0.5);
+                ProjectAzurePlayerCapability.getCapability(player).addCompanion(companion);
                 context.getLevel().addFreshEntity(spawnedEntity);
                 if (!context.getPlayer().isCreative()) {
                     itemstack.shrink(1);
