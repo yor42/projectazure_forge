@@ -30,7 +30,6 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.DirectionUtil;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -82,6 +81,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
@@ -450,7 +451,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public Optional<CompanionTeam> getCompanionTeam(){
         if(this.getCommandSenderWorld().isClientSide()){
-            return this.getColpanionTeamClient();
+            return this.getCompanionTeamClient();
         }
         else{
             ServerWorld world = (ServerWorld) this.getCommandSenderWorld();
@@ -461,7 +462,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @OnlyIn(Dist.CLIENT)
-    private Optional<CompanionTeam> getColpanionTeamClient(){
+    private Optional<CompanionTeam> getCompanionTeamClient(){
         return this.getTeamUUID().flatMap(UUID -> ProjectAzureWorldSavedData.getTeambyUUIDClient(uuid));
     }
     public void setdead(boolean value){
