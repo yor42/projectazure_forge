@@ -242,6 +242,8 @@
   "gui.teamformation.createteam": "Create New Team",
   "gui.teamformation.addmember": "Add member",
   "gui.teamformation.pages": "%s Pages",
+  "gui.teamformation.title": "Team Management",
+  "gui.membermanagement.title": "Add Member",
 
   "gui.team.newname": "New Team %s",
 

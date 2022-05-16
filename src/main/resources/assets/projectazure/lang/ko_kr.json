@@ -242,6 +242,10 @@
   "gui.teamformation.createteam": "새 팀 만들기",
   "gui.teamformation.addmember": "팀원 추가",
   "gui.teamformation.pages": "%s 페이지",
+  "gui.teamformation.title": "팀 관리",
+  "gui.membermanagement.title": "팀원 추가",
+
+  "gui.team.newname": "새 팀 %s",
 
   "destroyer": "구축함",
   "light_cruiser": "경순양함",

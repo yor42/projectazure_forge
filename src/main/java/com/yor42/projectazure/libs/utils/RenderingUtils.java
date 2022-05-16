@@ -1,17 +1,22 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -104,5 +109,46 @@ public class RenderingUtils {
     public static TextureAtlasSprite getSprite(ResourceLocation rl)
     {
         return Minecraft.getInstance().getModelManager().getAtlas(PlayerContainer.BLOCK_ATLAS).getSprite(rl);
+    }
+
+    public static void renderEntityInInventory(int x, int y, float scale, float mouseX, float mouseY, LivingEntity entity) {
+        float f = (float)Math.atan((double)((x-mouseX) / 40.0F));
+        float f1 = (float)Math.atan((double)((y-mouseY) / 40.0F));
+        RenderSystem.pushMatrix();
+        RenderSystem.translatef((float)x, (float)y, 1050.0F);
+        RenderSystem.scalef(1.0F, 1.0F, -1.0F);
+        MatrixStack matrixstack = new MatrixStack();
+        matrixstack.translate(0.0D, 0.0D, 1000.0D);
+        matrixstack.scale(scale, scale, (float)scale);
+        Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
+        Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
+        quaternion.mul(quaternion1);
+        matrixstack.mulPose(quaternion);
+        float f2 = entity.yBodyRot;
+        float f3 = entity.yRot;
+        float f4 = entity.xRot;
+        float f5 = entity.yHeadRotO;
+        float f6 = entity.yHeadRot;
+        entity.yBodyRot = 180.0F + f * 20.0F;
+        entity.yRot = 180.0F + f * 40.0F;
+        entity.xRot = -f1 * 20.0F;
+        entity.yHeadRot = entity.yRot;
+        entity.yHeadRotO = entity.yRot;
+        EntityRendererManager entityrenderermanager = Minecraft.getInstance().getEntityRenderDispatcher();
+        quaternion1.conj();
+        entityrenderermanager.overrideCameraOrientation(quaternion1);
+        entityrenderermanager.setRenderShadow(false);
+        IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
+        RenderSystem.runAsFancy(() -> {
+            entityrenderermanager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
+        });
+        irendertypebuffer$impl.endBatch();
+        entityrenderermanager.setRenderShadow(true);
+        entity.yBodyRot = f2;
+        entity.yRot = f3;
+        entity.xRot = f4;
+        entity.yHeadRotO = f5;
+        entity.yHeadRot = f6;
+        RenderSystem.popMatrix();
     }
 }

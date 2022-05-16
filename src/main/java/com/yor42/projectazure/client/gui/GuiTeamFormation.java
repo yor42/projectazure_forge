@@ -17,6 +17,7 @@ import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
@@ -32,6 +33,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 
 public class GuiTeamFormation extends Screen {
 
@@ -79,19 +82,26 @@ public class GuiTeamFormation extends Screen {
     @Override
     public void init(Minecraft p_231158_1_, int p_231158_2_, int p_231158_3_) {
         super.init(p_231158_1_, p_231158_2_, p_231158_3_);
-        this.subInit();
+        this.name = new TextFieldWidget(this.font, x + 9, y + 25, 109, 16, new TranslationTextComponent("team.defaultteamname"));
+        this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
+        this.name.setTextColor(-1);
+        this.name.setTextColorUneditable(-1);
+        this.name.setBordered(true);
+        this.name.setMaxLength(35);
+        this.name.setResponder(this::onNameChanged);
+        this.children.add(this.name);
     }
 
     @Override
     protected void init() {
         this.notYetPopulated = true;
-        this.buttons.clear();
-        this.children.clear();
-        super.init();
         this.backgroundWidth = this.Subscreen == 0? 248:155;
         this.backgroundHeight = this.Subscreen == 0?219:167;
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2;
+        this.buttons.clear();
+        this.children.clear();
+        super.init();
         this.scrollBarTop = this.y + 24;
         this.lastScrollY = this.scrollBarTop;
         if(this.editingTeam != null){
@@ -108,27 +118,6 @@ public class GuiTeamFormation extends Screen {
                 this.setFocused(null);
             }
         }
-    }
-
-    private void subInit() {
-        this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        this.name = new TextFieldWidget(this.font, x + 9, y + 25, 109, 16, new TranslationTextComponent("team.defaultteamname"));
-        this.name.setTextColor(-1);
-        this.name.setTextColorUneditable(-1);
-        this.name.setBordered(true);
-        this.name.setMaxLength(35);
-        if(this.editingTeam == null||this.Subscreen != 0){
-            this.name.setEditable(false);
-            this.name.setVisible(false);
-        }
-        else {
-            this.name.setEditable(true);
-            this.name.setVisible(true);
-            this.name.setFocus(true);
-            this.setFocused(name);
-        }
-        this.name.setResponder(this::onNameChanged);
-        this.children.add(this.name);
     }
 
     private void onNameChanged(String s) {
@@ -152,6 +141,7 @@ public class GuiTeamFormation extends Screen {
     public void resize(Minecraft p_231152_1_, int p_231152_2_, int p_231152_3_) {
         this.notYetPopulated = true;
         super.resize(p_231152_1_, p_231152_2_, p_231152_3_);
+        this.getEditingTeam().ifPresent((team)->this.name.setValue(team.getDisplayName().getString()));
     }
 
     @Override
@@ -176,6 +166,7 @@ public class GuiTeamFormation extends Screen {
     }
 
     private void renderSubScreenButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        font.drawShadow(matrixStack, new TranslationTextComponent("gui.membermanagement.title"),this.x+6,this.y+6, -1);
         ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(this.minecraft.player);
         List<AbstractEntityCompanion> entities = capability.getCompanionList().stream().filter((entity)->{
             for(CompanionTeam team:this.player_teams){
@@ -213,6 +204,7 @@ public class GuiTeamFormation extends Screen {
 
     private void renderMainScreenButtons(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if(this.minecraft!= null) {
+            font.drawShadow(matrixStack, new TranslationTextComponent("gui.teamformation.title"),this.x+4,this.y+4, -1);
             //Draw Team Lists
             int i = 0;
             while (i < 5 && 5 * this.TeamListPage + i <= this.player_teams.size()) {
@@ -251,19 +243,20 @@ public class GuiTeamFormation extends Screen {
                             Button button = new ImageButton(x, y, 14, 29, 0, 0, 29, BUTTON_TEXTURE, (runnable) -> this.removeMeber(entity));
                             this.addButton(button);
                         }
-                        this.minecraft.getTextureManager().bind(BUTTON_TEXTURE);
-                        this.blit(matrixStack, x+12, y, 14, 0,99,29);
-                        this.font.drawShadow(matrixStack, entity.getDisplayName(), x+15, y+4, 0xFFFFFF);
+                        this.minecraft.getTextureManager().bind(TEXTURE_MAINSCREEN);
+                        this.blit(matrixStack, x+14, y, 0, 219,97,29);
+                        this.font.drawShadow(matrixStack, entity.getDisplayName(), x+18, y+4, 0xFFFFFF);
                         matrixStack.pushPose();
                         float renderscale = 0.8F;
                         matrixStack.scale(renderscale,renderscale,renderscale);
                         IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(TextFormatting.RED));
                         float width = this.font.width(text)*renderscale;
-                        float textx =(float) (this.x+23)/renderscale;
+                        float textx =(float) (this.x+26)/renderscale;
                         float texty = (float) (this.y + 79.5 + (29 * j))/renderscale;
                         this.font.drawShadow(matrixStack, text, textx, texty, -1);
                         this.font.drawShadow(matrixStack, new StringTextComponent("Lv.").withStyle(TextFormatting.WHITE).append(new StringTextComponent(Integer.toString(entity.getLevel())).withStyle(TextFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
                         matrixStack.popPose();
+                        renderEntityInInventory(x+99, y+26, 14, mouseX, mouseY, entity);
                     }
                     else {
                         if (this.notYetPopulated) {
@@ -433,6 +426,11 @@ public class GuiTeamFormation extends Screen {
         this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
     private static class CreateButton extends Button {
 
         private final boolean hasBG;
@@ -475,7 +473,18 @@ public class GuiTeamFormation extends Screen {
             FontRenderer font = minecraft.font;
             minecraft.getTextureManager().bind(GuiTeamFormation.TEXTURE_SUBSCREEN);
             this.blit(matrix, this.x, this.y, 0,this.isHovered()?194:167, 121,27);
-            font.draw(matrix, this.getMessage(), this.x+4, this.y + 4, this.isHovered()?0xffff00:0xffffff);
+            font.drawShadow(matrix, this.getMessage(), this.x+4, this.y + 4, this.isHovered()?0xffff00:0xffffff);
+            matrix.pushPose();
+            float renderscale = 0.8F;
+            matrix.scale(renderscale,renderscale,renderscale);
+            IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(TextFormatting.RED));
+            float width = font.width(text)*renderscale;
+            float textx =(float) (this.x+4)/renderscale;
+            float texty = (float) (this.y + 15)/renderscale;
+            font.drawShadow(matrix, text, textx, texty, -1);
+            font.drawShadow(matrix, new StringTextComponent("Lv.").withStyle(TextFormatting.WHITE).append(new StringTextComponent(Integer.toString(entity.getLevel())).withStyle(TextFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
+            matrix.popPose();
+            renderEntityInInventory(this.x+this.width-10, this.y+this.height-3, 11, mouseX, mouseY, this.entity);
         }
     }
 }
