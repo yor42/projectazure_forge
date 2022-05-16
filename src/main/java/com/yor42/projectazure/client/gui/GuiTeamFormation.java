@@ -35,6 +35,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
+import static net.minecraft.util.text.TextFormatting.DARK_RED;
+import static net.minecraft.util.text.TextFormatting.YELLOW;
 
 public class GuiTeamFormation extends Screen {
 
@@ -249,7 +251,18 @@ public class GuiTeamFormation extends Screen {
                         matrixStack.pushPose();
                         float renderscale = 0.8F;
                         matrixStack.scale(renderscale,renderscale,renderscale);
-                        IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(TextFormatting.RED));
+                        TextFormatting color = TextFormatting.GREEN;
+                        float health_percent = entity.getHealth()/entity.getMaxHealth();
+                        if(entity.isCriticallyInjured()){
+                            color = DARK_RED;
+                        }
+                        else if(health_percent<=0.25F){
+                            color = TextFormatting.RED;
+                        }
+                        else if(health_percent<=0.5F){
+                            color = YELLOW;
+                        }
+                        IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(color));
                         float width = this.font.width(text)*renderscale;
                         float textx =(float) (this.x+26)/renderscale;
                         float texty = (float) (this.y + 79.5 + (29 * j))/renderscale;
@@ -477,7 +490,18 @@ public class GuiTeamFormation extends Screen {
             matrix.pushPose();
             float renderscale = 0.8F;
             matrix.scale(renderscale,renderscale,renderscale);
-            IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(TextFormatting.RED));
+            TextFormatting color = TextFormatting.GREEN;
+            float health_percent = entity.getHealth()/entity.getMaxHealth();
+            if(entity.isCriticallyInjured()){
+                color = DARK_RED;
+            }
+            else if(health_percent<=0.25F){
+                color = TextFormatting.RED;
+            }
+            else if(health_percent<=0.5F){
+                color = YELLOW;
+            }
+            IFormattableTextComponent text = new StringTextComponent("HP:").withStyle(TextFormatting.WHITE).append(entity.isCriticallyInjured()? new TranslationTextComponent("gui.team.injured"):new StringTextComponent(((int)entity.getHealth())+"/"+((int)entity.getMaxHealth())).withStyle(color));
             float width = font.width(text)*renderscale;
             float textx =(float) (this.x+4)/renderscale;
             float texty = (float) (this.y + 15)/renderscale;
