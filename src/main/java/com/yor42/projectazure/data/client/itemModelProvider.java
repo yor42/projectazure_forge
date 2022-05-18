@@ -161,6 +161,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelAKN("spawnmudrock");
         buildModelRUN("spawntalulah");
         buildModelRUN("spawnfrostnova");
+        buildModelRUN("spawncrownslayer");
         buildModelAKN("spawntexas");
         buildModelAKN("spawnsiege");
         buildModelAKN("spawnschwarz");

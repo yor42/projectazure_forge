@@ -1,14 +1,25 @@
 package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
+import com.yor42.projectazure.libs.utils.DirectionUtil;
+import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+
+import javax.annotation.Nonnull;
+
+import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
 
 public abstract class AbstractSwordUserBase extends AbstractEntityCompanion implements IMeleeAttacker {
 

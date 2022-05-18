@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
@@ -46,6 +47,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_SYLVI, EntitySylvi.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_YAMATO, EntityYamato.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CROWNSLAYER, EntityCrownSlayer.MutableAttribute().build());
     }
 
 

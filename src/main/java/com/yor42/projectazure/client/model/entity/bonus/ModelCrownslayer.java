@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.model.entity.bonus;
 
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.MathUtil;
@@ -15,40 +16,45 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
+public class ModelCrownslayer extends AnimatedGeoModel<EntityCrownSlayer> {
 
     private int blinkinterval = 0;
     private long LastBlinkTime = 0;
 
     @Override
-    public ResourceLocation getModelLocation(EntityFrostnova object) {
-        return GeoModelEntityLocation("modelfrostnova");
+    public ResourceLocation getModelLocation(EntityCrownSlayer object) {
+        return GeoModelEntityLocation("modelcrownslayer");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityFrostnova object) {
-        return TextureEntityLocation("modelfrostnova");
+    public ResourceLocation getTextureLocation(EntityCrownSlayer object) {
+        return TextureEntityLocation("modelcrownslayer");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityFrostnova animatable) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/bonus/frostnova.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntityCrownSlayer animatable) {
+        return new ResourceLocation(Constants.MODID,"animations/entity/bonus/crownslayer.animation.json");
     }
 
     @Override
-    public void setLivingAnimations(EntityFrostnova entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setLivingAnimations(EntityCrownSlayer entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+        IBone EarR = this.getAnimationProcessor().getBone("EarR");
+        IBone EarL = this.getAnimationProcessor().getBone("EarL");
+        IBone hood = this.getAnimationProcessor().getBone("hood");
         IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
+        IBone Injured = this.getAnimationProcessor().getBone("Injured");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone SleepFace = this.getAnimationProcessor().getBone("Sleeping");
         IBone Flushed = this.getAnimationProcessor().getBone("flushed");
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
+        IBone Angry3 = this.getAnimationProcessor().getBone("angry3");
         IBone body = this.getAnimationProcessor().getBone("Body");
-        IBone Faint = this.getAnimationProcessor().getBone("fainted");
+        IBone Faint = this.getAnimationProcessor().getBone("Faint");
         if (entity.isDeadOrDying() || entity.isCriticallyInjured()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
@@ -58,8 +64,36 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(false);
-        } else if (entity.isAngry()) {
+            Injured.setHidden(true);
+        }
+        else if(entity.isCriticallyInjured()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Angry3.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(false);
+        }
+        else if (entity.isAngry()) {
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Angry3.setHidden(false);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
+        } else if (entity.getAngerWarningCount() == 2) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -68,17 +102,9 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(false);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
-        } else if (entity.getAngerWarningCount() == 2) {
-            NormalFace.setHidden(true);
-            ExcitedFace.setHidden(true);
-            EyeclosedFace.setHidden(true);
-            PatFace.setHidden(true);
-            SleepFace.setHidden(true);
-            Flushed.setHidden(true);
-            Angry1.setHidden(false);
-            Angry2.setHidden(true);
-            Faint.setHidden(true);
+            Injured.setHidden(true);
         } else if (entity.islewded()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
@@ -88,7 +114,9 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
             Flushed.setHidden(false);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
+            Injured.setHidden(true);
         } else if (entity.isBeingPatted()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
@@ -98,7 +126,9 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
+            Injured.setHidden(true);
         } else if (entity.isSleeping()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
@@ -108,7 +138,9 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
+            Injured.setHidden(true);
         } else {
             if (this.LastBlinkTime == 0) {
                 this.LastBlinkTime = System.currentTimeMillis();
@@ -120,7 +152,9 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
                 Flushed.setHidden(true);
                 Angry1.setHidden(true);
                 Angry2.setHidden(true);
+                Angry3.setHidden(true);
                 Faint.setHidden(true);
+                Injured.setHidden(true);
             }
             if (System.currentTimeMillis() - this.LastBlinkTime >= this.blinkinterval) {
                 if (EyeclosedFace.isHidden()) {
@@ -132,7 +166,9 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
                     Flushed.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
+                    Angry3.setHidden(true);
                     Faint.setHidden(true);
+                    Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat() * 300) + 100);
                 } else {
                     NormalFace.setHidden(false);
@@ -143,7 +179,9 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
                     Flushed.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
+                    Angry3.setHidden(true);
                     Faint.setHidden(true);
+                    Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat() * 1000) + 3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();
@@ -169,5 +207,16 @@ public class ModelFrostNova extends AnimatedGeoModel<EntityFrostnova> {
         } else if (entity.isSleeping()) {
             body.setPositionY(-35);
         }
+
+        if (entity.isWearingHood()) {
+            EarL.setHidden(true);
+            EarR.setHidden(true);
+            hood.setHidden(false);
+        } else {
+            EarL.setHidden(false);
+            EarR.setHidden(false);
+            hood.setHidden(true);
+        }
+
     }
 }

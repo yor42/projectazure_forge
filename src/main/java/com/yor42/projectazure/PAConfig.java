@@ -124,6 +124,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue TalulahAttackDamage;
         public final ForgeConfigSpec.DoubleValue TalulahMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue CrownslayerHealth;
+        public final ForgeConfigSpec.DoubleValue CrownslayerSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue CrownslayerAttackDamage;
+        public final ForgeConfigSpec.DoubleValue CrownslayerMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue SylviHealth;
         public final ForgeConfigSpec.DoubleValue SylviSwimSpeed;
         public final ForgeConfigSpec.DoubleValue SylviAttackDamage;
@@ -300,11 +305,16 @@ public class PAConfig {
             TalulahAttackDamage = builder.defineInRange("Attack Damage of Talulah", 2.0F, 0, 1024);
             TalulahMovementSpeed = builder.defineInRange("Movement speed of Talulah", 0.5F, 0, 2);
 
+            CrownslayerHealth = builder.defineInRange("Max Health of Crownslayer", 20D, 1, 1024);
+            CrownslayerSwimSpeed = builder.defineInRange("Swim Speed of Crownslayer", 2.5, 0, 1024);
+            CrownslayerAttackDamage = builder.defineInRange("Attack Damage of Crownslayer", 2.0F, 0, 1024);
+            CrownslayerMovementSpeed = builder.defineInRange("Movement speed of Crownslayer", 0.4F, 0, 2);
+
             builder.pop().push("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);
             GangwonSwimSpeed = builder.defineInRange("Swim Speed of Gangwon", 2.5, 0, 1024);
             GangwonAttackDamage = builder.defineInRange("Attack Damage of Gangwon", 2.0F, 0, 1024);
-            GangwonMovementSpeed = builder.defineInRange("Movement speed of Gangwon", 0.35F, 0, 2);
+            GangwonMovementSpeed = builder.defineInRange("Movement speed of Gangwon", 0.4F, 0, 2);
 
             builder.pop().push("Closers");
             SylviHealth = builder.defineInRange("Max Health of Sylvi Lee", 20D, 1, 1024);

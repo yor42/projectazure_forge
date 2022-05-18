@@ -3,6 +3,7 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
@@ -132,6 +133,9 @@ public class registerManager {
     public static final EntityType<EntityTalulah> ENTITYTYPE_TALULAH = EntityType.Builder.of(EntityTalulah::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitytalulah").toString());
     public static final RegistryObject<EntityType<EntityTalulah>> TALULAH = ENTITIES.register("entitytalulah", () -> ENTITYTYPE_TALULAH);
 
+    public static final EntityType<EntityCrownSlayer> ENTITYTYPE_CROWNSLAYER = EntityType.Builder.of(EntityCrownSlayer::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitycrownslayer").toString());
+    public static final RegistryObject<EntityType<EntityCrownSlayer>> CROWNSLAYER = ENTITIES.register("entitycrownslayer", () -> ENTITYTYPE_CROWNSLAYER);
+
     public static final EntityType<EntityTexas> ENTITYTYPE_TEXAS = EntityType.Builder.of(EntityTexas::new, EntityClassification.CREATURE).sized(0.572F, 1.61F).build(ModResourceLocation("entitytexas").toString());
     public static final RegistryObject<EntityType<EntityTexas>> TEXAS = ENTITIES.register("entitytexas", () -> ENTITYTYPE_TEXAS);
 
@@ -149,6 +153,7 @@ public class registerManager {
 
     public static final EntityType<EntityNearl> ENTITYTYPE_NEARL = EntityType.Builder.of(EntityNearl::new, EntityClassification.CREATURE).sized(0.572F, 1.71F).build(ModResourceLocation("entitynearl").toString());
     public static final RegistryObject<EntityType<EntityNearl>> NEARL = ENTITIES.register("entitynearl", () -> ENTITYTYPE_NEARL);
+
     public static final EntityType<EntitySylvi> ENTITYTYPE_SYLVI = EntityType.Builder.of(EntitySylvi::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityschwarz").toString());
     public static final RegistryObject<EntityType<EntitySylvi>> SYLVI = ENTITIES.register("entitysylvi", () -> ENTITYTYPE_SYLVI);
 

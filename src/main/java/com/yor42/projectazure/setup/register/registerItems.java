@@ -392,6 +392,9 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWN_TALULAH = registerManager.ITEMS.register("spawntalulah", () -> new ItemKansenSpawnEgg(ENTITYTYPE_TALULAH, new Item.Properties()
             .tab(PA_SHIPS)));
 
+    public static final RegistryObject<Item> SPAWN_CROWNSLAYER = registerManager.ITEMS.register("spawncrownslayer", () -> new ItemKansenSpawnEgg(ENTITYTYPE_CROWNSLAYER, new Item.Properties()
+            .tab(PA_SHIPS)));
+
     public static final RegistryObject<Item> SPAWN_SHIROKO = registerManager.ITEMS.register("spawnshiroko", () -> new ItemKansenSpawnEgg(ENTITYTYPE_SHIROKO, new Item.Properties()
             .tab(PA_SHIPS)));
 

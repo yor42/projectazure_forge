@@ -2542,7 +2542,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     interactionDirection = DirectionUtil.RelativeDirection.BACK;
                 }
                 else{
-                    interactionDirection = DirectionUtil.RelativeDirection.RIGHT;
+                    interactionDirection = DirectionUtil.RelativeDirection.LEFT;
                 }
 
                 Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
