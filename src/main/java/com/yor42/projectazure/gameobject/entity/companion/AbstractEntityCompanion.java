@@ -124,6 +124,9 @@ import java.util.function.Predicate;
 import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
+import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.HOME;
+import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.RIDE_TARGET;
+import static net.minecraft.entity.ai.brain.schedule.Activity.REST;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
@@ -424,10 +427,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Optional<UUID>> TeamUUID = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_UUID);
 
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(HOME, MemoryModuleType.JOB_SITE, registerManager.WAIT_POINT.get(), MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, RIDE_TARGET, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES);
 
-    public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<AbstractEntityCompanion, PointOfInterestType>> POI_MEMORIES = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
+    public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<AbstractEntityCompanion, PointOfInterestType>> POI_MEMORIES = ImmutableMap.of(HOME, (p_213769_0_, p_213769_1_) -> {
         return p_213769_1_ == PointOfInterestType.HOME;
     });
     public abstract enums.EntityType getEntityType();
@@ -664,7 +667,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(MORALE, compound.getFloat("morale"));
         this.entityData.set(ANGRYTIMER, compound.getInt("angrytimer"));
         this.entityData.set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
-        this.entityData.set(SITTING, compound.getBoolean("issitting"));
+        boolean isSittng = compound.getBoolean("issitting");
+        this.entityData.set(SITTING, isSittng);
+
         this.entityData.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.awakeningLevel = compound.getInt("awaken");
@@ -682,6 +687,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(modifiableattributeinstance != null) {
             modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH) + this.getLevel());
         }
+
+        this.setOrderedToSit(isSittng);
     }
 
     public float getAttackDamageMainHand(){
@@ -1057,10 +1064,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getNavigation().stop();
         this.entityData.set(ISFREEROAMING, value);
         if(value) {
-            this.setStayCenterPos(this.blockPosition());
+            if(this.getBrain().getMemory(HOME).map((pos)->pos.dimension() == this.level.dimension() && this.getOnPos().closerThan(pos.pos(), (double) this.getHomeDistance())).orElse(false)){
+                this.getBrain().setActiveActivityIfPossible(REST);
+            }
+            else{
+                this.getBrain().setMemory(registerManager.WAIT_POINT.get(), GlobalPos.of(this.level.dimension(), this.getOnPos()));
+                this.getBrain().setActiveActivityIfPossible(registerManager.WAITING.get());
+            }
+            //this.setStayCenterPos(this.blockPosition());
         }
         else{
-            this.clearStayCenterPos();
+            this.getBrain().setActiveActivityIfPossible(registerManager.FOLLOWING_OWNER.get());
+            this.getBrain().eraseMemory(registerManager.WAIT_POINT.get());
+            //this.clearStayCenterPos();
         }
     }
 
@@ -2217,6 +2233,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.level.getProfiler().push("CompanionBrain");
         this.getBrain().tick((ServerWorld)this.level, this);
         this.level.getProfiler().pop();
+
         super.customServerAiStep();
     }
 

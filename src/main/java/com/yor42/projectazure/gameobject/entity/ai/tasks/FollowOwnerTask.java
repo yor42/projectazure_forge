@@ -7,24 +7,28 @@ import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
+import net.minecraft.util.RangedInteger;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
+import java.util.Random;
 
 public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
     public FollowOwnerTask() {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
     }
 
+    private static final RangedInteger followrange = new RangedInteger(1,4);
+
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld world, AbstractEntityCompanion entity) {
         LivingEntity owner = entity.getOwner();
-        return owner!=null && entity.distanceTo(owner)>=4;
+        return owner!=null && entity.distanceTo(owner)>=followrange.randomValue(new Random());
     }
 
     protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
         if (p_212831_2_.getOwner()!=null) {
-            BrainUtil.setWalkAndLookTargetMemories(p_212831_2_, p_212831_2_.getOwner(), 1, 4);
+            BrainUtil.setWalkAndLookTargetMemories(p_212831_2_, p_212831_2_.getOwner(), 1, followrange.randomValue(new Random()));
         }
     }
 }

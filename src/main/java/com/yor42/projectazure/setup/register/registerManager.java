@@ -203,6 +203,7 @@ public class registerManager {
     //Activities
     public static final RegistryObject<Activity> FOLLOWING_OWNER = registerActivity("following_ownner");
     public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
+    public static final RegistryObject<Activity> WAITING = registerActivity("waiting");
 
     //MemoryModuleType
     public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
