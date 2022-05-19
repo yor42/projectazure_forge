@@ -1,6 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.Dynamic;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
@@ -10,6 +12,7 @@ import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementControll
 import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
+import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
 import com.yor42.projectazure.gameobject.entity.ai.goals.*;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
@@ -33,6 +36,7 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerManager;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -53,6 +57,7 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -63,6 +68,7 @@ import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.DebugPacketSender;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -72,12 +78,15 @@ import net.minecraft.pathfinding.*;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.*;
 import net.minecraft.world.server.ServerWorld;
@@ -102,12 +111,14 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Abs;
 import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
@@ -413,8 +424,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Optional<UUID>> TeamUUID = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_UUID);
 
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI);
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, SensorType.VILLAGER_HOSTILES);
+
+    public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<AbstractEntityCompanion, PointOfInterestType>> POI_MEMORIES = ImmutableMap.of(MemoryModuleType.HOME, (p_213769_0_, p_213769_1_) -> {
+        return p_213769_1_ == PointOfInterestType.HOME;
+    });
     public abstract enums.EntityType getEntityType();
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -2152,7 +2167,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         return true;
     }
-
+    /*
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new CompanionMoveToRecruitStationGoal(this));
@@ -2193,6 +2208,45 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
+    }
+
+     */
+
+    @Override
+    protected void customServerAiStep() {
+        this.level.getProfiler().push("CompanionBrain");
+        this.getBrain().tick((ServerWorld)this.level, this);
+        this.level.getProfiler().pop();
+        super.customServerAiStep();
+    }
+
+    public Brain<AbstractEntityCompanion> getBrain() {
+        return (Brain<AbstractEntityCompanion>)super.getBrain();
+    }
+    @Override
+    protected Brain<?> makeBrain(Dynamic<?> p_213364_1_) {
+        Brain<AbstractEntityCompanion> brain = this.brainProvider().makeBrain(p_213364_1_);
+        CompanionTasks.registerBrain(brain);
+        return brain;
+    }
+
+    public void releasePoi(MemoryModuleType<GlobalPos> p_213742_1_) {
+        if (this.level instanceof ServerWorld) {
+            MinecraftServer minecraftserver = ((ServerWorld)this.level).getServer();
+            this.brain.getMemory(p_213742_1_).ifPresent((p_213752_3_) -> {
+                ServerWorld serverworld = minecraftserver.getLevel(p_213752_3_.dimension());
+                if (serverworld != null) {
+                    PointOfInterestManager pointofinterestmanager = serverworld.getPoiManager();
+                    Optional<PointOfInterestType> optional = pointofinterestmanager.getType(p_213752_3_.pos());
+                    BiPredicate<AbstractEntityCompanion, PointOfInterestType> bipredicate = POI_MEMORIES.get(p_213742_1_);
+                    if (optional.isPresent() && bipredicate.test(this, optional.get())) {
+                        pointofinterestmanager.release(p_213752_3_.pos());
+                        DebugPacketSender.sendPoiTicketCountPacket(serverworld, p_213752_3_.pos());
+                    }
+
+                }
+            });
+        }
     }
 
     @Nonnull
@@ -2938,6 +2992,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(!val && this.isCriticallyInjured()){
             return;
         }
+
+        if(val){
+            this.getBrain().setActiveActivityIfPossible(registerManager.SITTING.get());
+        }
+        else{
+            this.getBrain().setActiveActivityIfPossible(registerManager.FOLLOWING_OWNER.get());
+        }
+
         this.getEntityData().set(SITTING, val);
         super.setOrderedToSit(val);
         this.refreshDimensions();
@@ -2947,11 +3009,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public int tickTimer() {
         return this.tickCount;
     }
-
-    public Brain<AbstractEntityCompanion> getBrain() {
-        return (Brain<AbstractEntityCompanion>)super.getBrain();
-    }
-
     protected Brain.BrainCodec<AbstractEntityCompanion> brainProvider() {
         return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
     }

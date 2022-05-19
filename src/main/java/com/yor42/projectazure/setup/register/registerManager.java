@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.mojang.serialization.Codec;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
@@ -22,12 +23,15 @@ import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -36,6 +40,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Optional;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -51,6 +57,9 @@ public class registerManager {
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
     public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MODID);
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MODID);
+
+    public static final DeferredRegister<Activity> ACTIVITIES = DeferredRegister.create(ForgeRegistries.ACTIVITIES, Constants.MODID);
+    public static final DeferredRegister<MemoryModuleType<?>> MEMORYMODULES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, Constants.MODID);
 
     //Container
     private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<>((IContainerFactory<ContainerKansenInventory>)ContainerKansenInventory::new);
@@ -190,6 +199,20 @@ public class registerManager {
     public static final EntityType<EntityMissileDrone> ENTITYTYPE_MISSILEDRONE = EntityType.Builder.<EntityMissileDrone>of(EntityMissileDrone::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("missiledrone").toString());
     public static final RegistryObject<EntityType<EntityMissileDrone>> MISSILEDRONE = ENTITIES.register("missiledrone", () -> ENTITYTYPE_MISSILEDRONE);
 
+
+    //Activities
+    public static final RegistryObject<Activity> FOLLOWING_OWNER = registerActivity("following_ownner");
+    public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
+
+    //MemoryModuleType
+    public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
+    public static RegistryObject<Activity> registerActivity(String ID){
+        return ACTIVITIES.register(ID,()-> new Activity(ID));
+    }
+
+    public static <U> RegistryObject<MemoryModuleType<U>> registerMemoryModuleType(String ID, Codec<U> codec){
+        return MEMORYMODULES.register(ID,()->new MemoryModuleType<>(Optional.of(codec)));
+    }
     public static void register() {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
         ENTITIES.register(eventbus);
@@ -199,6 +222,8 @@ public class registerManager {
         ITEMS.register(eventbus);
         CONTAINER.register(eventbus);
         TILE_ENTITY.register(eventbus);
+        ACTIVITIES.register(eventbus);
+        MEMORYMODULES.register(eventbus);
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
         registerBlocks.register();
