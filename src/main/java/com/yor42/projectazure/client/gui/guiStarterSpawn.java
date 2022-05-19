@@ -65,6 +65,7 @@ public class guiStarterSpawn extends Screen {
                 button.y = this.y+26;
             }*/
         }
+        this.notYetPopulated = false;
     }
 
     @Override

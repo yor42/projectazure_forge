@@ -16,6 +16,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
@@ -94,6 +95,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             stack.translate(ItemPosition.x, ItemPosition.y, ItemPosition.z);
             stack.scale(1.5F, 1.5F, 1.5F);
             if (!mainHandStack.isEmpty()) {
+                this.performCustomRotationtoStack(mainHandStack, stack, Hand.MAIN_HAND);
                 Item gunItem = this.entity.getGunStack().getItem();
                 if (!this.entity.isReloadingMainHand() && this.entity.isUsingGun() && gunItem instanceof ItemGunBase && ((ItemGunBase) gunItem).isTwoHanded()) {
                     stack.mulPose(Vector3f.XN.rotationDegrees(27.5F));
@@ -110,6 +112,9 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
                 stack.mulPose(Vector3f.ZP.rotationDegrees(180));
                 xvalue = (xvalue * -1);
             }
+            else{
+                this.performCustomRotationtoStack(mainHandStack, stack, Hand.OFF_HAND);
+            }
             stack.translate(xvalue, ItemPosition.y, ItemPosition.z);
             stack.scale(1.5F, 1.5F, 1.5F);
             if (!mainHandStack.isEmpty()) {
@@ -120,6 +125,8 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         bufferIn = rtb.getBuffer(RenderType.entitySmoothCutout(texture));
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
+
+    protected void performCustomRotationtoStack(ItemStack stack, MatrixStack matrix, Hand hand){}
 
     @Nonnull
     protected abstract Vector3d getHandItemCoordinate();
