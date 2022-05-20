@@ -8,14 +8,11 @@ import com.yor42.projectazure.gameobject.entity.ai.tasks.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.*;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.village.PointOfInterestType;
 
 import java.util.Optional;
@@ -29,14 +26,19 @@ public class CompanionTasks {
         brain.addActivity(FOLLOWING_OWNER.get(), getFollowOwnerPackage());
         brain.addActivity(SITTING.get(), getSittingPackage());
         brain.addActivity(WAITING.get(), getWaitPackages(0.5F));
+        brain.addActivity(INJURED.get(), getInjuredPackage());
         brain.addActivity(Activity.REST, getRestPackage(0.5F));
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(FOLLOWING_OWNER.get());
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getCorePackage(float p_220638_1_) {
-        return ImmutableList.of(Pair.of(0, new SwimTask(0.8F)), Pair.of(0, new InteractWithDoorTask()),
-                Pair.of(0, new LookTask(45, 90)), Pair.of(0, new WakeUpTask()),
+        return ImmutableList.of(
+                Pair.of(0, new InteractWithDoorTask()),
+                Pair.of(0, new LookTask(45, 90)),
+                Pair.of(0, new CompanionWakeupTask()),
+                Pair.of(0, new CompanionEatandHealTask()),
+                Pair.of(1, new CompanionHealAllyAndPlayerTask(40, 20, 10)),
                 Pair.of(5, new PickupWantedItemTask<>(p_220638_1_, false, 4)),
                 Pair.of(1, new WalkToTargetTask()), Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))));
     }
@@ -51,7 +53,11 @@ public class CompanionTasks {
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getSittingPackage() {
-        return ImmutableList.of(Pair.of(0, new CompanionSitTask()), Pair.of(3, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)));
+        return ImmutableList.of(Pair.of(0, new clearMovementTask()), Pair.of(3, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)));
+    }
+
+    public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getInjuredPackage() {
+        return ImmutableList.of(Pair.of(0, new clearMovementTask()), Pair.of(3, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)));
     }
 
 

@@ -20,6 +20,10 @@ public class CompanionStartRidingTask extends Task<AbstractEntityCompanion> {
     }
 
     protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion p_212832_2_) {
+        if(p_212832_2_.isCriticallyInjured()){
+            return false;
+        }
+
         return !p_212832_2_.isPassenger();
     }
 

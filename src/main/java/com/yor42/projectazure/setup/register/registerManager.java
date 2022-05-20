@@ -4,6 +4,8 @@ import com.mojang.serialization.Codec;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.NearestAllySensor;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
@@ -23,8 +25,11 @@ import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
+import net.minecraft.entity.ai.brain.sensor.Sensor;
+import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -41,7 +46,9 @@ import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -58,6 +65,7 @@ public class registerManager {
     public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MODID);
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MODID);
 
+    public static final DeferredRegister<SensorType<?>> SENSORS = DeferredRegister.create(ForgeRegistries.SENSOR_TYPES, Constants.MODID);
     public static final DeferredRegister<Activity> ACTIVITIES = DeferredRegister.create(ForgeRegistries.ACTIVITIES, Constants.MODID);
     public static final DeferredRegister<MemoryModuleType<?>> MEMORYMODULES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, Constants.MODID);
 
@@ -204,15 +212,30 @@ public class registerManager {
     public static final RegistryObject<Activity> FOLLOWING_OWNER = registerActivity("following_ownner");
     public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
     public static final RegistryObject<Activity> WAITING = registerActivity("waiting");
+    public static final RegistryObject<Activity> INJURED = registerActivity("injured");
 
     //MemoryModuleType
     public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
+    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_ALLYS = registerMemoryModuleType("nearby_allys");
+    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_ALLYS = registerMemoryModuleType("visible_allys");
+    public static final RegistryObject<MemoryModuleType<LivingEntity>> HEAL_TARGET = registerMemoryModuleType("heal_target");
+
+    //Sensors
+    public static final RegistryObject<SensorType<NearestAllySensor>> NEAREST_ALLY_SENSOR = registerSensorType("nearest_ally_sensor", NearestAllySensor::new); 
+
     public static RegistryObject<Activity> registerActivity(String ID){
         return ACTIVITIES.register(ID,()-> new Activity(ID));
     }
 
+    public static <U extends Sensor<?>> RegistryObject<SensorType<U>> registerSensorType(String ID, Supplier<U> sensor){
+        return SENSORS.register(ID, ()->new SensorType<>(sensor));
+    }
     public static <U> RegistryObject<MemoryModuleType<U>> registerMemoryModuleType(String ID, Codec<U> codec){
         return MEMORYMODULES.register(ID,()->new MemoryModuleType<>(Optional.of(codec)));
+    }
+
+    public static <U> RegistryObject<MemoryModuleType<U>> registerMemoryModuleType(String ID){
+        return MEMORYMODULES.register(ID,()->new MemoryModuleType<>(Optional.empty()));
     }
     public static void register() {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -227,6 +250,7 @@ public class registerManager {
         MEMORYMODULES.register(eventbus);
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
+        SENSORS.register(eventbus);
         registerBlocks.register();
         registerItems.register();
         registerBiomes.register();

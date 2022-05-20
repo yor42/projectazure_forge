@@ -34,6 +34,7 @@ public class CompanionHealandEatFoodGoal extends Goal {
     public boolean canUse() {
         if(this.FoodCooldown > 0){
             this.FoodCooldown--;
+            return false;
         }
         else if(this.companion.isCriticallyInjured()){
             return false;

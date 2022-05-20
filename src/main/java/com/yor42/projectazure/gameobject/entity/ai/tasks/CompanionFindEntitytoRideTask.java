@@ -33,7 +33,9 @@ public class CompanionFindEntitytoRideTask extends Task<AbstractEntityCompanion>
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld world, AbstractEntityCompanion entity) {
         LivingEntity owner = entity.getOwner();
-
+        if(entity.isCriticallyInjured()){
+            return false;
+        }
         if(owner == null){
             return false;
         }
