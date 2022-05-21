@@ -140,6 +140,10 @@ public class spawnParticlePacket {
                     ParticleUtils.spawnPatSmokeParticle(message.EntityID);
                     break;
                 }
+                case TELEPORT:{
+                    ParticleUtils.spawnTeleportParticle(message.EntityID);
+                    break;
+                }
                 case ITEM_PARTICLE:
                 {
                     if(message.stack != null){
@@ -156,7 +160,8 @@ public class spawnParticlePacket {
         CANNON_SMOKE,
         AFFECTION_HEART,
         AFFECTION_SMOKE,
-        ITEM_PARTICLE
+        ITEM_PARTICLE,
+        TELEPORT
     }
 
 }

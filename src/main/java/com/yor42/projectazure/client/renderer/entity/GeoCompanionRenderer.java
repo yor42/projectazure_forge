@@ -6,6 +6,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import mekanism.api.annotations.NonNull;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.ClippingHelper;
@@ -18,8 +19,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -47,7 +53,9 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    public void render(@NonNull T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+    public void render(@NonNull T entity, float entityYaw, float partialTicks, @Nonnull MatrixStack stack, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn) {
+        this.renderStatus(entity, stack, bufferIn, packedLightIn);
+        this.renderNameTag(entity, entity.getDisplayName(), stack, bufferIn, packedLightIn);
         stack.pushPose();
         stack.scale(0.4F, 0.4F, 0.4F);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
@@ -86,18 +94,44 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
+    protected void renderNameTag(@Nonnull T entity, ITextComponent text, MatrixStack stack, IRenderTypeBuffer iRenderTypeBuffer, int light) {
+        double d0 = entityRenderDispatcher.distanceToSqr(entity);
+        if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
+            boolean flag = !entity.isDiscrete();
+            float renderscale = 0.4F;
+            float f = (entity.getBbHeight()+0.15F) / renderscale;
+            stack.pushPose();
+            stack.scale(renderscale, renderscale, renderscale);
+            stack.translate(0.0D, (double) f, 0.0D);
+            stack.mulPose(entityRenderDispatcher.cameraOrientation());
+            stack.scale(-0.025F, -0.025F, 0.025F);
+            Matrix4f matrix4f = stack.last().pose();
+            float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
+            int j = (int) (f1 * 255.0F) << 24;
+            FontRenderer fontrenderer = this.getFont();
+            float f2 = (float) (-fontrenderer.width(text) / 2);
+            fontrenderer.drawInBatch(text, f2, (float) 0, 553648127, false, matrix4f, iRenderTypeBuffer, flag, j, light);
+            if (flag) {
+                fontrenderer.drawInBatch(text, f2, (float) 0, -1, false, matrix4f, iRenderTypeBuffer, false, 0, light);
+            }
+
+            stack.popPose();
+        }
+    }
+
+    @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         Vector3d ItemPosition = this.getHandItemCoordinate();
         if (bone.getName().equals("itemMainHand")) {
             stack.pushPose();
             stack.mulPose(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.isLeftHanded()? this.entity.getItemBySlot(EquipmentSlotType.OFFHAND) :this.entity.getItemBySlot(EquipmentSlotType.MAINHAND);
+            ItemStack mainHandStack = this.isLeftHanded()? entity.getItemBySlot(EquipmentSlotType.OFFHAND) :entity.getItemBySlot(EquipmentSlotType.MAINHAND);
             stack.translate(ItemPosition.x, ItemPosition.y, ItemPosition.z);
             stack.scale(1.5F, 1.5F, 1.5F);
             if (!mainHandStack.isEmpty()) {
                 this.performCustomRotationtoStack(mainHandStack, stack, Hand.MAIN_HAND);
-                Item gunItem = this.entity.getGunStack().getItem();
-                if (!this.entity.isReloadingMainHand() && this.entity.isUsingGun() && gunItem instanceof ItemGunBase && ((ItemGunBase) gunItem).isTwoHanded()) {
+                Item gunItem = entity.getGunStack().getItem();
+                if (!entity.isReloadingMainHand() && entity.isUsingGun() && gunItem instanceof ItemGunBase && ((ItemGunBase) gunItem).isTwoHanded()) {
                     stack.mulPose(Vector3f.XN.rotationDegrees(27.5F));
                 }
                 Minecraft.getInstance().getItemRenderer().renderStatic(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
@@ -106,9 +140,9 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         } else if (bone.getName().equals("itemOffHand")) {
             stack.pushPose();
             stack.mulPose(Vector3f.XP.rotationDegrees(-90));
-            ItemStack mainHandStack = this.isLeftHanded()?this.entity.getItemBySlot(EquipmentSlotType.MAINHAND) :this.entity.getItemBySlot(EquipmentSlotType.OFFHAND);
+            ItemStack mainHandStack = this.isLeftHanded()?entity.getItemBySlot(EquipmentSlotType.MAINHAND) :entity.getItemBySlot(EquipmentSlotType.OFFHAND);
             float xvalue = (float) (ItemPosition.x*-1);
-            if (mainHandStack.isShield(this.entity)) {
+            if (mainHandStack.isShield(entity)) {
                 stack.mulPose(Vector3f.ZP.rotationDegrees(180));
                 xvalue = (xvalue * -1);
             }
@@ -127,6 +161,58 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     protected void performCustomRotationtoStack(ItemStack stack, MatrixStack matrix, Hand hand){}
+
+    protected void renderStatus(T entity, MatrixStack stack, IRenderTypeBuffer iRenderTypeBuffer, int p_225629_5_) {
+        @Nullable
+        ITextComponent text = null;
+        switch(entity.getMoveStatus()){
+            case RELAXING:
+                text = new TranslationTextComponent("entity.status.relaxing").withStyle(TextFormatting.GREEN);
+                break;
+            case SITTING:
+                text = new TranslationTextComponent("entity.status.sitting").withStyle(TextFormatting.BLUE);
+                break;
+            case WAITING:
+                text = new TranslationTextComponent("entity.status.waiting").withStyle(TextFormatting.YELLOW);
+                break;
+            case FOLLOWING_OWNER:
+                text = new TranslationTextComponent("entity.status.following").withStyle(TextFormatting.AQUA);
+                break;
+            case FAINTED:
+                text = new TranslationTextComponent("entity.status.fainted").withStyle(TextFormatting.DARK_RED);
+                break;
+            case INJURED:
+                text = new TranslationTextComponent("entity.status.injured").withStyle(TextFormatting.RED);
+                break;
+            case COMBAT:
+                text = new TranslationTextComponent("entity.status.combat").withStyle(TextFormatting.DARK_BLUE);
+                break;
+        }
+        if(text != null) {
+            double d0 = this.entityRenderDispatcher.distanceToSqr(entity);
+            if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
+                boolean flag = !entity.isDiscrete();
+                float renderscale = 0.3F;
+                float f = (entity.getBbHeight()+0.05F) / renderscale;
+                stack.pushPose();
+                stack.scale(renderscale, renderscale, renderscale);
+                stack.translate(0.0D, (double) f, 0.0D);
+                stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+                stack.scale(-0.025F, -0.025F, 0.025F);
+                Matrix4f matrix4f = stack.last().pose();
+                float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
+                int j = (int) (f1 * 255.0F) << 24;
+                FontRenderer fontrenderer = this.getFont();
+                float f2 = (float) (-fontrenderer.width(text) / 2);
+                fontrenderer.drawInBatch(text, f2, (float) 0, 553648127, false, matrix4f, iRenderTypeBuffer, flag, j, p_225629_5_);
+                if (flag) {
+                    fontrenderer.drawInBatch(text, f2, (float) 0, -1, false, matrix4f, iRenderTypeBuffer, false, 0, p_225629_5_);
+                }
+
+                stack.popPose();
+            }
+        }
+    }
 
     @Nonnull
     protected abstract Vector3d getHandItemCoordinate();

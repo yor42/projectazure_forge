@@ -2,6 +2,7 @@ package com.yor42.projectazure.client.model.entity.sworduser;
 
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityMudrock;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -176,6 +177,11 @@ public class ModelMudrock extends AnimatedGeoModel<EntityMudrock> {
         else if(entity.isSleeping()){
             body.setPositionY(-35);
         }
+
+        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
+        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
+        IBone Chest = this.getAnimationProcessor().getBone("Chest");
+        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
     }
 
 }

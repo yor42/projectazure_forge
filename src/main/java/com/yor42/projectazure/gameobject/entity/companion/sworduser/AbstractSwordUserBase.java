@@ -33,7 +33,8 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
     }
 
     public boolean shouldUseNonVanillaAttack(LivingEntity target){
-        return this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null;
+        boolean flag = this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null;
+        return flag;
     }
 
     public boolean isTalentedWeaponinMainHand(){

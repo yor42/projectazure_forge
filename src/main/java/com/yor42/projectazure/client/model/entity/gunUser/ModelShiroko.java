@@ -2,6 +2,7 @@ package com.yor42.projectazure.client.model.entity.gunUser;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
+import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
@@ -218,6 +219,11 @@ public class ModelShiroko extends AnimatedGeoModel<EntityShiroko> {
         }else if(entity.isSleeping()){
             body.setPositionY(-38);
         }
+
+        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
+        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
+        IBone Chest = this.getAnimationProcessor().getBone("Chest");
+        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
 
     }
 

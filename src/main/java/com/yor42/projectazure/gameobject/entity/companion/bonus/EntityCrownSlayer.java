@@ -20,6 +20,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import net.minecraft.item.TieredItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -105,9 +106,9 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingL":"swingR", true));
+            //event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingL":"swingR", true));
 
-            return PlayState.CONTINUE;
+            return PlayState.STOP;
         }
         else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd_chest", true));
@@ -286,6 +287,11 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(WEARING_HOOD, true);
+    }
+
+    public boolean hasMeleeItem(){
+        Item item = this.getItemInHand(this.getNonVanillaMeleeAttackHand()).getItem();
+        return this.getTalentedWeaponList().contains(item);
     }
 
     @Override

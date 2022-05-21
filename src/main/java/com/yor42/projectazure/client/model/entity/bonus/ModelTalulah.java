@@ -2,6 +2,7 @@ package com.yor42.projectazure.client.model.entity.bonus;
 
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -212,5 +213,10 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
         }else if(entity.isSleeping()){
             body.setPositionY(-35);
         }
+
+        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
+        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
+        IBone Chest = this.getAnimationProcessor().getBone("Chest");
+        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
     }
 }

@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.ai.sensor;
 import com.google.common.collect.ImmutableSet;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.registerManager;
+import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
@@ -35,12 +36,21 @@ public class NearestAllySensor extends Sensor<AbstractEntityCompanion> {
         list.sort(Comparator.comparingDouble(entity::distanceToSqr));
         Brain<?> brain = entity.getBrain();
         brain.setMemory(registerManager.NEARBY_ALLYS.get(), list);
-        brain.setMemory(registerManager.VISIBLE_ALLYS.get(), list.stream().filter((p_220981_1_) -> isEntityTargetable(entity, p_220981_1_)).collect(Collectors.toList()));
-        brain.setMemory(registerManager.HEAL_TARGET.get(), list.stream().filter((tgt)-> isEntityTargetable(entity, tgt) && (tgt.getHealth()/tgt.getMaxHealth())<=0.5F).min((ety1, ety2)-> (int) (ety1.getHealth()-ety2.getHealth())));
+        EntityPredicate TARGET_CONDITIONS = (new EntityPredicate()).range(16.0D).allowSameTeam().allowNonAttackable().selector((ety)->entity.getSensing().canSee(ety));
+
+        List<LivingEntity> friends = list.stream().filter((p_220981_1_) -> TARGET_CONDITIONS.test(entity, p_220981_1_)).collect(Collectors.toList());
+        brain.setMemory(registerManager.VISIBLE_ALLYS.get(), friends);
+        brain.setMemory(registerManager.VISIBLE_ALLYS_COUNT.get(), friends.size());
+        brain.setMemory(registerManager.HEAL_TARGET.get(), list.stream().filter((tgt)-> {
+            if(tgt instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) tgt).isCriticallyInjured()){
+                return false;
+            }
+            return TARGET_CONDITIONS.test(entity, tgt) && (tgt.getHealth()/tgt.getMaxHealth())<=0.5F;
+        }).min((ety1, ety2)-> (int) (ety1.getHealth()-ety2.getHealth())));
 
     }
 
     public Set<MemoryModuleType<?>> requires() {
-        return ImmutableSet.of(registerManager.NEARBY_ALLYS.get(), registerManager.VISIBLE_ALLYS.get(), registerManager.HEAL_TARGET.get());
+        return ImmutableSet.of(registerManager.VISIBLE_ALLYS_COUNT.get(), registerManager.NEARBY_ALLYS.get(), registerManager.VISIBLE_ALLYS.get(), registerManager.HEAL_TARGET.get());
     }
 }

@@ -128,9 +128,8 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             return PlayState.CONTINUE;
         }
-        else if(this.attackAnim>0){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
-            return PlayState.CONTINUE;
+        else if(this.swinging){
+            return PlayState.STOP;
         }
         else if(this.isOpeningDoor()){
             if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){

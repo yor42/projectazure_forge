@@ -1,6 +1,7 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityYamato;
+import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -187,6 +188,11 @@ public class YamatoModel extends AnimatedGeoModel<EntityYamato> {
         else if(entity.isSleeping()){
             body.setPositionY(-45);
         }
+
+        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
+        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
+        IBone Chest = this.getAnimationProcessor().getBone("Chest");
+        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
     }
 
 }

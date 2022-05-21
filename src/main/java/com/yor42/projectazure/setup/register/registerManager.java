@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.NearestAllySensor;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.NearestEnemySensor;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
@@ -30,6 +31,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -218,10 +220,17 @@ public class registerManager {
     public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_ALLYS = registerMemoryModuleType("nearby_allys");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_ALLYS = registerMemoryModuleType("visible_allys");
+    public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_ALLYS_COUNT = registerMemoryModuleType("visible_allys_count");
+    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_HOSTILES = registerMemoryModuleType("nearby_hostiles");
+    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_HOSTILES = registerMemoryModuleType("visible_hostiles");
+    public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_HOSTILE_COUNT = registerMemoryModuleType("visible_hostile_count");
     public static final RegistryObject<MemoryModuleType<LivingEntity>> HEAL_TARGET = registerMemoryModuleType("heal_target");
+    public static final RegistryObject<MemoryModuleType<Boolean>> RESTING = registerMemoryModuleType("resting");
+    public static final RegistryObject<MemoryModuleType<Boolean>> MEMORY_SITTING = registerMemoryModuleType("sitting");
 
     //Sensors
-    public static final RegistryObject<SensorType<NearestAllySensor>> NEAREST_ALLY_SENSOR = registerSensorType("nearest_ally_sensor", NearestAllySensor::new); 
+    public static final RegistryObject<SensorType<NearestAllySensor>> NEAREST_ALLY_SENSOR = registerSensorType("nearest_ally_sensor", NearestAllySensor::new);
+    public static final RegistryObject<SensorType<NearestEnemySensor>> NEAREST_HOSTILE_SENSOR = registerSensorType("nearest_hostile_sensor", NearestEnemySensor::new);
 
     public static RegistryObject<Activity> registerActivity(String ID){
         return ACTIVITIES.register(ID,()-> new Activity(ID));

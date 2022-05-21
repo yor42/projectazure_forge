@@ -83,6 +83,11 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
     }
 
     @Override
+    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
+        super.start(p_212831_1_, p_212831_2_, p_212831_3_);
+    }
+
+    @Override
     protected void tick(@Nonnull ServerWorld p_212833_1_, @Nonnull AbstractEntityCompanion entity, long p_212833_3_) {
         if(this.PotionHand != null) {
             entity.getBrain().getMemory(registerManager.HEAL_TARGET.get()).ifPresent((target)->{
@@ -92,6 +97,7 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
                 if(entity.distanceTo(target)>=CloseEnoughDistance){
                     BrainUtil.setWalkAndLookTargetMemories(entity, target, 1F, (int)CloseEnoughDistance);
                 }
+
                 else if(--this.rangedAttackTime <= 0) {
                     if (PotionItem instanceof LingeringPotionItem || PotionItem instanceof SplashPotionItem) {
                         double d0 = entity.distanceToSqr(target.getX(), target.getY(), target.getZ());
@@ -103,7 +109,12 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
                     else{
                         List<EffectInstance> list = PotionUtils.getMobEffects(PotionStack);
                         for(EffectInstance effect : list){
-                            target.addEffect(effect);
+                            if(effect.getEffect() == HEAL){
+                                target.heal((float)Math.max(4 << effect.getAmplifier(), 0));
+                            }
+                            else {
+                                target.addEffect(effect);
+                            }
                         }
                         target.playSound(SoundEvents.GENERIC_DRINK, 0.8F+(0.4F* MathUtil.getRand().nextFloat()), 0.8F+(0.4F* MathUtil.getRand().nextFloat()));
                         entity.swing(this.PotionHand);
