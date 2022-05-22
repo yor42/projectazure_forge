@@ -20,8 +20,6 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.*;
-import net.minecraft.entity.monster.piglin.PiglinEntity;
-import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
@@ -64,7 +62,7 @@ public class CompanionTasks {
 
     //TODO: code Idle Task
     public static void UpdateActivity(AbstractEntityCompanion companion){
-        if(companion.getBrain().getActiveNonCoreActivity().map((act)->!(act == INJURED.get())).orElse(false) && companion.isAlive()) {
+        if(companion.getBrain().getActiveNonCoreActivity().map((act)->act != INJURED.get()).orElse(false) && companion.isAlive()) {
             Brain<AbstractEntityCompanion> brain = companion.getBrain();
             companion.setAggressive(companion.getBrain().hasMemoryValue(ATTACK_TARGET));
             brain.setActiveActivityToFirstValid(ImmutableList.of(AVOID, Activity.FIGHT, SITTING.get(), WAITING.get(), Activity.REST, FOLLOWING_OWNER.get(), Activity.IDLE));
@@ -78,6 +76,7 @@ public class CompanionTasks {
                 Pair.of(0, new CompanionWakeupTask()),
                 Pair.of(0, new CompanionUseTotemTask()),
                 Pair.of(0, new CompanionEndAttackTask()),
+                Pair.of(0, new CompanionRunAwayTask()),
                 Pair.of(0, new CompanionSprintTask()),
                 Pair.of(1, new CompanionHealTask()),
                 Pair.of(1, new CompanionHealAllyAndPlayerTask(40, 20, 10)),
@@ -116,7 +115,7 @@ public class CompanionTasks {
 
     private static void addSittingActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         brain.addActivityAndRemoveMemoryWhenStopped(SITTING.get(), 10, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
-                new clearMovementTask(),
+                new CompanionClearMovementTask(),
                 new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)
                 ), MEMORY_SITTING.get());
 
@@ -156,8 +155,13 @@ public class CompanionTasks {
                         //new FindNewAttackTargetTask<>((p_234523_1_) -> !isNearestValidAttackTarget(companion, p_234523_1_)),
                         new SupplementedTask<>(CompanionTasks::shouldStrafe, new AttackStrafingTask<>(5, 0.75F)),
                         new MoveToTargetTask(1.0F),
+                        new CompanionLaunchPlaneGoal(20, 40, 50),
+                        new CompanionUseSkillTask(),
+                        new CompanionShipRangedAttackTask(),
+                        new CompanionShootGunTask(),
                         new CompanionNonVanillaMeleeAttackTask(),
                         new CompanionRangedAttackTask(),
+                        new CompanionUseShieldTask(),
                         new CompanionProtectOwnerTask(false),
                         new CompanionAttackTargetTask(15),
                         new ShootTargetTask<>()),
@@ -165,7 +169,7 @@ public class CompanionTasks {
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getInjuredPackage() {
-        return ImmutableList.of(Pair.of(0, new clearMovementTask()), Pair.of(3, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)));
+        return ImmutableList.of(Pair.of(0, new CompanionClearMovementTask()), Pair.of(3, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)));
     }
 
 

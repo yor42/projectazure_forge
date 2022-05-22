@@ -7,8 +7,8 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.world.server.ServerWorld;
 
-public class clearMovementTask extends Task<AbstractEntityCompanion> {
-    public clearMovementTask() {
+public class CompanionClearMovementTask extends Task<AbstractEntityCompanion> {
+    public CompanionClearMovementTask() {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_PRESENT));
     }
 

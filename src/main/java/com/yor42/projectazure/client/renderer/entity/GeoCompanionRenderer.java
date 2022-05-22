@@ -187,6 +187,9 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             case COMBAT:
                 text = new TranslationTextComponent("entity.status.combat").withStyle(TextFormatting.DARK_BLUE);
                 break;
+            case RETREAT:
+                text = new TranslationTextComponent("entity.status.retreat").withStyle(TextFormatting.DARK_PURPLE);
+                break;
         }
         if(text != null) {
             double d0 = this.entityRenderDispatcher.distanceToSqr(entity);

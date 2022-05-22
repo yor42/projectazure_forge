@@ -162,7 +162,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@Nonnull DamageSource source, float amount) {
         int skillitemcount = 0;
         for(int i=0;i<this.getSkillItemCount(); i++){
             if(this.isSkillItemInindex(i)){

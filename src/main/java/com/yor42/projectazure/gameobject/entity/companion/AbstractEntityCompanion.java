@@ -50,6 +50,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.brain.Brain;
+import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
@@ -129,8 +130,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.registerManager.*;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
-import static net.minecraft.entity.ai.brain.schedule.Activity.FIGHT;
-import static net.minecraft.entity.ai.brain.schedule.Activity.REST;
+import static net.minecraft.entity.ai.brain.schedule.Activity.*;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
@@ -431,7 +431,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH,
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY,
             MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
-            MemoryModuleType.LAST_WOKEN);
+            MemoryModuleType.LAST_WOKEN, HURT_AT.get());
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS,
             SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY,
@@ -1328,6 +1328,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         } else {
             if(source.getEntity() instanceof LivingEntity) {
                 CompanionTasks.wasHurtBy(this, (LivingEntity) source.getEntity());
+            }
+            else{
+                this.getBrain().setMemoryWithExpiry(HURT_AT.get(), this.blockPosition(), 400L);
             }
             return flag;
         }
@@ -3224,6 +3227,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         SITTING(registerManager.SITTING.get()),
         FAINTED(null),
         INJURED(registerManager.INJURED.get()),
+        RETREAT(AVOID),
         COMBAT(FIGHT);
 
         @Nullable

@@ -62,7 +62,7 @@ abstract class MoveEntityForWorkGoal extends Goal {
     private void UpdateBlockList(){
 
         int diameter = 16;
-        int height = 16;
+        int height = 8;
 
         BlockPos pos = new BlockPos(this.host.blockPosition().getX()-(diameter/2), Math.max(this.host.blockPosition().getY()-(height/2), 0), this.host.blockPosition().getZ()-(diameter/2));
         int size = diameter*diameter*height;

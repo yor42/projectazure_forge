@@ -59,7 +59,7 @@ public class CompanionUseTotemTask extends Task<AbstractEntityCompanion> {
     @Override
     protected void tick(ServerWorld world, AbstractEntityCompanion entity, long p_212833_3_) {
         if(!this.getTotemHand(entity).isPresent() && entity.hasEffect(Effects.REGENERATION) && entity.hasEffect(Effects.ABSORPTION)){
-            this.stop(world, entity, p_212833_3_);
+            this.doStop(world, entity, p_212833_3_);
         }
     }
 

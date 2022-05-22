@@ -27,7 +27,7 @@ public class CompanionEatTask extends Task<AbstractEntityCompanion> {
     private Hand FoodHand = null;
 
     public CompanionEatTask() {
-        super(ImmutableMap.of(FOOD_INDEX.get(), MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(FOOD_INDEX.get(), MemoryModuleStatus.REGISTERED));
     }
 
     @Override
@@ -98,8 +98,8 @@ public class CompanionEatTask extends Task<AbstractEntityCompanion> {
             ItemStack buffer = entity.getOffhandItem();
             entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
             entity.getInventory().setStackInSlot(entity.getItemSwapIndexOffHand(), buffer);
-            entity.setItemSwapIndexOffHand(-1);
         }
+        entity.setItemSwapIndexOffHand(-1);
     }
 
     private boolean shouldEat(AbstractEntityCompanion entity, ItemStack stack){

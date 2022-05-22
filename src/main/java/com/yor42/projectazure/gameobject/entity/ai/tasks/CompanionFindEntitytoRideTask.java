@@ -97,7 +97,6 @@ public class CompanionFindEntitytoRideTask extends Task<AbstractEntityCompanion>
 
     @Override
     protected void stop(ServerWorld p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
-        super.stop(p_212835_1_, p_212835_2_, p_212835_3_);
         this.RideableEntityList = new ArrayList<>();
     }
 
