@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
@@ -15,6 +16,7 @@ import net.minecraft.item.*;
 import net.minecraft.potion.*;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
@@ -40,7 +42,7 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
 
 
     public CompanionHealAllyAndPlayerTask(int maxRangedAttackTime, int attackIntervalMin, float attackRadius) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, registerManager.HEAL_TARGET.get(), MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, registerManager.HEAL_TARGET.get(), MemoryModuleStatus.VALUE_PRESENT, registerManager.HEAL_POTION_INDEX.get(), MemoryModuleStatus.REGISTERED, registerManager.REGENERATION_POTION_INDEX.get(), MemoryModuleStatus.REGISTERED));
         this.maxRangedAttackTime = maxRangedAttackTime;
         this.attackIntervalMin = attackIntervalMin;
         this.attackRadius = attackRadius;
@@ -84,7 +86,9 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
 
     @Override
     protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
-        super.start(p_212831_1_, p_212831_2_, p_212831_3_);
+        p_212831_2_.getBrain().getMemory(registerManager.HEAL_TARGET.get()).ifPresent((target)-> {
+            p_212831_2_.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityPosWrapper(target, true));
+        });
     }
 
     @Override
@@ -154,30 +158,10 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
     }
 
     private int getPotionFromInv(AbstractEntityCompanion entity, LivingEntity HealTarget){
-        Effect preferredEffect = HealTarget.getHealth()<6? HEAL:REGENERATION;
-        int index = -1;
-        boolean foundPotion = false;
-        for(int i = 0; i <entity.getInventory().getSlots(); i++){
-            ItemStack stack = entity.getInventory().getStackInSlot(i);
-            if(stack.getItem() instanceof PotionItem){
-                List<EffectInstance> Effects = PotionUtils.getMobEffects(stack);
-                if(!Effects.isEmpty()){
-                    for(EffectInstance effect : Effects){
-                        if(effect.getEffect().getCategory() == EffectType.HARMFUL){
-                            return -1;
-                        }
-                        else if(effect.getEffect() == preferredEffect){
-                            return i;
-                        }
-                        else if(!foundPotion && effect.getEffect() == HEAL || effect.getEffect() == REGENERATION){
-                            index = i;
-                            foundPotion = true;
-                        }
-                    }
-                }
-            }
-        }
-        return index;
+        MemoryModuleType<Integer> preferredEffect = HealTarget.getHealth()<6? registerManager.HEAL_POTION_INDEX.get():registerManager.REGENERATION_POTION_INDEX.get();
+        MemoryModuleType<Integer> otherEffect = preferredEffect == registerManager.HEAL_POTION_INDEX.get()? registerManager.REGENERATION_POTION_INDEX.get():registerManager.HEAL_POTION_INDEX.get();
+        Brain<AbstractEntityCompanion> brain = entity.getBrain();
+        return brain.getMemory(preferredEffect).orElse(brain.getMemory(otherEffect).orElse(-1));
     }
 
     private Optional<Hand> getPotioninHand(AbstractEntityCompanion entity) {

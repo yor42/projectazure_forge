@@ -12,26 +12,23 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Map;
 
+import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
+
 public class CompanionEndAttackTask extends Task<AbstractEntityCompanion> {
     public CompanionEndAttackTask() {
-        super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT, MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED));
+        super(ImmutableMap.of(ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT, MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED));
     }
     protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion p_212832_2_) {
-        return this.getAttackTarget(p_212832_2_).isDeadOrDying();
+        return p_212832_2_.getBrain().getMemory(ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(false);
     }
 
     protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
-        LivingEntity livingentity = this.getAttackTarget(p_212831_2_);
-
-        if (livingentity.getType() != EntityType.PLAYER || p_212831_1_.getGameRules().getBoolean(GameRules.RULE_FORGIVE_DEAD_PLAYERS)) {
-            p_212831_2_.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
-            p_212831_2_.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
-        }
-
-    }
-
-    private LivingEntity getAttackTarget(AbstractEntityCompanion p_233980_1_) {
-        return p_233980_1_.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get();
+        p_212831_2_.getBrain().getMemory(ATTACK_TARGET).ifPresent((livingentity)->{
+            if (livingentity.getType() != EntityType.PLAYER || p_212831_1_.getGameRules().getBoolean(GameRules.RULE_FORGIVE_DEAD_PLAYERS)) {
+                p_212831_2_.getBrain().eraseMemory(ATTACK_TARGET);
+                p_212831_2_.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
+            }
+        });
     }
 
 }

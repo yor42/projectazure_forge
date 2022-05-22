@@ -418,8 +418,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Optional<UUID>> TeamUUID = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_UUID);
 
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(HOME, RESTING.get(), ATTACK_TARGET, ATTACK_COOLING_DOWN, registerManager.VISIBLE_ALLYS_COUNT.get(), registerManager.VISIBLE_HOSTILE_COUNT.get(),registerManager.VISIBLE_HOSTILES.get(),registerManager.NEARBY_HOSTILES.get(), registerManager.WAIT_POINT.get(), registerManager.HEAL_TARGET.get(), MEMORY_SITTING.get(), MemoryModuleType.LIVING_ENTITIES, MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, NEAREST_HOSTILE, MemoryModuleType.NEAREST_VISIBLE_PLAYER, RIDE_TARGET, registerManager.WAIT_POINT.get(), registerManager.NEARBY_ALLYS.get(), registerManager.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.HIDING_PLACE, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN);
-    private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS, SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY, registerManager.NEAREST_ALLY_SENSOR.get(), registerManager.NEAREST_HOSTILE_SENSOR.get());
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
+            HOME, RESTING.get(), ATTACK_TARGET, ATTACK_COOLING_DOWN, registerManager.VISIBLE_ALLYS_COUNT.get(),
+            registerManager.VISIBLE_HOSTILE_COUNT.get(),registerManager.VISIBLE_HOSTILES.get(),registerManager.NEARBY_HOSTILES.get(),
+            registerManager.WAIT_POINT.get(), registerManager.HEAL_TARGET.get(), MEMORY_SITTING.get(), MemoryModuleType.LIVING_ENTITIES,
+            MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, NEAREST_HOSTILE,
+            MemoryModuleType.NEAREST_VISIBLE_PLAYER, RIDE_TARGET, registerManager.WAIT_POINT.get(), registerManager.NEARBY_ALLYS.get(),
+            registerManager.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER,
+            FOOD_INDEX.get(), HEAL_POTION_INDEX.get(),REGENERATION_POTION_INDEX.get(),TOTEM_INDEX.get(),
+            TORCH_INDEX.get(),FIRE_EXTINGIGH_ITEM.get(),FALL_BREAK_ITEM_INDEX.get(),
+            MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET,
+            MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH,
+            MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY,
+            MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
+            MemoryModuleType.LAST_WOKEN);
+    private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(
+            SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS,
+            SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY,
+            registerManager.NEAREST_ALLY_SENSOR.get(), registerManager.NEAREST_HOSTILE_SENSOR.get(),
+            INVENTORY_SENSOR.get());
 
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<AbstractEntityCompanion, PointOfInterestType>> POI_MEMORIES = ImmutableMap.of(HOME, (p_213769_0_, p_213769_1_) -> p_213769_1_ == PointOfInterestType.HOME);
     public abstract enums.EntityType getEntityType();
@@ -1023,7 +1040,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public boolean isEating(){
         if(this.isUsingItem()) {
-            return this.getItemInHand(this.getUsedItemHand()).isEdible();
+            return this.getItemInHand(this.getUsedItemHand()).getUseAnimation() == UseAction.EAT || this.getItemInHand(this.getUsedItemHand()).getUseAnimation() == UseAction.DRINK;
         }
         return false;
     }
@@ -1309,8 +1326,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if (this.level.isClientSide) {
             return false;
         } else {
-            CompanionTasks.wasHurtBy(this, (LivingEntity)source.getEntity());
-
+            if(source.getEntity() instanceof LivingEntity) {
+                CompanionTasks.wasHurtBy(this, (LivingEntity) source.getEntity());
+            }
             return flag;
         }
     }

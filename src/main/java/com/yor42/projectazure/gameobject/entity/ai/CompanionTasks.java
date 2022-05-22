@@ -20,6 +20,8 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.*;
+import net.minecraft.entity.monster.piglin.PiglinEntity;
+import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
@@ -36,6 +38,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCann
 import static com.yor42.projectazure.setup.register.registerManager.*;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.entity.ai.brain.schedule.Activity.AVOID;
 
 public class CompanionTasks {
 
@@ -52,6 +55,7 @@ public class CompanionTasks {
         addFollowOwnerActivity(brain, companion);
         addWaitPlayerActivity(brain, companion);
         addSittingActivity(brain, companion);
+        initRetreatActivity(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(FOLLOWING_OWNER.get());
         brain.useDefaultActivity();
@@ -63,7 +67,7 @@ public class CompanionTasks {
         if(companion.getBrain().getActiveNonCoreActivity().map((act)->!(act == INJURED.get())).orElse(false) && companion.isAlive()) {
             Brain<AbstractEntityCompanion> brain = companion.getBrain();
             companion.setAggressive(companion.getBrain().hasMemoryValue(ATTACK_TARGET));
-            brain.setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, SITTING.get(), WAITING.get(), Activity.REST, FOLLOWING_OWNER.get(), Activity.IDLE));
+            brain.setActiveActivityToFirstValid(ImmutableList.of(AVOID, Activity.FIGHT, SITTING.get(), WAITING.get(), Activity.REST, FOLLOWING_OWNER.get(), Activity.IDLE));
         }
     }
 
@@ -72,12 +76,14 @@ public class CompanionTasks {
                 Pair.of(0, new InteractWithDoorTask()),
                 Pair.of(0, new LookTask(45, 90)),
                 Pair.of(0, new CompanionWakeupTask()),
-                Pair.of(0, new CompanionEatandHealTask()),
+                Pair.of(0, new CompanionUseTotemTask()),
                 Pair.of(0, new CompanionEndAttackTask()),
                 Pair.of(0, new CompanionSprintTask()),
+                Pair.of(1, new CompanionHealTask()),
                 Pair.of(1, new CompanionHealAllyAndPlayerTask(40, 20, 10)),
                 Pair.of(1, new WalkToTargetTask()),
-                Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))));
+                Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))),
+                Pair.of(2, new CompanionEatTask()));
     }
 
     private static void addWaitPlayerActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
@@ -94,7 +100,18 @@ public class CompanionTasks {
                 new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new DummyTask(30, 60), 8)))
 
         ), WAIT_POINT.get());
+    }
 
+    private static void initRetreatActivity(Brain<AbstractEntityCompanion> p_234507_0_) {
+        p_234507_0_.addActivityAndRemoveMemoryWhenStopped(AVOID, 10, ImmutableList.of(new FollowOwnerTask(), RunAwayTask.entity(MemoryModuleType.AVOID_TARGET, 1.0F, 12, true), createIdleLookBehaviors(), createIdleMovementBehaviors(), new PredicateTask<AbstractEntityCompanion>(CompanionTasks::wantsToStopFleeing, MemoryModuleType.AVOID_TARGET)), MemoryModuleType.AVOID_TARGET);
+    }
+
+    private static FirstShuffledTask<AbstractEntityCompanion> createIdleLookBehaviors() {
+        return new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 1), Pair.of(new LookAtEntityTask(8.0F), 1), Pair.of(new DummyTask(30, 60), 1)));
+    }
+
+    private static FirstShuffledTask<AbstractEntityCompanion> createIdleMovementBehaviors() {
+        return new FirstShuffledTask<>(ImmutableList.of(Pair.of(new WalkRandomlyTask(0.6F), 2), Pair.of(InteractWithEntityTask.of(EntityType.PLAYER, 8, MemoryModuleType.INTERACTION_TARGET, 0.6F, 2), 2), Pair.of(new DummyTask(30, 60), 1)));
     }
 
     private static void addSittingActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
@@ -113,6 +130,7 @@ public class CompanionTasks {
                 new CompanionSteerEntityTask(),
                 new CompanionProtectOwnerTask(false),
                 new PickupWantedItemTask<>(AbstractEntityCompanion::shouldPickupItem, 0.5F, false, 4),
+                new CompanionPlaceTorchTask(),
                 new FindWalktargetbyChanceTask(0.5F,3,2, 0.1F),
                 new CompanionStopRidingEntityTask()));
 
@@ -215,7 +233,7 @@ public class CompanionTasks {
     }
 
     private static void maybeRetaliate(AbstractEntityCompanion companion, LivingEntity target) {
-        if (!companion.getBrain().isActive(Activity.AVOID)) {
+        if (!companion.getBrain().isActive(AVOID)) {
             if (EntityPredicates.ATTACK_ALLOWED.test(target)) {
                 if (hasWeapon(companion, target)) {
                     if (!BrainUtil.isOtherTargetMuchFurtherAwayThanCurrentAttackTarget(companion, target, 4.0D)) {

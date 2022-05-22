@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.NearestAllySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.NearestEnemySensor;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -228,9 +229,19 @@ public class registerManager {
     public static final RegistryObject<MemoryModuleType<Boolean>> RESTING = registerMemoryModuleType("resting");
     public static final RegistryObject<MemoryModuleType<Boolean>> MEMORY_SITTING = registerMemoryModuleType("sitting");
 
+    public static final RegistryObject<MemoryModuleType<Integer>> FOOD_INDEX = registerMemoryModuleType("food_index");
+    public static final RegistryObject<MemoryModuleType<Integer>> HEAL_POTION_INDEX = registerMemoryModuleType("heal_potion_index");
+    public static final RegistryObject<MemoryModuleType<Integer>> REGENERATION_POTION_INDEX = registerMemoryModuleType("regneneration_potion_index");
+    public static final RegistryObject<MemoryModuleType<Integer>> TOTEM_INDEX = registerMemoryModuleType("totem_index");
+    public static final RegistryObject<MemoryModuleType<Integer>> TORCH_INDEX = registerMemoryModuleType("torch_index");
+    public static final RegistryObject<MemoryModuleType<Integer>> FIRE_EXTINGIGH_ITEM = registerMemoryModuleType("fire_extinguish_index");
+    public static final RegistryObject<MemoryModuleType<Integer>> FALL_BREAK_ITEM_INDEX = registerMemoryModuleType("fall_break_index");
+
+
     //Sensors
     public static final RegistryObject<SensorType<NearestAllySensor>> NEAREST_ALLY_SENSOR = registerSensorType("nearest_ally_sensor", NearestAllySensor::new);
     public static final RegistryObject<SensorType<NearestEnemySensor>> NEAREST_HOSTILE_SENSOR = registerSensorType("nearest_hostile_sensor", NearestEnemySensor::new);
+    public static final RegistryObject<SensorType<InventorySensor>> INVENTORY_SENSOR = registerSensorType("inventory_sensor", InventorySensor::new);
 
     public static RegistryObject<Activity> registerActivity(String ID){
         return ACTIVITIES.register(ID,()-> new Activity(ID));
