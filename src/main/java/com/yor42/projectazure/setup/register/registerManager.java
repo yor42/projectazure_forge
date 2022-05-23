@@ -5,9 +5,8 @@ import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.NearestAllySensor;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.NearestEnemySensor;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.EntitySensor;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.WorldSensor;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
@@ -32,7 +31,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
@@ -58,7 +57,6 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 
 
 public class registerManager {
-
     public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, Constants.MODID);
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MODID);
@@ -68,7 +66,6 @@ public class registerManager {
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
     public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MODID);
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MODID);
-
     public static final DeferredRegister<SensorType<?>> SENSORS = DeferredRegister.create(ForgeRegistries.SENSOR_TYPES, Constants.MODID);
     public static final DeferredRegister<Activity> ACTIVITIES = DeferredRegister.create(ForgeRegistries.ACTIVITIES, Constants.MODID);
     public static final DeferredRegister<MemoryModuleType<?>> MEMORYMODULES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, Constants.MODID);
@@ -227,6 +224,7 @@ public class registerManager {
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_HOSTILES = registerMemoryModuleType("nearby_hostiles");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_HOSTILES = registerMemoryModuleType("visible_hostiles");
     public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_HOSTILE_COUNT = registerMemoryModuleType("visible_hostile_count");
+    public static final RegistryObject<MemoryModuleType<BoatEntity>> NEAREST_BOAT = registerMemoryModuleType("nearest_boat");
     public static final RegistryObject<MemoryModuleType<LivingEntity>> HEAL_TARGET = registerMemoryModuleType("heal_target");
     public static final RegistryObject<MemoryModuleType<Boolean>> RESTING = registerMemoryModuleType("resting");
     public static final RegistryObject<MemoryModuleType<Boolean>> MEMORY_SITTING = registerMemoryModuleType("sitting");
@@ -239,11 +237,15 @@ public class registerManager {
     public static final RegistryObject<MemoryModuleType<Integer>> FIRE_EXTINGIGH_ITEM = registerMemoryModuleType("fire_extinguish_index");
     public static final RegistryObject<MemoryModuleType<Integer>> FALL_BREAK_ITEM_INDEX = registerMemoryModuleType("fall_break_index");
 
+    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_ORE = registerMemoryModuleType("nearest_ore");
+    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_HARVESTABLE = registerMemoryModuleType("nearest_harvestable");
+    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_PLANTABLE = registerMemoryModuleType("nearest_ore");
+    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_BONEMEALABLE = registerMemoryModuleType("nearest_ore");
 
     //Sensors
-    public static final RegistryObject<SensorType<NearestAllySensor>> NEAREST_ALLY_SENSOR = registerSensorType("nearest_ally_sensor", NearestAllySensor::new);
-    public static final RegistryObject<SensorType<NearestEnemySensor>> NEAREST_HOSTILE_SENSOR = registerSensorType("nearest_hostile_sensor", NearestEnemySensor::new);
+    public static final RegistryObject<SensorType<EntitySensor>> ENTITY_SENSOR = registerSensorType("entity_sensor", EntitySensor::new);
     public static final RegistryObject<SensorType<InventorySensor>> INVENTORY_SENSOR = registerSensorType("inventory_sensor", InventorySensor::new);
+    public static final RegistryObject<SensorType<WorldSensor>> WORLD_SENSOR = registerSensorType("world_sensor", WorldSensor::new);
 
     public static RegistryObject<Activity> registerActivity(String ID){
         return ACTIVITIES.register(ID,()-> new Activity(ID));

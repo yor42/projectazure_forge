@@ -10,7 +10,7 @@ import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTe
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
-import com.yor42.projectazure.gameobject.entity.CompanionSwimPathFinder;
+import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
@@ -50,7 +50,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
@@ -59,7 +58,6 @@ import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -431,11 +429,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH,
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY,
             MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
-            MemoryModuleType.LAST_WOKEN, HURT_AT.get());
+            MemoryModuleType.LAST_WOKEN, HURT_AT.get(), NEAREST_BOAT.get(), NEAREST_ORE.get(), NEAREST_HARVESTABLE.get(), NEAREST_PLANTABLE.get(),
+            NEAREST_BONEMEALABLE.get());
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS,
             SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY,
-            registerManager.NEAREST_ALLY_SENSOR.get(), registerManager.NEAREST_HOSTILE_SENSOR.get(),
+            registerManager.ENTITY_SENSOR.get(), WORLD_SENSOR.get(),
             INVENTORY_SENSOR.get());
 
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<AbstractEntityCompanion, PointOfInterestType>> POI_MEMORIES = ImmutableMap.of(HOME, (p_213769_0_, p_213769_1_) -> p_213769_1_ == PointOfInterestType.HOME);
@@ -445,7 +444,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setAffection(40F);
         this.swimmingNav = new CompanionSwimPathNavigator(this, worldIn);
         this.groundNav = new CompanionGroundPathNavigator(this, worldIn);
-        this.SwimController = new CompanionSwimPathFinder(this);
+        this.SwimController = new CompanionSwimMovementController(this);
         this.MoveController = new CompanionDefaultMovementController(this);
         this.sailingNav = new SwimmerPathNavigator(this, worldIn){
             protected PathFinder createPathFinder(int p_179679_1_) {
@@ -3198,6 +3197,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public MOVE_STATUS getMoveStatus() {
         return MOVE_STATUS.values()[this.getEntityData().get(MOVE_MODE)];
+    }
+
+
+    public boolean shouldHelpMine(){
+        return this.getMainHandItem().getItem() instanceof PickaxeItem;
+    }
+
+    public boolean shouldHelpFarm(){
+        return this.getBrain().getActiveNonCoreActivity().map((activity)->activity == WORK && this.getMainHandItem().getItem() instanceof HoeItem).orElse(false);
     }
 
     public enum ARMPOSES{

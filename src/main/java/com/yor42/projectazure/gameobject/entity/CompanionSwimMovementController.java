@@ -13,11 +13,11 @@ import net.minecraftforge.common.ForgeMod;
 
 import static net.minecraft.tags.FluidTags.WATER;
 
-public class CompanionSwimPathFinder extends MovementController {
+public class CompanionSwimMovementController extends MovementController {
 
     AbstractEntityCompanion companion;
 
-    public CompanionSwimPathFinder(AbstractEntityCompanion mob) {
+    public CompanionSwimMovementController(AbstractEntityCompanion mob) {
         super(mob);
         this.companion = mob;
     }

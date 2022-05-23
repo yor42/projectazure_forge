@@ -103,7 +103,7 @@ public class CompanionMovetoTargetTask extends Task<AbstractEntityCompanion> {
 
     private boolean tryComputePath(AbstractEntityCompanion p_220487_1_, WalkTarget p_220487_2_, long p_220487_3_) {
         BlockPos blockpos = p_220487_2_.getTarget().currentBlockPosition();
-        this.path = p_220487_1_.getNavigation().createPath(blockpos, 0);
+        this.path = p_220487_1_.getNavigation().createPath(blockpos, 1);
         this.speedModifier = p_220487_2_.getSpeedModifier();
         Brain<?> brain = p_220487_1_.getBrain();
         if (this.reachedTarget(p_220487_1_, p_220487_2_)) {

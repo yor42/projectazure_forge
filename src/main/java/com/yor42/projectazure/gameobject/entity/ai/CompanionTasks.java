@@ -79,8 +79,9 @@ public class CompanionTasks {
                 Pair.of(0, new CompanionRunAwayTask()),
                 Pair.of(0, new CompanionSprintTask()),
                 Pair.of(1, new CompanionHealTask()),
+                Pair.of(1, new CompanionMoveforWorkTask()),
                 Pair.of(1, new CompanionHealAllyAndPlayerTask(40, 20, 10)),
-                Pair.of(1, new WalkToTargetTask()),
+                Pair.of(2, new WalkToTargetTask()),
                 Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))),
                 Pair.of(2, new CompanionEatTask()));
     }
@@ -130,6 +131,7 @@ public class CompanionTasks {
                 new CompanionProtectOwnerTask(false),
                 new PickupWantedItemTask<>(AbstractEntityCompanion::shouldPickupItem, 0.5F, false, 4),
                 new CompanionPlaceTorchTask(),
+                new CompanionMineTask(),
                 new FindWalktargetbyChanceTask(0.5F,3,2, 0.1F),
                 new CompanionStopRidingEntityTask()));
 

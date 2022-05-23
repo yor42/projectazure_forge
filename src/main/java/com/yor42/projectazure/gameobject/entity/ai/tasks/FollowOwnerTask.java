@@ -34,7 +34,7 @@ public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld world, AbstractEntityCompanion entity) {
         LivingEntity owner = entity.getOwner();
-        return owner!=null && entity.distanceTo(owner)>=6;
+        return owner!=null && entity.distanceTo(owner)>=(entity.shouldHelpMine()? 16:6);
     }
 
     protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion entity, long p_212831_3_) {
