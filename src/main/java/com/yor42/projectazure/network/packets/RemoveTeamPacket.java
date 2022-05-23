@@ -2,11 +2,8 @@ package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.UUID;

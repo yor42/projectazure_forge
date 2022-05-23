@@ -112,6 +112,10 @@ repositories {
         url = "https://modmaven.k-4u.nl"
     }
 
+    maven {
+        url "https://cursemaven.com"
+    }
+
     maven { url 'https://modmaven.dev/' }//Mekanism
 
     maven {
@@ -163,6 +167,7 @@ dependencies {
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+    implementation fg.deobf('curse.maven:timeless-and-classics-491264:3802219')//Timeless and Classic
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

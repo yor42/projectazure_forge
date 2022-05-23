@@ -308,11 +308,6 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public boolean shouldUseNonVanillaAttack(LivingEntity target) {
-        return super.shouldUseNonVanillaAttack(target);
-    }
-
-    @Override
     public enums.OperatorClass getOperatorClass() {
         return enums.OperatorClass.VANGUARD;
     }

@@ -90,6 +90,12 @@ public class registerNetwork {
                 .encoder(EditTeamMemberPacket::encode)
                 .add();
 
+        channel.messageBuilder(DeleteHomePacket.class,13)
+                .consumer(DeleteHomePacket::handle)
+                .decoder(DeleteHomePacket::decode)
+                .encoder(DeleteHomePacket::encode)
+                .add();
+
         return channel;
     }
 

@@ -149,7 +149,7 @@
 
   "tooltip.companion.rarity": "희귀도",
   "tooltip.companion.type": "동료 분류",
-  "tooltip.companion.shiupgirl_class": "Ship Class",
+  "tooltip.companion.shiupgirl_class": "함선 분류",
   "tooltip.companion.operator_class": "오퍼레이터 포지션",
   "tooltip.companion.shipgirl_class": "함선 분류",
   "tooltip.companion.gun_speciality": "주무기",
@@ -230,7 +230,8 @@
   "gui.tooltip.freeroaming.on": "현재 이 동료는 이 주변에서 머무는 중입니다",
 
   "gui.tooltip.homemode.nohome": "현재 침대가 없습니다",
-  "gui.tooltip.homepos": "현재 침대 위치",
+  "gui.tooltip_homepos": "현재 침대 위치",
+  "gui.tooltip.shifttoclearhome": "%s를 누른 상태로 클릭해 침대 위치를 지웁니다.",
 
   "gui.tooltip.itempickup.off": "아이템을 줍지 않습니다",
   "gui.tooltip.itempickup.on": "주변에 있는 아이템을 줍습니다",
@@ -244,6 +245,13 @@
   "gui.teamformation.pages": "%s 페이지",
   "gui.teamformation.title": "팀 관리",
   "gui.membermanagement.title": "팀원 추가",
+
+  "entity.status.relaxing": "Resting",
+  "entity.status.sitting": "Sitting",
+  "entity.status.waiting": "Waiting for owner",
+  "entity.status.following": "Following owner",
+  "entity.status.fainted": "FAINTED",
+  "entity.status.injured": "Injured",
 
   "gui.team.newname": "새 팀 %s",
 
@@ -411,7 +419,8 @@
 
   "top.companion_level.message": "레벨: %s",
   "top.companion_limit_break.message": "한계 돌파: %s",
-  "top.companion_owner.message": "지휘관: %s"
+  "top.companion_owner.message": "지휘관: %s",
 
 
+  "gui.tooltip.homepos": "현재 침대 위치"
 }

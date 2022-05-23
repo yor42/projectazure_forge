@@ -63,8 +63,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL"));
-            return PlayState.CONTINUE;
+            return PlayState.STOP;
         }
         else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));

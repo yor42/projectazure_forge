@@ -1,24 +1,58 @@
 package com.yor42.projectazure.libs.utils;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.CrossbowItem;
+import net.minecraft.util.Hand;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.processor.IBone;
 
 public class AnimationUtils {
 
-    public static void GeckolibanimateCrossbowHold(IBone p_239104_0_, IBone p_239104_1_, IBone p_239104_2_, boolean p_239104_3_) {
+    public static void GeckolibanimateCrossbowHold(IBone p_239104_0_, IBone p_239104_1_, IBone head, boolean p_239104_3_) {
         IBone modelrenderer = p_239104_3_ ? p_239104_0_ : p_239104_1_;
         IBone modelrenderer1 = p_239104_3_ ? p_239104_1_ : p_239104_0_;
-        modelrenderer.setRotationY((p_239104_3_ ? 0.3F : -0.3F) + p_239104_2_.getRotationY());
-        modelrenderer1.setRotationY((p_239104_3_ ? -0.6F : 0.6F) + p_239104_2_.getRotationY());
-        modelrenderer.setRotationX(((float)Math.PI / 2F) + p_239104_2_.getRotationX() + 0.1F);
-        modelrenderer1.setRotationX(1.5F + p_239104_2_.getRotationX());
+        modelrenderer.setRotationY((p_239104_3_ ? 0.3F : -0.3F) + head.getRotationY());
+        modelrenderer1.setRotationY((p_239104_3_ ? -0.6F : 0.6F) + head.getRotationY());
+        modelrenderer.setRotationX(((float)Math.PI / 2F) + head.getRotationX() + 0.1F);
+        modelrenderer1.setRotationX(1.5F + head.getRotationX());
+    }
+
+    public static void SwingArm(IBone Left, IBone Right, IBone chest, IBone head, AbstractEntityCompanion p_230486_1_, float p_230486_2_) {
+        float attacktime = p_230486_1_.getAttackAnim(p_230486_2_);
+        if (!(attacktime <= 0.0F)) {
+            HandSide handside = getAttackArm(p_230486_1_);
+            IBone modelrenderer = getArm(Right, Left, handside);
+            float f = attacktime;
+            chest.setRotationY(MathHelper.sin(MathHelper.sqrt(f) * ((float) Math.PI * 2F)) * -0.2F);
+            if (handside == HandSide.LEFT) {
+                chest.setRotationY(chest.getRotationY()*-1);
+            }
+
+            Right.setRotationY(Right.getRotationY()+chest.getRotationY());
+            Left.setRotationY(Left.getRotationY()+chest.getRotationY());
+            Left.setRotationY(Left.getRotationY()+chest.getRotationY());
+            f = 1.0F - attacktime;
+            f = f * f;
+            f = f * f;
+            f = 1.0F - f;
+            float f1 = MathHelper.sin(f * (float) Math.PI);
+            float f2 = MathHelper.sin(attacktime * (float) Math.PI) * -(head.getRotationX() - 0.7F) * 0.75F;
+            modelrenderer.setRotationX((float) ((double) modelrenderer.getRotationX() - ((double) f1 * 1.2D + (double) f2))*-1);
+            modelrenderer.setRotationY(modelrenderer.getRotationY()+chest.getRotationY() * 2.0F*-1);
+            modelrenderer.setPositionZ(modelrenderer.getRotationZ()+MathHelper.sin(attacktime * (float) Math.PI) * 0.4F);
+        }
+    }
+
+    private static IBone getArm(IBone right, IBone left, HandSide handside) {
+        return handside == HandSide.RIGHT? right:left;
+    }
+
+    protected static HandSide getAttackArm(AbstractEntityCompanion p_217147_1_) {
+        HandSide handside = p_217147_1_.getMainArm();
+        return p_217147_1_.swingingArm == Hand.MAIN_HAND ? handside : handside.getOpposite();
     }
 
     public static void GeckolibanimateCrossbowCharge(IBone p_239102_0_, IBone p_239102_1_, LivingEntity p_239102_2_, boolean isMainHand) {

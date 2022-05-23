@@ -13,6 +13,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class CompanionDefaultMovementController extends MovementController {
     protected final AbstractEntityCompanion companion;
@@ -45,30 +46,49 @@ public class CompanionDefaultMovementController extends MovementController {
                 this.strafeForwards = 1.0F;
                 this.strafeRight = 0.0F;
             }
-
             this.mob.setSpeed(lvt_2_1_);
             this.mob.setZza(this.strafeForwards);
             this.mob.setXxa(this.strafeRight);
             this.operation = MovementController.Action.WAIT;
-        } else if (this.operation == MovementController.Action.MOVE_TO) {
+        }
+        else if(this.mob.onClimbable() && !this.mob.isOnGround()){
+            double xDelta = this.wantedX - this.mob.getX();
+            double ZDelta = this.wantedZ - this.mob.getZ();
+            double YDelta = this.wantedY - this.mob.getY();
+            Vector3d deltaMovement = mob.getDeltaMovement();
+            double dx = deltaMovement.x;
+            double dy = deltaMovement.y;
+            double dz = deltaMovement.z;
+            if(YDelta >=0){
+                this.mob.getJumpControl().jump();
+            }
+            else{
+                dy = MathHelper.clamp(0, dy, -0.3);
+                this.mob.fallDistance = 0;
+            }
+
+            Vector3d newDelta = new Vector3d(Math.abs(YDelta)<0.25?dx:MathHelper.clamp(0.03, xDelta, -0.03), dy, Math.abs(YDelta)<0.25?dz:MathHelper.clamp(0.03, ZDelta, -0.03));
+            this.mob.setDeltaMovement(newDelta);
+        }
+        else if (this.operation == MovementController.Action.MOVE_TO) {
             this.operation = MovementController.Action.WAIT;
-            double lvt_1_2_ = this.wantedX - this.mob.getX();
-            double lvt_3_2_ = this.wantedZ - this.mob.getZ();
-            double lvt_5_2_ = this.wantedY - this.mob.getY();
-            double lvt_7_2_ = lvt_1_2_ * lvt_1_2_ + lvt_5_2_ * lvt_5_2_ + lvt_3_2_ * lvt_3_2_;
-            if (lvt_7_2_ < 2.500000277905201E-7D) {
+            double xDelta = this.wantedX - this.mob.getX();
+            double ZDelta = this.wantedZ - this.mob.getZ();
+            double YDelta = this.wantedY - this.mob.getY();
+            double DistanceSquared = xDelta * xDelta + YDelta * YDelta + ZDelta * ZDelta;
+            if (DistanceSquared < 2.500000277905201E-7D) {
                 this.mob.setZza(0.0F);
                 return;
             }
 
-            lvt_9_2_ = (float)(MathHelper.atan2(lvt_3_2_, lvt_1_2_) * 57.2957763671875D) - 90.0F;
+            lvt_9_2_ = (float)(MathHelper.atan2(ZDelta, xDelta) * 57.2957763671875D) - 90.0F;
             this.mob.yRot = this.rotlerp(this.mob.yRot, lvt_9_2_, 90.0F);
             this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
-            BlockPos lvt_10_1_ = this.mob.blockPosition();
-            BlockState lvt_11_1_ = this.mob.level.getBlockState(lvt_10_1_);
-            Block lvt_12_1_ = lvt_11_1_.getBlock();
-            VoxelShape lvt_13_1_ = lvt_11_1_.getCollisionShape(this.mob.level, lvt_10_1_);
-            if (lvt_5_2_ > (double)this.mob.maxUpStep && lvt_1_2_ * lvt_1_2_ + lvt_3_2_ * lvt_3_2_ < (double)Math.max(1.0F, this.mob.getBbWidth()) || !lvt_13_1_.isEmpty() && this.mob.getY() < lvt_13_1_.max(Direction.Axis.Y) + (double)lvt_10_1_.getY() && !this.companion.isSailing() && !lvt_12_1_.is(BlockTags.DOORS) && !lvt_12_1_.is(BlockTags.FENCES)) {
+            BlockPos blockPos = this.mob.blockPosition();
+            BlockState blockState = this.mob.level.getBlockState(blockPos);
+            Block block = blockState.getBlock();
+            VoxelShape voxel = blockState.getCollisionShape(this.mob.level, blockPos);
+            if (YDelta > (double)this.mob.maxUpStep && xDelta * xDelta + ZDelta * ZDelta < (double)Math.max(1.0F, this.mob.getBbWidth()) || !voxel.isEmpty() && this.mob.getY() < voxel.max(Direction.Axis.Y) + (double)blockPos.getY() && !this.companion.isSailing() && !block.is(BlockTags.DOORS) && !block.is(BlockTags.FENCES)) {
                 this.mob.getJumpControl().jump();
                 this.operation = MovementController.Action.JUMPING;
             }

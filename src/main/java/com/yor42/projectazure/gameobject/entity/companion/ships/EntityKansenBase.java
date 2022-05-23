@@ -347,7 +347,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         }
     }
 
-    public void AttackUsingTorpedo(LivingEntity target, float distanceFactor){
+    public void AttackUsingTorpedo(LivingEntity target){
         boolean shouldFire = this.isSailing() && canUseTorpedo(this.getRigging());
         if(shouldFire){
             Vector3d vector3d = this.getViewVector(1.0F);

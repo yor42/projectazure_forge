@@ -149,10 +149,10 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
         if(this.isHovering(0,51,10,10, mousex, mousey)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
             if(this.host.isFreeRoaming()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.on").withStyle(TextFormatting.GREEN));
+                tooltips.add(new TranslationTextComponent("gui.tooltip.freeroaming.on").withStyle(TextFormatting.GREEN));
             }
             else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.off").withStyle(TextFormatting.BLUE));
+                tooltips.add(new TranslationTextComponent("gui.tooltip.freeroaming.off").withStyle(TextFormatting.BLUE));
             }
 
             if(this.host.getHOMEPOS().isPresent()) {

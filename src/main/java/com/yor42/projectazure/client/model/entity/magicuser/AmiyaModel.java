@@ -1,6 +1,7 @@
 package com.yor42.projectazure.client.model.entity.magicuser;
 
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
+import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -186,6 +187,11 @@ public class AmiyaModel extends AnimatedGeoModel<EntityAmiya> {
             body.setPositionY(-30);
             body.setPositionZ(2);
         }
+
+        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
+        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
+        IBone Chest = this.getAnimationProcessor().getBone("Chest");
+        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
 
     }
 

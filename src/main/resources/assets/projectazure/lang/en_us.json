@@ -230,7 +230,8 @@
   "gui.tooltip.freeroaming.on": "This companion will stay around here freely",
 
   "gui.tooltip.homemode.nohome": "Currently has no bed to sleep",
-  "gui.tooltip.homepos": "Current Bed Position",
+  "gui.tooltip_homepos": "Current Bed Position",
+  "gui.tooltip.shifttoclearhome": "Click while pressing %s to clear home position",
 
   "gui.tooltip.itempickup.off": "This companion will not pickup items",
   "gui.tooltip.itempickup.on": "This companion will pick up nearby items",
@@ -244,6 +245,13 @@
   "gui.teamformation.pages": "%s Pages",
   "gui.teamformation.title": "Team Management",
   "gui.membermanagement.title": "Add Member",
+
+  "entity.status.relaxing": "Resting",
+  "entity.status.sitting": "Sitting",
+  "entity.status.waiting": "Waiting for owner",
+  "entity.status.following": "Following owner",
+  "entity.status.fainted": "FAINTED",
+  "entity.status.injured": "Injured",
 
   "gui.team.newname": "New Team %s",
 

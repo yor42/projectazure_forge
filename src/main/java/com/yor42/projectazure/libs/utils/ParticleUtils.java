@@ -51,6 +51,17 @@ public class ParticleUtils {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public static void spawnTeleportParticle(int EntityID){
+        World world = ClientUtils.getClientWorld();
+        Entity target = world.getEntity(EntityID);
+        if(target != null) {
+            for(int i = 0; i < 32; ++i) {
+                world.addParticle(ParticleTypes.PORTAL, target.getX(), target.getY() + MathUtil.getRand().nextDouble() * 2.0D, target.getZ(), MathUtil.getRand().nextGaussian(), 0.0D, MathUtil.getRand().nextGaussian());
+            }
+        }
+    }
+
     public static void SpawnItemParticles(int EntityID, ItemStack stack) {
         World world = ClientUtils.getClientWorld();
         Entity target = world.getEntity(EntityID);

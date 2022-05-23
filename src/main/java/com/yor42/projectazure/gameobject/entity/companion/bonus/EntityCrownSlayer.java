@@ -2,11 +2,9 @@ package com.yor42.projectazure.gameobject.entity.companion.bonus;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.DirectionUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -42,8 +40,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
 
 public class EntityCrownSlayer extends AbstractSwordUserBase {
 
@@ -105,9 +101,9 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingL":"swingR", true));
+            //event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingL":"swingR", true));
 
-            return PlayState.CONTINUE;
+            return PlayState.STOP;
         }
         else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd_chest", true));
@@ -286,6 +282,11 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(WEARING_HOOD, true);
+    }
+
+    public boolean hasMeleeItem(){
+        Item item = this.getItemInHand(this.getNonVanillaMeleeAttackHand()).getItem();
+        return this.getTalentedWeaponList().contains(item);
     }
 
     @Override
