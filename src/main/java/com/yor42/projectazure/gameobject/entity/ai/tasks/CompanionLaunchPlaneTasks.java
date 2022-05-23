@@ -25,7 +25,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getPreparedPlane;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
 
-public class CompanionLaunchPlaneGoal extends Task<AbstractEntityCompanion> {
+public class CompanionLaunchPlaneTasks extends Task<AbstractEntityCompanion> {
 
     private int PlaneDelay;
     private int seeTime;
@@ -34,7 +34,7 @@ public class CompanionLaunchPlaneGoal extends Task<AbstractEntityCompanion> {
 
     private final int attackIntervalMin;
 
-    public CompanionLaunchPlaneGoal(float maxAttackDistanceIn, int minDelayPerPlane, int maxDelayPerPlane) {
+    public CompanionLaunchPlaneTasks(float maxAttackDistanceIn, int minDelayPerPlane, int maxDelayPerPlane) {
         super(ImmutableMap.of(ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT));
         this.attackRadius = maxAttackDistanceIn;
         this.attackIntervalMin = minDelayPerPlane;

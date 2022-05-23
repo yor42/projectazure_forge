@@ -1795,6 +1795,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
 
+        if(this.isSprinting() && !this.isMoving()){
+            this.setSprinting(false);
+        }
+
         if (this.level.getDifficulty() == Difficulty.PEACEFUL && this.level.getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION)) {
             if (this.getHealth() < this.getMaxHealth() && this.tickCount % 20 == 0) {
                 this.heal(1.0F);
@@ -2037,14 +2041,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 int curetime = this.getInjuryCureTimer();
                 if(curetime>=0){
                     curetime++;
-                    if(curetime>=168000){
-                        curetime = -1;
-                        this.stopSleeping();
-                        this.getBrain().setActiveActivityIfPossible(registerManager.SITTING.get());
-                        this.setCriticallyinjured(false);
-                    }
-                    this.setInjurycuretimer(curetime);
                 }
+                if(curetime>=168000){
+                    curetime = -1;
+                }
+                if(curetime == -1){
+                    this.stopSleeping();
+                    this.getBrain().setMemory(MEMORY_SITTING.get(), true);
+                    this.setCriticallyinjured(false);
+                }
+                this.setInjurycuretimer(curetime);
             }
             if (!this.level.isClientSide() && this.getCommandSenderWorld().isDay() && !this.isCriticallyInjured()) {
                 this.stopSleeping();
@@ -2406,36 +2412,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             });
         }
-    }
-
-    @Nonnull
-    public Vector3d handleRelativeFrictionAndCalculateMovement(@Nonnull Vector3d p_233633_1_, float p_233633_2_) {
-        this.moveRelative(this.getFrictionInfluencedSpeed(p_233633_2_), p_233633_1_);
-        this.setDeltaMovement(this.handleOnClimbable(this.getDeltaMovement()));
-        this.move(MoverType.SELF, this.getDeltaMovement());
-        Vector3d vector3d = this.getDeltaMovement();
-        if ((this.horizontalCollision || this.jumping) && this.onClimbable() && this.isClimbingUp) {
-            vector3d = new Vector3d(vector3d.x, 0.2D, vector3d.z);
-        }
-
-        return vector3d;
-    }
-
-    private Vector3d handleOnClimbable(Vector3d p_213362_1_) {
-        if (this.onClimbable()) {
-            this.fallDistance = 0.0F;
-            float f = 0.15F;
-            double d0 = MathHelper.clamp(p_213362_1_.x, (double)-0.15F, (double)0.15F);
-            double d1 = MathHelper.clamp(p_213362_1_.z, (double)-0.15F, (double)0.15F);
-            double d2 = Math.max(p_213362_1_.y, (double)-0.15F);
-            if (d2 < 0.0D && !this.getFeetBlockState().isScaffolding(this)) {
-                this.isSuppressingSlidingDownLadder();
-            }
-
-            p_213362_1_ = new Vector3d(d0, d2, d1);
-        }
-
-        return p_213362_1_;
     }
 
     private float getFrictionInfluencedSpeed(float p_213335_1_) {
@@ -3201,7 +3177,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
 
     public boolean shouldHelpMine(){
-        return this.getMainHandItem().getItem() instanceof PickaxeItem;
+        return this.getMainHandItem().getItem() instanceof PickaxeItem && this.shouldPickupItem();
     }
 
     public boolean shouldHelpFarm(){

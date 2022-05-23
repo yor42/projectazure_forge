@@ -6,11 +6,13 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.OreBlock;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.Tags;
 
 import static com.yor42.projectazure.setup.register.registerManager.NEAREST_ORE;
 import static net.minecraft.util.Hand.MAIN_HAND;
@@ -26,7 +28,7 @@ public class CompanionMineTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld world, AbstractEntityCompanion entity) {
-        return entity.getBrain().getMemory(NEAREST_ORE.get()).map((pos)->world.getBlockState(pos).getBlock() instanceof OreBlock && entity.shouldHelpMine()).orElse(false);
+        return entity.getBrain().getMemory(NEAREST_ORE.get()).map((pos)->world.getBlockState(pos).getBlock() instanceof OreBlock || world.getBlockState(pos).is(Tags.Blocks.ORES) && entity.shouldHelpMine()).orElse(false) && entity.getNavigation().isDone();
     }
 
     @Override
@@ -56,6 +58,9 @@ public class CompanionMineTask extends Task<AbstractEntityCompanion> {
                 entity.level.destroyBlock(pos, true);
                 mainHandStack.hurtAndBreak(1, entity, b -> b.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
                 this.breakingTime = 0;
+                entity.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
+                entity.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+                entity.getBrain().eraseMemory(NEAREST_ORE.get());
             }
         });
     }

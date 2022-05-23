@@ -21,6 +21,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
+import static com.yor42.projectazure.setup.register.registerManager.NEAREST_ORE;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
@@ -33,7 +34,7 @@ public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld world, AbstractEntityCompanion entity) {
         LivingEntity owner = entity.getOwner();
-        return owner!=null && entity.distanceTo(owner)>=(entity.shouldHelpMine()? 16:6);
+        return owner!=null && !owner.onClimbable() && entity.distanceTo(owner)>=(entity.getBrain().hasMemoryValue(NEAREST_ORE.get()) || entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET)? 16:6);
     }
 
     protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion entity, long p_212831_3_) {

@@ -44,6 +44,6 @@ public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
-        BrainUtil.setWalkAndLookTargetMemories(entity, this.position,1, 4);
+        BrainUtil.setWalkAndLookTargetMemories(entity, this.position,1, 1);
     }
 }

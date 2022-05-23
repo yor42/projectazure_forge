@@ -5,6 +5,10 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.IPosWrapper;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.server.ServerWorld;
 
 public class CompanionSprintTask extends Task<AbstractEntityCompanion> {
@@ -26,7 +30,9 @@ public class CompanionSprintTask extends Task<AbstractEntityCompanion> {
     @Override
     protected void start(ServerWorld world, AbstractEntityCompanion entity, long p_212831_3_) {
         entity.getBrain().getMemory(MemoryModuleType.WALK_TARGET).ifPresent(((pos)->{
-            boolean shouldSprint = Math.sqrt(entity.distanceToSqr(pos.getTarget().currentPosition())) >= pos.getCloseEnoughDist() + 4;
+            BlockPos position = pos.getTarget().currentBlockPosition();
+            BlockPos entityPosition = entity.blockPosition();
+            boolean shouldSprint = position.closerThan(new Vector3i(entityPosition.getX(), position.getY(), entityPosition.getZ()), pos.getCloseEnoughDist() + 4);
             entity.setSprinting(shouldSprint);
         }));
         if(!entity.getBrain().getMemory(MemoryModuleType.WALK_TARGET).isPresent()){

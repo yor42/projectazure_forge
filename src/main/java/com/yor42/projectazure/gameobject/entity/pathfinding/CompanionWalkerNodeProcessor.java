@@ -4,6 +4,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 
@@ -21,6 +22,16 @@ public class CompanionWalkerNodeProcessor extends WalkNodeProcessor {
     public int getNeighbors(@Nonnull PathPoint[] points, @Nonnull PathPoint origin) {
         int supervalue = super.getNeighbors(points, origin);
         return createLadderPathPointFor(supervalue, points, origin, this::getNode, this.level, this.mob);
+    }
+
+    @Override
+    public PathNodeType getBlockPathType(IBlockReader world, int p_186330_2_, int p_186330_3_, int p_186330_4_) {
+        PathNodeType superValue = super.getBlockPathType(world, p_186330_2_, p_186330_3_, p_186330_4_);
+        if(superValue == PathNodeType.OPEN && world.getBlockState(new BlockPos(p_186330_2_, p_186330_3_, p_186330_4_).below()).getBlock().is(BlockTags.CLIMBABLE)){
+            superValue = PathNodeType.WALKABLE;
+
+        };
+        return superValue;
     }
 
     public static int createLadderPathPointFor(int PathPointID, PathPoint[] PathPoints, PathPoint origin, Function<BlockPos, PathPoint> PathPointGetter, IBlockReader getter, MobEntity mob) {
