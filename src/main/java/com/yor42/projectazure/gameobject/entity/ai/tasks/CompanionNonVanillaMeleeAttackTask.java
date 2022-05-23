@@ -3,19 +3,14 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
-import net.minecraft.entity.ICrossbowUser;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
 

@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.capability.playercapability;
 
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -10,7 +9,6 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class CompanionTeam {

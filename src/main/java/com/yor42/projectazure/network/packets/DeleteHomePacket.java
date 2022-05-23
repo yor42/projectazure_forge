@@ -1,6 +1,5 @@
 package com.yor42.projectazure.network.packets;
 
-import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
@@ -9,7 +8,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.HOME;

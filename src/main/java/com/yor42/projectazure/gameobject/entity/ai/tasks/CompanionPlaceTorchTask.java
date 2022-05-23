@@ -16,10 +16,9 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.LightType;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.*;
+import static com.yor42.projectazure.setup.register.registerManager.TORCH_INDEX;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 

@@ -4,16 +4,13 @@ import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.AttackTargetTask;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ShootableItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.world.server.ServerWorld;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
-import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class CompanionAttackTargetTask extends AttackTargetTask {
     public CompanionAttackTargetTask(int p_i231523_1_) {

@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.entity.sworduser;
 
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityNearl;
-import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntitySiege;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;

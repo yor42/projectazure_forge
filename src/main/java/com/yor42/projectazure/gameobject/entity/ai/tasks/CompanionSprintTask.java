@@ -7,8 +7,6 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Map;
-
 public class CompanionSprintTask extends Task<AbstractEntityCompanion> {
 
     public CompanionSprintTask() {

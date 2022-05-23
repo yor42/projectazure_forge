@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,10 +11,8 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Map;
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.FOOD_INDEX;
 import static com.yor42.projectazure.setup.register.registerManager.TOTEM_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
 

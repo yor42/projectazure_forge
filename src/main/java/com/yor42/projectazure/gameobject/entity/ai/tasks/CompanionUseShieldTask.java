@@ -4,9 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.RavagerEntity;
@@ -14,8 +12,6 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
-
-import java.util.Map;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 

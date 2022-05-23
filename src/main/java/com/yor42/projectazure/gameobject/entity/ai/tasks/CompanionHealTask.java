@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.projectile.PotionEntity;
@@ -22,10 +21,10 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.*;
+import static com.yor42.projectazure.setup.register.registerManager.HEAL_POTION_INDEX;
+import static com.yor42.projectazure.setup.register.registerManager.REGENERATION_POTION_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionHealTask extends Task<AbstractEntityCompanion> {

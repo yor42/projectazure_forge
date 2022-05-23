@@ -9,15 +9,13 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.pathfinding.*;
-import net.minecraft.util.GroundPathHelper;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
-
-import java.util.Map;
 
 import static java.lang.Math.abs;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;

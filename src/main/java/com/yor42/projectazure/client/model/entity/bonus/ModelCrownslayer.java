@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.entity.bonus;
 
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;

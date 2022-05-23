@@ -6,12 +6,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.StopRidingEntityTask;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Map;
 import java.util.function.BiPredicate;
 
 public class CompanionStopRidingEntityTask extends Task<AbstractEntityCompanion> {

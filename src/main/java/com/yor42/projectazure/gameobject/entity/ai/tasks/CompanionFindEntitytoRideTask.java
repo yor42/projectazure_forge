@@ -9,7 +9,6 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.horse.HorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -20,8 +19,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
 public class CompanionFindEntitytoRideTask extends Task<AbstractEntityCompanion> {
     private List<Entity> RideableEntityList;

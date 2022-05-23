@@ -10,8 +10,6 @@ import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.server.ServerWorld;
 
-import java.util.Map;
-
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 
 public class CompanionEndAttackTask extends Task<AbstractEntityCompanion> {

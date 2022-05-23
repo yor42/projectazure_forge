@@ -11,19 +11,14 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneB
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nonnull;
-import java.util.EnumSet;
-import java.util.Map;
 
 import static com.yor42.projectazure.libs.utils.EntityUtils.EntityHasPlanes;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getPreparedPlane;

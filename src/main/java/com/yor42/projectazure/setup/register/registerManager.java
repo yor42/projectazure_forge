@@ -4,8 +4,8 @@ import com.mojang.serialization.Codec;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.EntitySensor;
+import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.WorldSensor;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
@@ -239,8 +239,8 @@ public class registerManager {
 
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_ORE = registerMemoryModuleType("nearest_ore");
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_HARVESTABLE = registerMemoryModuleType("nearest_harvestable");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_PLANTABLE = registerMemoryModuleType("nearest_ore");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_BONEMEALABLE = registerMemoryModuleType("nearest_ore");
+    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_PLANTABLE = registerMemoryModuleType("nearest_plantable");
+    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_BONEMEALABLE = registerMemoryModuleType("nearest_bonemealable");
 
     //Sensors
     public static final RegistryObject<SensorType<EntitySensor>> ENTITY_SENSOR = registerSensorType("entity_sensor", EntitySensor::new);

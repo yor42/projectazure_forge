@@ -6,15 +6,11 @@ import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 
 public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
     private final float MaxDistance;

@@ -1,10 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.ai.sensor;
 
 import com.google.common.collect.ImmutableSet;
+import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerManager;
-import javafx.util.Pair;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.brain.Brain;
@@ -12,7 +12,6 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
@@ -45,22 +44,22 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
             brain.eraseMemory(registerManager.NEAREST_BONEMEALABLE.get());
 
             List<Pair<BlockPos, enums.ResourceBlockType>> blocklist = UpdateBlockList(world, entity).stream().filter((entry) -> {
-                BlockPos pos = entry.getKey();
-                enums.ResourceBlockType type = entry.getValue();
+                BlockPos pos = entry.getFirst();
+                enums.ResourceBlockType type = entry.getSecond();
                 Path path = entity.getNavigation().createPath(pos, type == ORE? 4:1);
                 return path != null && path.canReach();
-            }).sorted(Comparator.comparingDouble((entry) -> entity.distanceToSqr(Vector3d.atCenterOf(entry.getKey())))).collect(Collectors.toList());
+            }).sorted(Comparator.comparingDouble((entry) -> entity.distanceToSqr(Vector3d.atCenterOf(entry.getFirst())))).collect(Collectors.toList());
 
-            blocklist.stream().filter((entry)->entry.getValue() == ORE).map(Pair::getKey).findFirst().ifPresent((pos)->{
+            blocklist.stream().filter((entry)->entry.getSecond() == ORE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
                 brain.setMemory(registerManager.NEAREST_ORE.get(), pos);
             });
-            blocklist.stream().filter((entry)->entry.getValue() == CROP_HARVESTABLE).map(Pair::getKey).findFirst().ifPresent((pos)->{
+            blocklist.stream().filter((entry)->entry.getSecond() == CROP_HARVESTABLE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
                 brain.setMemory(registerManager.NEAREST_HARVESTABLE.get(), pos);
             });
-            blocklist.stream().filter((entry)->entry.getValue() == CROP_PLANTABLE).map(Pair::getKey).findFirst().ifPresent((pos)->{
+            blocklist.stream().filter((entry)->entry.getSecond() == CROP_PLANTABLE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
                 brain.setMemory(registerManager.NEAREST_PLANTABLE.get(), pos);
             });
-            blocklist.stream().filter((entry)->entry.getValue() == CROP_BONEMEALABLE).map(Pair::getKey).findFirst().ifPresent((pos)->{
+            blocklist.stream().filter((entry)->entry.getSecond() == CROP_BONEMEALABLE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
                 brain.setMemory(registerManager.NEAREST_BONEMEALABLE.get(), pos);
             });
         }

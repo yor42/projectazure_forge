@@ -10,13 +10,11 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.item.*;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
-import java.util.Map;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasGunOrTorpedo;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;

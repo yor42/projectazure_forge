@@ -8,8 +8,6 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PotionItem;
-import net.minecraft.potion.*;
 import net.minecraft.util.Hand;
 import net.minecraft.world.server.ServerWorld;
 
@@ -17,7 +15,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.*;
+import static com.yor42.projectazure.setup.register.registerManager.FOOD_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionEatTask extends Task<AbstractEntityCompanion> {

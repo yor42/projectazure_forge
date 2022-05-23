@@ -2,11 +2,9 @@ package com.yor42.projectazure.gameobject.entity.companion.bonus;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.DirectionUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -20,7 +18,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.item.TieredItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -43,8 +40,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
 
 public class EntityCrownSlayer extends AbstractSwordUserBase {
 

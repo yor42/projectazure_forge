@@ -1,8 +1,5 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
-import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
-import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
-import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandlerItemStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;

@@ -4,7 +4,6 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -166,17 +165,6 @@ public class WorkGoal extends MoveEntityForWorkGoal {
                     this.BlockPosBelowTarget = null;
                 }
             }
-        }
-    }
-
-    private void BlockDropItem(ItemStack stack, float offsetY)
-    {
-
-        if(!stack.isEmpty())
-        {
-            ItemEntity entityitem = new ItemEntity(this.host.level, this.BlockPosBelowTarget.getX(), this.BlockPosBelowTarget.getY() + (double)offsetY, this.BlockPosBelowTarget.getZ(), stack);
-            entityitem.setDefaultPickUpDelay();
-            this.host.level.addFreshEntity(entityitem);
         }
     }
 
