@@ -216,123 +216,123 @@ public class PAConfig {
             AyanamiHealth = builder.defineInRange("Max Health of Ayanami", 40D, 1, 1024);
             AyanamiSwimSpeed = builder.defineInRange("Swim Speed of Ayanami", 2.5, 0, 1024);
             AyanamiAttackDamage = builder.defineInRange("Attack Damage of Ayanami", 2.0F, 0, 1024);
-            AyanamiMovementSpeed = builder.defineInRange("Movement speed of Ayanami", 0.35F, 0, 2);
+            AyanamiMovementSpeed = builder.defineInRange("Movement speed of Ayanami", 0.3F, 0, 2);
 
             JavelinHealth = builder.defineInRange("Max Health of Javelin", 40D, 1, 1024);
             JavelinSwimSpeed = builder.defineInRange("Swim Speed of Javelin", 2.5, 0, 1024);
             JavelinAttackDamage = builder.defineInRange("Attack Damage of Javelin", 2.0F, 0, 1024);
-            JavelinMovementSpeed = builder.defineInRange("Movement speed of Javelin", 0.35F, 0, 2);
+            JavelinMovementSpeed = builder.defineInRange("Movement speed of Javelin", 0.3F, 0, 2);
 
             Z23Health = builder.defineInRange("Max Health of Z23", 40D, 1, 1024);
             Z23SwimSpeed = builder.defineInRange("Swim Speed of Z23", 2.5, 0, 1024);
             Z23AttackDamage = builder.defineInRange("Attack Damage of Z23", 2.0F, 0, 1024);
-            Z23MovementSpeed = builder.defineInRange("Movement speed of Z23", 0.35F, 0, 2);
+            Z23MovementSpeed = builder.defineInRange("Movement speed of Z23", 0.3F, 0, 2);
 
             LaffeyHealth = builder.defineInRange("Max Health of Laffey", 40D, 1, 1024);
             LaffeySwimSpeed = builder.defineInRange("Swim Speed of Laffey", 2.5, 0, 1024);
             LaffeyAttackDamage = builder.defineInRange("Attack Damage of Laffey", 2.0F, 0, 1024);
-            LaffeyMovementSpeed = builder.defineInRange("Movement speed of Laffey", 0.35F, 0, 2);
+            LaffeyMovementSpeed = builder.defineInRange("Movement speed of Laffey", 0.3F, 0, 2);
 
             EnterpriseHealth = builder.defineInRange("Max Health of Enterprise", 30D, 1, 1024);
             EnterpriseSwimSpeed = builder.defineInRange("Swim Speed of Enterprise", 2.5, 0, 1024);
             EnterpriseAttackDamage = builder.defineInRange("Attack Damage of Enterprise", 2.0F, 0, 1024);
-            EnterpriseMovementSpeed = builder.defineInRange("Movement speed of Enterprise", 0.35F, 0, 2);
+            EnterpriseMovementSpeed = builder.defineInRange("Movement speed of Enterprise", 0.3F, 0, 2);
 
             NagatoHealth = builder.defineInRange("Max Health of Nagato", 50D, 1, 1024);
             NagatoSwimSpeed = builder.defineInRange("Swim Speed of Nagato", 2.5, 0, 1024);
             NagatoAttackDamage = builder.defineInRange("Attack Damage of Nagato", 2.0F, 0, 1024);
-            NagatoMovementSpeed = builder.defineInRange("Movement speed of Nagato", 0.35F, 0, 2);
+            NagatoMovementSpeed = builder.defineInRange("Movement speed of Nagato", 0.3F, 0, 2);
 
             builder.pop().push("Blue Archive");
             ShirokoHealth = builder.defineInRange("Max Health of Shiroko", 40D, 1, 1024);
             ShirokoSwimSpeed = builder.defineInRange("Swim Speed of Shiroko", 2.5, 0, 1024);
             ShirokoAttackDamage = builder.defineInRange("Attack Damage of Shiroko", 2.0F, 0, 1024);
-            ShirokoMovementSpeed = builder.defineInRange("Movement speed of Shiroko", 0.4F, 0, 2);
+            ShirokoMovementSpeed = builder.defineInRange("Movement speed of Shiroko", 0.3F, 0, 2);
 
             builder.pop().push("Arknights");
             ChenHealth = builder.defineInRange("Max Health of Ch'en", 25D, 1, 1024);
             ChenSwimSpeed = builder.defineInRange("Swim Speed of Ch'en", 2.5, 0, 1024);
             ChenAttackDamage = builder.defineInRange("Attack Damage of Ch'en", 2.0F, 0, 1024);
-            ChenMovementSpeed = builder.defineInRange("Movement speed of Ch'en", 0.4F, 0, 2);
+            ChenMovementSpeed = builder.defineInRange("Movement speed of Ch'en", 0.3F, 0, 2);
 
             TexasHealth = builder.defineInRange("Max Health of Texas", 20D, 1, 1024);
             TexasSwimSpeed = builder.defineInRange("Swim Speed of Texas", 2.5, 0, 1024);
             TexasAttackDamage = builder.defineInRange("Attack Damage of Texas", 2.0F, 0, 1024);
-            TexasMovementSpeed = builder.defineInRange("Movement speed of Texas", 0.4F, 0, 2);
+            TexasMovementSpeed = builder.defineInRange("Movement speed of Texas", 0.3F, 0, 2);
 
             LapplandHealth = builder.defineInRange("Max Health of Lappland", 20D, 1, 1024);
             LapplandSwimSpeed = builder.defineInRange("Swim Speed of Lappland", 2.5, 0, 1024);
             LapplandAttackDamage = builder.defineInRange("Attack Damage of Lappland", 2.0F, 0, 1024);
-            LapplandMovementSpeed = builder.defineInRange("Movement speed of Lappland", 0.4F, 0, 2);
+            LapplandMovementSpeed = builder.defineInRange("Movement speed of Lappland", 0.3F, 0, 2);
 
             SiegeHealth = builder.defineInRange("Max Health of Siege", 20D, 1, 1024);
             SiegeSwimSpeed = builder.defineInRange("Swim Speed of Siege", 2.5, 0, 1024);
             SiegeAttackDamage = builder.defineInRange("Attack Damage of Siege", 2.0F, 0, 1024);
-            SiegeMovementSpeed = builder.defineInRange("Movement speed of Siege", 0.4F, 0, 2);
+            SiegeMovementSpeed = builder.defineInRange("Movement speed of Siege", 0.3F, 0, 2);
 
             NearlHealth = builder.defineInRange("Max Health of Nearl", 20D, 1, 1024);
             NearlSwimSpeed = builder.defineInRange("Swim Speed of Nearl", 2.5, 0, 1024);
             NearlAttackDamage = builder.defineInRange("Attack Damage of Nearl", 2.0F, 0, 1024);
-            NearlMovementSpeed = builder.defineInRange("Movement speed of Nearl", 0.4F, 0, 2);
+            NearlMovementSpeed = builder.defineInRange("Movement speed of Nearl", 0.3F, 0, 2);
 
             SchwarzHealth = builder.defineInRange("Max Health of Schwarz", 20D, 1, 1024);
             SchwarzSwimSpeed = builder.defineInRange("Swim Speed of Schwarz", 2.5, 0, 1024);
             SchwarzAttackDamage = builder.defineInRange("Attack Damage of Schwarz", 2.0F, 0, 1024);
-            SchwarzMovementSpeed = builder.defineInRange("Movement speed of Schwarz", 0.4F, 0, 2);
+            SchwarzMovementSpeed = builder.defineInRange("Movement speed of Schwarz", 0.3F, 0, 2);
 
             AmiyaHealth = builder.defineInRange("Max Health of Amiya", 20D, 1, 1024);
             AmiyaSwimSpeed = builder.defineInRange("Swim Speed of Amiya", 2.5, 0, 1024);
             AmiyaAttackDamage = builder.defineInRange("Attack Damage of Amiya", 2.0F, 0, 1024);
-            AmiyaMovementSpeed = builder.defineInRange("Movement speed of Amiya", 0.4F, 0, 2);
+            AmiyaMovementSpeed = builder.defineInRange("Movement speed of Amiya", 0.3F, 0, 2);
 
             RosmontisHealth = builder.defineInRange("Max Health of Rosmontis", 20D, 1, 1024);
             RosmontisSwimSpeed = builder.defineInRange("Swim Speed of Rosmontis", 2.5, 0, 1024);
             RosmontisAttackDamage = builder.defineInRange("Attack Damage of Rosmontis", 2.0F, 0, 1024);
-            RosmontisMovementSpeed = builder.defineInRange("Movement speed of Rosmontis", 0.4F, 0, 2);
+            RosmontisMovementSpeed = builder.defineInRange("Movement speed of Rosmontis", 0.3F, 0, 2);
 
             MudrockHealth = builder.defineInRange("Max Health of Mudrock", 20D, 1, 1024);
             MudrockSwimSpeed = builder.defineInRange("Swim Speed of Mudrock", 2.5, 0, 1024);
             MudrockAttackDamage = builder.defineInRange("Attack Damage of Mudrock", 2.0F, 0, 1024);
-            MudrockMovementSpeed = builder.defineInRange("Movement speed of Mudrock", 0.5F, 0, 2);
+            MudrockMovementSpeed = builder.defineInRange("Movement speed of Mudrock", 0.3F, 0, 2);
 
             FrostnovaHealth = builder.defineInRange("Max Health of Frostnova", 20D, 1, 1024);
             FrostnovaSwimSpeed = builder.defineInRange("Swim Speed of Frostnova", 2.5, 0, 1024);
             FrostnovaAttackDamage = builder.defineInRange("Attack Damage of Frostnova", 2.0F, 0, 1024);
-            FrostnovaMovementSpeed = builder.defineInRange("Movement speed of Frostnova", 0.5F, 0, 2);
+            FrostnovaMovementSpeed = builder.defineInRange("Movement speed of Frostnova", 0.3F, 0, 2);
 
             TalulahHealth = builder.defineInRange("Max Health of Talulah", 40D, 1, 1024);
             TalulahSwimSpeed = builder.defineInRange("Swim Speed of Talulah", 2.5, 0, 1024);
             TalulahAttackDamage = builder.defineInRange("Attack Damage of Talulah", 2.0F, 0, 1024);
-            TalulahMovementSpeed = builder.defineInRange("Movement speed of Talulah", 0.5F, 0, 2);
+            TalulahMovementSpeed = builder.defineInRange("Movement speed of Talulah", 0.3F, 0, 2);
 
             CrownslayerHealth = builder.defineInRange("Max Health of Crownslayer", 20D, 1, 1024);
             CrownslayerSwimSpeed = builder.defineInRange("Swim Speed of Crownslayer", 2.5, 0, 1024);
             CrownslayerAttackDamage = builder.defineInRange("Attack Damage of Crownslayer", 2.0F, 0, 1024);
-            CrownslayerMovementSpeed = builder.defineInRange("Movement speed of Crownslayer", 0.4F, 0, 2);
+            CrownslayerMovementSpeed = builder.defineInRange("Movement speed of Crownslayer", 0.3F, 0, 2);
 
             builder.pop().push("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);
             GangwonSwimSpeed = builder.defineInRange("Swim Speed of Gangwon", 2.5, 0, 1024);
             GangwonAttackDamage = builder.defineInRange("Attack Damage of Gangwon", 2.0F, 0, 1024);
-            GangwonMovementSpeed = builder.defineInRange("Movement speed of Gangwon", 0.4F, 0, 2);
+            GangwonMovementSpeed = builder.defineInRange("Movement speed of Gangwon", 0.3F, 0, 2);
 
             builder.pop().push("Closers");
             SylviHealth = builder.defineInRange("Max Health of Sylvi Lee", 20D, 1, 1024);
             SylviSwimSpeed = builder.defineInRange("Swim Speed of Sylvi Lee", 2.5, 0, 1024);
             SylviAttackDamage = builder.defineInRange("Attack Damage of Sylvi Lee" , 2.0F, 0, 1024);
-            SylviMovementSpeed = builder.defineInRange("Movement speed of Sylvi Lee", 0.4F, 0, 2);
+            SylviMovementSpeed = builder.defineInRange("Movement speed of Sylvi Lee", 0.3F, 0, 2);
 
             builder.pop().push("Kantai Collection");
             YamatoHealth = builder.defineInRange("Max Health of Yamato Lee", 40D, 1, 1024);
             YamatoSwimSpeed = builder.defineInRange("Swim Speed of Yamato Lee", 2.5, 0, 1024);
             YamatoAttackDamage = builder.defineInRange("Attack Damage of Yamato Lee" , 2.0F, 0, 1024);
-            YamatoMovementSpeed = builder.defineInRange("Movement speed of Yamato Lee", 0.4F, 0, 2);
+            YamatoMovementSpeed = builder.defineInRange("Movement speed of Yamato Lee", 0.3F, 0, 2);
 
             builder.pop().push("Girl's Frontline");
             M4A1Health = builder.defineInRange("Max Health of M4A1", 40D, 1, 1024);
             M4A1SwimSpeed = builder.defineInRange("Swim Speed of M4A1", 2.5, 0, 1024);
             M4A1AttackDamage = builder.defineInRange("Attack Damage of M4A1", 2.0F, 0, 1024);
-            M4A1MovementSpeed = builder.defineInRange("Movement speed of M4A1", 0.35F, 0, 2);
+            M4A1MovementSpeed = builder.defineInRange("Movement speed of M4A1", 0.3F, 0, 2);
 
             builder.pop().pop().push("Gacha Roll RNG").comment("Chance of Roll per rarity.").comment("1 star is most common, and 6 star is most rare.").comment("Higher the number is, Commoner the item is.");
             ALLOW_DUPLICATE = builder.define("Allow Duplicate Entity for same player?", false);

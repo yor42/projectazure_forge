@@ -63,9 +63,8 @@ public class EntityM4A1 extends EntityGunUserBase{
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
-        else if (this.swinging) {
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND ? "swingR" : "swingL"));
-            return PlayState.CONTINUE;
+        else if(this.swinging){
+            return PlayState.STOP;
         }
         else if (this.isBeingPatted()) {
             event.getController().setAnimation(builder.addAnimation("pat", true));

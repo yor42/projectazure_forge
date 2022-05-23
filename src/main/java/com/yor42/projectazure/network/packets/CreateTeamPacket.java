@@ -1,7 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
-import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.server.ServerWorld;

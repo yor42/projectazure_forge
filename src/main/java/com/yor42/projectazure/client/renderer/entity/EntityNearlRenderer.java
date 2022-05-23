@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.renderer.entity;
 
 import com.yor42.projectazure.client.model.entity.sworduser.NearlModel;
-import com.yor42.projectazure.client.model.entity.sworduser.SiegeModel;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityNearl;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.math.vector.Vector3d;

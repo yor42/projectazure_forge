@@ -19,8 +19,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Optional;
-import java.util.UUID;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 

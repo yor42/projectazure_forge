@@ -66,9 +66,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingR":"swingL", true));
-
-            return PlayState.CONTINUE;
+            return PlayState.STOP;
         }
         else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
@@ -164,7 +162,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@Nonnull DamageSource source, float amount) {
         int skillitemcount = 0;
         for(int i=0;i<this.getSkillItemCount(); i++){
             if(this.isSkillItemInindex(i)){

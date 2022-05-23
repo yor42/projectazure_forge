@@ -309,6 +309,13 @@ public class enums {
         }
     }
 
+    public enum ResourceBlockType{
+        ORE,
+        CROP_HARVESTABLE,
+        CROP_BONEMEALABLE,
+        CROP_PLANTABLE
+    }
+
     public enum ResourceType {
         GEAR("gear"),
         INGOT("ingot"),
