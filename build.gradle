@@ -114,6 +114,10 @@ repositories {
 
     maven { url 'https://modmaven.dev/' }//Mekanism
 
+    maven {
+        url "https://cursemaven.com"
+    }
+
     maven { // TOP
         name 'tterrag maven'
         url "https://maven.tterrag.com/"
@@ -134,6 +138,12 @@ dependencies {
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.57')
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+
+    //TaC
+    implementation fg.deobf('curse.maven:timeless-and-classics-491264:3802219')
+
+    //Multiblocked
+    implementation fg.deobf('curse.maven:multiblocked-604054:3802417')
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
     //compileOnly fg.deobf('com.chaosthedude:realistictorches:1.16.5:3.1.2')
