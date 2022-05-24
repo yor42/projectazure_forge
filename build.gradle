@@ -144,9 +144,11 @@ dependencies {
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
 
     //TaC
+    implementation fg.deobf('curse.maven:obfuscate-289380:3740120')
     implementation fg.deobf('curse.maven:timeless-and-classics-491264:3802219')
 
     //Multiblocked
+    implementation fg.deobf('curse.maven:ldlib-626676:3801329')
     implementation fg.deobf('curse.maven:multiblocked-604054:3802417')
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')

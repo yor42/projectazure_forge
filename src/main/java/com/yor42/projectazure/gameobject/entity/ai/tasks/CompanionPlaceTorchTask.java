@@ -55,9 +55,9 @@ public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
                 return !world.canSeeSky(entity.blockPosition()) && world.getBrightness(LightType.BLOCK, entity.blockPosition())<1;
             } else {
                 entity.getBrain().getMemory(TORCH_INDEX.get()).ifPresent((idx) -> {
-                    if (idx > 0 && entity.getItemSwapIndexOffHand() == -1) {
+                    if (entity.getItemSwapIndexOffHand() == -1) {
                         this.ChangeItem(idx, entity);
-                        this.Cooldown = 10;
+                        this.Cooldown = 20;
                     }
                 });
             }

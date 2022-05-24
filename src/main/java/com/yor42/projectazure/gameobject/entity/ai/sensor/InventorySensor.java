@@ -27,7 +27,8 @@ public class InventorySensor extends Sensor<AbstractEntityCompanion> {
     protected void doTick(@Nonnull ServerWorld world, @Nonnull AbstractEntityCompanion entity) {
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
         ItemStackHandler inventory = entity.getInventory();
-        boolean foundTotem = false, foundFood = false, foundHealPotion= false, foundRegenerationPotion= false, foundTorch= false, foundFireExtinguisher= false, foundFallbreaker = false;
+        boolean foundTotem = brain.hasMemoryValue(TOTEM_INDEX.get());
+        boolean foundFood = brain.hasMemoryValue(FOOD_INDEX.get()), foundHealPotion= brain.hasMemoryValue(HEAL_POTION_INDEX.get()), foundRegenerationPotion= brain.hasMemoryValue(REGENERATION_POTION_INDEX.get()), foundTorch= brain.hasMemoryValue(TORCH_INDEX.get()), foundFireExtinguisher= brain.hasMemoryValue(FIRE_EXTINGIGH_ITEM.get()), foundFallbreaker =  brain.hasMemoryValue(FALL_BREAK_ITEM_INDEX.get());
         for (int i = 0; i < inventory.getSlots(); i++){
             ItemStack stack = inventory.getStackInSlot(i);
             Item item = stack.getItem();
