@@ -31,6 +31,12 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.dropSelf(registerBlocks.MACHINE_FRAME.get());
         this.dropSelf(registerBlocks.REENFORCEDCONCRETE.get());
         this.dropSelf(registerBlocks.DRYDOCKCONTROLLER.get());
+
+        this.dropSelf(registerBlocks.ITEM_HATCH.get());
+        this.dropSelf(registerBlocks.ENERGY_HATCH.get());
+        this.dropSelf(registerBlocks.FLUID_HATCH.get());
+        this.dropSelf(registerBlocks.ORIGINIUM_GENERATOR_CONTROLLER.get());
+
         this.add(registerBlocks.METAL_PRESS.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
         this.add(registerBlocks.BASIC_REFINERY.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
         this.add(registerBlocks.ALLOY_FURNACE.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);

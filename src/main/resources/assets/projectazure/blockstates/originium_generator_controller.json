@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "projectazure:block/originium_generator_controller"
+    },
+    "facing=south": {
+      "model": "projectazure:block/originium_generator_controller",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "projectazure:block/originium_generator_controller",
+      "y": -90
+    },
+    "facing=east": {
+      "model": "projectazure:block/originium_generator_controller",
+      "y": 90
+    }
+  }
+}

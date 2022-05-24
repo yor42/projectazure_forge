@@ -22,6 +22,10 @@ public class registerTE {
     public static final RegistryObject<TileEntityType<MultiBlockReenforcedConcrete>> MULTIBLOCKSTRUCTURE_CONCRETE = register("multiblock_structure_concrete_te", MultiBlockReenforcedConcrete::new, registerBlocks.REENFORCEDCONCRETE);
     public static final RegistryObject<TileEntityType<MultiblockSteelFrame>> MULTIBLOCKSTRUCTURE_STEELFRAME = register("multiblock_structure_steel_te", MultiblockSteelFrame::new, registerBlocks.MACHINE_FRAME);
 
+    public static final RegistryObject<TileEntityType<TileEntityItemHatch>> ITEM_HATCH = register("item_hatch", TileEntityItemHatch::new, registerBlocks.ITEM_HATCH);
+    public static final RegistryObject<TileEntityType<TileEntityFluidHatch>> FLUID_HATCH = register("fluid_hatch", TileEntityFluidHatch::new, registerBlocks.FLUID_HATCH);
+    public static final RegistryObject<TileEntityType<TileEntityEnergyHatch>> ENERGY_HATCH = register("energy_hatch", TileEntityEnergyHatch::new, registerBlocks.ENERGY_HATCH);
+
     private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<? extends Block> block){
 
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW

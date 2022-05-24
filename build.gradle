@@ -142,17 +142,19 @@ dependencies {
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.57')
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
+    //Due to some gradle fuckery you need to remove TaC and Multiblocked from buildscript to get Datagen working
 
     //TaC
     implementation fg.deobf('curse.maven:obfuscate-289380:3740120')
     implementation fg.deobf('curse.maven:timeless-and-classics-491264:3802219')
 
+    compileOnly fg.deobf('curse.maven:realistic-torches-235729:3191715')
+
     //Multiblocked
-    implementation fg.deobf('curse.maven:ldlib-626676:3801329')
-    implementation fg.deobf('curse.maven:multiblocked-604054:3802417')
+    runtimeOnly fg.deobf('curse.maven:ldlib-626676:3801329')
+    runtimeOnly fg.deobf('curse.maven:multiblocked-604054:3802417')
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
-    //compileOnly fg.deobf('com.chaosthedude:realistictorches:1.16.5:3.1.2')
 
     // JEI
     if (project.hasProperty('jei_version')) {
@@ -169,7 +171,7 @@ dependencies {
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
-    implementation fg.deobf('curse.maven:timeless-and-classics-491264:3802219')//Timeless and Classic
+    //implementation fg.deobf('curse.maven:timeless-and-classics-491264:3802219')//Timeless and Classic
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"

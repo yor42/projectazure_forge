@@ -3,6 +3,9 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.items.ItemRecruitBeaconRenderer;
 import com.yor42.projectazure.gameobject.blocks.*;
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityEnergyHatch;
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityFluidHatch;
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityItemHatch;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockSteelFrame;
 import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
@@ -67,6 +70,33 @@ public class registerBlocks {
     public static final RegistryObject<Block> REENFORCEDCONCRETE = register_blockWithToolTiponItem("reenforced_concrete",()-> new MultiblockStructureBlocks(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
 
     public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties().setISTER(()-> ItemRecruitBeaconRenderer::new));
+
+
+    public static final RegistryObject<Block> ITEM_HATCH = register("item_hatch", ()->new HatchBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
+        @Nonnull
+        @Override
+        public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+            return new TileEntityItemHatch();
+        }
+    }, Main.PA_MACHINES);
+
+    public static final RegistryObject<Block> FLUID_HATCH = register("fluid_hatch", ()->new HatchBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
+        @Nonnull
+        @Override
+        public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+            return new TileEntityFluidHatch();
+        }
+    }, Main.PA_MACHINES);
+
+    public static final RegistryObject<Block> ENERGY_HATCH = register("energy_hatch", ()->new HatchBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
+        @Nonnull
+        @Override
+        public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+            return new TileEntityEnergyHatch();
+        }
+    }, Main.PA_MACHINES);
+
+    public static final RegistryObject<Block> ORIGINIUM_GENERATOR_CONTROLLER = register("originium_generator_controller", ()->new MultiblockControllerBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
 
     private static <T extends Block> RegistryObject<T> register_noItem(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);
