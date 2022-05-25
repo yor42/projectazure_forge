@@ -22,6 +22,8 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
         simpleBlock(registerBlocks.REENFORCEDCONCRETE.get());
         simpleBlock(registerBlocks.REENFORCED_PLANK.get());
 
+        simpleBlock(registerBlocks.MACHINE_COMPONENTBLOCK.get());
+
         simpleBlock(registerBlocks.FLUID_HATCH.get());
         simpleBlock(registerBlocks.ENERGY_HATCH.get());
         simpleBlock(registerBlocks.ITEM_HATCH.get());

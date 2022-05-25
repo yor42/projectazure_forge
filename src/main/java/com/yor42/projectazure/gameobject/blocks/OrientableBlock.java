@@ -9,10 +9,10 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 
-public class MultiblockControllerBlock extends Block {
+public class OrientableBlock extends Block {
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
 
-    public MultiblockControllerBlock(Properties p_i48440_1_) {
+    public OrientableBlock(Properties p_i48440_1_) {
         super(p_i48440_1_);
     }
 

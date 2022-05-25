@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "projectazure:block/machine_dynamo_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "projectazure:block/machine_dynamo"
+    },
+    "axis=z": {
+      "model": "projectazure:block/machine_dynamo_horizontal",
+      "x": 90
+    }
+  }
+}

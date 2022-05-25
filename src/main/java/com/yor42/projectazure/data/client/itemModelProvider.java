@@ -122,6 +122,9 @@ public class itemModelProvider extends ItemModelProvider {
         buildSimpleBlockModel("reenforced_plank");
         buildSimpleBlockModel("orirock");
 
+        buildSimpleBlockModel("machine_component");
+        buildSimpleBlockModel("machine_dynamo");
+
         buildSimpleBlockModel("item_hatch");
         buildSimpleBlockModel("fluid_hatch");
         buildSimpleBlockModel("energy_hatch");

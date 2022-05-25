@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "projectazure:block/dynamo_front",
+    "side": "projectazure:block/dynamo_side"
+  }
+}

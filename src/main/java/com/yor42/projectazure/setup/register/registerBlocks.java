@@ -71,7 +71,8 @@ public class registerBlocks {
 
     public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties().setISTER(()-> ItemRecruitBeaconRenderer::new));
 
-
+    public static final RegistryObject<Block> MACHINE_COMPONENTBLOCK = register("machine_component", ()->new Block((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
+    public static final RegistryObject<Block> MACHINE_DYNAMO = register("machine_dynamo", ()->new RotatedPillarBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
     public static final RegistryObject<Block> ITEM_HATCH = register("item_hatch", ()->new HatchBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
         @Nonnull
         @Override
@@ -96,7 +97,7 @@ public class registerBlocks {
         }
     }, Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> ORIGINIUM_GENERATOR_CONTROLLER = register("originium_generator_controller", ()->new MultiblockControllerBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
+    public static final RegistryObject<Block> ORIGINIUM_GENERATOR_CONTROLLER = register("originium_generator_controller", ()->new OrientableBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
 
     private static <T extends Block> RegistryObject<T> register_noItem(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);
