@@ -139,14 +139,14 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.35'
 
     //Geckoilib
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.57')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.71')
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
     //Due to some gradle fuckery you need to remove TaC and Multiblocked from buildscript to get Datagen working
 
     //TaC
     implementation fg.deobf('curse.maven:obfuscate-289380:3740120')
-     fg.deobf('curse.maven:timeless-and-classics-491264:3802219')
+    implementation fg.deobf('curse.maven:timeless-and-classics-491264:3802219')
 
     compileOnly fg.deobf('curse.maven:realistic-torches-235729:3191715')
 
