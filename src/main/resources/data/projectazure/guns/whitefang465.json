@@ -67,17 +67,12 @@
       "barrel": {
         "yOffset": -100829.84,
         "zOffset": -11.55,
-        "scale": 1.00
+        "scale": 0.00
       },
       "scope": {
-        "yOffset": 9,
-        "zOffset": 6.4,
+        "yOffset": 9.2,
+        "zOffset": 4,
         "scale": 1.00
-      },
-      "stock": {
-        "yOffset": 7.75,
-        "zOffset": -22.05,
-        "scale": 0.00
       },
       "underBarrel": {
         "yOffset": 7.799,

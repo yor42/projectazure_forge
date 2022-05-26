@@ -192,8 +192,8 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
         ClientRegisterManager.registerScreen();
 
-        //We do some class magic for gun here
-        for (Field field : ItemRegistry.class.getDeclaredFields()) {
+        //We do some reflect magic for gun here
+        for (Field field : registerItems.class.getDeclaredFields()) {
             RegistryObject<?> object;
             try {
                 object = (RegistryObject<?>) field.get(null);
@@ -204,10 +204,10 @@ public class Main
                 try {
                     ModelOverrides.register(
                             (Item) object.get(),
-                            (IOverrideModel) Class.forName(MODID+".client.render.gun.model." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
+                            (IOverrideModel) Class.forName("com.yor42.projectazure.client.renderer.gun." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
                     );
                 } catch (ClassNotFoundException e) {
-                    LOGGER.warn("Could not load animations for gun - " + field.getName());
+                    LOGGER.warn("Could not load animations for gun - " + field.getName()+" / expected class name:"+field.getName().toLowerCase(Locale.ENGLISH)+ "_animation");
                 } catch (IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();
                 }

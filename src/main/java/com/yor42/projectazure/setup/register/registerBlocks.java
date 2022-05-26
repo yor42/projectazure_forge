@@ -63,8 +63,6 @@ public class registerBlocks {
     public static final RegistryObject<Block> MACHINE_COMPONENTBLOCK = register("machine_component", ()->new Block((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
     public static final RegistryObject<Block> MACHINE_DYNAMO = register("machine_dynamo", ()->new RotatedPillarBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
 
-    //public static final RegistryObject<Block> ORIGINIUM_GENERATOR_CONTROLLER = register("originium_generator_controller", ()->new OrientableBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
-
     private static <T extends Block> RegistryObject<T> register_noItem(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);
     }
