@@ -1,5 +1,8 @@
 package com.yor42.projectazure;
 
+import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.ModelOverrides;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.block.DrydockControllerRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
@@ -18,6 +21,7 @@ import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
@@ -27,6 +31,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -41,8 +46,11 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
+import software.bernie.example.registry.ItemRegistry;
 import software.bernie.geckolib3.GeckoLib;
 
+import java.lang.reflect.Field;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 import static com.yor42.projectazure.libs.Constants.MODID;
@@ -139,6 +147,8 @@ public class Main
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
+
+        //register Entity renderers
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.AYANAMI.get(), entityAyanamiRenderer::new);
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.JAVELIN.get(), entityJavelinRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.Z23.get(), entityZ23Renderer::new);
@@ -181,6 +191,29 @@ public class Main
 
         RenderingRegistry.registerEntityRenderingHandler(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
         ClientRegisterManager.registerScreen();
+
+        //We do some class magic for gun here
+        for (Field field : ItemRegistry.class.getDeclaredFields()) {
+            RegistryObject<?> object;
+            try {
+                object = (RegistryObject<?>) field.get(null);
+            } catch (ClassCastException | IllegalAccessException e) {
+                continue;
+            }
+            if (TimelessGunItem.class.isAssignableFrom(object.get().getClass())) {
+                try {
+                    ModelOverrides.register(
+                            (Item) object.get(),
+                            (IOverrideModel) Class.forName(MODID+".client.render.gun.model." + field.getName().toLowerCase(Locale.ENGLISH) + "_animation").newInstance()
+                    );
+                } catch (ClassNotFoundException e) {
+                    LOGGER.warn("Could not load animations for gun - " + field.getName());
+                } catch (IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
 }

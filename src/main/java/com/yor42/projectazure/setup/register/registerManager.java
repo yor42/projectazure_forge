@@ -275,6 +275,7 @@ public class registerManager {
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
         SENSORS.register(eventbus);
+        registerMultiBlocks.register();
         registerBlocks.register();
         registerItems.register();
         registerBiomes.register();

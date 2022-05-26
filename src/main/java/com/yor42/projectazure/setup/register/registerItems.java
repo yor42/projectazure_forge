@@ -1,10 +1,13 @@
 package com.yor42.projectazure.setup.register;
 
+import com.tac.guns.GunMod;
+import com.tac.guns.interfaces.IGunModifier;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.*;
 import com.yor42.projectazure.gameobject.items.*;
-import com.yor42.projectazure.gameobject.items.gun.ItemAbydos550;
 import com.yor42.projectazure.gameobject.items.materials.ModMaterials;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBBDefault;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingCVDefault;
@@ -18,7 +21,6 @@ import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.RegistryObject;
@@ -180,6 +182,10 @@ public class registerItems {
             .tab(PA_GROUP)
             .rarity(Rarity.EPIC).stacksTo(1)));
 
+    //THIS, IS A BUCKET
+    //No.....
+    //AND THERE'S MORE.
+    //DEAR GOD....
     public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket", ()-> new BucketItem(()->registerFluids.CRUDE_OIL_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
     public static final RegistryObject<Item> GASOLINE_BUCKET = ITEMS.register("gasoline_bucket", ()-> new BucketItem(()->registerFluids.GASOLINE_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
     public static final RegistryObject<Item> DIESEL_BUCKET = ITEMS.register("diesel_bucket", ()-> new BucketItem(()->registerFluids.DIESEL_SOURCE, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
@@ -302,10 +308,12 @@ public class registerItems {
         }
     });
 
-    public static final RegistryObject<Item> ABYDOS_550 = registerManager.ITEMS.register("abydos550", () -> new ItemAbydos550(false, 2, 30, 72, 3, registerSounds.RIFLE_FIRE_SUPPRESSED, SoundEvents.LEVER_CLICK, 0, 0.5F, new Item.Properties()
-            .setISTER(() -> ItemAbydos550Renderer::new)
-            .tab(PA_WEAPONS).stacksTo(1), true, MAGAZINE_5_56.get()));
+    //Shooty stuff
 
+
+    public static final RegistryObject<Item> WHITEFANG_465 = registerManager.ITEMS.register("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+
+    //not-so-shooty-stuff
     public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> CRESCENTKATANA_SHIRO = registerManager.ITEMS.register("crescentkatana_shiro", () -> new ModSwordItem(ModMaterials.CRESCENT_KATANA_SHIRO, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));

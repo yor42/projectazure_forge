@@ -411,7 +411,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_parts", has(registerItems.MECHANICAL_PARTS.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.ABYDOS_550.get(), 1)
+        ShapedRecipeBuilder.shaped(registerItems.WHITEFANG_465.get(), 1)
                 .define('P', ModTags.Items.PLATE_STEEL)
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .define('B', registerItems.STEEL_RIFLE_FRAME.get())

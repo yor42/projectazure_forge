@@ -106,7 +106,7 @@
   "item.projectazure.defib_charger": "Defibrillator Charger",
   "item.projectazure.defib_charger.tooltip": "Device with battery and capacitor. used for conducting electrical shock to fallen companion's heart.",
 
-  "item.projectazure.abydos550": "WHITE FANG 465",
+  "item.projectazure.whitefang465": "WHITE FANG 465",
 
   "item.projectazure.missiledrone": "Missile Drone",
 
@@ -189,6 +189,10 @@
   "block.projectazure.drydock_controller": "Drydock Controller",
   "block.projectazure.drydock_controller.tooltip":"Brain of Drydock; part of multiblock Structure.",
   "block.projectazure.machine_frame": "Machine Frame",
+  "block.projectazure.itemhatch": "Item Hatch",
+  "block.projectazure.energyhatch": "Energy Hatch",
+  "block.projectazure.machine_dynamo": "Dynamo Coil",
+  "block.projectazure.originiumgenerator": "Originium Generator Controller",
   "block.projectazure.reenforced_plank": "Reenforced Wooden Plank",
   "block.projectazure.reenforced_concrete": "Reenforced Concrete",
   "block.projectazure.reenforced_concrete.tooltip":"Concrete Reenforced with steel; part of multiblock Structure.",

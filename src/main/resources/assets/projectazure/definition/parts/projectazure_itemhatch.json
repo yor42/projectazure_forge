@@ -1,0 +1,56 @@
+{
+  "canShared": true,
+  "location": "projectazure:itemhatch",
+  "traits": {
+    "item": [
+      {
+        "cIO": 2,
+        "gIO": 2,
+        "x": 70,
+        "y": 62,
+        "autoIO": false
+      },
+      {
+        "cIO": 2,
+        "gIO": 2,
+        "x": 88,
+        "y": 62,
+        "autoIO": false
+      },
+      {
+        "cIO": 2,
+        "gIO": 2,
+        "x": 88,
+        "y": 80,
+        "autoIO": false
+      },
+      {
+        "cIO": 2,
+        "gIO": 2,
+        "x": 70,
+        "y": 80,
+        "autoIO": false
+      }
+    ],
+    "background": "projectazure:textures/gui/itemhatch_gui.png"
+  },
+  "allowRotate": false,
+  "showInJei": true,
+  "baseRenderer": {
+    "modelLocation": "multiblocked:item_hatch",
+    "type": "imodel"
+  },
+  "properties": {
+    "isOpaque": true,
+    "destroyTime": 5.0,
+    "explosionResistance": 6.0,
+    "harvestLevel": 1,
+    "lightEmissive": 0,
+    "speedFactor": 1.0,
+    "jumpFactor": 1.0,
+    "friction": 0.6,
+    "hasCollision": true,
+    "tabGroup": "pa_machines",
+    "stackSize": 64
+  }
+}

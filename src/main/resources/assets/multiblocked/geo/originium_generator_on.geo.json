@@ -7,8 +7,8 @@
 				"texture_width": 512,
 				"texture_height": 512,
 				"visible_bounds_width": 6,
-				"visible_bounds_height": 5,
-				"visible_bounds_offset": [0, 0.5, 0]
+				"visible_bounds_height": 7,
+				"visible_bounds_offset": [0, -0.5, 0]
 			},
 			"bones": [
 				{
@@ -201,7 +201,59 @@
 				{
 					"name": "emissive",
 					"parent": "bone20",
-					"pivot": [0, -64, 16]
+					"pivot": [0, -64, 16],
+					"cubes": [
+						{
+							"origin": [-13, -17.95, 22],
+							"size": [26, 0, 15],
+							"uv": {
+								"north": {"uv": [182, 189], "uv_size": [26, 33]},
+								"east": {"uv": [163, 189], "uv_size": [19, 33]},
+								"south": {"uv": [227, 189], "uv_size": [26, 33]},
+								"west": {"uv": [208, 189], "uv_size": [19, 33]},
+								"up": {"uv": [15, 333], "uv_size": [26, 15]},
+								"down": {"uv": [209, 317], "uv_size": [26, -15]}
+							}
+						},
+						{
+							"origin": [-5, 32.04987, 18.99901],
+							"size": [10, 0, 2],
+							"pivot": [0, 31.99987, 1.99901],
+							"rotation": [-82.5, 0, 0],
+							"uv": {
+								"north": {"uv": [182, 189], "uv_size": [26, 33]},
+								"east": {"uv": [163, 189], "uv_size": [19, 33]},
+								"south": {"uv": [227, 189], "uv_size": [26, 33]},
+								"west": {"uv": [208, 189], "uv_size": [19, 33]},
+								"up": {"uv": [132, 303], "uv_size": [10, 2]},
+								"down": {"uv": [209, 317], "uv_size": [26, -15]}
+							}
+						},
+						{
+							"origin": [-21, -21.95, 8],
+							"size": [8, 0, 29],
+							"uv": {
+								"north": {"uv": [219, 127], "uv_size": [-8, 29]},
+								"east": {"uv": [248, 127], "uv_size": [-29, 8]},
+								"south": {"uv": [256, 127], "uv_size": [-8, 29]},
+								"west": {"uv": [211, 127], "uv_size": [-29, 8]},
+								"up": {"uv": [268, 127], "uv_size": [-8, 29]},
+								"down": {"uv": [274, 118], "uv_size": [-8, -29]}
+							}
+						},
+						{
+							"origin": [13, -21.95, 8],
+							"size": [8, 0, 29],
+							"uv": {
+								"north": {"uv": [211, 127], "uv_size": [8, 29]},
+								"east": {"uv": [182, 127], "uv_size": [29, 8]},
+								"south": {"uv": [248, 127], "uv_size": [8, 29]},
+								"west": {"uv": [219, 127], "uv_size": [29, 8]},
+								"up": {"uv": [260, 127], "uv_size": [8, 29]},
+								"down": {"uv": [266, 118], "uv_size": [8, -29]}
+							}
+						}
+					]
 				},
 				{
 					"name": "bone19",
@@ -726,11 +778,6 @@
 							}
 						}
 					]
-				},
-				{
-					"name": "emissive2",
-					"parent": "bone",
-					"pivot": [0, -64, 17]
 				}
 			]
 		}

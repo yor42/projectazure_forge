@@ -3,10 +3,6 @@ package com.yor42.projectazure.setup.register;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.items.ItemRecruitBeaconRenderer;
 import com.yor42.projectazure.gameobject.blocks.*;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityEnergyHatch;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityFluidHatch;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityItemHatch;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.MultiblockSteelFrame;
 import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
@@ -17,11 +13,9 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,12 +47,7 @@ public class registerBlocks {
 
 
     public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
-            new MultiblockStructureBlocks((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
-                @Override
-                public TileEntity createTileEntity(@Nonnull BlockState state, @Nonnull IBlockReader world) {
-                    return new MultiblockSteelFrame();
-                }
-            }, Main.PA_RESOURCES);
+            new Block((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
 
 
     public static final RegistryObject<Block> METAL_PRESS = register_blockWithToolTiponItem("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
@@ -73,31 +62,8 @@ public class registerBlocks {
 
     public static final RegistryObject<Block> MACHINE_COMPONENTBLOCK = register("machine_component", ()->new Block((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
     public static final RegistryObject<Block> MACHINE_DYNAMO = register("machine_dynamo", ()->new RotatedPillarBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
-    public static final RegistryObject<Block> ITEM_HATCH = register("item_hatch", ()->new HatchBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
-        @Nonnull
-        @Override
-        public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-            return new TileEntityItemHatch();
-        }
-    }, Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> FLUID_HATCH = register("fluid_hatch", ()->new HatchBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
-        @Nonnull
-        @Override
-        public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-            return new TileEntityFluidHatch();
-        }
-    }, Main.PA_MACHINES);
-
-    public static final RegistryObject<Block> ENERGY_HATCH = register("energy_hatch", ()->new HatchBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))){
-        @Nonnull
-        @Override
-        public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-            return new TileEntityEnergyHatch();
-        }
-    }, Main.PA_MACHINES);
-
-    public static final RegistryObject<Block> ORIGINIUM_GENERATOR_CONTROLLER = register("originium_generator_controller", ()->new OrientableBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
+    //public static final RegistryObject<Block> ORIGINIUM_GENERATOR_CONTROLLER = register("originium_generator_controller", ()->new OrientableBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
 
     private static <T extends Block> RegistryObject<T> register_noItem(String name, Supplier<T> block){
         return registerManager.BLOCKS.register(name, block);
