@@ -1,5 +1,6 @@
 package com.yor42.projectazure.libs.utils;
 
+import com.lowdragmc.multiblocked.client.renderer.impl.MBDIModelRenderer;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 
@@ -18,7 +19,10 @@ public class ResourceUtils {
             return ModResourceLocation("geo/entity/"+FileName);
     }
 
-
+    public static MBDIModelRenderer getMBDBlockModel(String filename){
+        ResourceLocation loc = ModResourceLocation("block/"+filename);
+        return new MBDIModelRenderer(loc);
+    }
 
     public static ResourceLocation TextureEntityLocation(String Filename){
         if(!Filename.contains(".png"))

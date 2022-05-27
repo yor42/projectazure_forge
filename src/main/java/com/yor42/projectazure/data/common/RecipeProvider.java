@@ -332,20 +332,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_orundum", has(registerItems.ORUNDUM.get()))
                 .save(consumer);
 
-
-        ShapedRecipeBuilder.shaped(registerBlocks.DRYDOCKCONTROLLER.get(), 1)
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
-                .define('A', ModTags.Items.GEAR_STEEL)
-                .define('L', Items.REDSTONE_LAMP)
-                .define('M', registerItems.BASIC_MOTOR.get())
-                .define('O', registerItems.ORUNDUM.get())
-                .pattern("COC")
-                .pattern("LFL")
-                .pattern("MAM")
-                .unlockedBy("has_orundum", has(registerItems.ORUNDUM.get()))
-                .save(consumer);
-
         ShapedRecipeBuilder.shaped(registerItems.SLEDGEHAMMER.get())
                 .define('S', registerItems.STEEL_PIPE.get())
                 .define('B', Tags.Items.STORAGE_BLOCKS_IRON)

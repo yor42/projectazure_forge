@@ -10,6 +10,7 @@ import com.lowdragmc.multiblocked.api.definition.PartDefinition;
 import com.lowdragmc.multiblocked.api.pattern.JsonBlockPattern;
 import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
@@ -42,8 +43,7 @@ public class registerMultiBlocks {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerMultiBlocksonEvent(RegistryEvent.Register<Block> event){
-        registerPartDef();
-        registerMultiblockDef();
+        HatchTE.registerItemHatch();
     }
 
     private static void registerMultiblockDef(){

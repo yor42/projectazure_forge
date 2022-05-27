@@ -40,8 +40,6 @@ public class registerBlocks {
     public static final RegistryObject<Block> GASOLINE = register_noItem("gasoline", ()->new FlowingFluidBlock(()->registerFluids.GASOLINE_SOURCE, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> DIESEL = register_noItem("diesel", ()->new FlowingFluidBlock(()->registerFluids.DIESEL_SOURCE, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
     public static final RegistryObject<Block> FUEL_OIL = register_noItem("fuel_oil", ()->new FlowingFluidBlock(()->registerFluids.FUEL_OIL_SOURCE, AbstractBlock.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-    public static final RegistryObject<Block> BOUNDING_BOX = register_noItem("boundingbox", ()->new BoundingBoxBlock(AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()));
-
 
     public static final RegistryObject<Block> REENFORCED_PLANK = register("reenforced_plank",() -> new Block(AbstractBlock.Properties.of(Material.WOOD).harvestLevel(2).strength(4F, 6F)), Main.PA_RESOURCES);
 
@@ -55,8 +53,7 @@ public class registerBlocks {
     public static final RegistryObject<Block> BASIC_REFINERY = register_blockWithToolTiponItem("basic_refinery", ()->new BasicRefineryBlock(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).lightLevel(registerBlocks.getLightValueLit(8)).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
     public static final RegistryObject<Block> CRYSTAL_GROWTH_CHAMBER = register_blockWithToolTiponItem("crystal_growth_chamber", ()->new CrystalGrowthChamberBlock(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).lightLevel((block)->0).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> DRYDOCKCONTROLLER = register_blockWithToolTiponItem("drydock_controller",()-> new blockMultiblockDryDockController(AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()), Main.PA_MACHINES);
-    public static final RegistryObject<Block> REENFORCEDCONCRETE = register_blockWithToolTiponItem("reenforced_concrete",()-> new MultiblockStructureBlocks(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> REENFORCEDCONCRETE = register_blockWithToolTiponItem("reenforced_concrete",()-> new Block(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
 
     public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties().setISTER(()-> ItemRecruitBeaconRenderer::new));
 

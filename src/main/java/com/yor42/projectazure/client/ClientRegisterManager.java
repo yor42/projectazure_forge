@@ -17,7 +17,6 @@ public class ClientRegisterManager {
         ScreenManager.register(registerManager.METAL_PRESS_CONTAINER.get(), guiMetalPress::new);
         ScreenManager.register(registerManager.ALLOY_FURNACE_CONTAINER.get(), guiAlloyFurnace::new);
         ScreenManager.register(registerManager.RECRUIT_BEACON_CONTAINER.get(), guiRecruitBeacon::new);
-        ScreenManager.register(registerManager.DRYDOCK_CONTAINER.get(), guiDryDock::new);
         ScreenManager.register(registerManager.BASIC_REFINERY_CONTAINER.get(), guiBasicRefinery::new);
         ScreenManager.register(registerManager.GROWTH_CHAMBER_CONTAINER.get(), GuiCrystalGrowthChamber::new);
     }

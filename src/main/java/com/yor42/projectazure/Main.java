@@ -4,7 +4,6 @@ import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.client.ClientRegisterManager;
-import com.yor42.projectazure.client.renderer.block.DrydockControllerRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer;
 import com.yor42.projectazure.client.renderer.entity.*;
@@ -184,7 +183,6 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.CLAYMORE.get(), EntityClaymoreRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(registerTE.METAL_PRESS.get(), MachineMetalPressRenderer::new);
-        ClientRegistry.bindTileEntityRenderer(registerTE.DRYDOCK.get(), DrydockControllerRenderer::new);
         ClientRegistry.bindTileEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
 
         ModBusEventHandlerClient.setup();
