@@ -1,7 +1,12 @@
 package com.yor42.projectazure;
 
+import com.lowdragmc.multiblocked.api.recipe.ItemsIngredient;
+import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
+import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
+import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
+import com.tac.guns.init.ModItems;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
@@ -11,8 +16,11 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityClaymoreRenderer
 import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRenderer;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.*;
+import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.events.ModBusEventHandlerClient;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressControllerTE;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.intermod.top.TOPCompat;
@@ -23,10 +31,15 @@ import com.yor42.projectazure.setup.register.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -35,10 +48,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -109,6 +119,7 @@ public class Main
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::finishSetup);
         // Register the enqueueIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         // Register the processIMC method for modloading
@@ -124,8 +135,119 @@ public class Main
         // Register ourselves for server and other game events we are interested i
     }
 
+    private void finishSetup(FMLLoadCompleteEvent t) {
+        t.enqueueWork(()->{
+
+        });
+    }
+
     private void setup(final FMLCommonSetupEvent event)
     {
+        event.enqueueWork(()->{
+            try{
+                OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.recipeMap.start().name("prime_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.ORIGINIUM_PRIME.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 2000).duration(1200).buildAndRegister();
+                OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.recipeMap.start().name("originite_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.ORIGINITE.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 4000).duration(400).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("9mm")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.PLATE_BRASS.get())))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER)))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_LEAD.get())))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_COPPER.get())))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_9.get(), 16)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("12gauge")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.PLATE_BRASS.get())))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER)))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_LEAD.get()), 12))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.PAPER), 2))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_10g.get(), 16)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("357magnum")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.PLATE_BRASS.get())))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER), 2))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_LEAD.get()), 2))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.DIAMOND), 1))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.MAGNUM_BULLET.get(), 12)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("50bmg")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_BRASS.get()), 2))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER), 3))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_LEAD.get()), 3))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.DIAMOND), 1))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.MAGNUM_BULLET.get(), 12)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("30winchester")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_BRASS.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER), 2))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_COPPER.get()), 8))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_LEAD.get()), 8))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_30_WIN.get(), 10)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("308win")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_BRASS.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER), 3))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_LEAD.get()), 8))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_COPPER.get())))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_308.get(), 24)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("7.62x25")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.PLATE_BRASS.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER)))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_LEAD.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_COPPER.get()), 4))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_762x39.get(), 30)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("7.62x39")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_BRASS.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER)))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_LEAD.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_COPPER.get()), 4))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_762x39.get(), 30)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("7.62x54")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_BRASS.get()), 2))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER)))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_LEAD.get()), 2))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_COPPER.get()), 2))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_762x39.get(), 20)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("45acp")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.PLATE_BRASS.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER)))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_LEAD.get()), 16))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_COPPER.get()), 1))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_45.get(), 16)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("5.56")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.PLATE_BRASS.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER)))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_LEAD.get()), 16))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.NUGGET_COPPER.get()), 24))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_556.get(), 32)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+                AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("5.8mm")
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.PLATE_IRON.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Items.GUNPOWDER), 2))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_LEAD.get()), 1))
+                        .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.INGOT_COPPER.get()), 1))
+                        .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_58x42.get(), 40)))
+                        .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+            }
+            catch (Exception e){
+                Main.LOGGER.error("Failed to register recipe:"+e.getMessage());
+            }
+        });
         ProjectAzurePlayerCapability.registerCapability();
         CapabilityMultiInventory.register();
         registerEntity.RegisterAttributes();

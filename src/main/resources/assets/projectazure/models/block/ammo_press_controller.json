@@ -2,7 +2,7 @@
   "parent": "minecraft:block/orientable",
   "textures": {
     "top": "projectazure:block/machine_frame",
-    "front": "projectazure:block/originium_generator_controller",
+    "front": "projectazure:block/ammo_press_controller",
     "side": "projectazure:block/machine_frame"
   }
 }

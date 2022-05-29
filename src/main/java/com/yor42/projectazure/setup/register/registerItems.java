@@ -172,6 +172,8 @@ public class registerItems {
 
     public static final RegistryObject<Item> STEEL_CUTTER = registerManager.ITEMS.register("steel_cutter", () -> new ItemCraftTool(70));
 
+    public static final RegistryObject<Item> GLITCHED_PHONE = registerManager.ITEMS.register("glitched_phone", () -> new Item(new Item.Properties().stacksTo(1).tab(PA_GROUP)));
+
 
     public static final RegistryObject<Item> MAGAZINE_5_56 = registerManager.ITEMS.register("5.56_magazine", () -> new ItemMagazine(enums.AmmoCalibur.AMMO_5_56, 30, new Item.Properties()
             .tab(PA_GROUP)
