@@ -105,7 +105,7 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
 
             return PlayState.STOP;
         }
-        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd_chest", true));
             return PlayState.CONTINUE;
         }
@@ -346,7 +346,7 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
             EyeDelta = EyeDelta.normalize();
             double EyeCheckFinal = PlayerLook.dot(EyeDelta);
 
-            if (EyeCheckFinal > 0.998 && this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)==0) {
+            if (EyeCheckFinal > 0.998 && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
                 this.setWearingHood(!this.isWearingHood());
                 return ActionResultType.SUCCESS;
             }

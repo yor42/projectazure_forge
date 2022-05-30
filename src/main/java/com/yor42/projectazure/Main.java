@@ -1,7 +1,6 @@
 package com.yor42.projectazure;
 
 import com.lowdragmc.multiblocked.api.recipe.ItemsIngredient;
-import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.tac.guns.client.render.gun.IOverrideModel;
@@ -16,7 +15,6 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityClaymoreRenderer
 import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRenderer;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.*;
-import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.events.ModBusEventHandlerClient;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressControllerTE;
@@ -34,12 +32,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -55,7 +50,6 @@ import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
-import software.bernie.example.registry.ItemRegistry;
 import software.bernie.geckolib3.GeckoLib;
 
 import java.lang.reflect.Field;

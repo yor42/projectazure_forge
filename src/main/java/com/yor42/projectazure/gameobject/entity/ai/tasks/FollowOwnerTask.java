@@ -5,6 +5,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
+import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.entity.LivingEntity;
@@ -34,7 +35,7 @@ public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld world, AbstractEntityCompanion entity) {
         LivingEntity owner = entity.getOwner();
-        return owner!=null && !owner.onClimbable() && entity.distanceTo(owner)>=(entity.getBrain().hasMemoryValue(NEAREST_ORE.get()) || entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET)? 16:6);
+        return owner!=null && !owner.onClimbable() && entity.distanceTo(owner)>=(entity.getBrain().hasMemoryValue(NEAREST_ORE.get()) || entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET)|| entity.getBrain().hasMemoryValue(registerManager.NEAREST_WORLDSKILLABLE.get())? 16:6);
     }
 
     protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion entity, long p_212831_3_) {

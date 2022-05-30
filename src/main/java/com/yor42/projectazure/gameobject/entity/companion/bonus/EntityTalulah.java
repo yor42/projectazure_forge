@@ -8,7 +8,10 @@ import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
+import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.mixin.FurnaceAccessors;
+import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -21,10 +24,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.TieredItem;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -35,11 +45,12 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 
 import static com.yor42.projectazure.libs.enums.EntityType.REUNION;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
-public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IMeleeAttacker, ISpellUser {
+public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IMeleeAttacker, ISpellUser, IWorldSkillUseable {
     public EntityTalulah(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -65,7 +76,11 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         else if(this.swinging){
             return PlayState.STOP;
         }
-        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.isUsingWorldSkill()){
+            event.getController().setAnimation(builder.addAnimation("worldskill", true));
+            return PlayState.CONTINUE;
+        }
+        else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }
@@ -282,6 +297,53 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
                 target.hurt(DamageSource.mobAttack(this), this.getAttackDamageMainHand());
             }
         }
+    }
+
+    @Override
+    public boolean canUseWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion companion) {
+        TileEntity te = world.getBlockEntity(pos);
+        if(te instanceof AbstractFurnaceTileEntity){
+            AbstractFurnaceTileEntity furnace = (AbstractFurnaceTileEntity)te;
+            IRecipeType<? extends AbstractCookingRecipe> recipe = ((FurnaceAccessors) furnace).getRecipeType();
+            Optional<? extends AbstractCookingRecipe> output = furnace.getLevel().getRecipeManager().getRecipeFor(recipe, furnace, furnace.getLevel());
+            if(!output.isPresent())
+                return false;
+            ItemStack fuelstack = furnace.getItem(1);
+            if(ForgeHooks.getBurnTime(fuelstack, recipe)>0 || (fuelstack.isEmpty() && ((FurnaceAccessors) furnace).getDataAccess().get(0)>10)){
+                return false;
+            }
+            ItemStack existingOutput = furnace.getItem(2);
+            if(existingOutput.isEmpty())
+                return true;
+            ItemStack outStack = output.get().getResultItem();
+            if(!existingOutput.sameItem(outStack))
+                return false;
+            int stackSize = existingOutput.getCount()+outStack.getCount();
+            return stackSize <= furnace.getMaxStackSize()&&stackSize <= outStack.getMaxStackSize();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean executeWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity) {
+        return false;
+    }
+
+    @Override
+    public float getWorldSkillRange() {
+        return 2.5F;
+    }
+
+    @Override
+    public boolean executeWorldSkillTick(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity) {
+        TileEntity te = world.getBlockEntity(pos);
+        if(te instanceof AbstractFurnaceTileEntity){
+            AbstractFurnaceTileEntity furnace = (AbstractFurnaceTileEntity)te;
+            ((FurnaceAccessors) furnace).getDataAccess().set(0, 10);
+            this.level.setBlock(pos, this.level.getBlockState(pos).setValue(AbstractFurnaceBlock.LIT, true), 3);
+            furnace.setChanged();
+        }
+        return false;
     }
 
     @Override

@@ -2,9 +2,14 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
+        maven {
+            name = "spongepowered"
+            url = "https://repo.spongepowered.org/maven"
+        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
 
@@ -12,13 +17,17 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+//we mix some ins
+apply plugin: 'org.spongepowered.mixin'
 
 version = '0.5.7'
 group = 'com.yor42.projecrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = project.archive_basename
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-
+mixin {
+    add sourceSets.main, "projectazure.refmap.json"
+}
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -40,6 +49,10 @@ minecraft {
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
+            arg "-mixin.config=mixin.projectazure.json"
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
@@ -58,7 +71,9 @@ minecraft {
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
+            arg "-mixin.config=mixin.projectazure.json"
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
@@ -77,7 +92,9 @@ minecraft {
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
+            arg "-mixin.config=mixin.projectazure.json"
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
@@ -137,7 +154,8 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.35'
-
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     //Geckoilib
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.71')
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
@@ -199,6 +217,8 @@ jar {
         attributes([
             "Specification-Title": "projectazure",
             "Specification-Vendor": "yor42",
+            "MixinConfigs": "mixin.projectazsure.json",
+            "MixinConnector": "com.yor42.projectazure.MixinConnector",
             "Specification-Version": "0.00.1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",

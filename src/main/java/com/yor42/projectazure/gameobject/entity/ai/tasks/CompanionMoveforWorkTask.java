@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.BrainUtil;
@@ -12,9 +13,12 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 
+import static com.yor42.projectazure.setup.register.registerManager.NEAREST_WORLDSKILLABLE;
+
 public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
     private final float MaxDistance;
     private BlockPos position;
+    private boolean isWorldSkill = false;
     public CompanionMoveforWorkTask(float maxDistance) {
         super(ImmutableMap.of(registerManager.NEAREST_ORE.get(), MemoryModuleStatus.REGISTERED, registerManager.NEAREST_HARVESTABLE.get(), MemoryModuleStatus.REGISTERED, registerManager.NEAREST_PLANTABLE.get(), MemoryModuleStatus.REGISTERED, registerManager.NEAREST_BONEMEALABLE.get(), MemoryModuleStatus.REGISTERED));
         this.MaxDistance = maxDistance;
@@ -26,7 +30,28 @@ public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, AbstractEntityCompanion entity) {
+
+        if(entity.isAngry()){
+            return false;
+        }
+
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
+
+        if(entity instanceof IWorldSkillUseable){
+            boolean worldskill = brain.getMemory(NEAREST_WORLDSKILLABLE.get()).map((pos)->{
+                this.position = pos;
+                if(entity.getOwner()!=null){
+                    return pos.closerThan(entity.getOwner().blockPosition(), this.MaxDistance);
+                }
+
+                return pos.closerThan(entity.blockPosition(), this.MaxDistance);
+            }).orElse(false);
+            if(worldskill){
+                this.isWorldSkill = true;
+                return true;
+            }
+        }
+
         if(entity.shouldHelpMine()){
             return brain.getMemory(registerManager.NEAREST_ORE.get()).map((pos)-> {
                 this.position = pos;
@@ -44,6 +69,12 @@ public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
-        BrainUtil.setWalkAndLookTargetMemories(entity, this.position,1, 1);
+        if(entity instanceof IWorldSkillUseable && this.isWorldSkill){
+            BrainUtil.setWalkAndLookTargetMemories(entity, this.position,1, (int) ((IWorldSkillUseable) entity).getWorldSkillRange());
+            this.isWorldSkill = false;
+        }
+        else {
+            BrainUtil.setWalkAndLookTargetMemories(entity, this.position, 1, 1);
+        }
     }
 }

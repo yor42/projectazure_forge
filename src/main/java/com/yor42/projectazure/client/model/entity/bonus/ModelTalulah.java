@@ -52,6 +52,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
         IBone body = this.getAnimationProcessor().getBone("Body");
         IBone Faint = this.getAnimationProcessor().getBone("Faint");
         IBone Injured = this.getAnimationProcessor().getBone("Injured");
+        IBone Worldskill = this.getAnimationProcessor().getBone("Worldskill");
 
         if(entity.isDeadOrDying() || (entity.isCriticallyInjured() && entity.isSleeping())){
             NormalFace.setHidden(true);
@@ -65,6 +66,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry3.setHidden(true);
             Faint.setHidden(false);
             Injured.setHidden(true);
+            Worldskill.setHidden(true);
         }
         else if(entity.isCriticallyInjured()){
             NormalFace.setHidden(true);
@@ -78,6 +80,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(false);
+            Worldskill.setHidden(true);
         }
         else if(entity.isAngry()){
             NormalFace.setHidden(true);
@@ -91,6 +94,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry3.setHidden(false);
             Faint.setHidden(true);
             Injured.setHidden(true);
+            Worldskill.setHidden(true);
         }
         else if(entity.getAngerWarningCount() == 2){
             NormalFace.setHidden(true);
@@ -104,6 +108,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
+            Worldskill.setHidden(true);
         }
         else if(entity.islewded()){
             NormalFace.setHidden(true);
@@ -112,6 +117,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             PatFace.setHidden(true);
             SleepFace.setHidden(true);
             Flushed.setHidden(true);
+            Worldskill.setHidden(true);
             Angry1.setHidden(false);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
@@ -128,6 +134,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry1.setHidden(true);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
+            Worldskill.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
@@ -141,10 +148,25 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
             Angry1.setHidden(true);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
+            Worldskill.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
             body.setPositionY(-45);
             body.setPositionZ(-5);
+        }
+        else if(entity.isUsingWorldSkill()){
+            NormalFace.setHidden(true);
+            ExcitedFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            PatFace.setHidden(true);
+            Worldskill.setHidden(false);
+            SleepFace.setHidden(true);
+            Flushed.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(true);
+            Angry3.setHidden(true);
+            Faint.setHidden(true);
+            Injured.setHidden(true);
         }
         else {
             if(this.LastBlinkTime == 0){
@@ -158,6 +180,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
                 Angry2.setHidden(true);
                 Angry3.setHidden(true);
                 Faint.setHidden(true);
+                Worldskill.setHidden(true);
                 Injured.setHidden(true);
                 this.LastBlinkTime = System.currentTimeMillis();
             }
@@ -173,6 +196,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
                     Angry2.setHidden(true);
                     Angry3.setHidden(true);
                     Faint.setHidden(true);
+                    Worldskill.setHidden(true);
                     Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
@@ -187,6 +211,7 @@ public class ModelTalulah extends AnimatedGeoModel<EntityTalulah> {
                     Angry2.setHidden(true);
                     Angry3.setHidden(true);
                     Faint.setHidden(true);
+                    Worldskill.setHidden(true);
                     Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }

@@ -11,6 +11,10 @@
   "item.projectazure.bb_default_rigging": "전함 기본 장비",
   "item.projectazure.cv_default_rigging": "항공모함 기본 장비",
 
+  "item.projectazure.glitched_phone": "Glitched Phone",
+  "item.projectazure.glitched_phone.tooltip1": "Smartphone with no marking or whatsoever.",
+  "item.projectazure.glitched_phone.tooltip2": "Shape of device itself is glitching out...",
+
   "item.projectazure.music_disc": "음반",
   "item.projectazure.oath_ring": "서약 반지",
   "item.projectazure.oath_ring.tooltip": "당신의 동료를 향한 우정을 상징하는 빛나는 반지",
@@ -106,7 +110,7 @@
   "item.projectazure.defib_charger": "제세동기 충전기",
   "item.projectazure.defib_charger.tooltip": "빈사 상태의 동료를 부활시키는데 사용되는 제세동기 본체입니다.",
 
-  "item.projectazure.abydos550": "화이트팽 465",
+  "item.projectazure.whitefang465": "WHITE FANG 465",
 
   "item.projectazure.missiledrone": "미사일 드론",
 
@@ -160,9 +164,10 @@
   "item.projectazure.spawnegg.spawn": "생성: ",
 
   "item.projectazure.bonk_bat.tooltip": "???: Aㅏ. [검열됨]을 만들어 주마.",
-  "item.projectazure.rainbowcube.tooltip1": "주머니 속에 들어있던 신비한 기운을 내뿜는 무지개색 큐브입니다.",
-  "item.projectazure.rainbowcube.tooltip2": "더 세게 쥐면 무슨 일이 일어날까요?",
 
+  "item.projectazure.rainbowcube.owner": "소유자:",
+  "item.projectazure.rainbowcube.tooltip1": "신비한 기운을 내뿜는 무지개색 큐브입니다.",
+  "item.projectazure.rainbowcube.tooltip2": "시작 함선을 선택하려먼 사용하세요.",
 
   "item.tooltip.firerate": "발사 속도",
   "item.tooltip.remainingammo": "남은 탄환",
@@ -181,15 +186,20 @@
   "block.projectazure.metal_press.tooltip": "재료에 강한 힘을 가하는 장비입니다.",
   "block.projectazure.alloy_furnace": "합금로",
   "block.projectazure.alloy_furnace.tooltip": "2개의 금속을 혼합해 하나의 합금으로 만드는 화로입니다.",
-  "block.projectazure.crystal_growth_chamber": "결정성장실",
+  "block.projectazure.crystal_growth_chamber": "결정 성장실",
   "block.projectazure.crystal_chamber": "결정성장실",
   "block.projectazure.crystal_growth_chamber.tooltip": "수용액으로부터 고순도의 결정을 만드는 기계입니다.",
   "block.projectazure.basic_refinery": "기본 정유기",
   "block.projectazure.basic_refinery.tooltip": "원유를 다양한 연료로 바꾸는 기계입니다.",
+  "block.projectazure.drydock_controller": "Drydock Controller",
+  "block.projectazure.drydock_controller.tooltip": "Brain of Drydock; part of multiblock Structure.",
   "block.projectazure.machine_frame": "기계 프레임",
+  "block.projectazure.item_hatch": "아이템 해치",
+  "block.projectazure.energy_hatch": "에너지 해치",
+  "block.projectazure.machine_dynamo": "다이너모 코일",
+  "block.projectazure.originium_generator": "오리지늄 반응로",
   "block.projectazure.reenforced_plank": "강화된 판자",
   "block.projectazure.reenforced_concrete": "강화 콘크리트",
-  "block.projectazure.originium_generator": "오리지늄 반응로",
   "block.projectazure.reenforced_concrete.tooltip": "강철로 보강된 콘크리트입니다; 멀티블럭 구조물의 일부로 쓰입니다.",
   "block.projectazure.orirock": "오리지늄 원암",
   "block.projectazure.nether_quartz_solution": "네더 석영 수용액",
@@ -247,6 +257,10 @@
   "gui.teamformation.pages": "%s 페이지",
   "gui.teamformation.title": "팀 관리",
   "gui.membermanagement.title": "팀원 추가",
+
+  "gui.initialspawnsetselect.selectpath": "> 출발점을 선택하세요...",
+  "message.glitchedphone.selected_0": "스마트폰이 빛을 발하기 시작하더니 이내 서류 더미로 변하며 사라집니다. 이건... 누군가의 프로필 같군요?",
+  "message.glitchedphone.selected_1": "스마트폰이 빛을 발하기 시작하더니 이내 빛과 열을 발하는 무지개색 정육면체로 변하며 사라집니다.",
 
   "entity.status.relaxing": "Resting",
   "entity.status.sitting": "Sitting",
@@ -424,5 +438,6 @@
   "top.companion_owner.message": "지휘관: %s",
 
 
-  "gui.tooltip.homepos": "현재 침대 위치"
+  "gui.tooltip.homepos": "현재 침대 위치",
+  "item.projectazure.abydos550": "화이트팽 465"
 }

@@ -6,7 +6,9 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.mixin.FurnaceAccessors;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -19,10 +21,17 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -31,6 +40,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUser {
     public EntityFrostnova(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -62,7 +72,7 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
         else if(this.swinging){
             return PlayState.STOP;
         }
-        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }

@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.client.gui.GuiALStarterSpawn;
+import com.yor42.projectazure.client.gui.GuiInitialSpawnSetSelection;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -21,9 +22,10 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class itemRainbowWisdomCube extends Item {
-    public itemRainbowWisdomCube(Properties properties) {
-        super(properties);
+public class ItemGlitchedPhone extends Item {
+
+    public ItemGlitchedPhone(Properties p_i48487_1_) {
+        super(p_i48487_1_);
     }
 
     @Override
@@ -43,15 +45,15 @@ public class itemRainbowWisdomCube extends Item {
         }
         if(worldIn.isClientSide){
             //openGui
-            this.openGUI();
+            this.openGUI(handIn);
             return ActionResult.success(playerIn.getItemInHand(handIn));
         }
         return ActionResult.pass(playerIn.getItemInHand(handIn));
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void openGUI(){
-        Minecraft.getInstance().setScreen(new GuiALStarterSpawn(new TranslationTextComponent("gui.StarterSelection")));
+    private void openGUI(Hand hand){
+        Minecraft.getInstance().setScreen(new GuiInitialSpawnSetSelection(hand));
     }
 
     @Override
@@ -75,7 +77,8 @@ public class itemRainbowWisdomCube extends Item {
                 tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.owner").withStyle(TextFormatting.GRAY).append(new StringTextComponent(": ")).append(new StringTextComponent(OwnerID.toString()).withStyle(TextFormatting.RED)));
             }
         }
-        tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.tooltip1").withStyle(TextFormatting.GRAY));
-        tooltip.add(new TranslationTextComponent("item.projectazure.rainbowcube.tooltip2").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.projectazure.glitched_phone.tooltip1").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("item.projectazure.glitched_phone.tooltip2").withStyle(TextFormatting.GRAY));
     }
+
 }

@@ -19,7 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.yor42.projectazure.libs.Constants.StarterList;
 
 @OnlyIn(Dist.CLIENT)
-public class guiStarterSpawn extends Screen {
+public class GuiALStarterSpawn extends Screen {
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/rainbow_cube_gui.png");
 
@@ -34,7 +34,7 @@ public class guiStarterSpawn extends Screen {
 
     private final int buttonWidth = 59;
 
-    public guiStarterSpawn(ITextComponent titleIn) {
+    public GuiALStarterSpawn(ITextComponent titleIn) {
         super(titleIn);
     }
 

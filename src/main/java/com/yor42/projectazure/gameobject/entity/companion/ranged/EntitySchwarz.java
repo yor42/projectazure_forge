@@ -62,7 +62,7 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
         else if(this.swinging){
             return PlayState.STOP;
         }
-        else if(this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0 && !this.isAngry()){
+        else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;
         }

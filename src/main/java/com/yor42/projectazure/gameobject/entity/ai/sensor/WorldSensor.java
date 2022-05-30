@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.entity.ai.sensor;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.block.*;
@@ -33,15 +34,17 @@ import static net.minecraft.block.FarmlandBlock.MOISTURE;
 
 public class WorldSensor extends Sensor<AbstractEntityCompanion> {
 
-    BlockPos LastUpdated;
+    private BlockPos LastUpdated;
+    private int lastUpdatedTime = 0;
 
     @Override
     protected void doTick(@Nonnull ServerWorld world, @Nonnull AbstractEntityCompanion entity) {
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
-        if((this.LastUpdated == null || this.LastUpdated.distSqr(entity.blockPosition())>=4 || !brain.hasMemoryValue(NEAREST_ORE.get())|| !brain.hasMemoryValue(NEAREST_HARVESTABLE.get())|| !brain.hasMemoryValue(NEAREST_PLANTABLE.get())|| !brain.hasMemoryValue(NEAREST_BONEMEALABLE.get())) && this.shouldWork(entity)){
+        if((this.LastUpdated == null || this.LastUpdated.distSqr(entity.blockPosition())>=4 || entity.tickCount-this.lastUpdatedTime>=200 || !brain.hasMemoryValue(NEAREST_ORE.get())|| !brain.hasMemoryValue(NEAREST_HARVESTABLE.get())|| !brain.hasMemoryValue(NEAREST_PLANTABLE.get())|| !brain.hasMemoryValue(NEAREST_BONEMEALABLE.get())) && (this.shouldWork(entity) || (entity instanceof IWorldSkillUseable && !entity.getBrain().hasMemoryValue(NEAREST_WORLDSKILLABLE.get())))){
             brain.eraseMemory(NEAREST_ORE.get());
             brain.eraseMemory(NEAREST_HARVESTABLE.get());
             brain.eraseMemory(NEAREST_PLANTABLE.get());
+            brain.eraseMemory(NEAREST_WORLDSKILLABLE.get());
             brain.eraseMemory(registerManager.NEAREST_BONEMEALABLE.get());
 
             List<Pair<BlockPos, enums.ResourceBlockType>> blocklist = UpdateBlockList(world, entity).stream().filter((entry) -> {
@@ -60,10 +63,14 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
             blocklist.stream().filter((entry)->entry.getSecond() == CROP_PLANTABLE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
                 brain.setMemory(NEAREST_PLANTABLE.get(), pos);
             });
+            blocklist.stream().filter((entry)->entry.getSecond() == WORLDSKILL).map(Pair::getFirst).findFirst().ifPresent((pos)->{
+                brain.setMemory(NEAREST_WORLDSKILLABLE.get(), pos);
+            });
             blocklist.stream().filter((entry)->entry.getSecond() == CROP_BONEMEALABLE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
                 brain.setMemory(registerManager.NEAREST_BONEMEALABLE.get(), pos);
             });
             this.LastUpdated = entity.blockPosition();
+            this.lastUpdatedTime = entity.tickCount;
         }
     }
 
@@ -94,12 +101,13 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
         return BlockList;
     }
 
-    private Optional<enums.ResourceBlockType> getResourceType(AbstractEntityCompanion host, IWorldReader worldIn, BlockPos pos) {
+    private Optional<enums.ResourceBlockType> getResourceType(AbstractEntityCompanion host, ServerWorld worldIn, BlockPos pos) {
         BlockState state = worldIn.getBlockState(pos);
         Block block = state.getBlock();
         BlockState stateBelow = worldIn.getBlockState(pos.below());
         Block blockbelow = stateBelow.getBlock();
         boolean isOre = block instanceof OreBlock || block.is(Tags.Blocks.ORES);
+        boolean crop = block instanceof CropsBlock;
         boolean isCactusorSugarcane = block instanceof SugarCaneBlock || block instanceof CactusBlock;
         BlockRayTraceResult result;
 
@@ -107,8 +115,11 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
         if(isOre||isCactusorSugarcane){
             result = worldIn.clip(new RayTraceContext(host.getEyePosition(1.0F), Vector3d.atCenterOf(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, host));
         }
-        else{
+        else if(crop){
             result = worldIn.clip(new RayTraceContext(host.getEyePosition(1.0F), Vector3d.atBottomCenterOf(pos.above()), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, host));
+        }
+        else{
+            result = worldIn.clip(new RayTraceContext(host.getEyePosition(1.0F), Vector3d.atCenterOf(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, host));
         }
 
         if(!result.getBlockPos().equals(pos)){
@@ -118,6 +129,11 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
 
         if(isOre){
             return Optional.of(ORE);
+        }
+        else if(host instanceof IWorldSkillUseable){
+            if(((IWorldSkillUseable) host).canUseWorldSkill(worldIn, pos, host)){
+                return Optional.of(WORLDSKILL);
+            };
         }
         else if(blockbelow == Blocks.FARMLAND && state.getValue(MOISTURE)>0 && state.getMaterial() == Material.AIR){
             return Optional.of(enums.ResourceBlockType.CROP_PLANTABLE);
@@ -146,6 +162,6 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
     @Nonnull
     @Override
     public Set<MemoryModuleType<?>> requires() {
-        return ImmutableSet.of(NEAREST_ORE.get(), NEAREST_HARVESTABLE.get(), NEAREST_PLANTABLE.get(), registerManager.NEAREST_BONEMEALABLE.get());
+        return ImmutableSet.of(NEAREST_ORE.get(), NEAREST_HARVESTABLE.get(), NEAREST_PLANTABLE.get(), registerManager.NEAREST_BONEMEALABLE.get(), NEAREST_WORLDSKILLABLE.get());
     }
 }

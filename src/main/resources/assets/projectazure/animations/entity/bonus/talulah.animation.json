@@ -417,6 +417,37 @@
 				}
 			}
 		},
+		"worldskill": {
+			"loop": true,
+			"animation_length": 7,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": ["-90.4997+query.head_pitch", "34.8246+query.head_yaw", 12.20041]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 35]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": ["-90+query.head_pitch", "-10+query.head_yaw", 0]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"itemMainHand": {
+					"rotation": {
+						"vector": [27.5, 0, 0]
+					}
+				}
+			}
+		},
 		"idle_arm": {
 			"loop": true,
 			"animation_length": 4,

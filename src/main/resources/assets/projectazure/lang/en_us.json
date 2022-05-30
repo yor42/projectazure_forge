@@ -11,6 +11,10 @@
   "item.projectazure.bb_default_rigging": "Battleship Basic Rigging",
   "item.projectazure.cv_default_rigging": "Aircraft Carrier Basic Rigging",
 
+  "item.projectazure.glitched_phone": "Glitched Phone",
+  "item.projectazure.glitched_phone.tooltip1": "Smartphone with no marking or whatsoever.",
+  "item.projectazure.glitched_phone.tooltip2": "Shape of device itself is glitching out...",
+
   "item.projectazure.music_disc": "Music Disc",
   "item.projectazure.oath_ring": "Oath Ring",
   "item.projectazure.oath_ring.tooltip": "Shiny Ring that means your affection toward your life companion.",
@@ -160,9 +164,10 @@
   "item.projectazure.spawnegg.spawn": "Spawn: ",
 
   "item.projectazure.bonk_bat.tooltip": "Sends every being in existence who dares to cross this bat's path to horny jail. AND THERES NO EXCEPTION.",
-  "item.projectazure.rainbowcube.tooltip1": "Mysterious cube you found in your pocket. It's emitting weird aura with rainbow light.",
-  "item.projectazure.rainbowcube.tooltip2": "maybe you should grab it more firmly...?",
 
+  "item.projectazure.rainbowcube.owner": "Owned by:",
+  "item.projectazure.rainbowcube.tooltip1": "Mysterious cube emitting weird aura with rainbow light.",
+  "item.projectazure.rainbowcube.tooltip2": "Use to select starting companion.",
 
   "item.tooltip.firerate": "Fire Rate",
   "item.tooltip.remainingammo" : "Remaining Ammo",
@@ -253,6 +258,10 @@
   "gui.teamformation.title": "Team Management",
   "gui.membermanagement.title": "Add Member",
 
+  "gui.initialspawnsetselect.selectpath": "> Select your path...",
+  "message.glitchedphone.selected_0": "Strange phone started to shine, and turned into pile of document. it seems like.... a profile?",
+  "message.glitchedphone.selected_1": "Strange phone started to shine, and turned into rainbow cube. its warm, and its glowing...",
+
   "entity.status.relaxing": "Resting",
   "entity.status.sitting": "Sitting",
   "entity.status.waiting": "Waiting for owner",
@@ -292,11 +301,11 @@
   "operator.supporter": "Supporter",
   "operator.reunion": "Reunion",
 
-  "akn_operator": "Operator/Arknights",
-  "akn_reunion": "Reunion/Arknights",
-  "bluearchive": "Gun User/Blue Archive",
-  "al_kansen": "Shipgirl/Azur Lane",
-  "gfl_tdoll": "T-Doll/Girl's Frontline",
+  "akn_operator": "Operator / Arknights",
+  "akn_reunion": "Reunion / Arknights",
+  "bluearchive": "Blue Archive",
+  "al_kansen": "KANSEN / Azur Lane",
+  "gfl_tdoll": "T-Doll / Girl's Frontline",
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entityjavelin": "HMS Javelin",

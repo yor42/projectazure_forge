@@ -96,6 +96,12 @@ public class registerNetwork {
                 .encoder(DeleteHomePacket::encode)
                 .add();
 
+        channel.messageBuilder(SelectInitialSpawnSetPacket.class,14)
+                .consumer(SelectInitialSpawnSetPacket::handle)
+                .decoder(SelectInitialSpawnSetPacket::decode)
+                .encoder(SelectInitialSpawnSetPacket::encode)
+                .add();
+
         return channel;
     }
 

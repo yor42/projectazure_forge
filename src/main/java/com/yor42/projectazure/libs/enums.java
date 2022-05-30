@@ -313,7 +313,8 @@ public class enums {
         ORE,
         CROP_HARVESTABLE,
         CROP_BONEMEALABLE,
-        CROP_PLANTABLE
+        CROP_PLANTABLE,
+        WORLDSKILL
     }
 
     public enum ResourceType {

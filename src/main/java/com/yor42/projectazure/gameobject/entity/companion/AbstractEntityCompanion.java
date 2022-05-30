@@ -394,7 +394,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> PATCOOLDOWN = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> MOVE_MODE = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> PAT_ANIMATION_TIME = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> QUESTIONABLE_INTERACTION_ANIMATION_TIME = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> ECCI_ANIMATION_TIME = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> INTERACTION_WARNING_COUNT = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> PICKUP_ITEM = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -404,6 +404,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Float> VALID_HOME_DISTANCE = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Boolean> ISFORCEWOKENUP = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISUSINGGUN = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> USINGWORLDSKILL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Integer> HEAL_TIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> SKILL_POINTS = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> SKILL_ANIMATION_TIME = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
@@ -430,7 +431,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY,
             MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
             MemoryModuleType.LAST_WOKEN, HURT_AT.get(), NEAREST_BOAT.get(), NEAREST_ORE.get(), NEAREST_HARVESTABLE.get(), NEAREST_PLANTABLE.get(),
-            NEAREST_BONEMEALABLE.get());
+            NEAREST_BONEMEALABLE.get(), NEAREST_WORLDSKILLABLE.get());
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS,
             SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY,
@@ -945,10 +946,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(VALID_HOME_DISTANCE, validDistance);
     }
 
-
-    public Optional<BlockPos> getRecruitStationPos() {
-        return Optional.ofNullable(this.RECRUIT_BEACON_POS);
-    }
 
     public void setRecruitStationPos(BlockPos pos){
         this.RECRUIT_BEACON_POS= pos;
@@ -1466,6 +1463,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.define(HOMEPOS, Optional.empty());
         this.entityData.define(ISFORCEWOKENUP, false);
         this.entityData.define(ISUSINGGUN, false);
+        this.entityData.define(USINGWORLDSKILL, false);
         this.entityData.define(ISFREEROAMING, false);
         this.entityData.define(VALID_HOME_DISTANCE, -1.0f);
         this.entityData.define(HEAL_TIMER, 0);
@@ -1478,12 +1476,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.define(TeamUUID, Optional.empty());
         this.entityData.define(ANGRYTIMER, 0);
         this.entityData.define(INJURYCURETIMER, -1);
-        this.entityData.define(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 0);
+        this.entityData.define(ECCI_ANIMATION_TIME, 0);
         this.entityData.define(INTERACTION_WARNING_COUNT, 0);
         this.entityData.define(SKILL_ITEM_0, ItemStack.EMPTY);
         this.entityData.define(SKILL_ITEM_1, ItemStack.EMPTY);
         this.entityData.define(SKILL_ITEM_2, ItemStack.EMPTY);
         this.entityData.define(SKILL_ITEM_3, ItemStack.EMPTY);
+    }
+
+    public boolean isUsingWorldSkill() {
+        return this.getEntityData().get(USINGWORLDSKILL);
+    }
+
+    public void setUsingWorldSkill(boolean value){
+        this.getEntityData().set(USINGWORLDSKILL, value);
     }
 
     public int getInjuryCureTimer(){
@@ -1571,8 +1577,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
+    @Nonnull
     @MethodsReturnNonnullByDefault
-    public ItemStack eat(World WorldIn, ItemStack foodStack) {
+    public ItemStack eat(@Nonnull World WorldIn, @Nonnull ItemStack foodStack) {
         this.getFoodStats().consume(foodStack.getItem(), foodStack);
         if(!this.getCommandSenderWorld().isClientSide()) {
             Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, foodStack));
@@ -1866,6 +1873,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.getEntityData().set(PAT_ANIMATION_TIME, this.getEntityData().get(PAT_ANIMATION_TIME)-1);
             if(!this.isAngry()) {
                 this.patTimer++;
+                this.getBrain().eraseMemory(WALK_TARGET);
                 this.navigation.stop();
                 if (this.patTimer % 30 == 0 && !this.getCommandSenderWorld().isClientSide()) {
                     if (this.entityData.get(PATEFFECTCOUNT) < this.entityData.get(MAXPATEFFECTCOUNT)) {
@@ -1901,11 +1909,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(!this.getCommandSenderWorld().isClientSide()) {
             int AngerWarningCount = this.entityData.get(INTERACTION_WARNING_COUNT);
             if(this.getOwner() != null && this.getOwner().isAlive()){
-                if (this.getOwner() != null && this.getOwner().isAlive() && this.getEntityData().get(QUESTIONABLE_INTERACTION_ANIMATION_TIME) > 0) {
+                if (!this.isAngry() && this.getOwner() != null && this.getOwner().isAlive() && this.getEntityData().get(ECCI_ANIMATION_TIME) > 0) {
                     this.lookAt(this.getOwner(), 30F, 30F);
+                    this.getBrain().eraseMemory(WALK_TARGET);
                     this.getLookControl().setLookAt(this.getOwner(), 30, 30);
-                    int interactionTime = this.getEntityData().get(QUESTIONABLE_INTERACTION_ANIMATION_TIME);
-                    this.getEntityData().set(QUESTIONABLE_INTERACTION_ANIMATION_TIME, interactionTime - 1);
+                    int interactionTime = this.getEntityData().get(ECCI_ANIMATION_TIME);
+                    this.getEntityData().set(ECCI_ANIMATION_TIME, interactionTime - 1);
                     this.qinteractionTimer += 1;
                     if (this.qinteractionTimer % 30 == 0) {
                         int newWarningCount = AngerWarningCount+1;
@@ -1919,7 +1928,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             if(this.isOrderedToSit()){
                                 this.setOrderedToSit(false);
                             }
-                            this.getEntityData().set(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 0);
+                            this.getEntityData().set(ECCI_ANIMATION_TIME, 0);
                             this.getEntityData().set(ANGRYTIMER, 6000);
                             this.entityData.set(INTERACTION_WARNING_COUNT,0);
                         }
@@ -2519,7 +2528,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean islewded(){
-        return this.getEntityData().get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)>0;
+        return this.getEntityData().get(ECCI_ANIMATION_TIME)>0;
     }
 
     @Override
@@ -2753,7 +2762,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             this.forcewakeupExpireTimer = 20;
                         }
                         return ActionResultType.SUCCESS;
-                    } else if (EyeCheckFinal > 0.998 && this.entityData.get(QUESTIONABLE_INTERACTION_ANIMATION_TIME)==0) {
+                    } else if (EyeCheckFinal > 0.998 && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
                         if (this.getCommandSenderWorld().isClientSide()) {
                             Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.PAT, true));
                         }
@@ -2978,7 +2987,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void startqinteraction(){
-        this.getEntityData().set(QUESTIONABLE_INTERACTION_ANIMATION_TIME, 20);
+        this.getEntityData().set(ECCI_ANIMATION_TIME, 20);
     }
     @Nullable
     public SoundEvent getPatSoundEvent(){

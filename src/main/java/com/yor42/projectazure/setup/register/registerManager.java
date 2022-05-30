@@ -237,6 +237,7 @@ public class registerManager {
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_HARVESTABLE = registerMemoryModuleType("nearest_harvestable");
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_PLANTABLE = registerMemoryModuleType("nearest_plantable");
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_BONEMEALABLE = registerMemoryModuleType("nearest_bonemealable");
+    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_WORLDSKILLABLE = registerMemoryModuleType("nearest_worldskillable");
 
     //Sensors
     public static final RegistryObject<SensorType<EntitySensor>> ENTITY_SENSOR = registerSensorType("entity_sensor", EntitySensor::new);

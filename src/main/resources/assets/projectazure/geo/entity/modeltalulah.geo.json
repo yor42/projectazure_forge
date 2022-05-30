@@ -2140,6 +2140,25 @@
 					]
 				},
 				{
+					"name": "Worldskill",
+					"parent": "Faces",
+					"pivot": [-3, 34.75, -2.65],
+					"cubes": [
+						{
+							"origin": [-6, 50, -6.25],
+							"size": [12, 12, 1],
+							"uv": {
+								"north": {"uv": [0, 166], "uv_size": [13, 13]},
+								"east": {"uv": [28, 140], "uv_size": [1, 13]},
+								"south": {"uv": [30, 32], "uv_size": [13, 13]},
+								"west": {"uv": [29, 140], "uv_size": [1, 13]},
+								"up": {"uv": [15, 86], "uv_size": [13, 1]},
+								"down": {"uv": [136, 108], "uv_size": [13, -1]}
+							}
+						}
+					]
+				},
+				{
 					"name": "flushed",
 					"parent": "Faces",
 					"pivot": [-3, 34.75, -2.65],

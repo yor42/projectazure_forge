@@ -5,6 +5,8 @@ import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -41,4 +43,17 @@ public class serverEvents {
         }
     }
 
+    public static void selectStartkit(ServerPlayerEntity playerEntity, byte id, Hand hand) {
+        playerEntity.getItemInHand(hand).shrink(1);
+        if(id == 0){
+            //AKN
+            playerEntity.setItemInHand(hand, new ItemStack(registerItems.SPAWN_AMIYA.get()));
+        }
+        else{
+            ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
+            CompoundNBT nbt = cubeStack.getOrCreateTag();
+            nbt.putUUID("owner", playerEntity.getUUID());
+            playerEntity.setItemInHand(hand, cubeStack);
+        }
+    }
 }
