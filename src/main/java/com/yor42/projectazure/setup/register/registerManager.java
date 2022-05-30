@@ -1,6 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.mojang.serialization.Codec;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
@@ -29,6 +30,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
+import net.minecraft.entity.ai.brain.schedule.Schedule;
+import net.minecraft.entity.ai.brain.schedule.ScheduleBuilder;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.item.BoatEntity;
@@ -51,6 +54,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
@@ -69,6 +73,7 @@ public class registerManager {
     public static final DeferredRegister<SensorType<?>> SENSORS = DeferredRegister.create(ForgeRegistries.SENSOR_TYPES, Constants.MODID);
     public static final DeferredRegister<Activity> ACTIVITIES = DeferredRegister.create(ForgeRegistries.ACTIVITIES, Constants.MODID);
     public static final DeferredRegister<MemoryModuleType<?>> MEMORYMODULES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, Constants.MODID);
+    public static final DeferredRegister<Schedule> SCHEDULES = DeferredRegister.create(ForgeRegistries.SCHEDULES, Constants.MODID);
 
     //Container
     private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<>((IContainerFactory<ContainerKansenInventory>)ContainerKansenInventory::new);
@@ -238,14 +243,23 @@ public class registerManager {
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_PLANTABLE = registerMemoryModuleType("nearest_plantable");
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_BONEMEALABLE = registerMemoryModuleType("nearest_bonemealable");
     public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_WORLDSKILLABLE = registerMemoryModuleType("nearest_worldskillable");
+    public static final RegistryObject<MemoryModuleType<Boolean>> FOLLOWING_OWNER_MEMORY = registerMemoryModuleType("following_owner");
 
     //Sensors
     public static final RegistryObject<SensorType<EntitySensor>> ENTITY_SENSOR = registerSensorType("entity_sensor", EntitySensor::new);
     public static final RegistryObject<SensorType<InventorySensor>> INVENTORY_SENSOR = registerSensorType("inventory_sensor", InventorySensor::new);
     public static final RegistryObject<SensorType<WorldSensor>> WORLD_SENSOR = registerSensorType("world_sensor", WorldSensor::new);
 
+    public static final RegistryObject<Schedule> CompanionSchedule = registerSchedule("companion_schedule", (builder)-> builder.changeActivityAt(10, Activity.IDLE).changeActivityAt(12000, Activity.REST).build());
+
+
     public static RegistryObject<Activity> registerActivity(String ID){
         return ACTIVITIES.register(ID,()-> new Activity(ID));
+    }
+
+    public static RegistryObject<Schedule> registerSchedule(String ID, Function<ScheduleBuilder, Schedule> build){
+        Schedule schedule = build.apply(new ScheduleBuilder(new Schedule()));
+        return SCHEDULES.register(ID, ()->schedule);
     }
 
     public static <U extends Sensor<?>> RegistryObject<SensorType<U>> registerSensorType(String ID, Supplier<U> sensor){
@@ -272,6 +286,7 @@ public class registerManager {
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
         SENSORS.register(eventbus);
+        SCHEDULES.register(eventbus);
         registerMultiBlocks.register();
         registerBlocks.register();
         registerItems.register();

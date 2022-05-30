@@ -87,7 +87,9 @@ import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.village.PointOfInterestManager;
 import net.minecraft.village.PointOfInterestType;
@@ -431,7 +433,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY,
             MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
             MemoryModuleType.LAST_WOKEN, HURT_AT.get(), NEAREST_BOAT.get(), NEAREST_ORE.get(), NEAREST_HARVESTABLE.get(), NEAREST_PLANTABLE.get(),
-            NEAREST_BONEMEALABLE.get(), NEAREST_WORLDSKILLABLE.get());
+            NEAREST_BONEMEALABLE.get(), NEAREST_WORLDSKILLABLE.get(), FOLLOWING_OWNER_MEMORY.get());
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS,
             SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY,
@@ -640,7 +642,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putBoolean("oathed", this.entityData.get(OATHED));
         compound.putBoolean("pickupitem", this.entityData.get(PICKUP_ITEM));
         compound.putFloat("home_distance", this.entityData.get(VALID_HOME_DISTANCE));
-        compound.putBoolean("issitting", this.entityData.get(SITTING));
         compound.putBoolean("isCriticallyInjured", this.entityData.get(CRITICALLYINJURED));
         if(this.entityData.get(STAYPOINT).isPresent()) {
             compound.putDouble("stayX", this.entityData.get(STAYPOINT).get().getX());
@@ -657,18 +658,41 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             compound.putDouble("HomePosY", pos.pos().getY());
             compound.putDouble("HomePosZ", pos.pos().getZ());
             compound.putString("HomePosDim", pos.dimension().location().toString());
-            compound.putBoolean("freeroaming", true);
         });
-        this.getBrain().getMemory(RESTING.get()).ifPresent((bool)->{compound.putBoolean("isresting", bool);
-        compound.putBoolean("freeroaming", bool);});
+
+        CompoundNBT NBT = new CompoundNBT();
+        this.getBrain().getActiveNonCoreActivity().ifPresent((activity)->{
+            if(activity == REST){
+                NBT.putString("status", "resting");
+            }
+            else if(activity == (IDLE)){
+                NBT.putString("status", "idle");
+            }
+            else if(activity == registerManager.SITTING.get()){
+                NBT.putString("status", "sitting");
+            }
+            else if(activity == WAITING.get()){
+                NBT.putString("status", "waiting");
+                this.getBrain().getMemory(WAIT_POINT.get()).ifPresent((globalpos)->{
+                    NBT.putString("waitpointDim", globalpos.dimension().location().toString());
+                    NBT.putInt("waitpointx", globalpos.pos().getX());
+                    NBT.putInt("waitpointy", globalpos.pos().getY());
+                    NBT.putInt("waitpointz", globalpos.pos().getZ());
+                });
+            }
+            else{
+                NBT.putString("status", "following");
+            }
+        });
+
+        compound.put("status", NBT);
+
         compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
         compound.putBoolean("isforcewokenup", this.entityData.get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.entityData.get(EXP));
         compound.putInt("level", this.getEntityData().get(LEVEL));
         compound.putInt("limitbreaklv", this.entityData.get(LIMITBREAKLEVEL));
         compound.putInt("awaken", this.awakeningLevel);
-        compound.putBoolean("isSitting", this.isOrderedToSit());
-        compound.putBoolean("freeroaming", this.isFreeRoaming());
         compound.putDouble("morale", this.entityData.get(MORALE));
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
@@ -692,7 +716,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(NONVANILLAMELEEATTACKDELAY, compound.getInt("attackdelay"));
         this.getEntityData().set(CRITICALLYINJURED, compound.getBoolean("isCriticallyInjured"));
         this.entityData.set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
-        this.setOrderedToSit(compound.getBoolean("isSitting"));
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
         if(hasStayPos) {
             this.entityData.set(STAYPOINT, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
@@ -715,6 +738,40 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(compound.getBoolean("isresting")){
             this.getBrain().setMemory(RESTING.get(), true);
         }
+
+        CompoundNBT NBT = compound.getCompound("status");
+
+        switch (NBT.getString("status")){
+            case "resting":{
+                this.getBrain().setActiveActivityIfPossible(REST);
+                this.setFreeRoaming(true);
+                break;
+            }
+            case "idle":{
+                this.setResting();
+                this.entityData.set(ISFREEROAMING, true);
+                this.getBrain().setMemory(RESTING.get(), true);
+                break;
+            }
+            case "sitting":{
+                this.setOrderedToSit(true);
+                this.entityData.set(ISFREEROAMING, false);
+                break;
+            }
+            case "waiting":{
+                BlockPos blockpos = new BlockPos(NBT.getDouble("waitpointx"), NBT.getDouble("waitpointy"), NBT.getDouble("waitpointz"));
+                ResourceLocation resource = new ResourceLocation(NBT.getString("waitpointDim"));
+                RegistryKey<World> registrykey = RegistryKey.create(Registry.DIMENSION_REGISTRY, resource);
+                this.entityData.set(ISFREEROAMING, true);
+                GlobalPos pos = GlobalPos.of(registrykey, blockpos);
+                this.getBrain().setMemory(WAIT_POINT.get(), pos);
+                break;
+            }
+            default:
+                this.setFollowingOwner();
+                this.entityData.set(ISFREEROAMING, false);
+        }
+
         this.getEntityData().set(TeamUUID, compound.hasUUID("team")? Optional.of(compound.getUUID("team")):Optional.empty());
         this.entityData.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
         this.shouldBeSitting = compound.getBoolean("shouldbeSitting");
@@ -723,10 +780,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.entityData.set(MORALE, compound.getFloat("morale"));
         this.entityData.set(ANGRYTIMER, compound.getInt("angrytimer"));
         this.entityData.set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
-        this.entityData.set(ISFREEROAMING, compound.getBoolean("freeroaming"));
-        boolean isSittng = compound.getBoolean("issitting");
-        this.entityData.set(SITTING, isSittng);
-
         this.entityData.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.awakeningLevel = compound.getInt("awaken");
@@ -743,8 +796,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(modifiableattributeinstance != null) {
             modifiableattributeinstance.setBaseValue(this.getAttributeValue(Attributes.MAX_HEALTH) + this.getLevel());
         }
-
-        this.setOrderedToSit(isSittng);
     }
 
     public float getAttackDamageMainHand(){
@@ -1117,18 +1168,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getNavigation().stop();
         this.entityData.set(ISFREEROAMING, value);
         if(value) {
-            if(this.getBrain().getMemory(HOME).map((pos)->pos.dimension() == this.level.dimension() && this.getOnPos().closerThan(pos.pos(), this.getHomeDistance())).orElse(false)){
-                this.getBrain().setMemory(RESTING.get(), true);
-            }
-            else{
-                this.getBrain().setMemory(registerManager.WAIT_POINT.get(), GlobalPos.of(this.level.dimension(), this.getOnPos()));
-            }
+            this.setRestOrStay();
             //this.setStayCenterPos(this.blockPosition());
         }
         else{
             //this.getBrain().setActiveActivityIfPossible(registerManager.FOLLOWING_OWNER.get());
-            this.getBrain().eraseMemory(registerManager.WAIT_POINT.get());
-            this.getBrain().eraseMemory(RESTING.get());
+            this.setFollowingOwner();
             //this.clearStayCenterPos();
         }
     }
@@ -3149,14 +3194,42 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         if(val){
             this.getBrain().setMemory(MEMORY_SITTING.get(), true);
+            this.getBrain().eraseMemory(FOLLOWING_OWNER_MEMORY.get());
         }
         else{
             this.getBrain().eraseMemory(MEMORY_SITTING.get());
+            this.getBrain().setMemory(FOLLOWING_OWNER_MEMORY.get(), true);
         }
 
         this.getEntityData().set(SITTING, val);
         super.setOrderedToSit(val);
         this.refreshDimensions();
+    }
+
+    private void setRestOrStay(){
+        if(this.getBrain().getMemory(HOME).map((pos)->pos.dimension() == this.level.dimension() && this.getOnPos().closerThan(pos.pos(), this.getHomeDistance())).orElse(false)){
+            this.setResting();
+        }
+        else{
+            this.setWaiting();
+        }
+    }
+
+    private void setResting(){
+        this.getBrain().setMemory(RESTING.get(), true);
+        this.getBrain().eraseMemory(FOLLOWING_OWNER_MEMORY.get());
+        this.getBrain().setActiveActivityIfPossible(IDLE);
+    }
+
+    private void setWaiting(){
+        this.getBrain().setMemory(registerManager.WAIT_POINT.get(), GlobalPos.of(this.level.dimension(), this.getOnPos()));
+    }
+
+    private void setFollowingOwner(){
+        this.getBrain().eraseMemory(registerManager.WAIT_POINT.get());
+        this.getBrain().eraseMemory(RESTING.get());
+        this.getBrain().setMemory(FOLLOWING_OWNER_MEMORY.get(), true);
+        this.getBrain().setActiveActivityIfPossible(FOLLOWING_OWNER.get());
     }
 
     @Override
@@ -3214,20 +3287,28 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public enum MOVE_STATUS{
-        FOLLOWING_OWNER(registerManager.FOLLOWING_OWNER.get()),
-        WAITING(registerManager.WAITING.get()),
-        RELAXING(REST),
-        SITTING(registerManager.SITTING.get()),
-        FAINTED(null),
-        INJURED(registerManager.INJURED.get()),
-        RETREAT(AVOID),
-        COMBAT(FIGHT);
+        FOLLOWING_OWNER(registerManager.FOLLOWING_OWNER.get(), new TranslationTextComponent("entity.status.following").withStyle(TextFormatting.AQUA)),
+        WAITING(registerManager.WAITING.get(), new TranslationTextComponent("entity.status.waiting").withStyle(TextFormatting.YELLOW)),
+        SLEEPING(REST, new TranslationTextComponent("entity.status.sleeping").withStyle(TextFormatting.GRAY)),
+        SITTING(registerManager.SITTING.get(), new TranslationTextComponent("entity.status.sitting").withStyle(TextFormatting.BLUE)),
+        FAINTED(null, new TranslationTextComponent("entity.status.fainted").withStyle(TextFormatting.DARK_RED)),
+        IDLE(Activity.IDLE, new TranslationTextComponent("entity.status.relaxing").withStyle(TextFormatting.GREEN)),
+        INJURED(registerManager.INJURED.get(), new TranslationTextComponent("entity.status.injured").withStyle(TextFormatting.RED)),
+        RETREAT(AVOID, new TranslationTextComponent("entity.status.retreat").withStyle(TextFormatting.DARK_PURPLE)),
+        COMBAT(FIGHT, new TranslationTextComponent("entity.status.combat").withStyle(TextFormatting.DARK_BLUE));
 
         @Nullable
         private final Activity activity;
+        @Nonnull
+        private final IFormattableTextComponent displayname;
 
-        MOVE_STATUS(@Nullable Activity activity){
+        MOVE_STATUS(@Nullable Activity activity, IFormattableTextComponent displayname){
+            this.displayname = displayname;
             this.activity = activity;
+        }
+
+        public IFormattableTextComponent getDIsplayname(){
+            return this.displayname;
         }
 
         @Nullable

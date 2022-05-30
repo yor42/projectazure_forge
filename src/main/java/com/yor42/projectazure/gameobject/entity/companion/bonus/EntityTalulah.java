@@ -342,6 +342,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             ((FurnaceAccessors) furnace).getDataAccess().set(0, 10);
             this.level.setBlock(pos, this.level.getBlockState(pos).setValue(AbstractFurnaceBlock.LIT, true), 3);
             furnace.setChanged();
+            this.addMorale(-0.025);
         }
         return false;
     }

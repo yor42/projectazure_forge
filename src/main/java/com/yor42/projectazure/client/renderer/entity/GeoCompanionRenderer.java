@@ -161,57 +161,28 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     protected void performCustomRotationtoStack(ItemStack stack, MatrixStack matrix, Hand hand){}
 
     protected void renderStatus(T entity, MatrixStack stack, IRenderTypeBuffer iRenderTypeBuffer, int p_225629_5_) {
-        @Nullable
-        ITextComponent text = null;
-        switch(entity.getMoveStatus()){
-            case RELAXING:
-                text = new TranslationTextComponent("entity.status.relaxing").withStyle(TextFormatting.GREEN);
-                break;
-            case SITTING:
-                text = new TranslationTextComponent("entity.status.sitting").withStyle(TextFormatting.BLUE);
-                break;
-            case WAITING:
-                text = new TranslationTextComponent("entity.status.waiting").withStyle(TextFormatting.YELLOW);
-                break;
-            case FOLLOWING_OWNER:
-                text = new TranslationTextComponent("entity.status.following").withStyle(TextFormatting.AQUA);
-                break;
-            case FAINTED:
-                text = new TranslationTextComponent("entity.status.fainted").withStyle(TextFormatting.DARK_RED);
-                break;
-            case INJURED:
-                text = new TranslationTextComponent("entity.status.injured").withStyle(TextFormatting.RED);
-                break;
-            case COMBAT:
-                text = new TranslationTextComponent("entity.status.combat").withStyle(TextFormatting.DARK_BLUE);
-                break;
-            case RETREAT:
-                text = new TranslationTextComponent("entity.status.retreat").withStyle(TextFormatting.DARK_PURPLE);
-                break;
-        }
-        if(text != null) {
-            double d0 = this.entityRenderDispatcher.distanceToSqr(entity);
-            if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
-                boolean flag = !entity.isDiscrete();
-                float renderscale = 0.3F;
-                float f = (entity.getBbHeight()+0.05F) / renderscale;
-                stack.pushPose();
-                stack.scale(renderscale, renderscale, renderscale);
-                stack.translate(0.0D, (double) f, 0.0D);
-                stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-                stack.scale(-0.025F, -0.025F, 0.025F);
-                Matrix4f matrix4f = stack.last().pose();
-                float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
-                int j = (int) (f1 * 255.0F) << 24;
-                FontRenderer fontrenderer = this.getFont();
-                float f2 = (float) (-fontrenderer.width(text) / 2);
-                fontrenderer.drawInBatch(text, f2, (float) 0, 553648127, false, matrix4f, iRenderTypeBuffer, flag, j, p_225629_5_);
-                if (flag) {
-                    fontrenderer.drawInBatch(text, f2, (float) 0, -1, false, matrix4f, iRenderTypeBuffer, false, 0, p_225629_5_);
-                }
-
-                stack.popPose();
+        ITextComponent text = entity.getMoveStatus().getDIsplayname();
+        double d0 = this.entityRenderDispatcher.distanceToSqr(entity);
+        if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
+            boolean flag = !entity.isDiscrete();
+            float renderscale = 0.3F;
+            float f = (entity.getBbHeight() + 0.05F) / renderscale;
+            stack.pushPose();
+            stack.scale(renderscale, renderscale, renderscale);
+            stack.translate(0.0D, (double) f, 0.0D);
+            stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+            stack.scale(-0.025F, -0.025F, 0.025F);
+            Matrix4f matrix4f = stack.last().pose();
+            float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
+            int j = (int) (f1 * 255.0F) << 24;
+            FontRenderer fontrenderer = this.getFont();
+            float f2 = (float) (-fontrenderer.width(text) / 2);
+            fontrenderer.drawInBatch(text, f2, (float) 0, 553648127, false, matrix4f, iRenderTypeBuffer, flag, j, p_225629_5_);
+            if (flag) {
+                fontrenderer.drawInBatch(text, f2, (float) 0, -1, false, matrix4f, iRenderTypeBuffer, false, 0, p_225629_5_);
             }
+
+            stack.popPose();
         }
     }
 
