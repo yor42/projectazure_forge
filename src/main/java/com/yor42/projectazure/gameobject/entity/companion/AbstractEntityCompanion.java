@@ -45,7 +45,6 @@ import net.minecraft.block.material.PushReaction;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -344,7 +343,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected int patTimer, shieldCoolDown, qinteractionTimer, talkinterval;
+    protected int patTimer;
+    protected int shieldCoolDown;
+    protected int qinteractionTimer;
     public boolean isClimbingUp = false;
     private int ItemSwapIndexOffhand = -1;
     private int ItemSwapIndexMainHand = -1;
@@ -809,7 +810,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public float getAttackDamageForStack(ItemStack stack){
         Item item = stack.getItem();
         if(item instanceof TieredItem){
-            Float dmg;
+            float dmg;
             if(item instanceof SwordItem){
                 dmg =((SwordItem) item).getDamage();
             }
@@ -2291,10 +2292,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(SKILLDELAYTICK, value);
     }
 
-    public void setSkillDelaySeconds(int value){
-        this.getEntityData().set(SKILLDELAYTICK, value*20);
-    }
-
     public int getSkillItemCount(){
         return 1;
     }
@@ -2323,10 +2320,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setUsingSkill(false);
     }
 
-    public boolean isUsingSKill(){
-        return this.getEntityData().get(USING_SKILL);
-    }
-
     public void setUsingSkill(boolean value){
         this.getEntityData().set(USING_SKILL, value);
     }
@@ -2342,8 +2335,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public ItemStack getSkillItem(int index){
         if(this.getCommandSenderWorld().isClientSide){
             DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
-            ItemStack stack = this.getEntityData().get(stacks[index]);
-            return stack;
+            return this.getEntityData().get(stacks[index]);
         }
         return this.getInventory().getStackInSlot(12+index);
     }
@@ -2468,12 +2460,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    private float getFrictionInfluencedSpeed(float p_213335_1_) {
-        return this.onGround ? this.getSpeed() * (0.21600002F / (p_213335_1_ * p_213335_1_ * p_213335_1_)) : this.flyingSpeed;
-    }
-
     @Override
-    public void travel(Vector3d travelVector) {
+    public void travel(@Nonnull Vector3d travelVector) {
         double d0 = this.getX();
         double d1 = this.getY();
         double d2 = this.getZ();
@@ -2566,6 +2554,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.isPushable() && !this.isSleeping();
     }
 
+    @Nonnull
     @MethodsReturnNonnullByDefault
     @Override
     public PushReaction getPistonPushReaction() {
@@ -2813,13 +2802,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         }
                         return ActionResultType.SUCCESS;
                     }
-                    else if (this.CheckVerticalInteraction(player, 0.65F, -1) && interactionDirection==FRONT) {
+                    else if (this.CheckVerticalInteraction(player, 0.65F) && interactionDirection==FRONT) {
                         if (this.getCommandSenderWorld().isClientSide()) {
                             Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.QUESTIONABLE, true));
                         }
                         return ActionResultType.SUCCESS;
                     }
-                    else if (this.CheckVerticalInteraction(player, 0.2F, -1)) {
+                    else if (this.CheckVerticalInteraction(player, 0.2F)) {
                         if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit()) {
                             boolean isobstructed = false;
                             for(int i=0; i<4; i++){
@@ -2872,24 +2861,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.isCustomNameVisible();
     }
 
-    public boolean CheckVerticalInteraction(LivingEntity player, float heightpoint, float distance){
+    public boolean CheckVerticalInteraction(LivingEntity player, float heightpoint){
         Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
         Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), this.getY(heightpoint) - player.getEyeY(), this.getZ() - player.getZ());
         EyeDelta = EyeDelta.normalize();
         double EyeCheckFinal = PlayerLook.dot(EyeDelta);
         return EyeCheckFinal > 0.998;
-    }
-
-    public boolean isDoingHeadpat(LivingEntity player, float distance){
-        Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
-        float eyeHeight = (float) this.getEyeY();
-
-
-        Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
-        double EyeDeltaLength = EyeDelta.length();
-        EyeDelta = EyeDelta.normalize();
-        double EyeCheckFinal = PlayerLook.dot(EyeDelta);
-        return EyeCheckFinal > 1.0D / EyeDeltaLength;
     }
 
     private boolean hasHomePos() {
@@ -3003,7 +2980,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    public boolean canBeLeashed(PlayerEntity player) {
+    public boolean canBeLeashed(@Nonnull PlayerEntity player) {
         if(this.getOwner() == player){
             player.displayClientMessage(new TranslationTextComponent("message.easteregg.leash"), true);
         }
@@ -3068,7 +3045,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void clearHomePos(){
         Main.NETWORK.sendToServer(new DeleteHomePacket(this.getId()));
-    };
+    }
 
     public void setForceWaken(boolean value){
         this.getEntityData().set(ISFORCEWOKENUP, value);
@@ -3126,31 +3103,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void setStayCenterPos(BlockPos stayCenterPos) {
         this.getEntityData().set(STAYPOINT,Optional.of(stayCenterPos));
     }
-
-    public void clearStayCenterPos() {
-        this.getEntityData().set(STAYPOINT, Optional.empty());
-    }
-
-    public void PickUpItem(ItemEntity target) {
-        this.take(target, target.getItem().getCount());
-        ItemStack stack = target.getItem();
-
-        this.onItemPickup(target);
-        this.take(target, stack.getCount());
-        ItemStack itemstack1 = stack.copy();
-        for(int i = 0; i<this.getInventory().getSlots(); i++){
-            itemstack1 = this.getInventory().insertItem(i, stack, false);
-            if(itemstack1.isEmpty()){
-                target.remove();
-                break;
-            }
-
-        }
-        if(!itemstack1.isEmpty()){
-            target.setItem(itemstack1);
-        }
-    }
-
     public boolean addStackToInventory(ItemStack stack){
         for(int i=0; i<this.getInventory().getSlots(); i++){
             if(this.getInventory().insertItem(i, stack, false) == ItemStack.EMPTY){
@@ -3236,14 +3188,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public int tickTimer() {
         return this.tickCount;
     }
+
+    @Nonnull
     protected Brain.BrainCodec<AbstractEntityCompanion> brainProvider() {
         return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
-    }
-
-    @Nullable
-    @Override
-    public ModifiableAttributeInstance getAttribute(Attribute attribute) {
-        return super.getAttribute(attribute);
     }
 
     public void setMovementMode(MOVE_STATUS status){
@@ -3302,7 +3250,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         @Nonnull
         private final IFormattableTextComponent displayname;
 
-        MOVE_STATUS(@Nullable Activity activity, IFormattableTextComponent displayname){
+        MOVE_STATUS(@Nullable Activity activity, @Nonnull IFormattableTextComponent displayname){
             this.displayname = displayname;
             this.activity = activity;
         }
