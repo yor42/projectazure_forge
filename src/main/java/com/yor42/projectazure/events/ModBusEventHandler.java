@@ -58,7 +58,7 @@ public class ModBusEventHandler {
                 boolean isAoichi = player.getUUID().equals(AoichiID);
                 boolean isNecrom = player.getUUID().equals(NecromID);
 
-                ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
+                ItemStack cubeStack = new ItemStack(registerItems.GLITCHED_PHONE.get());
                 CompoundNBT nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
                 cubeStack.setTag(nbt);
