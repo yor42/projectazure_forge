@@ -36,7 +36,7 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(guiBAInventory.class, new IGuiContainerHandler<guiBAInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(guiBAInventory containerScreen) {
+            public List<Rectangle2d> getGuiExtraAreas(@Nonnull guiBAInventory containerScreen) {
                 List<Rectangle2d> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getX();
                 int guiTop = containerScreen.getY();
@@ -49,7 +49,7 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(GuiALInventory.class, new IGuiContainerHandler<GuiALInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(GuiALInventory containerScreen) {
+            public List<Rectangle2d> getGuiExtraAreas(@Nonnull GuiALInventory containerScreen) {
                 List<Rectangle2d> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getX();
                 int guiTop = containerScreen.getY();
@@ -63,7 +63,7 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(GuiGFLInventory.class, new IGuiContainerHandler<GuiGFLInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(GuiGFLInventory containerScreen) {
+            public List<Rectangle2d> getGuiExtraAreas(@Nonnull GuiGFLInventory containerScreen) {
                 List<Rectangle2d> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getGuiLeft();
                 int guiTop = containerScreen.getGuiTop();
@@ -76,7 +76,7 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(GuiAKNInventory.class, new IGuiContainerHandler<GuiAKNInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(GuiAKNInventory containerScreen) {
+            public List<Rectangle2d> getGuiExtraAreas(@Nonnull GuiAKNInventory containerScreen) {
                 List<Rectangle2d> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getGuiLeft();
                 int guiTop = containerScreen.getGuiTop();
@@ -89,7 +89,7 @@ public class Jei implements IModPlugin {
         registration.addGuiContainerHandler(GuiCLSInventory.class, new IGuiContainerHandler<GuiCLSInventory>() {
             @Nonnull
             @Override
-            public List<Rectangle2d> getGuiExtraAreas(GuiCLSInventory containerScreen) {
+            public List<Rectangle2d> getGuiExtraAreas(@Nonnull GuiCLSInventory containerScreen) {
                 List<Rectangle2d> rects = new ArrayList<>();
                 int guiLeft = containerScreen.getGuiLeft();
                 int guiTop = containerScreen.getGuiTop();

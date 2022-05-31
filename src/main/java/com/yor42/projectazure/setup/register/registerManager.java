@@ -149,10 +149,10 @@ public class registerManager {
     public static final EntityType<EntityRosmontis> ENTITYTYPE_ROSMONTIS = EntityType.Builder.of(EntityRosmontis::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entityamiya").toString());
     public static final RegistryObject<EntityType<EntityRosmontis>> ROSMONTIS = ENTITIES.register("entityrosmontis", () -> ENTITYTYPE_ROSMONTIS);
 
-    public static final EntityType<EntityTalulah> ENTITYTYPE_TALULAH = EntityType.Builder.of(EntityTalulah::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitytalulah").toString());
+    public static final EntityType<EntityTalulah> ENTITYTYPE_TALULAH = EntityType.Builder.of(EntityTalulah::new, EntityClassification.CREATURE).sized(0.572F, 1.78F).build(ModResourceLocation("entitytalulah").toString());
     public static final RegistryObject<EntityType<EntityTalulah>> TALULAH = ENTITIES.register("entitytalulah", () -> ENTITYTYPE_TALULAH);
 
-    public static final EntityType<EntityCrownSlayer> ENTITYTYPE_CROWNSLAYER = EntityType.Builder.of(EntityCrownSlayer::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitycrownslayer").toString());
+    public static final EntityType<EntityCrownSlayer> ENTITYTYPE_CROWNSLAYER = EntityType.Builder.of(EntityCrownSlayer::new, EntityClassification.CREATURE).sized(0.572F, 1.66F).build(ModResourceLocation("entitycrownslayer").toString());
     public static final RegistryObject<EntityType<EntityCrownSlayer>> CROWNSLAYER = ENTITIES.register("entitycrownslayer", () -> ENTITYTYPE_CROWNSLAYER);
 
     public static final EntityType<EntityTexas> ENTITYTYPE_TEXAS = EntityType.Builder.of(EntityTexas::new, EntityClassification.CREATURE).sized(0.572F, 1.61F).build(ModResourceLocation("entitytexas").toString());
