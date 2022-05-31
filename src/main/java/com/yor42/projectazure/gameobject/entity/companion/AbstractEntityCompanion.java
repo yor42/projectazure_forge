@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
 import com.tac.guns.Config;
+import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.common.GripType;
 import com.tac.guns.common.Gun;
 import com.tac.guns.common.ProjectileManager;
@@ -2597,7 +2598,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public int Reload_Anim_Delay(){
-        if (((GunItem)this.getMainHandItem().getItem()).getGun().getGeneral().getGripType() == GripType.TWO_HANDED) {
+        if (((GunItem)this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
             return 63;
         }
         else{

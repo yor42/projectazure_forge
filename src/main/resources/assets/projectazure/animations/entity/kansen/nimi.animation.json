@@ -3333,6 +3333,246 @@
 				}
 			}
 		},
+		"gun_reload_onehanded": {
+			"animation_length": 2.6,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-90, -7.5, 0]
+						},
+						"0.5": {
+							"vector": [-80.16871, 3.8446, 5.26013],
+							"easing": "easeOutSine"
+						},
+						"1.3": {
+							"vector": [-80.16871, 3.8446, 5.26013],
+							"easing": "easeOutSine"
+						},
+						"1.6": {
+							"vector": [-80.17206, -3.54561, 3.98062],
+							"easing": "easeInOutSine"
+						},
+						"1.7": {
+							"vector": [-80.17206, -3.54561, 3.98062],
+							"easing": "easeInOutSine"
+						},
+						"1.8": {
+							"vector": [-80.17206, -3.54561, 3.98062],
+							"easing": "easeInOutSine"
+						},
+						"2.2": {
+							"vector": [-60.17206, -3.54561, 3.98062]
+						},
+						"2.4": {
+							"vector": [-59.47539, -12.19614, -1.08902]
+						},
+						"2.6": {
+							"vector": [-90, -7.5, 0]
+						}
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.5": {
+							"vector": [-62.5, 0, 0],
+							"easing": "easeOutSine"
+						},
+						"1.3": {
+							"vector": [-62.5, 0, 0],
+							"easing": "easeOutSine"
+						},
+						"1.6": {
+							"vector": [-62.29788, -6.64851, -3.47875],
+							"easing": "easeInOutSine"
+						},
+						"1.7": {
+							"vector": [-62.29788, -6.64851, -3.47875],
+							"easing": "easeInOutSine"
+						},
+						"1.8": {
+							"vector": [-62.29788, -6.64851, -3.47875],
+							"easing": "easeInOutSine"
+						},
+						"2.2": {
+							"vector": [-44.79788, -6.64851, -3.47875]
+						},
+						"2.6": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"0.2": {
+							"vector": [-89.9282, 32.5023, 0.12926]
+						},
+						"0.7": {
+							"vector": [34.96569, -9.34425, 4.59199],
+							"easing": "easeInOutSine"
+						},
+						"1.3": {
+							"vector": [34.96569, -9.34425, 4.59199],
+							"easing": "easeInOutSine"
+						},
+						"1.6": {
+							"vector": [-82.54044, 33.15575, 4.5643],
+							"easing": "easeInOutSine"
+						},
+						"1.7": {
+							"vector": [-82.54044, 33.15575, 4.5643],
+							"easing": "easeInOutSine"
+						},
+						"1.8": {
+							"vector": [-82.54044, 33.15575, 4.5643],
+							"easing": "easeInOutSine"
+						},
+						"2.0": {
+							"vector": [-83.58762, 13.29838, 1.94918]
+						},
+						"2.2": {
+							"vector": [-101.8819, 23.00365, -0.59099]
+						},
+						"2.6": {
+							"vector": [-89.9282, 32.5023, 0.12926]
+						}
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"0.2": {
+							"vector": [0, 0, 0]
+						},
+						"0.7": {
+							"vector": [-42.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"0.9": {
+							"vector": [-50, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.1": {
+							"vector": [-42.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.3": {
+							"vector": [-50, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.6": {
+							"vector": [-2.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"1.8": {
+							"vector": [-18.24765, 17.42486, 12.08101]
+						},
+						"2.2": {
+							"vector": [0, 0, 40]
+						},
+						"2.4": {
+							"vector": [0, 0, 57.5]
+						},
+						"2.6": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"gun_shoot_onehanded": {
+			"animation_length": 7.29167,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": ["-89.9282+query.head_pitch", "32.5023+query.head_yaw", 0.12926]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": ["-90+query.head_pitch", "-7.5+query.head_yaw", 0]
+					}
+				},
+				"itemMainHand": {
+					"rotation": {
+						"vector": [27.5, 0, 0]
+					}
+				}
+			}
+		},
+		"gun_idle_onehanded2": {
+			"loop": true,
+			"animation_length": 8,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [-47.5, 0, 0]
+						},
+						"4.0": {
+							"vector": [-50, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"8.0": {
+							"vector": [-47.5, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"0.0": {
+							"vector": [-115, 0, 0]
+						},
+						"4.0": {
+							"vector": [-112.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"8.0": {
+							"vector": [-115, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, -3, -6]
+						},
+						"8.0": {
+							"vector": [0, -3, -6],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
+		},
+		"gun_idle_onehanded": {
+			"loop": true,
+			"animation_length": 8,
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"vector": [-21.26765, -7.52076, -18.58597]
+					}
+				},
+				"RightHand": {
+					"rotation": {
+						"vector": [0, 0, -20]
+					}
+				},
+				"LeftArm": {
+					"rotation": {
+						"vector": [-22.01816, 4.75113, 11.57518]
+					}
+				},
+				"LeftHand": {
+					"rotation": {
+						"vector": [0, 0, 17.5]
+					}
+				}
+			}
+		},
 		"carry_arm": {
 			"loop": true,
 			"animation_length": 2,

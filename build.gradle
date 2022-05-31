@@ -168,8 +168,8 @@ dependencies {
     compileOnly fg.deobf('curse.maven:realistic-torches-235729:3191715')
 
     //Multiblocked
-    implementation fg.deobf('curse.maven:ldlib-626676:3805387')
-    implementation fg.deobf('curse.maven:multiblocked-604054:3805374')
+    implementation fg.deobf('curse.maven:ldlib-626676:3808833')
+    implementation fg.deobf('curse.maven:multiblocked-604054:3808828')
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
 

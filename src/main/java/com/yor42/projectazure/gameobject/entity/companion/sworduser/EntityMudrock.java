@@ -1,5 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.sworduser;
 
+import com.tac.guns.client.render.pose.OneHandedPose;
+import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.common.GripType;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
@@ -99,13 +101,22 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isReloadingMainHand()){
-            event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
+        else if(this.isReloadingMainHand()) {
+            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
+                event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
+            }
+            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+            }
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
-            if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType() == GripType.TWO_HANDED) {
+            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             }
+            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+            }
+
             return PlayState.CONTINUE;
         }
         else if(this.isBlocking()){
@@ -140,6 +151,24 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
+        else if(this.isReloadingMainHand()) {
+            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
+                event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
+            }
+            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+            }
+            return PlayState.CONTINUE;
+        }else if(this.isUsingGun()){
+            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
+            }
+            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+            }
+
+            return PlayState.CONTINUE;
+        }
         else if(this.isMoving()) {
             if(this.isSprinting()){
                 event.getController().setAnimation(builder.addAnimation("run_arm", true));
@@ -150,12 +179,6 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else{
-            if(this.getMainHandItem().getItem() instanceof GunItem){
-                if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType() == GripType.TWO_HANDED){
-                    event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
-                }
-                return PlayState.CONTINUE;
-            }
             event.getController().setAnimation(builder.addAnimation("idle_arm", true));
             return PlayState.CONTINUE;
         }
