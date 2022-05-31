@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import java.util.Random;
 
 import static com.yor42.projectazure.setup.register.registerManager.NEAREST_ORE;
+import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
@@ -74,7 +75,7 @@ public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
         } else {
             ety.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, ety.yRot, ety.xRot);
             ety.getNavigation().stop();
-            Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> ety), new spawnParticlePacket(ety, spawnParticlePacket.Particles.TELEPORT));
+            Main.NETWORK.send(TRACKING_ENTITY.with(() -> ety), new spawnParticlePacket(ety, spawnParticlePacket.Particles.TELEPORT));
             return true;
         }
     }

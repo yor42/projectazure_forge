@@ -29,7 +29,7 @@ public class EntityCrownslayerRenderer extends GeoCompanionRenderer<EntityCrownS
     @Nonnull
     @Override
     protected Vector3d getHandItemCoordinate() {
-        return new Vector3d(0.6F, 0.1F, 1.5F);
+        return new Vector3d(0.6F, 0.3F, 1.5F);
     }
 
     @Override

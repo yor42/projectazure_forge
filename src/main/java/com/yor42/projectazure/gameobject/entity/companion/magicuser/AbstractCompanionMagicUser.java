@@ -23,11 +23,6 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
     }
 
     @Override
-    public ItemStack getGunStack() {
-        return super.getGunStack();
-    }
-
-    @Override
     public ItemStack getItemInHand(Hand p_184586_1_) {
         return super.getItemInHand(p_184586_1_);
     }
@@ -35,7 +30,7 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
     public boolean shouldUseSpell(){
         if(getGunStack().getItem() instanceof ItemGunBase) {
             boolean hasAmmo = getRemainingAmmo(getGunStack()) > 0;
-            boolean reloadable = HasRightMagazine((((ItemGunBase) getGunStack().getItem()).getAmmoType()));
+            boolean reloadable = HasRightMagazine(getGunStack());
 
             return !(hasAmmo || reloadable);
         }

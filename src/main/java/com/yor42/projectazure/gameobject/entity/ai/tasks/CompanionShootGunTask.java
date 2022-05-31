@@ -1,6 +1,10 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
+import com.tac.guns.common.Gun;
+import com.tac.guns.item.GunItem;
+import com.tac.guns.util.GunEnchantmentHelper;
+import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
@@ -28,19 +32,22 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, @Nonnull AbstractEntityCompanion entity) {
-        return this.getValidGunHand(entity).map((hand)->{
-            ItemStack gunStack = entity.getItemInHand(hand);
-            Item gunItem = gunStack.getItem();
-            if(gunItem instanceof ItemGunBase){
-                return entity.getBrain().getMemory(ATTACK_TARGET).map((target)->{
-                    boolean canusegun = entity.shouldUseGun();
-                    boolean hastarget = !target.isDeadOrDying();
-                    boolean entitycanAttack = !entity.isSleeping() && !entity.isOrderedToSit();
-                    return canusegun && entitycanAttack && hastarget;
-                }).orElse(false);
-            }
+
+        if(entity.getGunStack().isEmpty()){
             return false;
-        }).orElse( false);
+        }
+
+        ItemStack gunStack = entity.getGunStack();
+        Item gunItem = gunStack.getItem();
+        if(gunItem instanceof GunItem){
+            return entity.getBrain().getMemory(ATTACK_TARGET).map((target)->{
+                boolean canusegun = entity.shouldUseGun();
+                boolean hastarget = !target.isDeadOrDying();
+                boolean entitycanAttack = !entity.isSleeping() && !entity.isOrderedToSit();
+                return canusegun && entitycanAttack && hastarget;
+            }).orElse(false);
+        }
+        return false;
     }
 
     @Override
@@ -56,59 +63,56 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
     @Override
     protected void tick(@Nonnull ServerWorld p_212833_1_, AbstractEntityCompanion entity, long p_212833_3_) {
         entity.getBrain().getMemory(ATTACK_TARGET).ifPresent((target) ->
-                this.getValidGunHand(entity).ifPresent((hand) -> {
-                    ItemStack gunStack = entity.getItemInHand(hand);
-                    Item gunItem = gunStack.getItem();
-                    boolean canSee = entity.getSensing().canSee(target);
-                    boolean flag1 = this.seeTime > 0;
 
-                    if (canSee != flag1) {
-                        this.seeTime = 0;
-                    }
+        {
+            ItemStack gunStack = entity.getGunStack();
+            Item Item = gunStack.getItem();
+            if(Item instanceof GunItem) {
+                GunItem gunItem = (GunItem) Item;
+                boolean canSee = entity.getSensing().canSee(target);
+                boolean flag1 = this.seeTime > 0;
 
-                    if (canSee) {
-                        ++this.seeTime;
-                    } else {
-                        --this.seeTime;
-                    }
+                if (canSee != flag1) {
+                    this.seeTime = 0;
+                }
 
-                    if (!entity.isUsingGun() && this.seeTime >= 5 && gunStack != ItemStack.EMPTY && getRemainingAmmo(gunStack) > 0) {
+                if (canSee) {
+                    ++this.seeTime;
+                } else {
+                    --this.seeTime;
+                }
+
+                if (!entity.isUsingGun() && this.seeTime >= 5 && gunStack != ItemStack.EMPTY && getRemainingAmmo(gunStack) > 0) {
+                    entity.setUsingGun(true);
+                }
+                boolean flag = entity.isUsingGun();
+                entity.getBrain().setMemory(LOOK_TARGET, new EntityPosWrapper(target, true));
+                if (flag) {
+                    if (!canSee && this.seeTime < -80) {
+                        entity.setUsingGun(false);
+                    } else if (canSee) {
                         entity.setUsingGun(true);
-                    }
-                    boolean flag = entity.isUsingGun();
-                    entity.getBrain().setMemory(LOOK_TARGET, new EntityPosWrapper(target, true));
-                    if (flag) {
-                        if (!canSee && this.seeTime < -80) {
-                            entity.stopUsingItem();
-                            entity.setUsingGun(false);
-                        } else if (canSee) {
-                            entity.setUsingGun(true);
-                            boolean hasAmmo = getRemainingAmmo(gunStack) > 0;
-                            boolean reloadable = entity.HasRightMagazine(((ItemGunBase) gunItem).getAmmoType());
-                            if (hasAmmo && --this.attackTime <= 0) {
-                                entity.AttackUsingGun(target, gunStack, hand);
-                                this.attackTime = ((ItemGunBase) gunStack.getItem()).getMinFireDelay();
-                            } else if (gunStack.getItem() instanceof ItemGunBase && getRemainingAmmo(gunStack) <= 0 && !entity.isReloadingMainHand() && reloadable) {
-                                entity.setReloadDelay();
-                            }
+                        boolean hasAmmo = gunStack.getOrCreateTag().getInt("AmmoCount") > 0;
+                        boolean reloadable = entity.HasRightMagazine(gunStack);
+                        Gun modifiedGun = gunItem.getModifiedGun(gunStack);
+                        int rate = GunEnchantmentHelper.getRate(gunStack, modifiedGun);
+                        rate = GunModifierHelper.getModifiedRate(gunStack, rate);
+                        if (hasAmmo && --this.attackTime <= 0) {
+                            entity.AttackUsingGun(target, gunStack);
+                            this.attackTime = rate;
+                        } else if (gunStack.getItem() instanceof ItemGunBase && getRemainingAmmo(gunStack) <= 0 && !entity.isReloadingMainHand() && reloadable) {
+                            entity.setReloadDelay(gunStack);
                         }
-                    } else if (this.seeTime >= -80) {
-                        entity.setUsingGun(true);
                     }
-                }));
+                } else if (this.seeTime >= -80) {
+                    entity.setUsingGun(true);
+                }
+            }
+        });
     }
 
     @Override
     protected void stop(@Nonnull ServerWorld p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
         p_212835_2_.setUsingGun(false);
-    }
-
-    private Optional<Hand> getValidGunHand(AbstractEntityCompanion companion){
-        for(Hand hand:Hand.values()){
-            if(companion.getItemInHand(hand).getItem() instanceof ItemGunBase){
-                return Optional.of(hand);
-            }
-        }
-        return Optional.empty();
     }
 }

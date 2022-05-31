@@ -47,7 +47,7 @@ public class CompanionSwimMovementController extends MovementController {
                 shouldswim = waterheight > f;
             }
             boolean isJumping = this.operation == Action.JUMPING;
-            if((shouldswim || this.companion.isInLava()) || isTargetHigher || this.companion.isSwimmingUp() || obstructed || isOwnerHigherinWater || isJumping || this.companion.horizontalCollision && !this.companion.canUseRigging()){
+            if((shouldswim || this.companion.isInLava()) || isTargetHigher || obstructed || isOwnerHigherinWater || isJumping || this.companion.horizontalCollision && !this.companion.canUseRigging()){
                 Vector3d vec3d = this.companion.getDeltaMovement();
                 this.companion.setDeltaMovement(vec3d.x, vec3d.y + (double)(0.0175F), vec3d.z);
             }

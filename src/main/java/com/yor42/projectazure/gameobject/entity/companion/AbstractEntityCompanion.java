@@ -3,6 +3,18 @@ package com.yor42.projectazure.gameobject.entity.companion;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
+import com.tac.guns.Config;
+import com.tac.guns.common.GripType;
+import com.tac.guns.common.Gun;
+import com.tac.guns.common.ProjectileManager;
+import com.tac.guns.init.ModEnchantments;
+import com.tac.guns.interfaces.IProjectileFactory;
+import com.tac.guns.item.GunItem;
+import com.tac.guns.network.PacketHandler;
+import com.tac.guns.network.message.MessageBulletTrail;
+import com.tac.guns.network.message.MessageGunSound;
+import com.tac.guns.util.GunEnchantmentHelper;
+import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
@@ -42,6 +54,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.PushReaction;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -80,10 +93,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityPosWrapper;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -101,9 +111,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -132,6 +144,7 @@ import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
 import static net.minecraft.entity.ai.brain.schedule.Activity.*;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
+import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements ICrossbowUser, IAnimatable, IAnimationTickable {
@@ -576,24 +589,22 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isUsingGun(){
-        return this.getEntityData().get(ISUSINGGUN);
+        return this.getMainHandItem().getItem() instanceof GunItem && this.getEntityData().get(ISUSINGGUN);
     }
 
-    public ItemStack getMagazine(enums.AmmoCalibur calibur){
-
-        ItemStack stack2Return = ItemStack.EMPTY;
-        int currentMaxAmmo = 0;
-        for(int i=0; i<this.getAmmoStorage().getSlots();i++){
-            ItemStack candidateStack = this.getAmmoStorage().getStackInSlot(i);
-            if(candidateStack.getItem() instanceof ItemMagazine && ((ItemMagazine) candidateStack.getItem()).getAmmoType() == calibur){
-                int AmmoInCandidate = ItemStackUtils.getRemainingAmmo(candidateStack);
-                if(AmmoInCandidate>currentMaxAmmo) {
-                    stack2Return = candidateStack;
-                    currentMaxAmmo = AmmoInCandidate;
-                }
+    public ItemStack[] getMagazine(ResourceLocation id){
+        ArrayList<ItemStack> stacks = new ArrayList();
+        for(int i = 0; i < this.getAmmoStorage().getSlots(); ++i) {
+            ItemStack stack = this.getAmmoStorage().getStackInSlot(i);
+            if (isAmmo(stack, id)) {
+                stacks.add(stack);
             }
         }
-        return stack2Return;
+        return stacks.toArray(new ItemStack[0]);
+    }
+
+    private static boolean isAmmo(ItemStack stack, ResourceLocation id) {
+        return stack != null && stack.getItem().getRegistryName().equals(id);
     }
 
     protected boolean isMoving(){
@@ -1051,16 +1062,75 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.isSwimmingUp;
     }
 
-    public void setSwimmingUp(boolean swimmingUp) {
-        this.isSwimmingUp = swimmingUp;
-    }
+    private static final Predicate<LivingEntity> HOSTILE_ENTITIES = (entity) -> entity.getSoundSource() == SoundCategory.HOSTILE && !Config.COMMON.aggroMobs.exemptEntities.get().contains(entity.getType().getRegistryName().toString());
 
-    public void AttackUsingGun(LivingEntity target, ItemStack gun, Hand HandIn){
-        if(gun.getItem() instanceof ItemGunBase){
-            AnimationController<?> gunAnimation = GeckoLibUtil.getControllerForStack(((ItemGunBase) gun.getItem()).getFactory(), gun, ((ItemGunBase) gun.getItem()).getFactoryName());
-            gunAnimation.setAnimation(new AnimationBuilder().addAnimation("fire", false));
-            ((ItemGunBase) gun.getItem()).shootGunCompanion(gun, this.getCommandSenderWorld(), this, false, HandIn, target);
-            useAmmo(gun);
+    public void AttackUsingGun(LivingEntity target, ItemStack gun){
+        if(gun.getItem() instanceof GunItem){
+            GunItem item = (GunItem)gun.getItem();
+            Gun modifiedGun = item.getModifiedGun(gun);
+            if (modifiedGun != null) {
+                int count = modifiedGun.getGeneral().getProjectileAmount();
+                Gun.Projectile projectileProps = modifiedGun.getProjectile();
+                com.tac.guns.entity.ProjectileEntity[] spawnedProjectiles = new com.tac.guns.entity.ProjectileEntity[count];
+                for(int i = 0; i < count; ++i) {
+                    IProjectileFactory factory = ProjectileManager.getInstance().getFactory(projectileProps.getItem());
+                    com.tac.guns.entity.ProjectileEntity projectileEntity = factory.create(this.getCommandSenderWorld(), this, gun, item, modifiedGun);
+                    projectileEntity.setWeapon(gun);
+                    projectileEntity.setAdditionalDamage(Gun.getAdditionalDamage(gun));
+                    this.level.addFreshEntity(projectileEntity);
+                    spawnedProjectiles[i] = projectileEntity;
+                    projectileEntity.tick();
+                }
+
+                if (!projectileProps.isVisible()) {
+                    MessageBulletTrail messageBulletTrail = new MessageBulletTrail(spawnedProjectiles, projectileProps, this.getId());
+                    PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getX(), this.getY(), this.getZ(), (Double) Config.COMMON.network.projectileTrackingRange.get(), this.level.dimension())), messageBulletTrail);
+                }
+
+                double posY;
+                double posZ;
+                double posX;
+                if (Config.COMMON.aggroMobs.enabled.get()) {
+                    double radius = GunModifierHelper.getModifiedFireSoundRadius(gun, Config.COMMON.aggroMobs.range.get());
+                    posX = this.getX();
+                    posY = this.getY() + 0.5D;
+                    posZ = this.getZ();
+                    AxisAlignedBB box = new AxisAlignedBB(posX - radius, posY - radius, posZ - radius, posX + radius, posY + radius, posZ + radius);
+                    radius *= radius;
+
+                    for (LivingEntity entity : this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, box, HOSTILE_ENTITIES)) {
+                        double dx = posX - entity.getX();
+                        double dy = posY - entity.getY();
+                        double dz = posZ - entity.getZ();
+                        if (dx * dx + dy * dy + dz * dz <= radius) {
+                            entity.setLastHurtByMob(Config.COMMON.aggroMobs.angerHostileMobs.get() ? this : entity);
+                        }
+                    }
+                }
+
+                boolean silenced = GunModifierHelper.isSilencedFire(gun);
+                ResourceLocation fireSound = silenced ? modifiedGun.getSounds().getSilencedFire() : modifiedGun.getSounds().getFire();
+                if (fireSound != null) {
+                    posX = this.getX();
+                    posY = this.getY() + (double)this.getEyeHeight();
+                    posZ = this.getZ();
+                    float volume = GunModifierHelper.getFireSoundVolume(gun);
+                    float pitch = 0.9F + this.getCommandSenderWorld().random.nextFloat() * 0.2F;
+                    double radius = GunModifierHelper.getModifiedFireSoundRadius(gun, (Double)Config.SERVER.gunShotMaxDistance.get());
+                    boolean muzzle = modifiedGun.getDisplay().getFlash() != null;
+                    MessageGunSound messageSound = new MessageGunSound(fireSound, SoundCategory.PLAYERS, (float)posX, (float)posY, (float)posZ, volume, pitch, this.getId(), muzzle, false);
+                    PacketDistributor.TargetPoint targetPoint = new PacketDistributor.TargetPoint(posX, posY, posZ, radius, this.level.dimension());
+                    PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> targetPoint), messageSound);
+                }
+
+                CompoundNBT tag = gun.getOrCreateTag();
+                if (!tag.getBoolean("IgnoreAmmo")) {
+                    int level = EnchantmentHelper.getItemEnchantmentLevel((Enchantment) ModEnchantments.RECLAIMED.get(), gun);
+                    if (level == 0 || this.level.random.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0) {
+                        tag.putInt("AmmoCount", Math.max(0, tag.getInt("AmmoCount") - 1));
+                    }
+                }
+            }
         }
     }
 
@@ -1215,15 +1285,24 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public boolean shouldUseGun() {
         ItemStack gunstack = this.getGunStack();
-        if (gunstack.getItem() instanceof ItemGunBase) {
-            ItemGunBase gunitem = (ItemGunBase) gunstack.getItem();
-            return (!this.canUseCannonOrTorpedo() || !this.isSailing()) && this.getGunStack() != ItemStack.EMPTY && (this.HasRightMagazine(gunitem.getAmmoType()) || getRemainingAmmo(gunstack)>0);
+        if (gunstack.getItem() instanceof GunItem) {
+            GunItem gunitem = (GunItem) gunstack.getItem();
+            CompoundNBT tag = gunstack.getOrCreateTag();
+            int ammocount = tag.getInt("AmmoCount");
+            boolean hasAmmo = ammocount>0;
+            return (!this.canUseCannonOrTorpedo() || !this.isSailing()) && this.getGunStack() != ItemStack.EMPTY && (this.HasRightMagazine(gunstack) || hasAmmo);
         }
         return false;
     }
 
-    public boolean HasRightMagazine(enums.AmmoCalibur calibur){
-        return !this.getMagazine(calibur).isEmpty();
+    public boolean HasRightMagazine(ItemStack gunStack) {
+        Item gunItem = gunStack.getItem();
+        if(!(gunItem instanceof GunItem)){
+            return false;
+        }
+        Gun gun = ((GunItem)gunStack.getItem()).getModifiedGun(gunStack);
+
+        return this.getMagazine(gun.getProjectile().getItem()).length >0;
     }
 
     public boolean isSailing(){
@@ -1628,7 +1707,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public ItemStack eat(@Nonnull World WorldIn, @Nonnull ItemStack foodStack) {
         this.getFoodStats().consume(foodStack.getItem(), foodStack);
         if(!this.getCommandSenderWorld().isClientSide()) {
-            Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, foodStack));
+            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, foodStack));
         }
         WorldIn.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EAT, SoundCategory.PLAYERS, 0.5F, WorldIn.random.nextFloat() * 0.1F + 0.9F);
         if(foodStack.getItem().isEdible()){
@@ -1926,14 +2005,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         this.entityData.set(PATEFFECTCOUNT, this.entityData.get(PATEFFECTCOUNT) + 1);
                         this.addAffection(0.025);
                         this.addMorale(0.5);
-                        Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
+                        Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
 
                     } else {
                         this.entityData.set(PATEFFECTCOUNT, this.entityData.get(MAXPATEFFECTCOUNT));
                         if (this.entityData.get(PATCOOLDOWN) == 0) {
                             this.entityData.set(PATCOOLDOWN, (7 + this.random.nextInt(5)) * 1200);
                         }
-                        Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_SMOKE));
+                        Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_SMOKE));
                     }
                 }
             }
@@ -2206,51 +2285,45 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void reloadAmmo(){
-
-        Item guncandidate = this.getGunStack().getItem();
-        if(guncandidate instanceof ItemGunBase) {
-            ItemGunBase gun = (ItemGunBase) guncandidate;
-            ItemStack MagStack = this.getMagazine(((ItemGunBase) this.getGunStack().getItem()).getAmmoType());
-            if (!MagStack.isEmpty()) {
-                int i;
-                if (gun.getRoundsPerReload() > 0) {
-                    i = Math.min(gun.getRoundsPerReload(), getRemainingAmmo(MagStack));
-                } else {
-                    i = Math.min(gun.getMaxAmmo(), getRemainingAmmo(MagStack));
-                }
-                addAmmo(this.getGunStack(), i);
-                MagStack.shrink(1);
-                ItemStack EmptyMag = new ItemStack(((ItemGunBase) this.getGunStack().getItem()).getMagItem());
-                emptyAmmo(EmptyMag);
-
-                //Return Empty Magazine for Reloading by player
-                if (!this.addStackToInventory(EmptyMag)) {
-                    if (!this.addStackToAmmoStorage(EmptyMag)) {
-                        ItemEntity itemEntity = new ItemEntity(this.getCommandSenderWorld(), this.getX(), this.getY(), this.getZ(), EmptyMag);
-                        this.getCommandSenderWorld().addFreshEntity(itemEntity);
-                    }
+        ItemStack gunStack = this.getGunStack();
+        Item gunItem = gunStack.getItem();
+        if(gunItem instanceof GunItem) {
+            GunItem ItemGun = (GunItem) gunItem;
+            Gun gun = (ItemGun).getModifiedGun(gunStack);
+            CompoundNBT tag = gunStack.getOrCreateTag();
+            int remainingAmmo = tag.getInt("AmmoCount");
+            ItemStack[] MagStack = this.getMagazine(gun.getProjectile().getItem());
+            int magazinecap = GunEnchantmentHelper.getAmmoCapacity(gunStack, gun);
+            int availableammo = 0;
+            for(ItemStack stack:MagStack){
+                availableammo+=stack.getCount();
+                if(availableammo+remainingAmmo>=magazinecap){
+                    break;
                 }
             }
+
+            int ammo2Reload = Math.min(availableammo, magazinecap)-remainingAmmo;
+            for(ItemStack stack:MagStack) {
+                if (ammo2Reload > 0) {
+                    int shrinkableCount = Math.min(ammo2Reload, stack.getCount());
+                    stack.shrink(shrinkableCount);
+                }
+            }
+            tag.putInt("AmmoCount", tag.getInt("AmmoCount") + ammo2Reload);
+
         }
     }
-
-    public int getGunAmmoCount(){
-        return ItemStackUtils.getRemainingAmmo(this.getGunStack());
-    }
-
     public ItemStack getGunStack(){
-        if(this.getItemInHand(this.getValidGunHand()).getItem() instanceof ItemGunBase){
-            return this.getItemInHand(this.getValidGunHand());
-        }
-        return ItemStack.EMPTY;
+        return this.getValidGunHand().map(this::getItemInHand).orElse(ItemStack.EMPTY);
     }
 
-    private Hand getValidGunHand(){
-        if(this.getMainHandItem().getItem() instanceof ItemGunBase){
-            return MAIN_HAND;
+    private Optional<Hand> getValidGunHand(){
+        for(Hand hand:Hand.values()){
+            if(this.getItemInHand(hand).getItem() instanceof GunItem){
+                return Optional.of(hand);
+            }
         }
-        else
-            return OFF_HAND;
+        return Optional.empty();
     }
 
     public enums.GunClass getGunSpecialty(){
@@ -2512,12 +2585,24 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return remainingTime>0;
     }
 
-    public void setReloadDelay(){
+    public void setReloadDelay(ItemStack gun){
         this.getEntityData().set(RELOAD_TIMER_MAINHAND, this.Reload_Anim_Delay());
+
+        ResourceLocation reloadSound = ((GunItem)gun.getItem()).getGun().getSounds().getCock();
+        if (reloadSound != null) {
+            MessageGunSound message = new MessageGunSound(reloadSound, SoundCategory.PLAYERS, (float)this.getX(), (float)this.getY() + 1.0F, (float)this.getZ(), 1.0F, 1.0F, this.getId(), false, true);
+            PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getX(), this.getY() + 1.0D, this.getZ(), 16.0D, this.level.dimension())), message);
+        }
+
     }
 
     public int Reload_Anim_Delay(){
-        return 63;
+        if (((GunItem)this.getMainHandItem().getItem()).getGun().getGeneral().getGripType() == GripType.TWO_HANDED) {
+            return 63;
+        }
+        else{
+            return 52;
+        }
     }
     @Override
     public void startSleeping(@Nonnull BlockPos pos) {
@@ -2886,7 +2971,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.addAffection(0.12F);
         this.getEntityData().set(HEAL_TIMER, 50);
         if(!this.getCommandSenderWorld().isClientSide()) {
-            Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
+            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
         }
     }
 

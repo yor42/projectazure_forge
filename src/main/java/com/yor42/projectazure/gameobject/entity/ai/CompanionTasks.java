@@ -85,7 +85,7 @@ public class CompanionTasks {
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getCorePackage() {
         return ImmutableList.of(
-                Pair.of(0, new InteractWithDoorTask()),
+                Pair.of(0, new CompanionInteractWithDoorTask()),
                 Pair.of(0, new LookTask(45, 90)),
                 Pair.of(0, new CompanionWakeupTask()),
                 Pair.of(0, new CompanionUseTotemTask()),

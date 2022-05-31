@@ -1,5 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.ships;
 
+import com.tac.guns.common.GripType;
+import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
@@ -159,7 +161,9 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
-            event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
+            if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType() == GripType.TWO_HANDED) {
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
+            }
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
@@ -198,8 +202,8 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getMainHandItem().getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
+        else if(this.getMainHandItem().getItem() instanceof GunItem){
+            if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType() == GripType.TWO_HANDED){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
             return PlayState.CONTINUE;

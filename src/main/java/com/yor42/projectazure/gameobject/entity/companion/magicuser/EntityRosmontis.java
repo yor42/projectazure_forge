@@ -1,5 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
+import com.tac.guns.client.render.pose.OneHandedPose;
+import com.tac.guns.client.render.pose.TwoHandedPose;
+import com.tac.guns.common.GripType;
+import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
@@ -114,22 +118,21 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
+        else if(this.isReloadingMainHand()) {
+            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType() == GripType.TWO_HANDED) {
+                event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             }
-            else{
-                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
+            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
             }
-
-            return PlayState.CONTINUE;
-        }
-        else if(this.isReloadingMainHand()){
-            event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
-
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
-            event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
+            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType() == GripType.TWO_HANDED) {
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
+            }
+            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+            }
 
             return PlayState.CONTINUE;
         }
@@ -150,9 +153,12 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getMainHandItem().getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) this.getMainHandItem().getItem()).isTwoHanded()){
+        else if(this.getMainHandItem().getItem() instanceof GunItem){
+            if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+            }
+            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
+                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", true));
             }
             return PlayState.CONTINUE;
         }
@@ -263,7 +269,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     public boolean shouldUseSpell() {
         if(getGunStack().getItem() instanceof ItemGunBase) {
             boolean hasAmmo = getRemainingAmmo(getGunStack()) > 0;
-            boolean reloadable = HasRightMagazine((((ItemGunBase) getGunStack().getItem()).getAmmoType()));
+            boolean reloadable = HasRightMagazine(getGunStack());
 
             return !(hasAmmo || reloadable) && !this.getNextSkillItem().isEmpty();
         }

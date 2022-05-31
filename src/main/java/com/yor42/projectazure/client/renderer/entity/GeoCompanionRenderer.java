@@ -2,6 +2,8 @@ package com.yor42.projectazure.client.renderer.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.tac.guns.common.GripType;
+import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import mekanism.api.annotations.NonNull;
@@ -129,7 +131,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             if (!mainHandStack.isEmpty()) {
                 this.performCustomRotationtoStack(mainHandStack, stack, Hand.MAIN_HAND);
                 Item gunItem = entity.getGunStack().getItem();
-                if (!entity.isReloadingMainHand() && entity.isUsingGun() && gunItem instanceof ItemGunBase && ((ItemGunBase) gunItem).isTwoHanded()) {
+                if (!entity.isReloadingMainHand() && entity.isUsingGun() && ((GunItem) gunItem).getGun().getGeneral().getGripType() == GripType.TWO_HANDED) {
                     stack.mulPose(Vector3f.XN.rotationDegrees(27.5F));
                 }
                 Minecraft.getInstance().getItemRenderer().renderStatic(mainHandStack, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
