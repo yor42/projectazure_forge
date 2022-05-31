@@ -71,7 +71,7 @@ public abstract class NetherQuartzSolutionFluid extends FlowingFluid {
                         new ResourceLocation("block/water_still"),
                         new ResourceLocation("block/water_flow"))
                 .overlay(new ResourceLocation("block/water_overlay"))
-                .translationKey("block.projectazure.originium_solution")
+                .translationKey("block.projectazure.nether_quartz_solution")
                 .color(0xFFEAE5DE).density(2000).viscosity(2000)
                 .sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
                 .build(this);

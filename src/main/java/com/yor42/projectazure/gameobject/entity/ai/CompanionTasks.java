@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.ai.tasks.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
@@ -221,7 +222,7 @@ public class CompanionTasks {
     }
 
     private static boolean shouldStrafe(LivingEntity livingEntity) {
-        return (livingEntity instanceof EntitySchwarz &&  livingEntity.isHolding(item -> item instanceof net.minecraft.item.CrossbowItem)) || (livingEntity instanceof ISpellUser && ((ISpellUser) livingEntity).shouldUseSpell());
+        return (livingEntity instanceof EntitySchwarz &&  livingEntity.isHolding(item -> item instanceof net.minecraft.item.CrossbowItem)) || (livingEntity instanceof ISpellUser && ((ISpellUser) livingEntity).shouldUseSpell()) || (livingEntity.isHolding((item)->item instanceof GunItem));
     }
 
     private static boolean isNearestValidAttackTarget(AbstractEntityCompanion p_234504_0_, LivingEntity p_234504_1_) {

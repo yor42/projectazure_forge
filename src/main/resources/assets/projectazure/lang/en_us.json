@@ -198,6 +198,7 @@
   "block.projectazure.energy_hatch": "Energy Hatch",
   "block.projectazure.machine_dynamo": "Dynamo Coil",
   "block.projectazure.originium_generator": "Originium Reactor Controller",
+  "block.projectazure.ammo_press": "Ammo Press Controller",
   "block.projectazure.reenforced_plank": "Reenforced Wooden Plank",
   "block.projectazure.reenforced_concrete": "Reenforced Concrete",
   "block.projectazure.reenforced_concrete.tooltip":"Concrete Reenforced with steel; part of multiblock Structure.",
@@ -207,6 +208,7 @@
   "block.projectazure.machine_component": "Machine Component",
 
   "originium_generator.name": "Originium Reactor",
+  "ammo_press.name": "Ammunition Press",
 
 
   "rigging_valid_on.tooltip": "Useable On:",
@@ -435,7 +437,12 @@
 
   "top.companion_level.message": "Level: %s",
   "top.companion_limit_break.message": "Limit break: %s",
-  "top.companion_owner.message": "Commander: %s"
+  "top.companion_owner.message": "Commander: %s",
 
+  "multiblocked.recupe_map.originium_generation": "Originium Reaction",
+  "multiblocked.recupe_map.ammopress": "Ammo Press",
 
+  "recipe.alloying": "Alloying",
+  "recipe.pressing": "Pressing",
+  "recipe.crystalizing": "Crystalizing"
 }
