@@ -67,13 +67,13 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
             else
                 return enums.ALAffection.LOVE;
         }
-        else if(this.affection>80 && this.affection<100){
+        else if(this.affection>80){
             return enums.ALAffection.CRUSH;
         }
-        else if(this.affection>60 && this.affection<=80){
+        else if(this.affection>60){
             return enums.ALAffection.FRIENDLY;
         }
-        else if(this.affection>30 && this.affection<=60){
+        else if(this.affection>30){
             return enums.ALAffection.STRANGER;
         }
         else{
@@ -315,7 +315,6 @@ public class GuiALInventory extends ContainerScreen<ContainerKansenInventory> im
         this.blit(matrixStack, 125, 35, textureX, textureY, 12, 12);
         if (isHovering(125, 35, 12,12,mousex,mousey)){
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            double AffectionLimit = this.host.isOathed()? 200:100;
             tooltips.add(new TranslationTextComponent("gui.current_morale_level").append(": ").append(new TranslationTextComponent(morale.getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
             tooltips.add(new TranslationTextComponent("gui.current_morale_value").append(": ").append(String.format("%.2f",this.morale)+"/150").setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
             this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);

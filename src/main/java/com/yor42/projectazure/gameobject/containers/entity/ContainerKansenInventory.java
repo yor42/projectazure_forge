@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
+import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
 import com.yor42.projectazure.gameobject.containers.slots.SlotRigging;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -76,7 +77,7 @@ public class ContainerKansenInventory extends Container {
                 this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
                     @Override
                     public boolean mayPlace(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof ItemMagazine || stack.getItem() instanceof ArrowItem;
+                        return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof TimelessAmmoItem || stack.getItem() instanceof ArrowItem;
                     }
                 });
             }

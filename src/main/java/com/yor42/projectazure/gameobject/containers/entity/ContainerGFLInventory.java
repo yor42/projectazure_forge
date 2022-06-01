@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
+import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
@@ -62,7 +64,7 @@ public class ContainerGFLInventory extends Container {
                 this.addSlot(new SlotItemHandler(EntityAmmo, n + 2 * m, 180 + n * 18, 11 + m * 18) {
                     @Override
                     public boolean mayPlace(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemMagazine;
+                        return stack.getItem() instanceof TimelessAmmoItem || stack.getItem() instanceof ArrowItem;
                     }
                 });
             }
@@ -101,6 +103,7 @@ public class ContainerGFLInventory extends Container {
             this.companion = companion;
         }
 
+        @Nonnull
         @Override
         public ITextComponent getDisplayName() {
             return new TranslationTextComponent("gui.companioninventory");
@@ -108,12 +111,13 @@ public class ContainerGFLInventory extends Container {
 
         @Nullable
         @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
+        public Container createMenu(int openContainerId, @Nonnull PlayerInventory inventory, @Nonnull PlayerEntity player) {
             return new ContainerGFLInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), this.companion);
         }
     }
 
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    @Nonnull
+    public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {

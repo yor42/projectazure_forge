@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
+import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
@@ -61,7 +63,7 @@ public class ContainerCLSInventory extends Container {
                 this.addSlot(new SlotItemHandler(EntityAmmo, n + (2 * m), 222 + n * 18, 21 + m * 18) {
                     @Override
                     public boolean mayPlace(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemMagazine;
+                        return stack.getItem() instanceof TimelessAmmoItem || stack.getItem() instanceof ArrowItem;
                     }
                 });
             }
