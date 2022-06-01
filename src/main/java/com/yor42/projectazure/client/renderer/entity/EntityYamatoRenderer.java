@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.entity;
 
 import com.yor42.projectazure.client.model.entity.kansen.YamatoModel;
-import com.yor42.projectazure.client.renderer.layer.YamatoRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityYamato;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
@@ -15,8 +15,7 @@ public class EntityYamatoRenderer extends GeoCompanionRenderer<EntityYamato> {
 
     public EntityYamatoRenderer(EntityRendererManager renderManager) {
         super(renderManager, new YamatoModel());
-        this.addLayer(new YamatoRiggingLayer(this));
-        this.shadowRadius = 0.4F;
+        this.addLayer(new CompanionRiggingLayer<>(this));
     }
     @Override
     public ResourceLocation getTextureLocation(EntityYamato instance) {

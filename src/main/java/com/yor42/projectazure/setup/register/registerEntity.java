@@ -48,6 +48,7 @@ public class registerEntity {
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_YAMATO, EntityYamato.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CLAYMORE, EntityClaymore.MutableAttribute().build());
         GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_CROWNSLAYER, EntityCrownSlayer.MutableAttribute().build());
+        GlobalEntityTypeAttributes.put(registerManager.ENTITYTYPE_YATO, EntityYato.MutableAttribute().build());
     }
 
 

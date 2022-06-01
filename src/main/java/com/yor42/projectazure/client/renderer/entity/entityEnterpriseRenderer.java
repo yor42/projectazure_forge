@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.entity;
 
 import com.yor42.projectazure.client.model.entity.kansen.enterpriseModel;
-import com.yor42.projectazure.client.renderer.layer.EnterpriseRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityEnterprise;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +15,7 @@ public class entityEnterpriseRenderer extends GeoCompanionRenderer<EntityEnterpr
 
     public entityEnterpriseRenderer(EntityRendererManager renderManager) {
         super(renderManager, new enterpriseModel());
-        this.addLayer(new EnterpriseRiggingLayer(this));
+        this.addLayer(new CompanionRiggingLayer<>(this));
     }
     @Override
     public ResourceLocation getTextureLocation(@Nonnull EntityEnterprise entity) {

@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.entity;
 
 import com.yor42.projectazure.client.model.entity.kansen.laffeyModel;
-import com.yor42.projectazure.client.renderer.layer.LaffeyRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityLaffey;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -14,7 +14,7 @@ public class EntityLaffeyRenderer extends GeoCompanionRenderer<EntityLaffey> {
 
     public EntityLaffeyRenderer(EntityRendererManager renderManager) {
         super(renderManager, new laffeyModel());
-        this.addLayer(new LaffeyRiggingLayer(this));
+        this.addLayer(new CompanionRiggingLayer<>(this));
     }
 
     @Override

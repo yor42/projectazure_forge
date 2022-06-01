@@ -129,6 +129,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue CrownslayerAttackDamage;
         public final ForgeConfigSpec.DoubleValue CrownslayerMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue YatoHealth;
+        public final ForgeConfigSpec.DoubleValue YatoSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue YatoAttackDamage;
+        public final ForgeConfigSpec.DoubleValue YatoMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue SylviHealth;
         public final ForgeConfigSpec.DoubleValue SylviSwimSpeed;
         public final ForgeConfigSpec.DoubleValue SylviAttackDamage;
@@ -309,6 +314,11 @@ public class PAConfig {
             CrownslayerSwimSpeed = builder.defineInRange("Swim Speed of Crownslayer", 2.5, 0, 1024);
             CrownslayerAttackDamage = builder.defineInRange("Attack Damage of Crownslayer", 2.0F, 0, 1024);
             CrownslayerMovementSpeed = builder.defineInRange("Movement speed of Crownslayer", 0.3F, 0, 2);
+
+            YatoHealth = builder.defineInRange("Max Health of Yato", 20D, 1, 1024);
+            YatoSwimSpeed = builder.defineInRange("Swim Speed of Yato", 2.5, 0, 1024);
+            YatoAttackDamage = builder.defineInRange("Attack Damage of Yato", 2.0F, 0, 1024);
+            YatoMovementSpeed = builder.defineInRange("Movement speed of Yato", 0.3F, 0, 2);
 
             builder.pop().push("Warship Girls");
             GangwonHealth = builder.defineInRange("Max Health of Gangwon", 40D, 1, 1024);

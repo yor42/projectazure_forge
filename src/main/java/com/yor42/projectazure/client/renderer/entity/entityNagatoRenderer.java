@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.entity;
 
 import com.yor42.projectazure.client.model.entity.kansen.nagatoModel;
-import com.yor42.projectazure.client.renderer.layer.NagatoRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityNagato;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
@@ -15,7 +15,7 @@ public class entityNagatoRenderer extends GeoCompanionRenderer<EntityNagato> {
 
     public entityNagatoRenderer(EntityRendererManager renderManager) {
         super(renderManager, new nagatoModel());
-        this.addLayer(new NagatoRiggingLayer(this));
+        this.addLayer(new CompanionRiggingLayer<>(this));
     }
 
     @Override

@@ -18,7 +18,7 @@ import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModelLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureLocation;
 
-public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> implements IGeoRenderer {
+public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> implements IGeoRenderer<EntityRosmontis> {
 
     public RosmontisClaymoreLayer(IGeoRenderer<EntityRosmontis> entityRendererIn) {
         super(entityRendererIn);
@@ -116,7 +116,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Object instance) {
+    public ResourceLocation getTextureLocation(EntityRosmontis instance) {
         return TextureLocation("entity/modelclaymore");
     }
 }

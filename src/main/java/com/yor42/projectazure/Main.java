@@ -52,6 +52,7 @@ import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.Locale;
 import java.util.stream.Stream;
@@ -68,6 +69,7 @@ public class Main
     public static final CrushingRecipeCache CRUSHING_REGISTRY = new CrushingRecipeCache();
 
     public static ItemGroup PA_GROUP = new ItemGroup(MODID) {
+        @Nonnull
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
@@ -75,6 +77,7 @@ public class Main
     };
 
     public static ItemGroup PA_SHIPS = new ItemGroup("pa_ship") {
+        @Nonnull
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerItems.WISDOM_CUBE.get());
@@ -82,6 +85,7 @@ public class Main
     };
 
     public static ItemGroup PA_RESOURCES = new ItemGroup("pa_resources") {
+        @Nonnull
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerItems.INGOT_COPPER.get().asItem());
@@ -89,6 +93,7 @@ public class Main
     };
 
     public static ItemGroup PA_MACHINES = new ItemGroup("pa_machines") {
+        @Nonnull
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerBlocks.METAL_PRESS.get().asItem());
@@ -96,6 +101,7 @@ public class Main
     };
 
     public static ItemGroup PA_WEAPONS = new ItemGroup("pa_weapons") {
+        @Nonnull
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(registerItems.BONKBAT.get());
@@ -113,7 +119,6 @@ public class Main
         // Register the setup method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::finishSetup);
         // Register the enqueueIMC method for modloading
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         // Register the processIMC method for modloading
@@ -127,12 +132,6 @@ public class Main
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldgenInit::registerWorldgen);
 
         // Register ourselves for server and other game events we are interested i
-    }
-
-    private void finishSetup(FMLLoadCompleteEvent t) {
-        t.enqueueWork(()->{
-
-        });
     }
 
     private void setup(final FMLCommonSetupEvent event)
@@ -179,6 +178,7 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TEXAS.get(), EntityTexasRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.FROSTNOVA.get(), EntityFrostNovaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.CROWNSLAYER.get(), EntityCrownslayerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.YATO.get(), EntityYatoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.LAPPLAND.get(), EntityLapplandRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.SIEGE.get(), EntitySiegeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.SCHWARZ.get(), EntitySchwarzRenderer::new);

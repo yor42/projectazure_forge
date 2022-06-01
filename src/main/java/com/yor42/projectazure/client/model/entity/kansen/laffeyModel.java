@@ -1,23 +1,17 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
+import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityLaffey;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.libs.utils.AnimationUtils;
-import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
-public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
-    private int blinkinterval = 0;
-    private long LastBlinkTime = 0;
-
+public class laffeyModel extends GeoCompanionModel<EntityLaffey> {
     @Override
     public ResourceLocation getModelLocation(EntityLaffey object) {
         return new ResourceLocation(Constants.MODID, "geo/entity/modellaffey.geo.json");
@@ -147,33 +141,10 @@ public class laffeyModel extends AnimatedGeoModel<EntityLaffey> {
                 this.LastBlinkTime = System.currentTimeMillis();
             }
         }
+    }
 
-        if(customPredicate != null) {
-            EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-            if (!(entity.isBeingPatted() || entity.isSleeping())) {
-                head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-                head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
-            }
-
-        }
-
-        if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
-            body.setPositionY(body.getPositionY() - 58);
-            body.setPositionZ(body.getPositionZ() + 10);
-
-            if(entity.getOwner().isCrouching()){
-                body.setPositionZ(body.getPositionZ() + 2);
-                body.setPositionY(body.getPositionY() + 2);
-                body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
-            }
-        }
-        else if(entity.isSleeping()){
-            body.setPositionY(-35);
-        }
-
-        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
-        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
-        IBone Chest = this.getAnimationProcessor().getBone("Chest");
-        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
+    @Override
+    protected int SleepingBodyYPosition() {
+        return -35;
     }
 }

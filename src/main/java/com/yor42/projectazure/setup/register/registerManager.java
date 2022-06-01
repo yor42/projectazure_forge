@@ -155,6 +155,9 @@ public class registerManager {
     public static final EntityType<EntityCrownSlayer> ENTITYTYPE_CROWNSLAYER = EntityType.Builder.of(EntityCrownSlayer::new, EntityClassification.CREATURE).sized(0.572F, 1.66F).build(ModResourceLocation("entitycrownslayer").toString());
     public static final RegistryObject<EntityType<EntityCrownSlayer>> CROWNSLAYER = ENTITIES.register("entitycrownslayer", () -> ENTITYTYPE_CROWNSLAYER);
 
+    public static final EntityType<EntityYato> ENTITYTYPE_YATO = EntityType.Builder.of(EntityYato::new, EntityClassification.CREATURE).sized(0.572F, 1.61F).build(ModResourceLocation("entityyato").toString());
+    public static final RegistryObject<EntityType<EntityYato>> YATO = ENTITIES.register("entityyato", () -> ENTITYTYPE_YATO);
+
     public static final EntityType<EntityTexas> ENTITYTYPE_TEXAS = EntityType.Builder.of(EntityTexas::new, EntityClassification.CREATURE).sized(0.572F, 1.61F).build(ModResourceLocation("entitytexas").toString());
     public static final RegistryObject<EntityType<EntityTexas>> TEXAS = ENTITIES.register("entitytexas", () -> ENTITYTYPE_TEXAS);
 

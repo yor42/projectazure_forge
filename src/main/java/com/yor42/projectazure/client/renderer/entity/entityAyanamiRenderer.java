@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.entity;
 
 import com.yor42.projectazure.client.model.entity.kansen.ayanamiModel;
-import com.yor42.projectazure.client.renderer.layer.AyanamiRiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityAyanami;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 public class entityAyanamiRenderer extends GeoCompanionRenderer<EntityAyanami> {
     public entityAyanamiRenderer(EntityRendererManager renderManager) {
         super(renderManager, new ayanamiModel());
-        this.addLayer(new AyanamiRiggingLayer(this));
+        this.addLayer(new CompanionRiggingLayer<>(this));
     }
 
     @Override

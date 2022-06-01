@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 public abstract class AbstractSwordUserBase extends AbstractEntityCompanion implements IMeleeAttacker {
 
     protected AbstractSwordUserBase(EntityType<? extends TameableEntity> type, World worldIn) {
@@ -18,7 +20,11 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
 
     public boolean hasMeleeItem(){
         Item item = this.getItemInHand(this.getNonVanillaMeleeAttackHand()).getItem();
-        return this.getTalentedWeaponList().contains(item) || item instanceof SwordItem;
+        return this.getTalentedWeaponList().contains(item) || (item instanceof SwordItem && allowVanillaSwords());
+    }
+
+    private boolean allowVanillaSwords(){
+        return true;
     }
 
     public boolean shouldUseNonVanillaAttack(LivingEntity target){
@@ -35,11 +41,13 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
         this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
 
+    @Nonnull
     @Override
     public ItemStack getMainHandItem() {
         return super.getMainHandItem();
     }
 
+    @Nonnull
     @Override
     public ItemStack getOffhandItem() {
         return super.getOffhandItem();

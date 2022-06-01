@@ -1,7 +1,7 @@
 package com.yor42.projectazure.client.renderer.entity;
 
 import com.yor42.projectazure.client.model.entity.kansen.Z23Model;
-import com.yor42.projectazure.client.renderer.layer.Z23RiggingLayer;
+import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityZ23;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -14,7 +14,7 @@ public class entityZ23Renderer extends GeoCompanionRenderer<EntityZ23> {
 
     public entityZ23Renderer(EntityRendererManager renderManager) {
         super(renderManager, new Z23Model());
-        this.addLayer(new Z23RiggingLayer(this));
+        this.addLayer(new CompanionRiggingLayer<>(this));
     }
 
     @Override

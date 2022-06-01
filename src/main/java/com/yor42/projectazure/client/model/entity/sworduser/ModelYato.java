@@ -1,7 +1,8 @@
-package com.yor42.projectazure.client.model.entity.bonus;
+package com.yor42.projectazure.client.model.entity.sworduser;
 
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
+import com.yor42.projectazure.gameobject.entity.companion.sworduser.EntityYato;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -13,29 +14,32 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
+public class ModelYato extends GeoCompanionModel<EntityYato> {
 
     @Override
-    public ResourceLocation getModelLocation(EntityTalulah object) {
-        return GeoModelEntityLocation("modeltalulah");
+    public ResourceLocation getModelLocation(EntityYato object) {
+        return GeoModelEntityLocation("modelyato");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityTalulah object) {
-        return TextureEntityLocation("modeltalulah");
+    public ResourceLocation getTextureLocation(EntityYato object) {
+        return TextureEntityLocation("modelyato");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityTalulah animatable) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/bonus/talulah.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntityYato animatable) {
+        return new ResourceLocation(Constants.MODID,"animations/entity/bonus/yato.animation.json");
     }
 
     @Override
-    public void setLivingAnimations(EntityTalulah entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setLivingAnimations(EntityYato entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-        IBone head = this.getAnimationProcessor().getBone("Head");
+        IBone visor1 = this.getAnimationProcessor().getBone("visor");
+        IBone visor2 = this.getAnimationProcessor().getBone("visor2");
+        IBone visor3 = this.getAnimationProcessor().getBone("visor3");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
+        IBone Injured = this.getAnimationProcessor().getBone("Injured");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone SleepFace = this.getAnimationProcessor().getBone("Sleeping");
@@ -43,12 +47,8 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
         IBone Angry3 = this.getAnimationProcessor().getBone("angry3");
-        IBone body = this.getAnimationProcessor().getBone("Body");
         IBone Faint = this.getAnimationProcessor().getBone("Faint");
-        IBone Injured = this.getAnimationProcessor().getBone("Injured");
-        IBone Worldskill = this.getAnimationProcessor().getBone("Worldskill");
-
-        if(entity.isDeadOrDying() || (entity.isCriticallyInjured() && entity.isSleeping())){
+        if (entity.isDeadOrDying() || entity.isCriticallyInjured()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -60,7 +60,6 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
             Angry3.setHidden(true);
             Faint.setHidden(false);
             Injured.setHidden(true);
-            Worldskill.setHidden(true);
         }
         else if(entity.isCriticallyInjured()){
             NormalFace.setHidden(true);
@@ -74,9 +73,8 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
             Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(false);
-            Worldskill.setHidden(true);
         }
-        else if(entity.isAngry()){
+        else if (entity.isAngry()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -88,9 +86,7 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
             Angry3.setHidden(false);
             Faint.setHidden(true);
             Injured.setHidden(true);
-            Worldskill.setHidden(true);
-        }
-        else if(entity.getAngerWarningCount() == 2){
+        } else if (entity.getAngerWarningCount() == 2) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -102,23 +98,19 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
             Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
-            Worldskill.setHidden(true);
-        }
-        else if(entity.islewded()){
+        } else if (entity.islewded()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             SleepFace.setHidden(true);
-            Flushed.setHidden(true);
-            Worldskill.setHidden(true);
-            Angry1.setHidden(false);
+            Flushed.setHidden(false);
+            Angry1.setHidden(true);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
-        }
-        else if(entity.isBeingPatted()){
+        } else if (entity.isBeingPatted()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -128,11 +120,9 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
             Angry1.setHidden(true);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
-            Worldskill.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
-        }
-        else if(entity.isSleeping()){
+        } else if (entity.isSleeping()) {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
@@ -142,28 +132,11 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
             Angry1.setHidden(true);
             Angry2.setHidden(true);
             Angry3.setHidden(true);
-            Worldskill.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
-            body.setPositionY(-45);
-            body.setPositionZ(-5);
-        }
-        else if(entity.isUsingWorldSkill()){
-            NormalFace.setHidden(true);
-            ExcitedFace.setHidden(true);
-            EyeclosedFace.setHidden(true);
-            PatFace.setHidden(true);
-            Worldskill.setHidden(false);
-            SleepFace.setHidden(true);
-            Flushed.setHidden(true);
-            Angry1.setHidden(true);
-            Angry2.setHidden(true);
-            Angry3.setHidden(true);
-            Faint.setHidden(true);
-            Injured.setHidden(true);
-        }
-        else {
-            if(this.LastBlinkTime == 0){
+        } else {
+            if (this.LastBlinkTime == 0) {
+                this.LastBlinkTime = System.currentTimeMillis();
                 NormalFace.setHidden(false);
                 ExcitedFace.setHidden(true);
                 EyeclosedFace.setHidden(true);
@@ -174,12 +147,10 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
                 Angry2.setHidden(true);
                 Angry3.setHidden(true);
                 Faint.setHidden(true);
-                Worldskill.setHidden(true);
                 Injured.setHidden(true);
-                this.LastBlinkTime = System.currentTimeMillis();
             }
-            if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
-                if(EyeclosedFace.isHidden()){
+            if (System.currentTimeMillis() - this.LastBlinkTime >= this.blinkinterval) {
+                if (EyeclosedFace.isHidden()) {
                     NormalFace.setHidden(true);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
@@ -190,11 +161,9 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
                     Angry2.setHidden(true);
                     Angry3.setHidden(true);
                     Faint.setHidden(true);
-                    Worldskill.setHidden(true);
                     Injured.setHidden(true);
-                    this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
-                }
-                else{
+                    this.blinkinterval = (int) ((getRand().nextFloat() * 300) + 100);
+                } else {
                     NormalFace.setHidden(false);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
@@ -205,13 +174,16 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
                     Angry2.setHidden(true);
                     Angry3.setHidden(true);
                     Faint.setHidden(true);
-                    Worldskill.setHidden(true);
                     Injured.setHidden(true);
-                    this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
+                    this.blinkinterval = (int) ((getRand().nextFloat() * 1000) + 3000);
                 }
                 this.LastBlinkTime = System.currentTimeMillis();
             }
         }
+
+        visor1.setHidden(!entity.isWearingVisor());
+        visor2.setHidden(!entity.isWearingVisor());
+        visor3.setHidden(!entity.isWearingVisor());
     }
 
     @Override
