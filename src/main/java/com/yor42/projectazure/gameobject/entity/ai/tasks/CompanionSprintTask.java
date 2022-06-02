@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.mixin.PathNavigatorAccessors;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
@@ -19,7 +20,7 @@ public class CompanionSprintTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion p_212832_2_) {
-        return p_212832_2_.getFoodStats().getFoodLevel()>=10;
+        return p_212832_2_.getFoodStats().getFoodLevel()>=10 && ((PathNavigatorAccessors)p_212832_2_.getNavigation()).getSpeedModifier()>=1;
     }
 
     @Override

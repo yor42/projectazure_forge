@@ -28,7 +28,7 @@ public class ModelYato extends GeoCompanionModel<EntityYato> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityYato animatable) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/bonus/yato.animation.json");
+        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/yato.animation.json");
     }
 
     @Override

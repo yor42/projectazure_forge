@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nonnull;
@@ -24,12 +23,6 @@ public class EntityCrownslayerRenderer extends GeoCompanionRenderer<EntityCrownS
     @Override
     public ResourceLocation getTextureLocation(@Nonnull EntityCrownSlayer entity) {
         return TextureEntityLocation("modelcrownslayer");
-    }
-
-    @Nonnull
-    @Override
-    protected Vector3d getHandItemCoordinate() {
-        return new Vector3d(0.6F, 0.3F, 1.5F);
     }
 
     @Override

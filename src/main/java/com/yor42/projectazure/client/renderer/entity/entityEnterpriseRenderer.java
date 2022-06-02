@@ -5,7 +5,6 @@ import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityEnterprise;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
 
 import javax.annotation.Nonnull;
 
@@ -22,9 +21,4 @@ public class entityEnterpriseRenderer extends GeoCompanionRenderer<EntityEnterpr
         return TextureEntityLocation("modelenterprise");
     }
 
-    @Nonnull
-    @Override
-    protected Vector3d getHandItemCoordinate() {
-        return new Vector3d(0.7F, 0.1, 1.7F);
-    }
 }

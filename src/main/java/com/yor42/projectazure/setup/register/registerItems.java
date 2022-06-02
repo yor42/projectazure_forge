@@ -432,6 +432,10 @@ public class registerItems {
             .tab(PA_SHIPS)));
     public static final RegistryObject<Item> SPAWM_YAMATO = registerManager.ITEMS.register("spawnyamato", () -> new ItemKansenSpawnEgg(ENTITYTYPE_YAMATO, new Item.Properties()
             .tab(PA_SHIPS)));
+
+    public static final RegistryObject<Item> SPAWM_YATO = registerManager.ITEMS.register("spawnyato", () -> new ItemKansenSpawnEgg(ENTITYTYPE_YATO, new Item.Properties()
+            .tab(PA_SHIPS)));
+
     public static final RegistryObject<Item> MEDKIT = registerManager.ITEMS.register("medkit", ItemMedKit::new);
 
     public static final RegistryObject<Item> DEFIB_PADDLE = registerManager.ITEMS.register("defib_paddle", ItemDefibPaddle::new);
