@@ -37,7 +37,11 @@ import static net.minecraft.util.text.TextFormatting.DARK_RED;
 import static net.minecraft.util.text.TextFormatting.YELLOW;
 
 public class GuiTeamFormation extends Screen {
-
+    /*
+     * Part of class is based on SkillScreen from Dexterity.
+     * Get the Source Code in github:
+     * https://github.com/Rongmario/Dexterity/blob/master/src/main/java/zone/rong/dexterity/rpg/skill/client/SkillScreen.java
+     */
     private int Subscreen = 0;
     private int TeamListPage = 0;
     private int x, y;
