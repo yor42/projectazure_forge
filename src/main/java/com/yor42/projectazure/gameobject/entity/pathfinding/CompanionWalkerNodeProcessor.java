@@ -11,11 +11,9 @@ import net.minecraft.world.IBlockReader;
 import javax.annotation.Nonnull;
 import java.util.function.Function;
 /*
- * This class is distributed as part of the ImprovedMobs Mod.
+ * Part of class is distributed as part of the ImprovedMobs Mod.
  * Get the Source Code in github:
  * https://github.com/Flemmli97/ImprovedMobs
- *
- * I wish could write my own but I have 0 idea how AI works. sorry Flemmli97 ;C
  */
 public class CompanionWalkerNodeProcessor extends WalkNodeProcessor {
     @Override
@@ -35,9 +33,10 @@ public class CompanionWalkerNodeProcessor extends WalkNodeProcessor {
     }
 
     public static int createLadderPathPointFor(int PathPointID, PathPoint[] PathPoints, PathPoint origin, Function<BlockPos, PathPoint> PathPointGetter, IBlockReader getter, MobEntity mob) {
-        BlockPos.Mutable pos = new BlockPos.Mutable(origin.x, origin.y + 1, origin.z);
-        if (getter.getBlockState(pos).isLadder(mob.level, pos, mob) || getter.getBlockState(pos.below()).isLadder(mob.level, pos.below(), mob)) {
-            PathPoint node = PathPointGetter.apply(pos);
+        BlockPos pos = origin.asBlockPos();
+        //up
+        if (getter.getBlockState(pos.above()).isLadder(mob.level, pos.above(), mob) || getter.getBlockState(pos).isLadder(mob.level, pos, mob)) {
+            PathPoint node = PathPointGetter.apply(pos.above());
             if (node != null && !node.closed) {
                 node.costMalus = 0;
                 node.type = PathNodeType.WALKABLE;
@@ -45,9 +44,9 @@ public class CompanionWalkerNodeProcessor extends WalkNodeProcessor {
                     PathPoints[PathPointID++] = node;
             }
         }
-        pos.set(pos.getX(), pos.getY() - 2, pos.getZ());
-        if (getter.getBlockState(pos).isLadder(mob.level, pos, mob)) {
-            PathPoint node = PathPointGetter.apply(pos);
+        //down
+        if (getter.getBlockState(pos.below()).isLadder(mob.level, pos.below(), mob)) {
+            PathPoint node = PathPointGetter.apply(pos.below());
             if (node != null && !node.closed) {
                 node.costMalus = 0;
                 node.type = PathNodeType.WALKABLE;

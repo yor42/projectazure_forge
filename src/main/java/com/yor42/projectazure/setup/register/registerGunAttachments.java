@@ -12,6 +12,11 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+/*
+This class is for timeless and classic addon.
+
+
+ */
 @Mod.EventBusSubscriber(
         modid = Constants.MODID,
         value = {Dist.CLIENT},

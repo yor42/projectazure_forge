@@ -36,18 +36,6 @@ public class registerNetwork {
                 .consumer(spawnParticlePacket::handle)
                 .add();
 
-        channel.messageBuilder(GunFiredPacket.class,4)
-                .decoder(GunFiredPacket::decode)
-                .encoder(GunFiredPacket::encode)
-                .consumer(GunFiredPacket::handle)
-                .add();
-
-        channel.messageBuilder(DoGunAnimationPacket.class,5)
-                .decoder(DoGunAnimationPacket::decode)
-                .encoder(DoGunAnimationPacket::encode)
-                .consumer(DoGunAnimationPacket::handle)
-                .add();
-
         channel.messageBuilder(StartRecruitPacket.class,6)
                 .decoder(StartRecruitPacket::decode)
                 .encoder(StartRecruitPacket::encode)

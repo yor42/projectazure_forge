@@ -37,26 +37,6 @@ import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ForgeBusEventHandlerClient {
 
-    private static boolean keyFirePressedMainhand = false;
-    private static boolean keyFirePressedOffhand = false;
-
-    /*
-    Snippets from Techguns 2.
-    thank you, pWn3d1337!
-     */
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onMouseEvent(InputEvent.RawMouseEvent event){
-        ClientPlayerEntity player = Minecraft.getInstance().player;
-        //check if game has focus
-        if(Minecraft.getInstance().isWindowActive() && player != null && !Minecraft.getInstance().isPaused() && Minecraft.getInstance().screen == null){
-            if(event.getButton() == GLFW_MOUSE_BUTTON_LEFT && player.getMainHandItem().getItem() instanceof ItemGunBase){
-                keyFirePressedMainhand = event.getAction() == GLFW_PRESS;
-                event.setCanceled(true);
-            }
-        }
-    }
-
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickEmpty event){
@@ -66,71 +46,6 @@ public class ForgeBusEventHandlerClient {
             for(Entity entity:passengers){
                 if(entity instanceof AbstractEntityCompanion){
                     Main.NETWORK.sendToServer(new EntityInteractionPacket(entity.getId(), EntityInteractionPacket.EntityBehaviorType.STOP_RIDING, true));
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void TickPlayer(TickEvent.PlayerTickEvent event){
-        if (event.phase == TickEvent.Phase.START) {
-            if (event.player.level.isClientSide()) {
-
-                if (Minecraft.getInstance().isWindowActive() && !event.player.isSpectator()) {
-                    ItemStack MainStack = event.player.getMainHandItem();
-                    ItemStack OffStack = event.player.getOffhandItem();
-                    if (!MainStack.isEmpty() && MainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) MainStack.getItem()).ShouldFireWithLeftClick()) {
-                        if (keyFirePressedMainhand) {
-                            ItemGunBase gun = ((ItemGunBase) MainStack.getItem());
-                            ProjectAzurePlayerCapability capability = ProjectAzurePlayerCapability.getCapability(event.player);
-                            int mainDelay = capability.getMainHandFireDelay();
-                            int offDelay = capability.getOffHandFireDelay();
-                            boolean hasAmmo = getRemainingAmmo(MainStack)>0;
-                            if(mainDelay <= 0) {
-                                if(hasAmmo) {
-                                    if (MinecraftForge.EVENT_BUS.post(new GunFireEvent.PreFire(event.player, event.player.getMainHandItem())))
-                                        return;
-                                }
-                                Main.NETWORK.sendToServer(new GunFiredPacket(false, false));
-                            }
-
-                            if (gun.isSemiAuto()) {
-                                keyFirePressedMainhand = false;
-                            }
-
-                        }
-                    } else {
-                        keyFirePressedMainhand = false;
-                    }
-
-
-                } else {
-                    keyFirePressedMainhand = false;
-                    keyFirePressedOffhand = false;
-                }
-
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void RenderEntityEvent(RenderLivingEvent.Pre event){
-        if(event.getEntity() instanceof PlayerEntity){
-            PlayerEntity player = (PlayerEntity) event.getEntity();
-
-            ItemStack mainStack = player.getMainHandItem();
-
-            if(!mainStack.isEmpty() && mainStack.getItem() instanceof ItemGunBase && ((ItemGunBase) mainStack.getItem()).ShouldDoBowPose()){
-                EntityModel<?> model = event.getRenderer().getModel();
-                if(model instanceof PlayerModel){
-                    PlayerModel<?> playermodel = (PlayerModel<?>) model;
-
-                    if(player.getMainArm() == HandSide.RIGHT){
-                        playermodel.rightArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
-                    }
-                    else{
-                        playermodel.leftArmPose = BipedModel.ArmPose.BOW_AND_ARROW;
-                    }
                 }
             }
         }

@@ -32,7 +32,6 @@ import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
-import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import com.yor42.projectazure.gameobject.items.tools.ItemCommandStick;
@@ -117,6 +116,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.example.client.renderer.entity.ExampleExtendedRendererEntityRenderer;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -2430,51 +2430,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         return true;
     }
-    /*
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new CompanionMoveToRecruitStationGoal(this));
-        this.goalSelector.addGoal(2, new CompanionSleepGoal(this));
-        this.goalSelector.addGoal(3, new SitGoal(this));
-        this.goalSelector.addGoal(4, new CompanionClimbLadderGoal(this));
-        this.goalSelector.addGoal(5, new CompanionUseSkillGoal(this));
-        if(this instanceof EntityKansenBase){
-            if(this instanceof EntityKansenAircraftCarrier) {
-                this.goalSelector.addGoal(6, new KansenLaunchPlaneGoal((EntityKansenAircraftCarrier) this, 20, 40, 50));
-            }
-            this.goalSelector.addGoal(7, new KansenRangedAttackGoal((EntityKansenBase) this, 0.8F, 10,20, 80, 100));
-        }
-        else if(this instanceof ISpellUser){
-            this.goalSelector.addGoal(8, new CompanionSpellRangedAttackGoal(this, 10));
-        }
-        else if(this instanceof IMeleeAttacker){
-            this.goalSelector.addGoal(9, new CompanionSwordUserMeleeAttack((IMeleeAttacker) this));
-        }
-        this.goalSelector.addGoal(10, new CompanionHealandEatFoodGoal(this));
-        this.goalSelector.addGoal(11, new CompanionsUseTotem(this));
-        this.goalSelector.addGoal(12, new CompanionPlaceTorchGoal(this));
-        this.goalSelector.addGoal(13, new CompanionUseShieldGoal(this));
-        this.goalSelector.addGoal(14, new WorkGoal(this, 1.0D));
-        this.goalSelector.addGoal(15, new CompanionUseGunGoal(this, 40, 0.6));
-        this.goalSelector.addGoal(16, new CompanionUseCrossbowGoal<>(this, 1.0D, 8.0F));
-        this.goalSelector.addGoal(17, new KansenAttackUsingBowGoal<>(this, 1.0D, 20, 15.0F));
-        this.goalSelector.addGoal(18, new CompanionRideBoatAlongPlayerGoal(this, 1.0));
-        this.goalSelector.addGoal(19, new CompanionVanillaMeleeGoal(this, 1.0D, true));
-        this.goalSelector.addGoal(20, new CompanionFollowOwnerGoal(this, 0.75D, 5.0F, 2.0F, false));
-        this.goalSelector.addGoal(21, new CompanionHealOwnerAndAllyGoal(this, 20, 10, 1.25, 10F));
-        this.goalSelector.addGoal(22, new CompanionOpenDoorGoal(this, true));
-        this.goalSelector.addGoal(23, new CompanionFreeroamGoal(this, 60, true));
-        this.goalSelector.addGoal(24, new CompanionPickupItemGoal(this));
-        this.goalSelector.addGoal(25, new CompanionLookplayerGoal(this));
-        this.goalSelector.addGoal(26, new LookRandomlyGoal(this));
-
-        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
-        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
-    }
-
-     */
-
     @Override
     protected void customServerAiStep() {
         this.level.getProfiler().push("CompanionBrain");
@@ -2834,6 +2789,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     return ActionResultType.CONSUME;
                 }
             } else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
+
+                /*
+                 * This Part of class is based on EntityWroughtnaut.java class from Mowzie's mob
+                 * Get the Source Code in github:
+                 * https://github.com/BobMowzie/MowziesMobs/blob/1.16.5/src/main/java/com/bobmowzie/mowziesmobs/server/entity/wroughtnaut/EntityWroughtnaut.java
+                 * Get Mod on curseforge:
+                 *  https://www.curseforge.com/minecraft/mc-mods/mowzies-mobs
+                 *
+                 * Mowzie's mob is licensed under cutom license. I do hope tht this falls under Non-Compete/Non-Imitate/Non-Manipulate...
+                 */
 
                 DirectionUtil.RelativeDirection interactionDirection;
                 float entityHitAngle = (float) ((Math.atan2(player.getZ() - getZ(), player.getX() - getX()) * (180 / Math.PI) - 90) % 360);

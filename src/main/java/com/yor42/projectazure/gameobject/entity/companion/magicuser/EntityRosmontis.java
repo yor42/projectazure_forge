@@ -267,12 +267,6 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
     @Override
     public boolean shouldUseSpell() {
-        if(getGunStack().getItem() instanceof ItemGunBase) {
-            boolean hasAmmo = getRemainingAmmo(getGunStack()) > 0;
-            boolean reloadable = HasRightMagazine(getGunStack());
-
-            return !(hasAmmo || reloadable) && !this.getNextSkillItem().isEmpty();
-        }
         else return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming()&& !this.getNextSkillItem().isEmpty();
     }
 

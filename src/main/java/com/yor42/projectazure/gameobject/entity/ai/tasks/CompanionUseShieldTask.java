@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
+import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -49,7 +50,7 @@ public class CompanionUseShieldTask extends Task<AbstractEntityCompanion> {
             }
 
             if (companion.getShieldCoolDown() == 0) {
-                boolean ranged = companion.getMainHandItem().getItem() instanceof CrossbowItem || companion.getMainHandItem().getItem() instanceof BowItem || companion.getMainHandItem().getItem() instanceof ItemGunBase;
+                boolean ranged = companion.getMainHandItem().getItem() instanceof CrossbowItem || companion.getMainHandItem().getItem() instanceof BowItem || companion.getMainHandItem().getItem() instanceof GunItem;
                 return companion.distanceTo(target) <= 4.0D || target instanceof CreeperEntity || target instanceof IRangedAttackMob && target.distanceTo(companion) >= 5.0D && !ranged || target instanceof RavagerEntity;
             }
             return false;

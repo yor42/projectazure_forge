@@ -36,8 +36,15 @@ import java.util.Objects;
 
 public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & IAnimatable> extends ExtendedGeoEntityRenderer<T> {
 
-    private T entity;
-
+    /*
+     * This Part of class is based on ExampleExtendedRendererEntityRenderer from Geckolib.
+     * Get the Source Code in github:
+     * https://github.com/bernie-g/geckolib/blob/1.16/src/main/java/software/bernie/example/client/renderer/entity/ExampleExtendedRendererEntityRenderer.java
+     * Get Mod on curseforge:
+     *  https://www.curseforge.com/minecraft/mc-mods/geckolib
+     *
+     * Geckolib is licensed under MIT license.
+     */
     @Nullable
     @Override
     protected ResourceLocation getTextureForBone(String boneName, T currentEntity) {
@@ -190,52 +197,8 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
 
     @Override
     public void renderEarly(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        this.entity = animatable;
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
     }
-
-    /*
-    *Confused noise*
-     */
-    protected void prepareArmorPositionAndScale(GeoBone bone, ObjectList<ModelRenderer.ModelBox> cubeList, ModelRenderer sourceLimb, MatrixStack stack) {
-        GeoCube firstCube = bone.childCubes.get(0);
-        final ModelRenderer.ModelBox armorCube = cubeList.get(0);
-
-        final float targetSizeX = firstCube.size.x();
-        final float targetSizeY = firstCube.size.y();
-        final float targetSizeZ = firstCube.size.z();
-
-        final float sourceSizeX = Math.abs(armorCube.maxX - armorCube.minX);
-        final float sourceSizeY = Math.abs(armorCube.maxY - armorCube.minY);
-        final float sourceSizeZ = Math.abs(armorCube.maxZ - armorCube.minZ);
-
-        float scaleX = targetSizeX / sourceSizeX;
-        float scaleY = targetSizeY / sourceSizeY;
-        float scaleZ = targetSizeZ / sourceSizeZ;
-
-        //Modify position to move point to correct location, otherwise it will be off when the sizes are different
-        sourceLimb.setPos(-(bone.getPivotX() + sourceSizeX - targetSizeX), -(bone.getPivotY() + sourceSizeY - targetSizeY), (bone.getPivotZ() + sourceSizeZ - targetSizeZ));
-
-        sourceLimb.xRot = -bone.getRotationX();
-        sourceLimb.yRot = -bone.getRotationY();
-        sourceLimb.zRot = bone.getRotationZ();
-
-        stack.scale(scaleX, scaleY, scaleZ);
-    }
-    /*
-    @Override
-    public void render(GeoModel model, T animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-    }
-
-    @Override
-    public void render(@NonNull T entity, float entityYaw, float partialTicks, @Nonnull MatrixStack stack, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn) {
-        this.renderStatus(entity, stack, bufferIn, packedLightIn);
-        this.renderNameTag(entity, entity.getDisplayName(), stack, bufferIn, packedLightIn);
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-    }
-
-     */
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {

@@ -20,14 +20,15 @@ import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
+/*
+ *  BluSunrize
+ *  Copyright (c) 2021
+ *
+ *  This code is licensed under "Blu's License of Common Sense"
+ *  Details can be found in the license file in the root folder of this project
+ */
+
 public class RenderingUtils {
-    /*
-     *  BluSunrize
-     *  Copyright (c) 2021
-     *
-     *  This code is licensed under "Blu's License of Common Sense"
-     *  Details can be found in the license file in the root folder of this project
-     */
     public static void drawRepeatedFluidSpriteGui(IRenderTypeBuffer buffer, MatrixStack stack, FluidStack fluid, float x, float y, float w, float h)
     {
         RenderType renderType = getGui(PlayerContainer.BLOCK_ATLAS);

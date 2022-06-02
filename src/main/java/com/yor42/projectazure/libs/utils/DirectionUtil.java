@@ -18,12 +18,6 @@ import java.util.function.Function;
 
 public class DirectionUtil {
 
-    public static final Direction[] VALUES = Direction.values();
-    public static final Direction[] BY_HORIZONTAL_INDEX = Arrays.stream(VALUES)
-            .filter((direction) -> direction.getAxis().isHorizontal())
-            .sorted(Comparator.comparingInt(Direction::get2DDataValue))
-            .toArray(Direction[]::new);
-
     public static RelativeDirection getRelativeDirection(Direction direction, Direction MachineFacings) {
         switch (MachineFacings) {
             case NORTH:{

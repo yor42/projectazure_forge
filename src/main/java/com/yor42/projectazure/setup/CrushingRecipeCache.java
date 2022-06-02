@@ -48,10 +48,6 @@ public class CrushingRecipeCache {
         recipeByBlockCache.clear();
     }
 
-    public List<CrushingRecipe> getRecipeList() {
-        return recipeList;
-    }
-
     public void clearRecipes() {
         recipeList.clear();
 

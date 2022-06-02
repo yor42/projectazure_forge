@@ -28,13 +28,8 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
     }
 
     public boolean shouldUseSpell(){
-        if(getGunStack().getItem() instanceof ItemGunBase) {
-            boolean hasAmmo = getRemainingAmmo(getGunStack()) > 0;
-            boolean reloadable = HasRightMagazine(getGunStack());
 
-            return !(hasAmmo || reloadable);
-        }
-        else return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
+        return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
     };
 
 

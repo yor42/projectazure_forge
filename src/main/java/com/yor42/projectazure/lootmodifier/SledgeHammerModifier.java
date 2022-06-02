@@ -17,7 +17,14 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/*
+ * This class is distributed as part of the Ex Nihilo Sequentia Mod.
+ * Get the Source Code in github:
+ * https://github.com/NovaMachina-Mods/ExNihiloSequentia
+ *
+ * Ex Nihilo Sequentia is Open Source and distributed under the
+ * CC BY-NC-SA 4.0 License: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
+ */
 public class SledgeHammerModifier extends LootModifier {
     /**
      * Constructs a LootModifier.

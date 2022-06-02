@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
+import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.setup.register.registerManager;
@@ -32,19 +33,6 @@ public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld world, AbstractEntityCompanion entity) {
-        ItemStack mainHandStack = entity.getItemInHand(MAIN_HAND);
-        ItemStack offHandStack = entity.getItemInHand(OFF_HAND);
-        if(mainHandStack.getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) mainHandStack.getItem()).isTwoHanded()){
-                return false;
-            }
-        }
-
-        if(offHandStack.getItem() instanceof ItemGunBase){
-            if(((ItemGunBase) offHandStack.getItem()).isTwoHanded()){
-                return false;
-            }
-        }
 
         if (this.Cooldown > 0) {
             this.Cooldown--;

@@ -1,7 +1,6 @@
 package com.yor42.projectazure.intermod.top;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import mcjty.theoneprobe.api.IProbeHitEntityData;
@@ -99,11 +98,6 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
             }
             if(companion.getOwner() != null) {
                 iProbeInfo.horizontal().text(new TranslationTextComponent("top.companion_owner.message").append(companion.getOwner().getName()).withStyle(TextFormatting.YELLOW));
-            }
-            if(gunstack.getItem() instanceof ItemGunBase){
-                int RemainingAmmo = ItemStackUtils.getRemainingAmmo(gunstack);
-                int maxAmmo = ((ItemGunBase)gunstack.getItem()).getMaxAmmo();
-                iProbeInfo.item(gunstack).text(new StringTextComponent(RemainingAmmo+"/"+maxAmmo));
             }
 
         }
