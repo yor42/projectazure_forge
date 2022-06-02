@@ -1,7 +1,8 @@
-package com.yor42.projectazure.client.renderer.entity;
+package com.yor42.projectazure.client.renderer.entity.biped;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.client.model.entity.bonus.ModelCrownslayer;
+import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

@@ -1,6 +1,7 @@
-package com.yor42.projectazure.client.renderer.entity;
+package com.yor42.projectazure.client.renderer.entity.biped;
 
 import com.yor42.projectazure.client.model.entity.kansen.Z23Model;
+import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityZ23;
 import com.yor42.projectazure.libs.Constants;
