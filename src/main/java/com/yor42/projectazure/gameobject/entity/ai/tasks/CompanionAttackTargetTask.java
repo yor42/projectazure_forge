@@ -1,7 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
+import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
-import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
@@ -28,7 +29,7 @@ public class CompanionAttackTargetTask extends AttackTargetTask {
     }
 
     private boolean isHoldingUsableProjectileWeapon(MobEntity p_233921_1_) {
-        return p_233921_1_.isHolding((p_233922_1_) -> p_233922_1_ instanceof ItemGunBase);
+        return p_233921_1_.isHolding((p_233922_1_) -> p_233922_1_ instanceof GunItem);
     }
 
     private LivingEntity getAttackTarget(MobEntity p_233923_1_) {

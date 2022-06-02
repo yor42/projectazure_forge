@@ -6,7 +6,7 @@ import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.Item;
@@ -100,7 +100,7 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
                         if (hasAmmo && --this.attackTime <= 0) {
                             entity.AttackUsingGun(target, gunStack);
                             this.attackTime = rate;
-                        } else if (gunStack.getItem() instanceof ItemGunBase && getRemainingAmmo(gunStack) <= 0 && !entity.isReloadingMainHand() && reloadable) {
+                        } else if (gunStack.getItem() instanceof GunItem && getRemainingAmmo(gunStack) <= 0 && !entity.isReloadingMainHand() && reloadable) {
                             entity.setReloadDelay(gunStack);
                         }
                     }

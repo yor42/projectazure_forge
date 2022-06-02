@@ -1,7 +1,8 @@
 package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
+import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -28,7 +29,12 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
     }
 
     public boolean shouldUseSpell(){
+        if(this.getGunStack().getItem() instanceof GunItem) {
+            boolean hasAmmo = this.getGunStack().getOrCreateTag().getInt("AmmoCount") > 0;
+            boolean reloadable = this.HasRightMagazine(this.getGunStack());
 
+            return !(hasAmmo || reloadable);
+        }
         return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
     };
 

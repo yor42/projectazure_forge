@@ -42,20 +42,21 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
                 body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
             }
         }
-        else if(!(entity.isOrderedToSit()||entity.isBeingPatted()||entity.isSleeping()||entity.islewded())) {
-            if (entity.isChargingCrossbow()) {
-                AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
-            } else if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
-                AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
-            }
-        }
         else if(entity.isSleeping()){
             body.setPositionY(SleepingBodyYPosition());
             body.setPositionZ(SleepingBodyZPosition());
         }
-        else {
-            AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
+        else if(!(entity.isBeingPatted()||entity.islewded())) {
+
+            if(!entity.isOrderedToSit()) {
+                if (entity.isChargingCrossbow()) {
+                    AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
+                } else if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
+                    AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
+                }
+            }
         }
+        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
     }
 
     protected abstract int SleepingBodyYPosition();

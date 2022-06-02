@@ -1408,7 +1408,7 @@
 		},
 		"walk_arm": {
 			"loop": true,
-			"animation_length": 1.16667,
+			"animation_length": 1.1667,
 			"bones": {
 				"RightArm": {
 					"rotation": {
@@ -1468,6 +1468,11 @@
 							"vector": [-22.5, 0, 0],
 							"easing": "easeInOutSine"
 						}
+					}
+				},
+				"armor_body": {
+					"position": {
+						"vector": [-0.5, 0, 0]
 					}
 				}
 			}

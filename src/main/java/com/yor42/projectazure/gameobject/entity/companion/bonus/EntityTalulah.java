@@ -9,7 +9,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
-import com.yor42.projectazure.gameobject.items.gun.ItemGunBase;
+
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.interfaces.IWorldSkillUseable;
@@ -386,8 +386,8 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
 
     @Override
     public boolean shouldUseSpell() {
-        if(this.getGunStack().getItem() instanceof ItemGunBase) {
-            boolean hasAmmo = getRemainingAmmo(this.getGunStack()) > 0;
+        if(this.getGunStack().getItem() instanceof GunItem) {
+            boolean hasAmmo = this.getGunStack().getOrCreateTag().getInt("AmmoCount") > 0;
             boolean reloadable = this.HasRightMagazine(this.getGunStack());
 
             return !(hasAmmo || reloadable);

@@ -65,6 +65,8 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
                 return boots;
             case "armor_leftleg":
             case "armor_rightleg":
+            case "armor_leftleg2":
+            case "armor_rightleg2":
                 return leggings;
             case "armor_rightarm":
             case "armor_leftarm":
@@ -82,9 +84,11 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         switch (name) {
             case "armor_leftfoot":
             case "armor_leftleg":
+            case "armor_leftleg2":
                 return armorModel.leftLeg;
             case "armor_rightfoot":
             case "armor_rightleg":
+            case "armor_rightleg2":
                 return armorModel.rightLeg;
             case "armor_rightarm":
                 return armorModel.rightArm;
@@ -107,6 +111,8 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
                 return EquipmentSlotType.FEET;
             case "armor_leftleg":
             case "armor_rightleg":
+            case "armor_leftleg2":
+            case "armor_rightleg2":
                 return EquipmentSlotType.LEGS;
             case "armor_rightarm":
                 return !currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
@@ -202,13 +208,15 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
 
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if(this.shouldHideBone(bone.getName())){
-            bone.setHidden(true);
-        }
-        else if(bone.getName().startsWith("cosmetic_") || Objects.equals(bone.getName(), "Chest2")){
-            bone.setHidden(false);
+
+        if(isBoneCosmetic(bone)) {
+            bone.setHidden(this.shouldHideBone(bone.getName()));
         }
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    }
+
+    protected boolean isBoneCosmetic(GeoBone bone) {
+        return bone.getName().startsWith("cosmetic_") || Objects.equals(bone.getName(), "Chest2");
     }
 
     protected boolean shouldHideBone(String bone){

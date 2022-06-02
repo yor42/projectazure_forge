@@ -2126,7 +2126,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         int mainhandDelay = this.getEntityData().get(RELOAD_TIMER_MAINHAND);
         if(mainhandDelay>0){
             this.getEntityData().set(RELOAD_TIMER_MAINHAND, mainhandDelay - 1);
-            if(this.getEntityData().get(RELOAD_TIMER_MAINHAND) == 0 && this.getGunStack().getItem() instanceof ItemGunBase){
+            if(this.getEntityData().get(RELOAD_TIMER_MAINHAND) == 0 && this.getGunStack().getItem() instanceof GunItem){
                 this.reloadAmmo();
             }
         }
