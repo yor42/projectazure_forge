@@ -1,4 +1,4 @@
-package com.yor42.projectazure.client.model.entity.kansen;
+package com.yor42.projectazure.client.model.entity.kanmusu;
 
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityYamato;

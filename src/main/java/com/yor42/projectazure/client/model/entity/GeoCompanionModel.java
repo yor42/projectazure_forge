@@ -3,8 +3,10 @@ package com.yor42.projectazure.client.model.entity;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.CrossbowItem;
+import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -75,6 +77,8 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
 
             parser.setValue("query.prev_head_pitch", ((LivingEntity)animatable).xRotO * ((float) Math.PI / 180F));
             parser.setValue("query.prev_head_yaw", ((LivingEntity)animatable).yHeadRotO * ((float) Math.PI / 180F));
+
+            parser.setValue("query.animation_speed", ((AbstractEntityCompanion)animatable).animationSpeed);
         }
     }
 }

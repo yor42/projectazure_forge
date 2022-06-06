@@ -33,7 +33,7 @@ public class CompanionSprintTask extends Task<AbstractEntityCompanion> {
         entity.getBrain().getMemory(MemoryModuleType.WALK_TARGET).ifPresent(((pos)->{
             BlockPos position = pos.getTarget().currentBlockPosition();
             BlockPos entityPosition = entity.blockPosition();
-            boolean shouldSprint = position.closerThan(new Vector3i(entityPosition.getX(), position.getY(), entityPosition.getZ()), pos.getCloseEnoughDist() + 4);
+            boolean shouldSprint = position.closerThan(new Vector3i(entityPosition.getX(), position.getY(), entityPosition.getZ()), Math.max(pos.getCloseEnoughDist() + 4, 8));
             entity.setSprinting(shouldSprint);
         }));
         if(!entity.getBrain().getMemory(MemoryModuleType.WALK_TARGET).isPresent()){

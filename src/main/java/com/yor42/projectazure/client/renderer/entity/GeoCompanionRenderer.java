@@ -71,6 +71,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             case "armor_rightarm":
             case "armor_leftarm":
             case "armor_body":
+            case "armor_chest":
                 return chestplate;
             case "armor_head":
                 return helmet;
@@ -95,6 +96,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             case "armor_leftarm":
                 return armorModel.leftArm;
             case "armor_body":
+            case "armor_chest":
                 return armorModel.body;
             case "armor_head":
                 return armorModel.head;
@@ -119,6 +121,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             case "armor_leftarm":
                 return currentEntity.isLeftHanded() ? EquipmentSlotType.MAINHAND : EquipmentSlotType.OFFHAND;
             case "armor_body":
+            case "armor_chest":
                 return EquipmentSlotType.CHEST;
             case "armor_head":
                 return EquipmentSlotType.HEAD;
@@ -228,19 +231,28 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
                 return !(boots.getItem() == Items.AIR);
             case "cosmetic_leftleg":
             case "cosmetic_rightleg":
-            case "cosmetic_waist":
+            case "cosmetic_leftleg2":
+            case "cosmetic_rightleg2":
+            case "cosmetic_skirt":
                 return !(leggings.getItem() == Items.AIR);
             case "cosmetic_body":
             case "cosmetic_chest":
             case "cosmetic_chest2":
+            case "cosmetic_chest3":
+            case "cosmetic_chest4":
             case "cosmetic_leftarm":
             case "Chest2":
+            case "cosmetic_waist":
             case "cosmetic_rightarm":
             case "cosmetic_lefthand":
             case "cosmetic_righthand":
                 boolean val = (chestplate.getItem() == Items.AIR);
                 return !val;
             case "cosmetic_head":
+            case "cosmetic_head2":
+            case "cosmetic_head3":
+            case "cosmetic_head4":
+            case "cosmetic_head5":
                 return !(helmet.getItem() == Items.AIR);
         }
     };

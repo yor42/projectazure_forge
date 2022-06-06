@@ -1,6 +1,6 @@
 package com.yor42.projectazure.client.renderer.entity.biped;
 
-import com.yor42.projectazure.client.model.entity.kansen.YamatoModel;
+import com.yor42.projectazure.client.model.entity.kanmusu.YamatoModel;
 import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.client.renderer.layer.CompanionRiggingLayer;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityYamato;

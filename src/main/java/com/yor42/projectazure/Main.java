@@ -128,9 +128,6 @@ public class Main
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        event.enqueueWork(()->{
-
-        });
         ProjectAzurePlayerCapability.registerCapability();
         CapabilityMultiInventory.register();
         registerEntity.RegisterAttributes();

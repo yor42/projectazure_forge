@@ -25,6 +25,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 
+import static com.yor42.projectazure.libs.enums.EntityType.KANMUSU;
+
 public class EntityYamato extends EntityKansenBattleship{
     public EntityYamato(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -156,6 +158,11 @@ public class EntityYamato extends EntityKansenBattleship{
         }
         event.getController().setAnimation(builder.addAnimation("idle", true));
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public enums.EntityType getEntityType() {
+        return KANMUSU;
     }
 
     @Override

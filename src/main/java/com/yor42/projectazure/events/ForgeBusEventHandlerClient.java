@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
+import static com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData.TeamListCLIENT;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
@@ -53,6 +54,7 @@ public class ForgeBusEventHandlerClient {
     @SubscribeEvent
     public static void onPlayerLoggedOut(ClientPlayerNetworkEvent.LoggedOutEvent event){
         Main.CRUSHING_REGISTRY.clearRecipes();
+        TeamListCLIENT.clear();
     }
 
 }

@@ -63,6 +63,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
+import net.minecraft.entity.ai.brain.memory.WalkTarget;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
@@ -1434,8 +1435,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             if(this.toldtomovecount >=3){
                 this.toldtomovecount = 0;
                 Vector3d loc = this.WanderRNG();
-                if(loc != null) {
-                    this.getNavigation().moveTo(loc.x, loc.y, loc.z, 1);
+                if(loc != null && !this.isOrderedToSit()) {
+                    this.getBrain().setMemory(WALK_TARGET, new WalkTarget(loc, 1,1));
                 }
             }
             else{
