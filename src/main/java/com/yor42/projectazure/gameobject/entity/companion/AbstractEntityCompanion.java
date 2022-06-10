@@ -1060,10 +1060,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return -1;
     }
 
-    public boolean isSwimmingUp() {
-        return this.isSwimmingUp;
-    }
-
     private static final Predicate<LivingEntity> HOSTILE_ENTITIES = (entity) -> entity.getSoundSource() == SoundCategory.HOSTILE && !Config.COMMON.aggroMobs.exemptEntities.get().contains(entity.getType().getRegistryName().toString());
 
     public void AttackUsingGun(LivingEntity target, ItemStack gun){
