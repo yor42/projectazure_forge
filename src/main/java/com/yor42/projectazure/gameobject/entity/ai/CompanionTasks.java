@@ -58,7 +58,6 @@ public class CompanionTasks {
         addCombatActivity(brain, companion);
         addFollowOwnerActivity(brain, companion);
         addWaitPlayerActivity(brain, companion);
-        addSittingActivity(brain, companion);
         initRetreatActivity(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(FOLLOWING_OWNER.get());

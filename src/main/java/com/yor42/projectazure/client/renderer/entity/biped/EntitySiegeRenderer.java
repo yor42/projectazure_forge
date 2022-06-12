@@ -11,9 +11,4 @@ public class EntitySiegeRenderer extends GeoCompanionRenderer<EntitySiege> {
         super(renderManager, new SiegeModel());
     }
 
-    @Override
-    protected boolean isLeftHanded() {
-        return false;
-    }
-
 }

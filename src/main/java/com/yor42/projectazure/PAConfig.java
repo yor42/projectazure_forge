@@ -5,6 +5,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
 
+import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
+
 @Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class PAConfig {
 
@@ -201,7 +203,7 @@ public class PAConfig {
         public final ForgeConfigSpec.BooleanValue RedStonePoweredMachines;
 
         public final ForgeConfigSpec.BooleanValue shouldRecruitBeaconSpawnAllCompanions;
-        public final ForgeConfigSpec.BooleanValue permadeath;
+        public final ForgeConfigSpec.EnumValue<COMPANION_DEATH> death_type;
 
         public final ForgeConfigSpec.BooleanValue RiggingInfiniteFuel;
 
@@ -408,13 +410,19 @@ public class PAConfig {
 
             builder.pop().push("Misc").comment("Other Thingys");
             shouldRecruitBeaconSpawnAllCompanions = builder.define("Should Recruit Beacon Spawn ALL Companion?", false);
-            permadeath = builder.define("Enable Permadeath: disable companion dropping back stasis crystal", false);
+            death_type = builder.defineEnum("What should happen when companion fully dies?", RESPAWN);
             builder.pop();
 
             builder.push("Cheats").comment("wuss mode");
             RiggingInfiniteFuel = builder.define("Rigging does not require fuel", false);
             builder.pop();
         }
+    }
+
+    public enum COMPANION_DEATH{
+        PERMADEATH,
+        STASIS_CRYSTAL,
+        RESPAWN
     }
 
 }

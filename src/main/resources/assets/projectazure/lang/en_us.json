@@ -307,6 +307,7 @@
   "akn_reunion": "Reunion / Arknights",
   "bluearchive": "Blue Archive",
   "al_kansen": "KANSEN / Azur Lane",
+  "kc_kanmusu": "Kanmusu / Kantai Collection",
   "gfl_tdoll": "T-Doll / Girl's Frontline",
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
@@ -335,6 +336,7 @@
   "entity.projectazure.entitysylvi": "Sylvi Lee",
   "entity.projectazure.entityschwarz": "Schwarz",
   "entity.projectazure.entitynearl": "Nearl",
+  "entity.projectazure.entityyato": "Yato",
 
   "entity.projectazure.missiledrone": "Missile Drone",
 

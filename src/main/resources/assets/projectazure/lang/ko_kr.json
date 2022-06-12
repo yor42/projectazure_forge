@@ -198,6 +198,7 @@
   "block.projectazure.energy_hatch": "에너지 해치",
   "block.projectazure.machine_dynamo": "다이너모 코일",
   "block.projectazure.originium_generator": "오리지늄 반응로",
+  "block.projectazure.ammo_press": "탄약 압착기 제어 패널",
   "block.projectazure.reenforced_plank": "강화된 판자",
   "block.projectazure.reenforced_concrete": "강화 콘크리트",
   "block.projectazure.reenforced_concrete.tooltip": "강철로 보강된 콘크리트입니다; 멀티블럭 구조물의 일부로 쓰입니다.",
@@ -207,6 +208,7 @@
   "block.projectazure.machine_component": "기계 부품",
 
   "originium_generator.name": "오리지늄 반응로",
+  "ammo_press.name": "탄약 압착기",
 
 
   "rigging_valid_on.tooltip": "사용 가능 함급:",
@@ -262,12 +264,12 @@
   "message.glitchedphone.selected_0": "스마트폰이 빛을 발하기 시작하더니 이내 서류 더미로 변하며 사라집니다. 이건... 누군가의 프로필 같군요?",
   "message.glitchedphone.selected_1": "스마트폰이 빛을 발하기 시작하더니 이내 빛과 열을 발하는 무지개색 정육면체로 변하며 사라집니다.",
 
-  "entity.status.relaxing": "Resting",
-  "entity.status.sitting": "Sitting",
-  "entity.status.waiting": "Waiting for owner",
-  "entity.status.following": "Following owner",
-  "entity.status.fainted": "FAINTED",
-  "entity.status.injured": "Injured",
+  "entity.status.relaxing": "휴식 중",
+  "entity.status.sitting": "앉아 있는 중",
+  "entity.status.waiting": "지휘관을 기다리는 중",
+  "entity.status.following": "지휘관을 따르는 중",
+  "entity.status.fainted": "기절",
+  "entity.status.injured": "부상",
 
   "gui.team.newname": "새 팀 %s",
 
@@ -333,6 +335,7 @@
   "entity.projectazure.entitysylvi": "이슬비",
   "entity.projectazure.entityschwarz": "슈바르츠",
   "entity.projectazure.entitynearl": "니어",
+  "entity.projectazure.entityyato": "야토",
 
   "entity.projectazure.missiledrone": "미사일 드론",
 
@@ -437,7 +440,12 @@
   "top.companion_limit_break.message": "한계 돌파: %s",
   "top.companion_owner.message": "지휘관: %s",
 
+  "multiblocked.recupe_map.originium_generation": "오리지늄 반응",
+  "multiblocked.recupe_map.ammopress": "탄약 압착기",
 
+  "recipe.alloying": "Alloying",
+  "recipe.pressing": "Pressing",
+  "recipe.crystalizing": "Crystalizing",
   "gui.tooltip.homepos": "현재 침대 위치",
   "item.projectazure.abydos550": "화이트팽 465"
 }
