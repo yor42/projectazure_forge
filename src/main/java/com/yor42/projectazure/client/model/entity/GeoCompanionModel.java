@@ -3,6 +3,7 @@ package com.yor42.projectazure.client.model.entity;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.CrossbowItem;
@@ -24,41 +25,41 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
 
     @Override
     public void setLivingAnimations(E entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
-        super.setLivingAnimations(entity, uniqueID, customPredicate);
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        IBone head = this.getAnimationProcessor().getBone("Head");
-        IBone body = this.getAnimationProcessor().getBone("Body");
-        IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
-        IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
-        IBone Chest = this.getAnimationProcessor().getBone("Chest");
-        if(!(entity.isBeingPatted()||entity.isSleeping())) {
-            head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
-        }
-        else if(entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
-            body.setPositionY(body.getPositionY() - 60);
-            body.setPositionZ(body.getPositionZ() + 10);
-            if(entity.getOwner().isCrouching()){
-                body.setPositionZ(body.getPositionZ() + 2);
-                body.setPositionY(body.getPositionY() + 2);
-                body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI)*-1);
+        if(!Minecraft.getInstance().isPaused()) {
+            super.setLivingAnimations(entity, uniqueID, customPredicate);
+            EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+            IBone head = this.getAnimationProcessor().getBone("Head");
+            IBone body = this.getAnimationProcessor().getBone("Body");
+            IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
+            IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
+            IBone Chest = this.getAnimationProcessor().getBone("Chest");
+            if (!(entity.isBeingPatted() || entity.isSleeping())) {
+                head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+                head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
             }
-        }
-        else if(entity.isSleeping()){
-            body.setPositionY(SleepingBodyYPosition());
-            body.setPositionZ(SleepingBodyZPosition());
-        }
-        else if(!(entity.isBeingPatted()||entity.islewded())) {
 
-            if(!entity.isOrderedToSit()) {
-                if (entity.isChargingCrossbow()) {
-                    AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
-                } else if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
-                    AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
+            if (entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
+                body.setPositionZ(body.getPositionZ() - 10);
+                if (entity.getOwner().isCrouching()) {
+                    body.setPositionZ(body.getPositionZ() + 8);
+                    body.setPositionY(body.getPositionY() - 8);
+                    body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI) * -1);
+                }
+            } else if (entity.isSleeping()) {
+                body.setPositionY(SleepingBodyYPosition());
+                body.setPositionZ(SleepingBodyZPosition());
+            } else if (!(entity.isBeingPatted() || entity.islewded())) {
+
+                if (!entity.isOrderedToSit()) {
+                    if (entity.isChargingCrossbow()) {
+                        AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
+                    } else if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
+                        AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
+                    }
                 }
             }
+            AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
         }
-        AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
     }
 
     protected abstract int SleepingBodyYPosition();

@@ -895,6 +895,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                 respawnworld.addFreshEntity(newEntity);
                                 isSpawnSuccessful.set(true);
                             });
+                            if(!isSpawnSuccessful.get()) {
+                                this.getOwner().sendMessage(new TranslationTextComponent("message.companion.bedmissing"), UUID.randomUUID());
+                            }
                         }
                     }
                 }
@@ -1451,12 +1454,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public double getMyRidingOffset() {
+
         if(this.getVehicle() instanceof PlayerEntity){
-            return 0.45D;
+            return this.getDimensions(Pose.STANDING).height*0.2D;
         }
-        else {
-            return 0.3D;
-        }
+
+        return 0.3D;
     }
 
     @Override
