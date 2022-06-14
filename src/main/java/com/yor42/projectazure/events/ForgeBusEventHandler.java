@@ -227,6 +227,7 @@ public class ForgeBusEventHandler {
                     }
                 }
             }
+            player.swing(MAIN_HAND);
         }
     }
 

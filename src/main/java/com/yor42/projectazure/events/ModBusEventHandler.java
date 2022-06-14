@@ -29,6 +29,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability.CapabilityID;
 
@@ -108,22 +109,15 @@ public class ModBusEventHandler {
                 data.putBoolean("PRJA:gotStarterCube", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
 
-                if(data.contains("carrying_companion")){
-                    ListNBT list = data.getList("carrying_companion", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
-                    for(int i = 0; i<list.size(); i++){
-                        CompoundNBT compound = list.getCompound(i);
-                        Optional<Entity> entity = EntityType.create(compound, player.level);
-                        entity.ifPresent((ent)->{
-                            if(ent instanceof AbstractEntityCompanion){
-                                player.level.addFreshEntity(ent);
-                                if(ent.startRiding(player, true)){
-                                    Main.LOGGER.debug("Successfully loaded entity");
-                                }
-                            }
-                        });
+                Optional<Entity> entity = Optional.ofNullable(EntityType.loadEntityRecursive(data, player.level, Function.identity()));
+                entity.ifPresent((ent)->{
+                    if(ent instanceof AbstractEntityCompanion){
+                        player.level.addFreshEntity(ent);
+                        if(ent.startRiding(player, true)){
+                            Main.LOGGER.debug("Successfully loaded entity");
+                        }
                     }
-                    data.remove("carrying_companion");
-                }
+                });
             }
             ServerPlayerEntity serverplayer = (ServerPlayerEntity) event.getPlayer();
             ProjectAzureWorldSavedData.getSaveddata(serverplayer.getLevel()).SyncEntireTeamListtoPlayer(serverplayer);
@@ -145,18 +139,17 @@ public class ModBusEventHandler {
 
                         entity.stopRiding();
                         ((AbstractEntityCompanion) entity).setOrderedToSit(true);
+                        /*
                         CompoundNBT compoundnbt = new CompoundNBT();
                         if (entity.saveAsPassenger(compoundnbt)) {
                             listnbt1.add(compoundnbt);
                         }
+
+                         */
                     }
                 }
-/*
-                if (!listnbt1.isEmpty()) {
-                    playerData.put("carrying_companion", listnbt1);
-                }
 
- */             ProjectAzureWorldSavedData.TeamListCLIENT.clear();
+                ProjectAzureWorldSavedData.TeamListCLIENT.clear();
 
             }
         }

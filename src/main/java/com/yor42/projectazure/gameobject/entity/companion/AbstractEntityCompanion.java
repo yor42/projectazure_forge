@@ -1453,6 +1453,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
+    protected boolean canRide(Entity p_184228_1_) {
+        if(p_184228_1_ == this.getOwner()){
+            return true;
+        }
+        return super.canRide(p_184228_1_);
+    }
+
+    @Override
     public double getMyRidingOffset() {
 
         if(this.getVehicle() instanceof PlayerEntity){
