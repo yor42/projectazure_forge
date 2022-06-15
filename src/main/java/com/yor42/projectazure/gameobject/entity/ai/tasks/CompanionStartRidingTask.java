@@ -16,7 +16,7 @@ import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.RIDE_TARGET;
 
 public class CompanionStartRidingTask extends Task<AbstractEntityCompanion> {
     public CompanionStartRidingTask() {
-        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, RIDE_TARGET, MemoryModuleStatus.VALUE_PRESENT));
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, RIDE_TARGET, MemoryModuleStatus.VALUE_PRESENT));
     }
 
     protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion p_212832_2_) {

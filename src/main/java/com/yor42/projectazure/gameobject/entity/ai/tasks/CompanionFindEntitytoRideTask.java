@@ -24,7 +24,7 @@ public class CompanionFindEntitytoRideTask extends Task<AbstractEntityCompanion>
     private List<Entity> RideableEntityList;
 
     public CompanionFindEntitytoRideTask() {
-        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, MemoryModuleType.RIDE_TARGET, MemoryModuleStatus.VALUE_ABSENT));
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.RIDE_TARGET, MemoryModuleStatus.VALUE_ABSENT));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CompanionFindEntitytoRideTask extends Task<AbstractEntityCompanion>
                     if(candidate.getPassengers().size() == 2){
                         return false;
                     }
-                    return candidate.getPassengers().size()<2 && controller instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) controller).isOwnedBy(entity.getOwner()) || candidate.getPassengers().isEmpty();
+                    return (candidate.getPassengers().size()<2 && controller instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) controller).isOwnedBy(owner)) || candidate.getPassengers().isEmpty() || candidate.getControllingPassenger() == owner;
                 }
                 else if(cls == HorseEntity.class){
                     return candidate.getPassengers().isEmpty();
@@ -79,9 +79,6 @@ public class CompanionFindEntitytoRideTask extends Task<AbstractEntityCompanion>
                 return false;
             });
             if(entity.getVehicle()!= null && entity.getVehicle().getClass() ==cls){
-                return true;
-            }
-            else if(vehicle instanceof BoatEntity && vehicle.getPassengers().size() < 2){
                 return true;
             }
             else if(!entitylist.isEmpty()){
@@ -107,7 +104,6 @@ public class CompanionFindEntitytoRideTask extends Task<AbstractEntityCompanion>
             }
             else if(vehicle instanceof BoatEntity && vehicle.getPassengers().size()<2){
                 entity.getBrain().setMemory(MemoryModuleType.RIDE_TARGET, vehicle);
-                return;
             }
             else if(!this.RideableEntityList.isEmpty()){
                 entity.getBrain().setMemory(MemoryModuleType.RIDE_TARGET, this.RideableEntityList.get(0));

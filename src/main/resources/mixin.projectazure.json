@@ -11,7 +11,8 @@
     "FurnaceAccessors",
     "MixinBoatEntity",
     "MixinPlayerEntity",
-    "PathNavigatorAccessors"
+    "PathNavigatorAccessors",
+    "SwimmerPathNavigatorAccess"
   ],
   "client": [
     "MixinSplashManager"
