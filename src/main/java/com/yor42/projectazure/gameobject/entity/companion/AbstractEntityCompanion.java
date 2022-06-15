@@ -882,7 +882,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             CompoundNBT saveddata = new CompoundNBT();
                             this.addAdditionalSaveData(saveddata);
                             newEntity.readAdditionalSaveData(saveddata);
-                            newEntity.dead = false;
                             newEntity.revive();
                             newEntity.setHealth((float) this.getAttributeValue(MAX_HEALTH));
                             newEntity.addAffection(-8D);
@@ -912,6 +911,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.remove(false);
             }
         }
+    }
+
+    @Override
+    public void revive() {
+        super.revive();
+        this.dead = false;
+        this.hurtTime = 0;
+        this.deathTime = 0;
     }
 
     public static Optional<Vector3d> findRespawnPositionAndUseSpawnBlock(ServerWorld p_242374_0_, BlockPos p_242374_1_, float p_242374_2_, boolean p_242374_3_, boolean p_242374_4_) {

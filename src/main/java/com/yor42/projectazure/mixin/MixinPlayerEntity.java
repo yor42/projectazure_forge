@@ -25,19 +25,12 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     @Override
     @Unique(silent = true)
     public void positionRider(@Nonnull Entity entity) {
-        if(entity instanceof AbstractEntityCompanion){
-            float entityhorizontalOffset = -0.5F;
-            float f1 = (float)(entity.getMyRidingOffset());
-            Vector3d vector3d = (new Vector3d(entityhorizontalOffset, 0.0D, 0.0D)).yRot(-this.yBodyRotO * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
-            entity.setPos(this.getX() + vector3d.x, this.getY() + f1, this.getZ() + vector3d.z);
-            entity.yRot += this.yBodyRot;
-            entity.setYHeadRot(entity.getYHeadRot() + this.yBodyRot);
-        }
+        super.positionRider(entity);
     }
-    /*
+
     //We do some hacky shit to prevent crash when other mod also overrides this. thanks Domi.
     @SuppressWarnings({"UnresolvedMixinReference", "MixinAnnotationTarget"})
-    @Inject(method = {"positionRider", "func_226266_a_"}, at = @At("HEAD"), remap = false)
+    @Inject(method = {"positionRider", "func_226266_a_"}, at = @At("HEAD"), remap = false, cancellable = true)
     private void onPositionRider(Entity entity, CallbackInfo cir){
         if(entity instanceof AbstractEntityCompanion){
             float entityhorizontalOffset = -0.5F;
@@ -46,9 +39,8 @@ public abstract class MixinPlayerEntity extends LivingEntity {
             entity.setPos(this.getX() + vector3d.x, this.getY() + f1, this.getZ() + vector3d.z);
             entity.yRot += this.yBodyRot;
             entity.setYHeadRot(entity.getYHeadRot() + this.yBodyRot);
+            cir.cancel();
         }
     }
-
-     */
 
 }
