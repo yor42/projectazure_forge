@@ -146,9 +146,9 @@ public class CompanionTasks {
     }
 
     private static void addSittingActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivityAndRemoveMemoryWhenStopped(SITTING.get(), 10, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
+        brain.addActivityAndRemoveMemoryWhenStopped(SITTING.get(), 0, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
                 new CompanionClearMovementTask(),
-                new FindInteractionAndLookTargetTask(EntityType.PLAYER, 4)
+                new FindInteractionAndLookTargetTask(EntityType.PLAYER, 5)
                 ), MEMORY_SITTING.get());
 
     }

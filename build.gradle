@@ -118,6 +118,10 @@ repositories {
     mavenLocal()
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven {
+        url "https://maven.firstdarkdev.xyz/snapshots"
+    }
+
+    maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
@@ -168,8 +172,8 @@ dependencies {
     compileOnly fg.deobf('curse.maven:realistic-torches-235729:3191715')
 
     //Multiblocked
-    implementation fg.deobf('curse.maven:ldlib-626676:3808833')
-    implementation fg.deobf('curse.maven:multiblocked-604054:3808828')
+    implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.16.5-0.4")
+    implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.16.5-0.9")
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
 

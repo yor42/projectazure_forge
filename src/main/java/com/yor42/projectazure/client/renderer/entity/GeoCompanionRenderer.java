@@ -281,9 +281,12 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    public void render(GeoModel model, T animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        this.renderStatus(animatable, matrixStackIn, renderTypeBuffer, packedLightIn);
-        super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    public void render(T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        if(Minecraft.getInstance().player != null && entity.isOwnedBy(Minecraft.getInstance().player)) {
+            this.renderStatus(entity, stack, bufferIn, packedLightIn);
+            this.renderNameTag(entity, entity.getDisplayName(), stack, bufferIn, packedLightIn);
+        }
+        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
     }
 
     @Override
@@ -292,7 +295,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
             boolean flag = !entity.isDiscrete();
             float renderscale = 0.4F;
-            float f = (entity.getBbHeight()+0.15F) / renderscale;
+            float f = (entity.getBbHeight()+0.2F) / renderscale;
             stack.pushPose();
             stack.scale(renderscale, renderscale, renderscale);
             stack.translate(0.0D, f, 0.0D);
@@ -320,7 +323,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
             boolean flag = !entity.isDiscrete();
             float renderscale = 0.3F;
-            float f = (entity.getBbHeight() + 0.05F) / renderscale;
+            float f = (entity.getBbHeight() + 0.1F) / renderscale;
             stack.pushPose();
             stack.scale(renderscale, renderscale, renderscale);
             stack.translate(0.0D, f, 0.0D);

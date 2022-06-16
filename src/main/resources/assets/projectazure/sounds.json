@@ -118,6 +118,13 @@
       }
     ]
   },
+  "sangvis_cannon_fire": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/gun/sangvis_cannon_fire"
+      }
+    ]
+  },
   "chimera_talk_normal": {
     "sounds": [
       {

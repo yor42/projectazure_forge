@@ -26,7 +26,10 @@ public enum registerGunAttachments {
 
     WHITEFANG465_VERTICALGRIP("whitefang465_tactical_grip"),
     WHITEFANG465_SUPPRESSOR("whitefang465_suppressor"),
-    WHITEFANG465_BODY("whitefang465_body");
+    WHITEFANG465_BODY("whitefang465_body"),
+
+    SANGVIS_RAILGUN_BODY("sangvis_railgun"),
+    SANGVIS_RAILGUN_SAFE("sangvis_railgun_safe");
 
 
     private final ResourceLocation modelLocation;
