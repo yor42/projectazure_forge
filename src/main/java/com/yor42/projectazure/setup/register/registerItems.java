@@ -314,7 +314,7 @@ public class registerItems {
 
 
     public static final RegistryObject<Item> WHITEFANG_465 = registerManager.ITEMS.register("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> SANGVIS_RAILGUN = registerManager.ITEMS.register("sangvis_railgun", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> SANGVIS_RAILGUN = registerManager.ITEMS.register("sangvis_railgun", ()->new ItemEnergyGun(50000, 10000, (properties) -> properties.tab(PA_WEAPONS)));
 
     //not-so-shooty-stuff
     public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));

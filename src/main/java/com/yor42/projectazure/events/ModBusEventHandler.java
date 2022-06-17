@@ -1,10 +1,12 @@
 package com.yor42.projectazure.events;
 
 import com.google.common.base.Throwables;
+import com.tac.guns.event.GunFireEvent;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.items.ItemEnergyGun;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
 import com.yor42.projectazure.setup.register.registerItems;
@@ -17,7 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -151,6 +155,23 @@ public class ModBusEventHandler {
 
                 ProjectAzureWorldSavedData.TeamListCLIENT.clear();
 
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onGunFire(GunFireEvent.Pre event) {
+        ItemStack gunstack = event.getStack();
+        Item gunItem = gunstack.getItem();
+        PlayerEntity player = event.getPlayer();
+        if(gunItem instanceof ItemEnergyGun){
+            ItemEnergyGun energygun = (ItemEnergyGun) gunItem;
+            if(gunstack.getCapability(CapabilityEnergy.ENERGY).map((energyhandler)-> energyhandler.extractEnergy(energygun.getEnergyperShot(), true) < ((ItemEnergyGun) gunItem).getEnergyperShot()).orElse(true)){
+                player.sendMessage(new TranslationTextComponent("message.energyguns.gun.notenoughenergy"), UUID.randomUUID());
+                event.setCanceled(true);
+            }
+            else{
+                gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler)-> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
             }
         }
     }

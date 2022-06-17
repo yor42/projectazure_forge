@@ -2,22 +2,22 @@
   "general": {
     "boltAction": true,
     "auto": false,
-    "rate": 30,
+    "rate": 60,
     "rateSelector": [
       0,
       1
     ],
     "gripType": "tac:one_handed_m1911",
-    "recoilAngle": 2.175,
-    "recoilKick": 2,
-    "horizontalRecoilAngle": 0.15,
-    "recoilAdsReduction": 0.4,
+    "recoilAngle": 26.25,
+    "recoilKick": 23,
+    "horizontalRecoilAngle": 4.3,
+    "recoilAdsReduction": 0,
     "weaponRecoilDuration": 1,
-    "recoilDuration": 1,
-    "cameraRecoilModifier": 1.5,
+    "recoilDuration": 0.22,
+    "cameraRecoilModifier": 10,
     "alwaysSpread": false,
     "spread": 0,
-    "weightKilo": 3.5
+    "weightKilo": 12
   },
   "reloads": {
     "magFed": true,
@@ -35,11 +35,11 @@
 
     "size": 0.4,
 
-    "speed": 34.5,
+    "speed": 100,
 
     "life": 6,
 
-    "ricochet": true
+    "ricochet": false
   },
   "sounds": {
     "fire": "projectazure:sangvis_cannon_fire",
