@@ -2,6 +2,10 @@ package com.yor42.projectazure;
 
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
+import com.tac.guns.common.ProjectileManager;
+import com.tac.guns.entity.MissileEntity;
+import com.tac.guns.init.ModEntities;
+import com.tac.guns.init.ModItems;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.client.ClientRegisterManager;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
@@ -15,11 +19,13 @@ import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.events.ModBusEventHandlerClient;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityRailgunProjectile;
 import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -135,6 +141,9 @@ public class Main
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
+        ProjectileManager.getInstance().registerFactory(registerItems.DUMMYAMMO_RAILGUN.get(), (worldIn, entity, weapon, item, modifiedGun) -> {
+            return new EntityRailgunProjectile(registerManager.RAILGUN_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun, 4F);
+        });
         if (ModList.get().isLoaded("theoneprobe")) TOPCompat.register();
     }
 
@@ -177,9 +186,9 @@ public class Main
         RenderingRegistry.registerEntityRenderingHandler(registerManager.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
     	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerManager.RAILGUN_PROJECTILE.get(), EntityRailgunProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.PROJECTILEARTS.get(), EntityArtsProjectileRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.GUN_BULLET.get(), EntityGunBulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerManager.THROWN_KNIFE.get(), EntityThrownKnifeRenderer::new);
 

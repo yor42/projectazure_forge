@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.misc;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
-import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileBullet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,10 +25,6 @@ public class DamageSources {
     public static final DamageSource PLANE_GUN = new DamageSource("plane_gun").setProjectile();
 
     public static final DamageSource CLAYMORE = new DamageSourcesWithRandomMessages("claymore", 3).bypassArmor();
-
-    public static DamageSource causeGunDamage(EntityProjectileBullet bullet, @Nullable Entity indirectEntityIn) {
-        return (new IndirectEntityDamageSource("gun_bullet", bullet, indirectEntityIn)).setProjectile().bypassInvul();
-    }
 
     public static DamageSource causeRevengeDamage(AbstractEntityCompanion companion) {
         return (new PACompanionAttackDamage("revenge", companion, 5));

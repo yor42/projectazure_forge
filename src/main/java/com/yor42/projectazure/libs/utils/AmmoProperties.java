@@ -8,10 +8,10 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rollBooleanRNG;
 public class AmmoProperties {
 
     private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
-    private boolean shouldDamageMultipleComponant, isIncendiary;
+    private boolean shouldDamageMultipleComponant;
     enums.AmmoCategory category;
 
-    public AmmoProperties(enums.AmmoCategory category, float damage_rigging, float damage_entity, float damage_component, float hitChance, float minimum_damage_modifier, boolean shouldDamageMultipleComponant, boolean isIncendiary){
+    public AmmoProperties(enums.AmmoCategory category, float damage_rigging, float damage_entity, float damage_component, float hitChance, float minimum_damage_modifier, boolean shouldDamageMultipleComponant){
         this.category = category;
         this.damage_rigging = damage_rigging;
         this.damage_entity = damage_entity;
@@ -19,7 +19,6 @@ public class AmmoProperties {
         this.hitChance = hitChance;
         this.minimum_damage_modifier = minimum_damage_modifier;
         this.shouldDamageMultipleComponant = shouldDamageMultipleComponant;
-        this.isIncendiary = isIncendiary;
     }
 
     public enums.AmmoCategory getCategory() {
@@ -54,7 +53,11 @@ public class AmmoProperties {
     }
 
     public boolean isFiery(){
-        return this.isIncendiary;
+        return this.category.isFiery();
+    }
+
+    public boolean isExplosive(){
+        return this.category.isFiery();
     }
 
     public float getRawComponentDamage() {

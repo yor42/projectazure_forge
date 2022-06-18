@@ -115,7 +115,7 @@ public class enums {
         INCENDIARY(0.73F, 6, 3F,2, 0.8F, true, false),
         //digs deep, and goes boom. does not do splash damage cuz it blows up inside of ship
         SAP(0.78F, 9, 4, 2,0.8F, false, false),
-        API(0.8F, 6, 3, 3,0.6F, false, true),
+        API(0.8F, 6, 3, 3,0.6F, true, true),
         //HEI(0.68F, ),
         HEIAP(0.78F, 8, 4F, 4F, 0.6F, false,true);
 
@@ -154,7 +154,6 @@ public class enums {
         public boolean isFiery(){
             return this.isIncendiary;
         }
-
         public float getRawComponentDamage() {
             return damage_component;
         }

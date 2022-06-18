@@ -111,6 +111,7 @@
   "item.projectazure.defib_charger.tooltip": "Device with battery and capacitor. used for conducting electrical shock to fallen companion's heart.",
 
   "item.projectazure.whitefang465": "WHITE FANG 465",
+  "item.projectazure.sangvis_railgun": "SF-2815 Energy Cannon",
 
   "item.projectazure.missiledrone": "Missile Drone",
 
@@ -160,6 +161,7 @@
   "tooltip.companion.maxhealth": "Max Health",
   "tooltip.companion.name": "Entity",
   "tooltip.companion.cost": "Cost to summon: %s",
+  "tooltip.energygun.remainingenergy": "Remaining Energy: %s",
 
   "item.projectazure.spawnegg.spawn": "Spawn: ",
 
@@ -386,6 +388,8 @@
   "nether_quartz": "Nether Quartz",
   "originium": "Originium",
 
+  "message.energyguns.gun.ammo.energy": "Forge Energy",
+
   "recruit_beacon": "Recruit Beacon",
   "tile.drydock": "Dry Dock",
   "metal_press": "Hydraulic Press",
@@ -406,6 +410,8 @@
   "message.stasiscrystal.notenoughlevel" : "Not Enough level: Cost to spawn this entity is %s.",
   "message.stasiscrystal.cost" : "Not Enough level: Cost to spawn this entity is %s.",
   "message.stasiscrystal.notowner" : "You are not the owner of this entity! owner is: %s.",
+
+  "message.energyguns.gun.notenoughenergy": "Not enough energy!",
 
   "death.attack.bonk": "%1$s was sent to horny jail",
 

@@ -2,6 +2,7 @@ package com.yor42.projectazure.setup.register;
 
 import com.tac.guns.GunMod;
 import com.tac.guns.interfaces.IGunModifier;
+import com.tac.guns.item.AmmoItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
@@ -314,8 +315,9 @@ public class registerItems {
 
 
     public static final RegistryObject<Item> WHITEFANG_465 = registerManager.ITEMS.register("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> SANGVIS_RAILGUN = registerManager.ITEMS.register("sangvis_railgun", ()->new ItemEnergyGun(50000, 10000, (properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> SANGVIS_RAILGUN = registerManager.ITEMS.register("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, true, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
 
+    public static final RegistryObject<Item> DUMMYAMMO_RAILGUN = registerManager.ITEMS.register("dummyammo_sangvisrailgun", ()->new AmmoItem((new Item.Properties())));
     //not-so-shooty-stuff
     public static final RegistryObject<Item> CHIXIAO = registerManager.ITEMS.register("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = registerManager.ITEMS.register("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));
@@ -331,7 +333,6 @@ public class registerItems {
             .stacksTo(1)));
     public static final RegistryObject<Item> SLEDGEHAMMER = registerManager.ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = registerManager.ITEMS.register("claymore", ItemClaymore::new);
-
 
     public static final RegistryObject<Item> COMMANDING_STICK = registerManager.ITEMS.register("commanding_stick", ItemCommandStick::new);
 

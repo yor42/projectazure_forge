@@ -7,11 +7,18 @@ import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.tac.guns.util.Process;
 import com.yor42.projectazure.gameobject.capability.ItemPowerCapabilityProvider;
+import com.yor42.projectazure.libs.utils.MathUtil;
+import net.minecraft.client.audio.Sound;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.KeybindTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -21,20 +28,47 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ItemEnergyGun extends TimelessGunItem {
 
-    private final int energycapacity, energypershot;
+    private final int energycapacity, energypershot, idleenergyconsumption;
+    private final boolean ignoreAmmo;
+    @Nullable
+    private SoundEvent safereleasesound, safesetsound;
+    @Nullable
+    private SoundEvent NoAmmoSound;
 
     public ItemEnergyGun(int energycapacity, int energypershot, Process<Item.Properties> properties) {
+        this(energycapacity, energypershot, 200, false, properties);
+    }
+
+    public ItemEnergyGun(int energycapacity, int energypershot, int idleenergyconsumption, boolean ignoreAmmo, Process<Item.Properties> properties) {
         super(properties);
         this.energycapacity = energycapacity;
         this.energypershot = energypershot;
+        this.ignoreAmmo = ignoreAmmo;
+        this.idleenergyconsumption=idleenergyconsumption;
+    }
+
+    public ItemEnergyGun(int energycapacity, int energypershot, int idleenergyconsumption, boolean ignoreAmmo, @Nullable SoundEvent safereleasesound, @Nullable SoundEvent safesetsound, @Nullable SoundEvent NoAmmoSound,Process<Item.Properties> properties) {
+        super(properties);
+        this.energycapacity = energycapacity;
+        this.energypershot = energypershot;
+        this.ignoreAmmo = ignoreAmmo;
+        this.idleenergyconsumption=idleenergyconsumption;
+        this.safereleasesound = safereleasesound;
+        this.safesetsound = safesetsound;
+        this.NoAmmoSound = NoAmmoSound;
+    }
+
+    @Nullable
+    public SoundEvent getNoAmmoSound(){
+        return this.NoAmmoSound;
     }
 
     public int getEnergyperShot(){
@@ -47,17 +81,33 @@ public class ItemEnergyGun extends TimelessGunItem {
         return new ItemPowerCapabilityProvider(stack, this.energycapacity);
     }
 
+    @Override
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> stacks) {
+        if (this.allowdedIn(group)) {
+            ItemStack stack = new ItemStack(this);
+            stack.getOrCreateTag().putInt("AmmoCount", this.getGun().getReloads().getMaxAmmo());
+            stack.getOrCreateTag().putBoolean("IgnoreAmmo", this.ignoreAmmo);
+            stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energystorage)->energystorage.receiveEnergy(energystorage.getMaxEnergyStored(), false));
+            stacks.add(stack);
+        }
+    }
+
+    @Override
+    public void onCraftedBy(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull PlayerEntity player) {
+        super.onCraftedBy(stack, world, player);
+        stack.getOrCreateTag().putBoolean("IgnoreAmmo", this.ignoreAmmo);
+    }
+
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flag) {
         Gun modifiedGun = this.getModifiedGun(stack);
         Item ammo = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
-        if (ammo != null) {
-            if(ammo == Items.AIR) {
-                tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (new TranslationTextComponent("message.energyguns.gun.ammo.energy")).withStyle(TextFormatting.BLUE))).withStyle(TextFormatting.DARK_GRAY));
-            }
-            else{
-                tooltip.add((new TranslationTextComponent("info.projectazure.ammo_type_energy", (new TranslationTextComponent(ammo.getDescriptionId())).withStyle(TextFormatting.GOLD))).withStyle(TextFormatting.DARK_GRAY));
-            }
+        if(doesIgnoreAmmo(stack)) {
+            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (new TranslationTextComponent("message.energyguns.gun.ammo.energy")).withStyle(TextFormatting.BLUE))).withStyle(TextFormatting.DARK_GRAY));
         }
+        else if (ammo != null) {
+            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (new TranslationTextComponent(ammo.getDescriptionId())).withStyle(TextFormatting.GOLD))).withStyle(TextFormatting.DARK_GRAY));
+        }
+
 
 
         String additionalDamageText = "";
@@ -78,18 +128,12 @@ public class ItemEnergyGun extends TimelessGunItem {
         additionalDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, additionalDamage);
         tooltip.add((new TranslationTextComponent("info.tac.damage", TextFormatting.GOLD + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format((double)additionalDamage) + additionalDamageText)).withStyle(TextFormatting.DARK_GRAY));
         if (tagCompound != null) {
-            if (tagCompound.getBoolean("IgnoreAmmo")) {
-                tooltip.add((new TranslationTextComponent("info.tac.ignore_ammo")).withStyle(TextFormatting.AQUA));
-            } else {
-                AtomicBoolean isenergy = new AtomicBoolean(false);
-                stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler)->{
-                    tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + energyhandler.getEnergyStored() + "/" + energyhandler.getMaxEnergyStored()).withStyle(TextFormatting.DARK_GRAY)));
-                    isenergy.set(true);
-                });
-                if(!isenergy.get()){
-                    int ammoCount = tagCompound.getInt("AmmoCount");
-                    tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun))).withStyle(TextFormatting.DARK_GRAY));
-                }
+            stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> {
+                tooltip.add((new TranslationTextComponent("tooltip.energygun.remainingenergy", TextFormatting.BLUE.toString() + energyhandler.getEnergyStored() + "/" + energyhandler.getMaxEnergyStored()).withStyle(TextFormatting.DARK_GRAY)));
+            });
+            if (!tagCompound.getBoolean("IgnoreAmmo")) {
+                int ammoCount = tagCompound.getInt("AmmoCount");
+                tooltip.add((new TranslationTextComponent("info.tac.ammo", TextFormatting.GOLD.toString() + ammoCount + "/" + GunEnchantmentHelper.getAmmoCapacity(stack, modifiedGun))).withStyle(TextFormatting.DARK_GRAY));
             }
         }
 
@@ -121,9 +165,8 @@ public class ItemEnergyGun extends TimelessGunItem {
 
     public double getDurabilityForDisplay(ItemStack stack) {
         Gun modifiedGun = this.getModifiedGun(stack);
-        Item ammo = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
-        if(stack.getCapability(CapabilityEnergy.ENERGY).isPresent()&& ammo == Items.AIR){
-            return stack.getCapability(CapabilityEnergy.ENERGY).map((energystorage)-> 1.0D - energystorage.getEnergyStored() / energystorage.getMaxEnergyStored()).orElse(super.getDurabilityForDisplay(stack));
+        if(stack.getCapability(CapabilityEnergy.ENERGY).isPresent()&&doesIgnoreAmmo(stack)){
+            return stack.getCapability(CapabilityEnergy.ENERGY).map((energystorage)-> 1.0D - (double)energystorage.getEnergyStored() / (double)energystorage.getMaxEnergyStored()).orElse(super.getDurabilityForDisplay(stack));
         }
         return super.getDurabilityForDisplay(stack);
     }
@@ -139,11 +182,45 @@ public class ItemEnergyGun extends TimelessGunItem {
     public int getRGBDurabilityForDisplay(ItemStack stack) {
         Gun modifiedGun = this.getModifiedGun(stack);
         Item ammo = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
-        if(ammo == Items.AIR) {
+        if(doesIgnoreAmmo(stack)) {
             return Objects.requireNonNull(TextFormatting.BLUE.getColor());
         }
         else{
             return super.getRGBDurabilityForDisplay(stack);
         }
+    }
+
+    private static boolean doesIgnoreAmmo(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("IgnoreAmmo");
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int tick, boolean isfocused) {
+        super.inventoryTick(stack, world, entity, tick, isfocused);
+        CompoundNBT tagCompound = stack.getOrCreateTag();
+        int currentfiremode = tagCompound.getInt("CurrentFireMode");
+        int previousfiremode = tagCompound.getInt("previousfiremode");
+
+        if(!(entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.instabuild)&&currentfiremode != 0){
+            stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energystorage)->{
+                if(energystorage.extractEnergy(this.idleenergyconsumption, false)<this.idleenergyconsumption){
+                    tagCompound.putInt("CurrentFireMode", 0);
+                }
+            });
+        }
+
+        if(currentfiremode!=previousfiremode){
+            if(previousfiremode == 0){
+                if(this.safereleasesound!= null){
+                    entity.playSound(this.safereleasesound, 0.8F+(MathUtil.getRand().nextFloat()*0.4F),0.8F+(MathUtil.getRand().nextFloat()*0.4F));
+                }
+            }
+            else if(currentfiremode == 0){
+                if(this.safesetsound!= null){
+                    entity.playSound(this.safesetsound, 0.8F+(MathUtil.getRand().nextFloat()*0.4F),0.8F+(MathUtil.getRand().nextFloat()*0.4F));
+                }
+            }
+        }
+        tagCompound.putInt("previousfiremode",currentfiremode);
     }
 }

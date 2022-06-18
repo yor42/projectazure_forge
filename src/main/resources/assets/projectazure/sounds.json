@@ -125,6 +125,27 @@
       }
     ]
   },
+  "sangvis_cannon_noammo": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/gun/sangvis_cannon_noammo"
+      }
+    ]
+  },
+  "sangvis_cannon_open": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/gun/sangvis_cannon_open"
+      }
+    ]
+  },
+  "sangvis_cannon_close": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/gun/sangvis_cannon_close"
+      }
+    ]
+  },
   "chimera_talk_normal": {
     "sounds": [
       {

@@ -6,12 +6,12 @@ import com.yor42.projectazure.libs.utils.AmmoProperties;
 public class ItemCannonshell extends ItemBaseTooltip {
     enums.AmmoCategory ammoCategory;
     private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
-    private boolean shouldDamageMultipleComponant, isIncendiary;
+    private boolean shouldDamageMultipleComponant;
 
     public ItemCannonshell(enums.AmmoCategory category, Properties ItemProperties){
-        this(category, 0,0,0,0,0,category.ShouldDamageMultipleComponent(),category.isFiery(),ItemProperties);
+        this(category, 0,0,0,0,0,category.ShouldDamageMultipleComponent(), ItemProperties);
     }
-    public ItemCannonshell(enums.AmmoCategory ammoType, float damage_rigging, float damage_entity, float damage_component, float hitChance, float minimum_damage_modifier, boolean shouldDamageMultipleComponant, boolean isIncendiary, Properties properties) {
+    public ItemCannonshell(enums.AmmoCategory ammoType, float damage_rigging, float damage_entity, float damage_component, float hitChance, float minimum_damage_modifier, boolean shouldDamageMultipleComponant, Properties properties) {
         super(properties);
         this.ammoCategory = ammoType;
         this.damage_rigging = damage_rigging;
@@ -21,7 +21,6 @@ public class ItemCannonshell extends ItemBaseTooltip {
         this.minimum_damage_modifier = minimum_damage_modifier;
 
         this.shouldDamageMultipleComponant = shouldDamageMultipleComponant;
-        this.isIncendiary = isIncendiary;
     }
 
 
@@ -32,6 +31,6 @@ public class ItemCannonshell extends ItemBaseTooltip {
         float hitChance = this.minimum_damage_modifier>0? this.minimum_damage_modifier: this.ammoCategory.getRawhitChance();
         float minimum_damage_modifier = this.minimum_damage_modifier>0? this.minimum_damage_modifier:this.ammoCategory.getRawDamageModifer();
 
-        return new AmmoProperties(this.ammoCategory, damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier, this.shouldDamageMultipleComponant, this.isIncendiary);
+        return new AmmoProperties(this.ammoCategory, damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier, this.shouldDamageMultipleComponant);
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
@@ -97,6 +98,19 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
         this.xRot = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
         this.yRotO = this.yRot;
         this.xRotO = this.xRot;
+    }
+
+    @Override
+    public boolean hurt(DamageSource p_70097_1_, float p_70097_2_) {
+        if(p_70097_2_>=8) {
+            if (this.properties != null && this.properties.getCategory().ShouldDamageMultipleComponent()) {
+                this.getCommandSenderWorld().explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2.0F, Explosion.Mode.DESTROY);
+            } else {
+                this.remove();
+            }
+        }
+
+        return false;
     }
 
     @Override

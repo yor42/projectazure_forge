@@ -1,7 +1,9 @@
 package com.yor42.projectazure.events;
 
 import com.google.common.base.Throwables;
+import com.tac.guns.entity.ProjectileEntity;
 import com.tac.guns.event.GunFireEvent;
+import com.tac.guns.event.GunProjectileHitEvent;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
@@ -19,7 +21,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Explosion;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -167,11 +173,17 @@ public class ModBusEventHandler {
         if(gunItem instanceof ItemEnergyGun){
             ItemEnergyGun energygun = (ItemEnergyGun) gunItem;
             if(gunstack.getCapability(CapabilityEnergy.ENERGY).map((energyhandler)-> energyhandler.extractEnergy(energygun.getEnergyperShot(), true) < ((ItemEnergyGun) gunItem).getEnergyperShot()).orElse(true)){
-                player.sendMessage(new TranslationTextComponent("message.energyguns.gun.notenoughenergy"), UUID.randomUUID());
+                player.displayClientMessage(new TranslationTextComponent("message.energyguns.gun.notenoughenergy").withStyle(TextFormatting.DARK_RED), true);
+                SoundEvent sound = ((ItemEnergyGun) gunItem).getNoAmmoSound();
+                if(sound != null) {
+                    player.playSound(sound, 1, 1);
+                }
                 event.setCanceled(true);
             }
             else{
-                gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler)-> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
+                if(!player.abilities.instabuild) {
+                    gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
+                }
             }
         }
     }

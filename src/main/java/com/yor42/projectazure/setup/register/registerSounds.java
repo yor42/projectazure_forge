@@ -19,7 +19,9 @@ public final class registerSounds {
     public static final SoundEvent RIFLE_FIRE_SUPPRESSED = registerSoundEvent("rifle_suppressed");
     public static final SoundEvent GUN_CLICK = registerSoundEvent("gun_click");
 
-    public static final SoundEvent SANGVIS_CANNON_FIRE = registerSoundEvent("sangvis_cannon_fire");
+    public static final SoundEvent SANGVIS_CANNON_NOAMMO = registerSoundEvent("sangvis_cannon_noammo");
+    public static final SoundEvent SANGVIS_CANNON_OPEN = registerSoundEvent("sangvis_cannon_open");
+    public static final SoundEvent SANGVIS_CANNON_CLOSE = registerSoundEvent("sangvis_cannon_close");
 
     public static final SoundEvent DISC_FRIDAY_NIGHT = registerSoundEvent("disc_fridaynight");
     public static final SoundEvent DISC_BRAINPOWER = registerSoundEvent("disc_brainpower");
