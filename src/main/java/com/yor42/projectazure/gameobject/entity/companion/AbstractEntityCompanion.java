@@ -93,6 +93,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
@@ -143,7 +144,7 @@ import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
 
-public abstract class AbstractEntityCompanion extends TameableEntity implements ICrossbowUser, IAnimatable, IAnimationTickable {
+public abstract class AbstractEntityCompanion extends TameableEntity implements ICrossbowUser, IRangedAttackMob, IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
 
     public float getSpellRange() {
@@ -367,7 +368,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public ItemStackHandler AmmoStorage = new ItemStackHandler(8){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-
             return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof ItemMagazine || stack.getItem() instanceof ArrowItem;
         }
     };
@@ -1276,6 +1276,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.noActionTime = 0;
     }
 
+    @Nonnull
     public ItemStack getProjectile(ItemStack p_213356_1_) {
         if (!(p_213356_1_.getItem() instanceof ShootableItem)) {
             return ItemStack.EMPTY;
@@ -1310,10 +1311,30 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         double d1 = p_82196_1_.getY(0.3333333333333333D) - abstractarrowentity.getY();
         double d2 = p_82196_1_.getZ() - this.getZ();
         double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level.getDifficulty().getId() * 4));
+        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, this.getBowInaccuracy());
+        itemstack.shrink(1);
         this.playSound(SoundEvents.ARROW_SHOOT,1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(abstractarrowentity);
     }
+
+    public void shootCrossbowProjectile(LivingEntity p_234279_1_, LivingEntity p_234279_2_, ProjectileEntity p_234279_3_, float p_234279_4_, float p_234279_5_) {
+        double d0 = p_234279_2_.getX() - p_234279_1_.getX();
+        double d1 = p_234279_2_.getZ() - p_234279_1_.getZ();
+        double d2 = MathHelper.sqrt(d0 * d0 + d1 * d1);
+        double d3 = p_234279_2_.getY(0.3333333333333333D) - p_234279_3_.getY() + d2 * (double)0.2F;
+        Vector3f vector3f = this.getProjectileShotVector(p_234279_1_, new Vector3d(d0, d3, d1), p_234279_4_);
+        p_234279_3_.shoot(vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), p_234279_5_, this.getCrossBowInaccuracy());
+        p_234279_1_.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (p_234279_1_.getRandom().nextFloat() * 0.4F + 0.8F));
+    }
+
+    protected float getBowInaccuracy(){
+        return 10;
+    }
+
+    protected float getCrossBowInaccuracy(){
+        return 10;
+    }
+
 
     public boolean isFreeRoaming() {
         return this.entityData.get(ISFREEROAMING);

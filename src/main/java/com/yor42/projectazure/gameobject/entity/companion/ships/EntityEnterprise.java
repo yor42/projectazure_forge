@@ -227,6 +227,11 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
     }
 
     @Override
+    protected float getBowInaccuracy() {
+        return 2;
+    }
+
+    @Override
     public SoundEvent getDisappointedAmbientSound() {
         return registerSounds.ENTERPRISE_TALK_DISAPPOINTED;
     }

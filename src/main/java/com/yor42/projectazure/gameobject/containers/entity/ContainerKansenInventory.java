@@ -1,9 +1,8 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
-import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
+import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.containers.slots.SlotRigging;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
-import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +12,6 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
@@ -74,12 +72,7 @@ public class ContainerKansenInventory extends Container {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 2; n++) {
-                this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
-                    @Override
-                    public boolean mayPlace(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof TimelessAmmoItem || stack.getItem() instanceof ArrowItem;
-                    }
-                });
+                this.addSlot(new AmmoSlot(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18));
             }
         }
 

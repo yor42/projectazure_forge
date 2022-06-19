@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
+import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityGunUserBase;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
@@ -76,12 +77,7 @@ public class ContainerBAInventory extends Container {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 2; n++) {
-                this.addSlot(new SlotItemHandler(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18){
-                    @Override
-                    public boolean mayPlace(@Nonnull ItemStack stack) {
-                        return stack.getItem() instanceof TimelessAmmoItem || stack.getItem() instanceof ArrowItem;
-                    }
-                });
+                this.addSlot(new AmmoSlot(this.AmmoStack, n + 2 * m, 180 + n * 18, 15 + m * 18));
             }
         }
 

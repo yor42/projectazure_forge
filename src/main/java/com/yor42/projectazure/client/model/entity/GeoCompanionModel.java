@@ -6,12 +6,14 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector2f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
@@ -34,12 +36,12 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
             IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
             IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
             IBone Chest = this.getAnimationProcessor().getBone("Chest");
+            float pitch = extraData.headPitch* ((float) Math.PI / 180F);
+            float yaw = extraData.netHeadYaw* ((float) Math.PI / 180F);
             if (!(entity.isBeingPatted() || entity.isSleeping())) {
                 Vector2f headoffset = this.getHeadOffset(entity);
-                float pitch = extraData.headPitch;
-                float yaw = extraData.netHeadYaw;
-                head.setRotationX(head.getRotationX()+pitch * ((float) Math.PI / 180F));
-                head.setRotationY(head.getRotationY()+yaw * ((float) Math.PI / 180F));
+                head.setRotationX(head.getRotationX()+pitch);
+                head.setRotationY(head.getRotationY()+yaw);
             }
 
             if (entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
@@ -60,10 +62,43 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
                     } else if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
                         AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
                     }
+                    else if(entity.isUsingItem() && entity.isHolding((item)->item instanceof BowItem)){
+                        boolean isLeftHanded = entity.isLeftHanded();
+                        switch(entity.getUsedItemHand()){
+                            case OFF_HAND:
+                                if (isLeftHanded) {
+                                    animatebowRightArm(RightArm, LeftArm, pitch, yaw);
+                                } else {
+                                    animatebowLeftArm(RightArm, LeftArm, pitch, yaw);
+                                }
+                                break;
+                            case MAIN_HAND:
+                                if (isLeftHanded) {
+                                    animatebowLeftArm(RightArm, LeftArm, pitch, yaw);
+                                } else {
+                                    animatebowRightArm(RightArm, LeftArm, pitch, yaw);
+                                }
+                                break;
+                        }
+                    }
                 }
             }
             AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
         }
+    }
+
+    protected void animatebowRightArm(IBone RightArm, IBone LeftArm, float headpitch, float headyaw){
+        RightArm.setRotationY((-0.1F + headyaw)*-1);
+        LeftArm.setRotationY((0.1F + headyaw + 0.4F)*-1);
+        RightArm.setRotationX (((float)Math.PI / 2F) + headpitch);
+        LeftArm.setRotationX(((float)Math.PI / 2F) + headpitch);
+    }
+
+    protected void animatebowLeftArm(IBone RightArm, IBone LeftArm, float headpitch, float headyaw){
+        RightArm.setRotationY((-0.1F + headyaw - 0.4F)*-1);
+        LeftArm.setRotationY((0.1F + headyaw)*-1);
+        RightArm.setRotationX (((float)Math.PI / 2F) + headpitch);
+        LeftArm.setRotationX(((float)Math.PI / 2F) + headpitch);
     }
 
     protected Vector2f getHeadOffset(E entity){

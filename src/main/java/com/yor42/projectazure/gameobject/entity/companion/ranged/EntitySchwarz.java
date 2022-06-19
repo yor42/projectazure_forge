@@ -255,6 +255,11 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
         return enums.CompanionRarity.STAR_6;
     }
 
+    @Override
+    protected float getCrossBowInaccuracy() {
+        return 3;
+    }
+
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.createMobAttributes()

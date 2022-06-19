@@ -23,8 +23,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.RangedInteger;
 import net.minecraft.util.TickRangeConverter;
@@ -188,13 +187,14 @@ public class CompanionTasks {
                         new CompanionLaunchPlaneTasks(20, 40, 50),
                         new CompanionShipRangedAttackTask(),
                         new CompanionUseSkillTask(),
+                        new CompanionUseCrossbowTask(),
+                        new CompanionBowRangedAttackTask(),
                         new CompanionShootGunTask(),
                         new CompanionNonVanillaMeleeAttackTask(),
                         new CompanionSpellRangedAttackTask(),
                         new CompanionUseShieldTask(),
                         new CompanionProtectOwnerTask(false),
-                        new CompanionAttackTargetTask(15),
-                        new ShootTargetTask<>()),
+                        new CompanionAttackTargetTask(15)),
                 MemoryModuleType.ATTACK_TARGET);
     }
 
@@ -281,13 +281,15 @@ public class CompanionTasks {
     }
 
     private static boolean hasWeapon(AbstractEntityCompanion companion, LivingEntity tgt){
-        Item item = companion.getItemBySlot(EquipmentSlotType.MAINHAND).getItem();
+        ItemStack stack = companion.getItemBySlot(EquipmentSlotType.MAINHAND);
+        Item item = stack.getItem();
         boolean isEquippingsword = item instanceof SwordItem;
+        boolean hasboworCrossbow = (item instanceof BowItem || item instanceof CrossbowItem) && !companion.getProjectile(stack).isEmpty();
         boolean canUseGun = companion.shouldUseGun();
         boolean canUseRigging = companion instanceof EntityKansenBase && !hasAttackableCannon(companion.getRigging()) && ((EntityKansenBase) companion).canUseShell(((EntityKansenBase) companion).getActiveShellCategory());
         boolean CanUseNonValinnaAttack = companion instanceof AbstractSwordUserBase && ((AbstractSwordUserBase)companion).shouldUseNonVanillaAttack(tgt);
         boolean canUseSpell = companion instanceof AbstractCompanionMagicUser && ((AbstractCompanionMagicUser) companion).shouldUseSpell();
-        return isEquippingsword||canUseGun || canUseRigging || CanUseNonValinnaAttack||canUseSpell;
+        return isEquippingsword||canUseGun || canUseRigging || CanUseNonValinnaAttack||canUseSpell || hasboworCrossbow;
     }
 
     private static void setAttackTarget(AbstractEntityCompanion p_234397_0_, LivingEntity p_234397_1_) {
