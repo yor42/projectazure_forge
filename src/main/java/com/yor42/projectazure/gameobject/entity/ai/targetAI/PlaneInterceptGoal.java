@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.targetAI;
 
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
+import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 
@@ -26,7 +26,13 @@ public class PlaneInterceptGoal extends NearestAttackableTargetGoal<AbstractEnti
             if(this.target == null)
                 return false;
             if(this.target instanceof AbstractEntityPlanes) {
-                return this.planes.getOwner() != ((AbstractEntityPlanes) this.target).getOwner() && this.planes.getOwner().getOwner() != ((AbstractEntityPlanes) this.target).getOwner().getOwner();
+                if(((AbstractEntityPlanes) this.target).getOwner()==null){
+                    return true;
+                }
+
+                boolean isDifferentCompanionOwner = this.planes.getOwner().getOwner() != ((AbstractEntityPlanes) this.target).getOwner().getOwner();;
+                boolean isDifferentPlaneOwner = this.planes.getOwner() != ((AbstractEntityPlanes) this.target).getOwner();
+                return isDifferentPlaneOwner && isDifferentCompanionOwner;
             }
         }
         return false;

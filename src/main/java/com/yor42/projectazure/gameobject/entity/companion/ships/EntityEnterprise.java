@@ -2,10 +2,9 @@ package com.yor42.projectazure.gameobject.entity.companion.ships;
 
 import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
-import com.tac.guns.common.GripType;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
+import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;

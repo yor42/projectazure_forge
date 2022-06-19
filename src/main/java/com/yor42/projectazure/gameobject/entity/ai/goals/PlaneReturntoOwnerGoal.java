@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
+import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -21,7 +21,7 @@ public class PlaneReturntoOwnerGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return (!this.entity.hasPayload() || this.entity.getTarget() == null || this.entity.getMaxOperativeTick() - this.entity.tickCount <200 || !this.entity.getTarget().isAlive()) && this.entity.getOwner() instanceof EntityKansenAircraftCarrier;
+        return (!this.entity.hasPayload() || this.entity.getTarget() == null || this.entity.getMaxOperativeTick() - this.entity.tickCount <200 || !this.entity.getTarget().isAlive() || this.entity.isReturningToOwner()) && this.entity.getOwner() instanceof EntityKansenAircraftCarrier;
     }
 
     @Override
@@ -34,18 +34,26 @@ public class PlaneReturntoOwnerGoal extends Goal {
         super.tick();
         if(this.entity.getOwner() instanceof EntityKansenAircraftCarrier) {
             this.entity.getNavigation().moveTo(this.entity.getOwner(), 2);
-            this.entity.setReturningtoOwner(true);
+            this.entity.setReturningtoOwner();
             if(this.entity.distanceToSqr(this.entity.getOwner())<4F) {
                 if (((EntityKansenAircraftCarrier) this.entity.getOwner()).hasRigging()) {
                     IItemHandler Hanger = ((EntityKansenAircraftCarrier) this.entity.getOwner()).getHanger();
                     if(Hanger != null){
+                        boolean SuccessfullyReturned = false;
                         ItemStack PlaneStack = serializePlane(this.entity);
                         for(int i = 0; i<Hanger.getSlots(); i++){
-                            PlaneStack = Hanger.insertItem(i, PlaneStack, false);
-                            if(PlaneStack == ItemStack.EMPTY)
+                            if(Hanger.insertItem(i, PlaneStack, true) == ItemStack.EMPTY) {
+                                Hanger.insertItem(i, PlaneStack, false);
+                                SuccessfullyReturned = true;
+                                this.entity.remove();
                                 break;
+                            }
                         }
-                        this.entity.remove();
+
+                        if(!SuccessfullyReturned){
+                            this.entity.startCircling(this.entity.getOwner());
+                        }
+
                     }
                 }
             }

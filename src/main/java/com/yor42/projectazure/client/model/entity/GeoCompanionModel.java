@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector2f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -34,8 +35,11 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
             IBone RightArm = this.getAnimationProcessor().getBone("RightArm");
             IBone Chest = this.getAnimationProcessor().getBone("Chest");
             if (!(entity.isBeingPatted() || entity.isSleeping())) {
-                head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-                head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+                Vector2f headoffset = this.getHeadOffset(entity);
+                float pitch = extraData.headPitch;
+                float yaw = extraData.netHeadYaw;
+                head.setRotationX(head.getRotationX()+pitch * ((float) Math.PI / 180F));
+                head.setRotationY(head.getRotationY()+yaw * ((float) Math.PI / 180F));
             }
 
             if (entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
@@ -60,6 +64,10 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
             }
             AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
         }
+    }
+
+    protected Vector2f getHeadOffset(E entity){
+        return Vector2f.ZERO;
     }
 
     protected abstract int SleepingBodyYPosition();

@@ -1,22 +1,23 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
+import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.FluidTags;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.EnumSet;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.serializePlane;
 
-public class planeBombRunGoal extends Goal {
+public class PlaneAttackGoal extends Goal {
 
     private AbstractEntityPlanes entity;
 
-    public planeBombRunGoal(AbstractEntityPlanes host){
+    public PlaneAttackGoal(AbstractEntityPlanes host){
         this.entity = host;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
@@ -28,20 +29,20 @@ public class planeBombRunGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.entity.getMoveControl().hasWanted() && this.entity.getTarget() != null && this.entity.getTarget().isAlive() && this.entity.hasPayload() && this.entity.getSensing().canSee(this.entity.getTarget());
+        return this.entity.getTarget() != null && this.entity.getTarget().isAlive() && this.entity.hasPayload() && this.entity.getSensing().canSee(this.entity.getTarget());
     }
 
     @Override
     public void stop() {
         super.stop();
-        this.entity.setOnBombRun(false);
+        this.entity.setReturningtoOwner();
     }
 
     @Override
     public void start() {
         LivingEntity target = this.entity.getTarget();
         if(target!= null) {
-            this.entity.setOnBombRun(true);
+            this.entity.setOnBombRun();
             this.entity.getNavigation().moveTo(target.getX(), target.getEyeY()+1, target.getZ(), 2F);
         }
     }
@@ -70,7 +71,7 @@ public class planeBombRunGoal extends Goal {
                             ShouldDropPayloads = this.entity.distanceTo(target)<2.5;
                             break;
                         case TORPEDO_BOMBER:
-                            ShouldDropPayloads = this.entity.distanceTo(target) < 8F;
+                            ShouldDropPayloads =target.getFluidHeight(FluidTags.WATER)>0.1D && this.entity.distanceTo(target) < 8F;
                             break;
                     }
 

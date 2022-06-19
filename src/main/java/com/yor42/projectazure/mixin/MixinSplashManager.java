@@ -60,6 +60,7 @@ public class MixinSplashManager {
         entries.add(":pogchamp:");
         entries.add("So we back in the mine");
         entries.add("Got our pickaxe swingin' from side to side");
+        entries.add("Can cause cancer in the state of california");
         entries.add("Primogem not included");
         entries.add("Originium included");
         entries.add("MINCERAFT");
@@ -69,6 +70,22 @@ public class MixinSplashManager {
         entries.add("WHO TOOK MY SPAGHET");
         entries.add("*[Reunion stole this splash text]*");
         entries.add("*[Sangvis stole this splash text]*");
+        entries.add("Dinnergate ate my splash text!");
+        entries.add("Ow thats hot");
+        entries.add("Steve just slapped the heck out of me");
+        entries.add("*professionally vibing*");
+        entries.add("Seal of approval");
+        entries.add("yor42 seal of quality");
+        entries.add("Haha Mixin goes BRRRT");
+        entries.add("Oh no!");
+        entries.add("NANI!?!?");
+        entries.add("OMAE WA MOU SHINDEIRU");
+        entries.add("YOUR NEXT MOVE WILL BE PRESSING SINGLEPLAYER BUTTON");
+        entries.add("Heh, Ban this, Microsoft!");
+        entries.add("What in the world?");
+        entries.add("ON 20% SALE! (No, not really.)");
+        entries.add("LET THE BASS KICK");
+        entries.add("That's not very cash money of you.");
         entries.add("Turing complete!");
         entries.add("look ma! I'm in the video game!");
         entries.add("Aw dang! here we go again.");
@@ -78,7 +95,7 @@ public class MixinSplashManager {
         entries.add("AZURU LA- Oh wait...");
         entries.add("Project azure: <3 from south korea.");
         entries.add("E.");
-        entries.add("ᗜˬᗜ");
+        //entries.add("ᗜˬᗜ");
 
 
         return entries;

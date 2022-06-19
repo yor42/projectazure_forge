@@ -12,7 +12,7 @@ import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.*;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.*;
 import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
-import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
+import com.yor42.projectazure.gameobject.entity.planes.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;

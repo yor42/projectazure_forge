@@ -14,8 +14,8 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
 
-public class CompanionRangedAttackTask extends Task<AbstractEntityCompanion> {
-    public CompanionRangedAttackTask() {
+public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion> {
+    public CompanionSpellRangedAttackTask() {
         super(ImmutableMap.of(LOOK_TARGET, MemoryModuleStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryModuleStatus.VALUE_PRESENT), 1200);
     }
 
@@ -30,11 +30,21 @@ public class CompanionRangedAttackTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
-        LivingEntity target = getAttackTarget(p_212831_2_);
-        if (p_212831_2_ instanceof ISpellUser) {
-            ((ISpellUser) p_212831_2_).StartShootingEntityUsingSpell(target);;
+    protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion entity, long p_212831_3_) {
+        LivingEntity target = getAttackTarget(entity);
+        if (entity instanceof ISpellUser) {
+            if(!entity.closerThan(target, entity.getSpellRange())){
+                BrainUtil.setWalkAndLookTargetMemories(entity, target, 1, (int) (entity.getSpellRange()-2));
+            }
+            else {
+                this.clearWalkTarget(entity);
+                ((ISpellUser) entity).StartShootingEntityUsingSpell(target);
+            }
         }
+    }
+
+    private void clearWalkTarget(LivingEntity p_233967_1_) {
+        p_233967_1_.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
     }
 
     private static LivingEntity getAttackTarget(LivingEntity p_233887_0_) {

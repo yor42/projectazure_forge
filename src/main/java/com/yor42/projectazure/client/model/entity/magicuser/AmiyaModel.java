@@ -3,6 +3,7 @@ package com.yor42.projectazure.client.model.entity.magicuser;
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector2f;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 

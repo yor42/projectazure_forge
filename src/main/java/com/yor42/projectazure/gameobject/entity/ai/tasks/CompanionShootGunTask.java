@@ -7,7 +7,10 @@ import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,7 +47,7 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
                 boolean canusegun = entity.shouldUseGun();
                 boolean hastarget = !target.isDeadOrDying();
                 boolean entitycanAttack = !entity.isSleeping() && !entity.isOrderedToSit();
-                return canusegun && entitycanAttack && hastarget;
+                return canusegun && entitycanAttack && hastarget&& entity.closerThan(target, entity.getGunRange());
             }).orElse(false);
         }
         return false;
@@ -52,12 +55,29 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected boolean canStillUse(@Nonnull ServerWorld p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
-        return this.checkExtraStartConditions(p_212834_1_, p_212834_2_);
+
+        if(!p_212834_2_.getBrain().getMemory(ATTACK_TARGET).isPresent()){
+            return false;
+        }
+
+        return this.checkExtraStartConditions(p_212834_1_, p_212834_2_) && p_212834_2_.closerThan(p_212834_2_.getBrain().getMemory(ATTACK_TARGET).get(), p_212834_2_.getGunRange());
     }
 
     @Override
-    protected void start(@Nonnull ServerWorld p_212831_1_, AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
-        p_212831_2_.getBrain().eraseMemory(WALK_TARGET);
+    protected void start(@Nonnull ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
+        if(!entity.getBrain().getMemory(ATTACK_TARGET).isPresent()){
+            return;
+        }
+        if(!entity.closerThan(entity.getBrain().getMemory(ATTACK_TARGET).get(), entity.getSpellRange()) || !entity.getSensing().canSee(entity.getBrain().getMemory(ATTACK_TARGET).get())){
+            BrainUtil.setWalkAndLookTargetMemories(entity, entity.getBrain().getMemory(ATTACK_TARGET).get(), 1, (int) (entity.getSpellRange()-2));
+        }
+        else {
+            this.clearWalkTarget(entity);
+        }
+    }
+
+    private void clearWalkTarget(LivingEntity p_233967_1_) {
+        p_233967_1_.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
     }
 
     @Override

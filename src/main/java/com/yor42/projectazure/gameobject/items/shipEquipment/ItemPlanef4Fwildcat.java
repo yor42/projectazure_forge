@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.items.shipEquipment;
 
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
+import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.EntityType;

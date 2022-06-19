@@ -10,18 +10,22 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.AnimationUtils;
 
 import java.awt.*;
+import java.util.Collections;
 
 public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends EntityRenderer<T>
         implements IGeoRenderer<T> {
@@ -45,6 +49,7 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
     @Override
     public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn,
                        IRenderTypeBuffer bufferIn, int packedLightIn) {
+        EntityModelData entityModelData = new EntityModelData();
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityIn));
         matrixStackIn.pushPose();
         matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(
@@ -52,6 +57,9 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
         matrixStackIn.mulPose(Vector3f.ZP
                 .rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
         Minecraft.getInstance().textureManager.bind(getTextureLocation(entityIn));
+        AnimationEvent<T> predicate = new AnimationEvent<T>(entityIn, 0, 0, partialTicks,
+                !entityIn.getDeltaMovement().equals(Vector3d.ZERO), Collections.singletonList(entityModelData));
+        ((IAnimatableModel<T>) modelProvider).setLivingAnimations(entityIn, this.getUniqueID(entityIn), predicate);
         Color renderColor = getRenderColor(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn);
         RenderType renderType = getRenderType(entityIn, partialTicks, matrixStackIn, bufferIn, null, packedLightIn,
                 getTextureLocation(entityIn));

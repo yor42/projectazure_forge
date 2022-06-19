@@ -5,12 +5,15 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenAircraftCarrier;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
+import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.EntityPosWrapper;
@@ -57,6 +60,19 @@ public class CompanionLaunchPlaneTasks extends Task<AbstractEntityCompanion> {
             }
         }
         return false;
+    }
+
+    @Override
+    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
+        if(!entity.getBrain().getMemory(ATTACK_TARGET).isPresent()){
+            return;
+        }
+        if(!entity.closerThan(entity.getBrain().getMemory(ATTACK_TARGET).get(), entity.getSpellRange())){
+            BrainUtil.setWalkAndLookTargetMemories(entity, entity.getBrain().getMemory(ATTACK_TARGET).get(), 1, (int) (entity.getPlaneRange()-2));
+        }
+        else {
+            this.clearWalkTarget(entity);
+        }
     }
 
     @Override
@@ -110,12 +126,20 @@ public class CompanionLaunchPlaneTasks extends Task<AbstractEntityCompanion> {
 
     @Override
     protected boolean canStillUse(@Nonnull ServerWorld p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
-        return this.checkExtraStartConditions(p_212834_1_, p_212834_2_);
+        if(!p_212834_2_.getBrain().getMemory(ATTACK_TARGET).isPresent()){
+            return false;
+        }
+
+        return this.checkExtraStartConditions(p_212834_1_, p_212834_2_)&& p_212834_2_.closerThan(p_212834_2_.getBrain().getMemory(ATTACK_TARGET).get(), p_212834_2_.getPlaneRange());
     }
 
     @Override
     protected void stop(@Nonnull ServerWorld p_212835_1_, @Nonnull AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
         this.seeTime = 0;
         this.PlaneDelay = -1;
+    }
+
+    private void clearWalkTarget(LivingEntity p_233967_1_) {
+        p_233967_1_.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
     }
 }

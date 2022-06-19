@@ -13,7 +13,6 @@ import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
 import com.yor42.projectazure.setup.register.registerManager;
-import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -23,8 +22,6 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.*;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
-import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.SwordItem;
@@ -187,13 +184,13 @@ public class CompanionTasks {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
                         //new FindNewAttackTargetTask<>((p_234523_1_) -> !isNearestValidAttackTarget(companion, p_234523_1_)),
                         new SupplementedTask<>(CompanionTasks::shouldStrafe, new AttackStrafingTask<>(5, 0.75F)),
-                        new MoveToTargetTask(1.0F),
+                        new CompanionMovetoTargetTask(companion,1.0F),
                         new CompanionLaunchPlaneTasks(20, 40, 50),
-                        new CompanionUseSkillTask(),
                         new CompanionShipRangedAttackTask(),
+                        new CompanionUseSkillTask(),
                         new CompanionShootGunTask(),
                         new CompanionNonVanillaMeleeAttackTask(),
-                        new CompanionRangedAttackTask(),
+                        new CompanionSpellRangedAttackTask(),
                         new CompanionUseShieldTask(),
                         new CompanionProtectOwnerTask(false),
                         new CompanionAttackTargetTask(15),
@@ -221,7 +218,7 @@ public class CompanionTasks {
     }
 
     private static boolean shouldStrafe(LivingEntity livingEntity) {
-        return (livingEntity instanceof EntitySchwarz &&  livingEntity.isHolding(item -> item instanceof net.minecraft.item.CrossbowItem)) || (livingEntity instanceof ISpellUser && ((ISpellUser) livingEntity).shouldUseSpell()) || (livingEntity.isHolding((item)->item instanceof GunItem));
+        return (livingEntity instanceof EntitySchwarz &&  livingEntity.isHolding(item -> item instanceof net.minecraft.item.CrossbowItem)) || (livingEntity.isHolding((item)->item instanceof GunItem));
     }
 
     private static boolean isNearestValidAttackTarget(AbstractEntityCompanion p_234504_0_, LivingEntity p_234504_1_) {
@@ -287,7 +284,7 @@ public class CompanionTasks {
         Item item = companion.getItemBySlot(EquipmentSlotType.MAINHAND).getItem();
         boolean isEquippingsword = item instanceof SwordItem;
         boolean canUseGun = companion.shouldUseGun();
-        boolean canUseRigging = companion instanceof EntityKansenBase && !hasAttackableCannon(companion.getRigging()) && !((EntityKansenBase) companion).canUseShell(((EntityKansenBase) companion).getActiveShellCategory());
+        boolean canUseRigging = companion instanceof EntityKansenBase && !hasAttackableCannon(companion.getRigging()) && ((EntityKansenBase) companion).canUseShell(((EntityKansenBase) companion).getActiveShellCategory());
         boolean CanUseNonValinnaAttack = companion instanceof AbstractSwordUserBase && ((AbstractSwordUserBase)companion).shouldUseNonVanillaAttack(tgt);
         boolean canUseSpell = companion instanceof AbstractCompanionMagicUser && ((AbstractCompanionMagicUser) companion).shouldUseSpell();
         return isEquippingsword||canUseGun || canUseRigging || CanUseNonValinnaAttack||canUseSpell;

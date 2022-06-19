@@ -329,10 +329,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             if (Ammostack.getItem() instanceof ItemCannonshell) {
                 Vector3d vector3d = this.getViewVector(1.0F);
                 double x = target.getX() - (this.getX());
-                double y = this.getY(0.5) - (this.getY(0.5));
+                double y = target.getY(0.5) - (this.getY(0.5));
                 double z = target.getZ() - (this.getZ());
-
-                EntityCannonPelllet shell = new EntityCannonPelllet(this.level, this, 0, 0, 0, ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty());
+                AmmoProperties properties = ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty();
+                EntityCannonPelllet shell = new EntityCannonPelllet(this.level, this, 0, 0, 0, properties);
+                shell.setPos(this.getX(), this.getY(0.5), this.getZ());
                 shell.shoot(x,y,z, 0.8F, 0.05F);
                 this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                 this.level.addFreshEntity(shell);

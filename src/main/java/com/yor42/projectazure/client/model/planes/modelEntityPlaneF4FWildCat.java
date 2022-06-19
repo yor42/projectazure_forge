@@ -1,6 +1,6 @@
 package com.yor42.projectazure.client.model.planes;
 
-import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
+import com.yor42.projectazure.gameobject.entity.planes.EntityF4fWildcat;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;

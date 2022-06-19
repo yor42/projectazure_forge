@@ -8,8 +8,10 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
@@ -36,12 +38,12 @@ public class EntityArtsProjectileRenderer extends EntityRenderer<EntityArtsProje
     @Override
     public void render(@Nonnull EntityArtsProjectile entityIn, float entityYaw, float partialTicks, @Nonnull MatrixStack matrixStackIn, @Nonnull IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
-        Model model = new ModelArtsProjectile();
+        EntityModel<EntityArtsProjectile> model = new ModelArtsProjectile();
         IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
         matrixStackIn.pushPose();
-        matrixStackIn.translate(0, -1.2, 0);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
-        matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
+        float f = MathHelper.rotLerp(partialTicks, entityIn.yRotO, entityIn.yRot);
+        float f6 = MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot);
+        model.setupAnim(entityIn,partialTicks,0.0F, -0.1F, f, f6);
         model.renderToBuffer(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
         matrixStackIn.popPose();
     }

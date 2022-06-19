@@ -28,7 +28,7 @@ import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
+import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -145,6 +145,26 @@ import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements ICrossbowUser, IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
+
+    public float getSpellRange() {
+        return 5;
+    };
+
+    public float getGunRange() {
+        return 7;
+    };
+
+    public float getPlaneRange() {
+        return 10;
+    };
+
+    public float getCannonRange() {
+        return 10;
+    };
+
+    public float getBowRange() {
+        return 4;
+    };
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
 
@@ -1350,7 +1370,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public boolean shouldUseGun() {
         ItemStack gunstack = this.getGunStack();
         if (gunstack.getItem() instanceof GunItem) {
-            GunItem gunitem = (GunItem) gunstack.getItem();
             CompoundNBT tag = gunstack.getOrCreateTag();
             int ammocount = tag.getInt("AmmoCount");
             boolean hasAmmo = ammocount>0;

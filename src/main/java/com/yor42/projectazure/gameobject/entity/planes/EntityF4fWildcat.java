@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity.misc;
+package com.yor42.projectazure.gameobject.entity.planes;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
@@ -75,7 +75,7 @@ public class EntityF4fWildcat extends AbstractEntityPlanes implements IAnimatabl
                 .add(Attributes.MOVEMENT_SPEED, 1.0F)
                 .add(ForgeMod.SWIM_SPEED.get(), 0.0F)
                 .add(Attributes.MAX_HEALTH, WildcatHP)
-                .add(Attributes.FLYING_SPEED, 1F)
+                .add(Attributes.FLYING_SPEED, 2F)
                 .add(Attributes.ATTACK_DAMAGE, 2F)
                 ;
     }

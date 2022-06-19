@@ -1,7 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
 import com.mojang.serialization.Codec;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
@@ -20,7 +19,7 @@ import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.*;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.*;
 import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
-import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
+import com.yor42.projectazure.gameobject.entity.planes.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.entity.projectiles.*;
 import com.yor42.projectazure.libs.Constants;

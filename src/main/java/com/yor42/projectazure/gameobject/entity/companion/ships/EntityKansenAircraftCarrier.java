@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.ships;
 
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityPlanes;
+import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

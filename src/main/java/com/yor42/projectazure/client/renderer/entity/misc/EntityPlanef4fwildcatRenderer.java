@@ -3,7 +3,7 @@ package com.yor42.projectazure.client.renderer.entity.misc;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.planes.modelEntityPlaneF4FWildCat;
-import com.yor42.projectazure.gameobject.entity.misc.EntityF4fWildcat;
+import com.yor42.projectazure.gameobject.entity.planes.EntityF4fWildcat;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
