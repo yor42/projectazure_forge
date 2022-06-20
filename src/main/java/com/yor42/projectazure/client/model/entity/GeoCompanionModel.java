@@ -3,6 +3,7 @@ package com.yor42.projectazure.client.model.entity;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.mixin.PathNavigatorAccessors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
@@ -39,7 +40,6 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
             float pitch = extraData.headPitch* ((float) Math.PI / 180F);
             float yaw = extraData.netHeadYaw* ((float) Math.PI / 180F);
             if (!(entity.isBeingPatted() || entity.isSleeping())) {
-                Vector2f headoffset = this.getHeadOffset(entity);
                 head.setRotationX(head.getRotationX()+pitch);
                 head.setRotationY(head.getRotationY()+yaw);
             }
@@ -101,10 +101,6 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
         LeftArm.setRotationX(((float)Math.PI / 2F) + headpitch);
     }
 
-    protected Vector2f getHeadOffset(E entity){
-        return Vector2f.ZERO;
-    }
-
     protected abstract int SleepingBodyYPosition();
 
     protected int SleepingBodyZPosition(){
@@ -123,6 +119,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
             parser.setValue("query.prev_head_yaw", ((LivingEntity)animatable).yHeadRotO * ((float) Math.PI / 180F));
 
             parser.setValue("query.animation_speed", ((AbstractEntityCompanion)animatable).animationSpeed);
+            parser.setValue("query.speed_modifier", (((PathNavigatorAccessors)((AbstractEntityCompanion)animatable).getNavigation()).getSpeedModifier()));
         }
     }
 }

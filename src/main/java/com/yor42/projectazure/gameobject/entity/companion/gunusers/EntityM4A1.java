@@ -93,13 +93,6 @@ public class EntityM4A1 extends EntityGunUserBase{
             }
 
             return PlayState.CONTINUE;
-        } else if (this.isOpeningDoor()) {
-            if (this.getItemBySlot(EquipmentSlotType.OFFHAND) == ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY) {
-                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
-            } else {
-                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
-            }
-            return PlayState.CONTINUE;
         }
         else if (this.isEating()) {
             if (this.getUsedItemHand() == Hand.MAIN_HAND) {

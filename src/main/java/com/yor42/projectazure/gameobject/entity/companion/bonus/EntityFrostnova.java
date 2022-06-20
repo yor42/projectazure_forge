@@ -94,15 +94,6 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
 
             return PlayState.CONTINUE;
         }
-        else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("opendoorL", false));
-            }
-            else{
-                event.getController().setAnimation(builder.addAnimation("opendoorR", false));
-            }
-            return PlayState.CONTINUE;
-        }
         else if(this.isReloadingMainHand()){
             if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
                 event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));

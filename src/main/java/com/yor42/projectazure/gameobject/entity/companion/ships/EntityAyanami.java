@@ -65,14 +65,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorL", false));
-            }
-            else{
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.openDoorR", false));
-            }
-        }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
             if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));

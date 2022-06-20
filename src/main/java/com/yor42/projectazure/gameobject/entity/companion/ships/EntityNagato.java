@@ -62,15 +62,6 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
             event.getController().setAnimation(builder.addAnimation("pat_arm", true));
             return PlayState.CONTINUE;
         }
-        else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
-            }
-            else{
-                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
-            }
-            return PlayState.CONTINUE;
-        }
         else if(this.isUsingGun()){
             if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));

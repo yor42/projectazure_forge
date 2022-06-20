@@ -78,14 +78,6 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isOpeningDoor()){
-            if(this.getItemBySlot(EquipmentSlotType.OFFHAND)== ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY){
-                event.getController().setAnimation(builder.addAnimation("openDoorL", false));
-            }
-            else{
-                event.getController().setAnimation(builder.addAnimation("openDoorR", false));
-            }
-        }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd", true));
             return PlayState.CONTINUE;

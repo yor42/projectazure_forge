@@ -5,6 +5,7 @@ import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.tac.guns.init.ModItems;
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
@@ -270,16 +271,17 @@ public class ForgeBusEventHandler {
                         }
                     }
 
-                    ItemDefibCharger.setChargeProgress(ChargerStack, 0);
-                    player.playSound(registerSounds.DEFIB_SHOCK, 0.8F+(0.4F+ MathUtil.getRand().nextFloat()), 0.8F+(0.4F+MathUtil.getRand().nextFloat()));
-                    if(target instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) target).isDeadOrDying() && ((AbstractEntityCompanion) target).isOwnedBy(player)){
-                        ((AbstractEntityCompanion) target).reviveCompanion();
-                        ((AbstractEntityCompanion) target).setOrderedToSit(true);
+                    if(PAConfig.CONFIG.InjuredRecoveryTimer.get()<0) {
+                        ItemDefibCharger.setChargeProgress(ChargerStack, 0);
+                        player.playSound(registerSounds.DEFIB_SHOCK, 0.8F + (0.4F + MathUtil.getRand().nextFloat()), 0.8F + (0.4F + MathUtil.getRand().nextFloat()));
+                        if (target instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) target).isDeadOrDying() && ((AbstractEntityCompanion) target).isOwnedBy(player)) {
+                            ((AbstractEntityCompanion) target).reviveCompanion();
+                            ((AbstractEntityCompanion) target).setOrderedToSit(true);
+                        } else {
+                            target.hurt(DamageSources.causeDefibDamage(player), 20);
+                        }
+                        event.setCanceled(true);
                     }
-                    else {
-                        target.hurt(DamageSources.causeDefibDamage(player), 20);
-                    }
-                    event.setCanceled(true);
                 }
             }
         }

@@ -73,9 +73,8 @@ public class EntityInteractionPacket {
                         case STOP_RIDING:
                             entity.stopRiding();
                             if(msg.pos != null) {
-                                DirectionUtil.getAvailableBedPos(world, msg.pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
-                                if (((AbstractEntityCompanion) entity).isCriticallyInjured()) {
-                                    ((AbstractEntityCompanion) entity).setInjurycuretimer(0);
+                                if (((AbstractEntityCompanion) entity).isCriticallyInjured() || world.isNight()) {
+                                    DirectionUtil.getAvailableBedPos(world, msg.pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
                                 }
                             }
                         case HEAL:

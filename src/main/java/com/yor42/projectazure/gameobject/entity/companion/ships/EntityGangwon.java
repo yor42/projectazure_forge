@@ -70,13 +70,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
         } else if (this.isGettingHealed()) {
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.heal_arm", true));
             return PlayState.CONTINUE;
-        } else if (this.isOpeningDoor()) {
-            if (this.getItemBySlot(EquipmentSlotType.OFFHAND) == ItemStack.EMPTY && this.getItemBySlot(EquipmentSlotType.MAINHAND) != ItemStack.EMPTY) {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorL", false));
-            } else {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.openDoorR", false));
-            }
-        } else if (this.isEating()) {
+        }else if (this.isEating()) {
             if (this.getUsedItemHand() == Hand.MAIN_HAND) {
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             } else if (this.getUsedItemHand() == Hand.OFF_HAND) {

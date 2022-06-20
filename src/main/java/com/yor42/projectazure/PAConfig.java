@@ -199,6 +199,7 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue ORIROCK_MAXHEIGHT;
 
         public final ForgeConfigSpec.IntValue BeaconFindSpawnPositionTries;
+        public final ForgeConfigSpec.ConfigValue<Integer> InjuredRecoveryTimer;
 
         public final ForgeConfigSpec.BooleanValue RedStonePoweredMachines;
 
@@ -411,6 +412,7 @@ public class PAConfig {
             builder.pop().push("Misc").comment("Other Thingys");
             shouldRecruitBeaconSpawnAllCompanions = builder.define("Should Recruit Beacon Spawn ALL Companion?", false);
             death_type = builder.defineEnum("What should happen when companion fully dies?", RESPAWN);
+            InjuredRecoveryTimer = builder.define("How long should it take before companion to recover from injury?(in seconds, please.)", 8400);
             builder.pop();
 
             builder.push("Cheats").comment("wuss mode");
