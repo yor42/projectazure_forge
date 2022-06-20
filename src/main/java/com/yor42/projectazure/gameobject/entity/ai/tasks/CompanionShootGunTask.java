@@ -6,7 +6,6 @@ import com.tac.guns.item.GunItem;
 import com.tac.guns.util.GunEnchantmentHelper;
 import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
@@ -14,15 +13,14 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
+import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
 
 public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
 
@@ -118,7 +116,7 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
                         int rate = GunEnchantmentHelper.getRate(gunStack, modifiedGun);
                         rate = GunModifierHelper.getModifiedRate(gunStack, rate);
                         if (hasAmmo && --this.attackTime <= 0) {
-                            entity.AttackUsingGun(target, gunStack);
+                            entity.AttackUsingGun(gunStack);
                             this.attackTime = rate;
                         } else if (gunStack.getItem() instanceof GunItem && getRemainingAmmo(gunStack) <= 0 && !entity.isReloadingMainHand() && reloadable) {
                             entity.setReloadDelay(gunStack);

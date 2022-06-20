@@ -28,7 +28,6 @@ import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
-import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
@@ -51,7 +50,6 @@ import com.yor42.projectazure.setup.register.registerManager;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
 import net.minecraft.block.material.PushReaction;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -118,8 +116,6 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.ParticleKeyFrameEvent;
-import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -137,6 +133,7 @@ import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
 import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.registerManager.*;
+import static net.minecraft.block.material.Material.AIR;
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
 import static net.minecraft.entity.ai.brain.schedule.Activity.*;
@@ -149,23 +146,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public float getSpellRange() {
         return 5;
-    };
+    }
 
     public float getGunRange() {
         return 7;
-    };
+    }
 
     public float getPlaneRange() {
         return 10;
-    };
+    }
 
     public float getCannonRange() {
         return 10;
-    };
+    }
 
     public float getBowRange() {
         return 4;
-    };
+    }
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
 
@@ -339,20 +336,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         @Override
         protected void onContentsChanged(int slot) {
-            switch (slot){
-                case 12:
-                    AbstractEntityCompanion.this.getEntityData().set(SKILL_ITEM_0, this.getStackInSlot(slot));
-                    break;
-                case 13:
-                    ItemStack stack = this.getStackInSlot(slot);
-                    AbstractEntityCompanion.this.getEntityData().set(SKILL_ITEM_1, stack);
-                    break;
-                case 14:
-                    AbstractEntityCompanion.this.getEntityData().set(SKILL_ITEM_2, this.getStackInSlot(slot));
-                    break;
-                case 15:
-                    AbstractEntityCompanion.this.getEntityData().set(SKILL_ITEM_3, this.getStackInSlot(slot));
-                    break;
+            if(slot>=12){
+                List<DataParameter<ItemStack>> stacks = Arrays.asList(SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3);
+                int SkillslotIdx = slot-12;
+                AbstractEntityCompanion.this.getEntityData().set(stacks.get(SkillslotIdx), this.getStackInSlot(slot));
             }
         }
 
@@ -360,8 +347,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         protected void onLoad() {
             super.onLoad();
             for(int i=0; i<AbstractEntityCompanion.this.getSkillItemCount(); i++){
-                DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
-                AbstractEntityCompanion.this.getEntityData().set(stacks[i], this.getStackInSlot(12+i));
+                AbstractEntityCompanion.this.setSkillItemSlotContent(i, this.getStackInSlot(12+i));
             }
         }
     };
@@ -380,8 +366,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected int lastAggroedTimeStamp = 0;
     protected int toldtomovecount = 0;
     public boolean shouldBeSitting;
-    protected boolean isMeleeing;
-    protected boolean isOpeningDoor;
     public boolean isMovingtoRecruitStation = false;
     protected int awakeningLevel;
     @Nullable
@@ -393,8 +377,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private final PathNavigator sailingNav;
     protected CompanionFoodStats foodStats = new CompanionFoodStats();
     private List<ExperienceOrbEntity> nearbyExpList;
-    public boolean canUseCrossbow;
-    public boolean canUseBow;
     protected long lastSlept, lastWokenup;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
     protected int StartedMeleeAttackTimeStamp = -1;
@@ -465,6 +447,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<AbstractEntityCompanion, PointOfInterestType>> POI_MEMORIES = ImmutableMap.of(HOME, (p_213769_0_, p_213769_1_) -> p_213769_1_ == PointOfInterestType.HOME);
     public abstract enums.EntityType getEntityType();
+
+
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setAffection(40F);
@@ -473,17 +457,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.SwimController = new CompanionSwimMovementController(this);
         this.MoveController = new CompanionDefaultMovementController(this);
         this.sailingNav = new SwimmerPathNavigator(this, worldIn){
+            @Nonnull
             protected PathFinder createPathFinder(int p_179679_1_) {
                 this.nodeEvaluator = new WalkAndSwimNodeProcessor();
                 return new PathFinder(this.nodeEvaluator, p_179679_1_);
             }
-            public boolean isStableDestination(BlockPos p_188555_1_) {
-                return !this.level.getBlockState(p_188555_1_.below()).isAir();
+            public boolean isStableDestination(@Nonnull BlockPos p_188555_1_) {
+                return !(this.level.getBlockState(p_188555_1_.below()).getMaterial() == AIR);
             }
         };
         this.noCulling = true;
-        this.canUseCrossbow = false;
-        this.canUseBow = false;
     }
 
     @Override
@@ -500,19 +483,27 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    public boolean isAlly(LivingEntity entity){
+    public boolean isAlly(LivingEntity target){
 
-        if(this.getOwner()==null){
+        LivingEntity owner = this.getOwner();
+        if (owner == null){
             return false;
         }
 
-        if(entity instanceof TameableEntity){
-            return ((TameableEntity) entity).isOwnedBy(this.getOwner());
+        if(target instanceof TameableEntity){
+            if(((TameableEntity) target).isOwnedBy(owner)){
+                return true;
+            }
         }
-        else if(entity instanceof AbstractEntityPlanes){
-            return ((AbstractEntityPlanes) entity).getOwner().isOwnedBy(this.getOwner());
+        else if(target instanceof PlayerEntity){
+
+            if(this.isOwnedBy(target)){
+                return !this.isAngry();
+            }
+
+            return !this.isPVPenabled();
         }
-        return false;
+        return target instanceof AbstractEntityDrone && ((AbstractEntityDrone) target).getOwner().isPresent() && (((AbstractEntityDrone) target).getOwner().get() == this || (((AbstractEntityDrone) target).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) target).getOwner().get()).isOwnedBy(this.getOwner())));
 
     }
 
@@ -578,6 +569,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void onLevelup(){
         ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(MAX_HEALTH);
+        assert modifiableattributeinstance != null;
         modifiableattributeinstance.setBaseValue(this.getAttributeValue(MAX_HEALTH)+this.getLevel());
         this.heal(this.getMaxHealth());
     }
@@ -599,7 +591,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public ItemStack[] getMagazine(ResourceLocation id){
-        ArrayList<ItemStack> stacks = new ArrayList();
+        ArrayList<ItemStack> stacks = new ArrayList<>();
         for(int i = 0; i < this.getAmmoStorage().getSlots(); ++i) {
             ItemStack stack = this.getAmmoStorage().getStackInSlot(i);
             if (isAmmo(stack, id)) {
@@ -610,7 +602,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     private static boolean isAmmo(ItemStack stack, ResourceLocation id) {
-        return stack != null && stack.getItem().getRegistryName().equals(id);
+        return stack != null && Objects.equals(stack.getItem().getRegistryName(), id);
     }
 
     protected boolean isMoving(){
@@ -832,7 +824,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             else {
                 dmg = ((TieredItem) item).getTier().getAttackDamageBonus();
             }
-            float basedmg = this.getAttribute(Attributes.ATTACK_DAMAGE) == null? 0: (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+            ModifiableAttributeInstance instance = this.getAttribute(Attributes.ATTACK_DAMAGE);
+            float basedmg = instance == null? 0: (float) instance.getValue();
             return basedmg+dmg;
         }
 
@@ -866,7 +859,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     protected void tickDeath() {
         ++this.deathTime;
-        int deathtimethreshold = this.isCriticallyInjured() || PAConfig.CONFIG.InjuredRecoveryTimer.get()<0? 40:24000;
+        int deathtimethreshold = this.isCriticallyInjured() || PAConfig.CONFIG.FaintTimeLimit.get()<1? 40:PAConfig.CONFIG.FaintTimeLimit.get();
         if (this.deathTime >= deathtimethreshold) {
             for(int i = 0; i < 20; ++i) {
                 double d0 = this.random.nextGaussian() * 0.02D;
@@ -906,7 +899,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                                 isSpawnSuccessful.set(true);
                             });
                             if(!isSpawnSuccessful.get()) {
-                                this.getOwner().sendMessage(new TranslationTextComponent("message.companion.bedmissing"), UUID.randomUUID());
+                                LivingEntity owner = this.getOwner();
+                                if(owner != null) {
+                                    this.getOwner().sendMessage(new TranslationTextComponent("message.companion.bedmissing"), UUID.randomUUID());
+                                }
                             }
                         }
                     }
@@ -958,7 +954,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayerEntity) {
             this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
         }
-        if (!this.removed && !this.dead) {
+        if (this.isAlive() && !this.dead) {
             Entity entity = p_70645_1_.getEntity();
             LivingEntity livingentity = this.getKillCredit();
             if (this.deathScore >= 0 && livingentity != null) {
@@ -1080,29 +1076,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public boolean wantsToAttack(@Nonnull LivingEntity target, @Nonnull LivingEntity owner) {
 
-        if(target instanceof TameableEntity){
-            if(((TameableEntity) target).isOwnedBy(owner)){
-                return false;
-            }
-        }
-        else if(target instanceof PlayerEntity){
-
-            if(this.isOwnedBy(target)){
-                return this.isAngry();
-            }
-
-            return this.isPVPenabled();
-        }
-        if(target instanceof AbstractEntityDrone && ((AbstractEntityDrone)target).getOwner().isPresent() && (((AbstractEntityDrone) target).getOwner().get() == this ||  (((AbstractEntityDrone) target).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) target).getOwner().get()).isOwnedBy(this.getOwner())))){
+        if(this.isAlly(target)){
             return false;
         }
 
         return super.wantsToAttack(target, owner);
     }
 
-    public void setHomeposAndDistance(BlockPos pos, float validDistance){
+    public void setHomeposAndDistance(@Nonnull BlockPos pos, float validDistance){
         this.getBrain().setMemory(HOME, GlobalPos.of(this.getCommandSenderWorld().dimension(), pos));
-        this.entityData.set(HOMEPOS, Optional.ofNullable(pos));
+        this.entityData.set(HOMEPOS, Optional.of(pos));
         this.entityData.set(VALID_HOME_DISTANCE, validDistance);
     }
 
@@ -1128,7 +1111,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.entityData.get(HOMEPOS);
     }
 
-    public void setHomePos(BlockPos pos){
+    public void setHomePos(@Nonnull BlockPos pos){
         this.setHomeposAndDistance(pos, 64);
     }
 
@@ -1141,9 +1124,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.Inventory;
     }
 
-    private static final Predicate<LivingEntity> HOSTILE_ENTITIES = (entity) -> entity.getSoundSource() == SoundCategory.HOSTILE && !Config.COMMON.aggroMobs.exemptEntities.get().contains(entity.getType().getRegistryName().toString());
+    private static final Predicate<LivingEntity> HOSTILE_ENTITIES = (entity) -> entity.getType().getRegistryName()!=null&&entity.getSoundSource() == SoundCategory.HOSTILE && !Config.COMMON.aggroMobs.exemptEntities.get().contains(entity.getType().getRegistryName().toString());
 
-    public void AttackUsingGun(LivingEntity target, ItemStack gun){
+    public void AttackUsingGun(ItemStack gun){
         if(gun.getItem() instanceof GunItem){
             GunItem item = (GunItem)gun.getItem();
             Gun modifiedGun = item.getModifiedGun(gun);
@@ -1163,7 +1146,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
                 if (!projectileProps.isVisible()) {
                     MessageBulletTrail messageBulletTrail = new MessageBulletTrail(spawnedProjectiles, projectileProps, this.getId());
-                    PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getX(), this.getY(), this.getZ(), (Double) Config.COMMON.network.projectileTrackingRange.get(), this.level.dimension())), messageBulletTrail);
+                    PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getX(), this.getY(), this.getZ(), Config.COMMON.network.projectileTrackingRange.get(), this.level.dimension())), messageBulletTrail);
                 }
 
                 double posY;
@@ -1195,7 +1178,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     posZ = this.getZ();
                     float volume = GunModifierHelper.getFireSoundVolume(gun);
                     float pitch = 0.9F + this.getCommandSenderWorld().random.nextFloat() * 0.2F;
-                    double radius = GunModifierHelper.getModifiedFireSoundRadius(gun, (Double)Config.SERVER.gunShotMaxDistance.get());
+                    double radius = GunModifierHelper.getModifiedFireSoundRadius(gun, Config.SERVER.gunShotMaxDistance.get());
                     boolean muzzle = modifiedGun.getDisplay().getFlash() != null;
                     MessageGunSound messageSound = new MessageGunSound(fireSound, SoundCategory.PLAYERS, (float)posX, (float)posY, (float)posZ, volume, pitch, this.getId(), muzzle, false);
                     PacketDistributor.TargetPoint targetPoint = new PacketDistributor.TargetPoint(posX, posY, posZ, radius, this.level.dimension());
@@ -1204,35 +1187,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
                 CompoundNBT tag = gun.getOrCreateTag();
                 if (!tag.getBoolean("IgnoreAmmo")) {
-                    int level = EnchantmentHelper.getItemEnchantmentLevel((Enchantment) ModEnchantments.RECLAIMED.get(), gun);
+                    int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.RECLAIMED.get(), gun);
                     if (level == 0 || this.level.random.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0) {
                         tag.putInt("AmmoCount", Math.max(0, tag.getInt("AmmoCount") - 1));
                     }
                 }
             }
         }
-    }
-
-    public int storeItemStack(ItemStack itemStackIn)
-    {
-        for(int i = 0; i < this.getInventory().getSlots(); ++i)
-        {
-            if(this.canMergeStacks(this.getInventory().getStackInSlot(i).getStack(), itemStackIn, i))
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private boolean canMergeStacks(ItemStack stack1, ItemStack stack2, int index)
-    {
-        return !stack1.isEmpty() && this.stackEqualExact(stack1, stack2) && stack1.isStackable() && stack1.getCount() < stack1.getMaxStackSize() && stack1.getCount() < this.getInventory().getSlotLimit(index);
-    }
-
-    private boolean stackEqualExact(ItemStack stack1, ItemStack stack2)
-    {
-        return stack1.getItem() == stack2.getItem() && ItemStack.tagMatches(stack1, stack2);
     }
 
     public boolean isEating(){
@@ -1251,12 +1212,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    public void shootCrossbowProjectile(LivingEntity p_230284_1_, ItemStack p_230284_2_, ProjectileEntity p_230284_3_, float p_230284_4_) {
+    public void shootCrossbowProjectile(@Nonnull LivingEntity p_230284_1_, @Nonnull ItemStack p_230284_2_, @Nonnull ProjectileEntity p_230284_3_, float p_230284_4_) {
         this.shootCrossbowProjectile(this, p_230284_1_, p_230284_3_, p_230284_4_, 1.6F);
     }
 
     @Override
-    public void performCrossbowAttack(LivingEntity p_234281_1_, float p_234281_2_) {
+    public void performCrossbowAttack(@Nonnull LivingEntity p_234281_1_, float p_234281_2_) {
         Hand hand = ProjectileHelper.getWeaponHoldingHand(this, item -> item instanceof CrossbowItem);
         ItemStack itemstack = this.getItemInHand(hand);
         if (this.getMainHandItem().getItem() instanceof CrossbowItem) {
@@ -1295,7 +1256,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    public void performRangedAttack(LivingEntity p_82196_1_, float p_82196_2_) {
+    public void performRangedAttack(@Nonnull LivingEntity p_82196_1_, float p_82196_2_) {
 
         ItemStack itemstack = this.getProjectile(this.getItemInHand(MAIN_HAND));
         ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
@@ -1318,7 +1279,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         double d2 = MathHelper.sqrt(d0 * d0 + d1 * d1);
         double d3 = p_234279_2_.getY(0.3333333333333333D) - p_234279_3_.getY() + d2 * (double)0.2F;
         Vector3f vector3f = this.getProjectileShotVector(p_234279_1_, new Vector3d(d0, d3, d1), p_234279_4_);
-        p_234279_3_.shoot(vector3f.x(), (double)vector3f.y(), (double)vector3f.z(), p_234279_5_, this.getCrossBowInaccuracy());
+        p_234279_3_.shoot(vector3f.x(), vector3f.y(), vector3f.z(), p_234279_5_, this.getCrossBowInaccuracy());
         p_234279_1_.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0F, 1.0F / (p_234279_1_.getRandom().nextFloat() * 0.4F + 0.8F));
     }
 
@@ -1409,7 +1370,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    public boolean wantsToPickUp(ItemStack stack) {
+    public boolean wantsToPickUp(@Nonnull ItemStack stack) {
         boolean isInventoryfree = false;
         for(int i=0; i<this.getInventory().getSlots(); i++){
             if(this.getInventory().insertItem(i, stack, true) == ItemStack.EMPTY){
@@ -1495,6 +1456,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected boolean canRide(Entity p_184228_1_) {
         if(p_184228_1_ == this.getOwner()){
             return true;
@@ -1540,6 +1502,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean hurt(DamageSource source, float amount) {
         if(this.getVehicle() != null && source.getEntity() == this.getVehicle() || source == DamageSource.IN_WALL) {
             return false;
@@ -1617,16 +1580,21 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         ItemStack itemstack = this.getItemInHand(hand);
         if (itemstack.isShield(this)) {
             ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
-            modifiableattributeinstance.removeModifier(USE_ITEM_SPEED_PENALTY);
-            modifiableattributeinstance.addTransientModifier(USE_ITEM_SPEED_PENALTY);
+            if(modifiableattributeinstance!=null) {
+                modifiableattributeinstance.removeModifier(USE_ITEM_SPEED_PENALTY);
+                modifiableattributeinstance.addTransientModifier(USE_ITEM_SPEED_PENALTY);
+            }
         }
         super.startUsingItem(hand);
     }
 
     @Override
     public void releaseUsingItem() {
-        if (this.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(USE_ITEM_SPEED_PENALTY))
-            this.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(USE_ITEM_SPEED_PENALTY);
+        ModifiableAttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        if(speed!=null) {
+            if (speed.hasModifier(USE_ITEM_SPEED_PENALTY))
+                speed.removeModifier(USE_ITEM_SPEED_PENALTY);
+        }
         super.releaseUsingItem();
     }
 
@@ -1652,19 +1620,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        AnimationController UpperBodycontroller = new AnimationController<>(this, "controller_lowerbody", 1, this::predicate_lowerbody);
+        AnimationController<?> UpperBodycontroller = new AnimationController<>(this, "controller_lowerbody", 1, this::predicate_lowerbody);
         animationData.addAnimationController(UpperBodycontroller);
         animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 1, this::predicate_upperbody));
         animationData.addAnimationController(new AnimationController<>(this, "controller_head", 1, this::predicate_head));
-
-        UpperBodycontroller.registerSoundListener(this::soundListener);
-        UpperBodycontroller.registerParticleListener(this::particleListener);
-    }
-
-    protected void particleListener(ParticleKeyFrameEvent particleKeyFrameEvent) {
-    }
-
-    protected void soundListener(SoundKeyframeEvent event) {
     }
 
     protected abstract <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent);
@@ -1959,15 +1918,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return false;
     }
 
-    private Optional<BlockPos> findHomePosition(ServerWorld world, AbstractEntityCompanion entity) {
-        return world.getPoiManager().take(PointOfInterestType.HOME.getPredicate(), (pos) -> this.canReachHomePosition(entity, pos), entity.blockPosition(), 20);
-    }
-
-    private boolean canReachHomePosition(AbstractEntityCompanion entity, BlockPos pos) {
-        Path path = entity.getNavigation().createPath(pos, PointOfInterestType.HOME.getValidRange());
-        return path != null && path.canReach();
-    }
-
     public int getSkillPoints(){
         return this.entityData.get(SKILL_POINTS);
     }
@@ -2037,12 +1987,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(this.getCommandSenderWorld().isClientSide() && this.getEntityData().get(SITTING)!=this.isOrderedToSit()){
             super.setOrderedToSit(this.getEntityData().get(SITTING));
             this.refreshDimensions();
-        }
-
-
-        if(!this.getCommandSenderWorld().isClientSide() && this.tickCount % 200 == 0&& !this.getHOMEPOS().isPresent()){
-            Optional<BlockPos> optional = this.findHomePosition((ServerWorld) this.getCommandSenderWorld(), this);
-            optional.ifPresent(blockPos -> this.setHomeposAndDistance(blockPos, 64));
         }
 
         if(this.hasEffect(Effects.HUNGER)){
@@ -2131,7 +2075,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     int interactionTime = this.getEntityData().get(ECCI_ANIMATION_TIME);
                     this.getEntityData().set(ECCI_ANIMATION_TIME, interactionTime - 1);
                     this.qinteractionTimer += 1;
-                    if (this.qinteractionTimer % 30 == 0) {
+                    if (this.qinteractionTimer % 40 == 0) {
                         int newWarningCount = AngerWarningCount+1;
                         this.entityData.set(INTERACTION_WARNING_COUNT,newWarningCount);
                         if (newWarningCount == 1 && this.distanceTo(this.getOwner()) < 5) {
@@ -2186,30 +2130,42 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
             //Very cheap fix to Datamanager not syncing
             for(int i=0; i<this.getSkillItemCount(); i++){
-                DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
                 ItemStack serverSideItem = this.getInventory().getStackInSlot(12+i);
-                this.getEntityData().set(stacks[i], serverSideItem);
+                this.setSkillItemSlotContent(i, serverSideItem);
             }
 
-        }
+            if(this.isAngry()){
+                int newangertimer = this.entityData.get(ANGRYTIMER)-1;
+                this.entityData.set(ANGRYTIMER, newangertimer);
+                if(newangertimer <=0){
+                    this.setTarget(null);
+                }else if(this.getTarget() != this.getOwner()){
+                    this.setTarget(this.getOwner());
+                }
+            }
+            if(this.getHOMEPOS().isPresent()) {
 
-        if(!this.getCommandSenderWorld().isClientSide() && this.isAngry()){
-            int newangertimer = this.entityData.get(ANGRYTIMER)-1;
-            this.entityData.set(ANGRYTIMER, newangertimer);
-            if(newangertimer <=0){
-                this.setTarget(null);
-            }else if(this.getTarget() != this.getOwner()){
-                this.setTarget(this.getOwner());
+                Path path2home = this.getNavigation().createPath(this.getHOMEPOS().get(), 0);
+                if(path2home != null && path2home.canReach()) {
+
+                    if (this.isFreeRoaming() && (this.getCommandSenderWorld().isNight() && this.isOrderedToSit() && this.isInHomeRangefromCurrenPos())) {
+                        this.shouldBeSitting = this.isOrderedToSit();
+                        this.setOrderedToSit(false);
+                    }
+                }
+            }
+
+            if(this.getEntityData().get(HEAL_TIMER)>0){
+                this.getEntityData().set(HEAL_TIMER, this.getEntityData().get(HEAL_TIMER)-1);
             }
         }
 
-
-        if(this.getEntityData().get(HEAL_TIMER)>0){
-            this.getEntityData().set(HEAL_TIMER, this.getEntityData().get(HEAL_TIMER)-1);
-        }
 
         if (this.forcewakeupExpireTimer>0){
             this.forcewakeupExpireTimer--;
+        }
+        if(this.isForceWaken() && this.getCommandSenderWorld().isDay()){
+            this.setForceWaken(false);
         }
 
         int mainhandDelay = this.getEntityData().get(RELOAD_TIMER_MAINHAND);
@@ -2240,15 +2196,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.navigation.getNodeEvaluator().setCanPassDoors(this.canOpenDoor());
         this.navigation.getNodeEvaluator().setCanOpenDoors(this.canOpenDoor());
 
-        if(this.isForceWaken() && this.getCommandSenderWorld().isDay()){
-            this.setForceWaken(false);
-        }
 
-        if(this.isOrderedToSit() && this.tickCount%20 == 0){
-            this.addMorale(0.015);
-        }
-        else if(!this.isFreeRoaming()&& this.tickCount%20 == 0){
-            this.addMorale(-0.001);
+        if(this.tickCount%20 == 0){
+            double moraledelta = 0.001;
+
+            if(this.isOrderedToSit()){
+                moraledelta = 0.0125;
+            }
+            else if(this.isFreeRoaming()){
+                moraledelta = 0.023;
+            }
+            this.addMorale(moraledelta);
         }
 
         if(this.isSleeping()) {
@@ -2270,11 +2228,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
                 this.setInjurycuretimer(curetime);
             }
-        }
-
-        if(!this.getCommandSenderWorld().isClientSide() && this.isFreeRoaming() && (this.getCommandSenderWorld().isNight() && this.isOrderedToSit() && this.isInHomeRangefromCurrenPos() && this.getNavigation().createPath(this.getHOMEPOS().get(), 0) != null && this.getNavigation().createPath(this.getHOMEPOS().get(), 0).canReach())){
-            this.shouldBeSitting = this.isOrderedToSit();
-            this.setOrderedToSit(false);
         }
     }
 
@@ -2326,9 +2279,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setSkillItemSlotContent(int index, ItemStack stack){
-        DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
         this.getInventory().setStackInSlot(12+index, stack);
-        this.getEntityData().set(stacks[index], stack);
     }
 
     public ItemStack getNextSkillItem(){
@@ -2408,33 +2359,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return enums.GunClass.NONE;
     }
 
-    public void ShootArrow(LivingEntity target, float distanceFactor) {
-        ItemStack itemstack = this.findArrow();
-        AbstractArrowEntity abstractarrowentity = this.fireArrow(itemstack, distanceFactor, this.getItemBySlot(EquipmentSlotType.MAINHAND));
-        if (this.getMainHandItem().getItem() instanceof net.minecraft.item.BowItem)
-            abstractarrowentity = ((net.minecraft.item.BowItem)this.getMainHandItem().getItem()).customArrow(abstractarrowentity);
-        double d0 = target.getX() - this.getX();
-        double d1 = target.getY(0.3333333333333333D) - abstractarrowentity.getY();
-        double d2 = target.getZ() - this.getZ();
-        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, 3);
-        this.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(abstractarrowentity);
-    }
-
-    protected AbstractArrowEntity fireArrow(ItemStack arrowStack, float distanceFactor, ItemStack ItemInHand) {
-        return ProjectileHelper.getMobArrow(this, arrowStack, distanceFactor);
-    }
-
-    protected ItemStack findArrow() {
-        for (int i = 0; i < this.getInventory().getSlots(); i++) {
-            if (this.getInventory().getStackInSlot(i).getItem() instanceof ArrowItem) {
-                return this.getInventory().getStackInSlot(i);
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
     public int getSkillDelayTick(){
         return this.getEntityData().get(SKILLDELAYTICK);
     }
@@ -2485,8 +2409,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public ItemStack getSkillItem(int index){
         if(this.getCommandSenderWorld().isClientSide){
-            DataParameter<ItemStack>[] stacks = new DataParameter[]{SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3};
-            return this.getEntityData().get(stacks[index]);
+            List<DataParameter<ItemStack>> stacks = Arrays.asList(SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3);
+            return this.getEntityData().get(stacks.get(index));
         }
         return this.getInventory().getStackInSlot(12+index);
     }
@@ -2924,7 +2848,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             this.forcewakeupExpireTimer = 20;
                         }
                         return ActionResultType.SUCCESS;
-                    } else if (EyeCheckFinal > 0.998 && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
+                    } else if (EyeCheckFinal > 1.0D - 0.02D / EyeDeltaLength && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
                         if (this.getCommandSenderWorld().isClientSide()) {
                             Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.PAT, true));
                         }
@@ -3232,23 +3156,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void setStayCenterPos(BlockPos stayCenterPos) {
         this.getEntityData().set(STAYPOINT,Optional.of(stayCenterPos));
-    }
-    public boolean addStackToInventory(ItemStack stack){
-        for(int i=0; i<this.getInventory().getSlots(); i++){
-            if(this.getInventory().insertItem(i, stack, false) == ItemStack.EMPTY){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean addStackToAmmoStorage(ItemStack stack){
-        for(int i=0; i<this.getAmmoStorage().getSlots(); i++){
-            if(this.getAmmoStorage().insertItem(i, stack, false) == ItemStack.EMPTY){
-                return true;
-            }
-        }
-        return false;
     }
 
     @Nonnull

@@ -1,6 +1,5 @@
 package com.yor42.projectazure.setup.register;
 
-import com.tac.guns.client.SpecialModels;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;

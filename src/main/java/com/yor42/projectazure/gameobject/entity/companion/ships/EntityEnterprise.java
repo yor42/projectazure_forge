@@ -5,7 +5,6 @@ import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
-
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
@@ -16,7 +15,6 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -94,7 +92,6 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
 
     public EntityEnterprise(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
-        this.canUseBow = true;
     }
 
     @Override

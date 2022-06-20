@@ -2,12 +2,10 @@ package com.yor42.projectazure.gameobject.entity.companion.ranged;
 
 import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
-import com.tac.guns.common.GripType;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
@@ -18,9 +16,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
@@ -40,7 +36,6 @@ import static com.yor42.projectazure.libs.enums.EntityType.OPERATOR;
 public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
     public EntitySchwarz(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
-        this.canUseCrossbow = true;
     }
 
     @Override

@@ -1,12 +1,7 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.monster.PhantomEntity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
 
 public class PlaneFlyMovementController extends FlyingMovementController {
     private final int maxTurn;

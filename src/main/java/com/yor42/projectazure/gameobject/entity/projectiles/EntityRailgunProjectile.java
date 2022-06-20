@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
-import com.tac.guns.Config;
 import com.tac.guns.common.Gun;
 import com.tac.guns.entity.ProjectileEntity;
 import com.tac.guns.item.GunItem;

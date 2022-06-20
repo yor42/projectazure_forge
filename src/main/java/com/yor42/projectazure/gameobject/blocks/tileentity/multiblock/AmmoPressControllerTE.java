@@ -15,9 +15,7 @@ import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.Blocks;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.Tags;
 
 public class AmmoPressControllerTE extends ControllerTileEntity {
     public static final ControllerDefinition AmmoPressDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "ammo_press"), AmmoPressControllerTE::new);

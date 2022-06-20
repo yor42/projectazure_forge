@@ -3,7 +3,6 @@ package com.yor42.projectazure.client.renderer.block;
 import com.lowdragmc.multiblocked.client.renderer.impl.GeoComponentRenderer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;

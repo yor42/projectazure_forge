@@ -1,10 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
-import com.tac.guns.GunMod;
-import com.tac.guns.interfaces.IGunModifier;
 import com.tac.guns.item.AmmoItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
 import com.yor42.projectazure.client.renderer.items.*;

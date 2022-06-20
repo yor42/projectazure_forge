@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;

@@ -7,15 +7,12 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.task.ShootTargetTask;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.world.server.ServerWorld;
-
-import java.util.Map;
 
 public class CompanionUseCrossbowTask extends Task<AbstractEntityCompanion> {
 

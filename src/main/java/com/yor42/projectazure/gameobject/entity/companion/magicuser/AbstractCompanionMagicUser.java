@@ -1,16 +1,12 @@
 package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
-import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion implements ISpellUser {
 

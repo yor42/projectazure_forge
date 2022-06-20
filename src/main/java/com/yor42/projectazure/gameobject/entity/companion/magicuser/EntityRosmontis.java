@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
 import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
-import com.tac.guns.common.GripType;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
@@ -20,7 +19,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -35,8 +33,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknOp {
 

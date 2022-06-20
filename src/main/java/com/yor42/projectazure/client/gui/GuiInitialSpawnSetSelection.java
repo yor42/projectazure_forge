@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ClientUtils;
@@ -10,7 +9,6 @@ import com.yor42.projectazure.network.packets.SelectInitialSpawnSetPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;

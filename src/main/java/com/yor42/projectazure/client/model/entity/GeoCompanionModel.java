@@ -5,22 +5,21 @@ import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.mixin.PathNavigatorAccessors;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.Hand;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 import software.bernie.shadowed.eliotlash.molang.MolangParser;
 
 import javax.annotation.Nullable;
+
+import static net.minecraft.util.Hand.MAIN_HAND;
 
 public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> extends AnimatedGeoModel<E> {
 
@@ -55,12 +54,16 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
                 body.setPositionY(SleepingBodyYPosition());
                 body.setPositionZ(SleepingBodyZPosition());
             } else if (!(entity.isBeingPatted() || entity.islewded())) {
-
                 if (!entity.isOrderedToSit()) {
-                    if (entity.isChargingCrossbow()) {
-                        AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, true);
-                    } else if (entity.getMainHandItem().getItem() instanceof CrossbowItem) {
-                        AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
+                    if(entity.isHolding((item)->item instanceof CrossbowItem)){
+                        Hand CrossbowHand = entity.getItemInHand(MAIN_HAND).getItem() instanceof CrossbowItem? MAIN_HAND:Hand.OFF_HAND;
+                        boolean isMainhanded = CrossbowHand == MAIN_HAND;
+                        if(entity.isChargingCrossbow()){
+                            AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, isMainhanded);
+                        }
+                        else{
+                            AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
+                        }
                     }
                     else if(entity.isUsingItem() && entity.isHolding((item)->item instanceof BowItem)){
                         boolean isLeftHanded = entity.isLeftHanded();

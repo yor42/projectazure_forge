@@ -24,7 +24,6 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.AnimationUtils;
 
-import java.awt.*;
 import java.util.Collections;
 
 public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends EntityRenderer<T>

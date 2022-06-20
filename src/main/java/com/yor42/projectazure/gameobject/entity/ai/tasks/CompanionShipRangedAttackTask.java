@@ -17,7 +17,6 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasGunOrTorpedo;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 

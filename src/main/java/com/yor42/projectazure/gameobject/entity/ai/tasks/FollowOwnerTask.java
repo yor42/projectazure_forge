@@ -24,7 +24,6 @@ import java.util.Random;
 
 import static com.yor42.projectazure.setup.register.registerManager.NEAREST_ORE;
 import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
-import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
     public FollowOwnerTask() {

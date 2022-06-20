@@ -8,7 +8,6 @@ import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.ai.tasks.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
-import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
@@ -130,7 +129,7 @@ public class CompanionTasks {
     }
 
     private static void initRetreatActivity(Brain<AbstractEntityCompanion> p_234507_0_) {
-        p_234507_0_.addActivityAndRemoveMemoryWhenStopped(AVOID, 10, ImmutableList.of(new FollowOwnerTask(), RunAwayTask.entity(MemoryModuleType.AVOID_TARGET, 1.0F, 12, true), createIdleLookBehaviors(), createIdleMovementBehaviors(), new PredicateTask<AbstractEntityCompanion>(CompanionTasks::wantsToStopFleeing, MemoryModuleType.AVOID_TARGET)), MemoryModuleType.AVOID_TARGET);
+        p_234507_0_.addActivityAndRemoveMemoryWhenStopped(AVOID, 10, ImmutableList.of(new FollowOwnerTask(), RunAwayTask.entity(MemoryModuleType.AVOID_TARGET, 1.0F, 12, true), createIdleLookBehaviors(), createIdleMovementBehaviors(), new PredicateTask<>(CompanionTasks::wantsToStopFleeing, MemoryModuleType.AVOID_TARGET)), MemoryModuleType.AVOID_TARGET);
     }
 
     private static FirstShuffledTask<AbstractEntityCompanion> createIdleLookBehaviors() {
@@ -270,7 +269,7 @@ public class CompanionTasks {
     private static void maybeRetaliate(AbstractEntityCompanion companion, LivingEntity target) {
         if (!companion.getBrain().isActive(AVOID)) {
             if (EntityPredicates.ATTACK_ALLOWED.test(target)) {
-                if (hasWeapon(companion, target)) {
+                if (hasWeapon(companion, target) && (companion.getOwner() == null || companion.wantsToAttack(target, companion.getOwner()))) {
                     if (!BrainUtil.isOtherTargetMuchFurtherAwayThanCurrentAttackTarget(companion, target, 4.0D)) {
                         setAttackTarget(companion, target);
                         broadcastAttackTarget(companion, target);

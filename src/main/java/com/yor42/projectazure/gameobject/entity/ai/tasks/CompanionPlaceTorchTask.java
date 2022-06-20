@@ -1,9 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
-import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-
 import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
@@ -20,7 +18,6 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.registerManager.TORCH_INDEX;
-import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {

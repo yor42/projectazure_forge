@@ -8,16 +8,10 @@ import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.entity.monster.SkeletonEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.BowItem;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nonnull;
-import java.util.Map;
-
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 
 public class CompanionBowRangedAttackTask extends Task<AbstractEntityCompanion> {

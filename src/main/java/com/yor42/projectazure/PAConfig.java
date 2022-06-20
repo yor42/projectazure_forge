@@ -200,6 +200,7 @@ public class PAConfig {
 
         public final ForgeConfigSpec.IntValue BeaconFindSpawnPositionTries;
         public final ForgeConfigSpec.ConfigValue<Integer> InjuredRecoveryTimer;
+        public final ForgeConfigSpec.ConfigValue<Integer> FaintTimeLimit;
 
         public final ForgeConfigSpec.BooleanValue RedStonePoweredMachines;
 
@@ -209,13 +210,14 @@ public class PAConfig {
         public final ForgeConfigSpec.BooleanValue RiggingInfiniteFuel;
 
         private PAModConfig(ForgeConfigSpec.Builder builder){
+            builder.push("Letter from developer");
             builder.comment("As a Mod dev/modpack maker, I believe everything in mod should be configurable.");
             builder.comment("Minecraft is after all, game that no one plays the same.");
             builder.comment("So Nobody should tell you how to play the game.");
             builder.comment("So here you go. Go crazy with it.");
-            builder.comment(" - yor42");
+            builder.comment("with <3, yor42");
 
-            builder.push("General");
+            builder.pop().push("General");
             EnablePVP = builder.define("Enable PVP Combat", false);
             EnableShipLandCombat = builder.define("Enable Ship Weapons on land", true);
             EnableTorpedoBlockDamage = builder.define("Enable Torpedo's block damage", true);
@@ -412,7 +414,8 @@ public class PAConfig {
             builder.pop().push("Misc").comment("Other Thingys");
             shouldRecruitBeaconSpawnAllCompanions = builder.define("Should Recruit Beacon Spawn ALL Companion?", false);
             death_type = builder.defineEnum("What should happen when companion fully dies?", RESPAWN);
-            InjuredRecoveryTimer = builder.define("How long should it take before companion to recover from injury?(in seconds, please.)", 8400);
+            InjuredRecoveryTimer = builder.define("How long should it take before companion to recover from injury? (in seconds, please.)", 8400);
+            FaintTimeLimit = builder.define("How long should it take before companion die after fainting? (in seconds, set it to 0 if you wish to disable fainting mechanic)", 1200);
             builder.pop();
 
             builder.push("Cheats").comment("wuss mode");

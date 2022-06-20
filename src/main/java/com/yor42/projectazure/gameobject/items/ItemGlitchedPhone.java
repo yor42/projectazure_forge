@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.yor42.projectazure.client.gui.GuiALStarterSpawn;
 import com.yor42.projectazure.client.gui.GuiInitialSpawnSetSelection;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.client.Minecraft;

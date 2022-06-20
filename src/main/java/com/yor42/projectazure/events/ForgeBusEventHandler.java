@@ -16,7 +16,6 @@ import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.block.BedBlock;
@@ -33,9 +32,6 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.state.properties.BedPart;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -43,7 +39,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -212,20 +207,23 @@ public class ForgeBusEventHandler {
         if (!passengers.isEmpty() && player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
             for (Entity entity : passengers) {
                 entity.stopRiding();
-                if (entity instanceof AbstractEntityCompanion) {
-                    boolean isInjured = ((AbstractEntityCompanion) entity).isCriticallyInjured();
-                    if (isInjured || world.isNight()) {
-                        BlockState state = world.getBlockState(pos);
-                        if (state.isBed(world, pos, (LivingEntity) entity)) {
-                            pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
-                            ((AbstractEntityCompanion) entity).startSleeping(pos);
-                            event.setCanceled(true);
-                        }
-                        break;
+
+                if (!(entity instanceof AbstractEntityCompanion)) {
+                    return;
+                }
+
+                boolean isInjured = ((AbstractEntityCompanion) entity).isCriticallyInjured();
+                if (isInjured || world.isNight()) {
+                    BlockState state = world.getBlockState(pos);
+                    if (state.isBed(world, pos, (LivingEntity) entity)) {
+                        pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
+                        ((AbstractEntityCompanion) entity).startSleeping(pos);
+                        event.setCanceled(true);
                     }
-                    else if(((AbstractEntityCompanion) entity).isDeadOrDying()){
-                        player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
-                    }
+                    break;
+                }
+                else if(((AbstractEntityCompanion) entity).isDeadOrDying()){
+                    player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
                 }
             }
             player.swing(MAIN_HAND);
@@ -271,7 +269,7 @@ public class ForgeBusEventHandler {
                         }
                     }
 
-                    if(PAConfig.CONFIG.InjuredRecoveryTimer.get()<0) {
+                    if(PAConfig.CONFIG.FaintTimeLimit.get()>0) {
                         ItemDefibCharger.setChargeProgress(ChargerStack, 0);
                         player.playSound(registerSounds.DEFIB_SHOCK, 0.8F + (0.4F + MathUtil.getRand().nextFloat()), 0.8F + (0.4F + MathUtil.getRand().nextFloat()));
                         if (target instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) target).isDeadOrDying() && ((AbstractEntityCompanion) target).isOwnedBy(player)) {

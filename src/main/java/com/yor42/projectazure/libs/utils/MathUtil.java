@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.spawner.WorldEntitySpawner;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import static net.minecraft.util.math.MathHelper.clamp;
@@ -52,6 +54,13 @@ public class MathUtil {
         }
         else
             return Result;
+    }
+
+    @SafeVarargs
+    public static<T> ArrayList<T> createArrayListof(T... values){
+        ArrayList<T> list = new ArrayList<>();
+        Collections.addAll(list, values);
+        return list;
     }
 
     public static float getRiggingedDamageModifier(){
