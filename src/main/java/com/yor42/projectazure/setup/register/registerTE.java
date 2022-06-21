@@ -2,10 +2,13 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.*;
 import net.minecraft.block.Block;
+import net.minecraft.stats.Stat;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class registerTE {
@@ -15,11 +18,21 @@ public class registerTE {
     public static final RegistryObject<TileEntityType<TileEntityBasicRefinery>> BASIC_REFINERY = register("basic_refinery_te", TileEntityBasicRefinery::new, registerBlocks.BASIC_REFINERY);
     public static final RegistryObject<TileEntityType<TileEntityRecruitBeacon>> RECRUIT_BEACON = register("recruit_beacon_te", TileEntityRecruitBeacon::new, registerBlocks.RECRUIT_BEACON);
     public static final RegistryObject<TileEntityType<TileEntityCrystalGrowthChamber>> CRYSTAL_GROWTH_CHAMBER = register("crystal_growth_chamber_te", TileEntityCrystalGrowthChamber::new, registerBlocks.CRYSTAL_GROWTH_CHAMBER);
-    private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<? extends Block> block){
-
+    public static final RegistryObject<TileEntityType<TileEntityPantry>> PANTRY = register("pantry_te", TileEntityPantry::new, registerBlocks.OAK_PANTRY);
+    @SafeVarargs
+    private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<Block>... block){
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW
         //noinspection ConstantConditions
-        return registerManager.TILE_ENTITY.register(name, () -> TileEntityType.Builder.of(factory, block.get()).build(null));
+        return registerManager.TILE_ENTITY.register(name, () -> TileEntityType.Builder.of(factory, RegistryObject2Block(block)).build(null));
+    }
+
+    @SafeVarargs
+    private static Block[] RegistryObject2Block(RegistryObject<Block>... blocks){
+        ArrayList<Block> list = new ArrayList<>();
+        for(RegistryObject<Block> block:blocks){
+            list.add(block.get());
+        }
+        return list.toArray(new Block[0]);
     }
 
     static void register(){}

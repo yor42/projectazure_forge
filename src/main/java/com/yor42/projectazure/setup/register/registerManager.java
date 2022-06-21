@@ -107,6 +107,9 @@ public class registerManager {
     public static final ContainerType<ContainerCrystalGrowthChamber> GROWTH_CHAMBER_CONTAINER_TYPE = IForgeContainerType.create(ContainerCrystalGrowthChamber::new);
     public static final RegistryObject<ContainerType<ContainerCrystalGrowthChamber>> GROWTH_CHAMBER_CONTAINER = CONTAINER.register("crystal_growth_chamber_container", () -> GROWTH_CHAMBER_CONTAINER_TYPE);
 
+    public static final ContainerType<ContainerPantry> PANTRY_CONTAINER_TYPE = IForgeContainerType.create(ContainerPantry::new);
+    public static final RegistryObject<ContainerType<ContainerPantry>> PANTRY_CONTAINER = CONTAINER.register("pantry_container", () -> PANTRY_CONTAINER_TYPE);
+
 
     //entity
     public static final EntityType<EntityAyanami> ENTITYTYPE_AYANAMI = EntityType.Builder.of(EntityAyanami::new, EntityClassification.CREATURE).sized(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString());

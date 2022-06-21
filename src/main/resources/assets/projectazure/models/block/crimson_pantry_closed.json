@@ -1,0 +1,8 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "projectazure:block/pantry_closed",
+	"textures": {
+		"planks": "minecraft:block/crimson_planks",
+		"log": "minecraft:block/crimson_stem"
+	}
+}
