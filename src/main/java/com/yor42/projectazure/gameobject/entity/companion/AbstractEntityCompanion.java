@@ -430,7 +430,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             registerManager.WAIT_POINT.get(), registerManager.HEAL_TARGET.get(), MEMORY_SITTING.get(), MemoryModuleType.LIVING_ENTITIES,
             MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, NEAREST_HOSTILE,
             MemoryModuleType.NEAREST_VISIBLE_PLAYER, RIDE_TARGET, registerManager.WAIT_POINT.get(), registerManager.NEARBY_ALLYS.get(),
-            registerManager.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER,
+            registerManager.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, FOOD_PANTRY.get(),
             FOOD_INDEX.get(), HEAL_POTION_INDEX.get(),REGENERATION_POTION_INDEX.get(),TOTEM_INDEX.get(),
             TORCH_INDEX.get(),FIRE_EXTINGIGH_ITEM.get(),FALL_BREAK_ITEM_INDEX.get(),
             MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET,
@@ -446,8 +446,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             INVENTORY_SENSOR.get());
 
     public static final Map<MemoryModuleType<GlobalPos>, BiPredicate<AbstractEntityCompanion, PointOfInterestType>> POI_MEMORIES = ImmutableMap.of(HOME, (p_213769_0_, p_213769_1_) -> p_213769_1_ == PointOfInterestType.HOME);
-    public abstract enums.EntityType getEntityType();
 
+    public abstract enums.EntityType getEntityType();
 
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);

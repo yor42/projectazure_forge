@@ -1,5 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.containers.machine.*;
@@ -23,7 +25,10 @@ import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.entity.planes.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.projectiles.*;
 import com.yor42.projectazure.libs.Constants;
+import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -39,9 +44,11 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
+import net.minecraft.state.properties.BedPart;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
+import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -51,9 +58,12 @@ import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
@@ -73,6 +83,7 @@ public class registerManager {
     public static final DeferredRegister<Activity> ACTIVITIES = DeferredRegister.create(ForgeRegistries.ACTIVITIES, Constants.MODID);
     public static final DeferredRegister<MemoryModuleType<?>> MEMORYMODULES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, Constants.MODID);
     public static final DeferredRegister<Schedule> SCHEDULES = DeferredRegister.create(ForgeRegistries.SCHEDULES, Constants.MODID);
+    public static final DeferredRegister<PointOfInterestType> POI = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MODID);
 
     //Container
     private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<>((IContainerFactory<ContainerKansenInventory>)ContainerKansenInventory::new);
@@ -220,9 +231,13 @@ public class registerManager {
     public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
     public static final RegistryObject<Activity> WAITING = registerActivity("waiting");
     public static final RegistryObject<Activity> INJURED = registerActivity("injured");
+    private static final Set<BlockState> PANTRY = ImmutableList.of(registerBlocks.OAK_PANTRY.get(),registerBlocks.SPRUCE_PANTRY.get(),registerBlocks.BIRCH_PANTRY.get(),registerBlocks.JUNGLE_PANTRY.get(),registerBlocks.DARK_OAK_PANTRY.get(),registerBlocks.ACACIA_PANTRY.get(),registerBlocks.WARPED_PANTRY.get(),registerBlocks.CRIMSON_PANTRY.get()).stream().flatMap((p_234171_0_) -> p_234171_0_.getStateDefinition().getPossibleStates().stream()).collect(ImmutableSet.toImmutableSet());
+    //POI
+    public static final RegistryObject<PointOfInterestType> POI_PANTRY = registerPOI("poi_pantry",PANTRY, null, 1,1);
 
     //MemoryModuleType
     public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
+    public static final RegistryObject<MemoryModuleType<GlobalPos>> FOOD_PANTRY = registerMemoryModuleType("food_pantry", GlobalPos.CODEC);
     public static final RegistryObject<MemoryModuleType<BlockPos>> HURT_AT = registerMemoryModuleType("hurt_at");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_ALLYS = registerMemoryModuleType("nearby_allys");
     public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_ALLYS = registerMemoryModuleType("visible_allys");
@@ -267,6 +282,15 @@ public class registerManager {
         return SCHEDULES.register(ID, ()->schedule);
     }
 
+    public static RegistryObject<PointOfInterestType> registerPOI(String ID, Set<BlockState> state, @Nullable Predicate<PointOfInterestType> predicate, int maxticket, int validrange){
+        if(predicate == null){
+            return POI.register(ID, ()->new PointOfInterestType(ID, state, maxticket, validrange));
+        }
+        else{
+            return POI.register(ID, ()->new PointOfInterestType(ID, state, maxticket, predicate, validrange));
+        }
+    }
+
     public static <U extends Sensor<?>> RegistryObject<SensorType<U>> registerSensorType(String ID, Supplier<U> sensor){
         return SENSORS.register(ID, ()->new SensorType<>(sensor));
     }
@@ -290,6 +314,7 @@ public class registerManager {
         MEMORYMODULES.register(eventbus);
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
+        POI.register(eventbus);
         SENSORS.register(eventbus);
         SCHEDULES.register(eventbus);
         registerMultiBlocks.register();
