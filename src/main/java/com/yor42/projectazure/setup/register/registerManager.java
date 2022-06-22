@@ -222,7 +222,7 @@ public class registerManager {
     public static final EntityType<EntityF4fWildcat> PLANEF4FWildCat = EntityType.Builder.of(EntityF4fWildcat::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString());
     public static final RegistryObject<EntityType<EntityF4fWildcat>> F4FWildCat = ENTITIES.register("planef4fwildcat", () -> PLANEF4FWildCat);
 
-    public static final EntityType<EntityMissileDrone> ENTITYTYPE_MISSILEDRONE = EntityType.Builder.<EntityMissileDrone>of(EntityMissileDrone::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("missiledrone").toString());
+    public static final EntityType<EntityMissileDrone> ENTITYTYPE_MISSILEDRONE = EntityType.Builder.of(EntityMissileDrone::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("missiledrone").toString());
     public static final RegistryObject<EntityType<EntityMissileDrone>> MISSILEDRONE = ENTITIES.register("missiledrone", () -> ENTITYTYPE_MISSILEDRONE);
 
 
@@ -231,6 +231,7 @@ public class registerManager {
     public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
     public static final RegistryObject<Activity> WAITING = registerActivity("waiting");
     public static final RegistryObject<Activity> INJURED = registerActivity("injured");
+    @SuppressWarnings("UnstableApiUsage")
     private static final Set<BlockState> PANTRY = ImmutableList.of(registerBlocks.OAK_PANTRY.get(),registerBlocks.SPRUCE_PANTRY.get(),registerBlocks.BIRCH_PANTRY.get(),registerBlocks.JUNGLE_PANTRY.get(),registerBlocks.DARK_OAK_PANTRY.get(),registerBlocks.ACACIA_PANTRY.get(),registerBlocks.WARPED_PANTRY.get(),registerBlocks.CRIMSON_PANTRY.get()).stream().flatMap((p_234171_0_) -> p_234171_0_.getStateDefinition().getPossibleStates().stream()).collect(ImmutableSet.toImmutableSet());
     //POI
     public static final RegistryObject<PointOfInterestType> POI_PANTRY = registerPOI("poi_pantry",PANTRY, null, 1,1);
