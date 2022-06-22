@@ -35,6 +35,5 @@ public class GuiPantryInventory extends ContainerScreen<ContainerPantry> {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
         this.blit(p_230450_1_, i, j, 0, 0, this.imageWidth, 225);
-        this.blit(p_230450_1_, i, j + 225, 0, 126, this.imageWidth, 96);
     }
 }

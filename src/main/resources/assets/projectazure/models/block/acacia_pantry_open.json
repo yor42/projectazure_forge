@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "projectazure:block/pantry_open",
 	"textures": {
-		"planks": "minecraft:block/birch_planks",
-		"log": "minecraft:block/birch_log"
+		"planks": "minecraft:block/acacia_planks",
+		"log": "minecraft:block/acacia_log"
 	}
 }

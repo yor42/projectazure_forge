@@ -18,7 +18,7 @@ public class registerTE {
     public static final RegistryObject<TileEntityType<TileEntityBasicRefinery>> BASIC_REFINERY = register("basic_refinery_te", TileEntityBasicRefinery::new, registerBlocks.BASIC_REFINERY);
     public static final RegistryObject<TileEntityType<TileEntityRecruitBeacon>> RECRUIT_BEACON = register("recruit_beacon_te", TileEntityRecruitBeacon::new, registerBlocks.RECRUIT_BEACON);
     public static final RegistryObject<TileEntityType<TileEntityCrystalGrowthChamber>> CRYSTAL_GROWTH_CHAMBER = register("crystal_growth_chamber_te", TileEntityCrystalGrowthChamber::new, registerBlocks.CRYSTAL_GROWTH_CHAMBER);
-    public static final RegistryObject<TileEntityType<TileEntityPantry>> PANTRY = register("pantry_te", TileEntityPantry::new, registerBlocks.OAK_PANTRY);
+    public static final RegistryObject<TileEntityType<TileEntityPantry>> PANTRY = register("pantry_te", TileEntityPantry::new, registerBlocks.OAK_PANTRY, registerBlocks.CRIMSON_PANTRY, registerBlocks.JUNGLE_PANTRY, registerBlocks.ACACIA_PANTRY, registerBlocks.BIRCH_PANTRY, registerBlocks.SPRUCE_PANTRY, registerBlocks.WARPED_PANTRY, registerBlocks.DARK_OAK_PANTRY);
     @SafeVarargs
     private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<Block>... block){
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW

@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.blocks.PantryBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerPantry;
+import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.block.BarrelBlock;
 import net.minecraft.block.BlockState;
@@ -87,12 +88,12 @@ public class TileEntityPantry extends TileEntity implements IInventory {
             this.scheduleRecheck();
         } else {
             BlockState blockstate = this.getBlockState();
-            if (!blockstate.is(Blocks.BARREL)) {
+            if (!(blockstate.getBlock() instanceof PantryBlock)) {
                 this.setRemoved();
                 return;
             }
 
-            boolean flag = blockstate.getValue(BarrelBlock.OPEN);
+            boolean flag = blockstate.getValue(PantryBlock.OPEN);
             if (flag) {
                 this.playSound(blockstate, SoundEvents.CHEST_CLOSE);
                 this.updateBlockState(blockstate, false);
@@ -139,15 +140,15 @@ public class TileEntityPantry extends TileEntity implements IInventory {
     }
 
     private void updateBlockState(BlockState p_213963_1_, boolean p_213963_2_) {
-        this.level.setBlock(this.getBlockPos(), p_213963_1_.setValue(BarrelBlock.OPEN, p_213963_2_), 3);
+        this.level.setBlock(this.getBlockPos(), p_213963_1_.setValue(PantryBlock.OPEN, p_213963_2_), 3);
     }
 
     private void playSound(BlockState p_213965_1_, SoundEvent p_213965_2_) {
-        Vector3i vector3i = p_213965_1_.getValue(BarrelBlock.FACING).getNormal();
+        Vector3i vector3i = p_213965_1_.getValue(PantryBlock.FACING).getNormal();
         double d0 = (double)this.worldPosition.getX() + 0.5D + (double)vector3i.getX() / 2.0D;
         double d1 = (double)this.worldPosition.getY() + 0.5D + (double)vector3i.getY() / 2.0D;
         double d2 = (double)this.worldPosition.getZ() + 0.5D + (double)vector3i.getZ() / 2.0D;
-        this.level.playSound(null, d0, d1, d2, p_213965_2_, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 1.1F);
+        this.level.playSound(null, d0, d1, d2, p_213965_2_, SoundCategory.BLOCKS, 0.5F, this.level.random.nextFloat() * 0.1F + 1.5F);
     }
     private final LazyOptional<ItemStackHandler> INVENTORY = LazyOptional.of(()->this.inventory);
 

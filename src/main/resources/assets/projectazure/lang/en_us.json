@@ -209,6 +209,16 @@
   "block.projectazure.originium_solution": "Originium Solution",
   "block.projectazure.machine_component": "Machine Component",
 
+  "block.projectazure.oak_pantry": "Oak Pantry",
+  "block.projectazure.acacia_pantry": "Acacia Pantry",
+  "block.projectazure.birch_pantry": "Birch Pantry",
+  "block.projectazure.spruce_pantry": "Spruce Pantry",
+  "block.projectazure.jungle_pantry": "Jungle Pantry",
+  "block.projectazure.dark_oak_pantry": "Dark Oak Pantry",
+  "block.projectazure.warped_pantry": "Warped Pantry",
+  "block.projectazure.crimson_pantry": "Crimson Pantry",
+
+
   "originium_generator.name": "Originium Reactor",
   "ammo_press.name": "Ammunition Press",
 

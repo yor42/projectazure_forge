@@ -1,6 +1,9 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.mojang.datafixers.util.Pair;
+import com.yor42.projectazure.gameobject.blocks.PantryBlock;
+import com.yor42.projectazure.setup.register.registerBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,10 +36,31 @@ public class ContainerPantry extends Container {
         super(PANTRY_CONTAINER.get(), p_i50105_2_);
         this.access = access;
         this.inv = inv;
+        inv.startOpen(playerInv.player);
 
         for(int j = 0; j < 6; ++j) {
             for(int k = 0; k < 9; ++k) {
-                this.addSlot(new Slot( this.inv, k + j * 9, 8 + k * 18, 18 + j * 18));
+                this.addSlot(new Slot( this.inv, k + j * 9, 8 + k * 18, 18 + j * 18){
+                    @Override
+                    public boolean mayPlace(@Nonnull ItemStack p_75214_1_) {
+                        Food food = p_75214_1_.getItem().getFoodProperties();
+                        if (food == null) {
+                            return false;
+                        }
+
+                        if (food.getEffects().isEmpty()) {
+                            return true;
+                        } else {
+                            for (Pair<EffectInstance, Float> effect : food.getEffects()) {
+                                if (effect.getFirst().getEffect().getCategory() == EffectType.HARMFUL) {
+                                    return false;
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+                });
             }
         }
 
@@ -82,7 +106,16 @@ public class ContainerPantry extends Container {
 
     @Override
     public boolean stillValid(@Nonnull PlayerEntity p_75145_1_) {
-        return stillValid(this.access, p_75145_1_, Blocks.BEACON);
+        return stillValid(this.access, p_75145_1_);
+    }
+
+    protected static boolean stillValid(IWorldPosCallable p_216963_0_, PlayerEntity p_216963_1_) {
+        return p_216963_0_.evaluate((p_216960_2_, p_216960_3_) -> p_216960_2_.getBlockState(p_216960_3_).getBlock() instanceof PantryBlock && p_216963_1_.distanceToSqr((double) p_216960_3_.getX() + 0.5D, (double) p_216960_3_.getY() + 0.5D, (double) p_216960_3_.getZ() + 0.5D) <= 64.0D, true);
+    }
+
+    public void removed(@Nonnull PlayerEntity p_75134_1_) {
+        super.removed(p_75134_1_);
+        this.inv.stopOpen(p_75134_1_);
     }
 
     @Nonnull
