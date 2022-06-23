@@ -323,11 +323,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     };
 
-    protected final ItemStackHandler Inventory = new ItemStackHandler(12+this.getSkillItemCount()){
+    private static final int InventorySize = 12;
+
+    protected final ItemStackHandler Inventory = new ItemStackHandler(InventorySize+this.getSkillItemCount()){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 
-            if(slot >= 12){
+            if(slot >= InventorySize){
                 return AbstractEntityCompanion.this.isSkillItem(stack);
             }
 
@@ -336,9 +338,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         @Override
         protected void onContentsChanged(int slot) {
-            if(slot>=12){
+            if(slot>=InventorySize){
                 List<DataParameter<ItemStack>> stacks = Arrays.asList(SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3);
-                int SkillslotIdx = slot-12;
+                int SkillslotIdx = slot-InventorySize;
                 AbstractEntityCompanion.this.getEntityData().set(stacks.get(SkillslotIdx), this.getStackInSlot(slot));
             }
         }
@@ -347,7 +349,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         protected void onLoad() {
             super.onLoad();
             for(int i=0; i<AbstractEntityCompanion.this.getSkillItemCount(); i++){
-                AbstractEntityCompanion.this.setSkillItemSlotContent(i, this.getStackInSlot(12+i));
+                AbstractEntityCompanion.this.setSkillItemSlotContent(i, this.getStackInSlot(InventorySize+i));
             }
         }
     };
@@ -386,6 +388,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     //I'd really like to get off from datamanager's wild ride.
     protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> NONVANILLAMELEEATTACKDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> SHIP_ATTACK_ANIM_DELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> SKILLDELAYTICK = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Boolean> CHARGING_CROSSBOW = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> USING_SKILL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
@@ -548,11 +551,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setOathed(boolean bool){
-        this.entityData.set(OATHED, bool);
+        this.getEntityData().set(OATHED, bool);
     }
 
     public boolean isOathed(){
-        return this.entityData.get(OATHED);
+        return this.getEntityData().get(OATHED);
     }
 
     public int getLevel() {
@@ -645,17 +648,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("spelldelay", this.getEntityData().get(SPELLDELAY));
-        compound.putFloat("affection", this.entityData.get(AFFECTION));
-        compound.putInt("patcooldown", this.entityData.get(PATCOOLDOWN));
-        compound.putInt("angrytimer", this.entityData.get(ANGRYTIMER));
-        compound.putInt("injury_curetimer", this.entityData.get(INJURYCURETIMER));
-        compound.putBoolean("oathed", this.entityData.get(OATHED));
-        compound.putBoolean("pickupitem", this.entityData.get(PICKUP_ITEM));
-        compound.putFloat("home_distance", this.entityData.get(VALID_HOME_DISTANCE));
-        if(this.entityData.get(STAYPOINT).isPresent()) {
-            compound.putDouble("stayX", this.entityData.get(STAYPOINT).get().getX());
-            compound.putDouble("stayY", this.entityData.get(STAYPOINT).get().getY());
-            compound.putDouble("stayZ", this.entityData.get(STAYPOINT).get().getZ());
+        compound.putFloat("affection", this.getEntityData().get(AFFECTION));
+        compound.putInt("patcooldown", this.getEntityData().get(PATCOOLDOWN));
+        compound.putInt("angrytimer", this.getEntityData().get(ANGRYTIMER));
+        compound.putInt("injury_curetimer", this.getEntityData().get(INJURYCURETIMER));
+        compound.putBoolean("oathed", this.getEntityData().get(OATHED));
+        compound.putBoolean("pickupitem", this.getEntityData().get(PICKUP_ITEM));
+        compound.putFloat("home_distance", this.getEntityData().get(VALID_HOME_DISTANCE));
+        if(this.getEntityData().get(STAYPOINT).isPresent()) {
+            compound.putDouble("stayX", this.getEntityData().get(STAYPOINT).get().getX());
+            compound.putDouble("stayY", this.getEntityData().get(STAYPOINT).get().getY());
+            compound.putDouble("stayZ", this.getEntityData().get(STAYPOINT).get().getZ());
         }
         if(this.RECRUIT_BEACON_POS != null) {
             compound.putDouble("RecruitStationPosX", this.RECRUIT_BEACON_POS.getX());
@@ -697,12 +700,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.put("status", NBT);
 
         compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
-        compound.putBoolean("isforcewokenup", this.entityData.get(ISFORCEWOKENUP));
-        compound.putDouble("exp", this.entityData.get(EXP));
+        compound.putBoolean("isforcewokenup", this.getEntityData().get(ISFORCEWOKENUP));
+        compound.putDouble("exp", this.getEntityData().get(EXP));
         compound.putInt("level", this.getEntityData().get(LEVEL));
-        compound.putInt("limitbreaklv", this.entityData.get(LIMITBREAKLEVEL));
+        compound.putInt("limitbreaklv", this.getEntityData().get(LIMITBREAKLEVEL));
         compound.putInt("awaken", this.awakeningLevel);
-        compound.putDouble("morale", this.entityData.get(MORALE));
+        compound.putDouble("morale", this.getEntityData().get(MORALE));
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
         compound.putBoolean("isMovingtoRecruitStation", this.isMovingtoRecruitStation);
@@ -719,16 +722,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
         this.getEntityData().set(SPELLDELAY, compound.getInt("spelldelay"));
-        this.entityData.set(AFFECTION, compound.getFloat("affection"));
-        this.entityData.set(PATCOOLDOWN, compound.getInt("patcooldown"));
-        this.entityData.set(OATHED, compound.getBoolean("oathed"));
+        this.getEntityData().set(AFFECTION, compound.getFloat("affection"));
+        this.getEntityData().set(PATCOOLDOWN, compound.getInt("patcooldown"));
+        this.getEntityData().set(OATHED, compound.getBoolean("oathed"));
         this.getEntityData().set(NONVANILLAMELEEATTACKDELAY, compound.getInt("attackdelay"));
-        this.entityData.set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
+        this.getEntityData().set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
         if(hasStayPos) {
-            this.entityData.set(STAYPOINT, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
+            this.getEntityData().set(STAYPOINT, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
         }
-        this.entityData.set(VALID_HOME_DISTANCE, compound.getFloat("home_distance"));
+        this.getEntityData().set(VALID_HOME_DISTANCE, compound.getFloat("home_distance"));
         boolean hasRecruitBeaconPos = compound.contains("RecruitStationPosX") && compound.contains("RecruitStationPosY") && compound.contains("RecruitStationPosZ");
         if(hasRecruitBeaconPos) {
             this.RECRUIT_BEACON_POS = new BlockPos(compound.getDouble("RecruitStationPosX"), compound.getDouble("RecruitStationPosY"), compound.getDouble("RecruitStationPosZ"));
@@ -741,7 +744,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             RegistryKey<World> registrykey = RegistryKey.create(Registry.DIMENSION_REGISTRY, resource);
             GlobalPos pos = GlobalPos.of(registrykey, blockpos);
             this.getBrain().setMemory(HOME, pos);
-            this.entityData.set(HOMEPOS, Optional.of(blockpos));
+            this.getEntityData().set(HOMEPOS, Optional.of(blockpos));
         }
         if(compound.getBoolean("isresting")){
             this.getBrain().setMemory(RESTING.get(), true);
@@ -757,12 +760,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
             case "sitting":{
                 this.setOrderedToSit(true);
-                this.entityData.set(ISFREEROAMING, false);
+                this.getEntityData().set(ISFREEROAMING, false);
                 break;
             }
             case "idle":{
                 this.setResting();
-                this.entityData.set(ISFREEROAMING, true);
+                this.getEntityData().set(ISFREEROAMING, true);
                 this.getBrain().setMemory(RESTING.get(), true);
                 break;
             }
@@ -770,25 +773,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 BlockPos blockpos = new BlockPos(NBT.getDouble("waitpointx"), NBT.getDouble("waitpointy"), NBT.getDouble("waitpointz"));
                 ResourceLocation resource = new ResourceLocation(NBT.getString("waitpointDim"));
                 RegistryKey<World> registrykey = RegistryKey.create(Registry.DIMENSION_REGISTRY, resource);
-                this.entityData.set(ISFREEROAMING, true);
+                this.getEntityData().set(ISFREEROAMING, true);
                 GlobalPos pos = GlobalPos.of(registrykey, blockpos);
                 this.getBrain().setMemory(WAIT_POINT.get(), pos);
                 break;
             }
             default:
                 this.setFollowingOwner();
-                this.entityData.set(ISFREEROAMING, false);
+                this.getEntityData().set(ISFREEROAMING, false);
         }
 
         this.getEntityData().set(TeamUUID, compound.hasUUID("team")? Optional.of(compound.getUUID("team")):Optional.empty());
-        this.entityData.set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
+        this.getEntityData().set(ISFORCEWOKENUP, compound.getBoolean("isforcewokenup"));
         this.shouldBeSitting = compound.getBoolean("shouldbeSitting");
         this.getEntityData().set(LEVEL, compound.getInt("level"));
-        this.entityData.set(EXP, compound.getFloat("exp"));
-        this.entityData.set(MORALE, compound.getFloat("morale"));
-        this.entityData.set(ANGRYTIMER, compound.getInt("angrytimer"));
-        this.entityData.set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
-        this.entityData.set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
+        this.getEntityData().set(EXP, compound.getFloat("exp"));
+        this.getEntityData().set(MORALE, compound.getFloat("morale"));
+        this.getEntityData().set(ANGRYTIMER, compound.getInt("angrytimer"));
+        this.getEntityData().set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
+        this.getEntityData().set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.awakeningLevel = compound.getInt("awaken");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
@@ -833,7 +836,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public int getAngerWarningCount(){
-        return this.entityData.get(INTERACTION_WARNING_COUNT);
+        return this.getEntityData().get(INTERACTION_WARNING_COUNT);
     }
 
     public int getItemSwapIndexMainHand(){
@@ -1085,8 +1088,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void setHomeposAndDistance(@Nonnull BlockPos pos, float validDistance){
         this.getBrain().setMemory(HOME, GlobalPos.of(this.getCommandSenderWorld().dimension(), pos));
-        this.entityData.set(HOMEPOS, Optional.of(pos));
-        this.entityData.set(VALID_HOME_DISTANCE, validDistance);
+        this.getEntityData().set(HOMEPOS, Optional.of(pos));
+        this.getEntityData().set(VALID_HOME_DISTANCE, validDistance);
     }
 
 
@@ -1095,7 +1098,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public float getHomeDistance(){
-        return this.entityData.get(VALID_HOME_DISTANCE);
+        return this.getEntityData().get(VALID_HOME_DISTANCE);
     }
 
     public boolean isInHomeRange(BlockPos Startpos){
@@ -1108,7 +1111,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public Optional<BlockPos> getHOMEPOS(){
-        return this.entityData.get(HOMEPOS);
+        return this.getEntityData().get(HOMEPOS);
     }
 
     public void setHomePos(@Nonnull BlockPos pos){
@@ -1204,11 +1207,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setChargingCrossbow(boolean value){
-        this.entityData.set(CHARGING_CROSSBOW, value);
+        this.getEntityData().set(CHARGING_CROSSBOW, value);
     }
 
     public boolean isChargingCrossbow(){
-       return this.entityData.get(CHARGING_CROSSBOW);
+       return this.getEntityData().get(CHARGING_CROSSBOW);
     }
 
     @Override
@@ -1293,12 +1296,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
 
     public boolean isFreeRoaming() {
-        return this.entityData.get(ISFREEROAMING);
+        return this.getEntityData().get(ISFREEROAMING);
     }
 
     public void setFreeRoaming(boolean value) {
         this.getNavigation().stop();
-        this.entityData.set(ISFREEROAMING, value);
+        this.getEntityData().set(ISFREEROAMING, value);
         if(value) {
             this.setRestOrStay();
             //this.setStayCenterPos(this.blockPosition());
@@ -1502,7 +1505,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Override
-    @ParametersAreNonnullByDefault
     public boolean hurt(DamageSource source, float amount) {
         if(this.getVehicle() != null && source.getEntity() == this.getVehicle() || source == DamageSource.IN_WALL) {
             return false;
@@ -1615,7 +1617,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected final AnimationFactory factory = new AnimationFactory(this);
 
     public boolean isAngry(){
-        return this.entityData.get(ANGRYTIMER)>0;
+        return this.getEntityData().get(ANGRYTIMER)>0;
     }
 
     @Override
@@ -1640,44 +1642,45 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.getEntityData().define(SPELLDELAY, 0);
-        this.entityData.define(SKILLDELAYTICK, 0);
-        this.entityData.define(EXP, 0.0F);
-        this.entityData.define(LIMITBREAKLEVEL, 0);
-        this.entityData.define(MORALE, 0.0F);
-        this.entityData.define(CHARGING_CROSSBOW, false);
-        this.entityData.define(LEVEL, 0);
-        this.entityData.define(AFFECTION, 0.0F);
-        this.entityData.define(SITTING, false);
-        this.entityData.define(MAXPATEFFECTCOUNT, 0);
-        this.entityData.define(PATEFFECTCOUNT, 0);
+        this.getEntityData().define(SKILLDELAYTICK, 0);
+        this.getEntityData().define(EXP, 0.0F);
+        this.getEntityData().define(LIMITBREAKLEVEL, 0);
+        this.getEntityData().define(MORALE, 0.0F);
+        this.getEntityData().define(CHARGING_CROSSBOW, false);
+        this.getEntityData().define(LEVEL, 0);
+        this.getEntityData().define(AFFECTION, 0.0F);
+        this.getEntityData().define(SITTING, false);
+        this.getEntityData().define(MAXPATEFFECTCOUNT, 0);
+        this.getEntityData().define(PATEFFECTCOUNT, 0);
         this.getEntityData().define(NONVANILLAMELEEATTACKDELAY, 0);
-        this.entityData.define(PATCOOLDOWN, 0);
-        this.entityData.define(MOVE_MODE, 0);
-        this.entityData.define(PAT_ANIMATION_TIME, 0);
-        this.entityData.define(OATHED, false);
-        this.entityData.define(USING_SKILL, false);
-        this.entityData.define(STAYPOINT, Optional.empty());
-        this.entityData.define(HOMEPOS, Optional.empty());
-        this.entityData.define(ISFORCEWOKENUP, false);
-        this.entityData.define(ISUSINGGUN, false);
-        this.entityData.define(USINGWORLDSKILL, false);
-        this.entityData.define(ISFREEROAMING, false);
-        this.entityData.define(VALID_HOME_DISTANCE, -1.0f);
-        this.entityData.define(HEAL_TIMER, 0);
-        this.entityData.define(SKILL_POINTS, 0);
-        this.entityData.define(SKILL_ANIMATION_TIME, 0);
-        this.entityData.define(RELOAD_TIMER_MAINHAND, 0);
-        this.entityData.define(PICKUP_ITEM, false);
-        this.entityData.define(FOODLEVEL, 0);
-        this.entityData.define(TeamUUID, Optional.empty());
-        this.entityData.define(ANGRYTIMER, 0);
-        this.entityData.define(INJURYCURETIMER, 0);
-        this.entityData.define(ECCI_ANIMATION_TIME, 0);
-        this.entityData.define(INTERACTION_WARNING_COUNT, 0);
-        this.entityData.define(SKILL_ITEM_0, ItemStack.EMPTY);
-        this.entityData.define(SKILL_ITEM_1, ItemStack.EMPTY);
-        this.entityData.define(SKILL_ITEM_2, ItemStack.EMPTY);
-        this.entityData.define(SKILL_ITEM_3, ItemStack.EMPTY);
+        this.getEntityData().define(SHIP_ATTACK_ANIM_DELAY, 0);
+        this.getEntityData().define(PATCOOLDOWN, 0);
+        this.getEntityData().define(MOVE_MODE, 0);
+        this.getEntityData().define(PAT_ANIMATION_TIME, 0);
+        this.getEntityData().define(OATHED, false);
+        this.getEntityData().define(USING_SKILL, false);
+        this.getEntityData().define(STAYPOINT, Optional.empty());
+        this.getEntityData().define(HOMEPOS, Optional.empty());
+        this.getEntityData().define(ISFORCEWOKENUP, false);
+        this.getEntityData().define(ISUSINGGUN, false);
+        this.getEntityData().define(USINGWORLDSKILL, false);
+        this.getEntityData().define(ISFREEROAMING, false);
+        this.getEntityData().define(VALID_HOME_DISTANCE, -1.0f);
+        this.getEntityData().define(HEAL_TIMER, 0);
+        this.getEntityData().define(SKILL_POINTS, 0);
+        this.getEntityData().define(SKILL_ANIMATION_TIME, 0);
+        this.getEntityData().define(RELOAD_TIMER_MAINHAND, 0);
+        this.getEntityData().define(PICKUP_ITEM, false);
+        this.getEntityData().define(FOODLEVEL, 0);
+        this.getEntityData().define(TeamUUID, Optional.empty());
+        this.getEntityData().define(ANGRYTIMER, 0);
+        this.getEntityData().define(INJURYCURETIMER, 0);
+        this.getEntityData().define(ECCI_ANIMATION_TIME, 0);
+        this.getEntityData().define(INTERACTION_WARNING_COUNT, 0);
+        this.getEntityData().define(SKILL_ITEM_0, ItemStack.EMPTY);
+        this.getEntityData().define(SKILL_ITEM_1, ItemStack.EMPTY);
+        this.getEntityData().define(SKILL_ITEM_2, ItemStack.EMPTY);
+        this.getEntityData().define(SKILL_ITEM_3, ItemStack.EMPTY);
     }
 
     public boolean isUsingWorldSkill() {
@@ -1689,11 +1692,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public int getInjuryCureTimer(){
-        return this.entityData.get(INJURYCURETIMER);
+        return this.getEntityData().get(INJURYCURETIMER);
     }
 
     public void setInjurycuretimer(int value){
-        this.entityData.set(INJURYCURETIMER, value);
+        this.getEntityData().set(INJURYCURETIMER, value);
     }
 
     @Override
@@ -1728,12 +1731,35 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.getSpellDelay()>0;
     }
 
+    public int getShipAttackAnimDelay(){
+        return this.getEntityData().get(SHIP_ATTACK_ANIM_DELAY);
+    }
+
+    public void setShipAtackAnimDelayDelay(int value) {
+        this.getEntityData().set(SHIP_ATTACK_ANIM_DELAY, value);
+    }
+
+    public boolean shouldPlayShipAttackAnim(){
+        return this.getShipAttackAnimDelay()>0;
+    }
+
+    protected void startPlayingShipAttackAnim(){
+        int length = this.CannonAttackAnimLength();
+        if(length>0){
+            this.setShipAtackAnimDelayDelay(length);
+        }
+    }
+
+    protected int CannonAttackAnimLength(){
+    return 0;
+    }
+
     public boolean shouldPickupItem(){
-        return this.entityData.get(PICKUP_ITEM);
+        return this.getEntityData().get(PICKUP_ITEM);
     }
 
     public void setPickupItem(boolean value){
-        this.entityData.set(PICKUP_ITEM, value);
+        this.getEntityData().set(PICKUP_ITEM, value);
     }
 
     public void setMovingtoRecruitStation(BlockPos pos){
@@ -1785,11 +1811,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public int getLimitBreakLv() {
-        return this.entityData.get(LIMITBREAKLEVEL);
+        return this.getEntityData().get(LIMITBREAKLEVEL);
     }
 
     public void setLimitBreakLv(int value) {
-        this.entityData.set(LIMITBREAKLEVEL, value);
+        this.getEntityData().set(LIMITBREAKLEVEL, value);
     }
 
     public void addLimitBreak(int delta){
@@ -1867,11 +1893,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setExp(double exp) {
-        this.entityData.set(EXP, (float) exp);
+        this.getEntityData().set(EXP, (float) exp);
     }
 
     public double getExp() {
-        return this.entityData.get(EXP);
+        return this.getEntityData().get(EXP);
     }
 
     public int getMaxLevel(){
@@ -1919,11 +1945,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public int getSkillPoints(){
-        return this.entityData.get(SKILL_POINTS);
+        return this.getEntityData().get(SKILL_POINTS);
     }
 
     public void setSkillPoints(int points) {
-        this.entityData.set(SKILL_POINTS, points);
+        this.getEntityData().set(SKILL_POINTS, points);
     }
 
     public void addSkillPoints(int points) {
@@ -1944,11 +1970,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public int getSkillAnimationTime(){
-        return this.entityData.get(SKILL_ANIMATION_TIME);
+        return this.getEntityData().get(SKILL_ANIMATION_TIME);
     }
 
     public void setSkillAnimationTime(int value){
-        this.entityData.set(SKILL_ANIMATION_TIME, value);
+        this.getEntityData().set(SKILL_ANIMATION_TIME, value);
     }
 
     public void addSkillAnimationTime(int points) {
@@ -2009,6 +2035,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if(this.expdelay>0){
             this.expdelay--;
         }
+        int cannonattackanimdelay = this.getShipAttackAnimDelay();
+        if(cannonattackanimdelay>0){
+            this.setShipAtackAnimDelayDelay(--cannonattackanimdelay);
+        }
 
         if(this.nearbyExpList == null || this.tickCount%5 == 0){
             this.nearbyExpList = this.getCommandSenderWorld().getEntitiesOfClass(ExperienceOrbEntity.class, this.getBoundingBox().inflate(2));
@@ -2021,9 +2051,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             }
         }
-        int healAnimationTime = this.entityData.get(HEAL_TIMER);
+        int healAnimationTime = this.getEntityData().get(HEAL_TIMER);
         if(healAnimationTime>0){
-            this.entityData.set(HEAL_TIMER, --healAnimationTime);
+            this.getEntityData().set(HEAL_TIMER, --healAnimationTime);
         }
 
         if(this.getEntityData().get(PAT_ANIMATION_TIME) >0){
@@ -2035,16 +2065,16 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.getBrain().eraseMemory(WALK_TARGET);
                 this.navigation.stop();
                 if (this.patTimer % 30 == 0 && !this.getCommandSenderWorld().isClientSide()) {
-                    if (this.entityData.get(PATEFFECTCOUNT) < this.entityData.get(MAXPATEFFECTCOUNT)) {
-                        this.entityData.set(PATEFFECTCOUNT, this.entityData.get(PATEFFECTCOUNT) + 1);
+                    if (this.getEntityData().get(PATEFFECTCOUNT) < this.getEntityData().get(MAXPATEFFECTCOUNT)) {
+                        this.getEntityData().set(PATEFFECTCOUNT, this.getEntityData().get(PATEFFECTCOUNT) + 1);
                         this.addAffection(0.025);
                         this.addMorale(0.5);
                         Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
 
                     } else {
-                        this.entityData.set(PATEFFECTCOUNT, this.entityData.get(MAXPATEFFECTCOUNT));
-                        if (this.entityData.get(PATCOOLDOWN) == 0) {
-                            this.entityData.set(PATCOOLDOWN, (7 + this.random.nextInt(5)) * 1200);
+                        this.getEntityData().set(PATEFFECTCOUNT, this.getEntityData().get(MAXPATEFFECTCOUNT));
+                        if (this.getEntityData().get(PATCOOLDOWN) == 0) {
+                            this.getEntityData().set(PATCOOLDOWN, (7 + this.random.nextInt(5)) * 1200);
                         }
                         Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_SMOKE));
                     }
@@ -2056,17 +2086,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.patTimer = 0;
             }
 
-            if(this.entityData.get(PATCOOLDOWN) > 0){
-                this.entityData.set(PATCOOLDOWN, this.entityData.get(PATCOOLDOWN) -1);
+            if(this.getEntityData().get(PATCOOLDOWN) > 0){
+                this.getEntityData().set(PATCOOLDOWN, this.getEntityData().get(PATCOOLDOWN) -1);
             }
             else{
-                this.entityData.set(MAXPATEFFECTCOUNT,0);
-                this.entityData.set(PATEFFECTCOUNT,0);
+                this.getEntityData().set(MAXPATEFFECTCOUNT,0);
+                this.getEntityData().set(PATEFFECTCOUNT,0);
             }
         }
 
         if(!this.getCommandSenderWorld().isClientSide()) {
-            int AngerWarningCount = this.entityData.get(INTERACTION_WARNING_COUNT);
+            int AngerWarningCount = this.getEntityData().get(INTERACTION_WARNING_COUNT);
             if(this.getOwner() != null && this.getOwner().isAlive()){
                 if (!this.isAngry() && this.getOwner() != null && this.getOwner().isAlive() && this.getEntityData().get(ECCI_ANIMATION_TIME) > 0) {
                     this.lookAt(this.getOwner(), 30F, 30F);
@@ -2077,7 +2107,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     this.qinteractionTimer += 1;
                     if (this.qinteractionTimer % 40 == 0) {
                         int newWarningCount = AngerWarningCount+1;
-                        this.entityData.set(INTERACTION_WARNING_COUNT,newWarningCount);
+                        this.getEntityData().set(INTERACTION_WARNING_COUNT,newWarningCount);
                         if (newWarningCount == 1 && this.distanceTo(this.getOwner()) < 5) {
                             this.swing(MAIN_HAND);
                             this.getOwner().hurt(DamageSources.causeRevengeDamage(this), 2F);
@@ -2089,18 +2119,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             }
                             this.getEntityData().set(ECCI_ANIMATION_TIME, 0);
                             this.getEntityData().set(ANGRYTIMER, 6000);
-                            this.entityData.set(INTERACTION_WARNING_COUNT,0);
+                            this.getEntityData().set(INTERACTION_WARNING_COUNT,0);
                         }
                     }
                 }
                 else if (this.qinteractionTimer > 0 || AngerWarningCount > 0) {
                     this.qinteractionTimer = 0;
-                    this.entityData.set(INTERACTION_WARNING_COUNT,0);
+                    this.getEntityData().set(INTERACTION_WARNING_COUNT,0);
                 }
             }else if (this.isAngry() || this.qinteractionTimer > 0 || AngerWarningCount > 0){
                 this.qinteractionTimer = 0;
-                this.entityData.set(INTERACTION_WARNING_COUNT,0);
-                this.entityData.set(ANGRYTIMER,0);
+                this.getEntityData().set(INTERACTION_WARNING_COUNT,0);
+                this.getEntityData().set(ANGRYTIMER,0);
             }
 
 
@@ -2130,13 +2160,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
             //Very cheap fix to Datamanager not syncing
             for(int i=0; i<this.getSkillItemCount(); i++){
-                ItemStack serverSideItem = this.getInventory().getStackInSlot(12+i);
+                ItemStack serverSideItem = this.getInventory().getStackInSlot(InventorySize+i);
                 this.setSkillItemSlotContent(i, serverSideItem);
             }
 
             if(this.isAngry()){
-                int newangertimer = this.entityData.get(ANGRYTIMER)-1;
-                this.entityData.set(ANGRYTIMER, newangertimer);
+                int newangertimer = this.getEntityData().get(ANGRYTIMER)-1;
+                this.getEntityData().set(ANGRYTIMER, newangertimer);
                 if(newangertimer <=0){
                     this.setTarget(null);
                 }else if(this.getTarget() != this.getOwner()){
@@ -2279,7 +2309,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setSkillItemSlotContent(int index, ItemStack stack){
-        this.getInventory().setStackInSlot(12+index, stack);
+        this.getInventory().setStackInSlot(InventorySize+index, stack);
     }
 
     public ItemStack getNextSkillItem(){
@@ -2412,7 +2442,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             List<DataParameter<ItemStack>> stacks = Arrays.asList(SKILL_ITEM_0,SKILL_ITEM_1,SKILL_ITEM_2,SKILL_ITEM_3);
             return this.getEntityData().get(stacks.get(index));
         }
-        return this.getInventory().getStackInSlot(12+index);
+        return this.getInventory().getStackInSlot(InventorySize+index);
     }
 
     public boolean isSkillItemInindex(int index){
@@ -2789,7 +2819,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     return ActionResultType.CONSUME;
                 }
-            } else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
+            }
+            else if(this.isLimitbreakItem(heldstacks)){
+                this.doLimitBreak();
+            }
+            else if(player.isShiftKeyDown()) {
+                if (!this.level.isClientSide) {
+                    this.openGUI((ServerPlayerEntity) player);
+                }
+                this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
+                return ActionResultType.SUCCESS;
+            }
+            else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
 
                 /*
                  * This Part of class is based on EntityWroughtnaut.java class from Mowzie's mob
@@ -2848,7 +2889,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             this.forcewakeupExpireTimer = 20;
                         }
                         return ActionResultType.SUCCESS;
-                    } else if (EyeCheckFinal > 1.0D - 0.02D / EyeDeltaLength && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
+                    } else if (EyeCheckFinal > 1.0D - 0.02D / EyeDeltaLength && this.getEntityData().get(ECCI_ANIMATION_TIME)==0) {
                         if (this.getCommandSenderWorld().isClientSide()) {
                             Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.PAT, true));
                         }
@@ -2883,13 +2924,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         return ActionResultType.SUCCESS;
                         //this.setOrderedToSit(!this.isSitting());
                     }
-                    else if(player.isShiftKeyDown()) {
-                        if (!this.level.isClientSide) {
-                            this.openGUI((ServerPlayerEntity) player);
-                        }
-                        this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
-                        return ActionResultType.SUCCESS;
-                    }
                 }
             }
             return ActionResultType.FAIL;
@@ -2903,6 +2937,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         return super.interactAt(player, vec, hand);
     }
+
+    protected boolean isLimitbreakItem(ItemStack stack){
+        return false;
+    }
+
     @Nullable
     public SoundEvent getOathSound(){
         return null;
@@ -3051,8 +3090,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected abstract void openGUI(ServerPlayerEntity player);
 
     public void beingpatted(){
-        if(this.entityData.get(MAXPATEFFECTCOUNT) == 0){
-            this.entityData.set(MAXPATEFFECTCOUNT, 5+this.random.nextInt(5));
+        if(this.getEntityData().get(MAXPATEFFECTCOUNT) == 0){
+            this.getEntityData().set(MAXPATEFFECTCOUNT, 5+this.random.nextInt(5));
             if(this.getPatSoundEvent() != null){
                 this.playSound(this.getPatSoundEvent(), 1, this.getVoicePitch() );
             }
@@ -3069,7 +3108,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public boolean isGettingHealed(){
-        return this.entityData.get(HEAL_TIMER)>0;
+        return this.getEntityData().get(HEAL_TIMER)>0;
     }
 
     public IItemHandlerModifiable getEquipment(){
@@ -3136,11 +3175,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public double getMorale() {
-        return this.entityData.get(MORALE);
+        return this.getEntityData().get(MORALE);
     }
 
     public void setMorale(float morale) {
-        this.entityData.set(MORALE, morale);
+        this.getEntityData().set(MORALE, morale);
     }
 
     public void addMorale(double value){

@@ -344,6 +344,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), CannonType, this);
                 setEquipmentDelay(FiringCannon);
                 this.addMorale(-0.2);
+                this.startPlayingShipAttackAnim();
             }
         }
     }

@@ -78,13 +78,17 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
             }
-            else if(this.getUsedItemHand() == Hand.OFF_HAND){
+            else{
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
             }
             return PlayState.CONTINUE;
         }
         else if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
             event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
+        else if(this.shouldPlayShipAttackAnim()){
+            event.getController().setAnimation(builder.addAnimation("ship_fire"));
             return PlayState.CONTINUE;
         }
         else if(this.isReloadingMainHand()) {
@@ -135,6 +139,11 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
         }
         event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public int getShipAttackAnimDelay() {
+        return 18;
     }
 
     @Override
