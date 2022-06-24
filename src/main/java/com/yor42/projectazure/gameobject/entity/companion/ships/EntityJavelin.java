@@ -104,6 +104,10 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
 
             return PlayState.CONTINUE;
         }
+        else if(this.shouldPlayShipAttackAnim()){
+            event.getController().setAnimation(builder.addAnimation("ship_fire"));
+            return PlayState.CONTINUE;
+        }
         else if(this.isGettingHealed()){
             event.getController().setAnimation(builder.addAnimation("heal_arm", true));
             return PlayState.CONTINUE;

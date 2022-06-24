@@ -142,11 +142,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     }
 
     @Override
-    public int CannonAttackAnimLength() {
-        return 18;
-    }
-
-    @Override
     protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
         return PlayState.CONTINUE;
     }

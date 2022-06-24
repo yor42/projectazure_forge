@@ -104,7 +104,12 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             }
 
             return PlayState.CONTINUE;
-        } else if (this.isSwimming()) {
+        }
+        else if(this.shouldPlayShipAttackAnim()){
+            event.getController().setAnimation(builder.addAnimation("ship_fire"));
+            return PlayState.CONTINUE;
+        }
+        else if (this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_arm", true));
             return PlayState.CONTINUE;
         } else if (isMoving()) {

@@ -99,6 +99,10 @@ public class EntityZ23 extends EntityKansenDestroyer implements IAzurLaneKansen 
 
             return PlayState.CONTINUE;
         }
+        else if(this.shouldPlayShipAttackAnim()){
+            event.getController().setAnimation(builder.addAnimation("ship_fire"));
+            return PlayState.CONTINUE;
+        }
         else if(this.isBlocking()){
             event.getController().setAnimation(builder.addAnimation("shield_block", true));
             return PlayState.CONTINUE;

@@ -1749,8 +1749,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    protected int CannonAttackAnimLength(){
-    return 0;
+    public int CannonAttackAnimLength() {
+        return 18;
     }
 
     public boolean shouldPickupItem(){
