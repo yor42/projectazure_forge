@@ -334,7 +334,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 AmmoProperties properties = ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty();
                 EntityCannonPelllet shell = new EntityCannonPelllet(this.level, this, 0, 0, 0, properties);
                 shell.setPos(this.getX(), this.getY(0.5), this.getZ());
-                shell.shoot(x,y,z, 0.8F, 0.05F);
+                shell.shoot(x,y,z, 1F, 0.05F);
                 this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                 this.level.addFreshEntity(shell);
                 Ammostack.shrink(1);
@@ -343,6 +343,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 this.addExp(0.5F);
                 ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), CannonType, this);
                 setEquipmentDelay(FiringCannon);
+                Vector3d recoil = new Vector3d(0.3F, 0, 0).yRot(this.yBodyRot);
+                Vector3d vec = this.getDeltaMovement().add(recoil);
+                this.setDeltaMovement(vec);
                 this.addMorale(-0.2);
                 this.startPlayingShipAttackAnim();
             }

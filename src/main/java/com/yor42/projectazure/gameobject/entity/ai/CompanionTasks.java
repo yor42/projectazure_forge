@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.tac.guns.item.GunItem;
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.ai.tasks.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
@@ -21,6 +22,7 @@ import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.task.*;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.util.EntityPredicates;
@@ -216,7 +218,17 @@ public class CompanionTasks {
     }
 
     private static boolean shouldStrafe(LivingEntity livingEntity) {
-        return (livingEntity instanceof EntitySchwarz &&  livingEntity.isHolding(item -> item instanceof net.minecraft.item.CrossbowItem)) || (livingEntity.isHolding((item)->item instanceof GunItem));
+
+        if((livingEntity.isHolding((item)->item instanceof GunItem))){
+            return true;
+        }
+
+        if(livingEntity instanceof EntityKansenBase){
+            boolean isArmed = ((EntityKansenBase) livingEntity).canUseCannonOrTorpedo() && ((EntityKansenBase) livingEntity).canUseShell(((EntityKansenBase) livingEntity).getActiveShellCategory());
+            boolean isSailing = ((EntityKansenBase) livingEntity).isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
+            return isArmed && isSailing;
+        }
+        return livingEntity.isHolding(item -> item instanceof net.minecraft.item.CrossbowItem) || livingEntity.isHolding(item -> item instanceof BowItem);
     }
 
     private static boolean isNearestValidAttackTarget(AbstractEntityCompanion p_234504_0_, LivingEntity p_234504_1_) {
@@ -269,7 +281,7 @@ public class CompanionTasks {
         if (!companion.getBrain().isActive(AVOID)) {
             if (EntityPredicates.ATTACK_ALLOWED.test(target)) {
                 if (hasWeapon(companion, target) && (companion.getOwner() == null || companion.wantsToAttack(target, companion.getOwner()))) {
-                    if (!BrainUtil.isOtherTargetMuchFurtherAwayThanCurrentAttackTarget(companion, target, 4.0D)) {
+                    if (!BrainUtil.isOtherTargetMuchFurtherAwayThanCurrentAttackTarget(companion, target, 4.0D) || (companion.getBrain().getMemory(ATTACK_TARGET).isPresent() && target instanceof MonsterEntity && ((MonsterEntity) target).getTarget() == companion && (!(companion.getBrain().getMemory(ATTACK_TARGET).get() instanceof MonsterEntity)|| ((MonsterEntity)companion.getBrain().getMemory(ATTACK_TARGET).get()).getTarget() !=companion) )) {
                         setAttackTarget(companion, target);
                         broadcastAttackTarget(companion, target);
                     }
