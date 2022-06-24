@@ -21,7 +21,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.setup.register.registerManager.BA_CONTAINER;
+import static com.yor42.projectazure.setup.register.RegisterContainer.BA_CONTAINER;
 
 public class ContainerBAInventory extends Container {
 

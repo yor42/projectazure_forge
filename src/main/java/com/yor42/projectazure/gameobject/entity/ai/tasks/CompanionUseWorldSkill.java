@@ -11,7 +11,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.NEAREST_WORLDSKILLABLE;
+import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_WORLDSKILLABLE;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;
 
 public class CompanionUseWorldSkill extends Task<AbstractEntityCompanion> {

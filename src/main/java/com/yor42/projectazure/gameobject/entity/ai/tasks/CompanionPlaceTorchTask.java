@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.task.Task;
@@ -17,7 +17,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.TORCH_INDEX;
+import static com.yor42.projectazure.setup.register.RegisterAI.TORCH_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
@@ -25,7 +25,7 @@ public class CompanionPlaceTorchTask extends Task<AbstractEntityCompanion> {
     private int Cooldown =0;
 
     public CompanionPlaceTorchTask() {
-        super(ImmutableMap.of(registerManager.TORCH_INDEX.get(), MemoryModuleStatus.REGISTERED));
+        super(ImmutableMap.of(RegisterAI.TORCH_INDEX.get(), MemoryModuleStatus.REGISTERED));
     }
 
     @Override

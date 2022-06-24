@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.BrainUtil;
@@ -44,7 +44,7 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
 
 
     public CompanionHealAllyAndPlayerTask(int maxRangedAttackTime, int attackIntervalMin, float attackRadius) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, registerManager.HEAL_TARGET.get(), MemoryModuleStatus.VALUE_PRESENT, registerManager.HEAL_POTION_INDEX.get(), MemoryModuleStatus.REGISTERED, registerManager.REGENERATION_POTION_INDEX.get(), MemoryModuleStatus.REGISTERED));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT, RegisterAI.HEAL_TARGET.get(), MemoryModuleStatus.VALUE_PRESENT, RegisterAI.HEAL_POTION_INDEX.get(), MemoryModuleStatus.REGISTERED, RegisterAI.REGENERATION_POTION_INDEX.get(), MemoryModuleStatus.REGISTERED));
         this.maxRangedAttackTime = maxRangedAttackTime;
         this.attackIntervalMin = attackIntervalMin;
         this.attackRadius = attackRadius;
@@ -61,7 +61,7 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
         if(entity.getOwner() != null && !entity.isSleeping() && !entity.isOrderedToSit()) {
 
 
-            return entity.getBrain().getMemory(registerManager.HEAL_TARGET.get()).map((target)->{
+            return entity.getBrain().getMemory(RegisterAI.HEAL_TARGET.get()).map((target)->{
                 int inventoryoindex;
                 this.getPotioninHand(entity).ifPresent((hand)->this.PotionHand = hand);
                 if(this.PotionHand!=null){
@@ -83,12 +83,12 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
 
     @Override
     protected boolean canStillUse(@Nonnull ServerWorld p_212834_1_, AbstractEntityCompanion entity, long p_212834_3_) {
-        return entity.getBrain().getMemory(registerManager.HEAL_TARGET.get()).isPresent();
+        return entity.getBrain().getMemory(RegisterAI.HEAL_TARGET.get()).isPresent();
     }
 
     @Override
     protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
-        p_212831_2_.getBrain().getMemory(registerManager.HEAL_TARGET.get()).ifPresent((target)-> {
+        p_212831_2_.getBrain().getMemory(RegisterAI.HEAL_TARGET.get()).ifPresent((target)-> {
             p_212831_2_.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityPosWrapper(target, true));
         });
     }
@@ -96,7 +96,7 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
     @Override
     protected void tick(@Nonnull ServerWorld p_212833_1_, @Nonnull AbstractEntityCompanion entity, long p_212833_3_) {
         if(this.PotionHand != null) {
-            entity.getBrain().getMemory(registerManager.HEAL_TARGET.get()).ifPresent((target)->{
+            entity.getBrain().getMemory(RegisterAI.HEAL_TARGET.get()).ifPresent((target)->{
                 ItemStack PotionStack = entity.getItemInHand(this.PotionHand);
                 Item PotionItem = PotionStack.getItem();
                 float CloseEnoughDistance = PotionItem instanceof ThrowablePotionItem? this.maxAttackDistance:2;
@@ -138,7 +138,7 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
             this.ChangeItem(p_212835_2_, this.SwappedHand, p_212835_2_.getItemSwapIndex(this.SwappedHand),  true);
         }
         this.PotionHand=null;
-        p_212835_2_.getBrain().eraseMemory(registerManager.HEAL_TARGET.get());
+        p_212835_2_.getBrain().eraseMemory(RegisterAI.HEAL_TARGET.get());
         this.rangedAttackTime = -1;
     }
 
@@ -160,8 +160,8 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
     }
 
     private int getPotionFromInv(AbstractEntityCompanion entity, LivingEntity HealTarget){
-        MemoryModuleType<Integer> preferredEffect = HealTarget.getHealth()<6? registerManager.HEAL_POTION_INDEX.get():registerManager.REGENERATION_POTION_INDEX.get();
-        MemoryModuleType<Integer> otherEffect = preferredEffect == registerManager.HEAL_POTION_INDEX.get()? registerManager.REGENERATION_POTION_INDEX.get():registerManager.HEAL_POTION_INDEX.get();
+        MemoryModuleType<Integer> preferredEffect = HealTarget.getHealth()<6? RegisterAI.HEAL_POTION_INDEX.get(): RegisterAI.REGENERATION_POTION_INDEX.get();
+        MemoryModuleType<Integer> otherEffect = preferredEffect == RegisterAI.HEAL_POTION_INDEX.get()? RegisterAI.REGENERATION_POTION_INDEX.get(): RegisterAI.HEAL_POTION_INDEX.get();
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
         return brain.getMemory(preferredEffect).orElse(brain.getMemory(otherEffect).orElse(-1));
     }

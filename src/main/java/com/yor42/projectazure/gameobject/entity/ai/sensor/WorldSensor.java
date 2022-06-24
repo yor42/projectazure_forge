@@ -5,7 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.brain.Brain;
@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.enums.ResourceBlockType.*;
-import static com.yor42.projectazure.setup.register.registerManager.*;
 import static net.minecraft.block.FarmlandBlock.MOISTURE;
 
 public class WorldSensor extends Sensor<AbstractEntityCompanion> {
@@ -37,12 +36,12 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
     @Override
     protected void doTick(@Nonnull ServerWorld world, @Nonnull AbstractEntityCompanion entity) {
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
-        if((this.LastUpdated == null || this.LastUpdated.distSqr(entity.blockPosition())>=4 || entity.tickCount-this.lastUpdatedTime>=200 || !brain.hasMemoryValue(NEAREST_ORE.get())|| !brain.hasMemoryValue(NEAREST_HARVESTABLE.get())|| !brain.hasMemoryValue(NEAREST_PLANTABLE.get())|| !brain.hasMemoryValue(NEAREST_BONEMEALABLE.get())) && (this.shouldWork(entity) || (entity instanceof IWorldSkillUseable && !entity.getBrain().hasMemoryValue(NEAREST_WORLDSKILLABLE.get())))){
-            brain.eraseMemory(NEAREST_ORE.get());
-            brain.eraseMemory(NEAREST_HARVESTABLE.get());
-            brain.eraseMemory(NEAREST_PLANTABLE.get());
-            brain.eraseMemory(NEAREST_WORLDSKILLABLE.get());
-            brain.eraseMemory(registerManager.NEAREST_BONEMEALABLE.get());
+        if((this.LastUpdated == null || this.LastUpdated.distSqr(entity.blockPosition())>=4 || entity.tickCount-this.lastUpdatedTime>=200 || !brain.hasMemoryValue(RegisterAI.NEAREST_ORE.get())|| !brain.hasMemoryValue(RegisterAI.NEAREST_HARVESTABLE.get())|| !brain.hasMemoryValue(RegisterAI.NEAREST_PLANTABLE.get())|| !brain.hasMemoryValue(RegisterAI.NEAREST_BONEMEALABLE.get())) && (this.shouldWork(entity) || (entity instanceof IWorldSkillUseable && !entity.getBrain().hasMemoryValue(RegisterAI.NEAREST_WORLDSKILLABLE.get())))){
+            brain.eraseMemory(RegisterAI.NEAREST_ORE.get());
+            brain.eraseMemory(RegisterAI.NEAREST_HARVESTABLE.get());
+            brain.eraseMemory(RegisterAI.NEAREST_PLANTABLE.get());
+            brain.eraseMemory(RegisterAI.NEAREST_WORLDSKILLABLE.get());
+            brain.eraseMemory(RegisterAI.NEAREST_BONEMEALABLE.get());
 
             List<Pair<BlockPos, enums.ResourceBlockType>> blocklist = UpdateBlockList(world, entity).stream().filter((entry) -> {
                 BlockPos pos = entry.getFirst();
@@ -52,19 +51,19 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
             }).sorted(Comparator.comparingDouble((entry) -> entity.distanceToSqr(Vector3d.atCenterOf(entry.getFirst())))).collect(Collectors.toList());
 
             blocklist.stream().filter((entry)->entry.getSecond() == ORE && entity.getMainHandItem().isCorrectToolForDrops(world.getBlockState(entry.getFirst())) && !entity.blockPosition().below().equals(entry.getFirst())).map(Pair::getFirst).findFirst().ifPresent((pos)->{
-                brain.setMemory(NEAREST_ORE.get(), pos);
+                brain.setMemory(RegisterAI.NEAREST_ORE.get(), pos);
             });
             blocklist.stream().filter((entry)->entry.getSecond() == CROP_HARVESTABLE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
-                brain.setMemory(NEAREST_HARVESTABLE.get(), pos);
+                brain.setMemory(RegisterAI.NEAREST_HARVESTABLE.get(), pos);
             });
             blocklist.stream().filter((entry)->entry.getSecond() == CROP_PLANTABLE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
-                brain.setMemory(NEAREST_PLANTABLE.get(), pos);
+                brain.setMemory(RegisterAI.NEAREST_PLANTABLE.get(), pos);
             });
             blocklist.stream().filter((entry)->entry.getSecond() == WORLDSKILL).map(Pair::getFirst).findFirst().ifPresent((pos)->{
-                brain.setMemory(NEAREST_WORLDSKILLABLE.get(), pos);
+                brain.setMemory(RegisterAI.NEAREST_WORLDSKILLABLE.get(), pos);
             });
             blocklist.stream().filter((entry)->entry.getSecond() == CROP_BONEMEALABLE).map(Pair::getFirst).findFirst().ifPresent((pos)->{
-                brain.setMemory(registerManager.NEAREST_BONEMEALABLE.get(), pos);
+                brain.setMemory(RegisterAI.NEAREST_BONEMEALABLE.get(), pos);
             });
             this.LastUpdated = entity.blockPosition();
             this.lastUpdatedTime = entity.tickCount;
@@ -159,6 +158,6 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
     @Nonnull
     @Override
     public Set<MemoryModuleType<?>> requires() {
-        return ImmutableSet.of(NEAREST_ORE.get(), NEAREST_HARVESTABLE.get(), NEAREST_PLANTABLE.get(), registerManager.NEAREST_BONEMEALABLE.get(), NEAREST_WORLDSKILLABLE.get());
+        return ImmutableSet.of(RegisterAI.NEAREST_ORE.get(), RegisterAI.NEAREST_HARVESTABLE.get(), RegisterAI.NEAREST_PLANTABLE.get(), RegisterAI.NEAREST_BONEMEALABLE.get(), RegisterAI.NEAREST_WORLDSKILLABLE.get());
     }
 }

@@ -70,6 +70,7 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
     @Override
     protected void tick(ServerWorld p_212833_1_, AbstractEntityCompanion entity, long p_212833_3_) {
         if(entity instanceof EntityKansenBase) {
+            entity.getBrain().setMemory(ATTACK_TARGET, getAttackTarget(entity));
             entity.lookAt(getAttackTarget(entity), 30, 30);
             if (--this.CannonAttackDelay == 0) {
                 ((EntityKansenBase) entity).AttackUsingCannon(getAttackTarget(entity));

@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
+import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -16,8 +17,6 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.METAL_PRESS_CONTAINER_TYPE;
-
 public class ContainerMetalPress extends Container {
 
     private final IIntArray field;
@@ -27,7 +26,7 @@ public class ContainerMetalPress extends Container {
     }
 
     public ContainerMetalPress(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
-        super(METAL_PRESS_CONTAINER_TYPE, id);
+        super(RegisterContainer.METAL_PRESS_CONTAINER.get(), id);
 
         this.addSlot(new SlotItemHandler(Inventory, 0, 41, 35));
         this.addSlot(new SlotMold(Inventory, 1, 75,35));

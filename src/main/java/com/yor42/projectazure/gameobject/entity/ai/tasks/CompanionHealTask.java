@@ -23,8 +23,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.HEAL_POTION_INDEX;
-import static com.yor42.projectazure.setup.register.registerManager.REGENERATION_POTION_INDEX;
+import static com.yor42.projectazure.setup.register.RegisterAI.HEAL_POTION_INDEX;
+import static com.yor42.projectazure.setup.register.RegisterAI.REGENERATION_POTION_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionHealTask extends Task<AbstractEntityCompanion> {

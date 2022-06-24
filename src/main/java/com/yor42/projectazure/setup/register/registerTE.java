@@ -2,13 +2,11 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.blocks.tileentity.*;
 import net.minecraft.block.Block;
-import net.minecraft.stats.Stat;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
 public class registerTE {
@@ -23,7 +21,7 @@ public class registerTE {
     private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<Block>... block){
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW
         //noinspection ConstantConditions
-        return registerManager.TILE_ENTITY.register(name, () -> TileEntityType.Builder.of(factory, RegistryObject2Block(block)).build(null));
+        return RegisterContainer.TILE_ENTITY.register(name, () -> TileEntityType.Builder.of(factory, RegistryObject2Block(block)).build(null));
     }
 
     @SafeVarargs

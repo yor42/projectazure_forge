@@ -1,25 +1,25 @@
 package com.yor42.projectazure.client;
 
 import com.yor42.projectazure.client.gui.container.*;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.client.gui.ScreenManager;
 
 public class ClientRegisterManager {
 
     public static void registerScreen(){
-        ScreenManager.register(registerManager.SHIP_CONTAINER.get(), GuiALInventory::new);
-        ScreenManager.register(registerManager.RIGGING_INVENTORY.get(), guiRiggingInventory::new);
-        ScreenManager.register(registerManager.BA_CONTAINER.get(), guiBAInventory::new);
-        ScreenManager.register(registerManager.GFL_CONTAINER.get(), GuiGFLInventory::new);
-        ScreenManager.register(registerManager.CLS_CONTAINER.get(), GuiCLSInventory::new);
-        ScreenManager.register(registerManager.AKN_CONTAINER.get(), GuiAKNInventory::new);
+        ScreenManager.register(RegisterContainer.SHIP_CONTAINER.get(), GuiALInventory::new);
+        ScreenManager.register(RegisterContainer.RIGGING_INVENTORY.get(), guiRiggingInventory::new);
+        ScreenManager.register(RegisterContainer.BA_CONTAINER.get(), guiBAInventory::new);
+        ScreenManager.register(RegisterContainer.GFL_CONTAINER.get(), GuiGFLInventory::new);
+        ScreenManager.register(RegisterContainer.CLS_CONTAINER.get(), GuiCLSInventory::new);
+        ScreenManager.register(RegisterContainer.AKN_CONTAINER.get(), GuiAKNInventory::new);
 
-        ScreenManager.register(registerManager.METAL_PRESS_CONTAINER.get(), guiMetalPress::new);
-        ScreenManager.register(registerManager.ALLOY_FURNACE_CONTAINER.get(), guiAlloyFurnace::new);
-        ScreenManager.register(registerManager.RECRUIT_BEACON_CONTAINER.get(), guiRecruitBeacon::new);
-        ScreenManager.register(registerManager.BASIC_REFINERY_CONTAINER.get(), guiBasicRefinery::new);
-        ScreenManager.register(registerManager.GROWTH_CHAMBER_CONTAINER.get(), GuiCrystalGrowthChamber::new);
-        ScreenManager.register(registerManager.PANTRY_CONTAINER.get(), GuiPantryInventory::new);
+        ScreenManager.register(RegisterContainer.METAL_PRESS_CONTAINER.get(), guiMetalPress::new);
+        ScreenManager.register(RegisterContainer.ALLOY_FURNACE_CONTAINER.get(), guiAlloyFurnace::new);
+        ScreenManager.register(RegisterContainer.RECRUIT_BEACON_CONTAINER.get(), guiRecruitBeacon::new);
+        ScreenManager.register(RegisterContainer.BASIC_REFINERY_CONTAINER.get(), guiBasicRefinery::new);
+        ScreenManager.register(RegisterContainer.GROWTH_CHAMBER_CONTAINER.get(), GuiCrystalGrowthChamber::new);
+        ScreenManager.register(RegisterContainer.PANTRY_CONTAINER.get(), GuiPantryInventory::new);
     }
 
 }

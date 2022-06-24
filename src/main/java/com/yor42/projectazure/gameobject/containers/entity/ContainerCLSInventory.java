@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.containers.entity;
 import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
+import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -20,8 +21,6 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.setup.register.registerManager.CLS_INVENTORY_TYPE;
-
 public class ContainerCLSInventory extends Container {
 
     public final AbstractEntityCompanion companion;
@@ -29,7 +28,7 @@ public class ContainerCLSInventory extends Container {
         this(id, inventory, new ItemStackHandler(16), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
     public ContainerCLSInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(CLS_INVENTORY_TYPE, id);
+        super(RegisterContainer.CLS_CONTAINER.get(), id);
 
         this.companion = companion;
         //ZA HANDO

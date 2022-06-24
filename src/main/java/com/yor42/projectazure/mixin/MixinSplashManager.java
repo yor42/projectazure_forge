@@ -95,7 +95,9 @@ public class MixinSplashManager {
         entries.add("AZURU LA- Oh wait...");
         entries.add("Project azure: <3 from south korea.");
         entries.add("E.");
-        //entries.add("ᗜˬᗜ");
+        entries.add("ᗜˬᗜ");
+        entries.add("I Approb");
+        entries.add("Nice.");
 
 
         return entries;

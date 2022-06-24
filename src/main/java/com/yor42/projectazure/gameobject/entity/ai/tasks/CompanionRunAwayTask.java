@@ -17,7 +17,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.setup.register.registerManager.HURT_AT;
+import static com.yor42.projectazure.setup.register.RegisterAI.HURT_AT;
 
 public class CompanionRunAwayTask extends Task<AbstractEntityCompanion> {
     BlockPos pos;

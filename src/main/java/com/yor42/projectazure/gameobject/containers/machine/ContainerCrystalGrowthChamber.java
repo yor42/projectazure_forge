@@ -16,7 +16,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.GROWTH_CHAMBER_CONTAINER_TYPE;
+import static com.yor42.projectazure.setup.register.RegisterContainer.GROWTH_CHAMBER_CONTAINER;
 
 public class ContainerCrystalGrowthChamber extends Container {
 
@@ -46,7 +46,7 @@ public class ContainerCrystalGrowthChamber extends Container {
     }
 
     public ContainerCrystalGrowthChamber(int id, PlayerInventory inventory, ItemStackHandler itemStackHandler, IIntArray field, FluidStack waterTank, FluidStack solutionTank) {
-        super(GROWTH_CHAMBER_CONTAINER_TYPE, id);
+        super(GROWTH_CHAMBER_CONTAINER.get(), id);
         this.field = field;
         this.waterTank = waterTank;
         this.SolutionTank = solutionTank;

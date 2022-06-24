@@ -1,14 +1,5 @@
 package com.yor42.projectazure.setup.register;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.mojang.serialization.Codec;
-import com.yor42.projectazure.gameobject.containers.entity.*;
-import com.yor42.projectazure.gameobject.containers.machine.*;
-import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.EntitySensor;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;
-import com.yor42.projectazure.gameobject.entity.ai.sensor.WorldSensor;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
@@ -25,101 +16,29 @@ import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.entity.planes.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.projectiles.*;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.schedule.Activity;
-import net.minecraft.entity.ai.brain.schedule.Schedule;
-import net.minecraft.entity.ai.brain.schedule.ScheduleBuilder;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
-import net.minecraft.state.properties.BedPart;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 
 public class registerManager {
     public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, Constants.MODID);
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, Constants.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Constants.MODID);
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
-    public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MODID);
-    public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MODID);
-    public static final DeferredRegister<SensorType<?>> SENSORS = DeferredRegister.create(ForgeRegistries.SENSOR_TYPES, Constants.MODID);
-    public static final DeferredRegister<Activity> ACTIVITIES = DeferredRegister.create(ForgeRegistries.ACTIVITIES, Constants.MODID);
-    public static final DeferredRegister<MemoryModuleType<?>> MEMORYMODULES = DeferredRegister.create(ForgeRegistries.MEMORY_MODULE_TYPES, Constants.MODID);
-    public static final DeferredRegister<Schedule> SCHEDULES = DeferredRegister.create(ForgeRegistries.SCHEDULES, Constants.MODID);
-    public static final DeferredRegister<PointOfInterestType> POI = DeferredRegister.create(ForgeRegistries.POI_TYPES, Constants.MODID);
-
-    //Container
-    private static final ContainerType<ContainerKansenInventory> SHIP_INVENTORY = new ContainerType<>((IContainerFactory<ContainerKansenInventory>)ContainerKansenInventory::new);
-    public static final RegistryObject<ContainerType<ContainerKansenInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> SHIP_INVENTORY);
-
-    private static final ContainerType<RiggingContainer> RIGGING_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<RiggingContainer>)RiggingContainer::new);
-    public static final RegistryObject<ContainerType<RiggingContainer>> RIGGING_INVENTORY = CONTAINER.register("rigging_inventory", () -> RIGGING_INVENTORY_TYPE);
-
-    public static final ContainerType<ContainerBAInventory> BA_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<ContainerBAInventory>)ContainerBAInventory::new);
-    public static final RegistryObject<ContainerType<ContainerBAInventory>> BA_CONTAINER = CONTAINER.register("bluearchive_inventory", () -> BA_INVENTORY_TYPE);
-
-    public static final ContainerType<ContainerAKNInventory> AKN_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<ContainerAKNInventory>)ContainerAKNInventory::new);
-    public static final RegistryObject<ContainerType<ContainerAKNInventory>> AKN_CONTAINER = CONTAINER.register("arknights_inventory", () -> AKN_INVENTORY_TYPE);
-
-    public static final ContainerType<ContainerGFLInventory> GFL_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<ContainerGFLInventory>)ContainerGFLInventory::new);
-    public static final RegistryObject<ContainerType<ContainerGFLInventory>> GFL_CONTAINER = CONTAINER.register("girlsfrontline_inventory", () -> GFL_INVENTORY_TYPE);
-
-    public static final ContainerType<ContainerCLSInventory> CLS_INVENTORY_TYPE = new ContainerType<>((IContainerFactory<ContainerCLSInventory>)ContainerCLSInventory::new);
-    public static final RegistryObject<ContainerType<ContainerCLSInventory>> CLS_CONTAINER = CONTAINER.register("closers_inventory", () -> CLS_INVENTORY_TYPE);
-
-    public static final ContainerType<ContainerMetalPress> METAL_PRESS_CONTAINER_TYPE = IForgeContainerType.create(ContainerMetalPress::new);
-    public static final RegistryObject<ContainerType<ContainerMetalPress>> METAL_PRESS_CONTAINER = CONTAINER.register("metal_press_container", () -> METAL_PRESS_CONTAINER_TYPE);
-
-    public static final ContainerType<ContainerAlloyFurnace> CONTAINER_ALLOY_FURNACE_CONTAINER_TYPE = IForgeContainerType.create(ContainerAlloyFurnace::new);
-    public static final RegistryObject<ContainerType<ContainerAlloyFurnace>> ALLOY_FURNACE_CONTAINER = CONTAINER.register("alloy_furnace_container", () -> CONTAINER_ALLOY_FURNACE_CONTAINER_TYPE);
-
-    public static final ContainerType<ContainerRecruitBeacon> RECRUIT_BEACON_CONTAINER_TYPE = IForgeContainerType.create(ContainerRecruitBeacon::new);
-    public static final RegistryObject<ContainerType<ContainerRecruitBeacon>> RECRUIT_BEACON_CONTAINER = CONTAINER.register("recruit_beacon_container", () -> RECRUIT_BEACON_CONTAINER_TYPE);
-    public static final ContainerType<ContainerBasicRefinery> BASIC_REFINERY_CONTAINER_TYPE = IForgeContainerType.create(ContainerBasicRefinery::new);
-    public static final RegistryObject<ContainerType<ContainerBasicRefinery>> BASIC_REFINERY_CONTAINER = CONTAINER.register("basic_refinery_container", () -> BASIC_REFINERY_CONTAINER_TYPE);
-
-    public static final ContainerType<ContainerCrystalGrowthChamber> GROWTH_CHAMBER_CONTAINER_TYPE = IForgeContainerType.create(ContainerCrystalGrowthChamber::new);
-    public static final RegistryObject<ContainerType<ContainerCrystalGrowthChamber>> GROWTH_CHAMBER_CONTAINER = CONTAINER.register("crystal_growth_chamber_container", () -> GROWTH_CHAMBER_CONTAINER_TYPE);
-
-    public static final ContainerType<ContainerPantry> PANTRY_CONTAINER_TYPE = IForgeContainerType.create(ContainerPantry::new);
-    public static final RegistryObject<ContainerType<ContainerPantry>> PANTRY_CONTAINER = CONTAINER.register("pantry_container", () -> PANTRY_CONTAINER_TYPE);
 
 
     //entity
@@ -226,107 +145,31 @@ public class registerManager {
     public static final RegistryObject<EntityType<EntityMissileDrone>> MISSILEDRONE = ENTITIES.register("missiledrone", () -> ENTITYTYPE_MISSILEDRONE);
 
 
-    //Activities
-    public static final RegistryObject<Activity> FOLLOWING_OWNER = registerActivity("following_ownner");
-    public static final RegistryObject<Activity> SITTING = registerActivity("sitting");
-    public static final RegistryObject<Activity> WAITING = registerActivity("waiting");
-    public static final RegistryObject<Activity> INJURED = registerActivity("injured");
-    @SuppressWarnings("UnstableApiUsage")
-    private static final Set<BlockState> PANTRY = ImmutableList.of(registerBlocks.OAK_PANTRY.get(),registerBlocks.SPRUCE_PANTRY.get(),registerBlocks.BIRCH_PANTRY.get(),registerBlocks.JUNGLE_PANTRY.get(),registerBlocks.DARK_OAK_PANTRY.get(),registerBlocks.ACACIA_PANTRY.get(),registerBlocks.WARPED_PANTRY.get(),registerBlocks.CRIMSON_PANTRY.get()).stream().flatMap((p_234171_0_) -> p_234171_0_.getStateDefinition().getPossibleStates().stream()).collect(ImmutableSet.toImmutableSet());
-    //POI
-    public static final RegistryObject<PointOfInterestType> POI_PANTRY = registerPOI("poi_pantry",PANTRY, null, 1,1);
-
-    //MemoryModuleType
-    public static final RegistryObject<MemoryModuleType<GlobalPos>> WAIT_POINT = registerMemoryModuleType("wait_point", GlobalPos.CODEC);
-    public static final RegistryObject<MemoryModuleType<GlobalPos>> FOOD_PANTRY = registerMemoryModuleType("food_pantry", GlobalPos.CODEC);
-    public static final RegistryObject<MemoryModuleType<BlockPos>> HURT_AT = registerMemoryModuleType("hurt_at");
-    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_ALLYS = registerMemoryModuleType("nearby_allys");
-    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_ALLYS = registerMemoryModuleType("visible_allys");
-    public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_ALLYS_COUNT = registerMemoryModuleType("visible_allys_count");
-    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEARBY_HOSTILES = registerMemoryModuleType("nearby_hostiles");
-    public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> VISIBLE_HOSTILES = registerMemoryModuleType("visible_hostiles");
-    public static final RegistryObject<MemoryModuleType<Integer>> VISIBLE_HOSTILE_COUNT = registerMemoryModuleType("visible_hostile_count");
-    public static final RegistryObject<MemoryModuleType<BoatEntity>> NEAREST_BOAT = registerMemoryModuleType("nearest_boat");
-    public static final RegistryObject<MemoryModuleType<LivingEntity>> HEAL_TARGET = registerMemoryModuleType("heal_target");
-    public static final RegistryObject<MemoryModuleType<Boolean>> RESTING = registerMemoryModuleType("resting");
-    public static final RegistryObject<MemoryModuleType<Boolean>> MEMORY_SITTING = registerMemoryModuleType("sitting");
-
-    public static final RegistryObject<MemoryModuleType<Integer>> FOOD_INDEX = registerMemoryModuleType("food_index");
-    public static final RegistryObject<MemoryModuleType<Integer>> HEAL_POTION_INDEX = registerMemoryModuleType("heal_potion_index");
-    public static final RegistryObject<MemoryModuleType<Integer>> REGENERATION_POTION_INDEX = registerMemoryModuleType("regneneration_potion_index");
-    public static final RegistryObject<MemoryModuleType<Integer>> TOTEM_INDEX = registerMemoryModuleType("totem_index");
-    public static final RegistryObject<MemoryModuleType<Integer>> TORCH_INDEX = registerMemoryModuleType("torch_index");
-    public static final RegistryObject<MemoryModuleType<Integer>> FIRE_EXTINGIGH_ITEM = registerMemoryModuleType("fire_extinguish_index");
-    public static final RegistryObject<MemoryModuleType<Integer>> FALL_BREAK_ITEM_INDEX = registerMemoryModuleType("fall_break_index");
-
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_ORE = registerMemoryModuleType("nearest_ore");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_HARVESTABLE = registerMemoryModuleType("nearest_harvestable");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_PLANTABLE = registerMemoryModuleType("nearest_plantable");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_BONEMEALABLE = registerMemoryModuleType("nearest_bonemealable");
-    public static final RegistryObject<MemoryModuleType<BlockPos>> NEAREST_WORLDSKILLABLE = registerMemoryModuleType("nearest_worldskillable");
-    public static final RegistryObject<MemoryModuleType<Boolean>> FOLLOWING_OWNER_MEMORY = registerMemoryModuleType("following_owner");
-
-    //Sensors
-    public static final RegistryObject<SensorType<EntitySensor>> ENTITY_SENSOR = registerSensorType("entity_sensor", EntitySensor::new);
-    public static final RegistryObject<SensorType<InventorySensor>> INVENTORY_SENSOR = registerSensorType("inventory_sensor", InventorySensor::new);
-    public static final RegistryObject<SensorType<WorldSensor>> WORLD_SENSOR = registerSensorType("world_sensor", WorldSensor::new);
-
-    public static final RegistryObject<Schedule> CompanionSchedule = registerSchedule("companion_schedule", (builder)-> builder.changeActivityAt(10, Activity.IDLE).changeActivityAt(12000, Activity.REST).build());
-
-
-    public static RegistryObject<Activity> registerActivity(String ID){
-        return ACTIVITIES.register(ID,()-> new Activity(ID));
-    }
-
-    public static RegistryObject<Schedule> registerSchedule(String ID, Function<ScheduleBuilder, Schedule> build){
-        Schedule schedule = build.apply(new ScheduleBuilder(new Schedule()));
-        return SCHEDULES.register(ID, ()->schedule);
-    }
-
-    public static RegistryObject<PointOfInterestType> registerPOI(String ID, Set<BlockState> state, @Nullable Predicate<PointOfInterestType> predicate, int maxticket, int validrange){
-        if(predicate == null){
-            return POI.register(ID, ()->new PointOfInterestType(ID, state, maxticket, validrange));
-        }
-        else{
-            return POI.register(ID, ()->new PointOfInterestType(ID, state, maxticket, predicate, validrange));
-        }
-    }
-
-    public static <U extends Sensor<?>> RegistryObject<SensorType<U>> registerSensorType(String ID, Supplier<U> sensor){
-        return SENSORS.register(ID, ()->new SensorType<>(sensor));
-    }
-    public static <U> RegistryObject<MemoryModuleType<U>> registerMemoryModuleType(String ID, Codec<U> codec){
-        return MEMORYMODULES.register(ID,()->new MemoryModuleType<>(Optional.of(codec)));
-    }
-
-    public static <U> RegistryObject<MemoryModuleType<U>> registerMemoryModuleType(String ID){
-        return MEMORYMODULES.register(ID,()->new MemoryModuleType<>(Optional.empty()));
-    }
     public static void register() {
+        registerFluids.register();
+        registerItems.register();
+        registerFluids.register();
+        registerTE.register();
+        RegisterContainer.register();
+        registerBiomes.register();
+        registerPotionEffects.register();
+        registerRecipes.register();
+        RegisterAI.register();
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
         ENTITIES.register(eventbus);
         BIOMES.register(eventbus);
         FLUIDS.register(eventbus);
-        BLOCKS.register(eventbus);
+        registerBlocks.BLOCKS.register(eventbus);
         ITEMS.register(eventbus);
-        CONTAINER.register(eventbus);
-        TILE_ENTITY.register(eventbus);
-        ACTIVITIES.register(eventbus);
-        MEMORYMODULES.register(eventbus);
+        RegisterContainer.CONTAINER.register(eventbus);
+        RegisterContainer.TILE_ENTITY.register(eventbus);
+        RegisterAI.ACTIVITIES.register(eventbus);
+        RegisterAI.MEMORYMODULES.register(eventbus);
+        RegisterAI.SENSORS.register(eventbus);
+        RegisterAI.SCHEDULES.register(eventbus);
+        RegisterAI.POI.register(eventbus);
         RECIPE_SERIALIZERS.register(eventbus);
         EFFECTS.register(eventbus);
-        POI.register(eventbus);
-        SENSORS.register(eventbus);
-        SCHEDULES.register(eventbus);
-        registerMultiBlocks.register();
-        registerBlocks.register();
-        registerItems.register();
-        registerBiomes.register();
-        registerTE.register();
-        registerFluids.register();
-        registerRecipes.Serializers.register();
-        registerRecipes.Types.register();
-        registerPotionEffects.register();
     }
 
 

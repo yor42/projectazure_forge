@@ -4,7 +4,7 @@ import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.containers.slots.SlotRigging;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -37,7 +37,7 @@ public class ContainerKansenInventory extends Container {
 
     //constructor for actual use
     public ContainerKansenInventory(int id, PlayerInventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
-        super(registerManager.SHIP_CONTAINER.get(), id);
+        super(RegisterContainer.SHIP_CONTAINER.get(), id);
         this.equipment = Equipments;
         this.AmmoStack = AmmoStorage;
         this.entity = entity;

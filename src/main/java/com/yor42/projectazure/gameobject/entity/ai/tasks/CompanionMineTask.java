@@ -14,7 +14,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.Tags;
 
-import static com.yor42.projectazure.setup.register.registerManager.NEAREST_ORE;
+import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_ORE;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class CompanionMineTask extends Task<AbstractEntityCompanion> {

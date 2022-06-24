@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.yor42.projectazure.setup.register.registerManager.FALL_BREAK_ITEM_INDEX;
+import static com.yor42.projectazure.setup.register.RegisterAI.FALL_BREAK_ITEM_INDEX;
 import static net.minecraft.fluid.Fluids.WATER;
 import static net.minecraft.item.Items.COBWEB;
 import static net.minecraft.util.Hand.OFF_HAND;

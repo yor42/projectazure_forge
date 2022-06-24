@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IWorldSkillUseable;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
@@ -13,14 +13,14 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.NEAREST_WORLDSKILLABLE;
+import static com.yor42.projectazure.setup.register.RegisterAI.NEAREST_WORLDSKILLABLE;
 
 public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
     private final float MaxDistance;
     private BlockPos position;
     private boolean isWorldSkill = false;
     public CompanionMoveforWorkTask(float maxDistance) {
-        super(ImmutableMap.of(registerManager.NEAREST_ORE.get(), MemoryModuleStatus.REGISTERED, registerManager.NEAREST_HARVESTABLE.get(), MemoryModuleStatus.REGISTERED, registerManager.NEAREST_PLANTABLE.get(), MemoryModuleStatus.REGISTERED, registerManager.NEAREST_BONEMEALABLE.get(), MemoryModuleStatus.REGISTERED));
+        super(ImmutableMap.of(RegisterAI.NEAREST_ORE.get(), MemoryModuleStatus.REGISTERED, RegisterAI.NEAREST_HARVESTABLE.get(), MemoryModuleStatus.REGISTERED, RegisterAI.NEAREST_PLANTABLE.get(), MemoryModuleStatus.REGISTERED, RegisterAI.NEAREST_BONEMEALABLE.get(), MemoryModuleStatus.REGISTERED));
         this.MaxDistance = maxDistance;
     }
 
@@ -53,7 +53,7 @@ public class CompanionMoveforWorkTask extends Task<AbstractEntityCompanion> {
         }
 
         if(entity.shouldHelpMine()){
-            return brain.getMemory(registerManager.NEAREST_ORE.get()).map((pos)-> {
+            return brain.getMemory(RegisterAI.NEAREST_ORE.get()).map((pos)-> {
                 this.position = pos;
                 if(entity.getOwner()!=null){
                     return pos.closerThan(entity.getOwner().blockPosition(), this.MaxDistance);

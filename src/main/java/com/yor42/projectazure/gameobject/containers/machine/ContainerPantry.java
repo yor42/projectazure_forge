@@ -2,15 +2,11 @@ package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.blocks.PantryBlock;
-import com.yor42.projectazure.setup.register.registerBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
@@ -18,14 +14,10 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectType;
 import net.minecraft.util.IWorldPosCallable;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.setup.register.registerManager.PANTRY_CONTAINER;
+import static com.yor42.projectazure.setup.register.RegisterContainer.PANTRY_CONTAINER;
 
 public class ContainerPantry extends Container {
 

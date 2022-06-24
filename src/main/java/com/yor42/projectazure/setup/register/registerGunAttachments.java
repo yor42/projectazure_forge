@@ -12,9 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 /*
-This class is for timeless and classic addon.
-
-
+This class is for timeless and classic addon part of this mod.
  */
 @Mod.EventBusSubscriber(
         modid = Constants.MODID,

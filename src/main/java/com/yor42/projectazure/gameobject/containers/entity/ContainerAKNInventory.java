@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.containers.entity;
 import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemMagazine;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -31,7 +31,7 @@ public class ContainerAKNInventory extends Container {
     }
 
     public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(registerManager.AKN_CONTAINER.get(), id);
+        super(RegisterContainer.AKN_CONTAINER.get(), id);
         this.companion = companion;
         //mainhand
         this.addSlot(new SlotItemHandler(EntityEquipment, 0, 75, 80));

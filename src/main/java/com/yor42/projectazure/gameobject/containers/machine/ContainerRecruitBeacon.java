@@ -16,7 +16,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.RECRUIT_BEACON_CONTAINER_TYPE;
+import static com.yor42.projectazure.setup.register.RegisterContainer.RECRUIT_BEACON_CONTAINER;
 
 public class ContainerRecruitBeacon extends Container {
 
@@ -45,7 +45,7 @@ this(id, inventory, new ItemStackHandler(5), new IIntArray() {
     }
 
     public ContainerRecruitBeacon(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field) {
-        super(RECRUIT_BEACON_CONTAINER_TYPE, id);
+        super(RECRUIT_BEACON_CONTAINER.get(), id);
         this.field = field;
         addDataSlots(this.field);
         this.addSlot(new SlotItemHandler(Inventory, 0, 19, 10){

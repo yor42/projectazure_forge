@@ -12,6 +12,9 @@ import java.util.function.Supplier;
 
 public class registerRecipes {
 
+    public static void register() {
+    }
+
     public static class Types{
         public static final IRecipeType<PressingRecipe> PRESSING = IRecipeType.register(Constants.MODID+":pressing");
         public static final IRecipeType<CrushingRecipe> CRUSHING = IRecipeType.register(Constants.MODID+":crushing");

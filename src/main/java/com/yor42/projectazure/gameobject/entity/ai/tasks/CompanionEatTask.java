@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.FOOD_INDEX;
+import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionEatTask extends Task<AbstractEntityCompanion> {

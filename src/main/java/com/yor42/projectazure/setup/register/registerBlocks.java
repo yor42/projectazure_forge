@@ -5,6 +5,7 @@ import com.yor42.projectazure.client.renderer.items.ItemRecruitBeaconRenderer;
 import com.yor42.projectazure.gameobject.blocks.*;
 import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -20,6 +21,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,6 +31,8 @@ import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
 public class registerBlocks {
+
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Constants.MODID);
 
     public static final RegistryObject<Block> BAUXITE_ORE = registerMetalOre_Stone("aluminium");
     public static final RegistryObject<Block> COPPER_ORE = registerMetalOre_Stone("copper");
@@ -70,7 +75,7 @@ public class registerBlocks {
     public static final RegistryObject<Block> MACHINE_DYNAMO = register("machine_dynamo", ()->new RotatedPillarBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
 
     private static <T extends Block> RegistryObject<T> register_noItem(String name, Supplier<T> block){
-        return registerManager.BLOCKS.register(name, block);
+        return BLOCKS.register(name, block);
     }
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block, ItemGroup group){

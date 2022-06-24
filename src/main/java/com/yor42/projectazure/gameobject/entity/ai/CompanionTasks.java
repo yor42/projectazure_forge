@@ -11,7 +11,7 @@ import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractComp
 import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.sworduser.AbstractSwordUserBase;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -33,7 +33,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
-import static com.yor42.projectazure.setup.register.registerManager.*;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.entity.ai.brain.schedule.Activity.*;
@@ -46,7 +45,7 @@ public class CompanionTasks {
     public static void registerBrain(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         brain.addActivity(Activity.CORE, getCorePackage());
         //brain.addActivity(FOLLOWING_OWNER.get(), getFollowOwnerPackage());
-        brain.addActivity(INJURED.get(), getInjuredPackage());
+        brain.addActivity(RegisterAI.INJURED.get(), getInjuredPackage());
         brain.addActivity(IDLE, getIdlePackage(companion, 0.75F));
         addRelaxActivity(brain, companion);
         addSittingActivity(brain, companion);
@@ -55,25 +54,25 @@ public class CompanionTasks {
         addWaitPlayerActivity(brain, companion);
         initRetreatActivity(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
-        brain.setDefaultActivity(FOLLOWING_OWNER.get());
+        brain.setDefaultActivity(RegisterAI.FOLLOWING_OWNER.get());
         brain.useDefaultActivity();
         if(brain.getActiveNonCoreActivity().map((activity) -> activity == IDLE || activity == REST).orElse(false)) {
-            brain.setSchedule(CompanionSchedule.get());
+            brain.setSchedule(RegisterAI.CompanionSchedule.get());
             brain.updateActivityFromSchedule(companion.level.getDayTime(), companion.level.getGameTime());
         }
     }
 
 
     public static void UpdateActivity(AbstractEntityCompanion companion){
-        if(companion.getBrain().getActiveNonCoreActivity().map((act)->act != INJURED.get()).orElse(false) && companion.isAlive()) {
+        if(companion.getBrain().getActiveNonCoreActivity().map((act)->act != RegisterAI.INJURED.get()).orElse(false) && companion.isAlive()) {
             Brain<AbstractEntityCompanion> brain = companion.getBrain();
             companion.setAggressive(companion.getBrain().hasMemoryValue(ATTACK_TARGET));
             if(brain.getActiveNonCoreActivity().map((activity) -> activity == IDLE || activity == REST).orElse(false)) {
-                brain.setSchedule(CompanionSchedule.get());
+                brain.setSchedule(RegisterAI.CompanionSchedule.get());
                 brain.updateActivityFromSchedule(companion.level.getDayTime(), companion.level.getGameTime());
             }
             else{
-                brain.setActiveActivityToFirstValid(ImmutableList.of(AVOID, Activity.FIGHT, SITTING.get(), WAITING.get(), FOLLOWING_OWNER.get()));
+                brain.setActiveActivityToFirstValid(ImmutableList.of(AVOID, Activity.FIGHT, RegisterAI.SITTING.get(), RegisterAI.WAITING.get(), RegisterAI.FOLLOWING_OWNER.get()));
             }
         }
     }
@@ -97,8 +96,8 @@ public class CompanionTasks {
     }
 
     private static void addWaitPlayerActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivityAndRemoveMemoryWhenStopped(WAITING.get(), 10, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
-                new CompanionStayNearPointTask(registerManager.WAIT_POINT.get(), 0.5F, 1, 150, 1200),
+        brain.addActivityAndRemoveMemoryWhenStopped(RegisterAI.WAITING.get(), 10, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
+                new CompanionStayNearPointTask(RegisterAI.WAIT_POINT.get(), 0.5F, 1, 150, 1200),
                 new SleepAtHomeTask(),
                 new CompanionProtectOwnerTask(true),
                 new PickupWantedItemTask<>(AbstractEntityCompanion::shouldPickupItem, 0.5F, false, 4),
@@ -108,7 +107,7 @@ public class CompanionTasks {
                                 Pair.of(new DummyTask(20, 40), 2))),
                 new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new DummyTask(30, 60), 8)))
 
-        ), WAIT_POINT.get());
+        ), RegisterAI.WAIT_POINT.get());
     }
 
     public static ImmutableList<Pair<Integer, ? extends Task<? super AbstractEntityCompanion>>> getIdlePackage(AbstractEntityCompanion companion, float p_220641_1_) {
@@ -141,15 +140,15 @@ public class CompanionTasks {
     }
 
     private static void addSittingActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivityAndRemoveMemoryWhenStopped(SITTING.get(), 0, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
+        brain.addActivityAndRemoveMemoryWhenStopped(RegisterAI.SITTING.get(), 0, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
                 new CompanionClearMovementTask(),
                 new FindInteractionAndLookTargetTask(EntityType.PLAYER, 5)
-                ), MEMORY_SITTING.get());
+                ), RegisterAI.MEMORY_SITTING.get());
 
     }
 
     private static void addFollowOwnerActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivityWithConditions(FOLLOWING_OWNER.get(), ImmutableList.of(
+        brain.addActivityWithConditions(RegisterAI.FOLLOWING_OWNER.get(), ImmutableList.of(
                 Pair.of(0, new FollowOwnerTask()),
                 Pair.of(0, new CompanionFindEntitytoRideTask()),
                 Pair.of(0, new CompanionStartRidingTask()),
@@ -159,7 +158,7 @@ public class CompanionTasks {
                 Pair.of(3, new CompanionPlaceTorchTask()),
                 Pair.of(3, new CompanionMineTask()),
                 Pair.of(4, new FindWalktargetbyChanceTask(0.5F,3,2, 0.1F)),
-                Pair.of(4, new CompanionStopRidingEntityTask())), ImmutableSet.of(new Pair<>(FOLLOWING_OWNER_MEMORY.get(), VALUE_PRESENT)));
+                Pair.of(4, new CompanionStopRidingEntityTask())), ImmutableSet.of(new Pair<>(RegisterAI.FOLLOWING_OWNER_MEMORY.get(), VALUE_PRESENT)));
 
     }
 
@@ -237,11 +236,11 @@ public class CompanionTasks {
     }
 
     private static boolean isFriendlyOutnumbered(AbstractEntityCompanion entity) {
-        int i = entity.getBrain().getMemory(VISIBLE_ALLYS_COUNT.get()).orElse(0) + 1;
+        int i = entity.getBrain().getMemory(RegisterAI.VISIBLE_ALLYS_COUNT.get()).orElse(0) + 1;
         if(entity.getOwner()!=null && (entity.canSee(entity.getOwner()) || entity.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).map(entity::isOwnedBy).orElse(false))){
             i+=2;
         }
-        int j = entity.getBrain().getMemory(VISIBLE_HOSTILE_COUNT.get()).orElse(0);
+        int j = entity.getBrain().getMemory(RegisterAI.VISIBLE_HOSTILE_COUNT.get()).orElse(0);
         return j > i;
     }
 
@@ -312,7 +311,7 @@ public class CompanionTasks {
     }
 
     private static List<LivingEntity> getVisibleAllies(AbstractEntityCompanion p_234400_0_) {
-        return p_234400_0_.getBrain().getMemory(VISIBLE_ALLYS.get()).orElse(ImmutableList.of());
+        return p_234400_0_.getBrain().getMemory(RegisterAI.VISIBLE_ALLYS.get()).orElse(ImmutableList.of());
     }
 
     private static boolean isAttackAllowed(LivingEntity p_234506_0_) {
@@ -324,7 +323,7 @@ public class CompanionTasks {
     }
 
     private static List<LivingEntity> getVisibleFriendlies(AbstractEntityCompanion p_234529_0_) {
-        return p_234529_0_.getBrain().getMemory(VISIBLE_ALLYS.get()).orElse(ImmutableList.of()).stream().filter((entity)->entity instanceof AbstractEntityCompanion).collect(Collectors.toList());
+        return p_234529_0_.getBrain().getMemory(RegisterAI.VISIBLE_ALLYS.get()).orElse(ImmutableList.of()).stream().filter((entity)->entity instanceof AbstractEntityCompanion).collect(Collectors.toList());
     }
 
     private static void retreatFromNearestTarget(AbstractEntityCompanion companion, LivingEntity attacker) {

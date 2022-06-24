@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.entity.ai.sensor;
 
 import com.google.common.collect.ImmutableSet;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
@@ -21,8 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.yor42.projectazure.setup.register.registerManager.*;
 
 public class EntitySensor extends Sensor<AbstractEntityCompanion> {
     @Override
@@ -43,37 +41,37 @@ public class EntitySensor extends Sensor<AbstractEntityCompanion> {
         });
         Brain<?> brain = entity.getBrain();
 
-        brain.eraseMemory(registerManager.NEARBY_ALLYS.get());
-        brain.eraseMemory(registerManager.NEARBY_HOSTILES.get());
+        brain.eraseMemory(RegisterAI.NEARBY_ALLYS.get());
+        brain.eraseMemory(RegisterAI.NEARBY_HOSTILES.get());
         brain.eraseMemory(MemoryModuleType.NEAREST_HOSTILE);
-        brain.eraseMemory(registerManager.VISIBLE_HOSTILES.get());
-        brain.eraseMemory(registerManager.VISIBLE_HOSTILE_COUNT.get());
-        brain.eraseMemory(registerManager.VISIBLE_ALLYS.get());
-        brain.eraseMemory(registerManager.VISIBLE_ALLYS_COUNT.get());
-        brain.eraseMemory(registerManager.HEAL_TARGET.get());
-        brain.eraseMemory(registerManager.NEAREST_BOAT.get());
+        brain.eraseMemory(RegisterAI.VISIBLE_HOSTILES.get());
+        brain.eraseMemory(RegisterAI.VISIBLE_HOSTILE_COUNT.get());
+        brain.eraseMemory(RegisterAI.VISIBLE_ALLYS.get());
+        brain.eraseMemory(RegisterAI.VISIBLE_ALLYS_COUNT.get());
+        brain.eraseMemory(RegisterAI.HEAL_TARGET.get());
+        brain.eraseMemory(RegisterAI.NEAREST_BOAT.get());
 
         //B O A T E M
         entitylist.sort(Comparator.comparingDouble(entity::distanceToSqr));
-        entitylist.stream().filter((etr)->etr instanceof BoatEntity).map(BoatEntity.class::cast).findFirst().ifPresent((boat)->brain.setMemory(registerManager.NEAREST_BOAT.get(), boat));
+        entitylist.stream().filter((etr)->etr instanceof BoatEntity).map(BoatEntity.class::cast).findFirst().ifPresent((boat)->brain.setMemory(RegisterAI.NEAREST_BOAT.get(), boat));
 
         List<LivingEntity> list = entitylist.stream().filter((etr)->etr instanceof LivingEntity).map(LivingEntity.class::cast).collect(Collectors.toList());
-        brain.setMemory(registerManager.NEARBY_ALLYS.get(), list);
+        brain.setMemory(RegisterAI.NEARBY_ALLYS.get(), list);
         EntityPredicate TARGET_CONDITIONS = (new EntityPredicate()).range(16.0D).allowSameTeam().allowNonAttackable().selector((ety)->entity.getSensing().canSee(ety));
 
         //HOSTILE
         List<LivingEntity> hostiles = entitylist.stream().filter((etr)->etr instanceof MonsterEntity).map(LivingEntity.class::cast).collect(Collectors.toList());
-        brain.setMemory(registerManager.NEARBY_HOSTILES.get(), hostiles);
+        brain.setMemory(RegisterAI.NEARBY_HOSTILES.get(), hostiles);
         brain.setMemory(MemoryModuleType.NEAREST_HOSTILE, hostiles.stream().min((p_220986_2_, p_220986_3_) -> this.compareMobDistance(entity, p_220986_2_, p_220986_3_)));
         List<LivingEntity> enemies = hostiles.stream().filter((p_220981_1_) -> TARGET_CONDITIONS.test(entity, p_220981_1_)).collect(Collectors.toList());
-        brain.setMemory(registerManager.VISIBLE_HOSTILES.get(), enemies);
-        brain.setMemory(VISIBLE_HOSTILE_COUNT.get(), enemies.size());
+        brain.setMemory(RegisterAI.VISIBLE_HOSTILES.get(), enemies);
+        brain.setMemory(RegisterAI.VISIBLE_HOSTILE_COUNT.get(), enemies.size());
 
         //ALLYS
         List<LivingEntity> friends = list.stream().filter((p_220981_1_) -> TARGET_CONDITIONS.test(entity, p_220981_1_)).collect(Collectors.toList());
-        brain.setMemory(registerManager.VISIBLE_ALLYS.get(), friends);
-        brain.setMemory(registerManager.VISIBLE_ALLYS_COUNT.get(), friends.size());
-        brain.setMemory(registerManager.HEAL_TARGET.get(), list.stream().filter((tgt)-> {
+        brain.setMemory(RegisterAI.VISIBLE_ALLYS.get(), friends);
+        brain.setMemory(RegisterAI.VISIBLE_ALLYS_COUNT.get(), friends.size());
+        brain.setMemory(RegisterAI.HEAL_TARGET.get(), list.stream().filter((tgt)-> {
             if(tgt instanceof AbstractEntityCompanion && ((AbstractEntityCompanion) tgt).isCriticallyInjured()){
                 return false;
             }
@@ -88,6 +86,6 @@ public class EntitySensor extends Sensor<AbstractEntityCompanion> {
 
     @Nonnull
     public Set<MemoryModuleType<?>> requires() {
-        return ImmutableSet.of(MemoryModuleType.NEAREST_HOSTILE, NEARBY_HOSTILES.get(), VISIBLE_HOSTILE_COUNT.get(), VISIBLE_HOSTILES.get(), registerManager.VISIBLE_ALLYS_COUNT.get(), registerManager.NEAREST_BOAT.get(), registerManager.NEARBY_ALLYS.get(), registerManager.VISIBLE_ALLYS.get(), registerManager.HEAL_TARGET.get());
+        return ImmutableSet.of(MemoryModuleType.NEAREST_HOSTILE, RegisterAI.NEARBY_HOSTILES.get(), RegisterAI.VISIBLE_HOSTILE_COUNT.get(), RegisterAI.VISIBLE_HOSTILES.get(), RegisterAI.VISIBLE_ALLYS_COUNT.get(), RegisterAI.NEAREST_BOAT.get(), RegisterAI.NEARBY_ALLYS.get(), RegisterAI.VISIBLE_ALLYS.get(), RegisterAI.HEAL_TARGET.get());
     }
 }

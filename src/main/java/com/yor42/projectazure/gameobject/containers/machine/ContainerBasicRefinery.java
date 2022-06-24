@@ -20,7 +20,8 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerManager.BASIC_REFINERY_CONTAINER_TYPE;
+import static com.yor42.projectazure.setup.register.RegisterContainer.BASIC_REFINERY_CONTAINER;
+
 
 public class ContainerBasicRefinery extends Container {
 
@@ -51,7 +52,7 @@ public class ContainerBasicRefinery extends Container {
     }
 
     public ContainerBasicRefinery(int id, PlayerInventory inventory, ItemStackHandler Inventory, IIntArray field, FluidStack CrudeOilStack, FluidStack gasolinestack, FluidStack dieselstack, FluidStack fueloilstack) {
-        super(BASIC_REFINERY_CONTAINER_TYPE, id);
+        super(BASIC_REFINERY_CONTAINER.get(), id);
         this.field = field;
         this.crudeoilstack = CrudeOilStack;
         this.gasolinestack = gasolinestack;

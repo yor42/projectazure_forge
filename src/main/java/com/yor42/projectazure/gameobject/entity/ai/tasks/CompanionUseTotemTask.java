@@ -13,7 +13,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Optional;
 
-import static com.yor42.projectazure.setup.register.registerManager.TOTEM_INDEX;
+import static com.yor42.projectazure.setup.register.RegisterAI.TOTEM_INDEX;
 import static net.minecraft.util.Hand.OFF_HAND;
 
 public class CompanionUseTotemTask extends Task<AbstractEntityCompanion> {

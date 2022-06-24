@@ -142,7 +142,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     }
 
     @Override
-    public int getShipAttackAnimDelay() {
+    public int CannonAttackAnimLength() {
         return 18;
     }
 
