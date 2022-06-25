@@ -9,7 +9,7 @@ import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
 import com.yor42.projectazure.gameobject.items.tools.ItemClaymore;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -283,7 +283,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
     @Override
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
-        EntityClaymore claymore = new EntityClaymore(registerManager.ENTITYTYPE_CLAYMORE, world);
+        EntityClaymore claymore = new EntityClaymore(registerEntity.CLAYMORE.get(), world);
         claymore.setPos(target.getX(), target.getY(), target.getZ());
         claymore.setOwnerId(this.getUUID());
         world.addFreshEntity(claymore);

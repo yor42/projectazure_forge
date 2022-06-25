@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity.companion.sworduser;
+package com.yor42.projectazure.gameobject.entity.companion.meleeattacker;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
@@ -37,7 +37,7 @@ public abstract class AbstractSwordUserBase extends AbstractEntityCompanion impl
     }
 
     public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.getInitialMeleeAttackDelay() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
+        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
         this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
 

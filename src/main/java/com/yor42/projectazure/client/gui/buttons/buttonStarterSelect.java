@@ -15,6 +15,8 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
+
 public class buttonStarterSelect extends ImageButton {
     private final ResourceLocation resourceLocation;
     private final EntityType entityType;
@@ -103,7 +105,7 @@ public class buttonStarterSelect extends ImageButton {
 
                         int entityWidth = (int) entity.getBbWidth();
                         try {
-                            InventoryScreen.renderEntityInInventory(this.x+(this.width/2)-(entityWidth/2), this.y+this.height-5, 40, (float)(this.x + 51) - mouseX, (float)(this.y + 75 - 50) - mouseY, livingEntity);
+                            renderEntityInInventory(this.x+(this.width/2), this.y+this.height-5, 40, mouseX, mouseY, livingEntity);
                             return;
                         } catch (Exception e) {
                             Main.LOGGER.error("Failed to render Entity!");

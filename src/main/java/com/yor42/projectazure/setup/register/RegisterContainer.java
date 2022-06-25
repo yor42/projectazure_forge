@@ -23,10 +23,11 @@ public class RegisterContainer {
     public static final RegistryObject<ContainerType<ContainerCLSInventory>> CLS_CONTAINER = CONTAINER.register("closers_inventory", () -> new ContainerType<>((IContainerFactory<ContainerCLSInventory>)ContainerCLSInventory::new));
     public static final RegistryObject<ContainerType<ContainerGFLInventory>> GFL_CONTAINER = CONTAINER.register("girlsfrontline_inventory", () -> new ContainerType<>((IContainerFactory<ContainerGFLInventory>)ContainerGFLInventory::new));
     public static final RegistryObject<ContainerType<ContainerAKNInventory>> AKN_CONTAINER = CONTAINER.register("arknights_inventory", () -> new ContainerType<>((IContainerFactory<ContainerAKNInventory>)ContainerAKNInventory::new));
+    public static final RegistryObject<ContainerType<ContainerFGOInventory>> FGO_CONTAINER = CONTAINER.register("fategrandorder_inventory", () -> new ContainerType<>((IContainerFactory<ContainerFGOInventory>)ContainerFGOInventory::new));
     public static final RegistryObject<ContainerType<ContainerBAInventory>> BA_CONTAINER = CONTAINER.register("bluearchive_inventory", () -> new ContainerType<>((IContainerFactory<ContainerBAInventory>)ContainerBAInventory::new));
     public static final RegistryObject<ContainerType<RiggingContainer>> RIGGING_INVENTORY = CONTAINER.register("rigging_inventory", () -> new ContainerType<>((IContainerFactory<RiggingContainer>)RiggingContainer::new));
     //Container
-    public static final RegistryObject<ContainerType<ContainerKansenInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> new ContainerType<>((IContainerFactory<ContainerKansenInventory>)ContainerKansenInventory::new));
+    public static final RegistryObject<ContainerType<ContainerALInventory>> SHIP_CONTAINER = CONTAINER.register("kansen_inventory", () -> new ContainerType<>((IContainerFactory<ContainerALInventory>) ContainerALInventory::new));
     public static final DeferredRegister<TileEntityType<?>> TILE_ENTITY = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Constants.MODID);
 
     public static void register() {

@@ -7,10 +7,14 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
 public class registerRecipes {
+
+    public static final DeferredRegister<IRecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Constants.MODID);
 
     public static void register() {
     }
@@ -36,14 +40,12 @@ public class registerRecipes {
 
 
         private static <T extends IRecipe<?>> RegistryObject<IRecipeSerializer<T>> register(String name, Supplier<IRecipeSerializer<T>> serializer){
-            return registerManager.RECIPE_SERIALIZERS.register(name, serializer);
+            return RECIPE_SERIALIZERS.register(name, serializer);
         }
 
         private static <T extends IRecipe<?>> RegistryObject<IRecipeSerializer<T>> register_special_recipe(String name, Supplier<IRecipeSerializer<T>> serializer){
-            return registerManager.RECIPE_SERIALIZERS.register(name, serializer);
+            return RECIPE_SERIALIZERS.register(name, serializer);
         }
-
-        public static void register(){}
     }
 
 

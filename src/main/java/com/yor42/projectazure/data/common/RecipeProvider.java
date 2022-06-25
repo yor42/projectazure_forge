@@ -356,18 +356,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.AMMO_5_56.get(), 2)
-                .define('B', ModTags.Items.INGOT_BRASS)
-                .define('L', ModTags.Items.INGOT_LEAD)
-                .define('G', Tags.Items.GUNPOWDER)
-                .pattern(" L ")
-                .pattern("BGB")
-                .pattern("BGB")
-                .unlockedBy("has_breass", has(ModTags.Items.INGOT_BRASS))
-                .unlockedBy("has_lead", has(ModTags.Items.INGOT_LEAD))
-                .unlockedBy("has_gunpowder", has(Tags.Items.GUNPOWDER))
-                .save(consumer);
-
         ShapedRecipeBuilder.shaped(registerItems.STEEL_RIFLE_FRAME.get(), 1)
                 .define('P', ModTags.Items.PLATE_STEEL)
                 .define('I', ModTags.Items.INGOT_STEEL)

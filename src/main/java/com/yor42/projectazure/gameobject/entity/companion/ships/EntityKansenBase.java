@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.entity.companion.ships;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerKansenInventory;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerALInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
@@ -176,7 +176,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     protected void openGUI(ServerPlayerEntity player){
-        NetworkHooks.openGui(player, new ContainerKansenInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+        NetworkHooks.openGui(player, new ContainerALInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
 

@@ -21,6 +21,7 @@ import net.minecraft.util.text.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> implements IHasContainer<ContainerAKNInventory> {
@@ -187,7 +188,7 @@ public class GuiAKNInventory  extends ContainerScreen<ContainerAKNInventory> imp
             entity.restoreFrom(this.host);
             int entityWidth = (int) entity.getBbWidth();
             try {
-                InventoryScreen.renderEntityInInventory(this.leftPos + (48 - (entityWidth / 2)), this.topPos + 75, 30, mousex * -1 + leftPos + (53 - (float)entityWidth / 2), mousey * -1 + this.topPos + 70, (LivingEntity) entity);
+                renderEntityInInventory(this.leftPos + 48, this.topPos + 75, 30, mousex, mousey, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }

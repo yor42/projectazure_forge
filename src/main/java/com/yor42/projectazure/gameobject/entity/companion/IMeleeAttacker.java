@@ -11,7 +11,7 @@ public interface IMeleeAttacker {
     /*
     Delay between Each Attack
      */
-    int getInitialMeleeAttackDelay();
+    int MeleeAttackAnimationLength();
     /*
     Delay of Pre animation before Actual Damage Deals
 

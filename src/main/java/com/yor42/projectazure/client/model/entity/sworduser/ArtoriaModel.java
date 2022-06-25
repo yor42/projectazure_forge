@@ -1,7 +1,7 @@
-package com.yor42.projectazure.client.model.entity.bonus;
+package com.yor42.projectazure.client.model.entity.sworduser;
 
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
+import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.EntityArtoria;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -13,29 +13,30 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class ModelCrownslayer extends GeoCompanionModel<EntityCrownSlayer> {
-
+public class ArtoriaModel extends GeoCompanionModel<EntityArtoria> {
     @Override
-    public ResourceLocation getModelLocation(EntityCrownSlayer object) {
-        return GeoModelEntityLocation("modelcrownslayer");
+    protected int SleepingBodyYPosition() {
+        return -34;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityCrownSlayer object) {
-        return TextureEntityLocation("modelcrownslayer");
+    public ResourceLocation getModelLocation(EntityArtoria object) {
+        return GeoModelEntityLocation("modelsaber");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityCrownSlayer animatable) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/bonus/crownslayer.animation.json");
+    public ResourceLocation getTextureLocation(EntityArtoria object) {
+        return TextureEntityLocation("modelartoria");
     }
 
     @Override
-    public void setLivingAnimations(EntityCrownSlayer entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public ResourceLocation getAnimationFileLocation(EntityArtoria animatable) {
+        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/artoria.animation.json");
+    }
+
+    @Override
+    public void setLivingAnimations(EntityArtoria entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-        IBone EarR = this.getAnimationProcessor().getBone("EarR");
-        IBone EarL = this.getAnimationProcessor().getBone("EarL");
-        IBone hood = this.getAnimationProcessor().getBone("hood");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone Injured = this.getAnimationProcessor().getBone("Injured");
@@ -46,6 +47,7 @@ public class ModelCrownslayer extends GeoCompanionModel<EntityCrownSlayer> {
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
         IBone Angry3 = this.getAnimationProcessor().getBone("angry3");
+        IBone body = this.getAnimationProcessor().getBone("Body");
         IBone Faint = this.getAnimationProcessor().getBone("Faint");
         if (entity.isDeadOrDying() || entity.isCriticallyInjured()) {
             NormalFace.setHidden(true);
@@ -179,20 +181,5 @@ public class ModelCrownslayer extends GeoCompanionModel<EntityCrownSlayer> {
                 this.LastBlinkTime = System.currentTimeMillis();
             }
         }
-
-        if (entity.isWearingHood()) {
-            EarL.setHidden(true);
-            EarR.setHidden(true);
-            hood.setHidden(false);
-        } else {
-            EarL.setHidden(false);
-            EarR.setHidden(false);
-            hood.setHidden(true);
-        }
-    }
-
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
     }
 }

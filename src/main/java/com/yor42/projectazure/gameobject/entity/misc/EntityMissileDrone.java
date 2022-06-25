@@ -21,7 +21,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.setup.register.registerItems.DRONE_BAMISSILE;
-import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_DRONE_MISSILE;
+import static com.yor42.projectazure.setup.register.registerEntity.DRONE_MISSILE;
 
 public class EntityMissileDrone extends AbstractEntityDrone{
 
@@ -93,7 +93,7 @@ public class EntityMissileDrone extends AbstractEntityDrone{
         double y = target.getY() - (0.5D + this.getY(0.5D));
         double z = target.getZ() - (this.getZ());
 
-        EntityMissileDroneMissile droneMissile = PROJECTILE_DRONE_MISSILE.create(this.getCommandSenderWorld());
+        EntityMissileDroneMissile droneMissile = DRONE_MISSILE.get().create(this.getCommandSenderWorld());
         if(droneMissile != null){
             droneMissile.shoot(this, target, x,y,z);
             this.setFiringTick(this.getFireingTick());

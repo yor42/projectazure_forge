@@ -23,7 +23,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerKansenInventory extends Container {
+public class ContainerALInventory extends Container {
 
     private static final EquipmentSlotType[] EQUIPMENT = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private final IItemHandler AmmoStack;
@@ -31,12 +31,12 @@ public class ContainerKansenInventory extends Container {
     public final EntityKansenBase entity;
 
     //client
-    public ContainerKansenInventory(int id, PlayerInventory playerInventory, PacketBuffer data) {
+    public ContainerALInventory(int id, PlayerInventory playerInventory, PacketBuffer data) {
         this(id, playerInventory, new ItemStackHandler(12),  new ItemStackHandler(1), new ItemStackHandler(6), new ItemStackHandler(8), (EntityKansenBase) playerInventory.player.level.getEntity(data.readInt()));
     }
 
     //constructor for actual use
-    public ContainerKansenInventory(int id, PlayerInventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
+    public ContainerALInventory(int id, PlayerInventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
         super(RegisterContainer.SHIP_CONTAINER.get(), id);
         this.equipment = Equipments;
         this.AmmoStack = AmmoStorage;
@@ -59,7 +59,7 @@ public class ContainerKansenInventory extends Container {
 
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
-                    return stack.getItem() instanceof ArmorItem && stack.canEquip(EQUIPMENT[finalL],  ContainerKansenInventory.this.entity);
+                    return stack.getItem() instanceof ArmorItem && stack.canEquip(EQUIPMENT[finalL],  ContainerALInventory.this.entity);
                 }
             });
         }
@@ -175,7 +175,7 @@ public class ContainerKansenInventory extends Container {
         @Nullable
         @Override
         public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerKansenInventory(openContainerId, inventory, this.kansenEntity.getInventory(), this.kansenEntity.getShipRiggingStorage(), this.kansenEntity.getEquipment(), this.kansenEntity.getAmmoStorage(), this.kansenEntity);
+            return new ContainerALInventory(openContainerId, inventory, this.kansenEntity.getInventory(), this.kansenEntity.getShipRiggingStorage(), this.kansenEntity.getEquipment(), this.kansenEntity.getAmmoStorage(), this.kansenEntity);
         }
     }
 }

@@ -64,6 +64,9 @@ public class EntityInteractionPacket {
                         case ITEMPICKUP:
                             ((AbstractEntityCompanion) entity).setPickupItem(msg.value);
                             break;
+                        case ATTACK:
+                            ((AbstractEntityCompanion) entity).setShouldAttackFirst(msg.value);
+                            break;
                         case PAT:
                             ((AbstractEntityCompanion) entity).beingpatted();
                             break;
@@ -93,6 +96,7 @@ public class EntityInteractionPacket {
         HEAL,
         ITEMPICKUP,
         QUESTIONABLE,
+        ATTACK,
         STOP_RIDING
     }
 }

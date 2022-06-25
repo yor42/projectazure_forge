@@ -98,6 +98,18 @@ public class enums {
         }
     }
 
+    public enum SERVANT_CLASSES{
+        SABER("servantclass.saber");
+        private String translationkey;
+        SERVANT_CLASSES(String translationkey){
+            this.translationkey = translationkey;
+        }
+
+        public String getTranslationkey() {
+            return translationkey;
+        }
+    }
+
     public enum AmmoCategory {
         //.... and fallback values
         //AP: Higher damage on kansen, lower chance to damage rigging

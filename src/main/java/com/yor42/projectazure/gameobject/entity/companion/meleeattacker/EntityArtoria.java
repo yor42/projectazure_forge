@@ -1,11 +1,13 @@
-package com.yor42.projectazure.gameobject.entity.companion.sworduser;
+package com.yor42.projectazure.gameobject.entity.companion.meleeattacker;
 
 import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
-import com.yor42.projectazure.interfaces.IAknOp;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerFGOInventory;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
+import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -14,19 +16,11 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.TieredItem;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -39,17 +33,55 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class EntityYato extends AbstractSwordUserBase implements IAknOp {
-
-    protected static final DataParameter<Boolean> WEARING_VISOR = EntityDataManager.defineId(EntityYato.class, DataSerializers.BOOLEAN);
-
-    public EntityYato(EntityType<? extends TameableEntity> type, World worldIn) {
+public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
+    public EntityArtoria(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     @Override
+    public int MeleeAttackAnimationLength() {
+        return 36;
+    }
+
+    @Override
+    public ArrayList<Integer> getAttackDamageDelay() {
+        return new ArrayList<>(Collections.singletonList(22));
+    }
+
+    @Override
+    public ArrayList<Item> getTalentedWeaponList() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public boolean hasMeleeItem() {
+        return false;
+    }
+
+    @Override
+    public float getAttackRange(boolean isUsingTalentedWeapon) {
+        return 3;
+    }
+
+    @Override
+    public boolean shouldUseNonVanillaAttack(LivingEntity target) {
+        return false;
+    }
+
+    @Override
+    public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
+        target.hurt(DamageSource.mobAttack(this), damage*4);
+    }
+
+    @Override
+    public void StartMeleeAttackingEntity() {
+        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
+        this.StartedMeleeAttackTimeStamp = this.tickCount;
+    }
+
+    @Override
     public enums.EntityType getEntityType() {
-        return enums.EntityType.OPERATOR;
+        return enums.EntityType.SERVANT;
     }
 
     @Override
@@ -176,10 +208,8 @@ public class EntityYato extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent) {
-        AnimationBuilder builder = new AnimationBuilder();
-        pAnimationEvent.getController().setAnimation(builder.addAnimation("idle_chest", true));
-        return PlayState.CONTINUE;
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
+        return PlayState.STOP;
     }
 
     @Override
@@ -236,121 +266,30 @@ public class EntityYato extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
-        super.readAdditionalSaveData(compound);
-        this.setWearingVisor(compound.getBoolean("wearinghood"));
-    }
-
-    @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("wearinghood", this.isWearingVisor());
-    }
-
-    @Nonnull
-    @Override
-    public ActionResultType interactAt(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
-
-        if(this.isOwnedBy(player)&&!this.getCommandSenderWorld().isClientSide() && player.getItemInHand(hand).isEmpty() && player.isCrouching()&&this.distanceTo(player)<=2){
-            Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
-            float eyeHeight = (float) this.getEyeY();
-
-
-            Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
-            EyeDelta = EyeDelta.normalize();
-            double EyeCheckFinal = PlayerLook.dot(EyeDelta);
-
-            if (EyeCheckFinal > 0.998 && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
-                this.setWearingVisor(!this.isWearingVisor());
-                return ActionResultType.SUCCESS;
-            }
-        }
-        return super.interactAt(player, vec, hand);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(WEARING_VISOR, true);
-    }
-
-    @Override
     protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
-    }
-
-    public void setWearingVisor(boolean value){
-        this.entityData.set(WEARING_VISOR, value);
-    }
-
-    public boolean isWearingVisor(){
-        return this.entityData.get(WEARING_VISOR);
+        NetworkHooks.openGui(player, new ContainerFGOInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_2;
-    }
-
-    @Override
-    public int getInitialMeleeAttackDelay() {
-        return 17;
-    }
-
-    @Override
-    public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(7));
-    }
-
-    @Override
-    public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public float getAttackRange(boolean isUsingTalentedWeapon) {
-        return 3;
-    }
-
-    @Override
-    public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        target.hurt(DamageSource.mobAttack(this), damage);
-    }
-
-    @Override
-    public enums.OperatorClass getOperatorClass() {
-        return enums.OperatorClass.VANGUARD;
-    }
-
-    @Override
-    public SoundEvent getNormalAmbientSounds() {
-        return null;
-    }
-
-    @Override
-    public SoundEvent getAffection1AmbientSounds() {
-        return null;
-    }
-
-    @Override
-    public SoundEvent getAffection2AmbientSounds() {
-        return null;
-    }
-
-    @Override
-    public SoundEvent getAffection3AmbientSounds() {
-        return null;
+        return enums.CompanionRarity.STAR_5;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.createMobAttributes()
                 //Attribute
-                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.YatoMovementSpeed.get())
-                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.YatoSwimSpeed.get())
-                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.YatoHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.YatoAttackDamage.get())
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.SiegeMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.SiegeSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.SiegeHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.SiegeAttackDamage.get())
+                .add(Attributes.ARMOR, 15F)
                 ;
+    }
+
+    @Override
+    public enums.SERVANT_CLASSES getServantClass() {
+        return enums.SERVANT_CLASSES.SABER;
     }
 }

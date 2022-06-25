@@ -146,6 +146,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue YamatoAttackDamage;
         public final ForgeConfigSpec.DoubleValue YamatoMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue ArtoriaHealth;
+        public final ForgeConfigSpec.DoubleValue ArtoriaSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue ArtoriaAttackDamage;
+        public final ForgeConfigSpec.DoubleValue ArtoriaMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -338,10 +343,16 @@ public class PAConfig {
             SylviMovementSpeed = builder.defineInRange("Movement speed of Sylvi Lee", 0.3F, 0, 2);
 
             builder.pop().push("Kantai Collection");
-            YamatoHealth = builder.defineInRange("Max Health of Yamato Lee", 40D, 1, 1024);
-            YamatoSwimSpeed = builder.defineInRange("Swim Speed of Yamato Lee", 2.5, 0, 1024);
-            YamatoAttackDamage = builder.defineInRange("Attack Damage of Yamato Lee" , 2.0F, 0, 1024);
-            YamatoMovementSpeed = builder.defineInRange("Movement speed of Yamato Lee", 0.3F, 0, 2);
+            YamatoHealth = builder.defineInRange("Max Health of Yamato", 40D, 1, 1024);
+            YamatoSwimSpeed = builder.defineInRange("Swim Speed of Yamato", 2.5, 0, 1024);
+            YamatoAttackDamage = builder.defineInRange("Attack Damage of Yamato" , 2.0F, 0, 1024);
+            YamatoMovementSpeed = builder.defineInRange("Movement speed of Yamato", 0.3F, 0, 2);
+
+            builder.pop().push("Fate/Grand Order");
+            ArtoriaHealth = builder.defineInRange("Max Health of Artoria", 30D, 1, 1024);
+            ArtoriaSwimSpeed = builder.defineInRange("Swim Speed of Artoria", 2.5, 0, 1024);
+            ArtoriaAttackDamage = builder.defineInRange("Attack Damage of Artoria" , 2.0F, 0, 1024);
+            ArtoriaMovementSpeed = builder.defineInRange("Movement speed of Artoria", 0.3F, 0, 2);
 
             builder.pop().push("Girl's Frontline");
             M4A1Health = builder.defineInRange("Max Health of M4A1", 40D, 1, 1024);

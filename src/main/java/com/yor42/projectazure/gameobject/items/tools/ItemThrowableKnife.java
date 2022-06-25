@@ -15,7 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import static com.yor42.projectazure.setup.register.registerManager.PROJECTILE_KNIFE;
+import static com.yor42.projectazure.setup.register.registerEntity.PROJECTILE_THROWN_KNIFE;
 
 public class ItemThrowableKnife extends SwordItem {
     public ItemThrowableKnife(IItemTier p_i48460_1_, int p_i48460_2_, float p_i48460_3_, Properties p_i48460_4_) {
@@ -38,7 +38,7 @@ public class ItemThrowableKnife extends SwordItem {
                             p_220047_1_.broadcastBreakEvent(p_77615_3_.getUsedItemHand());
                         });
                         if (j == 0) {
-                            EntityThrownKnifeProjectile tridententity = new EntityThrownKnifeProjectile(PROJECTILE_KNIFE, playerentity, p_77615_2_, p_77615_1_);
+                            EntityThrownKnifeProjectile tridententity = new EntityThrownKnifeProjectile(PROJECTILE_THROWN_KNIFE.get(), playerentity, p_77615_2_, p_77615_1_);
                             tridententity.shootFromRotation(playerentity, playerentity.xRot, playerentity.yRot, 0.0F, 2.5F + (float)j * 0.5F, 1.0F);
                             if (playerentity.abilities.instabuild) {
                                 tridententity.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;

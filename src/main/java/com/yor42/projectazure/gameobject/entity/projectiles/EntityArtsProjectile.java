@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
 import com.yor42.projectazure.gameobject.misc.DamageSources;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -36,7 +36,7 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
     }
 
     public EntityArtsProjectile(World worldIn, LivingEntity shooter, float damage, @Nullable EffectInstance effect) {
-        super(registerManager.PROJECTILEARTS_ENTITYTYPE, shooter, 0, 0, 0, worldIn);
+        super(registerEntity.PROJECTILE_ARTS.get(), shooter, 0, 0, 0, worldIn);
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.7F), shooter.getZ());
         this.damage = damage;
         this.Effect = effect;

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -10,12 +11,15 @@ import net.minecraft.world.gen.feature.structure.StructureFeatures;
 import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilders;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class registerBiomes {
 
+    public static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, Constants.MODID);
     private static final List<BiomeData> BiomeList = new ArrayList<>();
     public static Biome makeMirrorSea(){
 
@@ -68,7 +72,7 @@ public class registerBiomes {
     }
 
     public static void registerviaData(BiomeData data){
-        registerManager.BIOMES.register(data.getID(), data::getBiome);
+        BIOMES.register(data.getID(), data::getBiome);
         BiomeManager.addBiome(data.getType(), new BiomeManager.BiomeEntry(RegistryKey.create(Registry.BIOME_REGISTRY, ResourceUtils.ModResourceLocation(data.getID())), data.getChance()));
         BiomeDictionary.addTypes(RegistryKey.create(Registry.BIOME_REGISTRY, data.getResourceLocationID()), BiomeDictionary.Type.OCEAN);
     }

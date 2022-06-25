@@ -21,6 +21,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> implements IHasContainer<ContainerCLSInventory> {
@@ -122,7 +123,7 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
             entity.restoreFrom(this.host);
             int entityWidth = (int) entity.getBbWidth();
             try {
-                InventoryScreen.renderEntityInInventory(this.leftPos + (100 - (entityWidth / 2)), this.topPos + 80, 30, mousex * -1 + leftPos + (100 - (float)entityWidth / 2), mousey * -1 + this.topPos + 80, (LivingEntity) entity);
+                renderEntityInInventory(this.leftPos + (100 - (entityWidth / 2)), this.topPos + 80, 30, mousex, mousey, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }

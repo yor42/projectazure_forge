@@ -141,7 +141,7 @@ public class Main
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
         ProjectileManager.getInstance().registerFactory(registerItems.DUMMYAMMO_RAILGUN.get(), (worldIn, entity, weapon, item, modifiedGun) -> {
-            return new EntityRailgunProjectile(registerManager.RAILGUN_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun, 4F);
+            return new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F);
         });
         if (ModList.get().isLoaded("theoneprobe")) TOPCompat.register();
     }
@@ -158,47 +158,48 @@ public class Main
         // do something that can only be done on the client
 
         //register Entity renderers
-    	RenderingRegistry.registerEntityRenderingHandler(registerManager.AYANAMI.get(), entityAyanamiRenderer::new);
-    	RenderingRegistry.registerEntityRenderingHandler(registerManager.JAVELIN.get(), entityJavelinRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.Z23.get(), entityZ23Renderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.LAFFEY.get(), EntityLaffeyRenderer::new);
-    	RenderingRegistry.registerEntityRenderingHandler(registerManager.GANGWON.get(), entityGangwonRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.SHIROKO.get(), entityShirokoRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.ENTERPRISE.get(), entityEnterpriseRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.NAGATO.get(), entityNagatoRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.CHEN.get(), EntityChenRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.MUDROCK.get(), EntityMudrockRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.ROSMONTIS.get(), EntityRosmontisRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.TALULAH.get(), EntityTalulahRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.AMIYA.get(), EntityAmiyaRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.M4A1.get(), EntityM4A1Renderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.TEXAS.get(), EntityTexasRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.FROSTNOVA.get(), EntityFrostNovaRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.CROWNSLAYER.get(), EntityCrownslayerRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.YATO.get(), EntityYatoRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.LAPPLAND.get(), EntityLapplandRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.SIEGE.get(), EntitySiegeRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.SCHWARZ.get(), EntitySchwarzRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.SYLVI.get(), EntitySylviRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.YAMATO.get(), EntityYamatoRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.NEARL.get(), EntityNearlRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
+    	RenderingRegistry.registerEntityRenderingHandler(registerEntity.AYANAMI.get(), entityAyanamiRenderer::new);
+    	RenderingRegistry.registerEntityRenderingHandler(registerEntity.JAVELIN.get(), entityJavelinRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.Z23.get(), entityZ23Renderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.LAFFEY.get(), EntityLaffeyRenderer::new);
+    	RenderingRegistry.registerEntityRenderingHandler(registerEntity.GANGWON.get(), entityGangwonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SHIROKO.get(), entityShirokoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.ENTERPRISE.get(), entityEnterpriseRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.NAGATO.get(), entityNagatoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.CHEN.get(), EntityChenRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.MUDROCK.get(), EntityMudrockRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.ROSMONTIS.get(), EntityRosmontisRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.TALULAH.get(), EntityTalulahRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.AMIYA.get(), EntityAmiyaRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.M4A1.get(), EntityM4A1Renderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.TEXAS.get(), EntityTexasRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.FROSTNOVA.get(), EntityFrostNovaRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.CROWNSLAYER.get(), EntityCrownslayerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.YATO.get(), EntityYatoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.LAPPLAND.get(), EntityLapplandRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SIEGE.get(), EntitySiegeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SCHWARZ.get(), EntitySchwarzRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SYLVI.get(), EntitySylviRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.YAMATO.get(), EntityYamatoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.ARTORIA.get(), EntityArtoriaRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.NEARL.get(), EntityNearlRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
-    	RenderingRegistry.registerEntityRenderingHandler(registerManager.CANNONSHELL.get(), entityCannonPelletRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.RAILGUN_PROJECTILE.get(), EntityRailgunProjectileRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.PROJECTILEARTS.get(), EntityArtsProjectileRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.THROWN_KNIFE.get(), EntityThrownKnifeRenderer::new);
+    	RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_CANNONSHELL.get(), entityCannonPelletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_RAILGUN.get(), EntityRailgunProjectileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_ARTS.get(), EntityArtsProjectileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_THROWN_KNIFE.get(), EntityThrownKnifeRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.CLAYMORE.get(), EntityClaymoreRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.CLAYMORE.get(), EntityClaymoreRenderer::new);
 
         ClientRegistry.bindTileEntityRenderer(registerTE.METAL_PRESS.get(), MachineMetalPressRenderer::new);
         ClientRegistry.bindTileEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
 
         ModBusEventHandlerClient.setup();
 
-        RenderingRegistry.registerEntityRenderingHandler(registerManager.F4FWildCat.get(), EntityPlanef4fwildcatRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PLANE_F4FWILDCAT.get(), EntityPlanef4fwildcatRenderer::new);
         ClientRegisterManager.registerScreen();
 
         //We do some reflect magic for gun here

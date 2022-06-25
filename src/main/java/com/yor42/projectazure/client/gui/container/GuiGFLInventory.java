@@ -21,6 +21,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> implements IHasContainer<ContainerGFLInventory> {
@@ -36,6 +37,7 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         this.morale = this.host.getMorale();
         this.imageWidth = 170;
         this.imageHeight = 188;
+        this.renderButton();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -45,7 +47,7 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
             entity.restoreFrom(this.host);
             int entityWidth = (int) entity.getBbWidth();
             try {
-                InventoryScreen.renderEntityInInventory(this.leftPos + (46 - (entityWidth / 2)), this.topPos + 75, 30, mousex * -1 + leftPos + (53 - entityWidth / 2), mousey * -1 + this.topPos + 70, (LivingEntity) entity);
+                renderEntityInInventory(this.leftPos + (46 - (entityWidth / 2)), this.topPos + 75, 30, mousex, mousey, (LivingEntity) entity);
             } catch (Exception e) {
                 Main.LOGGER.error("Failed to render Entity!");
             }
@@ -57,7 +59,6 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         this.renderEntity(mouseX, mouseY);
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderButton();
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 

@@ -84,7 +84,7 @@ public class registerBlocks {
 
     private static <T extends Block> RegistryObject<T> register_blockWithToolTiponItem(String name, Supplier<T> block, ItemGroup group){
         RegistryObject<T> ret = register_noItem(name, block);
-        registerManager.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(group)){
+        registerItems.ITEMS.register(name, () -> new BlockItem(ret.get(), new Item.Properties().tab(group)){
             @Override
             public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
                 super.appendHoverText(stack, worldIn, tooltip, flagIn);
@@ -104,14 +104,14 @@ public class registerBlocks {
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block, ItemGroup group, Item.Properties properties){
         RegistryObject<T> ret = register_noItem(name, block);
-        registerManager.ITEMS.register(name, () -> new BlockItem(ret.get(), properties));
+        registerItems.ITEMS.register(name, () -> new BlockItem(ret.get(), properties));
         return ret;
     }
 
 
     private static <T extends Block> RegistryObject<T> registerAnimatedMachines(String name, Supplier<T> block, ItemGroup group, Item.Properties properties){
         RegistryObject<T> ret = register_noItem(name, block);
-        registerManager.ITEMS.register(name, () -> new AnimateableMachineBlockItems(ret.get(), properties.tab(group), true));
+        registerItems.ITEMS.register(name, () -> new AnimateableMachineBlockItems(ret.get(), properties.tab(group), true));
         return ret;
     }
 
@@ -121,7 +121,7 @@ public class registerBlocks {
 
     private static RegistryObject<Block> registerMetalOre(String registryName, String materialName){
         RegistryObject<Block> ret = register_noItem(registryName, () -> new PAOreBlock(materialName));
-        registerManager.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName));
+        registerItems.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName));
         return ret;
     }
 

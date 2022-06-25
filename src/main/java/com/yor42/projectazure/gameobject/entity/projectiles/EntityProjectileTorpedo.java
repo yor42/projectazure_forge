@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.entity.projectiles;
 
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.registerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -34,16 +34,16 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public EntityProjectileTorpedo(double p_i50174_2_, double p_i50174_4_, double p_i50174_6_, double p_i50174_8_, double p_i50174_10_, double p_i50174_12_, World p_i50174_14_) {
-        super(registerManager.PROJECTILETORPEDO, p_i50174_2_, p_i50174_4_, p_i50174_6_, p_i50174_8_, p_i50174_10_, p_i50174_12_, p_i50174_14_);
+        super(registerEntity.PROJECTILE_TORPEDO.get(), p_i50174_2_, p_i50174_4_, p_i50174_6_, p_i50174_8_, p_i50174_10_, p_i50174_12_, p_i50174_14_);
     }
 
     public EntityProjectileTorpedo(LivingEntity ShooterIn, double AccelX, double AccelY, double AccelZ, World WorldIn) {
-        super(registerManager.PROJECTILETORPEDO, ShooterIn, AccelX, AccelY, AccelZ, WorldIn);
+        super(registerEntity.PROJECTILE_TORPEDO.get(), ShooterIn, AccelX, AccelY, AccelZ, WorldIn);
     }
 
     @OnlyIn(Dist.CLIENT)
     public EntityProjectileTorpedo(World worldIn, double x, double y, double z, double motionXIn, double motionYIn, double motionZIn) {
-        this(registerManager.PROJECTILETORPEDO, worldIn);
+        this(registerEntity.PROJECTILE_TORPEDO.get(), worldIn);
         this.moveTo(x, y, z, this.yRot, this.xRot);
         this.setDeltaMovement(motionXIn, motionYIn, motionZIn);
     }

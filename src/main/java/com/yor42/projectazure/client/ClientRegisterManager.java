@@ -13,6 +13,7 @@ public class ClientRegisterManager {
         ScreenManager.register(RegisterContainer.GFL_CONTAINER.get(), GuiGFLInventory::new);
         ScreenManager.register(RegisterContainer.CLS_CONTAINER.get(), GuiCLSInventory::new);
         ScreenManager.register(RegisterContainer.AKN_CONTAINER.get(), GuiAKNInventory::new);
+        ScreenManager.register(RegisterContainer.FGO_CONTAINER.get(), GuiFGOInventory::new);
 
         ScreenManager.register(RegisterContainer.METAL_PRESS_CONTAINER.get(), guiMetalPress::new);
         ScreenManager.register(RegisterContainer.ALLOY_FURNACE_CONTAINER.get(), guiAlloyFurnace::new);

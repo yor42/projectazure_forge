@@ -88,8 +88,12 @@ public class ContainerAKNInventory extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
-        return true;
+    public boolean stillValid(PlayerEntity p_75145_1_) {
+        if (this.companion.isDeadOrDying()) {
+            return false;
+        } else {
+            return p_75145_1_.distanceToSqr(this.companion.getX() + 0.5D, this.companion.getY() + 0.5D, this.companion.getZ() + 0.5D) <= 64.0D;
+        }
     }
 
     public static class Supplier implements INamedContainerProvider {

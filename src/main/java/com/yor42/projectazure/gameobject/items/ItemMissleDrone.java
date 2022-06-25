@@ -3,8 +3,8 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import com.yor42.projectazure.setup.register.registerEntity;
 import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
@@ -32,7 +32,7 @@ public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraf
 
     @Override
     public EntityType<? extends AbstractEntityDrone> getEntityType() {
-        return registerManager.ENTITYTYPE_MISSILEDRONE;
+        return registerEntity.MISSILEDRONE.get();
     }
 
     @Override

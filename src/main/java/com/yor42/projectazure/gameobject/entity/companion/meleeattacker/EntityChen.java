@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity.companion.sworduser;
+package com.yor42.projectazure.gameobject.entity.companion.meleeattacker;
 
 import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
@@ -54,7 +54,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public int getInitialMeleeAttackDelay() {
+    public int MeleeAttackAnimationLength() {
         return 31;
     }
 

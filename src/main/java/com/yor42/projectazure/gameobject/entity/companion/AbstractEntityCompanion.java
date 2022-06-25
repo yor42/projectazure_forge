@@ -408,6 +408,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> INTERACTION_WARNING_COUNT = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Boolean> OATHED = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> PICKUP_ITEM = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> SHOULDFIRSTATTACK = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> ISFREEROAMING = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Optional<BlockPos>> STAYPOINT = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
     protected static final DataParameter<Optional<BlockPos>> HOMEPOS = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_BLOCK_POS);
@@ -653,6 +654,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("injury_curetimer", this.getEntityData().get(INJURYCURETIMER));
         compound.putBoolean("oathed", this.getEntityData().get(OATHED));
         compound.putBoolean("pickupitem", this.getEntityData().get(PICKUP_ITEM));
+        compound.putBoolean("firstattack", this.getEntityData().get(SHOULDFIRSTATTACK));
         compound.putFloat("home_distance", this.getEntityData().get(VALID_HOME_DISTANCE));
         if(this.getEntityData().get(STAYPOINT).isPresent()) {
             compound.putDouble("stayX", this.getEntityData().get(STAYPOINT).get().getX());
@@ -726,6 +728,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(OATHED, compound.getBoolean("oathed"));
         this.getEntityData().set(NONVANILLAMELEEATTACKDELAY, compound.getInt("attackdelay"));
         this.getEntityData().set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
+        this.getEntityData().set(SHOULDFIRSTATTACK, compound.getBoolean("firstattack"));
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
         if(hasStayPos) {
             this.getEntityData().set(STAYPOINT, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
@@ -1670,6 +1673,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().define(SKILL_ANIMATION_TIME, 0);
         this.getEntityData().define(RELOAD_TIMER_MAINHAND, 0);
         this.getEntityData().define(PICKUP_ITEM, false);
+        this.getEntityData().define(SHOULDFIRSTATTACK, false);
         this.getEntityData().define(FOODLEVEL, 0);
         this.getEntityData().define(TeamUUID, Optional.empty());
         this.getEntityData().define(ANGRYTIMER, 0);
@@ -1759,6 +1763,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void setPickupItem(boolean value){
         this.getEntityData().set(PICKUP_ITEM, value);
+    }
+
+    public boolean shouldAttackFirst(){
+        return this.getEntityData().get(SHOULDFIRSTATTACK);
+    }
+
+    public void setShouldAttackFirst(boolean value){
+        this.getEntityData().set(SHOULDFIRSTATTACK, value);
     }
 
     public void setMovingtoRecruitStation(BlockPos pos){
@@ -3134,6 +3146,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @OnlyIn(Dist.CLIENT)
     public void SwitchFreeRoamingStatus() {
         Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.HOMEMODE, !this.isFreeRoaming()));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void SwitchPassiveAttack() {
+        Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.ATTACK, !this.shouldAttackFirst()));
     }
 
     public void clearHomePos(){

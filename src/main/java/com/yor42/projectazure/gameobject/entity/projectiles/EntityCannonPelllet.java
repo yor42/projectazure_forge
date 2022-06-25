@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.entity.projectiles;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
-import com.yor42.projectazure.setup.register.registerManager;
+import com.yor42.projectazure.setup.register.registerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -25,12 +25,12 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     BlockPos originPos;
 
     public EntityCannonPelllet(World worldIn, AmmoProperties ammotype){
-        super(registerManager.PROJECTILECANNONSHELL,worldIn);
+        super(registerEntity.PROJECTILE_CANNONSHELL.get(),worldIn);
         this.properties = ammotype;
     }
 
     public EntityCannonPelllet(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
-        super(registerManager.PROJECTILECANNONSHELL, shooter, accelX, accelY, accelZ, worldIn);
+        super(registerEntity.PROJECTILE_CANNONSHELL.get(), shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
         this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.5), shooter.getZ());
     }

@@ -241,6 +241,8 @@
   "gui.morale": "Morale",
   "gui.selectstarter.title": "Select Starter Ship",
   "gui.shipinventory": "KANSEN Inv.",
+  "gui.servantinventory": "Servant Inv.",
+  "gui.servantprofile": "Profile",
   "gui.companioninventory": "Inventory",
 
   "gui.current_morale_level": "Current Morale",
@@ -305,6 +307,8 @@
   "rarity.leg": "Legendary",
   "rarity.sp": "Special",
 
+  "servantclass.saber": "Saber",
+
   "operator.vanguard": "Vanguard",
   "operator.sniper": "Sniper",
   "operator.defender": "Defender",
@@ -321,6 +325,7 @@
   "al_kansen": "KANSEN / Azur Lane",
   "kc_kanmusu": "Kanmusu / Kantai Collection",
   "gfl_tdoll": "T-Doll / Girl's Frontline",
+  "fgo_servant": "Servant / Fate/Grand Order",
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entityjavelin": "HMS Javelin",
@@ -349,6 +354,8 @@
   "entity.projectazure.entityschwarz": "Schwarz",
   "entity.projectazure.entitynearl": "Nearl",
   "entity.projectazure.entityyato": "Yato",
+
+  "entity.projectazure.entityyartoria": "Artoria Pendragon",
 
   "entity.projectazure.missiledrone": "Missile Drone",
 

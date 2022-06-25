@@ -71,7 +71,7 @@ public class MixinSplashManager {
         entries.add("*[Reunion stole this splash text]*");
         entries.add("*[Sangvis stole this splash text]*");
         entries.add("Dinnergate ate my splash text!");
-        entries.add("Ow thats hot");
+        entries.add("Ow that's hot");
         entries.add("Steve just slapped the heck out of me");
         entries.add("*professionally vibing*");
         entries.add("Seal of approval");
@@ -86,6 +86,8 @@ public class MixinSplashManager {
         entries.add("ON 20% SALE! (No, not really.)");
         entries.add("LET THE BASS KICK");
         entries.add("That's not very cash money of you.");
+        entries.add("Say NO to 1.19.1!");
+        entries.add("Say NO to Censorship!");
         entries.add("Turing complete!");
         entries.add("look ma! I'm in the video game!");
         entries.add("Aw dang! here we go again.");

@@ -1,15 +1,19 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.misc.DamageSources;
+import com.yor42.projectazure.libs.Constants;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class registerPotionEffects {
+    public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MODID);
 
     public static Effect ACUTE_ORIPATHY = new AcuteOripathyEffect();
-    public static RegistryObject<Effect> ACUTE_ORIPATHY_REGISTRY = registerManager.EFFECTS.register("acute_oripathy", ()->ACUTE_ORIPATHY);
+    public static RegistryObject<Effect> ACUTE_ORIPATHY_REGISTRY = EFFECTS.register("acute_oripathy", ()->ACUTE_ORIPATHY);
 
     public static class AcuteOripathyEffect extends Effect{
 

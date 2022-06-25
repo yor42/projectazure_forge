@@ -1,16 +1,14 @@
-package com.yor42.projectazure.gameobject.entity.companion.sworduser;
+package com.yor42.projectazure.gameobject.entity.companion.meleeattacker;
 
 import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
-import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -20,10 +18,8 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.TieredItem;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -31,21 +27,21 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import static com.yor42.projectazure.libs.enums.CompanionRarity.STAR_5;
-import static com.yor42.projectazure.setup.register.registerItems.WARHAMMER;
+import static com.yor42.projectazure.setup.register.registerItems.CRESCENTKATANA_KURO;
+import static com.yor42.projectazure.setup.register.registerItems.CRESCENTKATANA_SHIRO;
 
-public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
-    public List<Entity> HealTarget = new ArrayList<>();
-
-    public EntityNearl(EntityType<? extends TameableEntity> type, World worldIn) {
+public class EntityLappland extends AbstractSwordUserBase implements IAknOp {
+    public EntityLappland(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
@@ -54,41 +50,35 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
         return enums.EntityType.OPERATOR;
     }
 
-    public enums.OperatorClass getOperatorClass(){
-        return enums.OperatorClass.DEFENDER;
+    @Override
+    public void registerControllers(AnimationData animationData) {
+        super.registerControllers(animationData);
+        animationData.addAnimationController(new AnimationController<>(this, "controller_tail", 10, this::predicate_tail));
     }
 
-    @Override
-    public SoundEvent getNormalAmbientSounds() {
-        return null;
-    }
+    private <T extends IAnimatable> PlayState predicate_tail(AnimationEvent<T> event) {
+        AnimationBuilder builder = new AnimationBuilder();
 
-    @Override
-    public SoundEvent getAffection1AmbientSounds() {
-        return null;
-    }
-
-    @Override
-    public SoundEvent getAffection2AmbientSounds() {
-        return null;
-    }
-
-    @Override
-    public SoundEvent getAffection3AmbientSounds() {
-        return null;
-    }
-
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        if(this.tickCount%20==0){
-            this.addSkillPoints();
+        if(this.isOrderedToSit() || (this.getVehicle() != null && this.getVehicle() != this.getOwner())){
+            event.getController().setAnimation(builder.addAnimation("sit_tail").addAnimation("sit_tail_idle"));
+            return PlayState.CONTINUE;
         }
-    }
+        else if(this.isBeingPatted()){
+            event.getController().setAnimation(builder.addAnimation("pat_tail", true));
 
-    @Override
-    public int maxSkillPoint() {
-        return 12;
+            return PlayState.CONTINUE;
+        }
+        else if (isMoving()) {
+            if(this.isSprinting()){
+                event.getController().setAnimation(builder.addAnimation("run_tail", true));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("walk_tail", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        event.getController().setAnimation(builder.addAnimation("idle_tail", true));
+        return PlayState.CONTINUE;
     }
 
     @Override
@@ -110,19 +100,15 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
             return PlayState.STOP;
         }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            event.getController().setAnimation(builder.addAnimation("lewd_chest", true));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
             return PlayState.CONTINUE;
         }
-        else if(this.getSkillAnimationTime()>0){
-            event.getController().setAnimation(builder.addAnimation("skill_arm", false));
-            return PlayState.CONTINUE;
-        }
         else if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("meleeattack_arm", false));
+            event.getController().setAnimation(builder.addAnimation(this.isDuelWielding()? "meleeattack_bothhand_arm":"meleeattack_onehand_arm", false));
 
             return PlayState.CONTINUE;
         }
@@ -150,7 +136,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
 
             return PlayState.CONTINUE;
         }
-        else if(this.isOrderedToSit()|| this.getVehicle() != null){
+        if(this.isOrderedToSit()|| this.getVehicle() != null){
             if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
                 return PlayState.CONTINUE;
@@ -160,9 +146,9 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
             }
             else {
                 if (this.getMainHandItem().getItem() instanceof TieredItem) {
-                    event.getController().setAnimation(builder.addAnimation("sit_idle_arm_toolmainhand", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_arm_idle_toolhand", true));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_idle_arm_emptymainhand", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_arm_idle_emptyhand", true));
                 }
             }
             return PlayState.CONTINUE;
@@ -207,7 +193,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded2", true));
             }
             return PlayState.CONTINUE;
         }
@@ -218,9 +204,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
-        AnimationBuilder builder = new AnimationBuilder();
-        event.getController().setAnimation(builder.addAnimation("idle_chest", true));
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
     @Override
@@ -249,17 +233,14 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg"));
+                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
                 }
             }
             return PlayState.CONTINUE;
         }
-        else if(this.getSkillAnimationTime()>0){
-            event.getController().setAnimation(builder.addAnimation("skill_leg", false));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("meleeattack_leg", false));
+        if(this.isNonVanillaMeleeAttacking()){
+            event.getController().setAnimation(builder.addAnimation(this.isDuelWielding()? "meleeattack_bothhand_leg":"meleeattack_onehand_leg", false));
+
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {
@@ -282,23 +263,79 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
+        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
-        return STAR_5;
+        return enums.CompanionRarity.STAR_5;
     }
 
     @Override
-    public int getInitialMeleeAttackDelay() {
-        return 40;
+    public int MeleeAttackAnimationLength() {
+        return 20;
     }
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(8));
+        return new ArrayList<>(Collections.singletonList(14));
+    }
+
+    @Override
+    public ArrayList<Item> getTalentedWeaponList() {
+        return new ArrayList<>(Arrays.asList(CRESCENTKATANA_SHIRO.get(), CRESCENTKATANA_KURO.get()));
+    }
+
+    @Override
+    public float getAttackRange(boolean isUsingTalentedWeapon) {
+        return 4;
+    }
+
+    @Override
+    public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
+        if(this.isDuelWielding()){
+            damage = this.getAttackDamageMainHand()+this.getAttackDamageOffHand();
+        }
+        target.playSound(registerSounds.CRESCENT_KATANA_HIT, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
+        target.hurt(DamageSource.mobAttack(this), damage);
+    }
+
+    @Override
+    public enums.OperatorClass getOperatorClass() {
+        return enums.OperatorClass.GUARD;
+    }
+
+    @Override
+    public SoundEvent getNormalAmbientSounds() {
+        return registerSounds.LAPPLAND_TALK_NORMAL;
+    }
+
+    @Override
+    public SoundEvent getAffection1AmbientSounds() {
+        return registerSounds.LAPPLAND_TALK_HIGH_AFFECTION1;
+    }
+
+    @Override
+    public SoundEvent getAffection2AmbientSounds() {
+        return registerSounds.LAPPLAND_TALK_HIGH_AFFECTION2;
+    }
+
+    @Override
+    public SoundEvent getAffection3AmbientSounds() {
+        return registerSounds.LAPPLAND_TALK_HIGH_AFFECTION3;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.LAPPLAND_TALK_ATTACK;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.LAPPLAND_TALK_PAT;
     }
 
     @Override
@@ -307,136 +344,18 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(WARHAMMER.get()));
-    }
-
-    @Override
-    public Hand getNonVanillaMeleeAttackHand() {
-        return Hand.MAIN_HAND;
-    }
-
-    @Override
-    public float getAttackRange(boolean isUsingTalentedWeapon) {
-        return 3;
-    }
-
-    public void UpdateandPerformNonVanillaMeleeAttack(){
-        int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
-        @Nullable
-        LivingEntity target = this.getTarget();
-        if (currentspelldelay > 0) {
-            this.getNavigation().stop();
-            if (target == null || !target.isAlive()) {
-                this.setMeleeAttackDelay(0);
-                this.AttackCount = 0;
-            }
-
-            else {
-                this.lookAt(target, 30.0F, 30.0F);
-                this.setMeleeAttackDelay(currentspelldelay - 1);
-                int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
-                if (!this.getMeleeAnimationAudioCueDelay().isEmpty() && this.getMeleeAnimationAudioCueDelay().contains(delay)) {
-                    this.playMeleeAttackPreSound();
-                }
-                if (this.getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {
-                    this.AttackCount += 1;
-                    this.PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
-                }
-            }
-        } else if (this.AttackCount > 0) {
-            this.AttackCount = 0;
-        }
-
-    }
-
-    @Override
-    public boolean canUseSkill(LivingEntity target) {
-        int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
-        if(currentspelldelay == 0 && this.getSkillPoints()>=6){
-            if((this.getHealth()/this.getMaxHealth())<=0.5F){
-                return true;
-            }
-            else if(this.getSkillPoints()>=6 && this.getOwner()!=null){
-                List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(10, 2, 10), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
-                if(!HealTarget.isEmpty()){
-                    this.HealTarget = HealTarget;
-                    return true;
-                };
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean performOneTimeSkill(LivingEntity target) {
-        return this.HealTarget.isEmpty();
-    }
-
-    @Override
-    public boolean performSkillTick(LivingEntity target, int Timer) {
-        if(Timer == 0){
-            this.setSkillAnimationTime(this.SkillAnimationLength());
-        }
-        else if(Timer == 20){
-            if(!this.HealTarget.isEmpty()) {
-                Entity entity2heal = HealTarget.get(0);
-                if(this.getHealth()/this.getMaxHealth()<=0.5F){
-                    entity2heal = this;
-                }
-                else {
-                    for (Entity entity : HealTarget) {
-                        if (entity2heal instanceof LivingEntity && entity instanceof LivingEntity) {
-                            if (((LivingEntity) entity).getHealth() <= ((LivingEntity) entity2heal).getHealth()) {
-                                entity2heal = entity;
-                            }
-                        }
-                    }
-                }
-
-                if (entity2heal instanceof LivingEntity) {
-                    ((LivingEntity) entity2heal).heal(Math.max(5, this.getAttackDamageMainHand()));
-                    for(int i = 0; i < 5; ++i) {
-                        double d0 = this.random.nextGaussian() * 0.02D;
-                        double d1 = this.random.nextGaussian() * 0.02D;
-                        double d2 = this.random.nextGaussian() * 0.02D;
-                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, entity2heal.getRandomX(1.0D), entity2heal.getRandomY() + 1.0D, entity2heal.getRandomZ(1.0D), d0, d1, d2);
-                    }
-                    this.addMorale(-1);
-                    this.playSound(registerSounds.NEARL_HEAL, 0.8F+(this.random.nextFloat()*0.4F), 0.8F+(this.random.nextFloat()*0.4F));
-                    this.getCommandSenderWorld().playSound(null, entity2heal.blockPosition(), registerSounds.HEAL_BOOST, SoundCategory.NEUTRAL, 0.8F+(this.random.nextFloat()*0.4F), 0.8F+(this.random.nextFloat()*0.4F));
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void resetSkill() {
-        super.resetSkill();
-        this.HealTarget.clear();
-    }
-
-    public int SkillAnimationLength(){
-        return 18;
-    }
-
-    @Override
-    public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        target.hurt(DamageSource.mobAttack(this), this.getAttackDamageMainHand());
-        target.playSound(registerSounds.WARHAMMER_HIT, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
+    public void playMeleeAttackPreSound() {
+        this.playSound(registerSounds.CRESCENT_KATANA_SWING, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.createMobAttributes()
                 //Attribute
-                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.SiegeMovementSpeed.get())
-                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.SiegeSwimSpeed.get())
-                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.SiegeHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.SiegeAttackDamage.get())
-                .add(Attributes.ARMOR, 5F)
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.TexasMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.TexasSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.TexasHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.TexasAttackDamage.get())
                 ;
     }
 }

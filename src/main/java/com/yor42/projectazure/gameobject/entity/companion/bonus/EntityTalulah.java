@@ -242,7 +242,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public int getInitialMeleeAttackDelay() {
+    public int MeleeAttackAnimationLength() {
         return 20;
     }
 
@@ -351,7 +351,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
 
     @Override
     public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.getInitialMeleeAttackDelay() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
+        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
         this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
 

@@ -1,15 +1,12 @@
-package com.yor42.projectazure.gameobject.entity.companion.sworduser;
+package com.yor42.projectazure.gameobject.entity.companion.meleeattacker;
 
 import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
-import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -17,66 +14,42 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.TieredItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
-    public EntityTexas(EntityType<? extends TameableEntity> type, World worldIn) {
+public class EntityYato extends AbstractSwordUserBase implements IAknOp {
+
+    protected static final DataParameter<Boolean> WEARING_VISOR = EntityDataManager.defineId(EntityYato.class, DataSerializers.BOOLEAN);
+
+    public EntityYato(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     @Override
     public enums.EntityType getEntityType() {
         return enums.EntityType.OPERATOR;
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData) {
-        super.registerControllers(animationData);
-        animationData.addAnimationController(new AnimationController<>(this, "controller_tail", 10, this::predicate_tail));
-    }
-
-    private <T extends IAnimatable> PlayState predicate_tail(AnimationEvent<T> event) {
-        AnimationBuilder builder = new AnimationBuilder();
-
-        if(this.isOrderedToSit() || (this.getVehicle() != null && this.getVehicle() != this.getOwner())){
-            event.getController().setAnimation(builder.addAnimation("sit_tail").addAnimation("sit_tail_idle"));
-            return PlayState.CONTINUE;
-        }
-        else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat_tail", true));
-
-            return PlayState.CONTINUE;
-        }
-        else if (isMoving()) {
-            if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_tail", true));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("walk_tail", true));
-            }
-            return PlayState.CONTINUE;
-        }
-        event.getController().setAnimation(builder.addAnimation("idle_tail", true));
-        return PlayState.CONTINUE;
     }
 
     @Override
@@ -95,9 +68,9 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
-            event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingL":"swingR", true));
+            //event.getController().setAnimation(builder.addAnimation(this.swingingArm == Hand.MAIN_HAND?"swingL":"swingR", true));
 
-            return PlayState.CONTINUE;
+            return PlayState.STOP;
         }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd_chest", true));
@@ -179,15 +152,6 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             event.getController().setAnimation(builder.addAnimation("swim_arm", true));
             return PlayState.CONTINUE;
         }
-        else if (isMoving()&& this.getVehicle() == null) {
-            if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_arm", true));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("walk_arm", true));
-            }
-            return PlayState.CONTINUE;
-        }
         else if(this.getMainHandItem().getItem() instanceof GunItem){
             if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
@@ -197,19 +161,18 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
+        else if (isMoving()&& this.getVehicle() == null) {
+            if(this.isSprinting()){
+                event.getController().setAnimation(builder.addAnimation("run_arm", true));
+            }
+            else {
+                event.getController().setAnimation(builder.addAnimation("walk_arm", true));
+            }
+            return PlayState.CONTINUE;
+        }
 
         event.getController().setAnimation(builder.addAnimation("idle_arm", true));
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
-        return new ArrayList<>(Collections.singletonList(10));
-    }
-
-    @Override
-    public void playMeleeAttackPreSound() {
-        this.playSound(registerSounds.TEXAS_SWORD_SWING, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
     }
 
     @Override
@@ -218,6 +181,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
         pAnimationEvent.getController().setAnimation(builder.addAnimation("idle_chest", true));
         return PlayState.CONTINUE;
     }
+
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
@@ -272,29 +236,76 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
+    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
+        super.readAdditionalSaveData(compound);
+        this.setWearingVisor(compound.getBoolean("wearinghood"));
+    }
+
+    @Override
+    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("wearinghood", this.isWearingVisor());
+    }
+
+    @Nonnull
+    @Override
+    public ActionResultType interactAt(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
+
+        if(this.isOwnedBy(player)&&!this.getCommandSenderWorld().isClientSide() && player.getItemInHand(hand).isEmpty() && player.isCrouching()&&this.distanceTo(player)<=2){
+            Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
+            float eyeHeight = (float) this.getEyeY();
+
+
+            Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
+            EyeDelta = EyeDelta.normalize();
+            double EyeCheckFinal = PlayerLook.dot(EyeDelta);
+
+            if (EyeCheckFinal > 0.998 && this.entityData.get(ECCI_ANIMATION_TIME)==0) {
+                this.setWearingVisor(!this.isWearingVisor());
+                return ActionResultType.SUCCESS;
+            }
+        }
+        return super.interactAt(player, vec, hand);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(WEARING_VISOR, true);
+    }
+
+    @Override
     protected void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
+    }
+
+    public void setWearingVisor(boolean value){
+        this.entityData.set(WEARING_VISOR, value);
+    }
+
+    public boolean isWearingVisor(){
+        return this.entityData.get(WEARING_VISOR);
     }
 
     @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {
-        return enums.CompanionRarity.STAR_5;
+        return enums.CompanionRarity.STAR_2;
     }
 
     @Override
-    public int getInitialMeleeAttackDelay() {
-        return 18;
+    public int MeleeAttackAnimationLength() {
+        return 17;
     }
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(14));
+        return new ArrayList<>(Collections.singletonList(7));
     }
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.FLEXABLE_SWORD_THINGY.get()));
+        return new ArrayList<>();
     }
 
     @Override
@@ -304,9 +315,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this): DamageSource.mobAttack(this), damage+3);
-        this.AttackCount = 0;
-        this.playSound(registerSounds.TEXAS_SWORD_HIT, 1, 0.8F+(0.4F*this.getRandom().nextFloat()));
+        target.hurt(DamageSource.mobAttack(this), damage);
     }
 
     @Override
@@ -314,46 +323,34 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
         return enums.OperatorClass.VANGUARD;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
-    {
-        return MobEntity.createMobAttributes()
-                //Attribute
-                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.TexasMovementSpeed.get())
-                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.TexasSwimSpeed.get())
-                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.TexasHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.TexasAttackDamage.get())
-                ;
-    }
-
     @Override
     public SoundEvent getNormalAmbientSounds() {
-        return registerSounds.TEXAS_TALK_NORMAL;
+        return null;
     }
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return registerSounds.TEXAS_TALK_HIGH_AFFECTION1;
+        return null;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return registerSounds.TEXAS_TALK_HIGH_AFFECTION2;
+        return null;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return registerSounds.TEXAS_TALK_HIGH_AFFECTION3;
+        return null;
     }
 
-    @Nullable
-    @Override
-    public SoundEvent getPatSoundEvent() {
-        return registerSounds.TEXAS_TALK_PAT;
-    }
-
-    @Nullable
-    @Override
-    protected SoundEvent getAggroedSoundEvent() {
-        return registerSounds.TEXAS_TALK_ATTACK;
+    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    {
+        return MobEntity.createMobAttributes()
+                //Attribute
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.YatoMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.YatoSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.YatoHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.YatoAttackDamage.get())
+                ;
     }
 }
