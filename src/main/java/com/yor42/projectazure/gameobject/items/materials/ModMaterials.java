@@ -20,6 +20,9 @@ public enum ModMaterials implements IItemTier {
     FLEXABLESWORD(2, 340, 5.5F, 3, 8, () -> {
         return Ingredient.of(ModTags.Items.INGOT_TIN);}),
 
+    EXCALIBUR(3, 1024, 5.5F, 4, 1, () -> {
+        return Ingredient.of(Tags.Items.INGOTS_IRON);}),
+
     SLEDGEHAMMER(2, 600, 0.5F, 1, 3, () -> {
         return Ingredient.of(Tags.Items.INGOTS_IRON);}),
 

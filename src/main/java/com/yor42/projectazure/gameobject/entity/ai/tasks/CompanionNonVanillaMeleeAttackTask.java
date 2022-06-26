@@ -23,7 +23,7 @@ public class CompanionNonVanillaMeleeAttackTask extends Task<AbstractEntityCompa
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, @Nonnull AbstractEntityCompanion p_212832_2_) {
         LivingEntity target = getAttackTarget(p_212832_2_);
         if (p_212832_2_ instanceof IMeleeAttacker) {
-            boolean flag = ((IMeleeAttacker) p_212832_2_).shouldUseNonVanillaAttack(target) && BrainUtil.canSee(p_212832_2_, target) && BrainUtil.isWithinAttackRange(p_212832_2_, target, 0);
+            boolean flag = ((IMeleeAttacker) p_212832_2_).shouldUseNonVanillaAttack(target) && BrainUtil.canSee(p_212832_2_, target);
             return flag && !p_212832_2_.isNonVanillaMeleeAttacking();
         }
         return false;
@@ -32,7 +32,13 @@ public class CompanionNonVanillaMeleeAttackTask extends Task<AbstractEntityCompa
     @Override
     protected void start(@Nonnull ServerWorld p_212831_1_, @Nonnull AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
         if (p_212831_2_ instanceof IMeleeAttacker) {
-            ((IMeleeAttacker) p_212831_2_).StartMeleeAttackingEntity();
+            LivingEntity target = getAttackTarget(p_212831_2_);
+            if(BrainUtil.isWithinAttackRange(p_212831_2_, target, 0)) {
+                ((IMeleeAttacker) p_212831_2_).StartMeleeAttackingEntity();
+            }
+            else{
+                BrainUtil.setWalkAndLookTargetMemories(p_212831_2_, target, 1, 2);
+            }
         }
     }
 

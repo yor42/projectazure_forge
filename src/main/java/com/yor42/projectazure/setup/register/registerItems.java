@@ -304,8 +304,6 @@ public class registerItems {
     });
 
     //Shooty stuff
-
-
     public static final RegistryObject<Item> WHITEFANG_465 = ITEMS.register("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SANGVIS_RAILGUN = ITEMS.register("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, true, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
 
@@ -317,6 +315,8 @@ public class registerItems {
     public static final RegistryObject<Item> CRESCENTKATANA_KURO = ITEMS.register("crescentkatana_kuro", () -> new ModSwordItem(ModMaterials.CRESCENT_KATANA_KURO, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> WARHAMMER = ITEMS.register("warhammer", () -> new ModSwordItem(ModMaterials.WARHAMMER, 1, -1.8F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> FLEXABLE_SWORD_THINGY = ITEMS.register("flexsword", () -> new ModSwordItem(ModMaterials.FLEXABLESWORD, 1, -1.0F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> EXCALIBUR_SHEATH = ITEMS.register("excalibur_sheath", ItemExcaliburSheath::new);
+    public static final RegistryObject<Item> EXCALIBUR = ITEMS.register("excalibur", () -> new ModSwordItem(ModMaterials.EXCALIBUR, 1, -1.0F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> TACTICAL_KNIFE = ITEMS.register("tactical_knife", () -> new ItemThrowableKnife(ModMaterials.KNIFE, 3, -0.2F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> COMPOUNDBOW = ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));
     public static final RegistryObject<Item> BONKBAT = ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()

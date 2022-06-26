@@ -11,6 +11,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractCompanionMagicUser;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.AbstractSwordUserBase;
+import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -293,6 +294,11 @@ public class CompanionTasks {
     private static boolean hasWeapon(AbstractEntityCompanion companion, LivingEntity tgt){
         ItemStack stack = companion.getItemBySlot(EquipmentSlotType.MAINHAND);
         Item item = stack.getItem();
+
+        if(companion instanceof IFGOServant){
+            return ((IFGOServant) companion).SwitchItem();
+        }
+
         boolean isEquippingsword = item instanceof SwordItem;
         boolean hasboworCrossbow = (item instanceof BowItem || item instanceof CrossbowItem) && !companion.getProjectile(stack).isEmpty();
         boolean canUseGun = companion.shouldUseGun();

@@ -135,6 +135,7 @@ import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
 import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_PANTRY;
+import static com.yor42.projectazure.setup.register.RegisterAI.KILLED_ENTITY;
 import static net.minecraft.block.material.Material.AIR;
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
@@ -444,7 +445,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, FOOD_PANTRY.get(),
             MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
             MemoryModuleType.LAST_WOKEN, RegisterAI.HURT_AT.get(), RegisterAI.NEAREST_BOAT.get(), RegisterAI.NEAREST_ORE.get(), RegisterAI.NEAREST_HARVESTABLE.get(), RegisterAI.NEAREST_PLANTABLE.get(),
-            RegisterAI.NEAREST_BONEMEALABLE.get(), RegisterAI.NEAREST_WORLDSKILLABLE.get(), RegisterAI.FOLLOWING_OWNER_MEMORY.get());
+            RegisterAI.NEAREST_BONEMEALABLE.get(), RegisterAI.NEAREST_WORLDSKILLABLE.get(), RegisterAI.FOLLOWING_OWNER_MEMORY.get(), RegisterAI.KILLED_ENTITY.get());
     private static final ImmutableList<SensorType<? extends Sensor<? super AbstractEntityCompanion>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES, SensorType.NEAREST_PLAYERS,
             SensorType.NEAREST_ITEMS, SensorType.NEAREST_BED, SensorType.HURT_BY,
@@ -971,6 +972,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             boolean flag1 = p_242374_0_.getBlockState(p_242374_1_.above()).getBlock().isPossibleToRespawnInThis();
             return flag && flag1 ? Optional.of(new Vector3d((double)p_242374_1_.getX() + 0.5D, (double)p_242374_1_.getY() + 0.1D, (double)p_242374_1_.getZ() + 0.5D)) : Optional.empty();
         }
+    }
+
+    @Override
+    public void awardKillScore(Entity p_191956_1_, int p_191956_2_, DamageSource p_191956_3_) {
+        this.getBrain().setMemoryWithExpiry(RegisterAI.KILLED_ENTITY.get(), true, 600);
+        super.awardKillScore(p_191956_1_, p_191956_2_, p_191956_3_);
     }
 
     public void die(@Nonnull DamageSource p_70645_1_) {
@@ -1861,7 +1868,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setAffection(float affection){
+        float prevvalue = this.getAffection();
+        float aftervalue = affection;
         this.getEntityData().set(AFFECTION, affection);
+        if(this.getOwner() instanceof PlayerEntity) {
+            this.onAffectionChange(prevvalue, aftervalue, (PlayerEntity) this.getOwner());
+        }
     }
 
     public double getmaxAffection(){
@@ -1916,6 +1928,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void addAffection(double Delta){
         this.setAffection((float) Math.min(this.getAffection() + Delta, this.getmaxAffection()));
+    }
+
+    protected void onAffectionChange(float prevValue, float afterValue, PlayerEntity owner){
+
     }
 
     public void MaxFillHunger(){
@@ -2083,8 +2099,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
 
         if(this.getEntityData().get(PAT_ANIMATION_TIME) >0){
-
-
             this.getEntityData().set(PAT_ANIMATION_TIME, this.getEntityData().get(PAT_ANIMATION_TIME)-1);
             if(!this.isAngry()) {
                 this.patTimer++;
@@ -2093,8 +2107,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 if (this.patTimer % 30 == 0 && !this.getCommandSenderWorld().isClientSide()) {
                     if (this.getEntityData().get(PATEFFECTCOUNT) < this.getEntityData().get(MAXPATEFFECTCOUNT)) {
                         this.getEntityData().set(PATEFFECTCOUNT, this.getEntityData().get(PATEFFECTCOUNT) + 1);
-                        this.addAffection(0.025);
-                        this.addMorale(0.5);
+
+                        float AffectionMultiplier = this.getBrain().hasMemoryValue(KILLED_ENTITY.get())?5:1;
+
+                        this.addAffection(0.025*AffectionMultiplier);
+                        this.addMorale(0.5*AffectionMultiplier);
                         Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.AFFECTION_HEART));
 
                     } else {
@@ -3054,13 +3071,26 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void tick() {
         super.tick();
-        if(this.getHOMEPOS().isPresent()&&this.tickCount%30==0){
-            BlockState blockstate = this.level.getBlockState(this.getHOMEPOS().get());
-            if(!blockstate.isBed(this.getCommandSenderWorld(),this.getHOMEPOS().get(), this)) {
-                this.releasePoi(HOME);
-                this.getBrain().eraseMemory(HOME);
-            }
+        if(this.tickCount%30==0) {
+            this.getBrain().getMemory(HOME).ifPresent((globalpos)->{
+                if(globalpos.dimension() == this.getCommandSenderWorld().dimension()){
+                    BlockState blockstate = this.level.getBlockState(this.getHOMEPOS().get());
+                    if (!blockstate.isBed(this.getCommandSenderWorld(), this.getHOMEPOS().get(), this)) {
+                        this.releasePoi(HOME);
+                        this.getBrain().eraseMemory(HOME);
+                    }
+                }
+            });
+            this.getBrain().getMemory(FOOD_PANTRY.get()).ifPresent((globalpos)->{
+                if(globalpos.dimension() == this.getCommandSenderWorld().dimension()){
+                    BlockState blockstate = this.level.getBlockState(this.getHOMEPOS().get());
+                    if (!(blockstate.getBlock() instanceof PantryBlock)) {
+                        this.getBrain().eraseMemory(FOOD_PANTRY.get());
+                    }
+                }
+            });
         }
+
         if(!this.getCommandSenderWorld().isClientSide()){
             this.foodStats.tick(this);
         }
