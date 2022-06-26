@@ -264,6 +264,11 @@
   "gui.tooltip.itempickup.off": "This companion will not pickup items",
   "gui.tooltip.itempickup.on": "This companion will pick up nearby items",
 
+  "gui.fgo.hunger": "Food: %s",
+  "gui.fgo.bond": "Bond:",
+  "gui.fgo.morale": "Morale: %s",
+  "gui.fgo.health": "HP: %s",
+
   "gui.ammostorage.title": "Ammo",
 
   "gui.kansen_ammostorage_usage": "Ammo Storage Usage",

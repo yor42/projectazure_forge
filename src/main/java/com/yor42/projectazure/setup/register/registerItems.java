@@ -176,12 +176,6 @@ public class registerItems {
 
     public static final RegistryObject<Item> GLITCHED_PHONE = ITEMS.register("glitched_phone", () -> new ItemGlitchedPhone(new Item.Properties().stacksTo(1).tab(PA_GROUP)));
 
-
-    public static final RegistryObject<Item> MAGAZINE_5_56 = ITEMS.register("5.56_magazine", () -> new ItemMagazine(enums.AmmoCalibur.AMMO_5_56, 30, new Item.Properties()
-            .tab(PA_GROUP)
-            .stacksTo(1)
-            .durability(7)));
-
     public static final RegistryObject<Item> Rainbow_Wisdom_Cube = ITEMS.register("rainbow_wisdomcube", () -> new itemRainbowWisdomCube(new Item.Properties()
             .tab(PA_GROUP)
             .rarity(Rarity.EPIC).stacksTo(1)));

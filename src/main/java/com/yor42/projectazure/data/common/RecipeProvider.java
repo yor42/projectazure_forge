@@ -385,20 +385,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_parts", has(registerItems.MECHANICAL_PARTS.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.WHITEFANG_465.get(), 1)
-                .define('P', ModTags.Items.PLATE_STEEL)
-                .define('I', ModTags.Items.INGOT_STEEL)
-                .define('B', registerItems.STEEL_RIFLE_FRAME.get())
-                .define('M', registerItems.MAGAZINE_5_56.get())
-                .define('R', registerItems.STEEL_PIPE.get())
-                .define('G', registerItems.PISTOL_GRIP.get())
-                .define('T', registerItems.HAMMER_IRON.get())
-                .pattern("PPP")
-                .pattern("RBI")
-                .pattern("TMG")
-                .unlockedBy("has_parts", has(registerItems.STEEL_RIFLE_FRAME.get()))
-                .save(consumer);
-
         ShapedRecipeBuilder.shaped(registerItems.AMMO_GENERIC.get(), 2)
                 .define('B', ModTags.Items.PLATE_BRASS)
                 .define('L', ModTags.Items.INGOT_LEAD)

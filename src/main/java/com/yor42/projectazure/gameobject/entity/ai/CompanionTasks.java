@@ -91,6 +91,7 @@ public class CompanionTasks {
                 Pair.of(1, new CompanionMoveforWorkTask()),
                 Pair.of(1, new CompanionHealAllyAndPlayerTask(40, 20, 10)),
                 Pair.of(1, new CompanionUseWorldSkill()),
+                Pair.of(2, new CompanionTakeFoodFromPantryGoal()),
                 Pair.of(2, new WalkToTargetTask()),
                 Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))),
                 Pair.of(2, new CompanionEatTask()));

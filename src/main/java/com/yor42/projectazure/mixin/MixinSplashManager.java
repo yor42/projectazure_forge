@@ -46,7 +46,7 @@ public class MixinSplashManager {
         entries.add("Stop eating our mushrooms Kay!");
         entries.add("IT'S GOOD FOR YOU!!!!");
         entries.add("MR FOOOOOX!!");
-        entries.add("help I'm stuck in the game!!!!!ANYO#*&$N321E!?!?!#&*$#");
+        entries.add("help I'm stuck in the game!!!!!ANYON#*&$N321E!?!?!#&*$#");
         entries.add("");
         entries.add("How do I craft this again?");
         entries.add("Nobody expects minecrafish inquisition!");
@@ -69,6 +69,8 @@ public class MixinSplashManager {
         entries.add("[missing splash text]");
         entries.add("WHO TOOK MY SPAGHET");
         entries.add("*[Reunion stole this splash text]*");
+        entries.add("Bro, REALLY COOL!");
+        entries.add("Someone stole my splash text!");
         entries.add("*[Sangvis stole this splash text]*");
         entries.add("Dinnergate ate my splash text!");
         entries.add("Ow that's hot");
@@ -98,6 +100,7 @@ public class MixinSplashManager {
         entries.add("Project azure: <3 from south korea.");
         entries.add("E.");
         entries.add("ᗜˬᗜ");
+        entries.add("STANDING HERE I REALIZE");
         entries.add("I Approb");
         entries.add("Nice.");
 

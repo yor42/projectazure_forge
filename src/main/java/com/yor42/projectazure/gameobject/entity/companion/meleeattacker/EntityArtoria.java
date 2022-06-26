@@ -150,11 +150,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
-                if (this.getMainHandItem().getItem() instanceof TieredItem) {
-                    event.getController().setAnimation(builder.addAnimation("sit_arm_idle_toolhand", true));
-                } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_arm_idle_emptyhand", true));
-                }
+                event.getController().setAnimation(builder.addAnimation("sit_arm_idle", true));
             }
             return PlayState.CONTINUE;
         }

@@ -28,7 +28,7 @@ public class InventorySensor extends Sensor<AbstractEntityCompanion> {
         Brain<AbstractEntityCompanion> brain = entity.getBrain();
         ItemStackHandler inventory = entity.getInventory();
         boolean foundTotem = brain.hasMemoryValue(RegisterAI.TOTEM_INDEX.get());
-        boolean foundFood = brain.hasMemoryValue(RegisterAI.FOOD_INDEX.get()), foundHealPotion= brain.hasMemoryValue(RegisterAI.HEAL_POTION_INDEX.get()), foundRegenerationPotion= brain.hasMemoryValue(RegisterAI.REGENERATION_POTION_INDEX.get()), foundTorch= brain.hasMemoryValue(RegisterAI.TORCH_INDEX.get()), foundFireExtinguisher= brain.hasMemoryValue(RegisterAI.FIRE_EXTINGIGH_ITEM.get()), foundFallbreaker =  brain.hasMemoryValue(RegisterAI.FALL_BREAK_ITEM_INDEX.get());
+        boolean foundFood = false, foundHealPotion= false, foundRegenerationPotion= false, foundTorch= false, foundFireExtinguisher= false, foundFallbreaker =  false;
         for (int i = 0; i < inventory.getSlots(); i++){
             ItemStack stack = inventory.getStackInSlot(i);
             Item item = stack.getItem();

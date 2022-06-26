@@ -18,6 +18,7 @@ import com.tac.guns.util.GunModifierHelper;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
+import com.yor42.projectazure.gameobject.blocks.PantryBlock;
 import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementController;
@@ -29,7 +30,7 @@ import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
-import com.yor42.projectazure.gameobject.items.ItemMagazine;
+import com.tac.guns.item.AmmoItem;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import com.yor42.projectazure.gameobject.items.tools.ItemCommandStick;
@@ -128,10 +129,12 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
 import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
+import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_PANTRY;
 import static net.minecraft.block.material.Material.AIR;
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
@@ -355,7 +358,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public ItemStackHandler AmmoStorage = new ItemStackHandler(8){
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof ItemMagazine || stack.getItem() instanceof ArrowItem;
+            return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof AmmoItem || stack.getItem() instanceof ArrowItem;
         }
     };
 
@@ -433,12 +436,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             RegisterAI.WAIT_POINT.get(), RegisterAI.HEAL_TARGET.get(), RegisterAI.MEMORY_SITTING.get(), MemoryModuleType.LIVING_ENTITIES,
             MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, NEAREST_HOSTILE,
             MemoryModuleType.NEAREST_VISIBLE_PLAYER, RIDE_TARGET, RegisterAI.WAIT_POINT.get(), RegisterAI.NEARBY_ALLYS.get(),
-            RegisterAI.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, RegisterAI.FOOD_PANTRY.get(),
+            RegisterAI.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, FOOD_PANTRY.get(),
             RegisterAI.FOOD_INDEX.get(), RegisterAI.HEAL_POTION_INDEX.get(), RegisterAI.REGENERATION_POTION_INDEX.get(), RegisterAI.TOTEM_INDEX.get(),
             RegisterAI.TORCH_INDEX.get(), RegisterAI.FIRE_EXTINGIGH_ITEM.get(), RegisterAI.FALL_BREAK_ITEM_INDEX.get(),
             MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET,
             MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH,
-            MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY,
+            MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, FOOD_PANTRY.get(),
             MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
             MemoryModuleType.LAST_WOKEN, RegisterAI.HURT_AT.get(), RegisterAI.NEAREST_BOAT.get(), RegisterAI.NEAREST_ORE.get(), RegisterAI.NEAREST_HARVESTABLE.get(), RegisterAI.NEAREST_PLANTABLE.get(),
             RegisterAI.NEAREST_BONEMEALABLE.get(), RegisterAI.NEAREST_WORLDSKILLABLE.get(), RegisterAI.FOLLOWING_OWNER_MEMORY.get());
@@ -673,6 +676,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             compound.putString("HomePosDim", pos.dimension().location().toString());
         });
 
+        this.getBrain().getMemory(FOOD_PANTRY.get()).ifPresent((pos)->{
+            compound.putDouble("pantryX", pos.pos().getX());
+            compound.putDouble("pantryY", pos.pos().getY());
+            compound.putDouble("pantryZ", pos.pos().getZ());
+            compound.putString("pantryDim", pos.dimension().location().toString());
+        });
+
         CompoundNBT NBT = new CompoundNBT();
         this.getBrain().getActiveNonCoreActivity().ifPresent((activity)->{
             if(activity == REST){
@@ -747,6 +757,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             GlobalPos pos = GlobalPos.of(registrykey, blockpos);
             this.getBrain().setMemory(HOME, pos);
             this.getEntityData().set(HOMEPOS, Optional.of(blockpos));
+        }
+
+        boolean hasPantryPos = compound.contains("pantryX") && compound.contains("pantryY") && compound.contains("pantryZ") && compound.contains("pantryDim");
+        if(hasPantryPos) {
+            BlockPos blockpos = new BlockPos(compound.getDouble("pantryX"), compound.getDouble("pantryY"), compound.getDouble("pantryZ"));
+            ResourceLocation resource = new ResourceLocation(compound.getString("pantryDim"));
+            RegistryKey<World> registrykey = RegistryKey.create(Registry.DIMENSION_REGISTRY, resource);
+            GlobalPos pos = GlobalPos.of(registrykey, blockpos);
+            this.getBrain().setMemory(FOOD_PANTRY.get(), pos);
         }
         if(compound.getBoolean("isresting")){
             this.getBrain().setMemory(RegisterAI.RESTING.get(), true);
@@ -1088,9 +1107,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return super.wantsToAttack(target, owner);
     }
 
-    public void setHomeposAndDistance(@Nonnull BlockPos pos, float validDistance){
-        this.getBrain().setMemory(HOME, GlobalPos.of(this.getCommandSenderWorld().dimension(), pos));
-        this.getEntityData().set(HOMEPOS, Optional.of(pos));
+    public void setHomeposAndDistance(@Nonnull GlobalPos pos, float validDistance){
+        this.getBrain().setMemory(HOME, pos);
+        this.getEntityData().set(HOMEPOS, Optional.of(pos.pos()));
         this.getEntityData().set(VALID_HOME_DISTANCE, validDistance);
     }
 
@@ -1116,7 +1135,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.getEntityData().get(HOMEPOS);
     }
 
-    public void setHomePos(@Nonnull BlockPos pos){
+    public void setHomePos(@Nonnull GlobalPos pos){
         this.setHomeposAndDistance(pos, 64);
     }
 
@@ -2484,7 +2503,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.getEntityData().set(VALID_HOME_DISTANCE, -1F);
         }
         else if(this.getHOMEPOS().map((pos)-> this.getBrain().getMemory(HOME).map((homepos)->!pos.equals(homepos.pos())).orElse(true)).orElse(true)){
-            this.getBrain().getMemory(HOME).ifPresent((pos)->this.setHomePos(pos.pos()));
+            this.getBrain().getMemory(HOME).ifPresent(this::setHomePos);
         }
 
         CompanionTasks.UpdateActivity(this);
@@ -2790,39 +2809,49 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 CompoundNBT compound = heldstacks.getOrCreateTag();
                 if (player.isShiftKeyDown()) {
                     if(!this.getCommandSenderWorld().isClientSide()) {
-                        if (compound.contains("BedX") && compound.contains("BedY") && compound.contains("BedZ")) {
-                            BlockPos BedPos = new BlockPos(compound.getInt("BedX"), compound.getInt("BedY"), compound.getInt("BedZ"));
-                            if (this.getCommandSenderWorld().getBlockState(BedPos).isBed(this.getCommandSenderWorld(), BedPos, this)) {
-                                if(this.getOwner() instanceof PlayerEntity) {
-
-                                    ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity)this.getOwner());
-                                    boolean isBedDuplicate = false;
-                                    @Nullable
-                                    AbstractEntityCompanion duplicatedComp = null;
-                                    for(AbstractEntityCompanion companion:cap.getCompanionList()){
-                                        if(companion.getEntityData().get(HOMEPOS).isPresent()){
-                                            BlockPos pos = companion.getEntityData().get(HOMEPOS).get();
-                                            if(pos.getX() == compound.getInt("BedX") && pos.getY() == compound.getInt("BedY") && pos.getZ() == compound.getInt("BedZ")){
-                                                isBedDuplicate = true;
-                                                duplicatedComp = companion;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if(duplicatedComp == this){
-                                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_same_companion_same_bed", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]"), true);
-                                    }
-                                    else if(isBedDuplicate){
-                                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed_duplicate", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]", this.getDisplayName(), duplicatedComp.getDisplayName()), true);
-                                    }
-                                    else {
-                                        this.setHomePos(BedPos);
-                                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_applied", "[" + BedPos.getX() + ", " + BedPos.getY() + ", " + BedPos.getZ() + "]", this.getDisplayName()), true);
-                                    }
-                                }
-                            } else {
-                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed", "["+ BedPos.getX()+", "+ BedPos.getY()+", "+ BedPos.getZ() +"]", this.getDisplayName()), true);
+                        if (compound.contains("X") && compound.contains("Y") && compound.contains("Z") && compound.contains("Dim")) {
+                            ResourceLocation resource = new ResourceLocation(compound.getString("Dim"));
+                            RegistryKey<World> registrykey = RegistryKey.create(Registry.DIMENSION_REGISTRY, resource);
+                            BlockPos Blockpos = new BlockPos(compound.getInt("X"), compound.getInt("Y"), compound.getInt("Z"));
+                            GlobalPos pos = GlobalPos.of(registrykey, Blockpos);
+                            ItemCommandStick.POSITION_TYPE type = ItemCommandStick.POSITION_TYPE.valueOf(compound.getString("postype"));
+                            if (this.getCommandSenderWorld().dimension() != registrykey) {
+                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_differentdimension", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
+                                return ActionResultType.FAIL;
                             }
+
+                            if (this.getOwner() != player) {
+                                return ActionResultType.FAIL;
+                            }
+
+                            if (type == ItemCommandStick.POSITION_TYPE.BED) {
+                                if (!this.getCommandSenderWorld().getBlockState(pos.pos()).isBed(this.getCommandSenderWorld(), Blockpos, this)) {
+                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_invalid", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
+                                    return ActionResultType.FAIL;
+                                }
+                                ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
+                                List<AbstractEntityCompanion> dupelist = cap.getCompanionList().stream().filter((companion) -> companion.getBrain().getMemory(HOME).map((globalpos) -> globalpos.equals(pos)).orElse(false)).collect(Collectors.toList());
+                                @Nullable
+                                AbstractEntityCompanion duplicatedComp = dupelist.isEmpty() ? null : dupelist.get(0);
+                                boolean isBedDuplicate = !(duplicatedComp ==null);
+
+                                if (duplicatedComp == this) {
+                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_same_companion_same_bed", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
+                                } else if (isBedDuplicate) {
+                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed_duplicate", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName(), duplicatedComp.getDisplayName()), true);
+                                } else {
+                                    this.setHomePos(pos);
+                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_applied", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName()), true);
+                                }
+                            }
+                            else if(type == ItemCommandStick.POSITION_TYPE.PANTRY){
+                                if(!(this.getCommandSenderWorld().getBlockState(pos.pos()).getBlock() instanceof PantryBlock)){
+                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_pantrypos_invalid", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
+                                    return ActionResultType.FAIL;
+                                }
+                                this.getBrain().setMemory(FOOD_PANTRY.get(), pos);
+                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_pantrypos_applied", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName()), true);
+                            };
                         } else if (this.hasHomePos()) {
                             this.releasePoi(HOME);
                             this.getBrain().eraseMemory(HOME);
@@ -3195,15 +3224,17 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.getEntityData().get(MORALE);
     }
 
+    public double getMaxMorale(){
+        return 150;
+    }
+
     public void setMorale(float morale) {
         this.getEntityData().set(MORALE, morale);
     }
 
     public void addMorale(double value){
         double prevmorale = this.getMorale();
-
-
-        this.setMorale((float) MathUtils.clamp(prevmorale+value, 0, 150));
+        this.setMorale((float) MathUtils.clamp(prevmorale+value, 0, this.getMaxMorale()));
     }
 
     public Optional<BlockPos> getStayCenterPos() {

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.slots;
 
+import com.tac.guns.item.AmmoItem;
 import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import net.minecraft.item.ArrowItem;
@@ -18,7 +19,7 @@ public class AmmoSlot extends SlotItemHandler {
     @Override
     public boolean mayPlace(@Nonnull ItemStack stack) {
 
-        if(!(stack.getItem() instanceof TimelessAmmoItem || stack.getItem() instanceof ArrowItem || stack.getItem() instanceof ItemCannonshell)){
+        if(!(stack.getItem() instanceof AmmoItem || stack.getItem() instanceof ArrowItem || stack.getItem() instanceof ItemCannonshell)){
             return false;
         }
 

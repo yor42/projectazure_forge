@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.containers.entity;
 
 import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.ItemMagazine;
+import com.tac.guns.item.AmmoItem;
 import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -148,7 +148,7 @@ public class ContainerAKNInventory extends Container {
                     return ItemStack.EMPTY;
                 }
             }
-            if(itemstack1.getItem() instanceof ItemMagazine){
+            if(itemstack1.getItem() instanceof AmmoItem){
                 if (!this.moveItemStackTo(itemstack1, ammoinv, ammoinv+8, false)) {
                     return ItemStack.EMPTY;
                 }

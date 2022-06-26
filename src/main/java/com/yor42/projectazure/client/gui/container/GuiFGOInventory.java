@@ -14,10 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -81,7 +78,9 @@ public class GuiFGOInventory extends ContainerScreen<ContainerFGOInventory> {
     }
 
     protected void rendergauges(MatrixStack stack, int mouseX, int mouseY){
-        this.blit(stack, this.topPos+98, this.leftPos+160, 0, 253, 50, 3);
+        this.minecraft.getTextureManager().bind(TEXTURE);
+        this.blit(stack,this.leftPos+145, this.topPos+28, 0, 253, 50, 3);
+        this.blit(stack,this.leftPos+145, this.topPos+28, 0, 250, (int)((this.host.getExp()/this.host.getMaxExp())*50), 3);
     }
 
     @Override
@@ -93,7 +92,20 @@ public class GuiFGOInventory extends ContainerScreen<ContainerFGOInventory> {
         p_230451_1_.pushPose();
         float renderscale = 0.75F;
         p_230451_1_.scale(renderscale, renderscale, renderscale);
-        this.font.draw(p_230451_1_, "Lv.", 83/renderscale,28.25F/renderscale,0xf5c719);
+        float leveltextwidth = this.font.width("Lv.")*renderscale;
+
+        ITextComponent bondtext =new TranslationTextComponent("gui.fgo.bond");
+        float bondwidth = this.font.width(bondtext)*renderscale;
+
+        this.font.drawShadow(p_230451_1_, "Lv.", 83/renderscale,28.25F/renderscale,0xf5c719);
+        this.font.drawShadow(p_230451_1_,  bondtext, 83/renderscale,65.25F/renderscale,0xf5c719);
+        ITextComponent HPText = new TranslationTextComponent("gui.fgo.health").withStyle(Style.EMPTY.withColor(Color.fromRgb(0xb1dbda))).append(new StringTextComponent(this.host.getHealth()+"/"+this.host.getMaxHealth()).withStyle(TextFormatting.WHITE));
+        ITextComponent MoraleText = new TranslationTextComponent("gui.fgo.morale").withStyle(Style.EMPTY.withColor(Color.fromRgb(0xb1dbda))).append(new StringTextComponent((int)this.host.getMorale()+"/"+(int)this.host.getMaxMorale()).withStyle(TextFormatting.WHITE));
+        float HPTextWidth = this.font.width(HPText)*renderscale;
+        this.font.drawShadow(p_230451_1_, HPText, 83/renderscale,37.25F/renderscale, -1);
+        this.font.drawShadow(p_230451_1_, MoraleText, 141/renderscale,37.25F/renderscale, -1);
+
+        this.font.drawShadow(p_230451_1_, new TranslationTextComponent("gui.fgo.hunger").withStyle(Style.EMPTY.withColor(Color.fromRgb(0xf5c719))).append(new StringTextComponent(this.host.getFoodStats().getFoodLevel()+" / 20").withStyle(TextFormatting.WHITE)), 83/renderscale,47.25F/renderscale, -1);
 
         if(this.host instanceof IFGOServant){
             ITextComponent text = new TranslationTextComponent(((IFGOServant) this.host).getServantClass().getTranslationkey());
@@ -124,8 +136,9 @@ public class GuiFGOInventory extends ContainerScreen<ContainerFGOInventory> {
         p_230451_1_.popPose();
 
 
+        this.font.draw(p_230451_1_, this.host.getLevel()+"/"+this.host.getMaxLevel(), 83+leveltextwidth+10,26.25F,0xffffff);
 
-        this.font.draw(p_230451_1_, this.host.getLevel()+"/"+this.host.getMaxLevel(), 96,26.25F,0xffffff);
+        this.font.draw(p_230451_1_, (int)this.host.getAffection()+"/"+(int)this.host.getmaxAffection(), 83+bondwidth+10,63.25F,0xffffff);
     }
 
 
