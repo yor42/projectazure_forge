@@ -40,7 +40,7 @@ public class ItemExcaliburSheath extends Item {
             if(ownerEntity instanceof EntityArtoria){
                 EntityArtoria entity = (EntityArtoria) ownerEntity;
                 if(entity.getOwner() == holder && entity.getAffection()>=90 && entity.blockPosition().closerThan(holder.blockPosition(), 16)){
-                    ((LivingEntity)holder).addEffect(new EffectInstance(Effects.REGENERATION, 20, 1));
+                    ((LivingEntity)holder).addEffect(new EffectInstance(Effects.REGENERATION, 30, 1));
                 }
             }
         }

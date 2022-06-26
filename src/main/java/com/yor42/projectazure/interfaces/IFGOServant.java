@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
+
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public interface IFGOServant {
@@ -18,14 +20,14 @@ public interface IFGOServant {
     default boolean SwitchItem(){
         ItemStack MainHandItem = this.getMainHandItem();
         if(MainHandItem.isEmpty()){
-            this.setItemInHand(MAIN_HAND, new ItemStack(registerItems.EXCALIBUR.get()));
+            this.setItemInHand(MAIN_HAND, this.createWeaponStack());
             return true;
         }
 
         for(int i=0;i<this.getInventory().getSlots(); i++){
             if(this.getInventory().insertItem(i, MainHandItem, true).isEmpty()){
                 this.getInventory().insertItem(i, MainHandItem, false);
-                this.setItemInHand(MAIN_HAND, new ItemStack(registerItems.EXCALIBUR.get()));
+                this.setItemInHand(MAIN_HAND, this.createWeaponStack());
                 this.setItemSwapIndexMainHand(i);
                 return true;
             }
@@ -33,6 +35,8 @@ public interface IFGOServant {
 
         return false;
     }
+    @Nonnull
+    ItemStack createWeaponStack();
 
     void setItemSwapIndexMainHand(int i);
 

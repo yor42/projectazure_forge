@@ -363,4 +363,12 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     public enums.SERVANT_CLASSES getServantClass() {
         return enums.SERVANT_CLASSES.SABER;
     }
+
+    @Nonnull
+    @Override
+    public ItemStack createWeaponStack() {
+        ItemStack stack = new ItemStack(registerItems.EXCALIBUR.get());
+        stack.getOrCreateTag().putUUID("owner", this.getUUID());
+        return stack;
+    }
 }
