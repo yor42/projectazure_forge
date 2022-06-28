@@ -50,7 +50,7 @@ minecraft {
 
             arg "-mixin.config=mixin.projectazure.json"
             property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
@@ -75,9 +75,6 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             mods {
                 projectazure {
@@ -147,6 +144,11 @@ repositories {
         url "https://maven.tterrag.com/"
     }
 
+    //Curios
+    maven {
+        url = "https://maven.theillusivec4.top/"
+    }
+
     flatDir {
         dirs 'jarlib'
     }
@@ -174,6 +176,10 @@ dependencies {
     //Multiblocked
     implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.16.5-0.4")
     implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.16.5-0.9")
+
+    //Curios
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
 

@@ -7,6 +7,7 @@ import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
 
@@ -38,6 +39,7 @@ public class ScathathModel extends GeoCompanionModel<EntityScathath> {
     @Override
     public void setLivingAnimations(EntityScathath entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone Injured = this.getAnimationProcessor().getBone("Injured");
@@ -48,7 +50,7 @@ public class ScathathModel extends GeoCompanionModel<EntityScathath> {
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
         IBone Angry3 = this.getAnimationProcessor().getBone("angry3");
-        IBone body = this.getAnimationProcessor().getBone("Body");
+        IBone hair = this.getAnimationProcessor().getBone("bone24");
         IBone Faint = this.getAnimationProcessor().getBone("Faint");
         if (entity.isDeadOrDying() || entity.isCriticallyInjured()) {
             NormalFace.setHidden(true);
@@ -181,6 +183,10 @@ public class ScathathModel extends GeoCompanionModel<EntityScathath> {
                 }
                 this.LastBlinkTime = System.currentTimeMillis();
             }
+        }
+        float pitch = extraData.headPitch* ((float) Math.PI / 180F);
+        if (!(entity.isBeingPatted() || entity.isSleeping())) {
+            hair.setRotationX(pitch*-1);
         }
     }
 }

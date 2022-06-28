@@ -133,7 +133,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
 
     @Override
     protected void onAffectionChange(float prevValue, float afterValue, PlayerEntity owner) {
-        if(prevValue<90 && afterValue <=90){
+        if(prevValue<90 && afterValue >=90){
             if(!this.gaveSheath) {
                 this.giveSheath(owner);
             }
