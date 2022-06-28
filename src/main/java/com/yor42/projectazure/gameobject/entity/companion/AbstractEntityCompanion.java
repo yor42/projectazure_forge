@@ -1658,7 +1658,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected abstract <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> pAnimationEvent);
 
-    protected abstract <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent);
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent){
+        return PlayState.STOP;
+    };
 
     protected abstract <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event);
 

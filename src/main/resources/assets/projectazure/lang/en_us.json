@@ -327,7 +327,7 @@
   "operator.supporter": "Supporter",
   "operator.reunion": "Reunion",
 
-  "akn_operator": "Operator / Arknights",
+  "akn_operator": "Operator  Arknights",
   "akn_reunion": "Reunion / Arknights",
   "bluearchive": "Blue Archive",
   "al_kansen": "KANSEN / Azur Lane",
@@ -363,7 +363,8 @@
   "entity.projectazure.entitynearl": "Nearl",
   "entity.projectazure.entityyato": "Yato",
 
-  "entity.projectazure.entityyartoria": "Artoria Pendragon",
+  "entity.projectazure.entityartoria": "Artoria Pendragon",
+  "entity.projectazure.entityyscathath": "Scathath",
 
   "entity.projectazure.missiledrone": "Missile Drone",
 

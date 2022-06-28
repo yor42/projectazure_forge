@@ -99,8 +99,9 @@ public class enums {
     }
 
     public enum SERVANT_CLASSES{
-        SABER("servantclass.saber");
-        private String translationkey;
+        SABER("servantclass.saber"),
+        LANCER("servantclass.lancer");
+        private final String translationkey;
         SERVANT_CLASSES(String translationkey){
             this.translationkey = translationkey;
         }

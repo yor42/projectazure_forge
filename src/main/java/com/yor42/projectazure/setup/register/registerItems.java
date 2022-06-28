@@ -360,78 +360,80 @@ public class registerItems {
             .tab(PA_WEAPONS).stacksTo(1),10, 20000));
 
     public static final RegistryObject<Item> SPAWM_AYANAMI = ITEMS.register("spawnayanami", () -> new ItemCompanionSpawnEgg<>(registerEntity.AYANAMI, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
     public static final RegistryObject<Item> SPAWM_JAVELIN = ITEMS.register("spawnjavelin", () -> new ItemCompanionSpawnEgg<>(registerEntity.JAVELIN, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
     public static final RegistryObject<Item> SPAWN_Z23 = ITEMS.register("spawnz23", () -> new ItemCompanionSpawnEgg<>(registerEntity.Z23, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_GANGWON = ITEMS.register("spawngangwon", () -> new ItemCompanionSpawnEgg<>(registerEntity.GANGWON, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_LAFFEY = ITEMS.register("spawnlaffey", () -> new ItemCompanionSpawnEgg<>(registerEntity.LAFFEY, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
-    public static final RegistryObject<Item> SPAWM_ENTERPRISE = ITEMS.register("spawnenterprise", ()-> new ItemCompanionSpawnEgg<>(registerEntity.ENTERPRISE, new Item.Properties().tab(PA_SHIPS)));
+    public static final RegistryObject<Item> SPAWM_ENTERPRISE = ITEMS.register("spawnenterprise", ()-> new ItemCompanionSpawnEgg<>(registerEntity.ENTERPRISE, new Item.Properties().tab(PA_COMPANIONS)));
 
 
     public static final RegistryObject<Item> SPAWN_NAGATO = ITEMS.register("spawnnagato", () -> new ItemCompanionSpawnEgg<>(registerEntity.NAGATO, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_CHEN = ITEMS.register("spawnchen", () -> new ItemCompanionSpawnEgg<>(registerEntity.CHEN, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_MUDROCK = ITEMS.register("spawnmudrock", () -> new ItemCompanionSpawnEgg<>(registerEntity.MUDROCK, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_M4A1 = ITEMS.register("spawnm4a1", () -> new ItemCompanionSpawnEgg<>(registerEntity.M4A1, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_AMIYA = ITEMS.register("spawnamiya", () -> new ItemCompanionSpawnEgg<>(registerEntity.AMIYA, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_ROSMONTIS = ITEMS.register("spawnrosmontis", () -> new ItemCompanionSpawnEgg<>(registerEntity.ROSMONTIS, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_TALULAH = ITEMS.register("spawntalulah", () -> new ItemCompanionSpawnEgg<>(registerEntity.TALULAH, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_CROWNSLAYER = ITEMS.register("spawncrownslayer", () -> new ItemCompanionSpawnEgg<>(registerEntity.CROWNSLAYER, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_SHIROKO = ITEMS.register("spawnshiroko", () -> new ItemCompanionSpawnEgg<>(registerEntity.SHIROKO, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_TEXAS = ITEMS.register("spawntexas", () -> new ItemCompanionSpawnEgg<>(registerEntity.TEXAS, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_FROSTNOVA = ITEMS.register("spawnfrostnova", () -> new ItemCompanionSpawnEgg<>(registerEntity.FROSTNOVA, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_SIEGE = ITEMS.register("spawnsiege", () -> new ItemCompanionSpawnEgg<>(registerEntity.SIEGE, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_NEARL = ITEMS.register("spawnnearl", () -> new ItemCompanionSpawnEgg<>(registerEntity.NEARL, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_SCHWARZ = ITEMS.register("spawnschwarz", () -> new ItemCompanionSpawnEgg<>(registerEntity.SCHWARZ, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_LAPPLAND = ITEMS.register("spawnlappland", () -> new ItemCompanionSpawnEgg<>(registerEntity.LAPPLAND, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_ARTORIA = ITEMS.register("spawnartoria", () -> new ItemCompanionSpawnEgg<>(registerEntity.ARTORIA, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
+    public static final RegistryObject<Item> SPAWN_SCATHATH = ITEMS.register("spawnscathath", () -> new ItemCompanionSpawnEgg<>(registerEntity.SCATHATH, new Item.Properties()
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> BANDAGE_ROLL = ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()
             .tab(PA_GROUP)));
     public static final RegistryObject<Item> SPAWM_SYLVI = ITEMS.register("spawnsylvi", () -> new ItemCompanionSpawnEgg<>(registerEntity.SYLVI, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
     public static final RegistryObject<Item> SPAWM_YAMATO = ITEMS.register("spawnyamato", () -> new ItemCompanionSpawnEgg<>(registerEntity.YAMATO, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWM_YATO = ITEMS.register("spawnyato", () -> new ItemCompanionSpawnEgg<>(registerEntity.YATO, new Item.Properties()
-            .tab(PA_SHIPS)));
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> MEDKIT = ITEMS.register("medkit", ItemMedKit::new);
 

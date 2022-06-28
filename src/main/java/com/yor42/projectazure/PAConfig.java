@@ -151,6 +151,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue ArtoriaAttackDamage;
         public final ForgeConfigSpec.DoubleValue ArtoriaMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue ScathathHealth;
+        public final ForgeConfigSpec.DoubleValue ScathathSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue ScathathAttackDamage;
+        public final ForgeConfigSpec.DoubleValue ScathathMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -353,6 +358,11 @@ public class PAConfig {
             ArtoriaSwimSpeed = builder.defineInRange("Swim Speed of Artoria", 2.5, 0, 1024);
             ArtoriaAttackDamage = builder.defineInRange("Attack Damage of Artoria" , 2.0F, 0, 1024);
             ArtoriaMovementSpeed = builder.defineInRange("Movement speed of Artoria", 0.3F, 0, 2);
+
+            ScathathHealth = builder.defineInRange("Max Health of Scathath", 30D, 1, 1024);
+            ScathathSwimSpeed = builder.defineInRange("Swim Speed of Scathath", 2.5, 0, 1024);
+            ScathathAttackDamage = builder.defineInRange("Attack Damage of Scathath" , 2.0F, 0, 1024);
+            ScathathMovementSpeed = builder.defineInRange("Movement speed of Scathath", 0.3F, 0, 2);
 
             builder.pop().push("Girl's Frontline");
             M4A1Health = builder.defineInRange("Max Health of M4A1", 40D, 1, 1024);

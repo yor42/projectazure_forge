@@ -1,6 +1,10 @@
 package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.client.renderer.entity.biped.*;
+import com.yor42.projectazure.client.renderer.entity.misc.EntityClaymoreRenderer;
+import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRenderer;
+import com.yor42.projectazure.client.renderer.entity.projectile.*;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
@@ -20,12 +24,19 @@ import com.yor42.projectazure.libs.Constants;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
+@Mod.EventBusSubscriber(modid = Constants.MODID ,bus = Mod.EventBusSubscriber.Bus.MOD)
 public class registerEntity {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Constants.MODID);
@@ -43,7 +54,8 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityCannonPelllet>> PROJECTILE_CANNONSHELL = ENTITIES.register("entitycannonshell", () -> EntityType.Builder.<EntityCannonPelllet>of(EntityCannonPelllet::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString()));
 
 
-    public static final RegistryObject<EntityType<EntityArtoria>> ARTORIA = ENTITIES.register("entityyartoria", () -> EntityType.Builder.of(EntityArtoria::new, EntityClassification.CREATURE).sized(0.572F, 1.54F).build(ModResourceLocation("entityyartoria").toString()));
+    public static final RegistryObject<EntityType<EntityArtoria>> ARTORIA = ENTITIES.register("entityartoria", () -> EntityType.Builder.of(EntityArtoria::new, EntityClassification.CREATURE).sized(0.572F, 1.54F).build(ModResourceLocation("entityartoria").toString()));
+    public static final RegistryObject<EntityType<EntityScathath>> SCATHATH = ENTITIES.register("entityyscathath", () -> EntityType.Builder.of(EntityScathath::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityscathath").toString()));
     public static final RegistryObject<EntityType<EntityYamato>> YAMATO = ENTITIES.register("entityyamato", () -> EntityType.Builder.of(EntityYamato::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityyamato").toString()));
     public static final RegistryObject<EntityType<EntitySylvi>> SYLVI = ENTITIES.register("entitysylvi", () -> EntityType.Builder.of(EntitySylvi::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityschwarz").toString()));
     public static final RegistryObject<EntityType<EntityNearl>> NEARL = ENTITIES.register("entitynearl", () -> EntityType.Builder.of(EntityNearl::new, EntityClassification.CREATURE).sized(0.572F, 1.71F).build(ModResourceLocation("entitynearl").toString()));
@@ -69,35 +81,77 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityJavelin>> JAVELIN = ENTITIES.register("entityjavelin", () -> EntityType.Builder.of(EntityJavelin::new, EntityClassification.CREATURE).sized(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString()));
     public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> EntityType.Builder.of(EntityAyanami::new, EntityClassification.CREATURE).sized(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString()));
 
-    public static void RegisterAttributes(){
-        GlobalEntityTypeAttributes.put(AYANAMI.get(), EntityAyanami.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(JAVELIN.get(), EntityJavelin.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(GANGWON.get(), EntityGangwon.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(ENTERPRISE.get(), EntityEnterprise.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(PLANE_F4FWILDCAT.get(), EntityF4fWildcat.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(MISSILEDRONE.get(), EntityMissileDrone.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(SHIROKO.get(), EntityShiroko.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(NAGATO.get(), EntityNagato.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(CHEN.get(), EntityChen.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(ROSMONTIS.get(), EntityRosmontis.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(TALULAH.get(), EntityTalulah.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(Z23.get(), EntityZ23.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(LAFFEY.get(), EntityLaffey.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(M4A1.get(), EntityM4A1.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(AMIYA.get(), EntityAmiya.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(MUDROCK.get(), EntityMudrock.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(TEXAS.get(), EntityTexas.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(FROSTNOVA.get(), EntityFrostnova.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(LAPPLAND.get(), EntityLappland.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(SIEGE.get(), EntitySiege.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(SCHWARZ.get(), EntitySchwarz.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(NEARL.get(), EntityNearl.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(SYLVI.get(), EntitySylvi.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(YAMATO.get(), EntityYamato.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(CLAYMORE.get(), EntityClaymore.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(CROWNSLAYER.get(), EntityCrownSlayer.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(YATO.get(), EntityYato.MutableAttribute().build());
-        GlobalEntityTypeAttributes.put(ARTORIA.get(), EntityArtoria.MutableAttribute().build());
+    @SubscribeEvent
+    public static void RegisterAttributes(EntityAttributeCreationEvent event){
+        event.put(AYANAMI.get(), EntityAyanami.MutableAttribute().build());
+        event.put(JAVELIN.get(), EntityJavelin.MutableAttribute().build());
+        event.put(GANGWON.get(), EntityGangwon.MutableAttribute().build());
+        event.put(ENTERPRISE.get(), EntityEnterprise.MutableAttribute().build());
+        event.put(PLANE_F4FWILDCAT.get(), EntityF4fWildcat.MutableAttribute().build());
+        event.put(MISSILEDRONE.get(), EntityMissileDrone.MutableAttribute().build());
+        event.put(SHIROKO.get(), EntityShiroko.MutableAttribute().build());
+        event.put(NAGATO.get(), EntityNagato.MutableAttribute().build());
+        event.put(CHEN.get(), EntityChen.MutableAttribute().build());
+        event.put(ROSMONTIS.get(), EntityRosmontis.MutableAttribute().build());
+        event.put(TALULAH.get(), EntityTalulah.MutableAttribute().build());
+        event.put(Z23.get(), EntityZ23.MutableAttribute().build());
+        event.put(LAFFEY.get(), EntityLaffey.MutableAttribute().build());
+        event.put(M4A1.get(), EntityM4A1.MutableAttribute().build());
+        event.put(AMIYA.get(), EntityAmiya.MutableAttribute().build());
+        event.put(MUDROCK.get(), EntityMudrock.MutableAttribute().build());
+        event.put(TEXAS.get(), EntityTexas.MutableAttribute().build());
+        event.put(FROSTNOVA.get(), EntityFrostnova.MutableAttribute().build());
+        event.put(LAPPLAND.get(), EntityLappland.MutableAttribute().build());
+        event.put(SIEGE.get(), EntitySiege.MutableAttribute().build());
+        event.put(SCHWARZ.get(), EntitySchwarz.MutableAttribute().build());
+        event.put(NEARL.get(), EntityNearl.MutableAttribute().build());
+        event.put(SYLVI.get(), EntitySylvi.MutableAttribute().build());
+        event.put(YAMATO.get(), EntityYamato.MutableAttribute().build());
+        event.put(CLAYMORE.get(), EntityClaymore.MutableAttribute().build());
+        event.put(CROWNSLAYER.get(), EntityCrownSlayer.MutableAttribute().build());
+        event.put(YATO.get(), EntityYato.MutableAttribute().build());
+        event.put(ARTORIA.get(), EntityArtoria.MutableAttribute().build());
+        event.put(SCATHATH.get(), EntityArtoria.MutableAttribute().build());
+    }
+    @OnlyIn(Dist.CLIENT)
+    public static void registerRenderer(){
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.AYANAMI.get(), entityAyanamiRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.JAVELIN.get(), entityJavelinRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.Z23.get(), entityZ23Renderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.LAFFEY.get(), EntityLaffeyRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.GANGWON.get(), entityGangwonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SHIROKO.get(), entityShirokoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.ENTERPRISE.get(), entityEnterpriseRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.NAGATO.get(), entityNagatoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.CHEN.get(), EntityChenRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.MUDROCK.get(), EntityMudrockRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.ROSMONTIS.get(), EntityRosmontisRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.TALULAH.get(), EntityTalulahRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.AMIYA.get(), EntityAmiyaRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.M4A1.get(), EntityM4A1Renderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.TEXAS.get(), EntityTexasRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.FROSTNOVA.get(), EntityFrostNovaRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.CROWNSLAYER.get(), EntityCrownslayerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.YATO.get(), EntityYatoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.LAPPLAND.get(), EntityLapplandRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SIEGE.get(), EntitySiegeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SCHWARZ.get(), EntitySchwarzRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SYLVI.get(), EntitySylviRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.YAMATO.get(), EntityYamatoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.ARTORIA.get(), EntityArtoriaRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SCATHATH.get(), EntityScathathRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.NEARL.get(), EntityNearlRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_CANNONSHELL.get(), entityCannonPelletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_RAILGUN.get(), EntityRailgunProjectileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_ARTS.get(), EntityArtsProjectileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_THROWN_KNIFE.get(), EntityThrownKnifeRenderer::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.CLAYMORE.get(), EntityClaymoreRenderer::new);
+
     }
 
     public static void loadClass(){

@@ -9,22 +9,16 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.TieredItem;
-import net.minecraft.item.ToolItem;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -37,107 +31,12 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
-
-    private boolean gaveSheath;
-
-    public EntityArtoria(EntityType<? extends TameableEntity> type, World worldIn) {
+public class EntityScathath extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
+    public EntityScathath(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
-        this.gaveSheath = false;
-    }
-
-    @Override
-    public int MeleeAttackAnimationLength() {
-        return 36;
-    }
-
-    @Override
-    public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(22));
-    }
-
-    @Override
-    public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.EXCALIBUR.get()));
-    }
-
-    @Override
-    public boolean hasMeleeItem() {
-        //We don't need this lol
-        return false;
-    }
-
-    @Override
-    public float getAttackRange(boolean isUsingTalentedWeapon) {
-        return 4;
-    }
-
-    @Override
-    public boolean shouldUseNonVanillaAttack(LivingEntity target) {
-        ItemStack MainHandItem = this.getMainHandItem();
-
-        if(this.getTalentedWeaponList().contains(MainHandItem.getItem())){
-            return true;
-        }
-
-        this.SwitchItem();
-        return false;
-    }
-
-    @Override
-    public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        target.hurt(DamageSource.mobAttack(this), damage*4);
-    }
-
-    @Override
-    public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
-        this.StartedMeleeAttackTimeStamp = this.tickCount;
-    }
-
-    @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
-        if(!this.getCommandSenderWorld().isClientSide() && this.tickCount%200 == 0) {
-            if (!this.gaveSheath && this.getAffection()>90){
-
-                if(this.getOwner() instanceof PlayerEntity){
-                    this.giveSheath((PlayerEntity) this.getOwner());
-                }
-            }
-        }
-
-        if(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(true) && this.getMainHandItem().getItem() == registerItems.EXCALIBUR.get()){
-            int swapindex = this.getItemSwapIndex(MAIN_HAND);
-            if(swapindex>-1){
-                this.setItemInHand(MAIN_HAND, this.getInventory().extractItem(swapindex, this.getInventory().getStackInSlot(swapindex).getCount(), false));
-                this.setItemSwapIndexMainHand(-1);
-            }
-            else{
-                this.setItemInHand(MAIN_HAND, ItemStack.EMPTY);
-            }
-        }
-    }
-
-    private void giveSheath(PlayerEntity player) {
-        ItemStack stack = new ItemStack(registerItems.EXCALIBUR_SHEATH.get());
-        stack.getOrCreateTag().putUUID("owner", this.getUUID());
-        if(player.inventory.add(stack)){
-            this.gaveSheath = true;
-        }
-    }
-
-    @Override
-    protected void onAffectionChange(float prevValue, float afterValue, PlayerEntity owner) {
-        if(prevValue<90 && afterValue <=90){
-            if(!this.gaveSheath) {
-                this.giveSheath(owner);
-            }
-        }
     }
 
     @Override
@@ -265,11 +164,6 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     }
 
     @Override
-    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
-        return PlayState.STOP;
-    }
-
-    @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
@@ -333,42 +227,67 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
         return enums.CompanionRarity.STAR_5;
     }
 
-    public static AttributeModifierMap.MutableAttribute MutableAttribute()
-    {
-        return MobEntity.createMobAttributes()
-                //Attribute
-                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ArtoriaMovementSpeed.get())
-                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ArtoriaSwimSpeed.get())
-                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.ArtoriaHealth.get())
-                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ArtoriaAttackDamage.get())
-                .add(Attributes.ARMOR, 15F)
-                ;
+    @Override
+    public int MeleeAttackAnimationLength() {
+        return 0;
     }
 
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT compound) {
-        super.readAdditionalSaveData(compound);
-        boolean gavesheath = compound.getBoolean("gavesheath");
-        this.gaveSheath = gavesheath;
+    public ArrayList<Integer> getAttackDamageDelay() {
+        return new ArrayList<>();
     }
 
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT compound) {
-        boolean gaveSheath = this.gaveSheath;
-        compound.putBoolean("gavesheath", gaveSheath);
-        super.addAdditionalSaveData(compound);
+    public ArrayList<Item> getTalentedWeaponList() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public boolean hasMeleeItem() {
+        return false;
+    }
+
+    @Override
+    public float getAttackRange(boolean isUsingTalentedWeapon) {
+        return 5;
+    }
+
+    @Override
+    public boolean shouldUseNonVanillaAttack(LivingEntity target) {
+        return false;
+    }
+
+    @Override
+    public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
+        target.hurt(DamageSource.mobAttack(this), damage*4);
+    }
+
+    @Override
+    public void StartMeleeAttackingEntity() {
+
     }
 
     @Override
     public enums.SERVANT_CLASSES getServantClass() {
-        return enums.SERVANT_CLASSES.SABER;
+        return enums.SERVANT_CLASSES.LANCER;
     }
 
     @Nonnull
     @Override
     public ItemStack createWeaponStack() {
-        ItemStack stack = new ItemStack(registerItems.EXCALIBUR.get());
-        stack.getOrCreateTag().putUUID("owner", this.getUUID());
-        return stack;
+        return ItemStack.EMPTY;
     }
+
+    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    {
+        return MobEntity.createMobAttributes()
+                //Attribute
+                .add(Attributes.MOVEMENT_SPEED, PAConfig.CONFIG.ScathathMovementSpeed.get())
+                .add(ForgeMod.SWIM_SPEED.get(), PAConfig.CONFIG.ScathathSwimSpeed.get())
+                .add(Attributes.MAX_HEALTH, PAConfig.CONFIG.ScathathHealth.get())
+                .add(Attributes.ATTACK_DAMAGE, PAConfig.CONFIG.ScathathAttackDamage.get())
+                .add(Attributes.ARMOR, 4F)
+                ;
+    }
+
 }

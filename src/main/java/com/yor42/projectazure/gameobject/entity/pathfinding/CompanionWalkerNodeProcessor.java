@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.pathfinding;
 
+import net.minecraft.block.CarpetBlock;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
@@ -25,10 +26,15 @@ public class CompanionWalkerNodeProcessor extends WalkNodeProcessor {
     @Override
     public PathNodeType getBlockPathType(IBlockReader world, int p_186330_2_, int p_186330_3_, int p_186330_4_) {
         PathNodeType superValue = super.getBlockPathType(world, p_186330_2_, p_186330_3_, p_186330_4_);
-        if(superValue == PathNodeType.OPEN && world.getBlockState(new BlockPos(p_186330_2_, p_186330_3_, p_186330_4_).below()).getBlock().is(BlockTags.CLIMBABLE)){
-            superValue = PathNodeType.WALKABLE;
+        if(superValue == PathNodeType.OPEN) {
+            if (world.getBlockState(new BlockPos(p_186330_2_, p_186330_3_, p_186330_4_).below()).getBlock().is(BlockTags.CLIMBABLE)) {
+                superValue = PathNodeType.WALKABLE;
 
-        };
+            }
+            else if(world.getBlockState(new BlockPos(p_186330_2_, p_186330_3_, p_186330_4_)).getBlock() instanceof CarpetBlock){
+                superValue = PathNodeType.WALKABLE;
+            }
+        }
         return superValue;
     }
 
