@@ -325,6 +325,7 @@ public class registerItems {
             .stacksTo(1)));
     public static final RegistryObject<Item> SLEDGEHAMMER = ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = ITEMS.register("claymore", ItemClaymore::new);
+    public static final RegistryObject<Item> GAE_BOLG = ITEMS.register("gae_bolg", () -> new GaebolgItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));
 
     public static final RegistryObject<Item> COMMANDING_STICK = ITEMS.register("commanding_stick", ItemCommandStick::new);
 

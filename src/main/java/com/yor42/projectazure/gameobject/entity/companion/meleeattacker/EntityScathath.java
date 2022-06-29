@@ -9,12 +9,14 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -31,7 +33,9 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 
+import static com.yor42.projectazure.setup.register.registerItems.GAE_BOLG;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class EntityScathath extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
@@ -229,17 +233,17 @@ public class EntityScathath extends AbstractEntityCompanion implements IMeleeAtt
 
     @Override
     public int MeleeAttackAnimationLength() {
-        return 0;
+        return 37;
     }
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>();
+        return new ArrayList<>(Collections.singletonList(19));
     }
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>();
+        return new ArrayList<>(Collections.singletonList(GAE_BOLG.get()));
     }
 
     @Override
@@ -252,8 +256,31 @@ public class EntityScathath extends AbstractEntityCompanion implements IMeleeAtt
         return 5;
     }
 
+
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(true) && this.getMainHandItem().getItem() == GAE_BOLG.get()){
+            int swapindex = this.getItemSwapIndex(MAIN_HAND);
+            if(swapindex>-1){
+                this.setItemInHand(MAIN_HAND, this.getInventory().extractItem(swapindex, this.getInventory().getStackInSlot(swapindex).getCount(), false));
+                this.setItemSwapIndexMainHand(-1);
+            }
+            else{
+                this.setItemInHand(MAIN_HAND, ItemStack.EMPTY);
+            }
+        }
+    }
+
     @Override
     public boolean shouldUseNonVanillaAttack(LivingEntity target) {
+        ItemStack MainHandItem = this.getMainHandItem();
+
+        if(this.getTalentedWeaponList().contains(MainHandItem.getItem())){
+            return true;
+        }
+
+        this.SwitchItem();
         return false;
     }
 
@@ -264,7 +291,8 @@ public class EntityScathath extends AbstractEntityCompanion implements IMeleeAtt
 
     @Override
     public void StartMeleeAttackingEntity() {
-
+        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
+        this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
 
     @Override
@@ -275,7 +303,7 @@ public class EntityScathath extends AbstractEntityCompanion implements IMeleeAtt
     @Nonnull
     @Override
     public ItemStack createWeaponStack() {
-        return ItemStack.EMPTY;
+        return new ItemStack(GAE_BOLG.get());
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
