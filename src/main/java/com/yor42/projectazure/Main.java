@@ -55,6 +55,7 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 import java.util.stream.Stream;
 
+import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
 import static com.yor42.projectazure.libs.Constants.MODID;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -140,11 +141,9 @@ public class Main
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        ProjectileManager.getInstance().registerFactory(registerItems.DUMMYAMMO_RAILGUN.get(), (worldIn, entity, weapon, item, modifiedGun) -> {
-            return new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F);
-        });
+        ProjectileManager.getInstance().registerFactory(registerItems.DUMMYAMMO_RAILGUN.get(), (worldIn, entity, weapon, item, modifiedGun) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F));
         if (ModList.get().isLoaded("theoneprobe")) TOPCompat.register();
-        if(ModList.get().isLoaded("curios")) CuriosCompat.init();
+        if(ModList.get().isLoaded(CURIOS_MODID)) CuriosCompat.sendImc(event);
     }
 
     private void processIMC(final InterModProcessEvent event)

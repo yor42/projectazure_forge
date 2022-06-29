@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityType;
 public class Constants {
 
     public static final String MODID = "projectazure";
+    public static final String CURIOS_MODID = "curios";
 
     //Starter ID
     public static final EntityType<?>[] StarterList = {

@@ -43,30 +43,6 @@ public class ProjectAzurePlayerCapability {
         this.player = null;
     }
 
-    public int getOffHandFireDelay() {
-        return this.OffHandFireDelay;
-    }
-
-    public int getMainHandFireDelay() {
-        return this.MainHandFireDelay;
-    }
-
-    public void setOffHandFireDelay(int leftHandFireDelay) {
-        this.OffHandFireDelay = leftHandFireDelay;
-    }
-
-    public void setMainHandFireDelay(int rightHandFireDelay) {
-        this.MainHandFireDelay = rightHandFireDelay;
-    }
-
-    public void setDelay(Hand handIn, int delay){
-        if (handIn == Hand.MAIN_HAND) {
-            setMainHandFireDelay(delay);
-        } else {
-            setOffHandFireDelay(delay);
-        }
-    }
-
     public ArrayList<AbstractEntityCompanion> getCompanionList(){
         return this.companionList;
     }
@@ -77,10 +53,6 @@ public class ProjectAzurePlayerCapability {
 
     public void removeCompanion(AbstractEntityCompanion companion){
         this.companionList.remove(companion);
-    }
-
-    public int getDelay(Hand handIn){
-        return handIn == Hand.MAIN_HAND? this.getMainHandFireDelay():getOffHandFireDelay();
     }
 
     public static ProjectAzurePlayerCapability getCapability(@Nonnull PlayerEntity player){
@@ -121,8 +93,6 @@ public class ProjectAzurePlayerCapability {
 
     public CompoundNBT serializeNBT(){
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putInt("mainHandDelay", this.getMainHandFireDelay());
-        nbt.putInt("offHandDelay", this.getOffHandFireDelay());
         ListNBT entityList = new ListNBT();
         for(AbstractEntityCompanion companion: this.companionList){
             entityList.add(companion.serializeNBT());
@@ -132,8 +102,6 @@ public class ProjectAzurePlayerCapability {
     }
 
     public void deserializeNBT(CompoundNBT compound){
-        this.setMainHandFireDelay(compound.getInt("mainHandDelay"));
-        this.setMainHandFireDelay(compound.getInt("offHandDelay"));
         ListNBT entities = compound.getList("companions", Constants.NBT.TAG_COMPOUND);
         for(int i=0; i<entities.size(); i++){
             CompoundNBT nbt = entities.getCompound(i);
