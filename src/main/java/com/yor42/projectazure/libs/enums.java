@@ -99,11 +99,22 @@ public class enums {
     }
 
     public enum SERVANT_CLASSES{
-        SABER("servantclass.saber"),
-        LANCER("servantclass.lancer");
+        SABER("servantclass.saber", 227, 227),
+        LANCER("servantclass.lancer", 227, 197);
         private final String translationkey;
-        SERVANT_CLASSES(String translationkey){
+        private final int iconx, icony;
+        SERVANT_CLASSES(String translationkey, int iconx, int icony){
             this.translationkey = translationkey;
+            this.iconx = iconx;
+            this.icony = icony;
+        }
+
+        public int getIconx() {
+            return iconx;
+        }
+
+        public int getIcony() {
+            return icony;
         }
 
         public String getTranslationkey() {
@@ -280,9 +291,6 @@ public class enums {
     }
 
     public enum AmmoCalibur{
-        AMMO_5_56,
-        AMMO_45,
-        AMMO_9MM,
         TORPEDO,
         DRONE_MISSILE
     }

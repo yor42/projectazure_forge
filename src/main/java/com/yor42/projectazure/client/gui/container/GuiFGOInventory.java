@@ -72,7 +72,9 @@ public class GuiFGOInventory extends ContainerScreen<ContainerFGOInventory> {
         matrixStack.pushPose();
         float renderscale = 0.5F;
         matrixStack.scale(renderscale, renderscale, renderscale);
-        this.blit(matrixStack, (int) ((this.leftPos+32)/renderscale), (int) ((this.topPos+111)/renderscale), 227, 227, 28, 28);
+        if(this.host instanceof IFGOServant) {
+            this.blit(matrixStack, (int) ((this.leftPos + 32) / renderscale), (int) ((this.topPos + 111) / renderscale), ((IFGOServant) this.host).getServantClass().getIconx(), ((IFGOServant) this.host).getServantClass().getIcony(), 28, 28);
+        }
         matrixStack.popPose();
 
     }
