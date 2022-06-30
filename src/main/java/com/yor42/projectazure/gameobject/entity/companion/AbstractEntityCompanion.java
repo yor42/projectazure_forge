@@ -38,6 +38,7 @@ import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
+import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.DirectionUtil;
@@ -2755,7 +2756,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 ItemStack stack = player.getItemInHand(hand).copy();
                 EquipmentSlotType type = getEquipmentSlotForItem(stack);
                 ItemStack EquippedStack = this.getItemBySlot(type).copy();
-                if (stack.canEquip(type, this)) {
+                if(!(type == EquipmentSlotType.MAINHAND || type == EquipmentSlotType.OFFHAND) && this instanceof IFGOServant){
+                    return ActionResultType.FAIL;
+                }
+                else if (stack.canEquip(type, this)) {
                     this.setItemSlot(type, stack);
                     if (stack == this.getItemBySlot(type)) {
                         player.setItemInHand(hand, EquippedStack);
@@ -2809,7 +2813,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         if(this.getOathSound()!= null) {
                             this.playSound(this.getOathSound(), 1.0f, 1.0f);
                         }
-                        return ActionResultType.CONSUME;
+                        return ActionResultType.SUCCESS;
                     }
                 }
             } else if (heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()) {
