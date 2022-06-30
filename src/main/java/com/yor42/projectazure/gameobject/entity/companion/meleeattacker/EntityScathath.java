@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -114,7 +115,7 @@ public class EntityScathath extends AbstractEntityCompanion implements IMeleeAtt
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_arm_idle", true));
+                event.getController().setAnimation(builder.addAnimation("sit_arm", false).addAnimation("sit_arm_idle", true));
             }
             return PlayState.CONTINUE;
         }
@@ -287,6 +288,7 @@ public class EntityScathath extends AbstractEntityCompanion implements IMeleeAtt
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(DamageSource.mobAttack(this), damage*4);
+        target.knockback(0.12F, MathHelper.sin(this.yRot * ((float)Math.PI / 180F)), -MathHelper.cos(this.yRot * ((float)Math.PI / 180F)));
     }
 
     @Override

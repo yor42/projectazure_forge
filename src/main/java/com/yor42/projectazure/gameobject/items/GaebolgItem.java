@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.extensions.IForgeItem;
 
 public class GaebolgItem extends Item {
 
@@ -26,8 +27,8 @@ public class GaebolgItem extends Item {
         this.defaultModifiers = builder.build();
     }
 
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType p_111205_1_) {
-        return p_111205_1_ == EquipmentSlotType.MAINHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(p_111205_1_);
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType p_111205_1_, ItemStack stack) {
+        return p_111205_1_ == EquipmentSlotType.MAINHAND || p_111205_1_ == EquipmentSlotType.OFFHAND ? this.defaultModifiers : super.getDefaultAttributeModifiers(p_111205_1_);
     }
 
     public boolean canAttackBlock(BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {

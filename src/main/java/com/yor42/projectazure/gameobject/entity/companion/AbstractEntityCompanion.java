@@ -64,6 +64,7 @@ import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.ai.controller.MovementController;
+import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -105,6 +106,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.extensions.IForgeItem;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -832,7 +834,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public float getAttackDamageMainHand(){
-        return this.getAttackDamageForStack(this.getMainHandItem());
+        ModifiableAttributeInstance instance = this.getAttribute(Attributes.ATTACK_DAMAGE);
+        return instance == null? 0: (float) instance.getValue();
     }
 
     public float getAttackDamageOffHand(){
@@ -841,20 +844,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public float getAttackDamageForStack(ItemStack stack){
         Item item = stack.getItem();
+        float dmg;
         if(item instanceof TieredItem){
-            float dmg;
             if(item instanceof SwordItem){
                 dmg =((SwordItem) item).getDamage();
             }
             else {
                 dmg = ((TieredItem) item).getTier().getAttackDamageBonus();
             }
-            ModifiableAttributeInstance instance = this.getAttribute(Attributes.ATTACK_DAMAGE);
-            float basedmg = instance == null? 0: (float) instance.getValue();
-            return basedmg+dmg;
         }
-
-        return 1F;
+        else {
+            dmg = (float) item.getAttributeModifiers(EquipmentSlotType.MAINHAND, stack).get(Attributes.ATTACK_DAMAGE).stream().findFirst().get().getAmount();
+        }
+        return dmg;
     }
 
     public int getAngerWarningCount(){
@@ -2318,21 +2320,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.getBrain().eraseMemory(WALK_TARGET);
                 @Nullable
                 LivingEntity target = this.getBrain().getMemory(ATTACK_TARGET).orElse(null);
-                if(this.isSprinting()){
-                    this.setSprinting(false);
-                }
-                this.getBrain().setMemory(LOOK_TARGET, Optional.ofNullable(target == null?null:new EntityPosWrapper(target, true)));
                 this.setMeleeAttackDelay(currentspelldelay - 1);
-                int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
-                if (!((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().isEmpty() && ((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().contains(delay)) {
-                    this.playMeleeAttackPreSound();
-                }
-                if (target!= null && ((IMeleeAttacker) this).getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {
-                    this.AttackCount += 1;
-                    ((IMeleeAttacker) this).PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
+                if(target!=null) {
+                    if (this.isSprinting()) {
+                        this.setSprinting(false);
+                    }
+                    this.getBrain().setMemory(LOOK_TARGET, Optional.of(new EntityPosWrapper(target, true)));
+                    this.lookAt(target, 30.0F, 30.0F);
+                    int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
+                    if (!((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().isEmpty() && ((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().contains(delay)) {
+                        this.playMeleeAttackPreSound();
+                    }
+                    if (((IMeleeAttacker) this).getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {
+                        this.AttackCount += 1;
+                        ((IMeleeAttacker) this).PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
+                    }
                 }
 
             } else if (this.AttackCount > 0) {
+                this.getBrain().eraseMemory(LOOK_TARGET);
                 this.AttackCount = 0;
             }
         }
