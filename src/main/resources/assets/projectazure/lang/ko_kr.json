@@ -102,6 +102,9 @@
   "item.projectazure.claymore.tooltip": "강철 합금으로 만든 말도 안되게 큰 클레이모어.\n이걸 어떻게 들고 다녀야 할 지 감도 안 옵니다.",
   "item.projectazure.sledgehammer": "슬레지해머",
 
+  "item.projectazure.excalibur": "엑스칼리버",
+  "item.projectazure.excalibur_sheath": "아발론",
+
   "item.projectazure.stasis_crystal": "안정화 수정",
 
   "item.projectazure.defib_paddle": "제세동기 패들",
@@ -111,6 +114,7 @@
   "item.projectazure.defib_charger.tooltip": "빈사 상태의 동료를 부활시키는데 사용되는 제세동기 본체입니다.",
 
   "item.projectazure.whitefang465": "WHITE FANG 465",
+  "item.projectazure.sangvis_railgun": "SF-2815 에너지 포",
 
   "item.projectazure.missiledrone": "미사일 드론",
 
@@ -160,6 +164,7 @@
   "tooltip.companion.maxhealth": "최대 체력",
   "tooltip.companion.name": "엔티티: ",
   "tooltip.companion.cost": "부활 비용: %s",
+  "tooltip.energygun.remainingenergy": "잔여 에너지: %s",
 
   "item.projectazure.spawnegg.spawn": "생성: ",
 
@@ -207,6 +212,16 @@
   "block.projectazure.originium_solution": "오리지늄 수용액",
   "block.projectazure.machine_component": "기계 부품",
 
+  "block.projectazure.oak_pantry": "참나무 식품 저장고",
+  "block.projectazure.acacia_pantry": "아카시아나무 식품 저장고",
+  "block.projectazure.birch_pantry": "자작나무 식품 저장고",
+  "block.projectazure.spruce_pantry": "가문비나무 식품 저장고",
+  "block.projectazure.jungle_pantry": "정글 나무 식품 저장고",
+  "block.projectazure.dark_oak_pantry": "짙은 참나무 식품 저장고",
+  "block.projectazure.warped_pantry": "뒤틀린 식품 저장고",
+  "block.projectazure.crimson_pantry": "진홍빛 식품 저장고",
+
+
   "originium_generator.name": "오리지늄 반응로",
   "ammo_press.name": "탄약 압착기",
 
@@ -229,6 +244,8 @@
   "gui.morale": "사기",
   "gui.selectstarter.title": "초기함을 선택해주세요",
   "gui.shipinventory": "함선 보관함",
+  "gui.servantinventory": "서번트 보관함.",
+  "gui.servantprofile": "프로필",
   "gui.companioninventory": "보관함",
 
   "gui.current_morale_level": "현재 사기",
@@ -249,6 +266,11 @@
 
   "gui.tooltip.itempickup.off": "아이템을 줍지 않습니다",
   "gui.tooltip.itempickup.on": "주변에 있는 아이템을 줍습니다",
+
+  "gui.fgo.hunger": "허기: %s",
+  "gui.fgo.bond": "인연:",
+  "gui.fgo.morale": "사기: %s",
+  "gui.fgo.health": "체력: %s",
 
   "gui.ammostorage.title": "탄약고",
 
@@ -280,7 +302,7 @@
 
   "affection.disappointed": "실망",
   "affection.stranger": "낯섦",
-  "affection.friendly": "호김",
+  "affection.friendly": "호감",
   "affection.crush": "친밀",
   "affection.love": "사랑",
   "affection.oath": "서약",
@@ -292,6 +314,8 @@
   "rarity.ur": "극도로 희귀",
   "rarity.leg": "전설",
   "rarity.sp": "특수",
+
+  "servantclass.saber": "세이버",
 
   "operator.vanguard": "뱅가드",
   "operator.sniper": "스나이퍼",
@@ -307,7 +331,9 @@
   "akn_reunion": "리유니온 / 명일방주",
   "bluearchive": "블루 아카이브",
   "al_kansen": "함선소녀 / 벽람항로",
+  "kc_kanmusu": "함선소녀 / 함대 컬렉션",
   "gfl_tdoll": "전술인형 / 소녀전선",
+  "fgo_servant": "서번트 / 페이트/그랜드 오더",
 
   "entity.projectazure.entityayanami": "IJN 아야나미",
   "entity.projectazure.entityjavelin": "HMS 재블린",
@@ -336,6 +362,9 @@
   "entity.projectazure.entityschwarz": "슈바르츠",
   "entity.projectazure.entitynearl": "니어",
   "entity.projectazure.entityyato": "야토",
+
+  "entity.projectazure.entityartoria": "아르토리아 펜드래건",
+  "entity.projectazure.entityyscathath": "스카사하",
 
   "entity.projectazure.missiledrone": "미사일 드론",
 
@@ -385,6 +414,8 @@
   "nether_quartz": "네더 석영",
   "originium": "오리지늄",
 
+  "message.energyguns.gun.ammo.energy": "포지 에너지",
+
   "recruit_beacon": "모집 신호기",
   "tile.drydock": "드라이독",
   "metal_press": "유압 프레스",
@@ -405,6 +436,8 @@
   "message.stasiscrystal.notenoughlevel": "레벨이 부족합니다: 해당 엔티티를 소환하려면 %s 레벨이 필요합니다.",
   "message.stasiscrystal.cost": "레벨이 부족합니다: 해당 엔티티를 소환하려면 %s 레벨이 필요합니다.",
   "message.stasiscrystal.notowner": "당신은 이 엔티티의 주인이 아닙니다! 소유자: %s.",
+
+  "message.energyguns.gun.notenoughenergy": "에너지가 부족합니다!",
 
   "death.attack.bonk": "%1$s이(가) 백병원으로 보내졌습니다.",
 
@@ -445,7 +478,5 @@
 
   "recipe.alloying": "Alloying",
   "recipe.pressing": "Pressing",
-  "recipe.crystalizing": "Crystalizing",
-  "gui.tooltip.homepos": "현재 침대 위치",
-  "item.projectazure.abydos550": "화이트팽 465"
+  "recipe.crystalizing": "Crystalizing"
 }

@@ -88,8 +88,6 @@ public class MixinSplashManager {
         entries.add("ON 20% SALE! (No, not really.)");
         entries.add("LET THE BASS KICK");
         entries.add("That's not very cash money of you.");
-        entries.add("Say NO to 1.19.1!");
-        entries.add("Say NO to Censorship!");
         entries.add("Turing complete!");
         entries.add("look ma! I'm in the video game!");
         entries.add("Aw dang! here we go again.");
