@@ -30,7 +30,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
 
     //We do some hacky shit to prevent crash when other mod also overrides this. thanks Domi.
     @SuppressWarnings({"UnresolvedMixinReference", "MixinAnnotationTarget"})
-    @Inject(method = {"positionRider", "func_226266_a_"}, at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = {"positionRider", "func_184232_k"}, at = @At("HEAD"), remap = false, cancellable = true)
     private void onPositionRider(Entity entity, CallbackInfo cir){
         if(entity instanceof AbstractEntityCompanion){
             float entityhorizontalOffset = -0.5F;

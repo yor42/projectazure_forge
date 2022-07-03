@@ -24,9 +24,7 @@ version = '0.6.2'
 group = 'com.yor42.projecrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-mixin {
-    add sourceSets.main, "projectazure.refmap.json"
-}
+
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -228,7 +226,7 @@ jar {
         attributes([
             "Specification-Title": "projectazure",
             "Specification-Vendor": "yor42",
-            "MixinConfigs": "mixin.projectazsure.json",
+            "MixinConfigs": "mixin.projectazure.json",
             "Specification-Version": "0.00.1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
