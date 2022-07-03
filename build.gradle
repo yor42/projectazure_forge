@@ -20,7 +20,7 @@ apply plugin: 'maven-publish'
 //we mix some ins
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.6.0'
+version = '0.6.2'
 group = 'com.yor42.projecrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -47,8 +47,6 @@ minecraft {
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            arg "-mixin.config=mixin.projectazure.json"
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
@@ -70,7 +68,6 @@ minecraft {
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            arg "-mixin.config=mixin.projectazure.json"
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // Recommended logging level for the console
@@ -88,7 +85,6 @@ minecraft {
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            arg "-mixin.config=mixin.projectazure.json"
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             // Recommended logging level for the console
@@ -166,8 +162,6 @@ dependencies {
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-1.16.5:${geckolib_version}")
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
-    //Due to some gradle fuckery you need to remove TaC and Multiblocked from buildscript to get Datagen working
-
     //TaC
     implementation fg.deobf('curse.maven:obfuscate-289380:3740120')
     implementation fg.deobf('curse.maven:timeless-and-classics-491264:3854371')
@@ -219,6 +213,15 @@ dependencies {
 
 }
 
+mixin {
+    // MixinGradle Settings
+    add sourceSets.main, 'projectazure.refmap.json'
+    config 'mixin.projectazure.json'
+
+    debug.verbose = true
+    debug.export = true
+}
+
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
@@ -226,7 +229,6 @@ jar {
             "Specification-Title": "projectazure",
             "Specification-Vendor": "yor42",
             "MixinConfigs": "mixin.projectazsure.json",
-            "MixinConnector": "com.yor42.projectazure.MixinConnector",
             "Specification-Version": "0.00.1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
