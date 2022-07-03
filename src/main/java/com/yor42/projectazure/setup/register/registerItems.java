@@ -425,6 +425,11 @@ public class registerItems {
             .tab(PA_COMPANIONS)));
     public static final RegistryObject<Item> SPAWN_SCATHATH = ITEMS.register("spawnscathath", () -> new ItemCompanionSpawnEgg<>(registerEntity.SCATHATH, new Item.Properties()
             .tab(PA_COMPANIONS)));
+    public static final RegistryObject<Item> SPAWN_SHIKI = ITEMS.register("spawnshiki", () -> new ItemCompanionSpawnEgg<>(registerEntity.SHIKI, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
+    public static final RegistryObject<Item> SPAWN_KYARU = ITEMS.register("spawnkyaru", () -> new ItemCompanionSpawnEgg<>(registerEntity.KYARU, new Item.Properties()
+            .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> BANDAGE_ROLL = ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()
             .tab(PA_GROUP)));

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.mixin;
 
+import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.util.Splashes;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
@@ -57,6 +58,9 @@ public class MixinSplashManager {
         entries.add("NOOT NOOT");
         entries.add("Based!");
         entries.add("10/10 -yor42");
+        entries.add("가즈아ㅏㅏㅏㅏㅏ");
+        entries.add("Are ya ready kids?");
+        entries.add("NANOBLOCKS, SON!");
         entries.add(":pogchamp:");
         entries.add("So we back in the mine");
         entries.add("Got our pickaxe swingin' from side to side");
@@ -100,6 +104,11 @@ public class MixinSplashManager {
         entries.add("ᗜˬᗜ");
         entries.add("STANDING HERE I REALIZE");
         entries.add("I Approb");
+        entries.add("#Saveminecraft");
+        entries.add("MOJANG KEEP YOUR NOSE OUT OF MY SERVER");
+        entries.add("My server, my rule!");
+        entries.add("Get out of my server mojang!");
+        entries.add("Techno Never Dies!");
         entries.add("Nice.");
 
 
@@ -110,7 +119,11 @@ public class MixinSplashManager {
     private void getSplash(CallbackInfoReturnable<String> cir){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        if(calendar.get(Calendar.MONTH) + 1 == 9 && calendar.get(Calendar.DATE) == 18){
+
+        if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY && MathUtil.rand.nextFloat()<=0.33F){
+            cir.setReturnValue("It's Wednesday, My dudes!");
+        }
+        else if(calendar.get(Calendar.MONTH) + 1 == 9 && calendar.get(Calendar.DATE) == 18){
             cir.setReturnValue("Happy birthday, yor42!");
         }
         else if(calendar.get(Calendar.MONTH) + 1 == 8 && calendar.get(Calendar.DATE) == 1){

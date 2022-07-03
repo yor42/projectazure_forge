@@ -122,13 +122,13 @@ public class ContainerAKNInventory extends Container {
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            int i = 6;
-            int entityinv = i+12;
+            int equipments = 6;
+            int entityinv = equipments+12;
             int ammoinv = entityinv+8;
             int playerMainInv = ammoinv + 27;
             int PlayerHotbar = playerMainInv + 9;
-            if (index < i) {
-                if (!this.moveItemStackTo(itemstack1, i, this.slots.size(), true)) {
+            if (index < equipments) {
+                if (!this.moveItemStackTo(itemstack1, equipments, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (this.getSlot(2).mayPlace(itemstack1) && !this.getSlot(2).hasItem()) {
@@ -157,20 +157,17 @@ public class ContainerAKNInventory extends Container {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!this.moveItemStackTo(itemstack1, 6, entityinv, false)) {
-                if (index >= playerMainInv && index < PlayerHotbar) {
-                    if (!this.moveItemStackTo(itemstack1, i, playerMainInv, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index < playerMainInv) {
-                    if (!this.moveItemStackTo(itemstack1, playerMainInv, PlayerHotbar, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (!this.moveItemStackTo(itemstack1, playerMainInv, playerMainInv, false)) {
+            else if (!this.moveItemStackTo(itemstack1, equipments, entityinv, false)) {
+                return ItemStack.EMPTY;
+            }
+            else if (index >= playerMainInv && index < PlayerHotbar) {
+                if (!this.moveItemStackTo(itemstack1, equipments, playerMainInv, false)) {
                     return ItemStack.EMPTY;
                 }
-
-                return ItemStack.EMPTY;
+            } else if (index < playerMainInv) {
+                if (!this.moveItemStackTo(itemstack1, playerMainInv, PlayerHotbar, false)) {
+                    return ItemStack.EMPTY;
+                }
             }
 
             if (itemstack1.isEmpty()) {

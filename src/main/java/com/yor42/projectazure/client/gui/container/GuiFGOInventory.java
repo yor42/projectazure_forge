@@ -2,6 +2,7 @@ package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerFGOInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IFGOServant;
@@ -32,8 +33,8 @@ public class GuiFGOInventory extends ContainerScreen<ContainerFGOInventory> {
     public GuiFGOInventory(ContainerFGOInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
         this.host = p_i51105_1_.companion;
-        this.imageWidth = 210;
-        this.imageHeight = 228;
+        this.imageWidth = 203;
+        this.imageHeight = 231;
     }
 
     @Override
@@ -143,32 +144,11 @@ public class GuiFGOInventory extends ContainerScreen<ContainerFGOInventory> {
         this.font.draw(p_230451_1_, (int)this.host.getAffection()+"/"+(int)this.host.getmaxAffection(), 83+bondwidth+10,63.25F,0xffffff);
     }
 
-
-
-    private void switchBehavior() {
-        if(Screen.hasShiftDown()){
-            this.host.clearHomePos();
-        }
-        else {
-            this.host.SwitchFreeRoamingStatus();
-        }
-    }
-
-    private void switchItemBehavior() {
-        this.host.SwitchItemBehavior();
-    }
-    private void switchAttackBehavior() {
-        this.host.SwitchPassiveAttack();
-    }
-
     private void renderButton(){
         if(!this.populated) {
-            int homeModeX = this.host.isFreeRoaming() ? 228 : 242;
-            int itemModeX = this.host.shouldPickupItem() ? 228 : 242;
-            int attackmodeX = this.host.shouldAttackFirst() ? 228 : 242;
-            Button homebutton = new ImageButton(this.leftPos + 4, this.topPos + 16, 14, 14, homeModeX, 0, 14, TEXTURE, action -> switchBehavior());
-            Button itembutton = new ImageButton(this.leftPos + 4, this.topPos + 31, 14, 14, itemModeX, 28, 14, TEXTURE, action -> switchItemBehavior());
-            Button attackbehaviorbutton = new ImageButton(this.leftPos + 4, this.topPos + 46, 14, 14, attackmodeX, 56, 14, TEXTURE, action -> switchAttackBehavior());
+            Button homebutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 16, 14, 14, 242, 0, -14,14, TEXTURE,EntityStatusButton.ACTIONTYPES.FREEROAM);
+            Button itembutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 31, 14, 14, 242, 28, -14,14, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM);
+            Button attackbehaviorbutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 46, 14, 14, 242, 56, -14,14, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE);
 
             this.addButton(homebutton);
             this.addButton(itembutton);

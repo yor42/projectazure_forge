@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "projectazure:energy_hatch"
+          "name": "projectazure:oak_pantry"
         }
       ],
       "conditions": [

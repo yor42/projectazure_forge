@@ -194,12 +194,13 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    protected void preRenderBlock(BlockState block, String boneName, T currentEntity) {
+    protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, T currentEntity) {
 
     }
 
     @Override
-    protected void postRenderBlock(BlockState block, String boneName, T currentEntity) {
+    protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, T currentEntity) {
+
     }
 
     protected GeoCompanionRenderer(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {

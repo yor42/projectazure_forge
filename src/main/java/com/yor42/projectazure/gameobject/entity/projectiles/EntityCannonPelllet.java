@@ -19,6 +19,8 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nonnull;
+
 public class EntityCannonPelllet extends DamagingProjectileEntity {
 
     AmmoProperties properties;
@@ -52,10 +54,6 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     @Override
     public boolean isOnFire() {
         return false;
-    }
-
-    @Override
-    protected void defineSynchedData() {
     }
 
     public AmmoProperties getProperties() {
@@ -113,6 +111,7 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
         return false;
     }
 
+    @Nonnull
     @Override
     public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);

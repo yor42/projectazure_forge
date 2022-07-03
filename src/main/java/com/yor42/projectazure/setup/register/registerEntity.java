@@ -11,6 +11,7 @@ import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
+import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityKyaru;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntitySylvi;
 import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
@@ -52,10 +53,10 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityArtsProjectile>> PROJECTILE_ARTS = ENTITIES.register("entityartsprojectile", () -> EntityType.Builder.<EntityArtsProjectile>of(EntityArtsProjectile::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("projectilearts").toString()));
     //projectile
     public static final RegistryObject<EntityType<EntityCannonPelllet>> PROJECTILE_CANNONSHELL = ENTITIES.register("entitycannonshell", () -> EntityType.Builder.<EntityCannonPelllet>of(EntityCannonPelllet::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString()));
-
+    public static final RegistryObject<EntityType<EntitySpellBall>> PROJECTILE_SPELLBALL = ENTITIES.register("entityspellball", () -> EntityType.Builder.<EntitySpellBall>of(EntitySpellBall::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("projectilespellball").toString()));
 
     public static final RegistryObject<EntityType<EntityArtoria>> ARTORIA = ENTITIES.register("entityartoria", () -> EntityType.Builder.of(EntityArtoria::new, EntityClassification.CREATURE).sized(0.572F, 1.54F).build(ModResourceLocation("entityartoria").toString()));
-    public static final RegistryObject<EntityType<EntityScathath>> SCATHATH = ENTITIES.register("entityyscathath", () -> EntityType.Builder.of(EntityScathath::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityscathath").toString()));
+    public static final RegistryObject<EntityType<EntityScathath>> SCATHATH = ENTITIES.register("entityscathath", () -> EntityType.Builder.of(EntityScathath::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityscathath").toString()));
     public static final RegistryObject<EntityType<EntityYamato>> YAMATO = ENTITIES.register("entityyamato", () -> EntityType.Builder.of(EntityYamato::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityyamato").toString()));
     public static final RegistryObject<EntityType<EntitySylvi>> SYLVI = ENTITIES.register("entitysylvi", () -> EntityType.Builder.of(EntitySylvi::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityschwarz").toString()));
     public static final RegistryObject<EntityType<EntityNearl>> NEARL = ENTITIES.register("entitynearl", () -> EntityType.Builder.of(EntityNearl::new, EntityClassification.CREATURE).sized(0.572F, 1.71F).build(ModResourceLocation("entitynearl").toString()));
@@ -80,7 +81,8 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityZ23>> Z23 = ENTITIES.register("entityz23", () -> EntityType.Builder.of(EntityZ23::new, EntityClassification.CREATURE).sized(0.572F, 1.525F).build(ModResourceLocation("entityz23").toString()));
     public static final RegistryObject<EntityType<EntityJavelin>> JAVELIN = ENTITIES.register("entityjavelin", () -> EntityType.Builder.of(EntityJavelin::new, EntityClassification.CREATURE).sized(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString()));
     public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> EntityType.Builder.of(EntityAyanami::new, EntityClassification.CREATURE).sized(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString()));
-
+    public static final RegistryObject<EntityType<EntityKyaru>> KYARU = ENTITIES.register("entitykyaru", () -> EntityType.Builder.of(EntityKyaru::new, EntityClassification.CREATURE).sized(0.572F, 1.52F).build(ModResourceLocation("entitykyaru").toString()));
+    public static final RegistryObject<EntityType<EntityShiki>> SHIKI = ENTITIES.register("entityshiki", () -> EntityType.Builder.of(EntityShiki::new, EntityClassification.CREATURE).sized(0.572F, 1.6F).build(ModResourceLocation("entityshiki").toString()));
     @SubscribeEvent
     public static void RegisterAttributes(EntityAttributeCreationEvent event){
         event.put(AYANAMI.get(), EntityAyanami.MutableAttribute().build());
@@ -112,6 +114,8 @@ public class registerEntity {
         event.put(YATO.get(), EntityYato.MutableAttribute().build());
         event.put(ARTORIA.get(), EntityArtoria.MutableAttribute().build());
         event.put(SCATHATH.get(), EntityArtoria.MutableAttribute().build());
+        event.put(KYARU.get(), EntityKyaru.MutableAttribute().build());
+        event.put(SHIKI.get(), EntityShiki.MutableAttribute().build());
     }
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderer(){
@@ -141,9 +145,12 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.ARTORIA.get(), EntityArtoriaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.SCATHATH.get(), EntityScathathRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.NEARL.get(), EntityNearlRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.KYARU.get(), EntityKyaruRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SHIKI.get(), EntityShikiRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_CANNONSHELL.get(), entityCannonPelletRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_SPELLBALL.get(), EntitySpellBallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_RAILGUN.get(), EntityRailgunProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_TORPEDO.get(), EntityProjectileTorpedoRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_ARTS.get(), EntityArtsProjectileRenderer::new);

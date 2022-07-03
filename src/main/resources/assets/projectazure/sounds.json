@@ -677,7 +677,7 @@
         "name": "projectazure:entity/akn/mudrock/voice/voice7"
       },
       {
-        "name": "projectazure:entity/akn/mudrock/voice/voice_aff1"
+        "name": "projectazure:entity/akn/mudrock/voice/aff1"
       }
     ]
   },
@@ -705,10 +705,10 @@
         "name": "projectazure:entity/akn/mudrock/voice/voice7"
       },
       {
-        "name": "projectazure:entity/akn/mudrock/voice/voice_aff1"
+        "name": "projectazure:entity/akn/mudrock/voice/aff1"
       },
       {
-        "name": "projectazure:entity/akn/mudrock/voice/voice_aff2"
+        "name": "projectazure:entity/akn/mudrock/voice/aff2"
       }
     ]
   },
@@ -736,13 +736,13 @@
         "name": "projectazure:entity/akn/mudrock/voice/voice7"
       },
       {
-        "name": "projectazure:entity/akn/mudrock/voice/voice_aff1"
+        "name": "projectazure:entity/akn/mudrock/voice/aff1"
       },
       {
-        "name": "projectazure:entity/akn/mudrock/voice/voice_aff2"
+        "name": "projectazure:entity/akn/mudrock/voice/aff2"
       },
       {
-        "name": "projectazure:entity/akn/mudrock/voice/voice_aff3"
+        "name": "projectazure:entity/akn/mudrock/voice/aff3"
       }
     ]
   },
@@ -815,7 +815,7 @@
         "name": "projectazure:entity/akn/rosmontis/voice/voice6"
       },
       {
-        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff1"
+        "name": "projectazure:entity/akn/rosmontis/voice/aff1"
       }
     ]
   },
@@ -840,10 +840,10 @@
         "name": "projectazure:entity/akn/rosmontis/voice/voice6"
       },
       {
-        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff1"
+        "name": "projectazure:entity/akn/rosmontis/voice/aff1"
       },
       {
-        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff2"
+        "name": "projectazure:entity/akn/rosmontis/voice/aff2"
       }
     ]
   },
@@ -868,13 +868,13 @@
         "name": "projectazure:entity/akn/rosmontis/voice/voice6"
       },
       {
-        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff1"
+        "name": "projectazure:entity/akn/rosmontis/voice/aff1"
       },
       {
-        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff2"
+        "name": "projectazure:entity/akn/rosmontis/voice/aff2"
       },
       {
-        "name": "projectazure:entity/akn/rosmontis/voice/voice_aff3"
+        "name": "projectazure:entity/akn/rosmontis/voice/aff3"
       }
     ]
   },
@@ -1424,39 +1424,39 @@
   "m4a1_talk_normal": {
     "sounds": [
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/voice1"
+        "name": "projectazure:entity/gfl/m4a1/voice1"
       },
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/voice2"
+        "name": "projectazure:entity/gfl/m4a1/voice2"
       },
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/voice3"
+        "name": "projectazure:entity/gfl/m4a1/voice3"
       }
     ]
   },
   "m4a1_talk_pat": {
     "sounds": [
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/pat/pat1"
+        "name": "projectazure:entity/gfl/m4a1/pat/pat1"
       },
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/pat/pat2"
+        "name": "projectazure:entity/gfl/m4a1/pat/pat2"
       },
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/pat/pat3"
+        "name": "projectazure:entity/gfl/m4a1/pat/pat3"
       }
     ]
   },
   "m4a1_talk_attack": {
     "sounds": [
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/attack1"
+        "name": "projectazure:entity/gfl/m4a1/attack1"
       },
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/attack2"
+        "name": "projectazure:entity/gfl/m4a1/attack2"
       },
       {
-        "name": "projectazure:entity/gfl/m4a1/voice/attack3"
+        "name": "projectazure:entity/gfl/m4a1/attack3"
       }
     ]
   },
@@ -2331,7 +2331,7 @@
         "name": "projectazure:entity/al/z23/voice5"
       },
       {
-        "name": "projectazure:entity/al/z23/love"
+        "name": "projectazure:entity/al/z23/crush"
       }
     ]
   },

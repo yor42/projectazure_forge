@@ -46,6 +46,7 @@ public class registerRecipes {
         private static <T extends IRecipe<?>> RegistryObject<IRecipeSerializer<T>> register_special_recipe(String name, Supplier<IRecipeSerializer<T>> serializer){
             return RECIPE_SERIALIZERS.register(name, serializer);
         }
+        public static void register(){};
     }
 
 

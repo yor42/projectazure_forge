@@ -24,6 +24,7 @@ public class RegisterContainer {
     public static final RegistryObject<ContainerType<ContainerGFLInventory>> GFL_CONTAINER = CONTAINER.register("girlsfrontline_inventory", () -> new ContainerType<>((IContainerFactory<ContainerGFLInventory>)ContainerGFLInventory::new));
     public static final RegistryObject<ContainerType<ContainerAKNInventory>> AKN_CONTAINER = CONTAINER.register("arknights_inventory", () -> new ContainerType<>((IContainerFactory<ContainerAKNInventory>)ContainerAKNInventory::new));
     public static final RegistryObject<ContainerType<ContainerFGOInventory>> FGO_CONTAINER = CONTAINER.register("fategrandorder_inventory", () -> new ContainerType<>((IContainerFactory<ContainerFGOInventory>)ContainerFGOInventory::new));
+    public static final RegistryObject<ContainerType<ContainerPCRInventory>> PCR_CONTAINER = CONTAINER.register("priconne_inventory", () -> new ContainerType<>((IContainerFactory<ContainerPCRInventory>)ContainerPCRInventory::new));
     public static final RegistryObject<ContainerType<ContainerBAInventory>> BA_CONTAINER = CONTAINER.register("bluearchive_inventory", () -> new ContainerType<>((IContainerFactory<ContainerBAInventory>)ContainerBAInventory::new));
     public static final RegistryObject<ContainerType<RiggingContainer>> RIGGING_INVENTORY = CONTAINER.register("rigging_inventory", () -> new ContainerType<>((IContainerFactory<RiggingContainer>)RiggingContainer::new));
     //Container

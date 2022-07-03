@@ -254,7 +254,7 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
         if(target.isAlive()){
             double x = target.getX() - (this.getX());
-            double y = target.getY(0.5) - (this.getY(0.7));
+            double y = target.getEyeHeight() - (this.getY(0.7));
             double z = target.getZ() - (this.getZ());
 
             EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this);

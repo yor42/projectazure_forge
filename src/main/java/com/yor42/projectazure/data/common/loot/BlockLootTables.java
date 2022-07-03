@@ -1,8 +1,11 @@
 package com.yor42.projectazure.data.common.loot;
 
+import com.lowdragmc.multiblocked.api.block.BlockComponent;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerMultiBlocks;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantments;
@@ -33,7 +36,14 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
 
         this.dropSelf(registerBlocks.MACHINE_COMPONENTBLOCK.get());
         this.dropSelf(registerBlocks.MACHINE_DYNAMO.get());
-        //this.dropSelf(registerBlocks.ORIGINIUM_GENERATOR_CONTROLLER.get());
+        this.dropSelf(registerBlocks.CRIMSON_PANTRY.get());
+        this.dropSelf(registerBlocks.OAK_PANTRY.get());
+        this.dropSelf(registerBlocks.SPRUCE_PANTRY.get());
+        this.dropSelf(registerBlocks.ACACIA_PANTRY.get());
+        this.dropSelf(registerBlocks.BIRCH_PANTRY.get());
+        this.dropSelf(registerBlocks.JUNGLE_PANTRY.get());
+        this.dropSelf(registerBlocks.DARK_OAK_PANTRY.get());
+        this.dropSelf(registerBlocks.WARPED_PANTRY.get());
 
         this.add(registerBlocks.METAL_PRESS.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
         this.add(registerBlocks.BASIC_REFINERY.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
@@ -51,7 +61,7 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
     @Override
     protected Iterable<Block> getKnownBlocks() {
         return ForgeRegistries.BLOCKS.getValues().stream()
-                .filter(block -> Constants.MODID.equals(block.getRegistryName().getNamespace()))
+                .filter(block -> Constants.MODID.equals(block.getRegistryName().getNamespace()) && !(block instanceof BlockComponent))
                 .collect(Collectors.toSet());
     }
 }

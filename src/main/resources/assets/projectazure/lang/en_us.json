@@ -273,6 +273,11 @@
   "gui.fgo.morale": "Morale: %s",
   "gui.fgo.health": "HP: %s",
 
+  "gui.pcr.hunger": "Fd.",
+  "gui.pcr.affection": "Aff.",
+  "gui.pcr.morale": "Mor.",
+  "gui.pcr.level": "Lv.",
+
   "gui.ammostorage.title": "Ammo",
 
   "gui.kansen_ammostorage_usage": "Ammo Storage Usage",
@@ -366,7 +371,10 @@
   "entity.projectazure.entityyato": "Yato",
 
   "entity.projectazure.entityartoria": "Artoria Pendragon",
-  "entity.projectazure.entityyscathath": "Scáthach",
+  "entity.projectazure.entityscathath": "Scáthach",
+  "entity.projectazure.entityshiki": "Ryougi Shiki",
+
+  "entity.projectazure.entitykyaru": "Kyaru",
 
   "entity.projectazure.missiledrone": "Missile Drone",
 

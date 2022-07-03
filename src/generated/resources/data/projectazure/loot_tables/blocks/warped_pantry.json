@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "projectazure:item_hatch"
+          "name": "projectazure:warped_pantry"
         }
       ],
       "conditions": [

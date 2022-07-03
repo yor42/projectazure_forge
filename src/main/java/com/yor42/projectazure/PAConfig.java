@@ -156,6 +156,16 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue ScathathAttackDamage;
         public final ForgeConfigSpec.DoubleValue ScathathMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue ShikiHealth;
+        public final ForgeConfigSpec.DoubleValue ShikiSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue ShikiAttackDamage;
+        public final ForgeConfigSpec.DoubleValue ShikiMovementSpeed;
+
+        public final ForgeConfigSpec.DoubleValue KyaruHealth;
+        public final ForgeConfigSpec.DoubleValue KyaruSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue KyaruAttackDamage;
+        public final ForgeConfigSpec.DoubleValue KyaruMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -363,6 +373,17 @@ public class PAConfig {
             ScathathSwimSpeed = builder.defineInRange("Swim Speed of Scathath", 2.5, 0, 1024);
             ScathathAttackDamage = builder.defineInRange("Attack Damage of Scathath" , 2.0F, 0, 1024);
             ScathathMovementSpeed = builder.defineInRange("Movement speed of Scathath", 0.3F, 0, 2);
+
+            ShikiHealth = builder.defineInRange("Max Health of Shiki", 30D, 1, 1024);
+            ShikiSwimSpeed = builder.defineInRange("Swim Speed of Shiki", 2.5, 0, 1024);
+            ShikiAttackDamage = builder.defineInRange("Attack Damage of Shiki" , 2.0F, 0, 1024);
+            ShikiMovementSpeed = builder.defineInRange("Movement speed of Shiki", 0.3F, 0, 2);
+
+            builder.pop().push("Princess Connect: REDIVE");
+            KyaruHealth = builder.defineInRange("Max Health of Kyaru", 20D, 1, 1024);
+            KyaruSwimSpeed = builder.defineInRange("Swim Speed of Kyaru", 2.5, 0, 1024);
+            KyaruAttackDamage = builder.defineInRange("Attack Damage of Kyaru", 2.0F, 0, 1024);
+            KyaruMovementSpeed = builder.defineInRange("Movement speed of Kyaru", 0.3F, 0, 2);
 
             builder.pop().push("Girl's Frontline");
             M4A1Health = builder.defineInRange("Max Health of M4A1", 40D, 1, 1024);

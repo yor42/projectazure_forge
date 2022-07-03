@@ -99,6 +99,7 @@ public class enums {
     }
 
     public enum SERVANT_CLASSES{
+        ASSASSIN("servantclass.assassin", 227, 227),
         SABER("servantclass.saber", 227, 227),
         LANCER("servantclass.lancer", 227, 197);
         private final String translationkey;
@@ -256,7 +257,7 @@ public class enums {
         TDOLL("gfl_tdoll"),
         BLUEARCHIVE("bluearchive"),
         OPERATOR("akn_operator"),
-        ELEMENTS("gi_elements"),
+        PRICONNE("pc_characters"),
         REUNION("akn_reunion"),
         SERVANT("fgo_servant"),
         CLOSER("cls_closer");

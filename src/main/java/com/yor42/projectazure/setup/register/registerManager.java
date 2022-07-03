@@ -15,6 +15,8 @@ public class registerManager {
         registerBiomes.register();
         registerPotionEffects.register();
         registerRecipes.register();
+        registerRecipes.Types.register();
+        registerRecipes.Serializers.register();
         RegisterAI.register();
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
         registerEntity.ENTITIES.register(eventbus);

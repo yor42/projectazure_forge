@@ -125,9 +125,6 @@ public class itemModelProvider extends ItemModelProvider {
         buildSimpleBlockModel("machine_component");
         buildSimpleBlockModel("machine_dynamo");
 
-        buildSimpleBlockModel("item_hatch");
-        buildSimpleBlockModel("fluid_hatch");
-        buildSimpleBlockModel("energy_hatch");
         buildSimpleBlockModel("originium_generator_controller");
 
         buildSimpleBlockModel("machine_frame");
@@ -175,6 +172,14 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelAKN("spawnschwarz");
         buildModelAKN("spawnlappland");
         buildModelAKN("spawnnearl");
+        buildModelAKN("spawnyato");
+
+        buildModelFGO("spawnshiki");
+        buildModelFGO("spawnartoria");
+        buildModelFGO("spawnscathath");
+
+        buildModelPCR("spawnkyaru");
+
 
         buildModelcls("spawnsylvi");
 
@@ -224,6 +229,14 @@ public class itemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder buildModelAKN(String ItemName){
         return buildModelWithSingleTex(ItemName, "akn_document");
+    }
+
+    private ItemModelBuilder buildModelPCR(String ItemName){
+        return buildModelWithSingleTex(ItemName, "goddess_stone");
+    }
+
+    private ItemModelBuilder buildModelFGO(String ItemName){
+        return buildModelWithSingleTex(ItemName, "saint_quartz");
     }
 
     private ItemModelBuilder buildModelRUN(String ItemName){

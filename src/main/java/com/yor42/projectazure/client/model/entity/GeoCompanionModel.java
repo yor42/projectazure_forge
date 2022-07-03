@@ -23,6 +23,8 @@ import static net.minecraft.util.Hand.MAIN_HAND;
 
 public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> extends AnimatedGeoModel<E> {
 
+    public GeoCompanionModel(){}
+
     protected int blinkinterval = 0;
     protected long LastBlinkTime = 0;
 
