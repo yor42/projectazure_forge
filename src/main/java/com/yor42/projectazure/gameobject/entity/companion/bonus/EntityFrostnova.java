@@ -6,7 +6,7 @@ import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
+import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
@@ -251,7 +251,7 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
 
             EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this, 8F, new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 1));
             projectile.shoot(x,y,z, 1.1F, 0.05F);
-            projectile.setPos(this.getX(), this.getY(0.7), this.getZ());
+            projectile.setPos(this.getX(), this.getY()+1, this.getZ());
             this.getCommandSenderWorld().addFreshEntity(projectile);
 
             this.playSound(registerSounds.CHIMERA_PROJECTILE_LAUNCH, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);

@@ -11,10 +11,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -60,10 +57,9 @@ public class EntityArtsProjectile extends DamagingProjectileEntity {
     }
 
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
         BlockPos blockPosIn = this.blockPosition();
         Random random = new Random();
-        super.onHit(result);
         if(!this.getCommandSenderWorld().getBlockState(blockPosIn).isPathfindable(this.getCommandSenderWorld(), blockPosIn, PathType.AIR)) {
             for (int i2 = 0; i2 < 8; ++i2) {
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE, (double) blockPosIn.getX() + random.nextDouble(), (double) blockPosIn.getY() + 1.2D, (double) blockPosIn.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);

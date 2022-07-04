@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.companion.meleeattacker;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
+import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;

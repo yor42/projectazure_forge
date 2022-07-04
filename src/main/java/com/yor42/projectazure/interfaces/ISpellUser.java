@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.entity.companion.magicuser;
+package com.yor42.projectazure.interfaces;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
@@ -18,7 +18,6 @@ public interface ISpellUser {
     int getProjectilePreAnimationDelay();
     Hand getSpellUsingHand();
     boolean shouldUseSpell();
-    void setSpellDelay(int delay);
 
     void ShootProjectile(World world, @Nonnull LivingEntity target);
     void StartShootingEntityUsingSpell(LivingEntity target);

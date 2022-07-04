@@ -18,31 +18,24 @@ public interface IFGOServant {
     enums.SERVANT_CLASSES getServantClass();
 
     default boolean SwitchItem(){
-        ItemStack MainHandItem = this.getMainHandItem();
-        if(MainHandItem.isEmpty()){
-            this.setItemInHand(MAIN_HAND, this.createWeaponStack());
-            return true;
-        }
-
-        for(int i=0;i<this.getInventory().getSlots(); i++){
-            if(this.getInventory().insertItem(i, MainHandItem, true).isEmpty()){
-                this.getInventory().insertItem(i, MainHandItem, false);
-                this.setItemInHand(MAIN_HAND, this.createWeaponStack());
-                this.setItemSwapIndexMainHand(i);
+        if(this instanceof AbstractEntityCompanion) {
+            ItemStack MainHandItem = (((AbstractEntityCompanion) this).getMainHandItem());
+            if (MainHandItem.isEmpty()) {
+                ((AbstractEntityCompanion) this).setItemInHand(MAIN_HAND, this.createWeaponStack());
                 return true;
             }
-        }
 
+            for (int i = 0; i < ((AbstractEntityCompanion) this).getInventory().getSlots(); i++) {
+                if (((AbstractEntityCompanion) this).getInventory().insertItem(i, MainHandItem, true).isEmpty()) {
+                    ((AbstractEntityCompanion) this).getInventory().insertItem(i, MainHandItem, false);
+                    ((AbstractEntityCompanion) this).setItemInHand(MAIN_HAND, this.createWeaponStack());
+                    ((AbstractEntityCompanion) this).setItemSwapIndexMainHand(i);
+                    return true;
+                }
+            }
+        }
         return false;
     }
     @Nonnull
     ItemStack createWeaponStack();
-
-    void setItemSwapIndexMainHand(int i);
-
-    IItemHandler getInventory();
-
-    void setItemInHand(Hand mainHand, ItemStack stack);
-
-    ItemStack getMainHandItem();
 }

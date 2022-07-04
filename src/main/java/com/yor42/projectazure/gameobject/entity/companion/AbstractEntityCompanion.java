@@ -26,7 +26,7 @@ import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
-import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
+import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -39,6 +39,7 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.interfaces.IFGOServant;
+import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.DirectionUtil;
@@ -65,7 +66,6 @@ import net.minecraft.entity.ai.brain.schedule.Activity;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.RangedBowAttackGoal;
 import net.minecraft.entity.item.BoatEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -107,7 +107,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.extensions.IForgeItem;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -2199,8 +2198,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     setSpellDelay(currentspelldelay - 1);
                     int delay = this.tickCount - this.StartedSpellAttackTimeStamp;
-                    if (delay == ((ISpellUser)this).getProjectilePreAnimationDelay()) {
-                        if(target!=null) {
+                    if(target!=null) {
+                        if (delay == ((ISpellUser) this).getProjectilePreAnimationDelay()) {
+                            this.lookAt(target, 30F, 30F);
                             ((ISpellUser) this).ShootProjectile(this.getCommandSenderWorld(), target);
                         }
                     }

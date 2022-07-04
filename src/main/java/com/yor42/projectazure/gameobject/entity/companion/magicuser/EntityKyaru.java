@@ -276,7 +276,7 @@ public class EntityKyaru extends AbstractCompanionMagicUser {
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
         if(target.isAlive()){
             double x = target.getX() - (this.getX());
-            double y = target.getEyeHeight() - (this.getY(0.7));
+            double y = target.getEyeY() - (this.getY(0.7));
             double z = target.getZ() - (this.getZ());
 
             EntitySpellBall projectile = new EntitySpellBall(this.getCommandSenderWorld(), this);

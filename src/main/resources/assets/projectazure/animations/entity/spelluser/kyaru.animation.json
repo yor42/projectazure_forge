@@ -4990,6 +4990,80 @@
 				}
 			}
 		},
+		"sit_leg_idle": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"Body": {
+					"position": {
+						"vector": [0, -25, 0]
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"vector": [-105, 0, 0]
+					}
+				},
+				"RightLowerLeg": {
+					"rotation": {
+						"vector": [65, 0, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": [-72.5, 0, -2.5]
+					}
+				},
+				"LeftLowerLeg": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"waist": {
+					"rotation": {
+						"vector": [-17.5, 0, 0]
+					}
+				},
+				"tail": {
+					"rotation": {
+						"vector": [67.5, 0, 0],
+						"easing": "easeInOutSine"
+					}
+				},
+				"tail2": {
+					"rotation": {
+						"vector": [21.23499, 9.93191, -14.48174],
+						"easing": "easeInOutSine"
+					}
+				},
+				"tail3": {
+					"rotation": {
+						"vector": [14.66541, 1.2497, -29.97638],
+						"easing": "easeInOutSine"
+					}
+				},
+				"tail4": {
+					"rotation": {
+						"vector": [1.56505, 14.47751, -26.56505],
+						"easing": "easeInOutSine"
+					}
+				},
+				"tail5": {
+					"rotation": {
+						"vector": [-7.54256, 0.65182, -34.97178],
+						"easing": "easeInOutSine"
+					}
+				},
+				"tail6": {
+					"rotation": {
+						"vector": [-24.60886, -1.34295, -32.47528],
+						"easing": "easeInOutSine"
+					}
+				}
+			}
+		},
 		"walk_leg": {
 			"loop": true,
 			"animation_length": 0.84,

@@ -282,6 +282,16 @@ public class CompanionTasks {
         if (!companion.getBrain().isActive(AVOID)) {
             if (EntityPredicates.ATTACK_ALLOWED.test(target)) {
                 if (hasWeapon(companion, target) && (companion.getOwner() == null || companion.wantsToAttack(target, companion.getOwner()))) {
+
+                    if(companion.getVehicle() != null){
+                        if(companion.getVehicle() == companion.getOwner()){
+                            return;
+                        }
+                        else{
+                            companion.stopRiding();
+                        }
+                    }
+
                     if (!BrainUtil.isOtherTargetMuchFurtherAwayThanCurrentAttackTarget(companion, target, 4.0D) || (companion.getBrain().getMemory(ATTACK_TARGET).isPresent() && target instanceof MonsterEntity && ((MonsterEntity) target).getTarget() == companion && (!(companion.getBrain().getMemory(ATTACK_TARGET).get() instanceof MonsterEntity)|| ((MonsterEntity)companion.getBrain().getMemory(ATTACK_TARGET).get()).getTarget() !=companion) )) {
                         setAttackTarget(companion, target);
                         broadcastAttackTarget(companion, target);

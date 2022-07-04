@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.magicuser.ISpellUser;
+import com.yor42.projectazure.interfaces.ISpellUser;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;

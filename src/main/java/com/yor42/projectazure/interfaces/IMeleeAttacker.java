@@ -1,5 +1,6 @@
-package com.yor42.projectazure.gameobject.entity.companion;
+package com.yor42.projectazure.interfaces;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,16 +34,18 @@ public interface IMeleeAttacker {
 
     boolean shouldUseNonVanillaAttack(LivingEntity target);
     default boolean isTalentedWeaponinMainHand(){
-        return isTalentedWeapon(getMainHandItem());
+        if(this instanceof AbstractEntityCompanion) {
+        return isTalentedWeapon(((AbstractEntityCompanion)this).getMainHandItem());
+        }
+        return false;
     }
 
     default boolean isDuelWielding(){
-        return isTalentedWeapon(this.getMainHandItem()) && isTalentedWeapon(getOffhandItem());
+        if(this instanceof AbstractEntityCompanion) {
+            return isTalentedWeapon(((AbstractEntityCompanion)this).getMainHandItem()) && isTalentedWeapon(((AbstractEntityCompanion)this).getOffhandItem());
+        }
+        return false;
     }
-
-    ItemStack getMainHandItem();
-
-    ItemStack getOffhandItem();
 
     default boolean isTalentedWeapon(ItemStack stack){
         return getTalentedWeaponList().contains(stack.getItem());

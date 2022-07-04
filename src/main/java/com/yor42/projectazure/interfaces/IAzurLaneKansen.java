@@ -1,28 +1,26 @@
 package com.yor42.projectazure.interfaces;
 
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.util.SoundEvent;
 
 public interface IAzurLaneKansen {
     default enums.ALAffection affectionValuetoEnum(){
-        if(this.getAffection()>=100.0D){
-            if(this.isOathed())
-                return enums.ALAffection.OATH;
-            else
-                return enums.ALAffection.LOVE;
+        if(this instanceof AbstractEntityCompanion) {
+            if (((AbstractEntityCompanion) this).getAffection() >= 100.0D) {
+                if (((AbstractEntityCompanion) this).isOathed())
+                    return enums.ALAffection.OATH;
+                else
+                    return enums.ALAffection.LOVE;
+            } else if (((AbstractEntityCompanion) this).getAffection() > 80) {
+                return enums.ALAffection.CRUSH;
+            } else if (((AbstractEntityCompanion) this).getAffection() > 60) {
+                return enums.ALAffection.FRIENDLY;
+            } else if (((AbstractEntityCompanion) this).getAffection() > 30) {
+                return enums.ALAffection.STRANGER;
+            }
         }
-        else if(this.getAffection()>80 && this.getAffection()<100){
-            return enums.ALAffection.CRUSH;
-        }
-        else if(this.getAffection()>60 && this.getAffection()<=80){
-            return enums.ALAffection.FRIENDLY;
-        }
-        else if(this.getAffection()>30 && this.getAffection()<=60){
-            return enums.ALAffection.STRANGER;
-        }
-        else{
-            return enums.ALAffection.DISAPPOINTED;
-        }
+        return enums.ALAffection.DISAPPOINTED;
     }
 
     default SoundEvent getDisappointedAmbientSound(){
@@ -44,7 +42,5 @@ public interface IAzurLaneKansen {
     default SoundEvent getLoveAmbientSound(){
         return null;
     }
-    
-    boolean isOathed();
-    float getAffection();
+
 }

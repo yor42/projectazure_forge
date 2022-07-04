@@ -6,7 +6,7 @@ import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerFGOInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.IMeleeAttacker;
+import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.Minecraft;
@@ -31,7 +31,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
