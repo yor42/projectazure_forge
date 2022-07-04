@@ -34,6 +34,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -302,10 +303,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         return this.canUseRigging() && (canUseCannon(this.getRigging()) || canUseTorpedo(this.getRigging()));
     }
 
-    public ItemStackHandler getCannonShellStorage() {
-        return this.AmmoStorage;
-    }
-
     public boolean canUseShell(enums.AmmoCategory types){
         return findAmmo(types) != ItemStack.EMPTY;
     }
@@ -333,7 +330,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 double z = target.getZ() - (this.getZ());
                 AmmoProperties properties = ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty();
                 EntityCannonPelllet shell = new EntityCannonPelllet(this.level, this, 0, 0, 0, properties);
-                shell.setPos(this.getX(), this.getY(0.5), this.getZ());
+                Vector3d offset = new Vector3d(-0.5F,0,0).yRot(this.yBodyRot);
+                shell.setPos(this.getX()+offset.x, this.getY(0.5)+offset.y, this.getZ()+offset.z);
                 shell.shoot(x,y,z, 1F, 0.05F);
                 this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
                 this.level.addFreshEntity(shell);

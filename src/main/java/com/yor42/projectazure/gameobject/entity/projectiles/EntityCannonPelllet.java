@@ -10,10 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -23,18 +20,15 @@ import javax.annotation.Nonnull;
 
 public class EntityCannonPelllet extends DamagingProjectileEntity {
 
-    AmmoProperties properties;
-    BlockPos originPos;
-
-    public EntityCannonPelllet(World worldIn, AmmoProperties ammotype){
-        super(registerEntity.PROJECTILE_CANNONSHELL.get(),worldIn);
-        this.properties = ammotype;
-    }
+    private AmmoProperties properties;
+    private LivingEntity shooter;
+    private BlockPos originPos;
 
     public EntityCannonPelllet(World worldIn, LivingEntity shooter, double accelX, double accelY, double accelZ, AmmoProperties properties){
         super(registerEntity.PROJECTILE_CANNONSHELL.get(), shooter, accelX, accelY, accelZ, worldIn);
         this.properties = properties;
-        this.originPos = new BlockPos(shooter.getX(), shooter.getY(0.5), shooter.getZ());
+        this.shooter = shooter;
+        this.originPos = shooter.blockPosition();
     }
 
     public EntityCannonPelllet(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
@@ -61,10 +55,9 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     }
 
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
+        super.onHitBlock(p_230299_1_);
         if(this.properties != null) {
-            super.onHit(result);
-
             if (!this.level.isClientSide()) {
 
                 if (this.properties.ShouldDamageMultipleComponent()) {
@@ -79,11 +72,17 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     @Override
     protected void onHitEntity(EntityRayTraceResult result) {
         Entity target = result.getEntity();
-        double DistanceMultiplier = Math.min(400/distanceToSqr(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
-        if(this.properties != null) {
-            if (target instanceof EntityKansenBase) {
-                ((EntityKansenBase) target).attackEntityFromCannon(DamageSources.causeCannonDamage(this, this.getOwner()), this.properties, DistanceMultiplier);
-            } else target.hurt(DamageSources.causeCannonDamage(this, this.getOwner()), (float) (this.properties.getMaxDamage() * 1.2));
+        if(target == this.shooter){
+            return;
+        }
+        if(!this.level.isClientSide()) {
+            double DistanceMultiplier = Math.min(400 / distanceToSqr(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0);
+            if (this.properties != null) {
+                if (target instanceof EntityKansenBase) {
+                    ((EntityKansenBase) target).attackEntityFromCannon(DamageSources.causeCannonDamage(this, this.getOwner()), this.properties, DistanceMultiplier);
+                } else
+                    target.hurt(DamageSources.causeCannonDamage(this, this.getOwner()), (float) (this.properties.getMaxDamage() * 1.2));
+            }
         }
         this.remove();
     }
