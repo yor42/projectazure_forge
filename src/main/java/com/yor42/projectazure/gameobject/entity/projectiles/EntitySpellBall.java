@@ -91,7 +91,6 @@ public class EntitySpellBall extends DamagingProjectileEntity {
     protected void onHitEntity(EntityRayTraceResult result) {
         Entity target = result.getEntity();
         if(target != this.getOwner() && target instanceof LivingEntity) {
-            LivingEntity LivingTarget = (LivingEntity)target;
             double DistanceMultiplier = this.originPos != null ? Math.min(25 / distanceToSqr(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0) : 1;
             target.hurt(DamageSource.MAGIC, (float) (5 * DistanceMultiplier));
 
