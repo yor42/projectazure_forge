@@ -323,6 +323,14 @@ public class registerItems {
             .tab(PA_WEAPONS)
             .rarity(Rarity.EPIC)
             .stacksTo(1)));
+
+    public static final RegistryObject<Item> KYARU_STAFF = ITEMS.register("kyarustaff", () -> new Item(new Item.Properties()
+            .tab(PA_WEAPONS)
+            .rarity(Rarity.UNCOMMON)
+            .stacksTo(1)));
+
+    public static final RegistryObject<Item> KITCHEN_KNIFE = ITEMS.register("kitchenknife", () -> new ModSwordItem(ModMaterials.KITCHEN_KNIFE, 1, -0.35F, new Item.Properties().tab(PA_WEAPONS)));
+
     public static final RegistryObject<Item> SLEDGEHAMMER = ITEMS.register("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = ITEMS.register("claymore", ItemClaymore::new);
     public static final RegistryObject<Item> GAE_BOLG = ITEMS.register("gae_bolg", () -> new GaebolgItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));

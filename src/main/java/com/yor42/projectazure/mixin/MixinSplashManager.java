@@ -58,7 +58,6 @@ public class MixinSplashManager {
         entries.add("NOOT NOOT");
         entries.add("Based!");
         entries.add("10/10 -yor42");
-        entries.add("가즈아ㅏㅏㅏㅏㅏ");
         entries.add("Are ya ready kids?");
         entries.add("NANOBLOCKS, SON!");
         entries.add(":pogchamp:");
@@ -99,9 +98,7 @@ public class MixinSplashManager {
         entries.add("Factories must grow!");
         entries.add("ARKNI- Wait wrong game.");
         entries.add("AZURU LA- Oh wait...");
-        entries.add("Project azure: <3 from south korea.");
         entries.add("E.");
-        entries.add("ᗜˬᗜ");
         entries.add("STANDING HERE I REALIZE");
         entries.add("I Approb");
         entries.add("#Saveminecraft");
@@ -140,9 +137,6 @@ public class MixinSplashManager {
         }
         else if(calendar.get(Calendar.MONTH) + 1 == 8 && calendar.get(Calendar.DATE) == 1){
             cir.setReturnValue("Happy birthday, Gab!");
-        }
-        else if(calendar.get(Calendar.MONTH) + 1 == 4 && calendar.get(Calendar.DATE) == 20){
-            cir.setReturnValue("◢◤ <3");
         }
         else if(calendar.get(Calendar.MONTH) + 1 == 1 && calendar.get(Calendar.DATE) == 16){
             cir.setReturnValue("Happy Arknights anniversary!");

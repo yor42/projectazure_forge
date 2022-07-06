@@ -38,7 +38,11 @@ public enum ModMaterials implements IItemTier {
     CRESCENT_KATANA_SHIRO(2, 540, 1F, 3, 3, () -> {
         return Ingredient.of(Tags.Items.INGOTS_IRON);}),
 
-    KNIFE(2, 500, 6.0F, 1.0F, 14, () -> {
+    KNIFE(2, 730, 6.0F, 2.0F, 3, () -> {
+        return Ingredient.of(ModTags.Items.INGOT_STEEL);
+    }),
+
+    KITCHEN_KNIFE(1, 600, 4.5F, 4.0F, 5, () -> {
         return Ingredient.of(Items.IRON_INGOT);
     });
 

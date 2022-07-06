@@ -1,7 +1,9 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
+import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
@@ -9,9 +11,7 @@ import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -72,6 +72,31 @@ public class EntitySpellBall extends DamagingProjectileEntity {
             this.remove();
         }
         this.remove();
+    }
+
+    @Override
+    protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
+        BlockPos blockPosIn = this.blockPosition();
+        Random random = new Random();
+        if(!this.getCommandSenderWorld().getBlockState(blockPosIn).isPathfindable(this.getCommandSenderWorld(), blockPosIn, PathType.AIR)) {
+            for (int i2 = 0; i2 < 8; ++i2) {
+                this.level.addParticle(ParticleTypes.PORTAL, (double) blockPosIn.getX() + random.nextDouble(), (double) blockPosIn.getY() + 1.2D, (double) blockPosIn.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+            }
+            this.remove();
+        }
+        this.remove();
+    }
+
+    @Override
+    protected void onHitEntity(EntityRayTraceResult result) {
+        Entity target = result.getEntity();
+        if(target != this.getOwner() && target instanceof LivingEntity) {
+            LivingEntity LivingTarget = (LivingEntity)target;
+            double DistanceMultiplier = this.originPos != null ? Math.min(25 / distanceToSqr(this.originPos.getX(), this.originPos.getY(), this.originPos.getZ()), 1.0) : 1;
+            target.hurt(DamageSource.MAGIC, (float) (5 * DistanceMultiplier));
+
+            this.remove();
+        }
     }
 
     @Override

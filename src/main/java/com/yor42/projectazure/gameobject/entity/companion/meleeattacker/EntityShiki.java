@@ -9,6 +9,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -286,7 +287,9 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
     @Nonnull
     @Override
     public ItemStack createWeaponStack() {
-        return ItemStack.EMPTY;
+        ItemStack stack = new ItemStack(registerItems.KITCHEN_KNIFE.get());
+        stack.getOrCreateTag().putUUID("owner", this.getUUID());
+        return stack;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

@@ -8,6 +8,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerPCRInventory
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntitySpellBall;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -269,7 +270,12 @@ public class EntityKyaru extends AbstractCompanionMagicUser {
 
     @Override
     public Hand getSpellUsingHand() {
-        return Hand.MAIN_HAND;
+        return Hand.OFF_HAND;
+    }
+
+    @Override
+    public boolean shouldUseSpell() {
+        return !isSwimming() && this.getMainHandItem().getItem() == registerItems.KYARU_STAFF.get();
     }
 
     @Override

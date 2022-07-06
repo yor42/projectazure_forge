@@ -20,13 +20,8 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
         this.StartedSpellAttackTimeStamp = this.tickCount;
     }
 
-    @Override
-    public ItemStack getItemInHand(Hand p_184586_1_) {
-        return super.getItemInHand(p_184586_1_);
-    }
-
     public boolean shouldUseSpell(){
-        return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
+        return this.getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
     };
 
 
