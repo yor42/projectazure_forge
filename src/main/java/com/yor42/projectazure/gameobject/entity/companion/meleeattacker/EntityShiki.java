@@ -32,6 +32,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
@@ -241,9 +242,10 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
         return list;
     }
 
+
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>();
+        return new ArrayList<>(Collections.singletonList(registerItems.KITCHEN_KNIFE.get()));
     }
 
     @Override
