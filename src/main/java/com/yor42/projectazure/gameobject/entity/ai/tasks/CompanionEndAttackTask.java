@@ -22,10 +22,8 @@ public class CompanionEndAttackTask extends Task<AbstractEntityCompanion> {
 
     protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
         p_212831_2_.getBrain().getMemory(ATTACK_TARGET).ifPresent((livingentity)->{
-            if (livingentity.getType() != EntityType.PLAYER || p_212831_1_.getGameRules().getBoolean(GameRules.RULE_FORGIVE_DEAD_PLAYERS)) {
-                p_212831_2_.getBrain().eraseMemory(ATTACK_TARGET);
-                p_212831_2_.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
-            }
+            p_212831_2_.getBrain().eraseMemory(ATTACK_TARGET);
+            p_212831_2_.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
         });
     }
 

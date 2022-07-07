@@ -2056,6 +2056,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.foodStats.setFoodLevel(this.foodStats.getFoodLevel() + 1);
             }
         }
+
         if (this.shieldCoolDown > 0) {
             --this.shieldCoolDown;
         }
@@ -2276,7 +2277,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.getEntityData().set(AFFECTION, 200F);
             }
         }
-        this.navigation.getNodeEvaluator().setCanPassDoors(this.canOpenDoor());
+
         this.navigation.getNodeEvaluator().setCanOpenDoors(this.canOpenDoor());
 
 

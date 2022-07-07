@@ -232,18 +232,6 @@ public class CompanionTasks {
         return livingEntity.isHolding(item -> item instanceof net.minecraft.item.CrossbowItem) || livingEntity.isHolding(item -> item instanceof BowItem);
     }
 
-    private static boolean isNearestValidAttackTarget(AbstractEntityCompanion p_234504_0_, LivingEntity p_234504_1_) {
-        return findNearestValidAttackTarget(p_234504_0_).filter((p_234483_1_) -> p_234483_1_ == p_234504_1_).isPresent();
-    }
-
-    private static Optional<? extends LivingEntity> findNearestValidAttackTarget(AbstractEntityCompanion p_234526_0_) {
-        Brain<AbstractEntityCompanion> brain = p_234526_0_.getBrain();
-        if(true){
-            return Optional.empty();
-        }
-        return brain.getMemory(MemoryModuleType.NEAREST_HOSTILE);
-    }
-
     private static Pair<Integer, Task<AbstractEntityCompanion>> getMinimalLookBehavior() {
         return Pair.of(5, new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new DummyTask(30, 60), 8))));
     }

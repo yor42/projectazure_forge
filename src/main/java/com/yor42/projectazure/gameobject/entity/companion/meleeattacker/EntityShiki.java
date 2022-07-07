@@ -16,6 +16,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -216,6 +217,21 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
         }
         event.getController().setAnimation(builder.addAnimation("idle_leg", true));
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(true) && this.getMainHandItem().getItem() == registerItems.KITCHEN_KNIFE.get()){
+            int swapindex = this.getItemSwapIndex(MAIN_HAND);
+            if(swapindex>-1){
+                this.setItemInHand(MAIN_HAND, this.getInventory().extractItem(swapindex, this.getInventory().getStackInSlot(swapindex).getCount(), false));
+                this.setItemSwapIndexMainHand(-1);
+            }
+            else{
+                this.setItemInHand(MAIN_HAND, ItemStack.EMPTY);
+            }
+        }
     }
 
     @Override
