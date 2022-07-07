@@ -2294,7 +2294,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
 
         if(this.isSleeping()) {
-            this.setDeltaMovement(new Vector3d(0, 0, 0));
             this.getSleepingPos().ifPresent((pos)->this.setPos((double)pos.getX() + 0.5D, (double)pos.getY() + 0.6875D, (double)pos.getZ() + 0.5D));
 
             if(this.tickCount %200 ==0){
