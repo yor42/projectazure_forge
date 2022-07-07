@@ -104,10 +104,6 @@ public class CompanionTasks {
                 new SleepAtHomeTask(),
                 new CompanionProtectOwnerTask(true),
                 new PickupWantedItemTask<>(AbstractEntityCompanion::shouldPickupItem, 0.5F, false, 4),
-                new FirstShuffledTask<>(ImmutableMap.of(MemoryModuleType.HOME, MemoryModuleStatus.VALUE_ABSENT),
-                        ImmutableList.of(Pair.of(new WalkToHouseTask(0.5F), 1),
-                                Pair.of(new WalkRandomlyInsideTask(0.5F), 4),
-                                Pair.of(new DummyTask(20, 40), 2))),
                 new FirstShuffledTask<>(ImmutableList.of(Pair.of(new LookAtEntityTask(EntityType.PLAYER, 8.0F), 2), Pair.of(new DummyTask(30, 60), 8)))
 
         ), RegisterAI.WAIT_POINT.get());
@@ -175,7 +171,7 @@ public class CompanionTasks {
     }
 
     private static void addRelaxActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivity(Activity.REST, getRestPackage(0.5F));
+        brain.addActivity(Activity.REST, getRestPackage(1F));
 
     }
 
@@ -209,6 +205,7 @@ public class CompanionTasks {
                 , Pair.of(3, new ExpirePOITask(PointOfInterestType.HOME, MemoryModuleType.HOME)),
                 Pair.of(3, new SleepAtHomeTask()),
                 Pair.of(2, new CompanionProtectOwnerTask(true)),
+
                 Pair.of(2, new PickupWantedItemTask<>(AbstractEntityCompanion::shouldPickupItem, 0.5F, false, 4)),
                 Pair.of(5, new FirstShuffledTask<>(ImmutableMap.of(MemoryModuleType.HOME, MemoryModuleStatus.VALUE_ABSENT),
                         ImmutableList.of(Pair.of(new WalkToHouseTask(p_220635_1_), 1),
@@ -219,9 +216,10 @@ public class CompanionTasks {
     }
 
     private static boolean shouldStrafe(LivingEntity livingEntity) {
-
-        if((livingEntity.isHolding((item)->item instanceof GunItem))){
-            return true;
+        if(livingEntity instanceof AbstractEntityCompanion) {
+            if ((livingEntity.isHolding((item) -> item instanceof GunItem)) && ((AbstractEntityCompanion) livingEntity).isUsingGun()) {
+                return true;
+            }
         }
 
         if(livingEntity instanceof EntityKansenBase){
