@@ -712,7 +712,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         });
 
         compound.put("status", NBT);
-
         compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
         compound.putBoolean("isforcewokenup", this.getEntityData().get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.getEntityData().get(EXP));
@@ -1732,11 +1731,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(INJURYCURETIMER, value);
     }
 
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() || this.isCriticallyInjured() || this.isSleeping();
-    }
-
     public boolean isCriticallyInjured(){
         return this.getInjuryCureTimer()>0;
     }
@@ -1744,8 +1738,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void setCriticallyinjured(boolean value){
         if(value){
             this.setInjurycuretimer(PAConfig.CONFIG.InjuredRecoveryTimer.get()*20);
-            this.getBrain().setActiveActivityIfPossible(RegisterAI.INJURED.get());
-            this.setMovementMode(MOVE_STATUS.INJURED);
         }
         else{
             this.setInjurycuretimer(0);
@@ -2734,19 +2726,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     this.stopSleeping();
                 }
                 boolean isobstructed = false;
-                for(int i=0; i<4; i++){
-                    if(player.level.getBlockState(player.blockPosition().above(i)).isSuffocating(player.level, player.blockPosition().above(i))){
-                        isobstructed = true;
-                    }
-                }
-
-                if(isobstructed){
-                    return ActionResultType.PASS;
-                }
-                else {
-                    this.startRiding(player, true);
-                    return ActionResultType.SUCCESS;
-                }
+                this.startRiding(player, true);
+                return ActionResultType.SUCCESS;
             }
             else if (this.getVehicle() != null) {
                 this.stopRiding();

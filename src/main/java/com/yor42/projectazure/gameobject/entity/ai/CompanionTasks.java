@@ -66,14 +66,18 @@ public class CompanionTasks {
 
 
     public static void UpdateActivity(AbstractEntityCompanion companion){
-        if(companion.getBrain().getActiveNonCoreActivity().map((act)->act != RegisterAI.INJURED.get()).orElse(false) && companion.isAlive()) {
+        if(companion.isAlive()) {
             Brain<AbstractEntityCompanion> brain = companion.getBrain();
             companion.setAggressive(companion.getBrain().hasMemoryValue(ATTACK_TARGET));
-            if(brain.getActiveNonCoreActivity().map((activity) -> activity == IDLE || activity == REST).orElse(false)) {
+            if (companion.isCriticallyInjured()) {
+                companion.getBrain().setActiveActivityIfPossible(RegisterAI.INJURED.get());
+                companion.setMovementMode(AbstractEntityCompanion.MOVE_STATUS.INJURED);
+            }
+            else if(brain.getActiveNonCoreActivity().map((activity) -> activity == IDLE || activity == REST).orElse(false)) {
                 brain.setSchedule(RegisterAI.CompanionSchedule.get());
                 brain.updateActivityFromSchedule(companion.level.getDayTime(), companion.level.getGameTime());
             }
-            else{
+            else {
                 brain.setActiveActivityToFirstValid(ImmutableList.of(AVOID, Activity.FIGHT, RegisterAI.SITTING.get(), RegisterAI.WAITING.get(), RegisterAI.FOLLOWING_OWNER.get()));
             }
         }
