@@ -2,16 +2,19 @@ package com.yor42.projectazure.mixin;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nonnull;
 
@@ -43,4 +46,20 @@ public abstract class MixinPlayerEntity extends LivingEntity {
         }
     }
 
+    @Override
+    @Unique(silent = true)
+    public double getPassengersRidingOffset() {
+        return super.getPassengersRidingOffset();
+    }
+
+    @SuppressWarnings({"UnresolvedMixinReference", "MixinAnnotationTarget"})
+    @Inject(method = {"getPassengersRidingOffset", "func_70042_X"}, at = @At("HEAD"), remap = false, cancellable = true)
+    private void ongetPassengersRidingOffset(CallbackInfoReturnable<Double> cir){
+        if(!this.getPassengers().isEmpty()){
+            if(this.getPassengers().get(0) instanceof AbstractEntityCompanion){
+                cir.setReturnValue(0D);
+                cir.cancel();
+            }
+        }
+    }
 }

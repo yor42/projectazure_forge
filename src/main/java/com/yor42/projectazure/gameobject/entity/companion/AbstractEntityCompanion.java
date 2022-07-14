@@ -1496,7 +1496,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public double getMyRidingOffset() {
 
         if(this.getVehicle() instanceof PlayerEntity){
-            return this.getDimensions(Pose.STANDING).height*0.2D;
+            return this.getDimensions(Pose.STANDING).height*0.3D;
         }
 
         return 0.3D;
@@ -2870,13 +2870,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             else if(this.isLimitbreakItem(heldstacks)){
                 this.doLimitBreak();
             }
-            else if(player.isShiftKeyDown()) {
-                if (!this.level.isClientSide) {
-                    this.openGUI((ServerPlayerEntity) player);
-                }
-                this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
-                return ActionResultType.SUCCESS;
-            }
             else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
 
                 /*
@@ -2950,20 +2943,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     else if (this.CheckVerticalInteraction(player, 0.2F)) {
                         if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit()) {
-                            boolean isobstructed = false;
-                            for(int i=0; i<4; i++){
-                                if(player.level.getBlockState(player.blockPosition().above(i)).isSuffocating(player.level, player.blockPosition().above(i))){
-                                    isobstructed = true;
-                                }
-                            }
-
-                            if(isobstructed){
-                                return ActionResultType.PASS;
-                            }
-                            else {
-                                this.startRiding(player, true);
-                                return ActionResultType.SUCCESS;
-                            }
+                            this.startRiding(player, true);
+                            return ActionResultType.SUCCESS;
                         }
                         else {
                             this.SwitchSittingStatus();
@@ -2971,6 +2952,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         return ActionResultType.SUCCESS;
                         //this.setOrderedToSit(!this.isSitting());
                     }
+                }
+                else if(player.isShiftKeyDown()) {
+                    if (!this.level.isClientSide) {
+                        this.openGUI((ServerPlayerEntity) player);
+                    }
+                    this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
+                    return ActionResultType.SUCCESS;
                 }
             }
             return ActionResultType.FAIL;
