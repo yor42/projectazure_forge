@@ -853,6 +853,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerBlocks.MACHINE_DYNAMO.get(), 1)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', registerItems.COPPER_COIL.get())
+                .define('P', ModTags.Items.PLATE_IRON)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .pattern("PCP")
+                .pattern("IFI")
+                .pattern("PCP")
+                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(HatchTE.EnergyHatchDefinition.getStackForm().getItem(), 4)
                 .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', Tags.Items.STORAGE_BLOCKS_REDSTONE)

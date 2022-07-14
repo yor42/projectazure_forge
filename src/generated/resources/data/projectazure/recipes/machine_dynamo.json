@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PCP",
+    "IFI",
+    "PCP"
+  ],
+  "key": {
+    "F": {
+      "item": "projectazure:machine_frame"
+    },
+    "C": {
+      "item": "projectazure:copper_coil"
+    },
+    "P": {
+      "tag": "forge:plates/iron"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "projectazure:machine_dynamo"
+  }
+}
