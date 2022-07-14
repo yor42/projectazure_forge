@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LPL",
+    "PCP",
+    "LPL"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:chests"
+    },
+    "L": {
+      "tag": "minecraft:birch_logs"
+    },
+    "P": {
+      "item": "minecraft:birch_planks"
+    }
+  },
+  "result": {
+    "item": "projectazure:birch_pantry"
+  }
+}

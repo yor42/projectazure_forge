@@ -205,8 +205,4 @@ public class gangwonModel extends GeoCompanionModel<EntityGangwon> {
         return -23;
     }
 
-    @Override
-    protected int SleepingBodyZPosition() {
-        return -5;
-    }
 }

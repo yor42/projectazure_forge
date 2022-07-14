@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LPL",
+    "PCP",
+    "LPL"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:chests"
+    },
+    "L": {
+      "tag": "minecraft:dark_oak_logs"
+    },
+    "P": {
+      "item": "minecraft:dark_oak_planks"
+    }
+  },
+  "result": {
+    "item": "projectazure:dark_oak_pantry"
+  }
+}

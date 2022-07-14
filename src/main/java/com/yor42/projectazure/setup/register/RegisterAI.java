@@ -1,7 +1,5 @@
 package com.yor42.projectazure.setup.register;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.EntitySensor;
 import com.yor42.projectazure.gameobject.entity.ai.sensor.InventorySensor;

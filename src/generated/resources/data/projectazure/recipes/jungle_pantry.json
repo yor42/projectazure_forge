@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LPL",
+    "PCP",
+    "LPL"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:chests"
+    },
+    "L": {
+      "tag": "minecraft:jungle_logs"
+    },
+    "P": {
+      "item": "minecraft:jungle_planks"
+    }
+  },
+  "result": {
+    "item": "projectazure:jungle_pantry"
+  }
+}

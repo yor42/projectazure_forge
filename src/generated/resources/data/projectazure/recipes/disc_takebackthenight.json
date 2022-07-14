@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "SDS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:plates/iron"
+    },
+    "D": {
+      "item": "minecraft:crying_obsidian"
+    }
+  },
+  "result": {
+    "item": "projectazure:disc_takebackthenight"
+  }
+}

@@ -1,11 +1,9 @@
 package com.yor42.projectazure.data.common.loot;
 
 import com.lowdragmc.multiblocked.api.block.BlockComponent;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerItems;
-import com.yor42.projectazure.setup.register.registerMultiBlocks;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantments;

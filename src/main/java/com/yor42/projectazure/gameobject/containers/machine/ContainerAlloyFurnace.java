@@ -3,7 +3,6 @@ package com.yor42.projectazure.gameobject.containers.machine;
 import com.yor42.projectazure.gameobject.containers.slots.FuelSlotItemhandler;
 import com.yor42.projectazure.gameobject.containers.slots.ResultSlotStackHandler;
 import com.yor42.projectazure.setup.register.RegisterContainer;
-import com.yor42.projectazure.setup.register.registerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;

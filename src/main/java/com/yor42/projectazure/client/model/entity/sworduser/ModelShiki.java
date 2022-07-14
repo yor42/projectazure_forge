@@ -1,13 +1,11 @@
 package com.yor42.projectazure.client.model.entity.sworduser;
 
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
-import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.EntityScathath;
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.EntityShiki;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
 

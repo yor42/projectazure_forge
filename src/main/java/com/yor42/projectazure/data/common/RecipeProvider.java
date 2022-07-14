@@ -5,6 +5,8 @@ import com.yor42.projectazure.data.recipebuilder.AlloyingRecipeBuilder;
 import com.yor42.projectazure.data.recipebuilder.CrushingRecipeBuilder;
 import com.yor42.projectazure.data.recipebuilder.CrystalizingRecipeBuilder;
 import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerFluids;
@@ -451,6 +453,56 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Tags.Items.DYES_GREEN))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerItems.DISC_REVENGE.get(), 1)
+                .define('S', ModTags.Items.PLATE_IRON)
+                .define('D', Tags.Items.GUNPOWDER)
+                .pattern(" S ")
+                .pattern("SDS")
+                .pattern(" S ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
+                .unlockedBy("has_dye", has(Tags.Items.GUNPOWDER))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.DISC_FALLEN_KINGDOM.get(), 1)
+                .define('S', ModTags.Items.PLATE_IRON)
+                .define('D', Items.GOLDEN_SWORD)
+                .pattern(" S ")
+                .pattern("SDS")
+                .pattern(" S ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
+                .unlockedBy("has_dye", has(Items.GOLDEN_SWORD))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.DISC_FIND_THE_PIECES.get(), 1)
+                .define('S', ModTags.Items.PLATE_IRON)
+                .define('D', Tags.Items.GEMS_EMERALD)
+                .pattern(" S ")
+                .pattern("SDS")
+                .pattern(" S ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
+                .unlockedBy("has_dye", has(Tags.Items.GEMS_EMERALD))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.DISC_TAKE_BACK_THE_NIGHT.get(), 1)
+                .define('S', ModTags.Items.PLATE_IRON)
+                .define('D', Blocks.CRYING_OBSIDIAN.asItem())
+                .pattern(" S ")
+                .pattern("SDS")
+                .pattern(" S ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
+                .unlockedBy("has_dye", has(Blocks.CRYING_OBSIDIAN.asItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.DISC_DRAGONHEARTED.get(), 1)
+                .define('S', ModTags.Items.PLATE_IRON)
+                .define('D', Items.ENDER_EYE)
+                .pattern(" S ")
+                .pattern("SDS")
+                .pattern(" S ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
+                .unlockedBy("has_dye", has(Items.ENDER_EYE))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(registerBlocks.REENFORCED_PLANK.get(), 4)
                 .define('P', ItemTags.PLANKS)
                 .define('S', ModTags.Items.INGOT_STEEL)
@@ -698,6 +750,128 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("NPN")
                 .unlockedBy("has_part", has(ModTags.Items.PLATE_IRON))
                 .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.OAK_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.OAK_LOGS)
+                .define('P', Items.OAK_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.OAK_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.ACACIA_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.ACACIA_LOGS)
+                .define('P', Items.ACACIA_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.ACACIA_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.BIRCH_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.BIRCH_LOGS)
+                .define('P', Items.BIRCH_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.BIRCH_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.SPRUCE_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.SPRUCE_LOGS)
+                .define('P', Items.SPRUCE_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.SPRUCE_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.DARK_OAK_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.DARK_OAK_LOGS)
+                .define('P', Items.DARK_OAK_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.DARK_OAK_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.JUNGLE_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.JUNGLE_LOGS)
+                .define('P', Items.JUNGLE_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.JUNGLE_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.WARPED_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.WARPED_STEMS)
+                .define('P', Items.WARPED_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.WARPED_STEMS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.CRIMSON_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.CRIMSON_STEMS)
+                .define('P', Items.CRIMSON_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.CRIMSON_STEMS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getStackForm().getItem(), 1)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('P', Blocks.PISTON.asItem())
+                .define('G', Blocks.GLASS.asItem())
+                .define('I', HatchTE.ItemHatchDefinition.getStackForm().getItem())
+                .define('D', registerBlocks.MACHINE_DYNAMO.get())
+                .pattern("PDP")
+                .pattern("IGI")
+                .pattern("CFC")
+                .unlockedBy("has_part", has(HatchTE.ItemHatchDefinition.getStackForm().getItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(HatchTE.ItemHatchDefinition.getStackForm().getItem(), 4)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', Tags.Items.CHESTS)
+                .pattern(" F ")
+                .pattern("FCF")
+                .pattern(" F ")
+                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(HatchTE.EnergyHatchDefinition.getStackForm().getItem(), 4)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', Tags.Items.STORAGE_BLOCKS_REDSTONE)
+                .pattern(" F ")
+                .pattern("FCF")
+                .pattern(" F ")
+                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.KYARU_STAFF.get(), 1)
+                .define('S', Items.STICK)
+                .define('C', ModTags.Items.INGOT_BRONZE)
+                .define('B', Items.ENCHANTED_BOOK)
+                .pattern(" CB")
+                .pattern(" SC")
+                .pattern("S  ")
+                .unlockedBy("has_part", has(Items.ENCHANTED_BOOK))
+                .save(consumer);
+
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {

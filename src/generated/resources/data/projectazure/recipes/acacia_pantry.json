@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LPL",
+    "PCP",
+    "LPL"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:chests"
+    },
+    "L": {
+      "tag": "minecraft:acacia_logs"
+    },
+    "P": {
+      "item": "minecraft:acacia_planks"
+    }
+  },
+  "result": {
+    "item": "projectazure:acacia_pantry"
+  }
+}

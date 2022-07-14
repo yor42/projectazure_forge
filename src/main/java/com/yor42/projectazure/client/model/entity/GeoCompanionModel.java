@@ -52,10 +52,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
                     body.setPositionY(body.getPositionY() - 8);
                     body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI) * -1);
                 }
-            } else if (entity.isSleeping()) {
-                body.setPositionY(SleepingBodyYPosition());
-                body.setPositionZ(SleepingBodyZPosition());
-            } else if (!(entity.isBeingPatted() || entity.islewded())) {
+            }else if (!(entity.isBeingPatted() || entity.islewded())) {
                 if (!entity.isOrderedToSit()) {
                     if(entity.isHolding((item)->item instanceof CrossbowItem)){
                         Hand CrossbowHand = entity.getItemInHand(MAIN_HAND).getItem() instanceof CrossbowItem? MAIN_HAND:Hand.OFF_HAND;
@@ -107,10 +104,6 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
     }
 
     protected abstract int SleepingBodyYPosition();
-
-    protected int SleepingBodyZPosition(){
-        return 0;
-    }
 
     @Override
     public void setMolangQueries(IAnimatable animatable, double currentTick) {

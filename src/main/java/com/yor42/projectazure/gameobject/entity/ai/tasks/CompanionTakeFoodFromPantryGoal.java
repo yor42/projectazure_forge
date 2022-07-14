@@ -26,8 +26,6 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-import java.util.Map;
-
 import static com.yor42.projectazure.setup.register.RegisterAI.*;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_ABSENT;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;

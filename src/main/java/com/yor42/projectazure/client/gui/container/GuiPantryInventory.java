@@ -5,11 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerPantry;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ChestContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-
-import javax.annotation.Nonnull;
 
 public class GuiPantryInventory extends ContainerScreen<ContainerPantry> {
     private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation("textures/gui/container/generic_54.png");

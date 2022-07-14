@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " CB",
+    " SC",
+    "S  "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "C": {
+      "tag": "forge:ingots/bronze"
+    },
+    "B": {
+      "item": "minecraft:enchanted_book"
+    }
+  },
+  "result": {
+    "item": "projectazure:kyarustaff"
+  }
+}

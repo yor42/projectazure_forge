@@ -16,7 +16,7 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocat
 public class ArtoriaModel extends GeoCompanionModel<EntityArtoria> {
     @Override
     protected int SleepingBodyYPosition() {
-        return -34;
+        return -26;
     }
 
     @Override

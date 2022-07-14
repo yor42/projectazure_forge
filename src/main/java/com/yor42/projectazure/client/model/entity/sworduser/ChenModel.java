@@ -182,8 +182,4 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
         return -40;
     }
 
-    @Override
-    protected int SleepingBodyZPosition() {
-        return -5;
-    }
 }

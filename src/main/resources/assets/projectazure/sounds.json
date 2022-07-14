@@ -15,6 +15,46 @@
       }
     ]
   },
+  "disc_revenge": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/revenge",
+        "stream": true
+      }
+    ]
+  },
+  "disc_fallenkingdom": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/fallenkingdom",
+        "stream": true
+      }
+    ]
+  },
+  "disc_takebackthenight": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/takebackthenight",
+        "stream": true
+      }
+    ]
+  },
+  "disc_findthepieces": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/findthepieces",
+        "stream": true
+      }
+    ]
+  },
+  "disc_dragonhearted": {
+    "sounds": [
+      {
+        "name": "projectazure:disc/dragonhearted",
+        "stream": true
+      }
+    ]
+  },
   "disc_sandstorm": {
     "sounds": [
       {

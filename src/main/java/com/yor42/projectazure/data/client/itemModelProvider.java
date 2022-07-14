@@ -142,6 +142,11 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("disc_rickroll");
         buildModel("disc_sandstorm");
         buildModel("disc_sandroll");
+        buildModel("disc_fallen_kingdom");
+        buildModel("disc_revenge");
+        buildModel("disc_findthepieces");
+        buildModel("disc_takebackthenight");
+        buildModel("disc_dragonhearted");
         buildModel("disc_cc5");
 
         buildModel("bandage_roll");

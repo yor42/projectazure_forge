@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
-import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.setup.register.registerEntity;
 import net.minecraft.entity.Entity;
@@ -13,7 +12,6 @@ import net.minecraft.pathfinding.PathType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 

@@ -287,6 +287,56 @@ public class registerItems {
         }
     });
 
+    public static final RegistryObject<Item> DISC_REVENGE = ITEMS.register("disc_revenge", () -> new MusicDiscItem(15, ()->registerSounds.DISC_REVENGE, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public ITextComponent getName(@Nonnull ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
+    public static final RegistryObject<Item> DISC_FALLEN_KINGDOM = ITEMS.register("disc_fallen_kingdom", () -> new MusicDiscItem(15, ()->registerSounds.DISC_FALLEN_KINGDOM, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public ITextComponent getName(@Nonnull ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
+    public static final RegistryObject<Item> DISC_FIND_THE_PIECES = ITEMS.register("disc_findthepieces", () -> new MusicDiscItem(15, ()->registerSounds.DISC_FIND_THE_PIECES, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public ITextComponent getName(@Nonnull ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
+    public static final RegistryObject<Item> DISC_TAKE_BACK_THE_NIGHT = ITEMS.register("disc_takebackthenight", () -> new MusicDiscItem(15, ()->registerSounds.DISC_TAKE_BACK_THE_NIGHT, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public ITextComponent getName(@Nonnull ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
+    public static final RegistryObject<Item> DISC_DRAGONHEARTED = ITEMS.register("disc_dragonhearted", () -> new MusicDiscItem(15, ()->registerSounds.DISC_DRAGONHEARTED, new Item.Properties()
+            .tab(PA_GROUP).stacksTo(1))
+    {
+        @Nonnull
+        @Override
+        public ITextComponent getName(@Nonnull ItemStack stack) {
+            return new TranslationTextComponent("item.projectazure.music_disc");
+        }
+    });
+
     public static final RegistryObject<Item> DISC_ENTERTHEBEGINNING = ITEMS.register("disc_enterthebeginning", () -> new MusicDiscItem(15, ()->registerSounds.DISC_ENTERTHEBEGINNING, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {

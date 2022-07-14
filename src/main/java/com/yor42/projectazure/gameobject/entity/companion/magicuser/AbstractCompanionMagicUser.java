@@ -5,8 +5,6 @@ import com.yor42.projectazure.interfaces.ISpellUser;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion implements ISpellUser {

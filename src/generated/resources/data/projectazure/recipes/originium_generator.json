@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PDP",
+    "IGI",
+    "CFC"
+  ],
+  "key": {
+    "F": {
+      "item": "projectazure:machine_frame"
+    },
+    "C": {
+      "tag": "forge:circuits/advanced"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "I": {
+      "item": "projectazure:item_hatch"
+    },
+    "D": {
+      "item": "projectazure:machine_dynamo"
+    }
+  },
+  "result": {
+    "item": "projectazure:originium_generator"
+  }
+}

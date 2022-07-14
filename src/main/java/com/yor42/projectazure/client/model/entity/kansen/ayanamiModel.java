@@ -160,8 +160,4 @@ public class ayanamiModel extends GeoCompanionModel<EntityAyanami> {
         return -33;
     }
 
-    @Override
-    protected int SleepingBodyZPosition() {
-        return -5;
-    }
 }

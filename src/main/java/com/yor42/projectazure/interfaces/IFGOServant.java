@@ -2,13 +2,7 @@ package com.yor42.projectazure.interfaces;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.Brain;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
