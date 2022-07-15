@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  B",
+    " BP",
+    "LP "
+  ],
+  "key": {
+    "B": {
+      "tag": "forge:ingots/steel"
+    },
+    "P": {
+      "tag": "forge:plates/steel"
+    },
+    "L": {
+      "item": "projectazure:steel_pipe"
+    }
+  },
+  "result": {
+    "item": "projectazure:crescentkatana_kuro"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SO",
+    "OS"
+  ],
+  "key": {
+    "S": {
+      "tag": "minecraft:sand"
+    },
+    "O": {
+      "item": "projectazure:dust_originium"
+    }
+  },
+  "result": {
+    "item": "projectazure:originium_seed",
+    "count": 4
+  }
+}

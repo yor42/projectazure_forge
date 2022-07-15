@@ -1,0 +1,14 @@
+{
+  "type": "projectazure:alloying",
+  "ingredient1": {
+    "tag": "forge:ingots/copper"
+  },
+  "ing1count": 3,
+  "ingredient2": {
+    "tag": "forge:ingots/tin"
+  },
+  "ing2count": 1,
+  "result": "projectazure:ingot_bronze",
+  "resultcount": 4,
+  "processtime": 300
+}

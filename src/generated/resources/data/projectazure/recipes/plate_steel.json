@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:crafting_hammer"
+    },
+    {
+      "tag": "forge:ingots/steel"
+    }
+  ],
+  "result": {
+    "item": "projectazure:plate_steel"
+  }
+}

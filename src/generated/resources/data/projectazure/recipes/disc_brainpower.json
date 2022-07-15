@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "SDS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:plates/iron"
+    },
+    "D": {
+      "tag": "forge:dyes/black"
+    }
+  },
+  "result": {
+    "item": "projectazure:disc_brainpower"
+  }
+}
