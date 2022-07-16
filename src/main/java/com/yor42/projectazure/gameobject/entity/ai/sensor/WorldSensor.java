@@ -102,7 +102,7 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
         Block block = state.getBlock();
         BlockState stateBelow = worldIn.getBlockState(pos.below());
         Block blockbelow = stateBelow.getBlock();
-        boolean isOre = block instanceof OreBlock || block.is(Tags.Blocks.ORES);
+        boolean isOre = (block instanceof OreBlock || block.is(Tags.Blocks.ORES)) && host.getMainHandItem().isCorrectToolForDrops(state);
         boolean crop = block instanceof CropsBlock;
         boolean isCactusorSugarcane = block instanceof SugarCaneBlock || block instanceof CactusBlock;
         BlockRayTraceResult result;
