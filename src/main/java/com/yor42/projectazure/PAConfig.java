@@ -444,10 +444,10 @@ public class PAConfig {
             LEAD_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Lead can generate", 40,0,256);
 
             ENABLE_ORIROCK = builder.define("Enable Orirock Generation", true);
-            ORIROCK_VEINSPERCHUNK = builder.defineInRange("Count of Orirock vein in single chunk", 10,0,128);
-            ORIROCK_VEINSIZE = builder.defineInRange("Size of Orirock vein", 2,0,512);
+            ORIROCK_VEINSPERCHUNK = builder.defineInRange("Count of Orirock vein in single chunk", 4,0,128);
+            ORIROCK_VEINSIZE = builder.defineInRange("Size of Orirock vein", 40,0,512);
             ORIROCK_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Orirock can generate", 0,0,256);
-            ORIROCK_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Orirock can generate", 30,0,256);
+            ORIROCK_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Orirock can generate", 50,0,256);
 
             builder.pop();
             builder.push("Debug");
