@@ -61,9 +61,11 @@ public class ModBusEventHandler {
                 UUID yorUUID = UUID.fromString("d45160dc-ae0b-4f7c-b44a-b535a48182d2");
                 UUID AoichiID = UUID.fromString("d189319f-ee53-4e80-9472-7c5e4711642e");
                 UUID NecromID = UUID.fromString("23b61d99-fbe4-4202-a6e6-3d467a08f3ba");
+                UUID GilgameshID = UUID.fromString("49aa1c13-e74a-4453-b2ac-7d5cdfbb059a");
                 boolean isDev = player.getUUID().equals(yorUUID) || player.getDisplayName().getString().equals("Dev");
                 boolean isAoichi = player.getUUID().equals(AoichiID);
                 boolean isNecrom = player.getUUID().equals(NecromID);
+                boolean isGilagmesh = player.getUUID().equals(GilgameshID);
 
                 ItemStack cubeStack = new ItemStack(registerItems.GLITCHED_PHONE.get());
                 CompoundNBT nbt = cubeStack.getOrCreateTag();
@@ -103,6 +105,11 @@ public class ModBusEventHandler {
                     stacks.add(registerItems.SPAWN_ROSMONTIS.get());
                 }else if(isNecrom){
                     stacks.add(registerItems.SPAWN_AMIYA.get());
+                }
+                else if(isGilagmesh){
+                    stacks.add(registerItems.SPAWN_ARTORIA.get());
+                    stacks.add(registerItems.SPAWN_SHIKI.get());
+                    stacks.add(registerItems.SPAWN_SCATHATH.get());
                 }
 
                 if(!stacks.isEmpty()){
