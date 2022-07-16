@@ -1496,7 +1496,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public double getMyRidingOffset() {
 
         if(this.getVehicle() instanceof PlayerEntity){
-            return this.getDimensions(Pose.STANDING).height*0.3D;
+
+            double Companionshoulderheight = this.getEyeHeight();
+            double playerShoulderHeight = this.getVehicle().getEyeHeight()-0.05;
+            return playerShoulderHeight - Companionshoulderheight;
         }
 
         return 0.3D;
@@ -2713,7 +2716,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         ItemStack heldstacks = player.getMainHandItem();
         Item HeldItem = heldstacks.getItem();
 
-        if(this.isOwnedBy(player) && !(this instanceof EntityKansenBase && HeldItem instanceof ItemRiggingBase)) {
+        if(this.isOwnedBy(player)) {
             if((this.isDeadOrDying() || this.isCriticallyInjured())){
                 if(player.getMainHandItem().getItem() instanceof ItemDefibPaddle || player.getOffhandItem().getItem() instanceof ItemDefibPaddle){
                     return ActionResultType.PASS;
@@ -2721,7 +2724,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 else if(this.isSleeping()){
                     this.stopSleeping();
                 }
-                boolean isobstructed = false;
                 this.startRiding(player, true);
                 return ActionResultType.SUCCESS;
             }
@@ -2729,146 +2731,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.stopRiding();
                 return ActionResultType.SUCCESS;
             }
-            else if (HeldItem instanceof ArmorItem || HeldItem instanceof TieredItem) {
-                ItemStack stack = player.getItemInHand(hand).copy();
-                EquipmentSlotType type = getEquipmentSlotForItem(stack);
-                ItemStack EquippedStack = this.getItemBySlot(type).copy();
-                if(!(type == EquipmentSlotType.MAINHAND || type == EquipmentSlotType.OFFHAND) && this instanceof IFGOServant){
-                    return ActionResultType.FAIL;
-                }
-                else if (stack.canEquip(type, this)) {
-                    this.setItemSlot(type, stack);
-                    if (stack == this.getItemBySlot(type)) {
-                        player.setItemInHand(hand, EquippedStack);
-                        this.playEquipSound(stack);
-                        return ActionResultType.SUCCESS;
-                    }
-                }
-            }
-            else if(this.isOnFire() && HeldItem == Items.WATER_BUCKET){
-                this.clearFire();
-                this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
-            }
-            //food
-            else if (HeldItem != registerItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
-                ItemStack stack = this.eat(this.getCommandSenderWorld(), player.getItemInHand(hand));
-                this.addAffection(0.03);
-                if (!player.isCreative()) {
-                    player.setItemInHand(hand, stack);
-                }
-                this.playSound(SoundEvents.GENERIC_EAT, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
-                return ActionResultType.SUCCESS;
-            }
-            //Potion
-            else if (HeldItem instanceof PotionItem && !(HeldItem instanceof ThrowablePotionItem)) {
-                ItemStack stack = player.getItemInHand(hand);
-                for (EffectInstance effectinstance : PotionUtils.getMobEffects(stack)) {
-                    if (effectinstance.getEffect().isInstantenous()) {
-                        effectinstance.getEffect().applyInstantenousEffect(player, player, this, effectinstance.getAmplifier(), 1.0D);
-                    } else {
-                        this.addEffect(new EffectInstance(effectinstance));
-                    }
-                    this.addAffection(effectinstance.getEffect().isBeneficial() ? 0.05 : -0.075);
-                }
-                this.playSound(SoundEvents.GENERIC_DRINK, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);
-                if (!player.isCreative()) {
-                    player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
-                }
-                return ActionResultType.SUCCESS;
-            } else if (heldstacks.getItem() == registerItems.OATHRING.get()) {
-                if (this.getAffection() < 100 && !player.isCreative()) {
-                    player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUUID());
-                    return ActionResultType.FAIL;
-                } else {
-                    if (!this.isOathed()) {
-                        if (player.isCreative()) {
-                            this.setAffection(100);
-                        } else {
-                            player.getItemInHand(hand).shrink(1);
-                        }
-                        this.setOathed(true);
-                        if(this.getOathSound()!= null) {
-                            this.playSound(this.getOathSound(), 1.0f, 1.0f);
-                        }
-                        return ActionResultType.SUCCESS;
-                    }
-                }
-            } else if (heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()) {
-                this.setMorale(150);
-                if (!player.isCreative()) {
-                    heldstacks.shrink(1);
-                }
-            } else if (heldstacks.getItem() instanceof ItemBandage) {
-                if (this.getHealth() < this.getMaxHealth()) {
-                    if (!this.level.isClientSide) {
-                        this.doHeal(1.0f);
-                        if (!player.isCreative()) {
-                            if (heldstacks.hurt(1, MathUtil.getRand(), (ServerPlayerEntity) player)) {
-                                heldstacks.shrink(1);
-                            }
-                        }
-                        this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
-                    }
-                    return ActionResultType.SUCCESS;
-                }
-            } else if (heldstacks.getItem() instanceof ItemCommandStick) {
-                CompoundNBT compound = heldstacks.getOrCreateTag();
-                if (player.isShiftKeyDown()) {
-                    if(!this.getCommandSenderWorld().isClientSide()) {
-                        if (compound.contains("X") && compound.contains("Y") && compound.contains("Z") && compound.contains("Dim")) {
-                            ResourceLocation resource = new ResourceLocation(compound.getString("Dim"));
-                            RegistryKey<World> registrykey = RegistryKey.create(Registry.DIMENSION_REGISTRY, resource);
-                            BlockPos Blockpos = new BlockPos(compound.getInt("X"), compound.getInt("Y"), compound.getInt("Z"));
-                            GlobalPos pos = GlobalPos.of(registrykey, Blockpos);
-                            ItemCommandStick.POSITION_TYPE type = ItemCommandStick.POSITION_TYPE.valueOf(compound.getString("postype"));
-                            if (this.getCommandSenderWorld().dimension() != registrykey) {
-                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_differentdimension", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
-                                return ActionResultType.FAIL;
-                            }
-
-                            if (this.getOwner() != player) {
-                                return ActionResultType.FAIL;
-                            }
-
-                            if (type == ItemCommandStick.POSITION_TYPE.BED) {
-                                if (!this.getCommandSenderWorld().getBlockState(pos.pos()).isBed(this.getCommandSenderWorld(), Blockpos, this)) {
-                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_invalid", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
-                                    return ActionResultType.FAIL;
-                                }
-                                ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
-                                List<AbstractEntityCompanion> dupelist = cap.getCompanionList().stream().filter((companion) -> companion.getBrain().getMemory(HOME).map((globalpos) -> globalpos.equals(pos)).orElse(false)).collect(Collectors.toList());
-                                @Nullable
-                                AbstractEntityCompanion duplicatedComp = dupelist.isEmpty() ? null : dupelist.get(0);
-                                boolean isBedDuplicate = !(duplicatedComp ==null);
-
-                                if (duplicatedComp == this) {
-                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_same_companion_same_bed", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
-                                } else if (isBedDuplicate) {
-                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed_duplicate", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName(), duplicatedComp.getDisplayName()), true);
-                                } else {
-                                    this.setHomePos(pos);
-                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_applied", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName()), true);
-                                }
-                            }
-                            else if(type == ItemCommandStick.POSITION_TYPE.PANTRY){
-                                if(!(this.getCommandSenderWorld().getBlockState(pos.pos()).getBlock() instanceof PantryBlock)){
-                                    player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_pantrypos_invalid", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
-                                    return ActionResultType.FAIL;
-                                }
-                                this.getBrain().setMemory(FOOD_PANTRY.get(), pos);
-                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_pantrypos_applied", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName()), true);
-                            };
-                        } else if (this.hasHomePos()) {
-                            this.releasePoi(HOME);
-                            this.getBrain().eraseMemory(HOME);
-                            player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_cleared", this.getDisplayName()), true);
-                        }
-                    }
-                    return ActionResultType.CONSUME;
-                }
-            }
-            else if(this.isLimitbreakItem(heldstacks)){
-                this.doLimitBreak();
+            else if(!heldstacks.isEmpty()){
+                return this.HandleItemInteraction(player, vec, hand, heldstacks);
             }
             else if(player.getItemInHand(hand).isEmpty() && !this.isAngry()) {
 
@@ -2937,7 +2801,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     else if (this.CheckVerticalInteraction(player, 0.65F) && interactionDirection==FRONT) {
                         if (this.getCommandSenderWorld().isClientSide()) {
-                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.QUESTIONABLE, true));
+                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.ECCI, true));
                         }
                         return ActionResultType.SUCCESS;
                     }
@@ -2953,12 +2817,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         //this.setOrderedToSit(!this.isSitting());
                     }
                 }
-                else if(player.isShiftKeyDown()) {
-                    if (!this.level.isClientSide) {
-                        this.openGUI((ServerPlayerEntity) player);
-                    }
-                    this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
-                    return ActionResultType.SUCCESS;
+                else if(player.isCrouching()) {
+                    return this.openInventory(player);
                 }
             }
             return ActionResultType.FAIL;
@@ -2971,6 +2831,176 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
         return super.interactAt(player, vec, hand);
+    }
+
+    protected ActionResultType HandleItemInteraction(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand, ItemStack heldstacks){
+        Item HeldItem = heldstacks.getItem();
+        if(player.isCrouching()){
+            return this.openInventory(player);
+        }
+        else if(this instanceof EntityKansenBase && HeldItem instanceof ItemRiggingBase){
+            ItemStack stack = player.getItemInHand(hand).copy();
+            ItemStack EquippedStack = this.getRigging().copy();
+            ((EntityKansenBase) this).getShipRiggingStorage().setStackInSlot(0, stack);
+            if (stack == this.getRigging()) {
+                player.setItemInHand(hand, EquippedStack);
+                this.playSound(SoundEvents.ARMOR_EQUIP_IRON, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
+                return ActionResultType.SUCCESS;
+            }
+        }
+        else if (HeldItem instanceof ArmorItem || HeldItem instanceof TieredItem) {
+            ItemStack stack = player.getItemInHand(hand).copy();
+            EquipmentSlotType type = getEquipmentSlotForItem(stack);
+            ItemStack EquippedStack = this.getItemBySlot(type).copy();
+            if(!(type == EquipmentSlotType.MAINHAND || type == EquipmentSlotType.OFFHAND) && this instanceof IFGOServant){
+                return ActionResultType.FAIL;
+            }
+            else if (stack.canEquip(type, this)) {
+                this.setItemSlot(type, stack);
+                if (stack == this.getItemBySlot(type)) {
+                    player.setItemInHand(hand, EquippedStack);
+                    this.playEquipSound(stack);
+                    return ActionResultType.SUCCESS;
+                }
+            }
+        }
+        else if(this.isOnFire() && HeldItem == Items.WATER_BUCKET){
+            this.clearFire();
+            this.playSound(SoundEvents.BUCKET_EMPTY, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
+            this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
+        }
+        //food
+        else if (HeldItem != registerItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
+            ItemStack stack = this.eat(this.getCommandSenderWorld(), player.getItemInHand(hand));
+            this.addAffection(0.03);
+            if (!player.isCreative()) {
+                player.setItemInHand(hand, stack);
+            }
+            this.playSound(SoundEvents.GENERIC_EAT, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
+            return ActionResultType.SUCCESS;
+        }
+        //Potion
+        else if (HeldItem instanceof PotionItem && !(HeldItem instanceof ThrowablePotionItem)) {
+            ItemStack stack = player.getItemInHand(hand);
+            for (EffectInstance effectinstance : PotionUtils.getMobEffects(stack)) {
+                if (effectinstance.getEffect().isInstantenous()) {
+                    effectinstance.getEffect().applyInstantenousEffect(player, player, this, effectinstance.getAmplifier(), 1.0D);
+                } else {
+                    this.addEffect(new EffectInstance(effectinstance));
+                }
+                this.addAffection(effectinstance.getEffect().isBeneficial() ? 0.05 : -0.075);
+            }
+            this.playSound(SoundEvents.GENERIC_DRINK, 1F, 0.8F + this.level.random.nextFloat() * 0.4F);
+            if (!player.isCreative()) {
+                player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+            }
+            return ActionResultType.SUCCESS;
+        } else if (heldstacks.getItem() == registerItems.OATHRING.get()) {
+            if (this.getAffection() < 100 && !player.isCreative()) {
+                player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUUID());
+                return ActionResultType.FAIL;
+            } else {
+                if (!this.isOathed()) {
+                    if (player.isCreative()) {
+                        this.setAffection(100);
+                    } else {
+                        player.getItemInHand(hand).shrink(1);
+                    }
+                    this.setOathed(true);
+                    if(this.getOathSound()!= null) {
+                        this.playSound(this.getOathSound(), 1.0f, 1.0f);
+                    }
+                    return ActionResultType.SUCCESS;
+                }
+            }
+        } else if (heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()) {
+            this.setMorale(150);
+            if (!player.isCreative()) {
+                heldstacks.shrink(1);
+            }
+        } else if (heldstacks.getItem() instanceof ItemBandage) {
+            if (this.getHealth() < this.getMaxHealth()) {
+                if (!this.level.isClientSide) {
+                    this.doHeal(1.0f);
+                    if (!player.isCreative()) {
+                        if (heldstacks.hurt(1, MathUtil.getRand(), (ServerPlayerEntity) player)) {
+                            heldstacks.shrink(1);
+                        }
+                    }
+                    this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
+                }
+                return ActionResultType.SUCCESS;
+            }
+        } else if (heldstacks.getItem() instanceof ItemCommandStick) {
+            CompoundNBT compound = heldstacks.getOrCreateTag();
+            if (player.isShiftKeyDown()) {
+                if(!this.getCommandSenderWorld().isClientSide()) {
+                    if (compound.contains("X") && compound.contains("Y") && compound.contains("Z") && compound.contains("Dim")) {
+                        ResourceLocation resource = new ResourceLocation(compound.getString("Dim"));
+                        RegistryKey<World> registrykey = RegistryKey.create(Registry.DIMENSION_REGISTRY, resource);
+                        BlockPos Blockpos = new BlockPos(compound.getInt("X"), compound.getInt("Y"), compound.getInt("Z"));
+                        GlobalPos pos = GlobalPos.of(registrykey, Blockpos);
+                        ItemCommandStick.POSITION_TYPE type = ItemCommandStick.POSITION_TYPE.valueOf(compound.getString("postype"));
+                        if (this.getCommandSenderWorld().dimension() != registrykey) {
+                            player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_differentdimension", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
+                            return ActionResultType.FAIL;
+                        }
+
+                        if (this.getOwner() != player) {
+                            return ActionResultType.FAIL;
+                        }
+
+                        if (type == ItemCommandStick.POSITION_TYPE.BED) {
+                            if (!this.getCommandSenderWorld().getBlockState(pos.pos()).isBed(this.getCommandSenderWorld(), Blockpos, this)) {
+                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_invalid", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
+                                return ActionResultType.FAIL;
+                            }
+                            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
+                            List<AbstractEntityCompanion> dupelist = cap.getCompanionList().stream().filter((companion) -> companion.getBrain().getMemory(HOME).map((globalpos) -> globalpos.equals(pos)).orElse(false)).collect(Collectors.toList());
+                            @Nullable
+                            AbstractEntityCompanion duplicatedComp = dupelist.isEmpty() ? null : dupelist.get(0);
+                            boolean isBedDuplicate = !(duplicatedComp ==null);
+
+                            if (duplicatedComp == this) {
+                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_same_companion_same_bed", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
+                            } else if (isBedDuplicate) {
+                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_failed_duplicate", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName(), duplicatedComp.getDisplayName()), true);
+                            } else {
+                                this.setHomePos(pos);
+                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_applied", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName()), true);
+                            }
+                        }
+                        else if(type == ItemCommandStick.POSITION_TYPE.PANTRY){
+                            if(!(this.getCommandSenderWorld().getBlockState(pos.pos()).getBlock() instanceof PantryBlock)){
+                                player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_pantrypos_invalid", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]"), true);
+                                return ActionResultType.FAIL;
+                            }
+                            this.getBrain().setMemory(FOOD_PANTRY.get(), pos);
+                            player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_pantrypos_applied", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName()), true);
+                        };
+                    } else if (this.hasHomePos()) {
+                        this.releasePoi(HOME);
+                        this.getBrain().eraseMemory(HOME);
+                        player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_bedpos_cleared", this.getDisplayName()), true);
+                    }
+                }
+                return ActionResultType.SUCCESS;
+            }
+        }
+        else if(this.isLimitbreakItem(heldstacks)){
+            this.doLimitBreak();
+            return ActionResultType.CONSUME;
+        }
+
+        return ActionResultType.FAIL;
+    }
+
+    protected ActionResultType openInventory(PlayerEntity player){
+        if (!this.level.isClientSide) {
+            this.openGUI((ServerPlayerEntity) player);
+        }
+        this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
+        return ActionResultType.SUCCESS;
     }
 
     protected boolean isLimitbreakItem(ItemStack stack){
@@ -2992,7 +3022,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), this.getY(heightpoint) - player.getEyeY(), this.getZ() - player.getZ());
         EyeDelta = EyeDelta.normalize();
         double EyeCheckFinal = PlayerLook.dot(EyeDelta);
-        return EyeCheckFinal > 0.998;
+        return EyeCheckFinal > 0.997;
     }
 
     private boolean hasHomePos() {

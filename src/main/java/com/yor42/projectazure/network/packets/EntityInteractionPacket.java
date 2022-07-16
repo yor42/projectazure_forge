@@ -70,7 +70,7 @@ public class EntityInteractionPacket {
                         case PAT:
                             ((AbstractEntityCompanion) entity).beingpatted();
                             break;
-                        case QUESTIONABLE:
+                        case ECCI:
                             ((AbstractEntityCompanion) entity).startqinteraction();
                             break;
                         case STOP_RIDING:
@@ -95,7 +95,7 @@ public class EntityInteractionPacket {
         PAT,
         HEAL,
         ITEMPICKUP,
-        QUESTIONABLE,
+        ECCI,
         ATTACK,
         STOP_RIDING
     }

@@ -46,7 +46,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
             }
 
             if (entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
-                body.setPositionZ(body.getPositionZ() - 10);
+                body.setPositionZ(body.getPositionZ() - 15);
                 if (entity.getOwner().isCrouching()) {
                     body.setPositionZ(body.getPositionZ() + 8);
                     body.setPositionY(body.getPositionY() - 8);

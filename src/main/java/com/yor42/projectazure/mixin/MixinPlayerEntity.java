@@ -36,7 +36,7 @@ public abstract class MixinPlayerEntity extends LivingEntity {
     @Inject(method = {"positionRider", "func_184232_k"}, at = @At("HEAD"), remap = false, cancellable = true)
     private void onPositionRider(Entity entity, CallbackInfo cir){
         if(entity instanceof AbstractEntityCompanion){
-            float entityhorizontalOffset = -0.5F;
+            float entityhorizontalOffset = -0.65F;
             float f1 = (float)((this.removed ? (double)0.01F : this.getPassengersRidingOffset()) + entity.getMyRidingOffset());
             Vector3d vector3d = (new Vector3d(entityhorizontalOffset, 0.0D, 0.0D)).yRot(-this.yBodyRotO * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
             entity.setPos(this.getX() + vector3d.x, this.getY() + f1, this.getZ() + vector3d.z);
