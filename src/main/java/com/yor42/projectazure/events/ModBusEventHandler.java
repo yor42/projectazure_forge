@@ -89,6 +89,14 @@ public class ModBusEventHandler {
                     stacks.add(registerItems.SPAWN_SIEGE.get());
                     stacks.add(registerItems.SPAWN_SCHWARZ.get());
                     stacks.add(registerItems.SPAWN_CROWNSLAYER.get());
+                    stacks.add(registerItems.SPAWN_KYARU.get());
+                    stacks.add(registerItems.SPAWN_ARTORIA.get());
+                    stacks.add(registerItems.SPAWN_SHIKI.get());
+                    stacks.add(registerItems.SPAWN_SCATHATH.get());
+                    stacks.add(registerItems.SPAWN_NEARL.get());
+                    stacks.add(registerItems.SPAWM_SYLVI.get());
+                    stacks.add(registerItems.SPAWM_YAMATO.get());
+                    stacks.add(registerItems.SPAWM_YATO.get());
                 }
                 else if(isAoichi){
                     stacks.add(registerItems.SPAWN_MUDROCK.get());
