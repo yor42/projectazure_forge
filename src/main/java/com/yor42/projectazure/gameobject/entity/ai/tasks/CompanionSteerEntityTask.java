@@ -104,7 +104,6 @@ public class CompanionSteerEntityTask extends Task<AbstractEntityCompanion> {
                     float f = 0.04F;
                     float oldyaw = boat.yRot;
                     boat.yRot = (float) (MathHelper.atan2(d1, d0) * (double) (180F / (float) Math.PI)) + 90.0F;
-                    Vector3d vector = new Vector3d(0, 0,f).yRot(boat.yRot);
                     boat.setDeltaMovement(boat.getDeltaMovement().add(MathHelper.sin(-boat.yRot * ((float) Math.PI / 180F)) * f, 0.0D, (double) (MathHelper.cos(boat.yRot * ((float) Math.PI / 180F)) * f)));
                     float newyaw = boat.yRot;
                     float x1 = (float) Math.sqrt(boat.getDeltaMovement().x()*boat.getDeltaMovement().x()+boat.getDeltaMovement().z()*boat.getDeltaMovement().z());

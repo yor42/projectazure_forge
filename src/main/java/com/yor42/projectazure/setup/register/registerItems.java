@@ -374,6 +374,9 @@ public class registerItems {
             .rarity(Rarity.EPIC)
             .stacksTo(1)));
 
+    public static final RegistryObject<Item> GRAVINET = ITEMS.register("gravinet", () -> new ModSwordItem(ModMaterials.GRAVINET, 1, -1.6F, new Item.Properties().tab(PA_WEAPONS)));
+
+
     public static final RegistryObject<Item> KYARU_STAFF = ITEMS.register("kyarustaff", () -> new Item(new Item.Properties()
             .tab(PA_WEAPONS)
             .rarity(Rarity.UNCOMMON)

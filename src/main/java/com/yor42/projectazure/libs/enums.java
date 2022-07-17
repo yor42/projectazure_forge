@@ -259,6 +259,7 @@ public class enums {
         OPERATOR("akn_operator"),
         PRICONNE("pc_characters"),
         REUNION("akn_reunion"),
+        SHININGRESONANCE("srr"),
         SERVANT("fgo_servant"),
         CLOSER("cls_closer");
 

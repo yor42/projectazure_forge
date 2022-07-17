@@ -2852,7 +2852,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             ItemStack stack = player.getItemInHand(hand).copy();
             EquipmentSlotType type = getEquipmentSlotForItem(stack);
             ItemStack EquippedStack = this.getItemBySlot(type).copy();
-            if(!(type == EquipmentSlotType.MAINHAND || type == EquipmentSlotType.OFFHAND) && this instanceof IFGOServant){
+            if(!(type == EquipmentSlotType.MAINHAND || type == EquipmentSlotType.OFFHAND) && !this.canEquipArmor()){
                 return ActionResultType.FAIL;
             }
             else if (stack.canEquip(type, this)) {
@@ -3073,6 +3073,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Nullable
     protected SoundEvent getAggroedSoundEvent(){
         return null;
+    }
+
+    protected boolean canEquipArmor(){
+        return !(this instanceof IFGOServant);
     }
 
     @Override

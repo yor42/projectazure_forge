@@ -160,8 +160,6 @@ public class Main
         ClientRegistry.bindTileEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
 
         ModBusEventHandlerClient.setup();
-
-        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PLANE_F4FWILDCAT.get(), EntityPlanef4fwildcatRenderer::new);
         ClientRegisterManager.registerScreen();
 
         //We do some reflect magic for gun here

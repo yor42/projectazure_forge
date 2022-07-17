@@ -15,6 +15,7 @@ public class DamageSources {
     public static final DamageSource DAMAGE_CANNON = new DamageSource("canon_shot_generic").setProjectile().bypassMagic().bypassInvul();
 
     public static final DamageSource SHIP_FIRE = new DamageSource("ship_fire").setIsFire();
+    public static final DamageSource CAUSAL_BLACKHOLE = new DamageSource("blackhole").bypassArmor();
     public static final DamageSource TORPEDO = new DamageSource("torpedo").setExplosion().bypassInvul();
 
     public static final DamageSource ARTS = new DamageSourcesWithRandomMessages("arts", 5).setMagic().bypassArmor().setProjectile();

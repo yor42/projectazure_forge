@@ -4,8 +4,10 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.entity.biped.*;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityClaymoreRenderer;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRenderer;
+import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.*;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
+import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityExcela;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
@@ -82,6 +84,7 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityAyanami>> AYANAMI = ENTITIES.register("entityayanami", () -> EntityType.Builder.of(EntityAyanami::new, EntityClassification.CREATURE).sized(0.572F, 1.525F).build(ModResourceLocation("entityayanami").toString()));
     public static final RegistryObject<EntityType<EntityKyaru>> KYARU = ENTITIES.register("entitykyaru", () -> EntityType.Builder.of(EntityKyaru::new, EntityClassification.CREATURE).sized(0.572F, 1.52F).build(ModResourceLocation("entitykyaru").toString()));
     public static final RegistryObject<EntityType<EntityShiki>> SHIKI = ENTITIES.register("entityshiki", () -> EntityType.Builder.of(EntityShiki::new, EntityClassification.CREATURE).sized(0.572F, 1.6F).build(ModResourceLocation("entityshiki").toString()));
+    public static final RegistryObject<EntityType<EntityExcela>> EXCELA = ENTITIES.register("entityexcela", () -> EntityType.Builder.of(EntityExcela::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityexcela").toString()));
     @SubscribeEvent
     public static void RegisterAttributes(EntityAttributeCreationEvent event){
         event.put(AYANAMI.get(), EntityAyanami.MutableAttribute().build());
@@ -115,6 +118,7 @@ public class registerEntity {
         event.put(SCATHATH.get(), EntityArtoria.MutableAttribute().build());
         event.put(KYARU.get(), EntityKyaru.MutableAttribute().build());
         event.put(SHIKI.get(), EntityShiki.MutableAttribute().build());
+        event.put(EXCELA.get(), EntityExcela.MutableAttribute().build());
     }
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderer(){
@@ -146,6 +150,8 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.NEARL.get(), EntityNearlRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.KYARU.get(), EntityKyaruRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.SHIKI.get(), EntityShikiRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.EXCELA.get(), EntityExcelaRenderer::new);
+
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_CANNONSHELL.get(), entityCannonPelletRenderer::new);
@@ -158,6 +164,7 @@ public class registerEntity {
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.CLAYMORE.get(), EntityClaymoreRenderer::new);
 
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PLANE_F4FWILDCAT.get(), EntityPlanef4fwildcatRenderer::new);
     }
 
     public static void loadClass(){

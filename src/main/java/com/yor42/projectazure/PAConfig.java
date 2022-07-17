@@ -166,6 +166,12 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue KyaruAttackDamage;
         public final ForgeConfigSpec.DoubleValue KyaruMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue ExcelaHealth;
+        public final ForgeConfigSpec.DoubleValue ExcelaSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue ExcelaAttackDamage;
+        public final ForgeConfigSpec.DoubleValue ExcelaMovementSpeed;
+        public final ForgeConfigSpec.DoubleValue ExcelaArmor;
+
         public final ForgeConfigSpec.DoubleValue Star_1_Chance;
         public final ForgeConfigSpec.DoubleValue Star_2_Chance;
         public final ForgeConfigSpec.DoubleValue Star_3_Chance;
@@ -384,6 +390,13 @@ public class PAConfig {
             KyaruSwimSpeed = builder.defineInRange("Swim Speed of Kyaru", 2.5, 0, 1024);
             KyaruAttackDamage = builder.defineInRange("Attack Damage of Kyaru", 2.0F, 0, 1024);
             KyaruMovementSpeed = builder.defineInRange("Movement speed of Kyaru", 0.3F, 0, 2);
+
+            builder.pop().push("Shining Resonance");
+            ExcelaHealth = builder.defineInRange("Max Health of Excela", 20D, 1, 1024);
+            ExcelaSwimSpeed = builder.defineInRange("Swim Speed of Excela", 2.5, 0, 1024);
+            ExcelaAttackDamage = builder.defineInRange("Attack Damage of Excela", 2.0F, 0, 1024);
+            ExcelaMovementSpeed = builder.defineInRange("Movement speed of Excela", 0.3F, 0, 2);
+            ExcelaArmor = builder.defineInRange("Armor Value of Excela", 15F, 0, 2);
 
             builder.pop().push("Girl's Frontline");
             M4A1Health = builder.defineInRange("Max Health of M4A1", 40D, 1, 1024);
