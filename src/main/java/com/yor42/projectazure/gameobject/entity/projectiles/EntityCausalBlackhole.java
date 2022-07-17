@@ -15,6 +15,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
+import java.security.acl.Owner;
 import java.util.UUID;
 
 import static com.yor42.projectazure.gameobject.misc.DamageSources.CAUSAL_BLACKHOLE;
@@ -22,10 +23,18 @@ import static com.yor42.projectazure.gameobject.misc.DamageSources.CAUSAL_BLACKH
 public class EntityCausalBlackhole extends Entity {
 
     private int life;
-    private UUID owner;
+    private final UUID owner;
 
     public EntityCausalBlackhole(EntityType<?> p_i48580_1_, World p_i48580_2_) {
         super(p_i48580_1_, p_i48580_2_);
+        this.life = 200;
+        this.owner = null;
+    }
+
+    public EntityCausalBlackhole(EntityType<?> p_i48580_1_, World p_i48580_2_, LivingEntity owner) {
+        super(p_i48580_1_, p_i48580_2_);
+        this.life = 200;
+        this.owner = owner.getUUID();
     }
 
     @Override

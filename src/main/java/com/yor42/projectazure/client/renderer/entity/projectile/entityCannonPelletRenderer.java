@@ -20,7 +20,7 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 public class entityCannonPelletRenderer extends EntityRenderer<EntityCannonPelllet> {
 
     private static final ResourceLocation TEXTURE = ModResourceLocation("textures/entity/projectile/shell_generic.png");
-    private static final RenderType RENDER_TYPE = RenderType.entitySmoothCutout(TEXTURE);
+    private static final RenderType RENDER_TYPE = RenderType.entityTranslucent(TEXTURE);
 
     public entityCannonPelletRenderer(EntityRendererManager renderManager) {
         super(renderManager);

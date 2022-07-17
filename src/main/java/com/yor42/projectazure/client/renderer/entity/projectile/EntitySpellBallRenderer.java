@@ -19,7 +19,7 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocatio
 
 public class EntitySpellBallRenderer extends EntityRenderer<EntitySpellBall> {
     private static final ResourceLocation TEXTURE = ModResourceLocation("textures/entity/projectile/kyaru_spell.png");
-    private static final RenderType RENDER_TYPE = RenderType.entitySmoothCutout(TEXTURE);
+    private static final RenderType RENDER_TYPE = RenderType.entityTranslucent(TEXTURE);
 
     public EntitySpellBallRenderer(EntityRendererManager renderManager) {
         super(renderManager);
