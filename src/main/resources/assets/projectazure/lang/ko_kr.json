@@ -11,9 +11,9 @@
   "item.projectazure.bb_default_rigging": "전함 기본 장비",
   "item.projectazure.cv_default_rigging": "항공모함 기본 장비",
 
-  "item.projectazure.glitched_phone": "Glitched Phone",
-  "item.projectazure.glitched_phone.tooltip1": "Smartphone with no marking or whatsoever.",
-  "item.projectazure.glitched_phone.tooltip2": "Shape of device itself is glitching out...",
+  "item.projectazure.glitched_phone": "오류가 난 휴대전화",
+  "item.projectazure.glitched_phone.tooltip1": "어떤 브랜드 마크도 없는 휴대전화.",
+  "item.projectazure.glitched_phone.tooltip2": "폰 모양 그 자체가 오류가 난 듯 지직거립니다...",
 
   "item.projectazure.music_disc": "음반",
   "item.projectazure.oath_ring": "서약 반지",
@@ -79,9 +79,15 @@
   "item.projectazure.disc_rickroll.desc": "릭 애스틀리 - Never Gonna Give You Up",
   "item.projectazure.disc_enterthebeginning.desc": "Edvard.S - Enter the Beginning",
   "disc.enterthebeginning.desc1": "EZ2ON 재밌어오. 사세오. - 개발자",
-  "item.projectazure.disc_cc5.desc": "Hyperglyph - Get this party started (Arknights CC5 Lobby theme)",
+  "item.projectazure.disc_cc5.desc": "Hyperglyph - Get this party started (명일방주 CC5 로비 배경음악)",
   "item.projectazure.disc_sandstorm.desc": "다루드 - Sandstorm",
   "item.projectazure.disc_sandroll.desc": "릭 애스틀리 vs 다루드 feat. groboclone - Sandroll",
+
+  "item.projectazure.disc_fallen_kingdom.desc": "TryhardNinja / Coldplay - Fallen Kingdom",
+  "item.projectazure.disc_findthepieces.desc": "TryhardNinja - Find the Pieces",
+  "item.projectazure.disc_takebackthenight.desc": "TryhardNinja - Take Back the Night",
+  "item.projectazure.disc_dragonhearted.desc": "TryhardNinja - Dragonhearted",
+  "item.projectazure.disc_revenge.desc": "TryhardNinja / Captainsparklez - Revenge",
 
   "item.projectazure.equipment_torpedo_533mm": "533mm 4연장 어뢰",
   "item.projectazure.equipment_gun_127mm": "127mm 단장포",
@@ -101,10 +107,15 @@
   "item.projectazure.claymore": "클레이모어",
   "item.projectazure.claymore.tooltip": "강철 합금으로 만든 말도 안되게 큰 클레이모어.\n이걸 어떻게 들고 다녀야 할 지 감도 안 옵니다.",
   "item.projectazure.sledgehammer": "슬레지해머",
+  "item.projectazure.kyarustaff": "카오스 그리모어 지팡이",
+  "item.projectazure.kitchenknife": "주방칼",
 
   "item.projectazure.excalibur": "엑스칼리버",
   "item.projectazure.excalibur_sheath": "아발론",
   "item.projectazure.gae_bolg": "게 볼그",
+
+  "item.projectazure.gravinet": "그라비넷",
+  "item.projectazure.gravinet.tooltip": "중력을 조작하는 힘이 깃들었다는 전설이 전해져오는 창",
 
   "item.projectazure.stasis_crystal": "안정화 수정",
 
@@ -273,6 +284,16 @@
   "gui.fgo.morale": "사기: %s",
   "gui.fgo.health": "체력: %s",
 
+  "gui.sr.hunger": "허기",
+  "gui.sr.bond": "호감도",
+  "gui.sr.atk": "공격력",
+  "gui.sr.def": "방어력",
+
+  "gui.pcr.hunger": "Fd.",
+  "gui.pcr.affection": "Aff.",
+  "gui.pcr.morale": "Mor.",
+  "gui.pcr.level": "Lv.",
+
   "gui.ammostorage.title": "탄약고",
 
   "gui.kansen_ammostorage_usage": "탄약고 사용량",
@@ -292,6 +313,7 @@
   "entity.status.waiting": "지휘관을 기다리는 중",
   "entity.status.following": "지휘관을 따르는 중",
   "entity.status.fainted": "기절",
+  "entity.status.combat": "전투중",
   "entity.status.injured": "부상",
 
   "gui.team.newname": "새 팀 %s",
@@ -332,10 +354,12 @@
   "akn_operator": "오퍼레이터 / 명일방주",
   "akn_reunion": "리유니온 / 명일방주",
   "bluearchive": "블루 아카이브",
+  "srr": "샤이닝 레저넌스",
   "al_kansen": "함선소녀 / 벽람항로",
   "kc_kanmusu": "함선소녀 / 함대 컬렉션",
   "gfl_tdoll": "전술인형 / 소녀전선",
   "fgo_servant": "서번트 / 페이트/그랜드 오더",
+  "cls_closer": "클로저 / 클로저스",
 
   "entity.projectazure.entityayanami": "IJN 아야나미",
   "entity.projectazure.entityjavelin": "HMS 재블린",
@@ -366,7 +390,12 @@
   "entity.projectazure.entityyato": "야토",
 
   "entity.projectazure.entityartoria": "아르토리아 펜드래건",
-  "entity.projectazure.entityyscathath": "스카사하",
+  "entity.projectazure.entityscathath": "스카사하",
+  "entity.projectazure.entityshiki": "료기 시키",
+
+  "entity.projectazure.entitykyaru": "캬루",
+
+  "entity.projectazure.entityexcela": "엑셀라",
 
   "entity.projectazure.missiledrone": "미사일 드론",
 

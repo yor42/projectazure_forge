@@ -114,6 +114,9 @@
   "item.projectazure.excalibur_sheath": "Avalon",
   "item.projectazure.gae_bolg": "Gáe Bolg",
 
+  "item.projectazure.gravinet": "Gravinet",
+  "item.projectazure.gravinet.tooltip": "Lance with legend says that it has power to manipulate gravity.",
+
   "item.projectazure.stasis_crystal": "Stasis Crystal",
 
   "item.projectazure.defib_paddle": "Defibrillator Paddle",
@@ -281,6 +284,11 @@
   "gui.fgo.morale": "Morale: %s",
   "gui.fgo.health": "HP: %s",
 
+  "gui.sr.hunger": "Hunger",
+  "gui.sr.bond": "Affection",
+  "gui.sr.atk": "Attack",
+  "gui.sr.def": "Defence",
+
   "gui.pcr.hunger": "Fd.",
   "gui.pcr.affection": "Aff.",
   "gui.pcr.morale": "Mor.",
@@ -305,6 +313,7 @@
   "entity.status.waiting": "Waiting for owner",
   "entity.status.following": "Following owner",
   "entity.status.fainted": "FAINTED",
+  "entity.status.combat": "in Combat",
   "entity.status.injured": "Injured",
 
   "gui.team.newname": "New Team %s",
@@ -342,13 +351,15 @@
   "operator.supporter": "Supporter",
   "operator.reunion": "Reunion",
 
-  "akn_operator": "Operator  Arknights",
+  "akn_operator": "Operator / Arknights",
   "akn_reunion": "Reunion / Arknights",
   "bluearchive": "Blue Archive",
+  "srr": "Shining Resonance",
   "al_kansen": "KANSEN / Azur Lane",
   "kc_kanmusu": "Kanmusu / Kantai Collection",
   "gfl_tdoll": "T-Doll / Girl's Frontline",
   "fgo_servant": "Servant / Fate/Grand Order",
+  "cls_closer": "Closer / CLOSERS",
 
   "entity.projectazure.entityayanami": "IJN Ayanami",
   "entity.projectazure.entityjavelin": "HMS Javelin",
@@ -383,6 +394,8 @@
   "entity.projectazure.entityshiki": "Ryougi Shiki",
 
   "entity.projectazure.entitykyaru": "Kyaru",
+
+  "entity.projectazure.entityexcela": "Excela",
 
   "entity.projectazure.missiledrone": "Missile Drone",
 

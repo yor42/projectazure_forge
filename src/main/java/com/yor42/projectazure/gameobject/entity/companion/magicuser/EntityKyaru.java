@@ -272,7 +272,7 @@ public class EntityKyaru extends AbstractCompanionMagicUser {
     }
 
     @Override
-    public boolean shouldUseSpell() {
+    public boolean shouldUseSpell(LivingEntity Target) {
         return !isSwimming() && this.getMainHandItem().getItem() == registerItems.KYARU_STAFF.get();
     }
 

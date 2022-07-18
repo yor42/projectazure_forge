@@ -26,31 +26,28 @@ import static com.yor42.projectazure.gameobject.misc.DamageSources.CAUSAL_BLACKH
 
 public class EntityCausalBlackhole extends Entity {
 
-    private int life;
-    private final UUID owner;
+    private UUID owner;
 
     public EntityCausalBlackhole(EntityType<?> p_i48580_1_, World p_i48580_2_) {
         super(p_i48580_1_, p_i48580_2_);
-        this.life = 200;
         this.noPhysics = true;
         this.owner = null;
     }
 
     public EntityCausalBlackhole(World p_i48580_2_, LivingEntity owner) {
         super(registerEntity.BLACKHOLE.get(), p_i48580_2_);
-        this.life = 400;
         this.noPhysics = true;
         this.owner = owner.getUUID();
     }
 
-    public static void SpawnAroundTarget(AbstractEntityCompanion entityCompanion, LivingEntity target){
+    public static void SpawnAroundTarget(ServerWorld world, AbstractEntityCompanion entityCompanion, LivingEntity target){
         EntityCausalBlackhole blackhole = new EntityCausalBlackhole(entityCompanion.getCommandSenderWorld(), entityCompanion);
 
         double x = target.getX()-4+(8* MathUtil.getRand().nextDouble());
-        double y = target.getZ()-2+(4* MathUtil.getRand().nextDouble());
+        double y = target.getY()+(2* MathUtil.getRand().nextDouble());
         double z = target.getZ()-4+(8* MathUtil.getRand().nextDouble());
         blackhole.setPos(x,y,z);
-        entityCompanion.getCommandSenderWorld().addFreshEntity(blackhole);
+        world.addFreshEntity(blackhole);
     }
 
     @Override
@@ -61,10 +58,13 @@ public class EntityCausalBlackhole extends Entity {
     @Override
     public void tick() {
         super.tick();
+        int life = 400;
+        if(this.tickCount>= life){
+            this.remove();
+        }
         if(!this.getCommandSenderWorld().isClientSide()) {
-
             this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8.0D, 8, 8)).stream().filter((entity) -> {
-                if(entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative()){
+                if(entity instanceof PlayerEntity && ((PlayerEntity) entity).isCreative() || entity.getUUID().equals(this.owner)){
                     return false;
                 }
                 Entity Owner = ((ServerWorld)this.getCommandSenderWorld()).getEntity(this.owner);
@@ -95,12 +95,12 @@ public class EntityCausalBlackhole extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundNBT p_70037_1_) {
-        this.life = p_70037_1_.getInt("lifespan");
+        this.owner = p_70037_1_.getUUID("owner");
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundNBT p_213281_1_) {
-        p_213281_1_.putInt("lifespan", this.life);
+        p_213281_1_.putUUID("owner", this.owner);
     }
 
     @Override

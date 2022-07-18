@@ -261,8 +261,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     }
 
     @Override
-    public boolean shouldUseSpell() {
-
+    public boolean shouldUseSpell(LivingEntity Target) {
         return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming()&& !this.getNextSkillItem().isEmpty();
     }
 

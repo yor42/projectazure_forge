@@ -42,7 +42,7 @@ public class CompanionMovetoTargetTask extends Task<AbstractEntityCompanion> {
 
     private void setWalkAndLookTarget(LivingEntity p_233968_1_, LivingEntity p_233968_2_) {
 
-        if(this.entity instanceof ISpellUser && ((ISpellUser) this.entity).shouldUseSpell()){
+        if(this.entity instanceof ISpellUser && ((ISpellUser) this.entity).shouldUseSpell(p_233968_2_)){
             this.closeEnoughDist = this.entity.getSpellRange();
         }
         else if(this.entity.canUseCannonOrTorpedo()){

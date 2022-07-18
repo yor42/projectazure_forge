@@ -238,7 +238,7 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
     }
 
     @Override
-    public boolean shouldUseSpell() {
+    public boolean shouldUseSpell(LivingEntity Target) {
         return getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
     }
 

@@ -18,7 +18,7 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
         this.StartedSpellAttackTimeStamp = this.tickCount;
     }
 
-    public boolean shouldUseSpell(){
+    public boolean shouldUseSpell(LivingEntity target){
         return this.getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
     };
 

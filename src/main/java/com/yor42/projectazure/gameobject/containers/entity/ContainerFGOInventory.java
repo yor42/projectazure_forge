@@ -39,7 +39,7 @@ public class ContainerFGOInventory extends Container {
 
         for (int m = 0; m < 2; m++) {
             for (int n = 0; n < 6; n++) {
-                this.addSlot(new AmmoSlot(entityInventory, n + 6 * m, 101 + n * 18, 94 + m * 18));
+                this.addSlot(new SlotItemHandler(entityInventory, n + 6 * m, 101 + n * 18, 94 + m * 18));
             }
         }
 

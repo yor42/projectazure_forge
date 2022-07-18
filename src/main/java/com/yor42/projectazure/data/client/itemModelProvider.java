@@ -165,6 +165,8 @@ public class itemModelProvider extends ItemModelProvider {
 
         buildModelGFL("spawnm4a1");
 
+        buildModelSR("spawnexcela");
+
         buildModelAKN("spawnchen");
         buildModelAKN("spawnrosmontis");
         buildModelAKN("spawnamiya");
@@ -230,6 +232,10 @@ public class itemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder buildModelGFL(String ItemName){
         return buildModelWithSingleTex(ItemName, "gfl_manufacture_contract");
+    }
+
+    private ItemModelBuilder buildModelSR(String ItemName){
+        return buildModelWithSingleTex(ItemName, "sr_sealstone");
     }
 
     private ItemModelBuilder buildModelAKN(String ItemName){

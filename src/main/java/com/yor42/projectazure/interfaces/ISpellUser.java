@@ -17,7 +17,7 @@ public interface ISpellUser {
      */
     int getProjectilePreAnimationDelay();
     Hand getSpellUsingHand();
-    boolean shouldUseSpell();
+    boolean shouldUseSpell(LivingEntity target);
 
     default int SpellCooldown(){
         return 0;

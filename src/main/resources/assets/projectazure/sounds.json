@@ -2465,6 +2465,81 @@
       }
     ]
   },
+  "exela_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/sr/excela/attack1"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/attack2"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/attack3"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/attack4"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/attack5"
+      }
+    ]
+  },
+  "exela_skill": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/sr/excela/skill/1"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/skill/2"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/skill/3"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/skill/4"
+      }
+    ]
+  },
+  "exela_talk": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/sr/excela/idle1"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle2"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle3"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle4"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle5"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle6"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle7"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle8"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle9"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle10"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle11"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/idle12"
+      }
+    ]
+},
   "warhammer_swing": {
     "sounds": [
       {

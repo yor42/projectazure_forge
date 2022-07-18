@@ -365,7 +365,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public boolean shouldUseSpell() {
+    public boolean shouldUseSpell(LivingEntity Target) {
         if(this.getGunStack().getItem() instanceof GunItem) {
             boolean hasAmmo = this.getGunStack().getOrCreateTag().getInt("AmmoCount") > 0;
             boolean reloadable = this.HasRightMagazine(this.getGunStack());

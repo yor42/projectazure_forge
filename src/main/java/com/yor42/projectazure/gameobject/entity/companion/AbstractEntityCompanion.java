@@ -2819,9 +2819,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         return ActionResultType.SUCCESS;
                         //this.setOrderedToSit(!this.isSitting());
                     }
-                }
-                else if(player.isCrouching()) {
-                    return this.openInventory(player);
+                    else if(player.isCrouching()) {
+                        return this.openInventory(player);
+                    }
                 }
             }
             return ActionResultType.FAIL;
@@ -2993,6 +2993,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         else if(this.isLimitbreakItem(heldstacks)){
             this.doLimitBreak();
             return ActionResultType.CONSUME;
+        }
+        else if(player.isCrouching()) {
+            return this.openInventory(player);
         }
 
         return ActionResultType.FAIL;

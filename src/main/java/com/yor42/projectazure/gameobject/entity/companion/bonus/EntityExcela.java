@@ -4,6 +4,7 @@ import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerShiningResonanceInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCausalBlackhole;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
@@ -11,6 +12,7 @@ import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -23,15 +25,19 @@ import net.minecraft.item.TieredItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +45,7 @@ import java.util.Collections;
 import static com.yor42.projectazure.libs.enums.EntityType.SHININGRESONANCE;
 
 public class EntityExcela extends AbstractEntityCompanion implements ISpellUser, IMeleeAttacker {
+
     public EntityExcela(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -137,7 +144,8 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
                 event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", true));
             }
-            return PlayState.CONTINUE;
+        }else if (this.isTalentedWeaponinMainHand()) {
+            event.getController().setAnimation(builder.addAnimation("idle_lancer", true));
         }
         else if(this.isMoving()) {
             if(this.isSprinting()){
@@ -146,13 +154,13 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
             else {
                 event.getController().setAnimation(builder.addAnimation("walk_arm", true));
             }
-            return PlayState.CONTINUE;
-        }
-        if(this.isTalentedWeaponinMainHand()){
-            event.getController().setAnimation(builder.addAnimation("idle_lancer", true));
         }
         else {
-            event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+            if (this.isTalentedWeaponinMainHand()) {
+                event.getController().setAnimation(builder.addAnimation("idle_lancer", true));
+            } else {
+                event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+            }
         }
         return PlayState.CONTINUE;
     }
@@ -187,21 +195,18 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle", true));
                 }
             }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", true));
-            return PlayState.CONTINUE;
         }
         else if(this.isNonVanillaMeleeAttacking()){
             event.getController().setAnimation(builder.addAnimation("melee_attack_leg", true));
-            return PlayState.CONTINUE;
         }
         else if(this.isUsingSpell()){
             event.getController().setAnimation(builder.addAnimation("ranged_attack_leg", true));
-            return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSprinting()){
@@ -210,15 +215,32 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
             else {
                 event.getController().setAnimation(builder.addAnimation("walk_leg", true));
             }
-            return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        else {
+            event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        }
         return PlayState.CONTINUE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return registerSounds.EXCELA_TALK;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 1.0F;
+    }
+
+    @Override
+    protected float getVoicePitch() {
+        return 1.0F;
     }
 
     @Override
     protected void openGUI(ServerPlayerEntity player) {
-
+        NetworkHooks.openGui(player, new ContainerShiningResonanceInventory.Supplier(this), (buffer)->{buffer.writeInt(this.getId());});
     }
 
     @Nonnull
@@ -234,12 +256,12 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
 
     @Override
     public int getInitialSpellDelay() {
-        return 14;
+        return 38;
     }
 
     @Override
     public int getProjectilePreAnimationDelay() {
-        return 38;
+        return 14;
     }
 
     @Override
@@ -248,20 +270,25 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
     }
 
     @Override
-    public boolean shouldUseSpell() {
+    public boolean shouldUseSpell(LivingEntity Target) {
         if(this.getGunStack().getItem() instanceof GunItem) {
             boolean hasAmmo = this.getGunStack().getOrCreateTag().getInt("AmmoCount") > 0;
             boolean reloadable = this.HasRightMagazine(this.getGunStack());
 
             return !(hasAmmo || reloadable);
         }
-        else return !this.isSwimming() && !this.shouldUseNonVanillaAttack(this.getTarget());
+
+        boolean flag = !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null && this.RangedAttackCoolDown<=0;
+
+        return flag;
 
     }
 
     @Override
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
-        EntityCausalBlackhole.SpawnAroundTarget(this, target);
+        if(!world.isClientSide()) {
+            EntityCausalBlackhole.SpawnAroundTarget((ServerWorld) world, this, target);
+        }
         this.addMorale(-0.2);
         this.addExhaustion(0.3F);
     }
@@ -270,6 +297,7 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
     public void StartShootingEntityUsingSpell(LivingEntity target) {
         this.setSpellDelay(this.getInitialSpellDelay());
         this.StartedSpellAttackTimeStamp = this.tickCount;
+        this.playSound(registerSounds.EXCELA_SKILL, this.getSoundVolume(), this.getVoicePitch());
     }
 
     @Override
@@ -297,12 +325,14 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
         return 4;
     }
 
+
     @Override
     public boolean shouldUseNonVanillaAttack(LivingEntity target) {
         if(target == null){
             return false;
         }
-        return this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null && this.distanceTo(target) <=this.getAttackRange(this.isTalentedWeaponinMainHand());
+        boolean flg = this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null && !this.shouldUseSpell(target) && this.distanceTo(target) <=16;
+        return flg;
     }
 
     @Override
@@ -315,6 +345,7 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
                 target.hurt(new EntityDamageSource("mob", this).bypassArmor(), this.getAttackDamageMainHand());
             }
         }
+        this.playSound(registerSounds.EXCELA_ATTACK, this.getSoundVolume(), this.getVoicePitch());
     }
 
     @Override

@@ -196,6 +196,10 @@ public final class registerSounds {
     public static final SoundEvent Z23_TALK_PAT = registerSoundEvent("z23_talk_pat");
     public static final SoundEvent Z23_TALK_ATTACK = registerSoundEvent("z23_talk_attack");
 
+    public static final SoundEvent EXCELA_ATTACK = registerSoundEvent("exela_attack");
+    public static final SoundEvent EXCELA_SKILL = registerSoundEvent("exela_skill");
+    public static final SoundEvent EXCELA_TALK = registerSoundEvent("exela_talk");
+
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);
         SoundEvent sound = new SoundEvent(soundID).setRegistryName(soundID);

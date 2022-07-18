@@ -301,7 +301,7 @@ public class CompanionTasks {
         boolean canUseGun = companion.shouldUseGun();
         boolean canUseRigging = companion instanceof EntityKansenBase && !hasAttackableCannon(companion.getRigging()) && ((EntityKansenBase) companion).canUseShell(((EntityKansenBase) companion).getActiveShellCategory());
         boolean CanUseNonValinnaAttack = companion instanceof AbstractSwordUserBase && ((AbstractSwordUserBase)companion).shouldUseNonVanillaAttack(tgt);
-        boolean canUseSpell = companion instanceof AbstractCompanionMagicUser && ((AbstractCompanionMagicUser) companion).shouldUseSpell();
+        boolean canUseSpell = companion instanceof AbstractCompanionMagicUser && ((AbstractCompanionMagicUser) companion).shouldUseSpell(tgt);
         return isEquippingsword||canUseGun || canUseRigging || CanUseNonValinnaAttack||canUseSpell || hasboworCrossbow;
     }
 

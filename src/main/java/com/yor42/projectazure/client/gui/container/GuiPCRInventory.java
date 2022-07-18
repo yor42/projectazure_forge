@@ -121,23 +121,9 @@ public class GuiPCRInventory extends ContainerScreen<ContainerPCRInventory> {
 
     @Override
     protected void renderBg(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
+        p_230450_1_.pushPose();
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(p_230450_1_, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-    }
-
-    private void switchBehavior() {
-        if(Screen.hasShiftDown()){
-            this.host.clearHomePos();
-        }
-        else {
-            this.host.SwitchFreeRoamingStatus();
-        }
-    }
-
-    private void switchItemBehavior() {
-        this.host.SwitchItemBehavior();
-    }
-    private void switchAttackBehavior() {
-        this.host.SwitchPassiveAttack();
+        p_230450_1_.popPose();
     }
 }
