@@ -2539,7 +2539,94 @@
         "name": "projectazure:entity/sr/excela/idle12"
       }
     ]
-},
+  },
+  "exela_hurt": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/sr/excela/hurt1"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt2"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt3"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt4"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt5"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt6"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt7"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt8"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt9"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/hurt10"
+      }
+    ]
+  },
+  "exela_die": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/sr/excela/die1"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/die2"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/die3"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/die4"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/die5"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/die6"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/die7"
+      }
+    ]
+  },
+  "exela_kill": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/sr/excela/kill1"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/kill2"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/kill3"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/kill4"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/kill5"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/kill6"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/kill7"
+      },
+      {
+        "name": "projectazure:entity/sr/excela/kill8"
+      }
+    ]
+  },
   "warhammer_swing": {
     "sounds": [
       {

@@ -13,6 +13,7 @@ import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -315,6 +316,20 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
         return new ArrayList<>(Collections.singletonList(registerItems.GRAVINET.get()));
     }
 
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return registerSounds.EXCELA_DEATH;
+    }
+
+    @Override
+    public void awardKillScore(Entity p_191956_1_, int p_191956_2_, DamageSource p_191956_3_) {
+        super.awardKillScore(p_191956_1_, p_191956_2_, p_191956_3_);
+        if(this.getRandom().nextFloat()<=0.5F) {
+            this.playSound(registerSounds.EXCELA_KILL, this.getSoundVolume(), this.getVoicePitch());
+        }
+    }
+
     @Override
     public boolean hasMeleeItem() {
         return this.isTalentedWeaponinMainHand();
@@ -325,6 +340,18 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
         return 4;
     }
 
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+
+        if(super.hurt(source, amount)){
+            if(this.getRandom().nextFloat()<0.2F){
+                this.playSound(registerSounds.EXCELA_HURT, this.getSoundVolume(), this.getVoicePitch());
+            }
+            return true;
+        }
+
+        return false;
+    }
 
     @Override
     public boolean shouldUseNonVanillaAttack(LivingEntity target) {

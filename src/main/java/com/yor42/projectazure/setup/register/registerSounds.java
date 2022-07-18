@@ -199,6 +199,9 @@ public final class registerSounds {
     public static final SoundEvent EXCELA_ATTACK = registerSoundEvent("exela_attack");
     public static final SoundEvent EXCELA_SKILL = registerSoundEvent("exela_skill");
     public static final SoundEvent EXCELA_TALK = registerSoundEvent("exela_talk");
+    public static final SoundEvent EXCELA_HURT = registerSoundEvent("exela_hurt");
+    public static final SoundEvent EXCELA_DEATH = registerSoundEvent("exela_die");
+    public static final SoundEvent EXCELA_KILL = registerSoundEvent("exela_kill");
 
     private static SoundEvent registerSoundEvent(final String soundname) {
         final ResourceLocation soundID = new ResourceLocation(MODID, soundname);
