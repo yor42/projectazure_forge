@@ -85,6 +85,8 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityKyaru>> KYARU = ENTITIES.register("entitykyaru", () -> EntityType.Builder.of(EntityKyaru::new, EntityClassification.CREATURE).sized(0.572F, 1.52F).build(ModResourceLocation("entitykyaru").toString()));
     public static final RegistryObject<EntityType<EntityShiki>> SHIKI = ENTITIES.register("entityshiki", () -> EntityType.Builder.of(EntityShiki::new, EntityClassification.CREATURE).sized(0.572F, 1.6F).build(ModResourceLocation("entityshiki").toString()));
     public static final RegistryObject<EntityType<EntityExcela>> EXCELA = ENTITIES.register("entityexcela", () -> EntityType.Builder.of(EntityExcela::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityexcela").toString()));
+
+    public static final RegistryObject<EntityType<EntityCausalBlackhole>> BLACKHOLE = ENTITIES.register("entitycausalblackhole", () -> EntityType.Builder.<EntityCausalBlackhole>of(EntityCausalBlackhole::new, EntityClassification.MISC).sized(3F, 3F).build(ModResourceLocation("entitycausalblackhole").toString()));
     @SubscribeEvent
     public static void RegisterAttributes(EntityAttributeCreationEvent event){
         event.put(AYANAMI.get(), EntityAyanami.MutableAttribute().build());
@@ -152,8 +154,10 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.SHIKI.get(), EntityShikiRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.EXCELA.get(), EntityExcelaRenderer::new);
 
+
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.BLACKHOLE.get(), EntityBlackHoleRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_CANNONSHELL.get(), entityCannonPelletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_SPELLBALL.get(), EntitySpellBallRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_RAILGUN.get(), EntityRailgunProjectileRenderer::new);

@@ -209,7 +209,7 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
                 this.playSound(registerSounds.LEAPHAMMER_START, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
             }
             else if(this.getAttackDamageDelay().contains(Timer)){
-                List<Entity> AttackTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(2, 2, 2), (entity) -> entity instanceof LivingEntity && (!EntitySiege.this.isOwnedBy((LivingEntity) entity) && !(entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntitySiege.this.getOwner()))) && (PAConfig.CONFIG.EnablePVP.get() && entity instanceof PlayerEntity));
+                List<Entity> AttackTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(2, 2, 2), (entity) -> entity instanceof LivingEntity && (!EntitySiege.this.isOwnedBy((LivingEntity) entity) && !(entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntitySiege.this.getOwner()))) && (PAConfig.CONFIG.EnablePVP.get() && entity instanceof PlayerEntity));
                 for(Entity entity : AttackTarget){
                     if(entity instanceof LivingEntity){
                         entity.hurt(DamageSource.mobAttack(this), this.getAttackDamageMainHand()*2.2F);

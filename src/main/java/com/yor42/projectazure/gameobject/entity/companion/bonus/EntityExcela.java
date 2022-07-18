@@ -5,6 +5,7 @@ import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityCausalBlackhole;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.ISpellUser;
@@ -22,6 +23,7 @@ import net.minecraft.item.TieredItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -156,6 +158,11 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
     }
 
     @Override
+    public int SpellCooldown() {
+        return 1800;
+    }
+
+    @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
@@ -254,7 +261,9 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
 
     @Override
     public void ShootProjectile(World world, @Nonnull LivingEntity target) {
-
+        EntityCausalBlackhole.SpawnAroundTarget(this, target);
+        this.addMorale(-0.2);
+        this.addExhaustion(0.3F);
     }
 
     @Override

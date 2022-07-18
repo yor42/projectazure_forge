@@ -358,7 +358,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
                 return true;
             }
             else if(this.getSkillPoints()>=6 && this.getOwner()!=null){
-                List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().expandTowards(10, 2, 10), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
+                List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(5, 2, 5), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
                 if(!HealTarget.isEmpty()){
                     this.HealTarget = HealTarget;
                     return true;

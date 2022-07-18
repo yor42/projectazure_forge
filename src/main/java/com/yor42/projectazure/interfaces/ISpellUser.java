@@ -19,6 +19,10 @@ public interface ISpellUser {
     Hand getSpellUsingHand();
     boolean shouldUseSpell();
 
+    default int SpellCooldown(){
+        return 0;
+    }
+
     void ShootProjectile(World world, @Nonnull LivingEntity target);
     void StartShootingEntityUsingSpell(LivingEntity target);
 }

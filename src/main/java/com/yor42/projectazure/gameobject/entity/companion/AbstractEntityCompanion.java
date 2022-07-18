@@ -363,6 +363,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected int patTimer;
     protected int shieldCoolDown;
+    public int RangedAttackCoolDown;
     protected int qinteractionTimer;
     private int ItemSwapIndexOffhand = -1;
     private int ItemSwapIndexMainHand = -1;
@@ -708,6 +709,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         });
 
         compound.put("status", NBT);
+        compound.putInt("rangedattackcooldown", this.RangedAttackCoolDown);
         compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
         compound.putBoolean("isforcewokenup", this.getEntityData().get(ISFORCEWOKENUP));
         compound.putDouble("exp", this.getEntityData().get(EXP));
@@ -737,6 +739,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(NONVANILLAMELEEATTACKDELAY, compound.getInt("attackdelay"));
         this.getEntityData().set(PICKUP_ITEM, compound.getBoolean("pickupitem"));
         this.getEntityData().set(SHOULDFIRSTATTACK, compound.getBoolean("firstattack"));
+        this.RangedAttackCoolDown = compound.getInt("rangedattackcooldown");
         boolean hasStayPos = compound.contains("stayX") && compound.contains("stayY") && compound.contains("stayZ");
         if(hasStayPos) {
             this.getEntityData().set(STAYPOINT, Optional.of(new BlockPos(compound.getDouble("stayX"), compound.getDouble("stayY"), compound.getDouble("stayZ"))));
@@ -3104,6 +3107,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         if(!this.getCommandSenderWorld().isClientSide()){
             this.foodStats.tick(this);
+            if(this.RangedAttackCoolDown>0){
+                this.RangedAttackCoolDown--;
+            }
         }
     }
 

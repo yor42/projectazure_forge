@@ -72,7 +72,7 @@ public class CompanionHealTask extends Task<AbstractEntityCompanion> {
 
     @Override
     protected boolean canStillUse(ServerWorld p_212834_1_, AbstractEntityCompanion entity, long p_212834_3_) {
-        List<LivingEntity> list = p_212834_1_.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().expandTowards(4.0D, 3.0D, 4.0D));
+        List<LivingEntity> list = p_212834_1_.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(4.0D, 3.0D, 4.0D));
 
         if (!list.isEmpty() && entity.getFoodStats().getFoodLevel()>5) {
             for (LivingEntity mob : list) {

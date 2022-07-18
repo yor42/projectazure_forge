@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCausalBlackhole;
+import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -24,15 +25,18 @@ public class EntityBlackHoleRenderer extends EntityRenderer<EntityCausalBlackhol
     private static final ResourceLocation TEXTURE = ModResourceLocation("textures/entity/projectile/blackhole.png");
     private static final RenderType RENDER_TYPE = RenderType.entityTranslucent(TEXTURE);
 
-    protected EntityBlackHoleRenderer(EntityRendererManager p_i46179_1_) {
+    public EntityBlackHoleRenderer(EntityRendererManager p_i46179_1_) {
         super(p_i46179_1_);
     }
 
     @Override
     public void render(EntityCausalBlackhole p_225623_1_, float p_225623_2_, float p_225623_3_, MatrixStack p_225623_4_, IRenderTypeBuffer p_225623_5_, int packedLightIn) {
         p_225623_4_.pushPose();
+        p_225623_4_.translate(0,1.5, 0);
+        p_225623_4_.scale(3,3,3);
         p_225623_4_.mulPose(this.entityRenderDispatcher.cameraOrientation());
-        p_225623_4_.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+        //p_225623_4_.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+        p_225623_4_.mulPose(Vector3f.ZP.rotation((float) ((2*Math.PI)*(((float)p_225623_1_.tickCount%200F) /200F))));
         MatrixStack.Entry matrixstack$entry = p_225623_4_.last();
         Matrix4f matrix4f = matrixstack$entry.pose();
         Matrix3f matrix3f = matrixstack$entry.normal();
@@ -50,7 +54,7 @@ public class EntityBlackHoleRenderer extends EntityRenderer<EntityCausalBlackhol
         return TEXTURE;
     }
 
-    private static void vertex(IVertexBuilder builder, Matrix4f p_229045_1_, Matrix3f p_229045_2_, int p_229045_3_, float p_229045_4_, int p_229045_5_, int p_229045_6_, int p_229045_7_) {
-        builder.vertex(p_229045_1_, p_229045_4_ - 0.5F, (float)p_229045_5_ - 0.25F, 0.0F).color(255, 255, 255, 255).uv((float)p_229045_6_, (float)p_229045_7_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229045_3_).normal(p_229045_2_, 0.0F, 1.0F, 0.0F).endVertex();
+    private static void vertex(IVertexBuilder builder, Matrix4f matrix, Matrix3f p_229045_2_, int p_229045_3_, float p_229045_4_, int p_229045_5_, int p_229045_6_, int p_229045_7_) {
+        builder.vertex(matrix, p_229045_4_ - 0.5F, (float)p_229045_5_ - 0.5F, 0.0F).color(255, 255, 255, 255).uv((float)p_229045_6_, (float)p_229045_7_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(p_229045_3_).normal(p_229045_2_, 0.0F, 1.0F, 0.0F).endVertex();
     }
 }
