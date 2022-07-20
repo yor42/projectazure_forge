@@ -11,6 +11,7 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -40,8 +41,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.yor42.projectazure.setup.register.registerSounds.CHIXIAO_HIT;
-import static com.yor42.projectazure.setup.register.registerSounds.SHEATH_HIT;
+import static com.yor42.projectazure.setup.register.registerSounds.*;
 
 public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     @Override
@@ -69,7 +69,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     @Nullable
     @Override
     protected SoundEvent getAggroedSoundEvent() {
-        return registerSounds.CHEN_TALK_ATTACK;
+        return registerSounds.CHEN_TALK_AGGRO;
     }
 
     @Nullable
@@ -87,20 +87,33 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
+    public void awardKillScore(Entity p_191956_1_, int p_191956_2_, DamageSource p_191956_3_) {
+        this.playSound(CHEN_TALK_KILL, this.getSoundVolume(), this.getVoicePitch());
+        super.awardKillScore(p_191956_1_, p_191956_2_, p_191956_3_);
+    }
+
+    @Override
     public float getAttackRange(boolean isUsingTalentedWeapon) {
         return isUsingTalentedWeapon? 4:3;
     }
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        this.playSound(getAttackSound(), 1F, 0.8F + this.getRandom().nextFloat() * 0.4F);
+        if(AttackCount == 1) {
+            this.playSound(CHEN_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
+        }
+        boolean ishit = false;
         if(AttackCount == 2){
-            target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage+3);
+            ishit = target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage+3);
             this.AttackCount = 0;
         }
         else{
-            target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage*0.5F);
+            ishit = target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage*0.5F);
             target.knockback(0.09F, MathHelper.sin(this.yRot * ((float)Math.PI / 180F)), -MathHelper.cos(this.yRot * ((float)Math.PI / 180F)));
+        }
+
+        if(ishit){
+            target.playSound(getAttackSound(), 1F, 0.8F + this.getRandom().nextFloat() * 0.4F);
         }
     }
 

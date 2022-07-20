@@ -82,9 +82,18 @@ public final class registerSounds {
     public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION2 = registerSoundEvent("chimera_talk_high_affection2");
     public static final SoundEvent AMIYA_TALK_HIGH_AFFECTION3 = registerSoundEvent("chimera_talk_high_affection3");
 
+    public static final SoundEvent NEARL_TALK_NORMAL = registerSoundEvent("nearl_talk_normal");
+    public static final SoundEvent NEARL_TALK_PAT = registerSoundEvent("nearl_talk_pat");
+    public static final SoundEvent NEARL_TALK_AGGRO = registerSoundEvent("nearl_talk_aggro");
+    public static final SoundEvent NEARL_TALK_SKILL = registerSoundEvent("nearl_talk_skill");
+    public static final SoundEvent NEARL_TALK_HIGH_AFFECTION1 = registerSoundEvent("nearl_talk_high_affection1");
+    public static final SoundEvent NEARL_TALK_HIGH_AFFECTION2 = registerSoundEvent("nearl_talk_high_affection2");
+    public static final SoundEvent NEARL_TALK_HIGH_AFFECTION3 = registerSoundEvent("nearl_talk_high_affection3");
     public static final SoundEvent CHEN_TALK_NORMAL = registerSoundEvent("chen_talk_normal");
     public static final SoundEvent CHEN_TALK_PAT = registerSoundEvent("chen_talk_pat");
     public static final SoundEvent CHEN_TALK_ATTACK = registerSoundEvent("chen_talk_attack");
+    public static final SoundEvent CHEN_TALK_AGGRO = registerSoundEvent("chen_talk_aggro");
+    public static final SoundEvent CHEN_TALK_KILL = registerSoundEvent("chen_talk_kill");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION1 = registerSoundEvent("chen_talk_high_affection1");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION2 = registerSoundEvent("chen_talk_high_affection2");
     public static final SoundEvent CHEN_TALK_HIGH_AFFECTION3 = registerSoundEvent("chen_talk_high_affection3");
@@ -92,6 +101,7 @@ public final class registerSounds {
     public static final SoundEvent TEXAS_TALK_NORMAL = registerSoundEvent("texas_talk_normal");
     public static final SoundEvent TEXAS_TALK_PAT = registerSoundEvent("texas_talk_pat");
     public static final SoundEvent TEXAS_TALK_ATTACK = registerSoundEvent("texas_talk_attack");
+    public static final SoundEvent TEXAS_TALK_AGGRO = registerSoundEvent("texas_talk_aggro");
     public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION1 = registerSoundEvent("texas_talk_high_affection1");
     public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION2 = registerSoundEvent("texas_talk_high_affection2");
     public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION3 = registerSoundEvent("texas_talk_high_affection3");
@@ -130,6 +140,37 @@ public final class registerSounds {
     public static final SoundEvent SCHWARZ_TALK_HIGH_AFFECTION1 = registerSoundEvent("schwarz_talk_high_affection1");
     public static final SoundEvent SCHWARZ_TALK_HIGH_AFFECTION2 = registerSoundEvent("schwarz_talk_high_affection2");
     public static final SoundEvent SCHWARZ_TALK_HIGH_AFFECTION3 = registerSoundEvent("schwarz_talk_high_affection3");
+
+    public static final SoundEvent YATO_TALK_NORMAL = registerSoundEvent("yato_talk_normal");
+    public static final SoundEvent YATO_TALK_PAT = registerSoundEvent("yato_talk_pat");
+    public static final SoundEvent YATO_TALK_ATTACK = registerSoundEvent("yato_talk_attack");
+    public static final SoundEvent YATO_TALK_HIGH_AFFECTION1 = registerSoundEvent("yato_talk_high_affection1");
+    public static final SoundEvent YATO_TALK_HIGH_AFFECTION2 = registerSoundEvent("yato_talk_high_affection2");
+    public static final SoundEvent YATO_TALK_HIGH_AFFECTION3 = registerSoundEvent("yato_talk_high_affection3");
+
+    public static final SoundEvent ARTORIA_TALK_NORMAL = registerSoundEvent("artoria_talk");
+    public static final SoundEvent ARTORIA_TALK_ATTACK = registerSoundEvent("artoria_attack");
+    public static final SoundEvent ARTORIA_TALK_AGGRO = registerSoundEvent("artoria_aggro");
+    public static final SoundEvent ARTORIA_TALK_HURT = registerSoundEvent("artoria_hurt");
+    public static final SoundEvent ARTORIA_TALK_KILL = registerSoundEvent("artoria_kill");
+    public static final SoundEvent ARTORIA_TALK_DIE = registerSoundEvent("artoria_die");
+    public static final SoundEvent ARTORIA_TALK_HIGH_AFFECTION1 = registerSoundEvent("artoria_talk_bond1");
+    public static final SoundEvent ARTORIA_TALK_HIGH_AFFECTION2 = registerSoundEvent("artoria_talk_bond2");
+    public static final SoundEvent ARTORIA_TALK_HIGH_AFFECTION3 = registerSoundEvent("artoria_talk_bond3");
+    public static final SoundEvent ARTORIA_TALK_HIGH_AFFECTION4 = registerSoundEvent("artoria_talk_bond4");
+    public static final SoundEvent ARTORIA_TALK_HIGH_AFFECTION5 = registerSoundEvent("artoria_talk_bond5");
+
+    public static final SoundEvent SHIKI_TALK_NORMAL = registerSoundEvent("shiki_talk");
+    public static final SoundEvent SHIKI_TALK_ATTACK = registerSoundEvent("shiki_attack");
+    public static final SoundEvent SHIKI_TALK_AGGRO = registerSoundEvent("shiki_aggro");
+    public static final SoundEvent SHIKI_TALK_HURT = registerSoundEvent("shiki_hurt");
+    public static final SoundEvent SHIKI_TALK_KILL = registerSoundEvent("shiki_kill");
+    public static final SoundEvent SHIKI_TALK_DIE = registerSoundEvent("shiki_die");
+    public static final SoundEvent SHIKI_TALK_HIGH_AFFECTION1 = registerSoundEvent("shiki_talk_bond1");
+    public static final SoundEvent SHIKI_TALK_HIGH_AFFECTION2 = registerSoundEvent("shiki_talk_bond2");
+    public static final SoundEvent SHIKI_TALK_HIGH_AFFECTION3 = registerSoundEvent("shiki_talk_bond3");
+    public static final SoundEvent SHIKI_TALK_HIGH_AFFECTION4 = registerSoundEvent("shiki_talk_bond4");
+    public static final SoundEvent SHIKI_TALK_HIGH_AFFECTION5 = registerSoundEvent("shiki_talk_bond5");
 
     public static final SoundEvent SHIROKO_TALK_NORMAL = registerSoundEvent("shiroko_talk_normal");
     public static final SoundEvent SHIROKO_TALK_PAT = registerSoundEvent("shiroko_talk_pat");

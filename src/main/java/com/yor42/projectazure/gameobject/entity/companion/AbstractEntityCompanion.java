@@ -509,7 +509,23 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
             return !this.isPVPenabled();
         }
-        return target instanceof AbstractEntityDrone && ((AbstractEntityDrone) target).getOwner().isPresent() && (((AbstractEntityDrone) target).getOwner().get() == this || (((AbstractEntityDrone) target).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) target).getOwner().get()).isOwnedBy(this.getOwner())));
+
+        if(target instanceof AbstractEntityDrone){
+            if(!((AbstractEntityDrone) target).getOwner().isPresent()){
+                return false;
+            }
+
+            if((((AbstractEntityDrone) target).getOwner().get() instanceof AbstractEntityCompanion)){
+
+                if (((AbstractEntityDrone) target).getOwner().get() == this) {
+                    return true;
+                }
+
+                return ((AbstractEntityCompanion) ((AbstractEntityDrone) target).getOwner().get()).isOwnedBy(this.getOwner());
+            }
+        }
+
+        return false;
 
     }
 
@@ -1234,6 +1250,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return false;
     }
 
+    @Override
+    protected float getSoundVolume() {
+        return 0.9F;
+    }
+
     public void setChargingCrossbow(boolean value){
         this.getEntityData().set(CHARGING_CROSSBOW, value);
     }
@@ -1918,6 +1939,28 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 case LOVE:
                 case OATH:
                     return kansen.getLoveAmbientSound();
+            }
+        }
+        else if(this instanceof IFGOServant){
+            IFGOServant Iservant = ((IFGOServant)this);
+            float bond = this.getAffection();
+            if(bond>=90F){
+                return Iservant.getBondlevel5Sound();
+            }
+            else if(bond>=80F){
+                return Iservant.getBondlevel4Sound();
+            }
+            else if(bond>=70F){
+                return Iservant.getBondlevel3Sound();
+            }
+            else if(bond>=60F){
+                return Iservant.getBondlevel2Sound();
+            }
+            else if(bond>=50F){
+                return Iservant.getBondlevel1Sound();
+            }
+            else{
+                return ((IFGOServant) this).getNormalAmbientSound();
             }
         }
 
@@ -2615,7 +2658,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     protected boolean canOpenDoor() {
-        return !this.isInWater() && !this.isOrderedToSit() && !this.isSleeping() && !this.isFreeRoaming();
+
+        if(this.isFreeRoaming()){
+            return false;
+        }
+
+        return !this.isInWater() && !this.isOrderedToSit() && !this.isSleeping();
     }
 
     public boolean isReloadingMainHand(){
@@ -3059,7 +3107,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     protected float getVoicePitch() {
-        return 0.9F+(this.getRandom().nextFloat()*0.2F);
+        return 0.98F+(this.getRandom().nextFloat()*0.04F);
     }
 
     @Override

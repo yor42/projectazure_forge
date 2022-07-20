@@ -10,7 +10,9 @@ import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -25,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -34,6 +37,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -88,6 +92,9 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
+        if(AttackCount == 1){
+            this.playSound(registerSounds.ARTORIA_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
+        }
         target.hurt(DamageSource.mobAttack(this), damage*4);
     }
 
@@ -320,6 +327,27 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
         return PlayState.CONTINUE;
     }
 
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSourceIn) {
+        if(this.getRandom().nextFloat()<0.2F){
+            return registerSounds.ARTORIA_TALK_HURT;
+        }
+        return super.getHurtSound(damageSourceIn);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return registerSounds.ARTORIA_TALK_DIE;
+    }
+
+    @Override
+    public void awardKillScore(Entity p_191956_1_, int p_191956_2_, DamageSource p_191956_3_) {
+        super.awardKillScore(p_191956_1_, p_191956_2_, p_191956_3_);
+        this.playSound(registerSounds.ARTORIA_TALK_KILL, this.getSoundVolume(), this.getVoicePitch());
+    }
+
     @Override
     protected void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerFGOInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
@@ -360,6 +388,42 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     @Override
     public enums.SERVANT_CLASSES getServantClass() {
         return enums.SERVANT_CLASSES.SABER;
+    }
+
+    @Override
+    public SoundEvent getNormalAmbientSound() {
+        return registerSounds.ARTORIA_TALK_NORMAL;
+    }
+
+    @Override
+    public SoundEvent getBondlevel1Sound() {
+        return registerSounds.ARTORIA_TALK_HIGH_AFFECTION1;
+    }
+
+    @Override
+    public SoundEvent getBondlevel2Sound() {
+        return registerSounds.ARTORIA_TALK_HIGH_AFFECTION2;
+    }
+
+    @Override
+    public SoundEvent getBondlevel3Sound() {
+        return registerSounds.ARTORIA_TALK_HIGH_AFFECTION3;
+    }
+
+    @Override
+    public SoundEvent getBondlevel4Sound() {
+        return registerSounds.ARTORIA_TALK_HIGH_AFFECTION4;
+    }
+
+    @Override
+    public SoundEvent getBondlevel5Sound() {
+        return registerSounds.ARTORIA_TALK_HIGH_AFFECTION5;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.ARTORIA_TALK_AGGRO;
     }
 
     @Nonnull

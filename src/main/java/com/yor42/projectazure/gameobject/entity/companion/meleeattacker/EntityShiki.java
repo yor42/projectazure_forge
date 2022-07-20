@@ -10,7 +10,9 @@ import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -23,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -32,9 +35,11 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static com.yor42.projectazure.setup.register.registerSounds.*;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
@@ -264,6 +269,12 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
         return new ArrayList<>(Collections.singletonList(registerItems.KITCHEN_KNIFE.get()));
     }
 
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return registerSounds.SHIKI_TALK_DIE;
+    }
+
     @Override
     public boolean hasMeleeItem() {
         return false;
@@ -288,7 +299,25 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        target.hurt(DamageSource.mobAttack(this), damage*4);
+        if(AttackCount == 1){
+            this.playSound(SHIKI_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
+        }
+        target.hurt(DamageSource.mobAttack(this), damage*1.5F);
+    }
+
+    @Override
+    public void awardKillScore(Entity p_191956_1_, int p_191956_2_, DamageSource p_191956_3_) {
+        super.awardKillScore(p_191956_1_, p_191956_2_, p_191956_3_);
+        this.playSound(SHIKI_TALK_KILL, this.getSoundVolume(), this.getVoicePitch());
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSourceIn) {
+        if(this.getRandom().nextFloat()<0.2F){
+            return SHIKI_TALK_HURT;
+        }
+        return super.getHurtSound(damageSourceIn);
     }
 
     @Override
@@ -297,6 +326,38 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
         this.StartedMeleeAttackTimeStamp = this.tickCount;
     }
 
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return SHIKI_TALK_AGGRO;
+    }
+
+    @Override
+    public SoundEvent getBondlevel1Sound() {
+        return SHIKI_TALK_HIGH_AFFECTION1;
+    }
+
+    @Override
+    public SoundEvent getBondlevel2Sound() {
+        return SHIKI_TALK_HIGH_AFFECTION2;
+    }
+    @Override
+    public SoundEvent getBondlevel3Sound() {
+        return SHIKI_TALK_HIGH_AFFECTION3;
+    }
+    @Override
+    public SoundEvent getBondlevel4Sound() {
+        return SHIKI_TALK_HIGH_AFFECTION4;
+    }
+    @Override
+    public SoundEvent getBondlevel5Sound() {
+        return SHIKI_TALK_HIGH_AFFECTION5;
+    }
+
+    @Override
+    public SoundEvent getNormalAmbientSound() {
+        return SHIKI_TALK_NORMAL;
+    }
     @Override
     public enums.SERVANT_CLASSES getServantClass() {
         return enums.SERVANT_CLASSES.ASSASSIN;

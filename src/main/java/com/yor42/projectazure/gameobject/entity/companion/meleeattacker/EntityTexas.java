@@ -306,7 +306,8 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this): DamageSource.mobAttack(this), damage+3);
         this.AttackCount = 0;
-        this.playSound(registerSounds.TEXAS_SWORD_HIT, 1, 0.8F+(0.4F*this.getRandom().nextFloat()));
+        this.playSound(registerSounds.TEXAS_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
+        target.playSound(registerSounds.TEXAS_SWORD_HIT, 1, 0.8F+(0.4F*this.getRandom().nextFloat()));
     }
 
     @Override
@@ -354,6 +355,6 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     @Nullable
     @Override
     protected SoundEvent getAggroedSoundEvent() {
-        return registerSounds.TEXAS_TALK_ATTACK;
+        return registerSounds.TEXAS_TALK_AGGRO;
     }
 }

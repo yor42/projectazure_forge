@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
@@ -319,4 +320,30 @@ public class EntityScathath extends AbstractEntityCompanion implements IMeleeAtt
                 ;
     }
 
+    @Override
+    public SoundEvent getBondlevel1Sound() {
+        return null;
+    }
+
+    @Override
+    public SoundEvent getBondlevel2Sound() {
+        return null;
+    }
+    @Override
+    public SoundEvent getBondlevel3Sound() {
+        return null;
+    }
+    @Override
+    public SoundEvent getBondlevel4Sound() {
+        return null;
+    }
+    @Override
+    public SoundEvent getBondlevel5Sound() {
+        return null;
+    }
+
+    @Override
+    public SoundEvent getNormalAmbientSound() {
+        return null;
+    }
 }

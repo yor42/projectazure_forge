@@ -3,6 +3,7 @@ package com.yor42.projectazure.interfaces;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 
 import javax.annotation.Nonnull;
 
@@ -30,6 +31,13 @@ public interface IFGOServant {
         }
         return false;
     }
+    SoundEvent getNormalAmbientSound();
+    SoundEvent getBondlevel1Sound();
+    SoundEvent getBondlevel2Sound();
+    SoundEvent getBondlevel3Sound();
+    SoundEvent getBondlevel4Sound();
+    SoundEvent getBondlevel5Sound();
+
     @Nonnull
     ItemStack createWeaponStack();
 }

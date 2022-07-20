@@ -44,7 +44,8 @@ public class CompanionProtectOwnerTask extends Task<AbstractEntityCompanion> {
                 this.tgt = ownerLastHurtBy;
                 return true;
             }
-            else if(j != this.owner_last_hurt_timestamp && entity.wantsToAttack(ownerLastHurt, owner)&& !this.onlyWhenVisible){
+
+            if(j != this.owner_last_hurt_timestamp && entity.wantsToAttack(ownerLastHurt, owner)&& !this.onlyWhenVisible){
                 this.tgt = ownerLastHurt;
                 return true;
             }

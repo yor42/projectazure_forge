@@ -340,17 +340,13 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
         return 4;
     }
 
+    @Nullable
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-
-        if(super.hurt(source, amount)){
-            if(this.getRandom().nextFloat()<0.2F){
-                this.playSound(registerSounds.EXCELA_HURT, this.getSoundVolume(), this.getVoicePitch());
-            }
-            return true;
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSourceIn) {
+        if(this.getRandom().nextFloat()<0.2F){
+            return registerSounds.EXCELA_HURT;
         }
-
-        return false;
+        return super.getHurtSound(damageSourceIn);
     }
 
     @Override

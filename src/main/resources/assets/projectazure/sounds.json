@@ -296,6 +296,148 @@
       }
     ]
   },
+  "nearl_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/talk1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk2"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk3"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk4"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk5"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk6"
+      }
+    ]
+  },
+  "chimera_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/talk1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk2"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk3"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk4"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk5"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk6"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/aff1"
+      }
+    ]
+  },
+  "chimera_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/talk1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk2"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk3"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk4"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk5"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk6"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/aff2"
+      }
+    ]
+  },
+  "chimera_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/talk1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk2"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk3"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk4"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk5"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/talk6"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/aff2"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/aff3"
+      }
+    ]
+  },
+  "nearl_talk_aggro": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/aggro1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/aggro2"
+      }
+    ]
+  },
+  "nearl_talk_skill": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/skill1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/skill2"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/skill3"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/skill4"
+      }
+    ]
+  },
+  "nearl_talk_pat": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/nearl/pat1"
+      },
+      {
+        "name": "projectazure:entity/akn/nearl/pat2"
+      }
+    ]
+  },
   "chimera_talk_high_affection3": {
     "sounds": [
       {
@@ -381,6 +523,32 @@
       },
       {
         "name": "projectazure:entity/akn/chen/voice/attack4"
+      }
+    ]
+  },
+  "chen_talk_aggro": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/chen/voice/aggro1"
+      },
+      {
+        "name": "projectazure:entity/akn/chen/voice/aggro2"
+      },
+      {
+        "name": "projectazure:entity/akn/chen/voice/aggro3"
+      },
+      {
+        "name": "projectazure:entity/akn/chen/voice/aggro4"
+      }
+    ]
+  },
+  "chen_talk_kill": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/chen/voice/kill1"
+      },
+      {
+        "name": "projectazure:entity/akn/chen/voice/kill2"
       }
     ]
   },
@@ -537,6 +705,22 @@
       },
       {
         "name": "projectazure:entity/akn/texas/voice/attack4"
+      }
+    ]
+  },
+  "texas_talk_aggro": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/aggro1"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/aggro2"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/aggro3"
+      },
+      {
+        "name": "projectazure:entity/akn/texas/voice/aggro4"
       }
     ]
   },
@@ -1344,6 +1528,162 @@
       }
     ]
   },
+  "yato_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/yato/talk1"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk2"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk3"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk4"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk5"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk6"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk7"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk8"
+      }
+    ]
+  },
+  "yato_talk_pat": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/yato/pat1"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/pat2"
+      }
+    ]
+  },
+  "yato_talk_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/yato/attack1"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/attack2"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/attack3"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/attack4"
+      }
+    ]
+  },
+  "yato_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/yato/talk1"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk2"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk3"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk4"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk5"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk6"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk7"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk8"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/affection1"
+      }
+    ]
+  },
+  "yato_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/yato/talk1"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk2"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk3"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk4"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk5"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk6"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk7"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk8"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/aff2"
+      }
+    ]
+  },
+  "yato_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/yato/talk1"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk2"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk3"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk4"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk5"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk6"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk7"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/talk8"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/aff2"
+      },
+      {
+        "name": "projectazure:entity/akn/yato/aff3"
+      }
+    ]
+  },
   "shiroko_talk_normal": {
     "sounds": [
       {
@@ -1497,6 +1837,538 @@
       },
       {
         "name": "projectazure:entity/gfl/m4a1/attack3"
+      }
+    ]
+  },
+  "artoria_talk": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk7"
+      }
+    ]
+  },
+  "artoria_talk_bond1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond1"
+      }
+    ]
+  },
+  "artoria_talk_bond2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond2"
+      }
+    ]
+  },
+  "artoria_talk_bond3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond3"
+      }
+    ]
+  },
+  "artoria_talk_bond4": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond4"
+      }
+    ]
+  },
+  "artoria_talk_bond5": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond4"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/bond5"
+      }
+    ]
+  },
+  "artoria_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/attack1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/attack2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/attack3"
+      }
+    ]
+  },
+  "artoria_aggro": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/aggro1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/aggro2"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/aggro3"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/aggro4"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/aggro5"
+      }
+    ]
+  },
+  "artoria_hurt": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/damage1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/damage2"
+      }
+    ]
+  },
+  "artoria_kill": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/kill1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/kill2"
+      }
+    ]
+  },
+  "artoria_die": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/artoria/die1"
+      },
+      {
+        "name": "projectazure:entity/fgo/artoria/die2"
+      }
+    ]
+  },
+  "shiki_talk": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk8"
+      }
+    ]
+  },
+  "shiki_talk_bond1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk8"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond1"
+      }
+    ]
+  },
+  "shiki_talk_bond2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk8"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond2"
+      }
+    ]
+  },
+  "shiki_talk_bond3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk8"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond3"
+      }
+    ]
+  },
+  "shiki_talk_bond4": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk8"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond4"
+      }
+    ]
+  },
+  "shiki_talk_bond5": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/talk1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk4"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk5"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk6"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk7"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/talk8"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond4"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/bond5"
+      }
+    ]
+  },
+  "shiki_attack": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/attack1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/attack2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/attack3"
+      }
+    ]
+  },
+  "shiki_aggro": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/aggro1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/aggro2"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/aggro3"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/aggro4"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/aggro5"
+      }
+    ]
+  },
+  "shiki_hurt": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/damage1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/damage2"
+      }
+    ]
+  },
+  "shiki_kill": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/kill1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/kill2"
+      }
+    ]
+  },
+  "shiki_die": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/fgo/shiki/die1"
+      },
+      {
+        "name": "projectazure:entity/fgo/shiki/die2"
       }
     ]
   },

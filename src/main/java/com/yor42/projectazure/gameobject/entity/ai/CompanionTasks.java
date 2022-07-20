@@ -153,10 +153,10 @@ public class CompanionTasks {
     private static void addFollowOwnerActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         brain.addActivityWithConditions(RegisterAI.FOLLOWING_OWNER.get(), ImmutableList.of(
                 Pair.of(0, new FollowOwnerTask()),
-                Pair.of(0, new CompanionFindEntitytoRideTask()),
-                Pair.of(0, new CompanionStartRidingTask()),
-                Pair.of(0, new CompanionSteerEntityTask()),
-                Pair.of(1, new CompanionProtectOwnerTask(false)),
+                Pair.of(0, new CompanionProtectOwnerTask(false)),
+                Pair.of(1, new CompanionFindEntitytoRideTask()),
+                Pair.of(1, new CompanionStartRidingTask()),
+                Pair.of(1, new CompanionSteerEntityTask()),
                 Pair.of(2, new PickupWantedItemTask<>(AbstractEntityCompanion::shouldPickupItem, 0.75F, false, 4)),
                 Pair.of(3, new CompanionPlaceTorchTask()),
                 Pair.of(3, new CompanionMineTask()),

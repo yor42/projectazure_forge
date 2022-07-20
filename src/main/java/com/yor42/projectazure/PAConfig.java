@@ -232,7 +232,6 @@ public class PAConfig {
 
         public final ForgeConfigSpec.BooleanValue shouldRecruitBeaconSpawnAllCompanions;
         public final ForgeConfigSpec.EnumValue<COMPANION_DEATH> death_type;
-
         public final ForgeConfigSpec.BooleanValue RiggingInfiniteFuel;
 
         private PAModConfig(ForgeConfigSpec.Builder builder){
@@ -484,5 +483,4 @@ public class PAConfig {
         STASIS_CRYSTAL,
         RESPAWN
     }
-
 }
