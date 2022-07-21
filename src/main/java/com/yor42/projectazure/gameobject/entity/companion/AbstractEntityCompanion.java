@@ -2198,7 +2198,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             this.getOwner().hurt(DamageSources.causeRevengeDamage(this), 2F);
                         } else if (newWarningCount >= 3 && this.getSensing().canSee(this.getOwner())) {
                             this.addAffection(-2F);
-                            this.setTarget(this.getOwner());
+                            this.getBrain().setMemory(ATTACK_TARGET, this.getOwner());
                             if(this.isOrderedToSit()){
                                 this.setOrderedToSit(false);
                             }
@@ -2314,6 +2314,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.getEntityData().set(AFFECTION, 200F);
             }
         }
+
+        this.getBrain().getMemory(ATTACK_TARGET).ifPresent((target)->{
+            if(target.isDeadOrDying()){
+                this.getBrain().eraseMemory(ATTACK_TARGET);
+                this.getBrain().eraseMemory(LOOK_TARGET);
+            }
+        });
 
         this.navigation.getNodeEvaluator().setCanOpenDoors(this.canOpenDoor());
 

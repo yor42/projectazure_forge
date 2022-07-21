@@ -23,6 +23,9 @@ public class CompanionNonVanillaMeleeAttackTask extends Task<AbstractEntityCompa
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, @Nonnull AbstractEntityCompanion p_212832_2_) {
         LivingEntity target = getAttackTarget(p_212832_2_);
         if (p_212832_2_ instanceof IMeleeAttacker) {
+            if(!p_212832_2_.wantsToAttack(target, p_212832_2_)){
+                return false;
+            }
             boolean flag = ((IMeleeAttacker) p_212832_2_).shouldUseNonVanillaAttack(target) && BrainUtil.canSee(p_212832_2_, target);
             return flag && !p_212832_2_.isNonVanillaMeleeAttacking();
         }

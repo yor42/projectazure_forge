@@ -33,6 +33,11 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
     protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion entityHost) {
         if(entityHost instanceof EntityKansenBase) {
             if (((EntityKansenBase) entityHost).hasRigging()) {
+                LivingEntity target = getAttackTarget(entityHost);
+                if(!entityHost.wantsToAttack(target, entityHost)){
+                    return false;
+                }
+
                 boolean isArmed = entityHost.canUseCannonOrTorpedo() && ((EntityKansenBase) entityHost).canUseShell(((EntityKansenBase) entityHost).getActiveShellCategory());
                 boolean isSailing = entityHost.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
                 return isArmed && isSailing;

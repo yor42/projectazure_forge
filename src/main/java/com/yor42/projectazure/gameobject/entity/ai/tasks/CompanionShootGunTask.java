@@ -42,6 +42,11 @@ public class CompanionShootGunTask extends Task<AbstractEntityCompanion> {
         Item gunItem = gunStack.getItem();
         if(gunItem instanceof GunItem){
             return entity.getBrain().getMemory(ATTACK_TARGET).map((target)->{
+
+                if(!entity.wantsToAttack(target, entity)){
+                    return false;
+                }
+
                 boolean canusegun = entity.shouldUseGun();
                 boolean hastarget = !target.isDeadOrDying();
                 boolean entitycanAttack = !entity.isSleeping() && !entity.isOrderedToSit();

@@ -23,6 +23,9 @@ public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, @Nonnull AbstractEntityCompanion p_212832_2_) {
         LivingEntity target = getAttackTarget(p_212832_2_);
         if (p_212832_2_ instanceof ISpellUser) {
+            if(!p_212832_2_.wantsToAttack(target, p_212832_2_)){
+                return false;
+            }
             boolean flag = ((ISpellUser) p_212832_2_).shouldUseSpell(target) && p_212832_2_.RangedAttackCoolDown<=0 && BrainUtil.canSee(p_212832_2_, target);
             return flag && !p_212832_2_.isUsingSpell();
         }

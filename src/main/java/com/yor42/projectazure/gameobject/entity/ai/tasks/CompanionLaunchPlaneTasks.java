@@ -54,7 +54,7 @@ public class CompanionLaunchPlaneTasks extends Task<AbstractEntityCompanion> {
             boolean flag = entity.hasRigging();
             boolean canFire = entity.isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
             if (flag && canFire){
-                boolean flag2 =entity.getBrain().getMemory(ATTACK_TARGET).map((target)->entity.getSensing().canSee(target) && EntityHasPlanes(entity)).orElse(false);
+                boolean flag2 =entity.getBrain().getMemory(ATTACK_TARGET).map((target)->entity.getSensing().canSee(target) && EntityHasPlanes(entity) && entity.wantsToAttack(target, entity)).orElse(false);
 
                 return flag2;
             }
