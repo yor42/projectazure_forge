@@ -54,7 +54,7 @@ public class ModBusEventHandler {
                 data = playerData.getCompound(PlayerEntity.PERSISTED_NBT_TAG);
             }
 
-            boolean flag = !data.getBoolean("PRJA:gotStarterCube");
+            boolean flag = !data.getBoolean("PRJA:gotStarterItem");
 
             if (flag) {
                 PlayerEntity player = event.getPlayer();
@@ -70,7 +70,6 @@ public class ModBusEventHandler {
                 ItemStack cubeStack = new ItemStack(registerItems.GLITCHED_PHONE.get());
                 CompoundNBT nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
-                cubeStack.setTag(nbt);
                 player.inventory.setItem(player.inventory.getFreeSlot(), cubeStack);
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
@@ -78,7 +77,7 @@ public class ModBusEventHandler {
                     stacks.add(registerItems.SPAWM_ENTERPRISE.get());
                     stacks.add(registerItems.SPAWN_CHEN.get());
                     stacks.add(registerItems.SPAWN_SHIROKO.get());
-                    stacks.add(registerItems.SPAWM_ENTERPRISE.get());
+                    stacks.add(registerItems.SPAWN_EXCELA.get());
                     stacks.add(registerItems.SPAWN_AMIYA.get());
                     stacks.add(registerItems.SPAWN_MUDROCK.get());
                     stacks.add(registerItems.SPAWN_Z23.get());
@@ -96,9 +95,9 @@ public class ModBusEventHandler {
                     stacks.add(registerItems.SPAWN_SHIKI.get());
                     stacks.add(registerItems.SPAWN_SCATHATH.get());
                     stacks.add(registerItems.SPAWN_NEARL.get());
-                    stacks.add(registerItems.SPAWM_SYLVI.get());
-                    stacks.add(registerItems.SPAWM_YAMATO.get());
-                    stacks.add(registerItems.SPAWM_YATO.get());
+                    stacks.add(registerItems.SPAWN_SYLVI.get());
+                    stacks.add(registerItems.SPAWN_YAMATO.get());
+                    stacks.add(registerItems.SPAWN_YATO.get());
                 }
                 else if(isAoichi){
                     stacks.add(registerItems.SPAWN_MUDROCK.get());
@@ -126,7 +125,7 @@ public class ModBusEventHandler {
                     player.inventory.setItem(player.inventory.getFreeSlot(), stack);
                 }
 
-                data.putBoolean("PRJA:gotStarterCube", true);
+                data.putBoolean("PRJA:gotStarterItem", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
 
                 Optional<Entity> entity = Optional.ofNullable(EntityType.loadEntityRecursive(data, player.level, Function.identity()));

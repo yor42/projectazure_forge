@@ -99,12 +99,6 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     }
 
     @Override
-    public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
-        this.StartedMeleeAttackTimeStamp = this.tickCount;
-    }
-
-    @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
         if(!this.getCommandSenderWorld().isClientSide() && this.tickCount%200 == 0) {

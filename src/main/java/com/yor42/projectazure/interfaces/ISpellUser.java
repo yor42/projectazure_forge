@@ -24,5 +24,5 @@ public interface ISpellUser {
     }
 
     void ShootProjectile(World world, @Nonnull LivingEntity target);
-    void StartShootingEntityUsingSpell(LivingEntity target);
+    default void StartSpellAttack(LivingEntity target){};
 }

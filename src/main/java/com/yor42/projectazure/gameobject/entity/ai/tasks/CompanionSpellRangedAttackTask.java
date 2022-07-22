@@ -11,8 +11,9 @@ import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
+import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
 
 public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion> {
     public CompanionSpellRangedAttackTask() {
@@ -22,14 +23,20 @@ public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, @Nonnull AbstractEntityCompanion p_212832_2_) {
         LivingEntity target = getAttackTarget(p_212832_2_);
-        if (p_212832_2_ instanceof ISpellUser) {
-            if(!p_212832_2_.wantsToAttack(target, p_212832_2_)){
-                return false;
-            }
-            boolean flag = ((ISpellUser) p_212832_2_).shouldUseSpell(target) && p_212832_2_.RangedAttackCoolDown<=0 && BrainUtil.canSee(p_212832_2_, target);
-            return flag && !p_212832_2_.isUsingSpell();
+
+        if(!(p_212832_2_ instanceof  ISpellUser)){
+            return false;
         }
-        return false;
+
+        if(!p_212832_2_.closerThan(target, p_212832_2_.getSpellRange())){
+            return false;
+        }
+
+        if(!p_212832_2_.wantsToAttack(target, p_212832_2_)){
+            return false;
+        }
+        boolean flag = ((ISpellUser) p_212832_2_).shouldUseSpell(target) && p_212832_2_.RangedAttackCoolDown<=0 && BrainUtil.canSee(p_212832_2_, target);
+        return flag && !p_212832_2_.isUsingSpell();
     }
 
     @Override
@@ -41,10 +48,45 @@ public class CompanionSpellRangedAttackTask extends Task<AbstractEntityCompanion
             }
             else {
                 this.clearWalkTarget(entity);
-                ((ISpellUser) entity).StartShootingEntityUsingSpell(target);
+                ((ISpellUser) entity).StartSpellAttack(target);
+                entity.setSpellDelay(((ISpellUser) entity).getInitialSpellDelay());
+                entity.StartedSpellAttackTimeStamp = entity.tickCount;
                 entity.RangedAttackCoolDown = ((ISpellUser) entity).SpellCooldown();
             }
         }
+    }
+
+    @Override
+    protected boolean canStillUse(ServerWorld p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
+        if(!p_212834_2_.getBrain().hasMemoryValue(ATTACK_TARGET) || getAttackTarget(p_212834_2_).isDeadOrDying()){
+            return false;
+        }
+
+        int currentspelldelay = p_212834_2_.getSpellDelay();
+        return currentspelldelay > 0;
+    }
+
+    @Override
+    protected void tick(ServerWorld p_212833_1_, AbstractEntityCompanion p_212833_2_, long p_212833_3_) {
+        p_212833_2_.getBrain().eraseMemory(WALK_TARGET);
+        if(p_212833_2_.isSprinting()){
+            p_212833_2_.setSprinting(false);
+        }
+        @Nullable
+        LivingEntity target = p_212833_2_.getBrain().getMemory(ATTACK_TARGET).orElse(null);
+        int delay = p_212833_2_.tickCount - p_212833_2_.StartedSpellAttackTimeStamp;
+        if(target!=null) {
+            p_212833_2_.lookAt(target, 90F, 90F);
+            if (delay == ((ISpellUser) p_212833_2_).getProjectilePreAnimationDelay()) {
+                ((ISpellUser) p_212833_2_).ShootProjectile(p_212833_1_, target);
+            }
+        }
+    }
+
+    @Override
+    protected void stop(ServerWorld p_212835_1_, AbstractEntityCompanion p_212835_2_, long p_212835_3_) {
+        p_212835_2_.setSpellDelay(0);
+        super.stop(p_212835_1_, p_212835_2_, p_212835_3_);
     }
 
     private void clearWalkTarget(LivingEntity p_233967_1_) {

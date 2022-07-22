@@ -383,9 +383,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private List<ExperienceOrbEntity> nearbyExpList;
     protected long lastSlept, lastWokenup;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
-    protected int StartedMeleeAttackTimeStamp = -1;
-    protected int AttackCount = 0;
-    protected int StartedSpellAttackTimeStamp = -1;
+    public int StartedMeleeAttackTimeStamp = -1;
+    public int AttackCount = 0;
+    public int StartedSpellAttackTimeStamp = -1;
 
     //I'd really like to get off from datamanager's wild ride.
     protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
@@ -2079,7 +2079,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 cap.addCompanion(this);
             }
         }
-
         if(this.isSprinting() && !this.isMoving()){
             this.setSprinting(false);
         }
@@ -2181,6 +2180,21 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
 
         if(!this.getCommandSenderWorld().isClientSide()) {
+
+            int currentspelldelay = this.getSpellDelay();
+            if(currentspelldelay>0){
+                this.setSpellDelay(--currentspelldelay);
+            }
+
+            int currentattackldelay = this.getNonVanillaMeleeAttackDelay();
+            if(currentattackldelay>0){
+                this.setMeleeAttackDelay(--currentattackldelay);
+                if(currentspelldelay == 0){
+                    this.AttackCount = 0;
+                }
+            }
+
+
             int AngerWarningCount = this.getEntityData().get(INTERACTION_WARNING_COUNT);
             if(this.getOwner() != null && this.getOwner().isAlive()){
                 if (!this.isAngry() && this.getOwner() != null && this.getOwner().isAlive() && this.getEntityData().get(ECCI_ANIMATION_TIME) > 0) {
@@ -2225,25 +2239,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.getNavigation().stop();
             }
 
-            if(this instanceof ISpellUser) {
-                int currentspelldelay = this.getSpellDelay();
-                @Nullable
-                LivingEntity target = this.getBrain().getMemory(ATTACK_TARGET).orElse(null);
-                if (currentspelldelay > 0) {
-                    this.getNavigation().stop();
-                    if(this.isSprinting()){
-                        this.setSprinting(false);
-                    }
-                    setSpellDelay(currentspelldelay - 1);
-                    int delay = this.tickCount - this.StartedSpellAttackTimeStamp;
-                    if(target!=null) {
-                        if (delay == ((ISpellUser) this).getProjectilePreAnimationDelay()) {
-                            this.lookAt(target, 30F, 30F);
-                            ((ISpellUser) this).ShootProjectile(this.getCommandSenderWorld(), target);
-                        }
-                    }
-                }
-            }
+
             //Very cheap fix to Datamanager not syncing
             for(int i=0; i<this.getSkillItemCount(); i++){
                 ItemStack serverSideItem = this.getInventory().getStackInSlot(InventorySize+i);
@@ -2356,6 +2352,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.setInjurycuretimer(curetime);
             }
         }
+
     }
 
     public void UpdateandPerformNonVanillaMeleeAttack(){
@@ -2370,10 +2367,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     if (this.isSprinting()) {
                         this.setSprinting(false);
                     }
-                    this.getBrain().setMemory(LOOK_TARGET, Optional.of(new EntityPosWrapper(target, true)));
                     this.lookAt(target, 30.0F, 30.0F);
                     int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
-                    if (!((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().isEmpty() && ((IMeleeAttacker) this).getMeleeAnimationAudioCueDelay().contains(delay)) {
+                    if (!((IMeleeAttacker) this).MeleeAttackAudioCue().isEmpty() && ((IMeleeAttacker) this).MeleeAttackAudioCue().contains(delay)) {
                         this.playMeleeAttackPreSound();
                     }
                     if (((IMeleeAttacker) this).getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {
@@ -3268,8 +3264,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Nonnull
     @Override
     public IPacket<?> getAddEntityPacket() {
-        NetworkHooks.getEntitySpawningPacket(this);
-        return super.getAddEntityPacket();
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -3354,7 +3349,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public abstract enums.CompanionRarity getRarity();
 
     protected float getSitHeight(){
-        return 1F;
+        return 1.25F;
     }
 
     @SuppressWarnings("NullableProblems")

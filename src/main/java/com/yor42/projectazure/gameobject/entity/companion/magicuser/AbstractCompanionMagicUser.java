@@ -13,11 +13,6 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
         super(type, worldIn);
     }
 
-    public void StartShootingEntityUsingSpell(LivingEntity target) {
-        this.setSpellDelay(this.getInitialSpellDelay());
-        this.StartedSpellAttackTimeStamp = this.tickCount;
-    }
-
     public boolean shouldUseSpell(LivingEntity target){
         return this.getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
     };

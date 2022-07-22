@@ -318,7 +318,7 @@
       }
     ]
   },
-  "chimera_talk_high_affection1": {
+  "nearl_talk_high_affection1": {
     "sounds": [
       {
         "name": "projectazure:entity/akn/nearl/talk1"
@@ -343,7 +343,7 @@
       }
     ]
   },
-  "chimera_talk_high_affection2": {
+  "nearl_talk_high_affection2": {
     "sounds": [
       {
         "name": "projectazure:entity/akn/nearl/talk1"
@@ -438,7 +438,7 @@
       }
     ]
   },
-  "chimera_talk_high_affection3": {
+  "nearl_talk_high_affection3": {
     "sounds": [
       {
         "name": "projectazure:entity/akn/chimera/voice/voice1"

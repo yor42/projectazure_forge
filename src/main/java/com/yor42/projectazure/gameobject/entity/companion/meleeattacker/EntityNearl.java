@@ -302,8 +302,8 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
-        return new ArrayList<>(Collections.singletonList(12));
+    public ArrayList<Integer> MeleeAttackAudioCue() {
+        return new ArrayList<>(Collections.singletonList(6));
     }
 
     @Override
@@ -336,7 +336,7 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
                 this.lookAt(target, 30.0F, 30.0F);
                 this.setMeleeAttackDelay(currentspelldelay - 1);
                 int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
-                if (!this.getMeleeAnimationAudioCueDelay().isEmpty() && this.getMeleeAnimationAudioCueDelay().contains(delay)) {
+                if (!this.MeleeAttackAudioCue().isEmpty() && this.MeleeAttackAudioCue().contains(delay)) {
                     this.playMeleeAttackPreSound();
                 }
                 if (this.getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {

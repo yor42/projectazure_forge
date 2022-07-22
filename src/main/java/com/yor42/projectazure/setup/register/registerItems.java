@@ -494,15 +494,15 @@ public class registerItems {
 
     public static final RegistryObject<Item> BANDAGE_ROLL = ITEMS.register("bandage_roll", () -> new ItemBandage(new Item.Properties()
             .tab(PA_GROUP)));
-    public static final RegistryObject<Item> SPAWM_SYLVI = ITEMS.register("spawnsylvi", () -> new ItemCompanionSpawnEgg<>(registerEntity.SYLVI, new Item.Properties()
+    public static final RegistryObject<Item> SPAWN_SYLVI = ITEMS.register("spawnsylvi", () -> new ItemCompanionSpawnEgg<>(registerEntity.SYLVI, new Item.Properties()
             .tab(PA_COMPANIONS)));
-    public static final RegistryObject<Item> SPAWM_YAMATO = ITEMS.register("spawnyamato", () -> new ItemCompanionSpawnEgg<>(registerEntity.YAMATO, new Item.Properties()
-            .tab(PA_COMPANIONS)));
-
-    public static final RegistryObject<Item> SPAWM_YATO = ITEMS.register("spawnyato", () -> new ItemCompanionSpawnEgg<>(registerEntity.YATO, new Item.Properties()
+    public static final RegistryObject<Item> SPAWN_YAMATO = ITEMS.register("spawnyamato", () -> new ItemCompanionSpawnEgg<>(registerEntity.YAMATO, new Item.Properties()
             .tab(PA_COMPANIONS)));
 
-    public static final RegistryObject<Item> SPAWM_EXCELA = ITEMS.register("spawnexcela", () -> new ItemCompanionSpawnEgg<>(registerEntity.EXCELA, new Item.Properties()
+    public static final RegistryObject<Item> SPAWN_YATO = ITEMS.register("spawnyato", () -> new ItemCompanionSpawnEgg<>(registerEntity.YATO, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
+    public static final RegistryObject<Item> SPAWN_EXCELA = ITEMS.register("spawnexcela", () -> new ItemCompanionSpawnEgg<>(registerEntity.EXCELA, new Item.Properties()
             .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> MEDKIT = ITEMS.register("medkit", ItemMedKit::new);

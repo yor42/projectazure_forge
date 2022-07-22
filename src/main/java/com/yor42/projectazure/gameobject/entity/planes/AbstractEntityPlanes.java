@@ -256,10 +256,10 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
         return this.isAlive();
     }
 
+    @Nonnull
     @Override
     public IPacket<?> getAddEntityPacket() {
-        NetworkHooks.getEntitySpawningPacket(this);
-        return super.getAddEntityPacket();
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override

@@ -246,7 +246,7 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Arrays.asList(18));
+        return new ArrayList<>(Collections.singletonList(10));
     }
 
     @Override
@@ -255,8 +255,8 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
-        return new ArrayList<>(Collections.singletonList(12));
+    public ArrayList<Integer> MeleeAttackAudioCue() {
+        return new ArrayList<>(Collections.singletonList(8));
     }
 
     @Override

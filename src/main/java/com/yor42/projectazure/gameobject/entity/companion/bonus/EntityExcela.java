@@ -295,9 +295,7 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
     }
 
     @Override
-    public void StartShootingEntityUsingSpell(LivingEntity target) {
-        this.setSpellDelay(this.getInitialSpellDelay());
-        this.StartedSpellAttackTimeStamp = this.tickCount;
+    public void StartSpellAttack(LivingEntity target) {
         this.playSound(registerSounds.EXCELA_SKILL, this.getSoundVolume(), this.getVoicePitch());
     }
 
@@ -351,11 +349,7 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
 
     @Override
     public boolean shouldUseNonVanillaAttack(LivingEntity target) {
-        if(target == null){
-            return false;
-        }
-        boolean flg = this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null && !this.shouldUseSpell(target) && this.distanceTo(target) <=16;
-        return flg;
+        return !this.shouldUseSpell(target);
     }
 
     @Override
@@ -370,13 +364,6 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
         }
         this.playSound(registerSounds.EXCELA_ATTACK, this.getSoundVolume(), this.getVoicePitch());
     }
-
-    @Override
-    public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
-        this.StartedMeleeAttackTimeStamp = this.tickCount;
-    }
-
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.createMobAttributes()

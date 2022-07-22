@@ -61,8 +61,8 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
         ArrayList<Integer> list = new ArrayList<>();
-        list.add(8);
-        list.add(24);
+        list.add(4);
+        list.add(12);
         return list;
     }
 

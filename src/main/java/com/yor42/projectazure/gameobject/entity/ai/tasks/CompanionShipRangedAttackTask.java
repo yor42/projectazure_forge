@@ -31,9 +31,14 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
 
     @Override
     protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion entityHost) {
+        LivingEntity target = getAttackTarget(entityHost);
+        if(!entityHost.closerThan(target, entityHost.getCannonRange())){
+            return false;
+        }
+
         if(entityHost instanceof EntityKansenBase) {
             if (((EntityKansenBase) entityHost).hasRigging()) {
-                LivingEntity target = getAttackTarget(entityHost);
+
                 if(!entityHost.wantsToAttack(target, entityHost)){
                     return false;
                 }
@@ -44,17 +49,6 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
             }
         }
         return false;
-    }
-
-    @Override
-    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion entity, long p_212831_3_) {
-        LivingEntity target = getAttackTarget(entity);
-        if(!entity.closerThan(target, entity.getSpellRange()) || !entity.getSensing().canSee(target)){
-            BrainUtil.setWalkAndLookTargetMemories(entity, target, 1, (int) (entity.getCannonRange()-2));
-        }
-        else {
-            this.clearWalkTarget(entity);
-        }
     }
 
     @Override

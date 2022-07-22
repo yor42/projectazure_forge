@@ -237,8 +237,8 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
-        return new ArrayList<>(Collections.singletonList(20));
+    public ArrayList<Integer> MeleeAttackAudioCue() {
+        return new ArrayList<>(Collections.singletonList(12));
     }
     @Override
     public void playMeleeAttackPreSound() {
@@ -322,12 +322,12 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public int MeleeAttackAnimationLength() {
-        return 28;
+        return 26;
     }
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(20));
+        return new ArrayList<>(Collections.singletonList(12));
     }
 
     @Override
@@ -347,7 +347,7 @@ public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        target.hurt(DamageSource.mobAttack(this), this.getAttackDamageMainHand());
+        target.hurt(DamageSource.mobAttack(this), damage);
         target.playSound(registerSounds.WARHAMMER_HIT, 1, 0.8F+(0.2F*this.getRandom().nextFloat()));
     }
 

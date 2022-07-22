@@ -292,12 +292,6 @@ public class EntityScathath extends AbstractEntityCompanion implements IMeleeAtt
     }
 
     @Override
-    public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
-        this.StartedMeleeAttackTimeStamp = this.tickCount;
-    }
-
-    @Override
     public enums.SERVANT_CLASSES getServantClass() {
         return enums.SERVANT_CLASSES.LANCER;
     }

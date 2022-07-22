@@ -203,8 +203,8 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
-        return new ArrayList<>(Collections.singletonList(10));
+    public ArrayList<Integer> MeleeAttackAudioCue() {
+        return new ArrayList<>(Collections.singletonList(5));
     }
 
     @Override
@@ -289,7 +289,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(14));
+        return new ArrayList<>(Collections.singletonList(7));
     }
 
     @Override

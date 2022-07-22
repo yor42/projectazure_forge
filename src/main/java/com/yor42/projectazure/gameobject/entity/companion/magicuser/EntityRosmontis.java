@@ -76,10 +76,6 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
 
             return PlayState.CONTINUE;
         }
-        else if(this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            return PlayState.CONTINUE;
-        }
         else if(this.isEating()){
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
                 event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
@@ -186,7 +182,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isDeadOrDying()){
-            if(this.getVehicle() == this.getOwner()){
+            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {

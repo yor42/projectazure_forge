@@ -12,6 +12,8 @@ import com.yor42.projectazure.gameobject.entity.companion.magicuser.AbstractComp
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.AbstractSwordUserBase;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.interfaces.IFGOServant;
+import com.yor42.projectazure.interfaces.IMeleeAttacker;
+import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -68,6 +70,11 @@ public class CompanionTasks {
     public static void UpdateActivity(AbstractEntityCompanion companion){
         if(companion.isAlive()) {
             Brain<AbstractEntityCompanion> brain = companion.getBrain();
+            brain.getMemory(ATTACK_TARGET).ifPresent((tgt)->{
+                if (tgt.isDeadOrDying()){
+                    brain.eraseMemory(ATTACK_TARGET);
+                }
+            });
             companion.setAggressive(companion.getBrain().hasMemoryValue(ATTACK_TARGET));
             if (companion.isCriticallyInjured()) {
                 companion.getBrain().setActiveActivityIfPossible(RegisterAI.INJURED.get());
@@ -88,6 +95,7 @@ public class CompanionTasks {
                 Pair.of(0, new CompanionInteractWithDoorTask()),
                 Pair.of(0, new LookTask(45, 90)),
                 Pair.of(0, new CompanionWakeupTask()),
+                Pair.of(0, new WalkToTargetTask()),
                 Pair.of(1, new CompanionUseTotemTask()),
                 //Pair.of(0, new CompanionEndAttackTask()),
                 Pair.of(1, new CompanionRunAwayTask()),
@@ -97,7 +105,6 @@ public class CompanionTasks {
                 Pair.of(2, new CompanionHealAllyAndPlayerTask(40, 20, 10)),
                 Pair.of(2, new CompanionUseWorldSkill()),
                 Pair.of(3, new CompanionTakeFoodFromPantryGoal()),
-                Pair.of(3, new WalkToTargetTask()),
                 Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))),
                 Pair.of(2, new CompanionEatTask()));
     }
@@ -301,8 +308,8 @@ public class CompanionTasks {
         boolean hasboworCrossbow = (item instanceof BowItem || item instanceof CrossbowItem) && !companion.getProjectile(stack).isEmpty();
         boolean canUseGun = companion.shouldUseGun();
         boolean canUseRigging = companion instanceof EntityKansenBase && !hasAttackableCannon(companion.getRigging()) && ((EntityKansenBase) companion).canUseShell(((EntityKansenBase) companion).getActiveShellCategory());
-        boolean CanUseNonValinnaAttack = companion instanceof AbstractSwordUserBase && ((AbstractSwordUserBase)companion).shouldUseNonVanillaAttack(tgt);
-        boolean canUseSpell = companion instanceof AbstractCompanionMagicUser && ((AbstractCompanionMagicUser) companion).shouldUseSpell(tgt);
+        boolean CanUseNonValinnaAttack = companion instanceof IMeleeAttacker && ((IMeleeAttacker)companion).shouldUseNonVanillaAttack(tgt);
+        boolean canUseSpell = companion instanceof ISpellUser && ((ISpellUser) companion).shouldUseSpell(tgt);
         return isEquippingsword||canUseGun || canUseRigging || CanUseNonValinnaAttack||canUseSpell || hasboworCrossbow;
     }
 

@@ -288,7 +288,7 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
 
     public boolean hasMeleeItem(){
         Item item = this.getItemInHand(this.getNonVanillaMeleeAttackHand()).getItem();
-        return this.getTalentedWeaponList().contains(item);
+        return item == registerItems.TACTICAL_KNIFE.get();
     }
 
     @Override

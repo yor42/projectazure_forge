@@ -242,7 +242,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(18));
+        return new ArrayList<>(Collections.singletonList(9));
     }
 
     @Override
@@ -260,22 +260,10 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         return 3;
     }
 
-    @Override
-    public ItemStack getMainHandItem() {
-        return super.getMainHandItem();
-    }
-
-    @Override
-    public ItemStack getOffhandItem() {
-        return super.getOffhandItem();
-    }
 
     @Override
     public boolean shouldUseNonVanillaAttack(LivingEntity target) {
-        if(target == null){
-            return false;
-        }
-        return this.hasMeleeItem() && !this.isSwimming() && !this.isOrderedToSit() && this.getVehicle() == null && this.distanceTo(target) <=this.getAttackRange(this.isTalentedWeaponinMainHand());
+        return this.hasMeleeItem() && this.distanceTo(target) <=this.getAttackRange(this.isTalentedWeaponinMainHand());
     }
 
     @Override
@@ -344,12 +332,6 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
-        this.StartedMeleeAttackTimeStamp = this.tickCount;
-    }
-
-    @Override
     public int getInitialSpellDelay() {
         return 20;
     }
@@ -372,7 +354,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
 
             return !(hasAmmo || reloadable);
         }
-        else return this.getItemInHand(getSpellUsingHand()).isEmpty() && !this.isSwimming() && !this.shouldUseNonVanillaAttack(this.getTarget());
+        else return this.getItemInHand(getSpellUsingHand()).isEmpty() && !this.isSwimming() && this.RangedAttackCoolDown<=0;
     }
 
     @Override
@@ -387,9 +369,8 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     }
 
     @Override
-    public void StartShootingEntityUsingSpell(LivingEntity target) {
-        this.setSpellDelay(this.getInitialSpellDelay());
-        this.StartedSpellAttackTimeStamp = this.tickCount;
+    public int SpellCooldown() {
+        return 100;
     }
 
     @Override

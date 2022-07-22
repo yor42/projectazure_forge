@@ -320,12 +320,6 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
         return super.getHurtSound(damageSourceIn);
     }
 
-    @Override
-    public void StartMeleeAttackingEntity() {
-        this.setMeleeAttackDelay((int) (this.MeleeAttackAnimationLength() *this.getAttackSpeedModifier(this.isTalentedWeaponinMainHand())));
-        this.StartedMeleeAttackTimeStamp = this.tickCount;
-    }
-
     @Nullable
     @Override
     protected SoundEvent getAggroedSoundEvent() {

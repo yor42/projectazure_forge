@@ -32,7 +32,9 @@ public interface IMeleeAttacker {
 
     float getAttackRange(boolean isUsingTalentedWeapon);
 
-    boolean shouldUseNonVanillaAttack(LivingEntity target);
+    default boolean shouldUseNonVanillaAttack(LivingEntity target){
+        return this.hasMeleeItem();
+    };
     default boolean isTalentedWeaponinMainHand(){
         if(this instanceof AbstractEntityCompanion) {
         return isTalentedWeapon(((AbstractEntityCompanion)this).getMainHandItem());
@@ -51,7 +53,7 @@ public interface IMeleeAttacker {
         return getTalentedWeaponList().contains(stack.getItem());
     }
 
-    default ArrayList<Integer> getMeleeAnimationAudioCueDelay(){
+    default ArrayList<Integer> MeleeAttackAudioCue(){
         return new ArrayList<>();
     }
 
@@ -59,5 +61,5 @@ public interface IMeleeAttacker {
     default float getAttackSpeedModifier(boolean isUsingTalentedWeapon){
         return isUsingTalentedWeapon? 1:1.2F;
     }
-    void StartMeleeAttackingEntity();
+    default void StartMeleeAttackingEntity(){};
 }

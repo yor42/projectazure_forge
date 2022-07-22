@@ -42,7 +42,7 @@ public class ItemGlitchedPhone extends Item {
                 return ActionResult.fail(cube);
             }
         }
-        if(worldIn.isClientSide){
+        else if(worldIn.isClientSide){
             //openGui
             this.openGUI(handIn);
             return ActionResult.success(playerIn.getItemInHand(handIn));

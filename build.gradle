@@ -176,6 +176,9 @@ dependencies {
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
 
+    runtimeOnly fg.deobf('curse.maven:roadrunner-529754:3683120')
+    runtimeOnly fg.deobf('curse.maven:ferritecore-429235:3485636')
+
     // JEI
     if (project.hasProperty('jei_version')) {
         // compile against the JEI API but do not include it at runtime

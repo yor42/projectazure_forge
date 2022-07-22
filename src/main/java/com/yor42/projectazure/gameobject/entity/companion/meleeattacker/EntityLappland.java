@@ -279,7 +279,7 @@ public class EntityLappland extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
-        return new ArrayList<>(Collections.singletonList(14));
+        return new ArrayList<>(Collections.singletonList(7));
     }
 
     @Override
@@ -339,8 +339,8 @@ public class EntityLappland extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    public ArrayList<Integer> getMeleeAnimationAudioCueDelay() {
-        return new ArrayList<>(Collections.singletonList(12));
+    public ArrayList<Integer> MeleeAttackAudioCue() {
+        return new ArrayList<>(Collections.singletonList(6));
     }
 
     @Override

@@ -261,12 +261,6 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
         }
     }
 
-    @Override
-    public void StartShootingEntityUsingSpell(LivingEntity target) {
-        this.setSpellDelay(this.getInitialSpellDelay());
-        this.StartedSpellAttackTimeStamp = this.tickCount;
-    }
-
     public static AttributeModifierMap.MutableAttribute MutableAttribute()
     {
         return MobEntity.createMobAttributes()

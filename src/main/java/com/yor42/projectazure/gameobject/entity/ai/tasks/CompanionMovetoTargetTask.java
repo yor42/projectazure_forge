@@ -24,7 +24,7 @@ public class CompanionMovetoTargetTask extends Task<AbstractEntityCompanion> {
         this.entity = entity;
     }
 
-    protected void start(ServerWorld p_212831_1_, MobEntity p_212831_2_, long p_212831_3_) {
+    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion p_212831_2_, long p_212831_3_) {
         LivingEntity livingentity = p_212831_2_.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get();
         if (BrainUtil.canSee(p_212831_2_, livingentity) && (BrainUtil.isWithinAttackRange(p_212831_2_, livingentity, 1)||livingentity.closerThan(this.entity, closeEnoughDist))) {
             this.clearWalkTarget(p_212831_2_);
