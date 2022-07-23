@@ -41,11 +41,11 @@ public class ItemGlitchedPhone extends Item {
                 playerIn.sendMessage(new TranslationTextComponent("message.rainbow_cube.notowner"), UUID.randomUUID());
                 return ActionResult.fail(cube);
             }
-        }
-        else if(worldIn.isClientSide){
-            //openGui
-            this.openGUI(handIn);
-            return ActionResult.success(playerIn.getItemInHand(handIn));
+            else if(worldIn.isClientSide){
+                //openGui
+                this.openGUI(handIn);
+                return ActionResult.success(playerIn.getItemInHand(handIn));
+            }
         }
         return ActionResult.pass(playerIn.getItemInHand(handIn));
     }
