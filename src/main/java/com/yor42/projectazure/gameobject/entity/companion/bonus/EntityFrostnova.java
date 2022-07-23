@@ -229,7 +229,7 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
 
     @Override
     public int getProjectilePreAnimationDelay() {
-        return 30;
+        return 17;
     }
 
     @Override
