@@ -165,7 +165,11 @@ public class EntityMudrock extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else{
-            event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+            if (this.isTalentedWeaponinMainHand()) {
+                event.getController().setAnimation(builder.addAnimation("idle_hammer", true));
+            } else {
+                event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+            }
             return PlayState.CONTINUE;
         }
     }

@@ -321,35 +321,6 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
         return 3;
     }
 
-    public void UpdateandPerformNonVanillaMeleeAttack(){
-        int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
-        @Nullable
-        LivingEntity target = this.getTarget();
-        if (currentspelldelay > 0) {
-            this.getNavigation().stop();
-            if (target == null || !target.isAlive()) {
-                this.setMeleeAttackDelay(0);
-                this.AttackCount = 0;
-            }
-
-            else {
-                this.lookAt(target, 30.0F, 30.0F);
-                this.setMeleeAttackDelay(currentspelldelay - 1);
-                int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
-                if (!this.MeleeAttackAudioCue().isEmpty() && this.MeleeAttackAudioCue().contains(delay)) {
-                    this.playMeleeAttackPreSound();
-                }
-                if (this.getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {
-                    this.AttackCount += 1;
-                    this.PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
-                }
-            }
-        } else if (this.AttackCount > 0) {
-            this.AttackCount = 0;
-        }
-
-    }
-
     @Override
     public boolean canUseSkill(LivingEntity target) {
         int currentspelldelay = this.getNonVanillaMeleeAttackDelay();

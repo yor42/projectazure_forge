@@ -2232,8 +2232,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.getEntityData().set(ANGRYTIMER,0);
             }
 
-
-            this.UpdateandPerformNonVanillaMeleeAttack();
             if(this.getSkillAnimationTime()>0){
                 this.addSkillAnimationTime(-1);
                 this.getNavigation().stop();
@@ -2353,36 +2351,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
 
-    }
-
-    public void UpdateandPerformNonVanillaMeleeAttack(){
-        if(this instanceof IMeleeAttacker) {
-            int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
-            if (currentspelldelay > 0) {
-                this.getBrain().eraseMemory(WALK_TARGET);
-                @Nullable
-                LivingEntity target = this.getBrain().getMemory(ATTACK_TARGET).orElse(null);
-                this.setMeleeAttackDelay(currentspelldelay - 1);
-                if(target!=null) {
-                    if (this.isSprinting()) {
-                        this.setSprinting(false);
-                    }
-                    this.lookAt(target, 30.0F, 30.0F);
-                    int delay = this.tickCount - this.StartedMeleeAttackTimeStamp;
-                    if (!((IMeleeAttacker) this).MeleeAttackAudioCue().isEmpty() && ((IMeleeAttacker) this).MeleeAttackAudioCue().contains(delay)) {
-                        this.playMeleeAttackPreSound();
-                    }
-                    if (((IMeleeAttacker) this).getAttackDamageDelay().contains(delay) && this.distanceTo(target) <= ((IMeleeAttacker) this).getAttackRange(((IMeleeAttacker) this).isTalentedWeaponinMainHand())) {
-                        this.AttackCount += 1;
-                        ((IMeleeAttacker) this).PerformMeleeAttack(target, this.getAttackDamageMainHand(), this.AttackCount);
-                    }
-                }
-
-            } else if (this.AttackCount > 0) {
-                this.getBrain().eraseMemory(LOOK_TARGET);
-                this.AttackCount = 0;
-            }
-        }
     }
 
     public ItemStack getSkillItem1(){
