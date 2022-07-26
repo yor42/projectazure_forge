@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "projectazure:block/machine_frame",
+    "front": "projectazure:block/riftway_controller",
+    "side": "projectazure:block/machine_frame"
+  }
+}
