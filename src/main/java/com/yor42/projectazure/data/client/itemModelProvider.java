@@ -128,6 +128,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildSimpleBlockModel("originium_generator_controller");
 
         buildSimpleBlockModel("machine_frame");
+        buildSimpleBlockModel("machine_frame_slab");
         buildModel("disc_enterthebeginning");
         buildModel("rainbow_wisdomcube");
         buildModel("wisdomcube");
@@ -180,6 +181,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelAKN("spawnlappland");
         buildModelAKN("spawnnearl");
         buildModelAKN("spawnyato");
+        buildModelAKN("spawnw");
 
         buildModelFGO("spawnshiki");
         buildModelFGO("spawnartoria");

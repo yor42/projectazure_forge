@@ -1,8 +1,11 @@
 package com.yor42.projectazure.data.client;
 
+import com.mojang.datafixers.kinds.Const;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerBlocks;
+import net.minecraft.block.SlabBlock;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockModelProvider extends net.minecraftforge.client.model.generators.BlockStateProvider {
@@ -23,5 +26,7 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
         simpleBlock(registerBlocks.REENFORCED_PLANK.get());
 
         simpleBlock(registerBlocks.MACHINE_COMPONENTBLOCK.get());
+
+        slabBlock((SlabBlock) registerBlocks.MACHINE_FRAME_SLAB.get(), new ResourceLocation(Constants.MODID, "block/machine_frame"), new ResourceLocation(Constants.MODID, "block/machine_frame"));
     }
 }

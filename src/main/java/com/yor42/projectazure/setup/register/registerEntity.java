@@ -12,6 +12,7 @@ import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityW;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityKyaru;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
@@ -73,6 +74,7 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityAmiya>> AMIYA = ENTITIES.register("entityamiya", () -> EntityType.Builder.of(EntityAmiya::new, EntityClassification.CREATURE).sized(0.572F, 1.42F).build(ModResourceLocation("entityamiya").toString()));
     public static final RegistryObject<EntityType<EntityMudrock>> MUDROCK = ENTITIES.register("entitymudrock", () -> EntityType.Builder.of(EntityMudrock::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitymudrock").toString()));
     public static final RegistryObject<EntityType<EntityChen>> CHEN = ENTITIES.register("entitychen", () -> EntityType.Builder.of(EntityChen::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entitychen").toString()));
+    public static final RegistryObject<EntityType<EntityW>> W = ENTITIES.register("entityw", () -> EntityType.Builder.of(EntityW::new, EntityClassification.CREATURE).sized(0.572F, 1.65F).build(ModResourceLocation("entityw").toString()));
     public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> EntityType.Builder.of(EntityShiroko::new, EntityClassification.CREATURE).sized(0.572F, 1.575F).build(ModResourceLocation("entityshiroko").toString()));
     public static final RegistryObject<EntityType<EntityM4A1>> M4A1 = ENTITIES.register("entitym4a1", () -> EntityType.Builder.of(EntityM4A1::new, EntityClassification.CREATURE).sized(0.65F, 1.825F).build(ModResourceLocation("entitym4a1").toString()));
     public static final RegistryObject<EntityType<EntityNagato>> NAGATO = ENTITIES.register("entitynagato", () -> EntityType.Builder.of(EntityNagato::new, EntityClassification.CREATURE).sized(0.572F, 1.32F).build(ModResourceLocation("entitynagato").toString()));
@@ -121,6 +123,7 @@ public class registerEntity {
         event.put(KYARU.get(), EntityKyaru.MutableAttribute().build());
         event.put(SHIKI.get(), EntityShiki.MutableAttribute().build());
         event.put(EXCELA.get(), EntityExcela.MutableAttribute().build());
+        event.put(W.get(), EntityW.MutableAttribute().build());
     }
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderer(){
@@ -153,7 +156,7 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.KYARU.get(), EntityKyaruRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.SHIKI.get(), EntityShikiRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.EXCELA.get(), EntityExcelaRenderer::new);
-
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.W.get(), EntityWRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 

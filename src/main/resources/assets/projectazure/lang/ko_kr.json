@@ -96,7 +96,7 @@
   "item.projectazure.sheath": "레이신 검",
   "item.projectazure.sheath.tooltip": "강철로 만든 검은 검.",
   "item.projectazure.chixiao": "적소",
-  "item.projectazure.chixiao.tooltip": "앰버 오리지늄으로 만든 붉은 검집의 검. \n 원 소유주와 달리 아츠 능력이 없는 사람에게는 일반 검일 뿐이지만,\n칼빵(+광석병) 앞에서는 모두가 평등합니다.",
+  "item.projectazure.chixiao.tooltip": "앰버 오리지늄으로 만든 붉은 검집의 검. \n 아츠 능력이 없는 사람에게는 일반 검일 뿐이지만,\n칼빵(+광석병) 앞에서는 모두가 평등합니다.",
   "item.projectazure.crescentkatana_shiro": "반월검 - 백",
   "item.projectazure.crescentkatana_shiro.tooltip": "손잡이 부근에 반달 모양의 날이 달린 검.",
   "item.projectazure.crescentkatana_kuro": "반월검 - 흑",
@@ -388,6 +388,7 @@
   "entity.projectazure.entityschwarz": "슈바르츠",
   "entity.projectazure.entitynearl": "니어",
   "entity.projectazure.entityyato": "야토",
+  "entity.projectazure.entityw": "W",
 
   "entity.projectazure.entityartoria": "아르토리아 펜드래건",
   "entity.projectazure.entityscathath": "스카사하",

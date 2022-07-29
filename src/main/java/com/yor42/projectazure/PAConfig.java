@@ -126,6 +126,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue TalulahAttackDamage;
         public final ForgeConfigSpec.DoubleValue TalulahMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue WHealth;
+        public final ForgeConfigSpec.DoubleValue WSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue WAttackDamage;
+        public final ForgeConfigSpec.DoubleValue WMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue CrownslayerHealth;
         public final ForgeConfigSpec.DoubleValue CrownslayerSwimSpeed;
         public final ForgeConfigSpec.DoubleValue CrownslayerAttackDamage;
@@ -339,6 +344,11 @@ public class PAConfig {
             TalulahSwimSpeed = builder.defineInRange("Swim Speed of Talulah", 2.5, 0, 1024);
             TalulahAttackDamage = builder.defineInRange("Attack Damage of Talulah", 2.0F, 0, 1024);
             TalulahMovementSpeed = builder.defineInRange("Movement speed of Talulah", 0.3F, 0, 2);
+
+            WHealth = builder.defineInRange("Max Health of W", 20D, 1, 1024);
+            WSwimSpeed = builder.defineInRange("Swim Speed of W", 2.5, 0, 1024);
+            WAttackDamage = builder.defineInRange("Attack Damage of W", 2.0F, 0, 1024);
+            WMovementSpeed = builder.defineInRange("Movement speed of W", 0.3F, 0, 2);
 
             CrownslayerHealth = builder.defineInRange("Max Health of Crownslayer", 20D, 1, 1024);
             CrownslayerSwimSpeed = builder.defineInRange("Swim Speed of Crownslayer", 2.5, 0, 1024);

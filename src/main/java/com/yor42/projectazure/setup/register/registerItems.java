@@ -505,6 +505,10 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWN_EXCELA = ITEMS.register("spawnexcela", () -> new ItemCompanionSpawnEgg<>(registerEntity.EXCELA, new Item.Properties()
             .tab(PA_COMPANIONS)));
 
+    public static final RegistryObject<Item> SPAWN_W = ITEMS.register("spawnw", () -> new ItemCompanionSpawnEgg<>(registerEntity.W, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
+
     public static final RegistryObject<Item> MEDKIT = ITEMS.register("medkit", ItemMedKit::new);
 
     public static final RegistryObject<Item> DEFIB_PADDLE = ITEMS.register("defib_paddle", ItemDefibPaddle::new);

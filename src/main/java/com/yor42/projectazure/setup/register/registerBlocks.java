@@ -52,6 +52,9 @@ public class registerBlocks {
     public static final RegistryObject<Block> MACHINE_FRAME = register("machine_frame", () ->
             new Block((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
 
+    public static final RegistryObject<Block> MACHINE_FRAME_SLAB = register("machine_frame_slab", () ->
+            new SlabBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES);
+
 
     public static final RegistryObject<Block> METAL_PRESS = register_blockWithToolTiponItem("metal_press", MetalPressBlock::new, Main.PA_MACHINES);
     public static final RegistryObject<Block> ALLOY_FURNACE = register_blockWithToolTiponItem("alloy_furnace", AlloyFurnaceBlock::new, Main.PA_MACHINES);

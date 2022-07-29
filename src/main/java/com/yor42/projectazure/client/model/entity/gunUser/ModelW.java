@@ -1,8 +1,8 @@
-package com.yor42.projectazure.client.model.entity.sworduser;
+package com.yor42.projectazure.client.model.entity.gunUser;
 
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
-import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.EntityArtoria;
-import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityW;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -10,32 +10,32 @@ import software.bernie.geckolib3.core.processor.IBone;
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
-import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLocation;
+import static com.yor42.projectazure.libs.utils.ResourceUtils.AnimationLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
-public class ArtoriaModel extends GeoCompanionModel<EntityArtoria> {
+public class ModelW extends GeoCompanionModel<EntityW> {
     @Override
     protected int SleepingBodyYPosition() {
-        return -26;
+        return 0;
     }
 
     @Override
-    public ResourceLocation getModelLocation(EntityArtoria object) {
-        return GeoModelEntityLocation("modelsaber");
+    public ResourceLocation getModelLocation(EntityW object) {
+        return ResourceUtils.GeoModelEntityLocation("modelw");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityArtoria object) {
-        return TextureEntityLocation("modelartoria");
+    public ResourceLocation getTextureLocation(EntityW object) {
+        return TextureEntityLocation("modelw");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityArtoria animatable) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/artoria.animation.json");
+    public ResourceLocation getAnimationFileLocation(EntityW animatable) {
+        return AnimationLocation("entity/gunuser/w");
     }
 
     @Override
-    public void setLivingAnimations(EntityArtoria entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setLivingAnimations(EntityW entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");

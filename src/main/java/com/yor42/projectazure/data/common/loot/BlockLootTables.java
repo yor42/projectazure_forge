@@ -30,6 +30,7 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.dropSelf(registerBlocks.ZINC_ORE.get());
         this.dropSelf(registerBlocks.REENFORCED_PLANK.get());
         this.dropSelf(registerBlocks.MACHINE_FRAME.get());
+        this.dropSelf(registerBlocks.MACHINE_FRAME_SLAB.get());
         this.dropSelf(registerBlocks.REENFORCEDCONCRETE.get());
 
         this.dropSelf(registerBlocks.MACHINE_COMPONENTBLOCK.get());
