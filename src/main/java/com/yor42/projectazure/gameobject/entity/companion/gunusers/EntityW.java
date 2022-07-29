@@ -8,6 +8,7 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -26,6 +27,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
@@ -220,22 +222,34 @@ public class EntityW extends EntityGunUserBase implements IAknOp {
 
     @Override
     public SoundEvent getNormalAmbientSounds() {
-        return null;
+        return registerSounds.W_TALK_NORMAL;
     }
 
     @Override
     public SoundEvent getAffection1AmbientSounds() {
-        return null;
+        return registerSounds.W_TALK_HIGH_AFFECTION1;
     }
 
     @Override
     public SoundEvent getAffection2AmbientSounds() {
-        return null;
+        return registerSounds.W_TALK_HIGH_AFFECTION2;
     }
 
     @Override
     public SoundEvent getAffection3AmbientSounds() {
-        return null;
+        return registerSounds.W_TALK_HIGH_AFFECTION3;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAggroedSoundEvent() {
+        return registerSounds.W_TALK_AGGRO;
+    }
+
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.W_TALK_PAT;
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

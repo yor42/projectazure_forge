@@ -1609,7 +1609,7 @@
         "name": "projectazure:entity/akn/yato/talk8"
       },
       {
-        "name": "projectazure:entity/akn/yato/affection1"
+        "name": "projectazure:entity/akn/yato/aff1"
       }
     ]
   },
@@ -1681,6 +1681,186 @@
       },
       {
         "name": "projectazure:entity/akn/yato/aff3"
+      }
+    ]
+  },
+  "w_talk_normal": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/w/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice8"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice9"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice10"
+      }
+    ]
+  },
+  "w_talk_pat": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/w/pat1"
+      },
+      {
+        "name": "projectazure:entity/akn/w/pat2"
+      }
+    ]
+  },
+  "w_talk_aggro": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/w/aggro1"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aggro2"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aggro3"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aggro4"
+      }
+    ]
+  },
+  "w_talk_high_affection1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/w/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice8"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice9"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice10"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aff1"
+      }
+    ]
+  },
+  "w_talk_high_affection2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/w/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice8"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice9"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice10"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aff2"
+      }
+    ]
+  },
+  "w_talk_high_affection3": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/w/voice1"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice2"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice3"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice4"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice5"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice6"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice7"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice8"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice9"
+      },
+      {
+        "name": "projectazure:entity/akn/w/voice10"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aff1"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aff2"
+      },
+      {
+        "name": "projectazure:entity/akn/w/aff3"
       }
     ]
   },

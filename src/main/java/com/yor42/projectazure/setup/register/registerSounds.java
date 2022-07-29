@@ -148,6 +148,13 @@ public final class registerSounds {
     public static final SoundEvent YATO_TALK_HIGH_AFFECTION2 = registerSoundEvent("yato_talk_high_affection2");
     public static final SoundEvent YATO_TALK_HIGH_AFFECTION3 = registerSoundEvent("yato_talk_high_affection3");
 
+    public static final SoundEvent W_TALK_NORMAL = registerSoundEvent("w_talk_normal");
+    public static final SoundEvent W_TALK_PAT = registerSoundEvent("w_talk_pat");
+    public static final SoundEvent W_TALK_AGGRO = registerSoundEvent("w_talk_aggro");
+    public static final SoundEvent W_TALK_HIGH_AFFECTION1 = registerSoundEvent("w_talk_high_affection1");
+    public static final SoundEvent W_TALK_HIGH_AFFECTION2 = registerSoundEvent("w_talk_high_affection2");
+    public static final SoundEvent W_TALK_HIGH_AFFECTION3 = registerSoundEvent("w_talk_high_affection3");
+
     public static final SoundEvent ARTORIA_TALK_NORMAL = registerSoundEvent("artoria_talk");
     public static final SoundEvent ARTORIA_TALK_ATTACK = registerSoundEvent("artoria_attack");
     public static final SoundEvent ARTORIA_TALK_AGGRO = registerSoundEvent("artoria_aggro");
