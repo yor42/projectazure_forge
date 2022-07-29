@@ -17,12 +17,12 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
 
     @Override
     public ResourceLocation getModelLocation(EntityTalulah object) {
-        return GeoModelEntityLocation("modeltalulah");
+        return GeoModelEntityLocation("modeltalulah_remaster");
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityTalulah object) {
-        return TextureEntityLocation("modeltalulah");
+        return TextureEntityLocation("modeltalulah_remaster");
     }
 
     @Override

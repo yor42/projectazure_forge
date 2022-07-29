@@ -16,12 +16,12 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocat
 public class ChenModel extends GeoCompanionModel<EntityChen> {
     @Override
     public ResourceLocation getModelLocation(EntityChen entityChen) {
-        return GeoModelEntityLocation("modelchen");
+        return GeoModelEntityLocation("modelchen_remaster");
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityChen entityChen) {
-        return TextureEntityLocation("modelchen");
+        return TextureEntityLocation("modelchen_remaster");
     }
 
     @Override
@@ -38,15 +38,15 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
         IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
-        IBone anger1 = this.getAnimationProcessor().getBone("lewd1");
-        IBone anger2 = this.getAnimationProcessor().getBone("lewd2");
-        IBone anger3 = this.getAnimationProcessor().getBone("angry");
+        IBone anger1 = this.getAnimationProcessor().getBone("angry1");
+        IBone anger2 = this.getAnimationProcessor().getBone("angry2");
+        IBone anger3 = this.getAnimationProcessor().getBone("angry3");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
         IBone Sleep = this.getAnimationProcessor().getBone("Sleeping");
-        IBone Faint = this.getAnimationProcessor().getBone("faint");
-        IBone Injured = this.getAnimationProcessor().getBone("injured");
+        IBone Faint = this.getAnimationProcessor().getBone("Faint");
+        IBone Injured = this.getAnimationProcessor().getBone("Injured");
 
-        IBone body = this.getAnimationProcessor().getBone("Body");
+        IBone flushed = this.getAnimationProcessor().getBone("flushed");
 
         if(entity.isDeadOrDying() || (entity.isCriticallyInjured() && entity.isSleeping())){
             NormalFace.setHidden(true);
@@ -59,6 +59,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
             Sleep.setHidden(true);
             Faint.setHidden(false);
             Injured.setHidden(true);
+            flushed.setHidden(true);
         }
         else if(entity.isCriticallyInjured()){
             NormalFace.setHidden(true);
@@ -71,6 +72,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
             Sleep.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(false);
+            flushed.setHidden(true);
         }
         else if(entity.isAngry()){
             NormalFace.setHidden(true);
@@ -83,6 +85,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
             Sleep.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
+            flushed.setHidden(true);
         }
         else if(entity.getAngerWarningCount() == 2){
             NormalFace.setHidden(true);
@@ -95,6 +98,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
             Sleep.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
+            flushed.setHidden(true);
         }
         else if(entity.islewded()){
             NormalFace.setHidden(true);
@@ -107,6 +111,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
             Sleep.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
+            flushed.setHidden(true);
         }
         else if(entity.isBeingPatted()){
             NormalFace.setHidden(true);
@@ -119,6 +124,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
             Sleep.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
+            flushed.setHidden(true);
         }
         else if(entity.isSleeping()){
             NormalFace.setHidden(true);
@@ -131,6 +137,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
             Sleep.setHidden(false);
             Faint.setHidden(true);
             Injured.setHidden(true);
+            flushed.setHidden(true);
         }
         else {
 
@@ -145,6 +152,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
                 Sleep.setHidden(true);
                 Faint.setHidden(true);
                 Injured.setHidden(true);
+                flushed.setHidden(true);
             }
             if (System.currentTimeMillis() - this.LastBlinkTime>=this.blinkinterval) {
                 if(EyeclosedFace.isHidden()){
@@ -158,6 +166,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
                     Sleep.setHidden(true);
                     Faint.setHidden(true);
                     Injured.setHidden(true);
+                    flushed.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
                 }
                 else{
@@ -169,6 +178,7 @@ public class ChenModel extends GeoCompanionModel<EntityChen> {
                     anger3.setHidden(true);
                     Sleep.setHidden(true);
                     Faint.setHidden(true);
+                    flushed.setHidden(true);
                     Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*1000)+3000);
                 }

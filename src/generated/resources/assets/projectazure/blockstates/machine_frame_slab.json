@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=top": {
+      "model": "projectazure:block/machine_frame_slab_top"
+    },
+    "type=bottom": {
+      "model": "projectazure:block/machine_frame_slab"
+    },
+    "type=double": {
+      "model": "projectazure:block/machine_frame"
+    }
+  }
+}

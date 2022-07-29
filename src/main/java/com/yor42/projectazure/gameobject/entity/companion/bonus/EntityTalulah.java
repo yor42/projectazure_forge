@@ -14,6 +14,7 @@ import com.yor42.projectazure.interfaces.IWorldSkillUseable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.mixin.FurnaceAccessors;
 import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -221,6 +222,30 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
         event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
+        if(Minecraft.getInstance().isPaused()){
+            return PlayState.STOP;
+        }
+
+        AnimationBuilder builder = new AnimationBuilder();
+
+        if(this.isOrderedToSit() && this.getVehicle() == null){
+            event.getController().setAnimation(builder.addAnimation("sit_tail").addAnimation("sit_tail_idle", true));
+        }
+        else if(this.isSleeping()){
+            event.getController().setAnimation(builder.addAnimation("sleep_tail", true));
+        }
+        else if(this.isBeingPatted()){
+            event.getController().setAnimation(builder.addAnimation("pat_tail", true));
+        }
+        else{
+            event.getController().setAnimation(builder.addAnimation("idle_tail", true));
+        }
+
         return PlayState.CONTINUE;
     }
 

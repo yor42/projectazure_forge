@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "side": "projectazure:block/machine_frame",
+    "bottom": "projectazure:block/machine_frame",
+    "top": "projectazure:block/machine_frame"
+  }
+}

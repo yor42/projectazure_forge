@@ -15,10 +15,4 @@ public class EntityChenRenderer extends GeoCompanionRenderer<EntityChen> {
         super(renderManager, new ChenModel());
     }
 
-    @Nonnull
-    @Override
-    public ResourceLocation getTextureLocation(@Nonnull EntityChen entity) {
-        return TextureEntityLocation("modelchen");
-    }
-
 }

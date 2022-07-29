@@ -16,10 +16,4 @@ public class EntityTalulahRenderer extends GeoCompanionRenderer<EntityTalulah> {
         super(renderManager, new ModelTalulah());
     }
 
-    @Nonnull
-    @Override
-    public ResourceLocation getTextureLocation(@Nonnull EntityTalulah entity) {
-        return TextureEntityLocation("modeltalulah");
-    }
-
 }
