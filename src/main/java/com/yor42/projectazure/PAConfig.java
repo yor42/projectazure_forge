@@ -71,6 +71,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue M4A1AttackDamage;
         public final ForgeConfigSpec.DoubleValue M4A1MovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue HK416Health;
+        public final ForgeConfigSpec.DoubleValue HK416SwimSpeed;
+        public final ForgeConfigSpec.DoubleValue HK416AttackDamage;
+        public final ForgeConfigSpec.DoubleValue HK416MovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue ChenHealth;
         public final ForgeConfigSpec.DoubleValue ChenSwimSpeed;
         public final ForgeConfigSpec.DoubleValue ChenAttackDamage;
@@ -412,6 +417,11 @@ public class PAConfig {
             M4A1SwimSpeed = builder.defineInRange("Swim Speed of M4A1", 2.5, 0, 1024);
             M4A1AttackDamage = builder.defineInRange("Attack Damage of M4A1", 2.0F, 0, 1024);
             M4A1MovementSpeed = builder.defineInRange("Movement speed of M4A1", 0.3F, 0, 2);
+
+            HK416Health = builder.defineInRange("Max Health of HK416", 40D, 1, 1024);
+            HK416SwimSpeed = builder.defineInRange("Swim Speed of HK416", 2.5, 0, 1024);
+            HK416AttackDamage = builder.defineInRange("Attack Damage of HK416", 2.0F, 0, 1024);
+            HK416MovementSpeed = builder.defineInRange("Movement speed of HK416", 0.3F, 0, 2);
 
             builder.pop().pop().push("Gacha Roll RNG").comment("Chance of Roll per rarity.").comment("1 star is most common, and 6 star is most rare.").comment("Higher the number is, Commoner the item is.");
             ALLOW_DUPLICATE = builder.define("Allow Duplicate Entity for same player?", false);

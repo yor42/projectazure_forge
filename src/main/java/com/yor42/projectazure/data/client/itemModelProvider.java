@@ -165,6 +165,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelWisdomCube("spawnyamato");
 
         buildModelGFL("spawnm4a1");
+        buildModelGFL("spawnhk416");
 
         buildModelSR("spawnexcela");
 
