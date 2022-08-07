@@ -452,6 +452,9 @@ public class registerItems {
     public static final RegistryObject<Item> SPAWN_HK416 = ITEMS.register("spawnhk416", () -> new ItemCompanionSpawnEgg<>(registerEntity.HK416, new Item.Properties()
             .tab(PA_COMPANIONS)));
 
+    public static final RegistryObject<Item> SPAWN_PURIFIER = ITEMS.register("spawnpurifier", () -> new ItemCompanionSpawnEgg<>(registerEntity.PURIFIER, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
     public static final RegistryObject<Item> SPAWN_AMIYA = ITEMS.register("spawnamiya", () -> new ItemCompanionSpawnEgg<>(registerEntity.AMIYA, new Item.Properties()
             .tab(PA_COMPANIONS)));
 

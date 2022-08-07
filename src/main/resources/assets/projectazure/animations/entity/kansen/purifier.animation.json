@@ -1575,14 +1575,14 @@
 				"LeftArm": {
 					"rotation": {
 						"0.0": {
-							"vector": [-40, 0, 0]
+							"vector": [0, 0, 0]
 						},
 						"2.0": {
-							"vector": [-37.5, 0, 0],
+							"vector": [0, 0, -2.5],
 							"easing": "easeInOutSine"
 						},
 						"4.0": {
-							"vector": [-40, 0, 0],
+							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
 					}
@@ -1590,27 +1590,14 @@
 				"LeftHand": {
 					"rotation": {
 						"0.0": {
-							"vector": [-100, 0, 0]
+							"vector": [0, 0, 0]
 						},
 						"2.0": {
-							"vector": [-102.5, 0, 0],
+							"vector": [0, 0, -2.5],
 							"easing": "easeInOutSine"
 						},
 						"4.0": {
-							"vector": [-100, 0, 0],
-							"easing": "easeInOutSine"
-						}
-					},
-					"position": {
-						"0.0": {
-							"vector": [0, -2, -2]
-						},
-						"2.0": {
-							"vector": [0, -2, -2],
-							"easing": "easeInOutSine"
-						},
-						"4.0": {
-							"vector": [0, -2, -2],
+							"vector": [0, 0, -2.5],
 							"easing": "easeInOutSine"
 						}
 					}

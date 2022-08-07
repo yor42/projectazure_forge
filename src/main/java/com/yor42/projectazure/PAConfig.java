@@ -26,6 +26,11 @@ public class PAConfig {
         public final ForgeConfigSpec.BooleanValue EnableShipLandCombat;
         public final ForgeConfigSpec.BooleanValue EnableTorpedoBlockDamage;
 
+        public final ForgeConfigSpec.DoubleValue PurifierHealth;
+        public final ForgeConfigSpec.DoubleValue PurifierSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue PurifierAttackDamage;
+        public final ForgeConfigSpec.DoubleValue PurifierMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue AyanamiHealth;
         public final ForgeConfigSpec.DoubleValue AyanamiSwimSpeed;
         public final ForgeConfigSpec.DoubleValue AyanamiAttackDamage;
@@ -287,6 +292,11 @@ public class PAConfig {
             NagatoSwimSpeed = builder.defineInRange("Swim Speed of Nagato", 2.5, 0, 1024);
             NagatoAttackDamage = builder.defineInRange("Attack Damage of Nagato", 2.0F, 0, 1024);
             NagatoMovementSpeed = builder.defineInRange("Movement speed of Nagato", 0.3F, 0, 2);
+
+            PurifierHealth = builder.defineInRange("Max Health of Purifier", 80D, 1, 1024);
+            PurifierSwimSpeed = builder.defineInRange("Swim Speed of Purifier", 2.5, 0, 1024);
+            PurifierAttackDamage = builder.defineInRange("Attack Damage of Purifier", 2.0F, 0, 1024);
+            PurifierMovementSpeed = builder.defineInRange("Movement speed of Purifier", 0.3F, 0, 2);
 
             builder.pop().push("Blue Archive");
             ShirokoHealth = builder.defineInRange("Max Health of Shiroko", 40D, 1, 1024);

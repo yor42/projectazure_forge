@@ -76,7 +76,7 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityMudrock>> MUDROCK = ENTITIES.register("entitymudrock", () -> EntityType.Builder.of(EntityMudrock::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitymudrock").toString()));
     public static final RegistryObject<EntityType<EntityChen>> CHEN = ENTITIES.register("entitychen", () -> EntityType.Builder.of(EntityChen::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entitychen").toString()));
     public static final RegistryObject<EntityType<EntityW>> W = ENTITIES.register("entityw", () -> EntityType.Builder.of(EntityW::new, EntityClassification.CREATURE).sized(0.572F, 1.65F).build(ModResourceLocation("entityw").toString()));
-    public static final RegistryObject<EntityType<EntityHK416>> HK416 = ENTITIES.register("entityhk416", () -> EntityType.Builder.of(EntityHK416::new, EntityClassification.CREATURE).sized(0.572F, 1.65F).build(ModResourceLocation("entityhk416").toString()));
+    public static final RegistryObject<EntityType<EntityHK416>> HK416 = ENTITIES.register("entityhk416", () -> EntityType.Builder.of(EntityHK416::new, EntityClassification.CREATURE).sized(0.572F, 1.58F).build(ModResourceLocation("entityhk416").toString()));
 
     public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> EntityType.Builder.of(EntityShiroko::new, EntityClassification.CREATURE).sized(0.572F, 1.575F).build(ModResourceLocation("entityshiroko").toString()));
     public static final RegistryObject<EntityType<EntityM4A1>> M4A1 = ENTITIES.register("entitym4a1", () -> EntityType.Builder.of(EntityM4A1::new, EntityClassification.CREATURE).sized(0.65F, 1.825F).build(ModResourceLocation("entitym4a1").toString()));
@@ -90,6 +90,7 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityKyaru>> KYARU = ENTITIES.register("entitykyaru", () -> EntityType.Builder.of(EntityKyaru::new, EntityClassification.CREATURE).sized(0.572F, 1.52F).build(ModResourceLocation("entitykyaru").toString()));
     public static final RegistryObject<EntityType<EntityShiki>> SHIKI = ENTITIES.register("entityshiki", () -> EntityType.Builder.of(EntityShiki::new, EntityClassification.CREATURE).sized(0.572F, 1.6F).build(ModResourceLocation("entityshiki").toString()));
     public static final RegistryObject<EntityType<EntityExcela>> EXCELA = ENTITIES.register("entityexcela", () -> EntityType.Builder.of(EntityExcela::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityexcela").toString()));
+    public static final RegistryObject<EntityType<EntityPurifier>> PURIFIER = ENTITIES.register("entitypurifier", () -> EntityType.Builder.of(EntityPurifier::new, EntityClassification.CREATURE).sized(0.572F, 1.58F).build(ModResourceLocation("entitypurifier").toString()));
 
     public static final RegistryObject<EntityType<EntityCausalBlackhole>> BLACKHOLE = ENTITIES.register("entitycausalblackhole", () -> EntityType.Builder.<EntityCausalBlackhole>of(EntityCausalBlackhole::new, EntityClassification.MISC).sized(3F, 3F).build(ModResourceLocation("entitycausalblackhole").toString()));
     @SubscribeEvent
@@ -128,6 +129,7 @@ public class registerEntity {
         event.put(EXCELA.get(), EntityExcela.MutableAttribute().build());
         event.put(W.get(), EntityW.MutableAttribute().build());
         event.put(HK416.get(), EntityHK416.MutableAttribute().build());
+        event.put(PURIFIER.get(), EntityPurifier.MutableAttribute().build());
     }
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderer(){
@@ -162,6 +164,7 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.EXCELA.get(), EntityExcelaRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.W.get(), EntityWRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.HK416.get(), EntityHK416Renderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PURIFIER.get(), EntityPurifierRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 

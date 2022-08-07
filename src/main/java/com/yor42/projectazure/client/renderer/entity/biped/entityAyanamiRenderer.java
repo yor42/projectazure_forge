@@ -13,11 +13,5 @@ public class entityAyanamiRenderer extends GeoCompanionRenderer<EntityAyanami> {
         super(renderManager, new ayanamiModel());
         this.addLayer(new CompanionRiggingLayer<>(this));
     }
-
-    @Override
-    public ResourceLocation getTextureLocation(EntityAyanami entity) {
-        return new ResourceLocation(Constants.MODID, "textures/entity/modelayanami.png");
-    }
-
 }
 
