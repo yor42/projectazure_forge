@@ -188,6 +188,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelFGO("spawnshiki");
         buildModelFGO("spawnartoria");
         buildModelFGO("spawnscathath");
+        buildModelFGO("spawnmash");
 
         buildModelPCR("spawnkyaru");
 

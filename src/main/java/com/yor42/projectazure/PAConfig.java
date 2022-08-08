@@ -171,6 +171,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue ScathathAttackDamage;
         public final ForgeConfigSpec.DoubleValue ScathathMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue MashHealth;
+        public final ForgeConfigSpec.DoubleValue MashSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue MashAttackDamage;
+        public final ForgeConfigSpec.DoubleValue MashMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue ShikiHealth;
         public final ForgeConfigSpec.DoubleValue ShikiSwimSpeed;
         public final ForgeConfigSpec.DoubleValue ShikiAttackDamage;
@@ -403,6 +408,11 @@ public class PAConfig {
             ScathathSwimSpeed = builder.defineInRange("Swim Speed of Scathath", 2.5, 0, 1024);
             ScathathAttackDamage = builder.defineInRange("Attack Damage of Scathath" , 2.0F, 0, 1024);
             ScathathMovementSpeed = builder.defineInRange("Movement speed of Scathath", 0.3F, 0, 2);
+
+            MashHealth = builder.defineInRange("Max Health of Mash", 40D, 1, 1024);
+            MashSwimSpeed = builder.defineInRange("Swim Speed of Mash", 2.5, 0, 1024);
+            MashAttackDamage = builder.defineInRange("Attack Damage of Mash" , 2.0F, 0, 1024);
+            MashMovementSpeed = builder.defineInRange("Movement speed of Mash", 0.3F, 0, 2);
 
             ShikiHealth = builder.defineInRange("Max Health of Shiki", 30D, 1, 1024);
             ShikiSwimSpeed = builder.defineInRange("Swim Speed of Shiki", 2.5, 0, 1024);

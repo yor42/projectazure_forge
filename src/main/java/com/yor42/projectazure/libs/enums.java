@@ -100,6 +100,7 @@ public class enums {
 
     public enum SERVANT_CLASSES{
         ASSASSIN("servantclass.assassin", 227, 227),
+        SHIELDER("servantclass.shielder", 227, 227),
         SABER("servantclass.saber", 227, 227),
         LANCER("servantclass.lancer", 227, 197);
         private final String translationkey;

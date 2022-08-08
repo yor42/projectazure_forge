@@ -369,6 +369,7 @@ public class registerItems {
     public static final RegistryObject<Item> EXCALIBUR = ITEMS.register("excalibur", () -> new ModSwordItem(ModMaterials.EXCALIBUR, 1, -1.0F,true, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> TACTICAL_KNIFE = ITEMS.register("tactical_knife", () -> new ItemThrowableKnife(ModMaterials.KNIFE, 3, -0.2F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> COMPOUNDBOW = ITEMS.register("compoundbow", () -> new BowItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));
+    public static final RegistryObject<Item> LORD_CHALDEAS = ITEMS.register("lordchaldeas", () -> new ShieldItem(new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> BONKBAT = ITEMS.register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
             .tab(PA_WEAPONS)
             .rarity(Rarity.EPIC)
@@ -512,6 +513,9 @@ public class registerItems {
             .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_W = ITEMS.register("spawnw", () -> new ItemCompanionSpawnEgg<>(registerEntity.W, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
+    public static final RegistryObject<Item> SPAWN_MASH = ITEMS.register("spawnmash", () -> new ItemCompanionSpawnEgg<>(registerEntity.MASH, new Item.Properties()
             .tab(PA_COMPANIONS)));
 
 

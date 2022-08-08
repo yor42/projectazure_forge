@@ -130,6 +130,8 @@
 
   "item.projectazure.missiledrone": "Missile Drone",
 
+  "item.projectazure.lordchaldeas": "Lord Chaldeas",
+
   "item.projectazure.dd_default_rigging.tooltip": "Basic Rigging for destroyer KANSEN.",
   "item.projectazure.cv_default_rigging.tooltip": "Basic Rigging for Aircraft Carrier KANSEN.",
   "item.projectazure.bb_default_rigging.tooltip": "Basic Rigging for Battleship KANSEN.",
@@ -395,6 +397,7 @@
   "entity.projectazure.entityartoria": "Artoria Pendragon",
   "entity.projectazure.entityscathath": "Scáthach",
   "entity.projectazure.entityshiki": "Ryougi Shiki",
+  "entity.projectazure.entitymash": "Mash Kyrielight",
 
   "entity.projectazure.entitykyaru": "Kyaru",
 

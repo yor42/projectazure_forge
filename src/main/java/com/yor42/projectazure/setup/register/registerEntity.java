@@ -91,6 +91,7 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityShiki>> SHIKI = ENTITIES.register("entityshiki", () -> EntityType.Builder.of(EntityShiki::new, EntityClassification.CREATURE).sized(0.572F, 1.6F).build(ModResourceLocation("entityshiki").toString()));
     public static final RegistryObject<EntityType<EntityExcela>> EXCELA = ENTITIES.register("entityexcela", () -> EntityType.Builder.of(EntityExcela::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityexcela").toString()));
     public static final RegistryObject<EntityType<EntityPurifier>> PURIFIER = ENTITIES.register("entitypurifier", () -> EntityType.Builder.of(EntityPurifier::new, EntityClassification.CREATURE).sized(0.572F, 1.58F).build(ModResourceLocation("entitypurifier").toString()));
+    public static final RegistryObject<EntityType<EntityMash>> MASH = ENTITIES.register("entitymash", () -> EntityType.Builder.of(EntityMash::new, EntityClassification.CREATURE).sized(0.572F, 1.64F).build(ModResourceLocation("entitymash").toString()));
 
     public static final RegistryObject<EntityType<EntityCausalBlackhole>> BLACKHOLE = ENTITIES.register("entitycausalblackhole", () -> EntityType.Builder.<EntityCausalBlackhole>of(EntityCausalBlackhole::new, EntityClassification.MISC).sized(3F, 3F).build(ModResourceLocation("entitycausalblackhole").toString()));
     @SubscribeEvent
@@ -130,6 +131,7 @@ public class registerEntity {
         event.put(W.get(), EntityW.MutableAttribute().build());
         event.put(HK416.get(), EntityHK416.MutableAttribute().build());
         event.put(PURIFIER.get(), EntityPurifier.MutableAttribute().build());
+        event.put(MASH.get(), EntityMash.MutableAttribute().build());
     }
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderer(){
@@ -165,6 +167,7 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.W.get(), EntityWRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.HK416.get(), EntityHK416Renderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PURIFIER.get(), EntityPurifierRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.MASH.get(), EntityMashRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 

@@ -3337,7 +3337,7 @@
 			}
 		},
 		"melee_attack": {
-			"animation_length": 1.85,
+			"animation_length": 0.95,
 			"bones": {
 				"Body": {
 					"rotation": {
@@ -3598,7 +3598,7 @@
 			}
 		},
 		"melee_attack_leg": {
-			"animation_length": 1.85,
+			"animation_length": 0.95,
 			"bones": {
 				"Body": {
 					"rotation": {
@@ -3768,7 +3768,7 @@
 			}
 		},
 		"melee_attack_arm": {
-			"animation_length": 1.85,
+			"animation_length": 0.95,
 			"bones": {
 				"RightArm": {
 					"rotation": {
