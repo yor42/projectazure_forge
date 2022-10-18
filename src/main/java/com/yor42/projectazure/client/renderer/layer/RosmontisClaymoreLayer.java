@@ -20,12 +20,15 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureLocation;
 
 public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> implements IGeoRenderer<EntityRosmontis> {
 
+    public IRenderTypeBuffer rtb;
+
     public RosmontisClaymoreLayer(IGeoRenderer<EntityRosmontis> entityRendererIn) {
         super(entityRendererIn);
     }
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, EntityRosmontis entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.rtb = bufferIn;
         int SpellItemIndex = entityLivingBaseIn.getNextSkillItemindex();
         if(entityLivingBaseIn.isSkillItemInindex(0)){
             matrixStackIn.pushPose();
@@ -108,6 +111,16 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
             }
             matrixStackIn.popPose();
         }
+    }
+
+    @Override
+    public void setCurrentRTB(IRenderTypeBuffer rtb) {
+        this.rtb = rtb;
+    }
+
+    @Override
+    public IRenderTypeBuffer getCurrentRTB() {
+        return this.rtb;
     }
 
     @Override

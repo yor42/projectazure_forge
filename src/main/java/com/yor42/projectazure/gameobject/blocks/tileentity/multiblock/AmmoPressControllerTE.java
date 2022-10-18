@@ -29,22 +29,22 @@ public class AmmoPressControllerTE extends ControllerTileEntity {
     }
 
     public static void registerTE(){
-        AmmoPressDefinition.recipeMap = new RecipeMap("ammopress");
+        AmmoPressDefinition.setRecipeMap(new RecipeMap("ammopress"));
 
-        AmmoPressDefinition.recipeMap.inputCapabilities.add(ItemMultiblockCapability.CAP);
-        AmmoPressDefinition.recipeMap.inputCapabilities.add(FEMultiblockCapability.CAP);
-        AmmoPressDefinition.recipeMap.outputCapabilities.add(ItemMultiblockCapability.CAP);
-        AmmoPressDefinition.baseRenderer = ResourceUtils.getMBDBlockModel("ammo_press_controller");
-        AmmoPressDefinition.formedRenderer = new MBDGeoRenderer("ammo_press", true);
-        AmmoPressDefinition.workingRenderer = new MBDGeoRenderer("ammo_press_on", true);
+        AmmoPressDefinition.getRecipeMap().inputCapabilities.add(ItemMultiblockCapability.CAP);
+        AmmoPressDefinition.getRecipeMap().inputCapabilities.add(FEMultiblockCapability.CAP);
+        AmmoPressDefinition.getRecipeMap().outputCapabilities.add(ItemMultiblockCapability.CAP);
+        AmmoPressDefinition.getBaseStatus().setRenderer(()->ResourceUtils.getMBDBlockModel("ammo_press_controller"));
+        AmmoPressDefinition.getIdleStatus().setRenderer(()-> new MBDGeoRenderer("ammo_press", true));
+        AmmoPressDefinition.getWorkingStatus().setRenderer(()->new MBDGeoRenderer("ammo_press_on", true));
         AmmoPressDefinition.properties.isOpaque = false;
         AmmoPressDefinition.properties.tabGroup = "pa_machines";
-        AmmoPressDefinition.basePattern = FactoryBlockPattern.start().aisle("PPPP", "kkkk", "MMMM").aisle("PPPP", "kMMk", "MDDM").aisle("P@PP", "GGGG", "MMMM")
+        AmmoPressDefinition.setBasePattern(FactoryBlockPattern.start().aisle("PPPP", "kkkk", "MMMM").aisle("PPPP", "kMMk", "MDDM").aisle("P@PP", "GGGG", "MMMM")
                 .where("P", Predicates.component(HatchTE.EnergyHatchDefinition).or(Predicates.component(HatchTE.ItemHatchDefinition)).or(Predicates.blocks(registerBlocks.MACHINE_FRAME.get())))
                 .where("k", Predicates.blocks(registerBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("M", Predicates.blocks(registerBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed())
-                .where("G", Predicates.blocks(Blocks.GLASS).disableRenderFormed()).where("@", Predicates.component(AmmoPressDefinition)).where("D", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).build();
+                .where("G", Predicates.blocks(Blocks.GLASS).disableRenderFormed()).where("@", Predicates.component(AmmoPressDefinition)).where("D", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).build());
 
-        RecipeMap.register(AmmoPressDefinition.recipeMap);
+        RecipeMap.register(AmmoPressDefinition.getRecipeMap());
         MbdComponents.registerComponent(AmmoPressDefinition);
     }
 }

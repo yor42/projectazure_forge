@@ -75,10 +75,10 @@ public class ForgeBusEventHandler {
     public static void onServerStart(FMLServerStartedEvent event){
         Main.LOGGER.debug("Starting multiblock recipe registration.");
         try{
-            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.recipeMap.start().name("prime_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME), 1)).perTick(true).output(FEMultiblockCapability.CAP, 2000).duration(1200).buildAndRegister();
-            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.recipeMap.start().name("originite_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINITE), 1)).perTick(true).output(FEMultiblockCapability.CAP, 4000).duration(400).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("prime_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME), 1)).perTick(true).output(FEMultiblockCapability.CAP, 2000).duration(1200).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("originite_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINITE), 1)).perTick(true).output(FEMultiblockCapability.CAP, 4000).duration(400).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("9mm")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("9mm")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD)))
@@ -86,7 +86,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_9.get(), 16)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("12gauge")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("12gauge")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.NUGGET_LEAD), 12))
@@ -94,7 +94,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_10g.get(), 16)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("357magnum")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("357magnum")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 2))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 2))
@@ -102,7 +102,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.MAGNUM_BULLET.get(), 12)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("50bmg")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("50bmg")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_BRASS), 2))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 3))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 3))
@@ -110,7 +110,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.MAGNUM_BULLET.get(), 12)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("30winchester")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("30winchester")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 2))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.NUGGET_COPPER), 8))
@@ -118,7 +118,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_30_WIN.get(), 10)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("308win")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("308win")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 3))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.NUGGET_LEAD), 8))
@@ -126,7 +126,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_308.get(), 24)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("7.62x25")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("7.62x25")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 1))
@@ -134,7 +134,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_762x39.get(), 30)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("7.62x39")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("7.62x39")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 1))
@@ -142,7 +142,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_762x39.get(), 30)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("7.62x54")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("7.62x54")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_BRASS), 2))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 2))
@@ -150,7 +150,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_762x39.get(), 20)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("45acp")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("45acp")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.NUGGET_LEAD), 16))
@@ -158,7 +158,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_45.get(), 16)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("5.56")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("5.56")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER)))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.NUGGET_LEAD), 16))
@@ -166,7 +166,7 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_556.get(), 32)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.recipeMap.start().name("5.8mm")
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("5.8mm")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_IRON), 1))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 2))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 1))

@@ -1,6 +1,7 @@
 package com.yor42.projectazure.client.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -24,10 +25,13 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.AnimationUtils;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 
 public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends EntityRenderer<T>
         implements IGeoRenderer<T> {
+
+    public IRenderTypeBuffer rtb;
 
     static {
         AnimationController.addModelFetcher((IAnimatable object) -> {
@@ -72,6 +76,22 @@ public class GeoProjectileRenderer <T extends Entity & IAnimatable> extends Enti
 
     public static int getPackedOverlay(Entity livingEntityIn, float uIn) {
         return OverlayTexture.pack(OverlayTexture.u(uIn), OverlayTexture.v(false));
+    }
+
+    @Override
+    public void setCurrentRTB(IRenderTypeBuffer rtb) {
+        this.rtb = rtb;
+    }
+
+    @Override
+    public void renderEarly(T animatable, MatrixStack stackIn, float partialTicks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        IGeoRenderer.super.renderEarly(animatable, stackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        this.rtb = renderTypeBuffer;
+    }
+
+    @Override
+    public IRenderTypeBuffer getCurrentRTB() {
+        return this.rtb;
     }
 
     @Override

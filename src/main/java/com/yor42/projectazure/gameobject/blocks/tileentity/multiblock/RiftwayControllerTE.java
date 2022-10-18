@@ -16,10 +16,10 @@ public class RiftwayControllerTE extends ControllerTileEntity {
     }
 
     public static void registerTE(){
-        RiftwayDefinition.recipeMap.inputCapabilities.add(ItemMultiblockCapability.CAP);
-        RiftwayDefinition.recipeMap.inputCapabilities.add(FEMultiblockCapability.CAP);
-        RiftwayDefinition.baseRenderer = ResourceUtils.getMBDBlockModel("riftway_controller");
-        RiftwayDefinition.formedRenderer = new MBDGeoRenderer("riftway", true);
-        RiftwayDefinition.workingRenderer = new MBDGeoRenderer("riftway", true);
+        RiftwayDefinition.getRecipeMap().inputCapabilities.add(ItemMultiblockCapability.CAP);
+        RiftwayDefinition.getRecipeMap().inputCapabilities.add(FEMultiblockCapability.CAP);
+        RiftwayDefinition.getBaseStatus().setRenderer(ResourceUtils.getMBDBlockModel("riftway_controller"));
+        RiftwayDefinition.getIdleStatus().setRenderer(new MBDGeoRenderer("riftway", true));
+        RiftwayDefinition.getWorkingStatus().setRenderer(new MBDGeoRenderer("riftway", true));
     }
 }

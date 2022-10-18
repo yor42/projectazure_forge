@@ -4,6 +4,7 @@ import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
+import com.lowdragmc.multiblocked.api.block.CustomProperties;
 import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
 import com.lowdragmc.multiblocked.api.definition.PartDefinition;
 import com.lowdragmc.multiblocked.api.gui.recipe.ProgressWidget;
@@ -145,13 +146,13 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
     }
 
     public static void registerItemHatch() {
-        ItemHatchDefinition.baseRenderer = ResourceUtils.getMBDBlockModel("item_hatch");
-        ItemHatchDefinition.allowRotate = false;
+        ItemHatchDefinition.getBaseStatus().setRenderer(()-> ResourceUtils.getMBDBlockModel("item_hatch"));
+        ItemHatchDefinition.properties.rotationState = CustomProperties.RotationState.NONE;
         ItemHatchDefinition.properties.isOpaque = true;
         ItemHatchDefinition.properties.tabGroup = "pa_machines";
         MbdComponents.registerComponent(ItemHatchDefinition);
-        EnergyHatchDefinition.baseRenderer = ResourceUtils.getMBDBlockModel("energy_hatch");
-        EnergyHatchDefinition.allowRotate = false;
+        EnergyHatchDefinition.getBaseStatus().setRenderer(()-> ResourceUtils.getMBDBlockModel("energy_hatch"));
+        EnergyHatchDefinition.properties.rotationState = CustomProperties.RotationState.NONE;
         EnergyHatchDefinition.properties.tabGroup = "pa_machines";
         EnergyHatchDefinition.properties.isOpaque = true;
         MbdComponents.registerComponent(EnergyHatchDefinition);

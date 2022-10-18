@@ -24,16 +24,16 @@ public class OriginiumGeneratorControllerTE extends ControllerTileEntity {
 
     public static void registerTE(){
 
-        OriginiumGeneratorDefinition.recipeMap = new RecipeMap("originium_generation");
-        OriginiumGeneratorDefinition.recipeMap.inputCapabilities.add(ItemMultiblockCapability.CAP);
-        OriginiumGeneratorDefinition.recipeMap.outputCapabilities.add(FEMultiblockCapability.CAP);
-        OriginiumGeneratorDefinition.baseRenderer = ResourceUtils.getMBDBlockModel("originium_generator_controller");
-        OriginiumGeneratorDefinition.formedRenderer = new MBDGeoRenderer("originium_generator", true);
-        OriginiumGeneratorDefinition.workingRenderer = new MBDGeoRenderer("originium_generator_on", true);
+        OriginiumGeneratorDefinition.setRecipeMap(new RecipeMap("originium_generation"));
+        OriginiumGeneratorDefinition.getRecipeMap().inputCapabilities.add(ItemMultiblockCapability.CAP);
+        OriginiumGeneratorDefinition.getRecipeMap().outputCapabilities.add(FEMultiblockCapability.CAP);
+        OriginiumGeneratorDefinition.getBaseStatus().setRenderer(()->ResourceUtils.getMBDBlockModel("originium_generator_controller"));
+        OriginiumGeneratorDefinition.getIdleStatus().setRenderer(()->new MBDGeoRenderer("originium_generator", true));
+        OriginiumGeneratorDefinition.getWorkingStatus().setRenderer(()-> new MBDGeoRenderer("originium_generator_on", true));
         OriginiumGeneratorDefinition.properties.isOpaque = false;
         OriginiumGeneratorDefinition.properties.tabGroup = "pa_machines";
-        OriginiumGeneratorDefinition.basePattern = FactoryBlockPattern.start().aisle("PCP", " E ", " @ ", " F ").aisle("IPI", "F F", "L L", "   ").aisle("FPF", "   ", "   ", "   ").where(' ', Predicates.any()).where('I', Predicates.component(HatchTE.ItemHatchDefinition).disableRenderFormed()).where('E', Predicates.component(HatchTE.EnergyHatchDefinition).disableRenderFormed()).where('@', Predicates.component(OriginiumGeneratorDefinition)).where('P', Predicates.blocks(registerBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).where('F', Predicates.blocks(registerBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("L", Predicates.blocks(Blocks.PISTON).disableRenderFormed()).where("C", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).build();
-        RecipeMap.register(OriginiumGeneratorDefinition.recipeMap);
+        OriginiumGeneratorDefinition.setBasePattern(FactoryBlockPattern.start().aisle("PCP", " E ", " @ ", " F ").aisle("IPI", "F F", "L L", "   ").aisle("FPF", "   ", "   ", "   ").where(' ', Predicates.any()).where('I', Predicates.component(HatchTE.ItemHatchDefinition).disableRenderFormed()).where('E', Predicates.component(HatchTE.EnergyHatchDefinition).disableRenderFormed()).where('@', Predicates.component(OriginiumGeneratorDefinition)).where('P', Predicates.blocks(registerBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).where('F', Predicates.blocks(registerBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("L", Predicates.blocks(Blocks.PISTON).disableRenderFormed()).where("C", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).build());
+        RecipeMap.register(OriginiumGeneratorDefinition.getRecipeMap());
         MbdComponents.registerComponent(OriginiumGeneratorDefinition);
     }
 }

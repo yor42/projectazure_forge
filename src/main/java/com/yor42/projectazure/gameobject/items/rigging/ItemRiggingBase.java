@@ -49,6 +49,18 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public AnimationFactory factory = new AnimationFactory(this);
 
     protected enums.shipClass validclass;
+    protected IRenderTypeBuffer rtb;
+
+
+    @Override
+    public IRenderTypeBuffer getCurrentRTB() {
+        return this.rtb;
+    }
+
+    @Override
+    public void setCurrentRTB(IRenderTypeBuffer rtb) {
+        this.rtb = rtb;
+    }
 
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
         return null;
