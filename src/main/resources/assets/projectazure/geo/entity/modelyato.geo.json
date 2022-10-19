@@ -16,8 +16,8 @@
 					"pivot": [0, 35.65, 0],
 					"cubes": [
 						{
-							"origin": [-7, 32.5, -3.5],
-							"size": [14, 11, 7],
+							"origin": [-7.25, 32.5, -3.75],
+							"size": [14.5, 11, 7.5],
 							"uv": {
 								"north": {"uv": [26, 28], "uv_size": [14, 11]},
 								"east": {"uv": [93, 130], "uv_size": [7, 11]},
@@ -29,7 +29,7 @@
 						},
 						{
 							"origin": [-7.5, 33, -4],
-							"size": [15, 2, 8.1],
+							"size": [15, 2, 7.85],
 							"uv": {
 								"north": {"uv": [154, 134], "uv_size": [15, 2]},
 								"east": {"uv": [162, 69], "uv_size": [8, 2]},
@@ -103,7 +103,7 @@
 						},
 						{
 							"origin": [-7.75, 30, -4.25],
-							"size": [15.5, 3, 8.75],
+							"size": [15.5, 3, 8.5],
 							"uv": {
 								"north": {"uv": [143, 79], "uv_size": [16, 3]},
 								"east": {"uv": [101, 19], "uv_size": [9, 3]},
@@ -115,7 +115,7 @@
 						},
 						{
 							"origin": [-7.75, 25, -4.25],
-							"size": [15.5, 5, 9],
+							"size": [15.5, 5, 8.75],
 							"uv": {
 								"north": {"uv": [126, 78], "uv_size": [15.5, 5]},
 								"east": {"uv": [55, 152], "uv_size": [9, 5]},
@@ -135,25 +135,6 @@
 								"west": {"uv": [49, 158], "uv_size": [8, 4]},
 								"up": {"uv": [101, 10], "uv_size": [14.5, 8]},
 								"down": {"uv": [104, 8], "uv_size": [14.5, -8]}
-							}
-						}
-					]
-				},
-				{
-					"name": "armor_waist",
-					"parent": "waist",
-					"pivot": [0, 0, 0],
-					"cubes": [
-						{
-							"origin": [-8, 24, -4.5],
-							"size": [16, 6, 9.5],
-							"uv": {
-								"north": {"uv": [105, 185], "uv_size": [16, 6]},
-								"east": {"uv": [149, 222], "uv_size": [9.5, 6]},
-								"south": {"uv": [222, 70], "uv_size": [16, 6]},
-								"west": {"uv": [110, 193], "uv_size": [9.5, 6]},
-								"up": {"uv": [139, 203], "uv_size": [16, 9.5]},
-								"down": {"uv": [121, 211.5], "uv_size": [16, -9.5]}
 							}
 						}
 					]
@@ -216,7 +197,7 @@
 				{
 					"name": "armor_rightleg",
 					"parent": "RightLeg",
-					"pivot": [-5.75, 25, 3],
+					"pivot": [-4, 25, 0],
 					"cubes": [
 						{
 							"origin": [-7.5, 13.5, -3.5],
@@ -254,7 +235,7 @@
 				{
 					"name": "armor_rightleg2",
 					"parent": "RightLowerLeg",
-					"pivot": [-5.75, 15.5, 3],
+					"pivot": [-4, 13.5, 0],
 					"cubes": [
 						{
 							"origin": [-7.5, 0, -3.5],
@@ -273,7 +254,7 @@
 				{
 					"name": "armor_rightfoot",
 					"parent": "RightLowerLeg",
-					"pivot": [-5.75, 13.5, 3],
+					"pivot": [-4, 13.5, 0],
 					"cubes": [
 						{
 							"origin": [-7.5, 0, -3.5],
@@ -385,7 +366,7 @@
 				{
 					"name": "armor_leftleg2",
 					"parent": "LeftLowerLeg",
-					"pivot": [-1, 15.5, 3],
+					"pivot": [4, 13.5, 0],
 					"cubes": [
 						{
 							"origin": [0.5, 0, -3.5],
@@ -404,7 +385,7 @@
 				{
 					"name": "armor_leftfoot",
 					"parent": "LeftLowerLeg",
-					"pivot": [-1, 13.5, 3],
+					"pivot": [4, 13.5, 0],
 					"cubes": [
 						{
 							"origin": [0.5, 0, -3.5],
@@ -478,7 +459,7 @@
 				{
 					"name": "armor_leftleg",
 					"parent": "LeftLeg",
-					"pivot": [-1, 25, 3],
+					"pivot": [4, 25, 0],
 					"cubes": [
 						{
 							"origin": [0.5, 13.5, -3.5],
@@ -516,7 +497,7 @@
 				{
 					"name": "armor_body",
 					"parent": "Chest",
-					"pivot": [-6.5, 36.875, 3.5],
+					"pivot": [0, 50.625, 0],
 					"cubes": [
 						{
 							"origin": [-7, 25, -3.5],
@@ -735,7 +716,7 @@
 				{
 					"name": "armor_head",
 					"parent": "Head",
-					"pivot": [-5, 36, 5],
+					"pivot": [0, 50.5, 0],
 					"cubes": [
 						{
 							"origin": [-6.5, 50.5, -6.5],
@@ -2168,11 +2149,11 @@
 				{
 					"name": "armor_leftarm",
 					"parent": "LeftArm",
-					"pivot": [5, 40.425, 4],
+					"pivot": [8.25, 45.35, 0],
 					"cubes": [
 						{
-							"origin": [7.65, 35.85, -3.6],
-							"size": [5.45, 15, 7.2],
+							"origin": [7.4, 27.85, -3.6],
+							"size": [5.7, 23, 7.2],
 							"uv": {
 								"north": {"uv": [222.2, 199], "uv_size": [-6.2, 28.85]},
 								"east": {"uv": [121.2, 191], "uv_size": [-7.2, 28.85]},
@@ -2274,11 +2255,11 @@
 				{
 					"name": "armor_rightarm",
 					"parent": "RightArm",
-					"pivot": [-8.25, 40.425, 4],
+					"pivot": [-8.25, 45.35, 0],
 					"cubes": [
 						{
-							"origin": [-12.85, 35.85, -3.6],
-							"size": [5.45, 15, 7.2],
+							"origin": [-13.1, 27.85, -3.6],
+							"size": [5.7, 23, 7.2],
 							"uv": {
 								"north": {"uv": [216, 199], "uv_size": [6.2, 28.85]},
 								"east": {"uv": [180, 190], "uv_size": [7.2, 28.85]},

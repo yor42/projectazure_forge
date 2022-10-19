@@ -32,7 +32,7 @@
 				{
 					"name": "armor_body",
 					"parent": "Body",
-					"pivot": [-6, 40.5, 2.93945],
+					"pivot": [0, 57.02013, -0.06055],
 					"cubes": [
 						{
 							"origin": [-7, 27.02013, -3.56055],
@@ -144,7 +144,7 @@
 				{
 					"name": "armor_rightleg",
 					"parent": "RightLeg",
-					"pivot": [-5.25, 26.75, 3],
+					"pivot": [-4.25, 27.02013, -0.06055],
 					"cubes": [
 						{
 							"origin": [-7.75, 15.02013, -3.56055],
@@ -194,7 +194,7 @@
 				{
 					"name": "armor_rightleg2",
 					"parent": "RightLowerLeg",
-					"pivot": [-5.25, 14.5, 3],
+					"pivot": [-4.25, 15.02013, -0.06055],
 					"cubes": [
 						{
 							"origin": [-7.75, 0.02013, -3.56055],
@@ -213,7 +213,7 @@
 				{
 					"name": "armor_rightfoot",
 					"parent": "RightLowerLeg",
-					"pivot": [-5.25, 14.5, 3],
+					"pivot": [-4.25, 15.02013, -0.06055],
 					"cubes": [
 						{
 							"origin": [-7.75, 0.02013, -3.56055],
@@ -580,7 +580,7 @@
 				{
 					"name": "armor_leftleg2",
 					"parent": "LeftLowerLeg",
-					"pivot": [-0.75, 14.5, 3],
+					"pivot": [4.25, 15.02013, -0.06055],
 					"cubes": [
 						{
 							"origin": [0.75, 0.02013, -3.56055],
@@ -599,7 +599,7 @@
 				{
 					"name": "armor_leftfoot",
 					"parent": "LeftLowerLeg",
-					"pivot": [-0.75, 14.5, 3],
+					"pivot": [4.25, 15.02013, -0.06055],
 					"cubes": [
 						{
 							"origin": [0.75, 0.02013, -3.56055],
@@ -618,7 +618,7 @@
 				{
 					"name": "armor_leftleg",
 					"parent": "LeftLeg",
-					"pivot": [-0.75, 26.75, 3],
+					"pivot": [4.25, 27.02013, -0.06055],
 					"cubes": [
 						{
 							"origin": [0.75, 15.02013, -3.56055],
@@ -1197,7 +1197,7 @@
 				{
 					"name": "armor_head",
 					"parent": "Head",
-					"pivot": [-5, 40.5, 5],
+					"pivot": [0, 57.02013, -0.06055],
 					"cubes": [
 						{
 							"origin": [-6.5, 57.02013, -6.56055],
@@ -2707,7 +2707,7 @@
 				{
 					"name": "armor_rightarm",
 					"parent": "RightArm",
-					"pivot": [-8.5, 38, 2.5],
+					"pivot": [-7.5, 51.52013, -0.06055],
 					"cubes": [
 						{
 							"origin": [-13, 30.02013, -3.31055],
@@ -2875,7 +2875,7 @@
 				{
 					"name": "armor_leftarm",
 					"parent": "LeftArm",
-					"pivot": [5.25, 38, 2.5],
+					"pivot": [7.5, 51.52013, -0.06055],
 					"cubes": [
 						{
 							"origin": [7.5, 30.02013, -3.31055],

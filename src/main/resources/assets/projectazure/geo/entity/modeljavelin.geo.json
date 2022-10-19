@@ -44,7 +44,7 @@
 				{
 					"name": "armor_body",
 					"parent": "Body",
-					"pivot": [-5, 35, 4],
+					"pivot": [0, 46.625, 0],
 					"cubes": [
 						{
 							"origin": [-6.5, 23, -4],
@@ -132,7 +132,7 @@
 				{
 					"name": "armor_rightleg",
 					"parent": "RightLeg",
-					"pivot": [-4, 24, 2.25],
+					"pivot": [-3.75, 23.02013, 0.18945],
 					"cubes": [
 						{
 							"origin": [-6.75, 12.02013, -2.81055],
@@ -170,7 +170,7 @@
 				{
 					"name": "armor_rightleg2",
 					"parent": "RightLowerLeg",
-					"pivot": [-4, 12.75, 2.25],
+					"pivot": [-3.75, 12.05, 0.18945],
 					"cubes": [
 						{
 							"origin": [-6.75, 0.1, -2.81055],
@@ -189,7 +189,7 @@
 				{
 					"name": "armor_rightfoot",
 					"parent": "RightLowerLeg",
-					"pivot": [-4, 12.75, 2.25],
+					"pivot": [-3.75, 12.05, 0.18945],
 					"cubes": [
 						{
 							"origin": [-6.75, 0.1, -2.81055],
@@ -308,7 +308,7 @@
 				{
 					"name": "armor_leftleg",
 					"parent": "LeftLeg",
-					"pivot": [0.25, 24, 2.25],
+					"pivot": [3.75, 23.02013, 0.18945],
 					"cubes": [
 						{
 							"origin": [0.75, 12.02013, -2.81055],
@@ -346,7 +346,7 @@
 				{
 					"name": "armor_leftleg2",
 					"parent": "LeftLowerLeg",
-					"pivot": [0.25, 12.75, 2.25],
+					"pivot": [3.75, 12.05, 0.18945],
 					"cubes": [
 						{
 							"origin": [0.75, 0.1, -2.81055],
@@ -365,7 +365,7 @@
 				{
 					"name": "armor_leftfoot",
 					"parent": "LeftLowerLeg",
-					"pivot": [0.25, 12.75, 2.25],
+					"pivot": [3.75, 12.05, 0.18945],
 					"cubes": [
 						{
 							"origin": [0.75, 0.1, -2.81055],
@@ -605,7 +605,7 @@
 				{
 					"name": "armor_head",
 					"parent": "Head",
-					"pivot": [-5, 34.75, 5],
+					"pivot": [0, 46.75, -0.375],
 					"cubes": [
 						{
 							"origin": [-6.5, 46.75, -7],
@@ -1861,8 +1861,8 @@
 					"rotation": [0, 0, 5],
 					"cubes": [
 						{
-							"origin": [-11, 34.75, -2.5],
-							"size": [4, 12, 5],
+							"origin": [-11.5, 34.75, -2.5],
+							"size": [4.5, 12, 5],
 							"uv": {
 								"north": {"uv": [38, 6], "uv_size": [4, 12]},
 								"east": {"uv": [33, 6], "uv_size": [5, 12]},
@@ -1877,11 +1877,11 @@
 				{
 					"name": "armor_rightarm",
 					"parent": "RightArm",
-					"pivot": [-8.5, 33.25, 1],
+					"pivot": [-8, 42.75, 0],
 					"cubes": [
 						{
-							"origin": [-11, 25.75, -2.5],
-							"size": [4, 21, 5],
+							"origin": [-11.5, 25.75, -2.5],
+							"size": [4.5, 21, 5],
 							"uv": {
 								"north": {"uv": [160, 244], "uv_size": [-4, 12]},
 								"east": {"uv": [165, 244], "uv_size": [-5, 12]},
@@ -1899,8 +1899,8 @@
 					"pivot": [-11.01228, 34.78116, 2.5],
 					"cubes": [
 						{
-							"origin": [-11, 21.75, -2.5],
-							"size": [4, 13, 5],
+							"origin": [-11.5, 21.75, -2.5],
+							"size": [4.5, 13, 5],
 							"uv": {
 								"north": {"uv": [38, 25], "uv_size": [4, 13]},
 								"east": {"uv": [33, 25], "uv_size": [5, 13]},
@@ -1925,7 +1925,7 @@
 					"cubes": [
 						{
 							"origin": [7, 34.75, -2.5],
-							"size": [4, 12, 5],
+							"size": [4.5, 12, 5],
 							"uv": {
 								"north": {"uv": [59, 6], "uv_size": [4, 12]},
 								"east": {"uv": [54, 6], "uv_size": [5, 12]},
@@ -1940,11 +1940,11 @@
 				{
 					"name": "armor_leftarm",
 					"parent": "LeftArm",
-					"pivot": [8.25, 33.25, 1],
+					"pivot": [8, 42.75, 0],
 					"cubes": [
 						{
 							"origin": [7, 25.75, -2.5],
-							"size": [4, 21, 5],
+							"size": [4.5, 21, 5],
 							"uv": {
 								"north": {"uv": [156, 244], "uv_size": [4, 12]},
 								"east": {"uv": [151, 244], "uv_size": [5, 12]},
@@ -1963,7 +1963,7 @@
 					"cubes": [
 						{
 							"origin": [7, 21.75, -2.5],
-							"size": [4, 13, 5],
+							"size": [4.5, 13, 5],
 							"uv": {
 								"north": {"uv": [59, 25], "uv_size": [4, 13]},
 								"east": {"uv": [54, 25], "uv_size": [5, 13]},
@@ -1975,7 +1975,7 @@
 						},
 						{
 							"origin": [6, 26.75, -3.5],
-							"size": [6, 1, 7],
+							"size": [6.5, 1, 7],
 							"uv": {
 								"north": {"uv": [17, 39], "uv_size": [6, 1]},
 								"east": {"uv": [10, 39], "uv_size": [7, 1]},
