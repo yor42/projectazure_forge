@@ -2880,7 +2880,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             else if (stack.canEquip(type, this)) {
                 this.setItemSlot(type, stack);
                 if (stack == this.getItemBySlot(type)) {
-                    player.setItemInHand(hand, EquippedStack);
+                    if(!player.isCreative() || !EquippedStack.isEmpty()) {
+                        player.setItemInHand(hand, EquippedStack);
+                    }
                     this.playEquipSound(stack);
                     return ActionResultType.SUCCESS;
                 }
