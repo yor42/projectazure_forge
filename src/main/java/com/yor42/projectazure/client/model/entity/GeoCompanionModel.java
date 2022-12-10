@@ -11,11 +11,11 @@ import net.minecraft.item.CrossbowItem;
 import net.minecraft.util.Hand;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.resource.GeckoLibCache;
-import software.bernie.shadowed.eliotlash.molang.MolangParser;
 
 import javax.annotation.Nullable;
 
@@ -110,14 +110,14 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
         super.setMolangQueries(animatable, currentTick);
         MolangParser parser = GeckoLibCache.getInstance().parser;
         if(animatable instanceof AbstractEntityCompanion){
-            parser.setValue("query.head_pitch", ((LivingEntity)animatable).xRot);
-            parser.setValue("query.head_yaw", ((LivingEntity)animatable).yHeadRot-((LivingEntity)animatable).yBodyRot);
+            parser.setValue("query.head_pitch", ()->((LivingEntity) animatable).xRot);
+            parser.setValue("query.head_yaw", ()->((LivingEntity)animatable).yHeadRot-((LivingEntity)animatable).yBodyRot);
 
-            parser.setValue("query.prev_head_pitch", ((LivingEntity)animatable).xRotO * ((float) Math.PI / 180F));
-            parser.setValue("query.prev_head_yaw", ((LivingEntity)animatable).yHeadRotO * ((float) Math.PI / 180F));
+            parser.setValue("query.prev_head_pitch", ()->((LivingEntity)animatable).xRotO * ((float) Math.PI / 180F));
+            parser.setValue("query.prev_head_yaw", ()->((LivingEntity)animatable).yHeadRotO * ((float) Math.PI / 180F));
 
-            parser.setValue("query.animation_speed", ((AbstractEntityCompanion)animatable).animationSpeed);
-            parser.setValue("query.speed_modifier", (((PathNavigatorAccessors)((AbstractEntityCompanion)animatable).getNavigation()).getSpeedModifier()));
+            parser.setValue("query.animation_speed", ()->((AbstractEntityCompanion)animatable).animationSpeed);
+            parser.setValue("query.speed_modifier", ()->(((PathNavigatorAccessors)((AbstractEntityCompanion)animatable).getNavigation()).getSpeedModifier()));
         }
     }
 }

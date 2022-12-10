@@ -20,7 +20,7 @@ apply plugin: 'maven-publish'
 //we mix some ins
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.8.3-IDP'
+version = '0.8.4-IDP'
 group = 'com.yor42.projectrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -168,7 +168,7 @@ dependencies {
 
     //Multiblocked
     //implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.16.5-${ldlib_version}")
-    implementation fg.deobf('curse.maven:ldlib-626676:4029777')
+    implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.16.5-${ldlib_version}")
     implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.16.5-${mbd_version}")
 
     //Curios

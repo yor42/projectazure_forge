@@ -7,7 +7,6 @@ import com.lowdragmc.lowdraglib.utils.LocalizationUtils;
 import com.lowdragmc.multiblocked.api.block.CustomProperties;
 import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
 import com.lowdragmc.multiblocked.api.definition.PartDefinition;
-import com.lowdragmc.multiblocked.api.gui.recipe.ProgressWidget;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.part.PartTileEntity;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
@@ -116,10 +115,10 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
     }
 
     private double getProgress() {
-        return (double)((float)this.battery.getEnergyStored() * 1.0F / (float)this.battery.getMaxEnergyStored());}
+        return ((float) this.battery.getEnergyStored() / (float)this.battery.getMaxEnergyStored());}
 
     protected String dynamicHoverTips(double progress) {
-        return LocalizationUtils.format("multiblocked.gui.trait.fe.progress", new Object[]{(int)((double)this.battery.getMaxEnergyStored() * progress), this.battery.getMaxEnergyStored()});
+        return LocalizationUtils.format("multiblocked.gui.trait.fe.progress", (int)((double)this.battery.getMaxEnergyStored() * progress), this.battery.getMaxEnergyStored());
     }
 
     @Nonnull
