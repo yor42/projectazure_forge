@@ -2079,6 +2079,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 cap.addCompanion(this);
             }
         }
+
         if(this.isSprinting() && !this.isMoving()){
             this.setSprinting(false);
         }

@@ -130,6 +130,8 @@
 
   "item.projectazure.missiledrone": "미사일 드론",
 
+  "item.projectazure.lordchaldeas": "로드 칼데아스",
+
   "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
   "item.projectazure.cv_default_rigging.tooltip": "항공모함 함선소녀 전용 기본 장비입니다",
   "item.projectazure.bb_default_rigging.tooltip": "전함 함선소녀 전용 기본 장비입니다",
@@ -369,8 +371,10 @@
   "entity.projectazure.entityyamato": "IJN 야마토",
   "entity.projectazure.entitylaffey": "USS 라피",
   "entity.projectazure.entityenterprise": "USS 엔터프라이즈",
+  "entity.projectazure.entitypurifier": "퓨리파이어",
 
   "entity.projectazure.entitym4a1": "M4A1",
+  "entity.projectazure.entityhk416": "HK416",
 
   "entity.projectazure.entityshiroko": "시로코",
 
@@ -393,6 +397,7 @@
   "entity.projectazure.entityartoria": "아르토리아 펜드래건",
   "entity.projectazure.entityscathath": "스카사하",
   "entity.projectazure.entityshiki": "료기 시키",
+  "entity.projectazure.entitymash": "마슈 키리에라이트",
 
   "entity.projectazure.entitykyaru": "캬루",
 
