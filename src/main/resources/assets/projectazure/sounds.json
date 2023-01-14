@@ -130,6 +130,20 @@
       }
     ]
   },
+  "typhoon_fire": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/rifle/typhoon_fire"
+      }
+    ]
+  },
+  "typhoon_reload": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/rifle/typhoon_reload"
+      }
+    ]
+  },
   "chimera_projectile_launch": {
     "sounds": [
       {

@@ -1,6 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
 import com.tac.guns.item.AmmoItem;
+import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
@@ -355,7 +356,10 @@ public class registerItems {
 
     //Shooty stuff
     public static final RegistryObject<Item> WHITEFANG_465 = ITEMS.register("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TYPHOON = ITEMS.register("typhoon", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SANGVIS_RAILGUN = ITEMS.register("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, true, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
+
+    public static final RegistryObject<Item> CASELESS_4MM = ITEMS.register("4mmcaseless", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
 
     public static final RegistryObject<Item> DUMMYAMMO_RAILGUN = ITEMS.register("dummyammo_sangvisrailgun", ()->new AmmoItem((new Item.Properties())));
     //not-so-shooty-stuff

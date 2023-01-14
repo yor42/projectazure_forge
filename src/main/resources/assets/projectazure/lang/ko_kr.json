@@ -120,13 +120,16 @@
   "item.projectazure.stasis_crystal": "안정화 수정",
 
   "item.projectazure.defib_paddle": "제세동기 패들",
-  "item.projectazure.defib_paddle.tooltip": "이유 불문으로 빈사 상태의 동료를 부활시킵니다.\n양손에 패들과, 인벤토리 내 충전 상태의 본체가 필요합니다.",
+  "item.projectazure.defib_paddle.tooltip": "빈사 상태의 동료를 부활시킵니다.\n양손에 패들과, 인벤토리 내 충전 상태의 본체가 필요합니다.",
   "item.projectazure.defib_paddle.tooltip.nocharger": "오류: 준비된 충전기가 없습니다!",
   "item.projectazure.defib_charger": "제세동기 충전기",
   "item.projectazure.defib_charger.tooltip": "빈사 상태의 동료를 부활시키는데 사용되는 제세동기 본체입니다.",
 
-  "item.projectazure.whitefang465": "WHITE FANG 465",
+  "item.projectazure.whitefang465": "화이트팽 465",
+  "item.projectazure.typhoon": "타이푼",
   "item.projectazure.sangvis_railgun": "SF-2815 에너지 포",
+
+  "item.projectazure.4mmcaseless": "4mm 무탄피 탄약",
 
   "item.projectazure.missiledrone": "미사일 드론",
 
