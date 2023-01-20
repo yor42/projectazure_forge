@@ -64,15 +64,8 @@ public class AlloyingRecipeBuilder {
     }
 
     public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
-        this.validate(id);
         this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
         consumerIn.accept(new AlloyingRecipeBuilder.Result(id, "", this.ingredient1, this.ing1count, this.ingredient2, this.ing2count, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.ALLOYING.get()));
-    }
-
-    private void validate(ResourceLocation id) {
-        if (this.advancementBuilder.getCriteria().isEmpty()) {
-            throw new IllegalStateException("No way of obtaining recipe " + id);
-        }
     }
 
     public static class Result implements IFinishedRecipe {

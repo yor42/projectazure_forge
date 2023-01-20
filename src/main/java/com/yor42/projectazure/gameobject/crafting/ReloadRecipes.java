@@ -31,12 +31,10 @@ public class ReloadRecipes extends SpecialRecipe {
         ICraftingTableReloadable ReloadTargetItem = null;
         for(int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack itemstack = inv.getItem(i);
-            if (!itemstack.isEmpty()) {
-                if(itemstack.getItem() instanceof ICraftingTableReloadable){
-                    this.ReloadTarget = itemstack;
-                    ReloadTargetItem = (ICraftingTableReloadable) itemstack.getItem();
-                    break;
-                }
+            if (itemstack.getItem() instanceof ICraftingTableReloadable) {
+                this.ReloadTarget = itemstack;
+                ReloadTargetItem = (ICraftingTableReloadable) itemstack.getItem();
+                break;
             }
         }
 
@@ -52,11 +50,9 @@ public class ReloadRecipes extends SpecialRecipe {
 
         for(int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack itemstack = inv.getItem(i);
-            if (!itemstack.isEmpty()) {
-                if(itemstack.getItem() instanceof ItemAmmo){
-                    if(((ItemAmmo) itemstack.getItem()).getCalibur() == ReloadTargetItem.getAmmoType()){
-                        this.AmmoList.add(itemstack);
-                    }
+            if (itemstack.getItem() instanceof ItemAmmo) {
+                if (((ItemAmmo) itemstack.getItem()).getCalibur() == ReloadTargetItem.getAmmoType()) {
+                    this.AmmoList.add(itemstack);
                 }
             }
         }

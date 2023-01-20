@@ -71,7 +71,7 @@
   "item.projectazure.pistol_grip": "피스톨 그립",
   "item.projectazure.steel_gunframe_rifle": "강철 소총 프레임",
 
-  "item.projectazure.energy_drink": "지옥 25층에서 기어올라온 저주받은 화학물질 (디버그 아이템)",
+  "item.projectazure.energy_drink": "뒤틀린 불지옥 25층에서 기어올라온 저주받은 화학물질 (디버그 아이템)",
 
   "item.projectazure.disc_fridaynight.desc": "템페스트 스튜디오 - Friday Night (Astrophysics 리믹스)",
   "disc.brainpower.desc1": "렛 더 베이스 킥 오오오오오오ㅗㅗ오오오-",
@@ -115,7 +115,7 @@
   "item.projectazure.gae_bolg": "게 볼그",
 
   "item.projectazure.gravinet": "그라비넷",
-  "item.projectazure.gravinet.tooltip": "중력을 조작하는 힘이 깃들었다는 전설이 전해져오는 창",
+  "item.projectazure.gravinet.tooltip": "중력을 조작하는 힘이 깃들었다는 전설이 전해져오는 창. 악기로써 연주도 가능하나 개발자가 게을러서 여기서는 안 될듯 합니다.",
 
   "item.projectazure.stasis_crystal": "안정화 수정",
 
@@ -128,6 +128,7 @@
   "item.projectazure.whitefang465": "화이트팽 465",
   "item.projectazure.typhoon": "타이푼",
   "item.projectazure.sangvis_railgun": "SF-2815 에너지 포",
+  "item.projectazure.granadelauncher": "자동 유탄발사기",
 
   "item.projectazure.4mmcaseless": "4mm 무탄피 탄약",
 

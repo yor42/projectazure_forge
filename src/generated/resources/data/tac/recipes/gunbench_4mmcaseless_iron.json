@@ -1,0 +1,17 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": "projectazure:gunpowder_compound",
+      "count": 5
+    },
+    {
+      "item": "minecraft:iron_ingot",
+      "count": 5
+    }
+  ],
+  "result": {
+    "item": "projectazure:4mmcaseless",
+    "count": 2
+  }
+}

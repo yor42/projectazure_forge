@@ -29,7 +29,8 @@
     "additionalReloadEmptyMagTimer": 0,
     "preReloadPauseTicks": 7,
     "maxAdditionalAmmoPerOC": [25, 50, 110],
-    "interReloadPauseTicks": 24
+    "interReloadPauseTicks": 24,
+    "openBolt":true
   },
   "projectile": {
     "item": "projectazure:4mmcaseless",
@@ -59,7 +60,7 @@
   "modules": {
     "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 10.45,
+      "yOffset": 13.5,
       "zOffset": -4.75
     },
     "attachments": {

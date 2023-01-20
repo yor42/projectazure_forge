@@ -127,8 +127,8 @@ repositories {
         url "https://cursemaven.com"
     }
 
-    maven { url 'https://modmaven.dev/' }//Mekanism
-
+    maven { url 'https://modmaven.dev/' }
+    //Mekanism
     maven {
         url "https://cursemaven.com"
     }
@@ -176,6 +176,7 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
+    //implementation fg.deobf('com.tac.guns:tac-d:0.3.4.2-1.16.5')
 
     runtimeOnly fg.deobf('curse.maven:roadrunner-529754:3683120')
     runtimeOnly fg.deobf('curse.maven:ferritecore-429235:3485636')

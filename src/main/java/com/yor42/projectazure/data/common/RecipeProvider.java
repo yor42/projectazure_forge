@@ -1,12 +1,12 @@
 package com.yor42.projectazure.data.common;
 
+import com.tac.guns.crafting.WorkbenchRecipeBuilder;
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.data.recipebuilder.AlloyingRecipeBuilder;
-import com.yor42.projectazure.data.recipebuilder.CrushingRecipeBuilder;
-import com.yor42.projectazure.data.recipebuilder.CrystalizingRecipeBuilder;
-import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
+import com.yor42.projectazure.data.recipebuilder.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
+import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerFluids;
@@ -27,6 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -37,6 +38,29 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     @Override
     protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
+        this.generateMetalRecipes(consumer);
+
+        CookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.TREE_SAP), registerItems.PLATE_POLYMER.get(), 0.5F, 200)
+                .unlockedBy("has_item", has(ModTags.Items.TREE_SAP))
+                .save(consumer);
+
+        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).save(consumer, "reloading_items");
+        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).save(consumer, "repairing_items");
+        this.generateAlloyingRecipe(consumer);
+        this.generatePressingRecipe(consumer);
+        this.generateCrystalizingRecipe(consumer);
+        this.generateHammerRecipe(consumer);
+        this.generateGunBenchRecipe(consumer);
+        this.generateShapedRecipe(consumer);
+        this.generateShapelessRecipe(consumer);
+    }
+
+    private void generateGunBenchRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),2).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 5).addIngredient(registerItems.INGOT_LEAD.get(), 5).addCriterion("has_gunpowderCompound", has(registerItems.GUNPOWDER_COMPOUND.get())).build(consumer, "gunbench_4mmcaseless_lead");
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),2).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 5).addIngredient(Items.IRON_INGOT, 5).addCriterion("has_gunpowderCompound", has(registerItems.GUNPOWDER_COMPOUND.get())).build(consumer, "gunbench_4mmcaseless_iron");
+    }
+
+    private void generateMetalRecipes(@Nonnull Consumer<IFinishedRecipe> consumer){
         BuildMetalRecipe(consumer, 0.5F, new Metals("copper", registerItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).ore(registerBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(registerItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(registerItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER).gear(registerItems.GEAR_COPPER.get(), ModTags.Items.GEAR_COPPER).nugget(registerItems.NUGGET_COPPER.get(), ModTags.Items.NUGGET_COPPER));
         BuildMetalRecipe(consumer, 0.5F, new Metals("tin", registerItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).ore(registerBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(registerItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(registerItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN).gear(registerItems.GEAR_TIN.get(), ModTags.Items.GEAR_TIN).nugget(registerItems.NUGGET_TIN.get(), ModTags.Items.NUGGET_TIN));
         BuildMetalRecipe(consumer, 0.5F, new Metals("lead", registerItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).ore(registerBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(registerItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(registerItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD).nugget(registerItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD).nugget(registerItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD));
@@ -48,6 +72,117 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
         BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(registerItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(registerItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON).gear(registerItems.GEAR_IRON.get(), ModTags.Items.GEAR_IRON));
         BuildMetalRecipe(consumer, 0.5F, new Metals("gold", Items.GOLD_INGOT, Tags.Items.INGOTS_GOLD).dust(registerItems.DUST_GOLD.get(), ModTags.Items.DUST_GOLD).plates(registerItems.PLATE_GOLD.get(), ModTags.Items.PLATE_GOLD).gear(registerItems.GEAR_GOLD.get(), ModTags.Items.GEAR_GOLD));
+
+    }
+
+    private void generateHammerRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+        createHammerRecipes(consumer, Blocks.STONE, Blocks.COBBLESTONE, "cobblestone");
+        createHammerRecipes(consumer, Blocks.COBBLESTONE, Blocks.GRAVEL, "gravel");
+        createHammerRecipes(consumer, Blocks.GRAVEL, Blocks.SAND, "sand");
+        createHammerRecipes(consumer, ModTags.Items.ORES_COPPER, registerItems.DUST_COPPER.get(), 2, "copper");
+        createHammerRecipes(consumer, ModTags.Items.ORES_ALUMINIUM, registerItems.DUST_ALUMINIUM.get(), 2, "aluminium");
+        createHammerRecipes(consumer, ModTags.Items.ORES_LEAD, registerItems.DUST_LEAD.get(), 2, "lead");
+        createHammerRecipes(consumer, ModTags.Items.ORES_TIN, registerItems.DUST_TIN.get(), 2, "tin");
+        createHammerRecipes(consumer, ModTags.Items.ORES_ZINC, registerItems.DUST_ZINC.get(), 2, "zinc");
+        createHammerRecipes(consumer, Tags.Items.ORES_IRON, registerItems.DUST_IRON.get(), 2, "iron");
+        createHammerRecipes(consumer, Tags.Items.ORES_COAL, registerItems.DUST_COAL.get(), 2, "coal");
+        createHammerRecipes(consumer, Tags.Items.ORES_GOLD, registerItems.DUST_GOLD.get(), 2, "gold");
+    }
+
+    private void generateAlloyingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
+        AlloyingRecipeBuilder.addRecipe(Ingredient.of(ModTags.Items.INGOT_COPPER), 3,Ingredient.of(ModTags.Items.INGOT_TIN), 1, registerItems.INGOT_BRONZE.get(), 4, 300)
+                .addCriterion("hastin", has(ModTags.Items.INGOT_TIN))
+                .addCriterion("hascopper", has(ModTags.Items.INGOT_COPPER))
+                .build(consumer);
+
+        AlloyingRecipeBuilder.addRecipe(Ingredient.of(ModTags.Items.INGOT_COPPER), 2,Ingredient.of(ModTags.Items.INGOT_ZINC), 1, registerItems.INGOT_BRASS.get(), 3, 300)
+                .addCriterion("haszinc", has(ModTags.Items.INGOT_ZINC))
+                .addCriterion("hascopper", has(ModTags.Items.INGOT_COPPER))
+                .build(consumer);
+
+    }
+    private void generatePressingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
+        PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.of(ItemTags.LOGS), Ingredient.of(registerItems.MOLD_EXTRACTION.get()), 1, 200)
+                .addCriterion("hasmold", has(registerItems.MOLD_EXTRACTION.get()))
+                .build(consumer, new ResourceLocation("iron_plate_pressing"));
+    }
+
+    private void generateCrystalizingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+        CrystalizingRecipeBuilder.addRecipe(registerItems.ORIGINIUM_PRIME.get(), Ingredient.of(registerItems.ORIGINIUM_SEED.get()), registerFluids.ORIGINIUM_SOLUTION_SOURCE, 3000)
+                .addCriterion("hasseed", has(registerItems.ORIGINIUM_SEED.get()))
+                .build(consumer, new ResourceLocation("originium_crystalizing"));
+
+        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.of(registerItems.NETHER_QUARTZ_SEED.get()), registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 400)
+                .addCriterion("hasseed", has(registerItems.NETHER_QUARTZ_SEED.get()))
+                .build(consumer, new ResourceLocation("quartz_crystalizing"));
+    }
+
+    private void generateShapelessRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+
+        ShapelessRecipeBuilder.shapeless(registerItems.COPPER_WIRE.get(), 3)
+                .requires(ModTags.Items.CUTTER)
+                .requires(ModTags.Items.PLATE_COPPER)
+                .unlockedBy("has_copper_plate", has(ModTags.Items.PLATE_COPPER))
+                .unlockedBy("has_cutter", has(ModTags.Items.CUTTER))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(registerItems.ORIGINITE.get(), 9)
+                .requires(ModTags.Items.ORIGINIUM_PRIME).unlockedBy("hasoriginium", has(registerItems.ORIGINIUM_PRIME.get()));
+
+        ShapelessRecipeBuilder.shapeless(registerItems.DISC_SANDROLL.get(),1).requires(registerItems.DISC_SANDSTORM.get()).requires(registerItems.DISC_RICKROLL.get())
+                .unlockedBy("has_sandstorm", has(registerItems.DISC_SANDSTORM.get()))
+                .unlockedBy("has_rickroll", has(registerItems.DISC_RICKROLL.get()))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(registerItems.DUST_ORIGINIUM.get(), 3)
+            .requires(registerItems.ORIGINITE.get())
+            .requires(registerItems.HAMMER_IRON.get())
+            .unlockedBy("has_originite", has(registerItems.ORIGINITE.get()))
+            .save(consumer, new ResourceLocation("originium_dust_from_originite"));
+
+        ShapelessRecipeBuilder.shapeless(registerItems.DUST_NETHER_QUARTZ.get(), 2)
+                .requires(Items.QUARTZ)
+                .requires(registerItems.HAMMER_IRON.get())
+                .unlockedBy("has_quartz", has(Items.QUARTZ))
+                .save(consumer, new ResourceLocation("quartz_dust_from_quartz"));
+
+        ShapelessRecipeBuilder.shapeless(registerItems.DUST_STEEL.get(), 2)
+                .requires(ModTags.Items.DUST_IRON)
+                .requires(ModTags.Items.DUST_IRON)
+                .requires(ModTags.Items.DUST_COAL)
+                .unlockedBy("has_iron", has(ModTags.Items.DUST_IRON))
+                .save(consumer, new ResourceLocation("steel_dust_from_iron"));
+
+    }
+
+    private void generateShapedRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+
+        ShapedRecipeBuilder.shaped(registerItems.TREE_SAP.get(),2)
+                .define('L', ItemTags.LOGS)
+                .pattern("LLL")
+                .pattern("LLL")
+                .pattern("LLL")
+                .unlockedBy("has_log", has(ItemTags.LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.REENFORCEDCONCRETE.get().asItem(),2)
+                .define('G', Blocks.GRAY_CONCRETE_POWDER)
+                .define('S', ModTags.Items.PLATE_STEEL)
+                .pattern("SGS")
+                .pattern("GSG")
+                .pattern("SGS")
+                .unlockedBy("has_concrete_powder", has(Blocks.GRAY_CONCRETE_POWDER))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.COPPER_COIL.get(), 2)
+                .define('W', registerItems.COPPER_WIRE.get())
+                .define('B', registerItems.IRON_PIPE.get())
+                .pattern("WBW")
+                .pattern("WBW")
+                .pattern("WBW")
+                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_pipe", has(registerItems.IRON_PIPE.get()))
+                .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.HAMMER_IRON.get())
                 .define('I', Tags.Items.INGOTS_IRON)
@@ -164,187 +299,306 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_circuit", has(registerItems.PRIMITIVE_CIRCUIT.get()))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(registerItems.COPPER_WIRE.get(), 3)
-                .requires(ModTags.Items.CUTTER)
-                .requires(ModTags.Items.PLATE_COPPER)
-                .unlockedBy("has_copper_plate", has(ModTags.Items.PLATE_COPPER))
-                .unlockedBy("has_cutter", has(ModTags.Items.CUTTER))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.COPPER_COIL.get(), 2)
-                .define('W', registerItems.COPPER_WIRE.get())
-                .define('B', registerItems.IRON_PIPE.get())
-                .pattern("WBW")
-                .pattern("WBW")
-                .pattern("WBW")
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
-                .unlockedBy("has_pipe", has(registerItems.IRON_PIPE.get()))
-                .save(consumer);
-
-        AlloyingRecipeBuilder.addRecipe(Ingredient.of(ModTags.Items.INGOT_COPPER), 3,Ingredient.of(ModTags.Items.INGOT_TIN), 1, registerItems.INGOT_BRONZE.get(), 4, 300)
-                .addCriterion("hastin", has(ModTags.Items.INGOT_TIN))
-                .addCriterion("hascopper", has(ModTags.Items.INGOT_COPPER))
-                .build(consumer);
-
-        AlloyingRecipeBuilder.addRecipe(Ingredient.of(ModTags.Items.INGOT_COPPER), 2,Ingredient.of(ModTags.Items.INGOT_ZINC), 1, registerItems.INGOT_BRASS.get(), 3, 300)
-                .addCriterion("haszinc", has(ModTags.Items.INGOT_ZINC))
-                .addCriterion("hascopper", has(ModTags.Items.INGOT_COPPER))
-                .build(consumer);
-
-        PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.of(ItemTags.LOGS), Ingredient.of(registerItems.MOLD_EXTRACTION.get()), 1, 200)
-                .addCriterion("hasmold", has(registerItems.MOLD_EXTRACTION.get()))
-                .build(consumer, new ResourceLocation("iron_plate_pressing"));
-
-        CrystalizingRecipeBuilder.addRecipe(registerItems.ORIGINIUM_PRIME.get(), Ingredient.of(registerItems.ORIGINIUM_SEED.get()), registerFluids.ORIGINIUM_SOLUTION_SOURCE, 3000)
-                .addCriterion("hasseed", has(registerItems.ORIGINIUM_SEED.get()))
-                .build(consumer, new ResourceLocation("originium_crystalizing"));
-
-        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.of(registerItems.NETHER_QUARTZ_SEED.get()), registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 400)
-                .addCriterion("hasseed", has(registerItems.NETHER_QUARTZ_SEED.get()))
-                .build(consumer, new ResourceLocation("quartz_crystalizing"));
-
-        ShapedRecipeBuilder.shaped(registerItems.TREE_SAP.get(),2)
-                .define('L', ItemTags.LOGS)
-                .pattern("LLL")
-                .pattern("LLL")
-                .pattern("LLL")
-                .unlockedBy("has_log", has(ItemTags.LOGS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.REENFORCEDCONCRETE.get().asItem(),2)
-                .define('G', Blocks.GRAY_CONCRETE_POWDER)
-                .define('S', ModTags.Items.PLATE_STEEL)
-                .pattern("SGS")
-                .pattern("GSG")
-                .pattern("SGS")
-                .unlockedBy("has_concrete_powder", has(Blocks.GRAY_CONCRETE_POWDER))
-                .save(consumer);
-
-
-        CookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.TREE_SAP), registerItems.PLATE_POLYMER.get(), 0.5F, 200)
-                .unlockedBy("has_item", has(ModTags.Items.TREE_SAP))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.CAPACITOR_PRIMITIVE.get(), 1)
-                .define('A', registerItems.PLATE_ALUMINIUM.get())
-                .define('P', Items.PAPER)
-                .define('C', registerItems.COPPER_WIRE.get())
-                .pattern("APA")
-                .pattern("APA")
-                .pattern("C C")
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
-                .unlockedBy("has_aluminium", has(ModTags.Items.PLATE_ALUMINIUM))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_PRIMITIVE.get(), 1)
-                .define('C', ModTags.Items.DUST_COAL)
-                .define('D', registerItems.DUST_IRON.get())
-                .define('P', Items.PAPER)
-                .define('W', registerItems.COPPER_WIRE.get())
-                .pattern(" P ")
-                .pattern("WCW")
-                .pattern(" D ")
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
-                .unlockedBy("has_carbon", has(ModTags.Items.DUST_COAL))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.BASIC_MOTOR.get(), 1)
-                .define('C', registerItems.COPPER_COIL.get())
-                .define('D', Items.IRON_INGOT)
-                .define('P', registerItems.PLATE_IRON.get())
-                .define('W', registerItems.COPPER_WIRE.get())
-                .pattern(" D ")
-                .pattern("PCP")
-                .pattern("PWP")
-                .unlockedBy("has_coil", has(registerItems.COPPER_COIL.get()))
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.PRIMITIVE_CIRCUIT.get(), 1)
-                .define('C', ModTags.Items.PLATE_COPPER)
-                .define('P', registerItems.PLATE_POLYMER.get())
-                .define('I', ModTags.Items.PLATE_IRON)
-                .define('L', Items.REDSTONE)
-                .define('R', registerItems.RESISTOR_PRIMITIVE.get())
-                .define('T', registerItems.CAPACITOR_PRIMITIVE.get())
-                .pattern(" I ")
-                .pattern("RLT")
-                .pattern("CPC")
-                .unlockedBy("has_plate", has(ModTags.Items.PLATE_COPPER))
-                .unlockedBy("has_polymer", has(registerItems.PLATE_POLYMER.get()))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.MECHANICAL_PARTS.get(), 2)
-                .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', ModTags.Items.PLATE_STEEL)
+        ShapedRecipeBuilder.shaped(registerItems.DEFIB_PADDLE.get(), 1)
                 .define('I', Tags.Items.INGOTS_IRON)
-                .pattern("GPG")
-                .pattern("PIP")
-                .pattern("GPG")
-                .unlockedBy("has_gear", has(ModTags.Items.GEAR_STEEL))
+                .define('B', Items.STONE_BUTTON)
+                .define('P', registerItems.PLATE_POLYMER.get())
+                .define('C', registerItems.COPPER_COIL.get())
+                .define('H', ModTags.Items.CIRCUITS_BASIC)
+                .pattern("BPP")
+                .pattern("PCH")
+                .pattern("III")
+                .unlockedBy("has_part", has(registerItems.PRIMITIVE_CIRCUIT.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CLAYMORE.get(), 1)
-                .define('S', Tags.Items.STORAGE_BLOCKS_IRON)
-                .define('P', registerItems.IRON_PIPE.get())
-                .pattern("PP")
-                .pattern("SS")
-                .pattern("SS")
-                .unlockedBy("has_gear", has(Tags.Items.STORAGE_BLOCKS_IRON))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.ORUNDUM.get(), 4)
-                .define('C', ModTags.Items.WIRE_COPPER)
-                .define('P', ModTags.Items.PLATE_STEEL)
-                .define('O', ModTags.Items.ORIGINITE)
-                .define('R', ModTags.Items.CIRCUITS_BASIC)
-                .pattern("CPC")
-                .pattern("ROR")
-                .pattern("CPC")
-                .unlockedBy("has_originite", has(ModTags.Items.ORIGINITE))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.HEADHUNTING_PCB.get())
-                .define('P', Items.ENDER_PEARL)
-                .define('E', Items.ENDER_EYE)
-                .define('R', ModTags.Items.CIRCUITS_BASIC)
-                .define('O', registerItems.ORUNDUM.get())
-                .pattern("EP")
-                .pattern("OR")
-                .unlockedBy("has_orundum", has(registerItems.ORUNDUM.get()))
-                .save(consumer);
-
-
-        ShapedRecipeBuilder.shaped(registerItems.BANDAGE_ROLL.get(), 4)
-                .define('W', ItemTags.WOOL)
-                .pattern("WWW")
-                .pattern("W W")
-                .pattern("WWW")
-                .unlockedBy("has_wool", has(ItemTags.WOOL))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.ADVANCED_CIRCUIT.get(), 2)
-                .define('C', ModTags.Items.CIRCUITS_BASIC)
-                .define('O', registerItems.ORUNDUM.get())
+        ShapedRecipeBuilder.shaped(registerItems.DEFIB_CHARGER.get(), 1)
+                .define('W', registerItems.COPPER_COIL.get())
+                .define('C', registerItems.CAPACITOR_PRIMITIVE.get())
+                .define('P', Items.REDSTONE_LAMP)
+                .define('I',  ModTags.Items.CIRCUITS_ADVANCED)
+                .define('B', registerItems.HEADHUNTING_PCB.get())
                 .define('R', registerItems.RESISTOR_PRIMITIVE.get())
-                .define('T', registerItems.CAPACITOR_PRIMITIVE.get())
-                .define('K', registerItems.PLATE_POLYMER.get())
-                .pattern("ROT")
-                .pattern("CKC")
-                .unlockedBy("has_orundum", has(registerItems.ORUNDUM.get()))
+                .pattern("WPW")
+                .pattern("RBR")
+                .pattern("CIC")
+                .unlockedBy("has_paddle", has(registerItems.DEFIB_PADDLE.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.SLEDGEHAMMER.get())
+        ShapedRecipeBuilder.shaped(registerItems.MOLD_EXTRACTION.get(), 1)
+                .define('N', Tags.Items.NUGGETS_IRON)
+                .define('P', ModTags.Items.PLATE_IRON)
+                .define('M', registerItems.MOLD_PLATE.get())
+                .pattern("PNP")
+                .pattern("PMP")
+                .pattern("NPN")
+                .unlockedBy("has_part", has(ModTags.Items.PLATE_IRON))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.OAK_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.OAK_LOGS)
+                .define('P', Items.OAK_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.OAK_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.ACACIA_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.ACACIA_LOGS)
+                .define('P', Items.ACACIA_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.ACACIA_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.BIRCH_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.BIRCH_LOGS)
+                .define('P', Items.BIRCH_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.BIRCH_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.SPRUCE_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.SPRUCE_LOGS)
+                .define('P', Items.SPRUCE_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.SPRUCE_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.DARK_OAK_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.DARK_OAK_LOGS)
+                .define('P', Items.DARK_OAK_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.DARK_OAK_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.JUNGLE_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.JUNGLE_LOGS)
+                .define('P', Items.JUNGLE_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.JUNGLE_LOGS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.WARPED_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.WARPED_STEMS)
+                .define('P', Items.WARPED_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.WARPED_STEMS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.CRIMSON_PANTRY.get(), 1)
+                .define('C', Tags.Items.CHESTS)
+                .define('L', ItemTags.CRIMSON_STEMS)
+                .define('P', Items.CRIMSON_PLANKS)
+                .pattern("LPL")
+                .pattern("PCP")
+                .pattern("LPL")
+                .unlockedBy("has_part", has(ItemTags.CRIMSON_STEMS))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getStackForm().getItem(), 1)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('P', Blocks.PISTON.asItem())
+                .define('G', Blocks.GLASS.asItem())
+                .define('I', HatchTE.ItemHatchDefinition.getStackForm().getItem())
+                .define('D', registerBlocks.MACHINE_DYNAMO.get())
+                .pattern("PDP")
+                .pattern("IGI")
+                .pattern("CFC")
+                .unlockedBy("has_part", has(HatchTE.ItemHatchDefinition.getStackForm().getItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(HatchTE.ItemHatchDefinition.getStackForm().getItem(), 4)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', Tags.Items.CHESTS)
+                .pattern(" F ")
+                .pattern("FCF")
+                .pattern(" F ")
+                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.MACHINE_DYNAMO.get(), 1)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', registerItems.COPPER_COIL.get())
+                .define('P', ModTags.Items.PLATE_IRON)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .pattern("PCP")
+                .pattern("IFI")
+                .pattern("PCP")
+                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(HatchTE.EnergyHatchDefinition.getStackForm().getItem(), 4)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', Tags.Items.STORAGE_BLOCKS_REDSTONE)
+                .pattern(" F ")
+                .pattern("FCF")
+                .pattern(" F ")
+                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.KYARU_STAFF.get(), 1)
+                .define('S', Items.STICK)
+                .define('C', ModTags.Items.INGOT_BRONZE)
+                .define('B', Items.ENCHANTED_BOOK)
+                .pattern(" CB")
+                .pattern(" SC")
+                .pattern("S  ")
+                .unlockedBy("has_part", has(Items.ENCHANTED_BOOK))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.DD_DEFAULT_RIGGING.get(), 1)
+                .define('A', ModTags.Items.PLATE_ALUMINIUM)
+                .define('S', ModTags.Items.INGOT_STEEL)
+                .define('G', ModTags.Items.GEAR_STEEL)
+                .define('P', registerItems.MECHANICAL_PARTS.get())
+                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('W', registerItems.WISDOM_CUBE.get())
+                .pattern("CSP")
+                .pattern("AWG")
+                .pattern(" MA")
+                .unlockedBy("has_cube", has(registerItems.WISDOM_CUBE.get()))
+                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.IRON_PIPE.get(), 1)
+                .define('A', ModTags.Items.PLATE_IRON)
+                .pattern("A")
+                .pattern("A")
+                .unlockedBy("has_ironplate", has(ModTags.Items.PLATE_IRON))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.STEEL_PIPE.get(), 1)
+                .define('A', ModTags.Items.PLATE_STEEL)
+                .pattern("A")
+                .pattern("A")
+                .unlockedBy("has_steelplate", has(ModTags.Items.PLATE_STEEL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.BB_DEFAULT_RIGGING.get(), 1)
+                .define('A', ModTags.Items.PLATE_ALUMINIUM)
+                .define('S', ModTags.Items.PLATE_STEEL)
+                .define('G', ModTags.Items.GEAR_STEEL)
+                .define('P', registerItems.MECHANICAL_PARTS.get())
+                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('D', registerItems.DD_DEFAULT_RIGGING.get())
+                .pattern("SMS")
+                .pattern("PDG")
+                .pattern("ACA")
+                .unlockedBy("has_dd_rigging", has(registerItems.DD_DEFAULT_RIGGING.get()))
+                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.CV_DEFAULT_RIGGING.get(), 1)
+                .define('W', registerBlocks.REENFORCED_PLANK.get().asItem())
+                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('D', registerItems.DD_DEFAULT_RIGGING.get())
+                .define('P', registerItems.MECHANICAL_PARTS.get())
+                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('S', ModTags.Items.PLATE_STEEL)
+                .define('I', ModTags.Items.INGOT_STEEL)
+                .pattern("SSW")
+                .pattern("IDW")
+                .pattern("PCM")
+                .unlockedBy("has_dd_rigging", has(registerItems.DD_DEFAULT_RIGGING.get()))
+                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.EQUIPMENT_TORPEDO_533MM.get(), 1)
+                .define('A', ModTags.Items.PLATE_ALUMINIUM)
                 .define('S', registerItems.STEEL_PIPE.get())
-                .define('B', Tags.Items.STORAGE_BLOCKS_IRON)
-                .pattern("BBB")
-                .pattern(" S ")
-                .pattern(" S ")
-                .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
+                .define('G', ModTags.Items.GEAR_STEEL)
+                .define('P', registerItems.MECHANICAL_PARTS.get())
+                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('M', registerItems.BASIC_MOTOR.get())
+                .pattern("ACA")
+                .pattern("SSS")
+                .pattern("GMP")
+                .unlockedBy("has_barrel", has(registerItems.STEEL_PIPE.get()))
+                .unlockedBy("has_part", has(registerItems.MECHANICAL_PARTS.get()))
+                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(registerItems.ORIGINITE.get(), 9)
-                .requires(ModTags.Items.ORIGINIUM_PRIME).unlockedBy("hasoriginium", has(registerItems.ORIGINIUM_PRIME.get()));
+
+        ShapedRecipeBuilder.shaped(registerItems.SHEATH.get())
+                .define('B', ModTags.Items.PLATE_STEEL)
+                .define('L', registerItems.STEEL_PIPE.get())
+                .pattern("  B")
+                .pattern(" B ")
+                .pattern("L  ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_STEEL))
+                .save(consumer);
+
+        //Temp Recipe
+        ShapedRecipeBuilder.shaped(registerItems.FLEXABLE_SWORD_THINGY.get())
+                .define('B', ModTags.Items.PLATE_STEEL)
+                .define('L', registerItems.PLATE_POLYMER.get())
+                .pattern("  B")
+                .pattern(" B ")
+                .pattern("L  ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_STEEL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), 1)
+                .define('S', Blocks.SMOOTH_STONE_SLAB)
+                .define('C', Blocks.CAULDRON)
+                .define('P', registerItems.STEEL_PIPE.get())
+                .define('I', ModTags.Items.PLATE_STEEL)
+                .pattern("III")
+                .pattern("CPC")
+                .pattern("SSS")
+                .unlockedBy("has_quartz", has(Tags.Items.GEMS_QUARTZ))
+                .unlockedBy("has_sand", has(ItemTags.SAND))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.NETHER_QUARTZ_SEED.get(), 4)
+                .define('S', ItemTags.SAND)
+                .define('Q', Tags.Items.GEMS_QUARTZ)
+                .pattern("SQ")
+                .pattern("QS")
+                .unlockedBy("has_quartz", has(Tags.Items.GEMS_QUARTZ))
+                .unlockedBy("has_sand", has(ItemTags.SAND))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.ORIGINIUM_SEED.get(), 4)
+                .define('S', ItemTags.SAND)
+                .define('O', registerItems.DUST_ORIGINIUM.get())
+                .pattern("SO")
+                .pattern("OS")
+                .unlockedBy("has_originium", has(registerItems.DUST_ORIGINIUM.get()))
+                .unlockedBy("has_sand", has(ItemTags.SAND))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.DISC_RICKROLL.get(), 1)
+                .define('S', ModTags.Items.PLATE_IRON)
+                .define('D', Tags.Items.DYES_GRAY)
+                .pattern(" S ")
+                .pattern("SDS")
+                .pattern(" S ")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
+                .unlockedBy("has_dye", has(Tags.Items.DYES_GRAY))
+                .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.WISDOM_CUBE.get(), 2)
                 .define('D', Tags.Items.GEMS_DIAMOND)
@@ -543,344 +797,122 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_sand", has(ModTags.Items.ORIGINIUM_PRIME))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(registerItems.DISC_SANDROLL.get(),1).requires(registerItems.DISC_SANDSTORM.get()).requires(registerItems.DISC_RICKROLL.get())
-                .unlockedBy("has_sandstorm", has(registerItems.DISC_SANDSTORM.get()))
-                .unlockedBy("has_rickroll", has(registerItems.DISC_RICKROLL.get()))
-                        .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.DISC_RICKROLL.get(), 1)
-                .define('S', ModTags.Items.PLATE_IRON)
-                .define('D', Tags.Items.DYES_GRAY)
-                .pattern(" S ")
-                .pattern("SDS")
-                .pattern(" S ")
-                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
-                .unlockedBy("has_dye", has(Tags.Items.DYES_GRAY))
+        ShapedRecipeBuilder.shaped(registerItems.CAPACITOR_PRIMITIVE.get(), 1)
+                .define('A', registerItems.PLATE_ALUMINIUM.get())
+                .define('P', Items.PAPER)
+                .define('C', registerItems.COPPER_WIRE.get())
+                .pattern("APA")
+                .pattern("APA")
+                .pattern("C C")
+                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_aluminium", has(ModTags.Items.PLATE_ALUMINIUM))
                 .save(consumer);
 
-        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).save(consumer, "reloading_items");
-        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).save(consumer, "repairing_items");
-
-        ShapedRecipeBuilder.shaped(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), 1)
-                .define('S', Blocks.SMOOTH_STONE_SLAB)
-                .define('C', Blocks.CAULDRON)
-                .define('P', registerItems.STEEL_PIPE.get())
-                .define('I', ModTags.Items.PLATE_STEEL)
-                .pattern("III")
-                .pattern("CPC")
-                .pattern("SSS")
-                .unlockedBy("has_quartz", has(Tags.Items.GEMS_QUARTZ))
-                .unlockedBy("has_sand", has(ItemTags.SAND))
+        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_PRIMITIVE.get(), 1)
+                .define('C', ModTags.Items.DUST_COAL)
+                .define('D', registerItems.DUST_IRON.get())
+                .define('P', Items.PAPER)
+                .define('W', registerItems.COPPER_WIRE.get())
+                .pattern(" P ")
+                .pattern("WCW")
+                .pattern(" D ")
+                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_carbon", has(ModTags.Items.DUST_COAL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.NETHER_QUARTZ_SEED.get(), 4)
-                .define('S', ItemTags.SAND)
-                .define('Q', Tags.Items.GEMS_QUARTZ)
-                .pattern("SQ")
-                .pattern("QS")
-                .unlockedBy("has_quartz", has(Tags.Items.GEMS_QUARTZ))
-                .unlockedBy("has_sand", has(ItemTags.SAND))
+        ShapedRecipeBuilder.shaped(registerItems.BASIC_MOTOR.get(), 1)
+                .define('C', registerItems.COPPER_COIL.get())
+                .define('D', Items.IRON_INGOT)
+                .define('P', registerItems.PLATE_IRON.get())
+                .define('W', registerItems.COPPER_WIRE.get())
+                .pattern(" D ")
+                .pattern("PCP")
+                .pattern("PWP")
+                .unlockedBy("has_coil", has(registerItems.COPPER_COIL.get()))
+                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.ORIGINIUM_SEED.get(), 4)
-                .define('S', ItemTags.SAND)
-                .define('O', registerItems.DUST_ORIGINIUM.get())
-                .pattern("SO")
-                .pattern("OS")
-                .unlockedBy("has_originium", has(registerItems.DUST_ORIGINIUM.get()))
-                .unlockedBy("has_sand", has(ItemTags.SAND))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(registerItems.DUST_ORIGINIUM.get(), 3)
-                .requires(registerItems.ORIGINITE.get())
-                .requires(registerItems.HAMMER_IRON.get())
-                .unlockedBy("has_originite", has(registerItems.ORIGINITE.get()))
-                .save(consumer, new ResourceLocation("originium_dust_from_originite"));
-
-        ShapelessRecipeBuilder.shapeless(registerItems.DUST_NETHER_QUARTZ.get(), 2)
-                .requires(Items.QUARTZ)
-                .requires(registerItems.HAMMER_IRON.get())
-                .unlockedBy("has_quartz", has(Items.QUARTZ))
-                .save(consumer, new ResourceLocation("quartz_dust_from_quartz"));
-
-        ShapelessRecipeBuilder.shapeless(registerItems.DUST_STEEL.get(), 2)
-                .requires(ModTags.Items.DUST_IRON)
-                .requires(ModTags.Items.DUST_IRON)
-                .requires(ModTags.Items.DUST_COAL)
-                .unlockedBy("has_iron", has(ModTags.Items.DUST_IRON))
-                .save(consumer, new ResourceLocation("steel_dust_from_iron"));
-
-        ShapedRecipeBuilder.shaped(registerItems.DD_DEFAULT_RIGGING.get(), 1)
-                .define('A', ModTags.Items.PLATE_ALUMINIUM)
-                .define('S', ModTags.Items.INGOT_STEEL)
-                .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', registerItems.MECHANICAL_PARTS.get())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.BASIC_MOTOR.get())
-                .define('W', registerItems.WISDOM_CUBE.get())
-                .pattern("CSP")
-                .pattern("AWG")
-                .pattern(" MA")
-                .unlockedBy("has_cube", has(registerItems.WISDOM_CUBE.get()))
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.IRON_PIPE.get(), 1)
-                .define('A', ModTags.Items.PLATE_IRON)
-                .pattern("A")
-                .pattern("A")
-                .unlockedBy("has_ironplate", has(ModTags.Items.PLATE_IRON))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_PIPE.get(), 1)
-                .define('A', ModTags.Items.PLATE_STEEL)
-                .pattern("A")
-                .pattern("A")
-                .unlockedBy("has_steelplate", has(ModTags.Items.PLATE_STEEL))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.BB_DEFAULT_RIGGING.get(), 1)
-                .define('A', ModTags.Items.PLATE_ALUMINIUM)
-                .define('S', ModTags.Items.PLATE_STEEL)
-                .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', registerItems.MECHANICAL_PARTS.get())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.BASIC_MOTOR.get())
-                .define('D', registerItems.DD_DEFAULT_RIGGING.get())
-                .pattern("SMS")
-                .pattern("PDG")
-                .pattern("ACA")
-                .unlockedBy("has_dd_rigging", has(registerItems.DD_DEFAULT_RIGGING.get()))
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.CV_DEFAULT_RIGGING.get(), 1)
-                .define('W', registerBlocks.REENFORCED_PLANK.get().asItem())
-                .define('M', registerItems.BASIC_MOTOR.get())
-                .define('D', registerItems.DD_DEFAULT_RIGGING.get())
-                .define('P', registerItems.MECHANICAL_PARTS.get())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('S', ModTags.Items.PLATE_STEEL)
-                .define('I', ModTags.Items.INGOT_STEEL)
-                .pattern("SSW")
-                .pattern("IDW")
-                .pattern("PCM")
-                .unlockedBy("has_dd_rigging", has(registerItems.DD_DEFAULT_RIGGING.get()))
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.EQUIPMENT_TORPEDO_533MM.get(), 1)
-                .define('A', ModTags.Items.PLATE_ALUMINIUM)
-                .define('S', registerItems.STEEL_PIPE.get())
-                .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', registerItems.MECHANICAL_PARTS.get())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.BASIC_MOTOR.get())
-                .pattern("ACA")
-                .pattern("SSS")
-                .pattern("GMP")
-                .unlockedBy("has_barrel", has(registerItems.STEEL_PIPE.get()))
-                .unlockedBy("has_part", has(registerItems.MECHANICAL_PARTS.get()))
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
-                .save(consumer);
-
-
-        ShapedRecipeBuilder.shaped(registerItems.SHEATH.get())
-                .define('B', ModTags.Items.PLATE_STEEL)
-                .define('L', registerItems.STEEL_PIPE.get())
-                .pattern("  B")
-                .pattern(" B ")
-                .pattern("L  ")
-                .unlockedBy("has_plate", has(ModTags.Items.PLATE_STEEL))
-                .save(consumer);
-
-        //Temp Recipe
-        ShapedRecipeBuilder.shaped(registerItems.FLEXABLE_SWORD_THINGY.get())
-                .define('B', ModTags.Items.PLATE_STEEL)
-                .define('L', registerItems.PLATE_POLYMER.get())
-                .pattern("  B")
-                .pattern(" B ")
-                .pattern("L  ")
-                .unlockedBy("has_plate", has(ModTags.Items.PLATE_STEEL))
-                .save(consumer);
-
-        createHammerRecipes(consumer, Blocks.STONE, Blocks.COBBLESTONE, "cobblestone");
-        createHammerRecipes(consumer, Blocks.COBBLESTONE, Blocks.GRAVEL, "gravel");
-        createHammerRecipes(consumer, Blocks.GRAVEL, Blocks.SAND, "sand");
-        createHammerRecipes(consumer, ModTags.Items.ORES_COPPER, registerItems.DUST_COPPER.get(), 2, "copper");
-        createHammerRecipes(consumer, ModTags.Items.ORES_ALUMINIUM, registerItems.DUST_ALUMINIUM.get(), 2, "aluminium");
-        createHammerRecipes(consumer, ModTags.Items.ORES_LEAD, registerItems.DUST_LEAD.get(), 2, "lead");
-        createHammerRecipes(consumer, ModTags.Items.ORES_TIN, registerItems.DUST_TIN.get(), 2, "tin");
-        createHammerRecipes(consumer, ModTags.Items.ORES_ZINC, registerItems.DUST_ZINC.get(), 2, "zinc");
-        createHammerRecipes(consumer, Tags.Items.ORES_IRON, registerItems.DUST_IRON.get(), 2, "iron");
-        createHammerRecipes(consumer, Tags.Items.ORES_COAL, registerItems.DUST_COAL.get(), 2, "coal");
-        createHammerRecipes(consumer, Tags.Items.ORES_GOLD, registerItems.DUST_GOLD.get(), 2, "gold");
-
-        ShapedRecipeBuilder.shaped(registerItems.DEFIB_PADDLE.get(), 1)
-                .define('I', Tags.Items.INGOTS_IRON)
-                .define('B', Items.STONE_BUTTON)
+        ShapedRecipeBuilder.shaped(registerItems.PRIMITIVE_CIRCUIT.get(), 1)
+                .define('C', ModTags.Items.PLATE_COPPER)
                 .define('P', registerItems.PLATE_POLYMER.get())
-                .define('C', registerItems.COPPER_COIL.get())
-                .define('H', ModTags.Items.CIRCUITS_BASIC)
-                .pattern("BPP")
-                .pattern("PCH")
-                .pattern("III")
-                .unlockedBy("has_part", has(registerItems.PRIMITIVE_CIRCUIT.get()))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.DEFIB_CHARGER.get(), 1)
-                .define('W', registerItems.COPPER_COIL.get())
-                .define('C', registerItems.CAPACITOR_PRIMITIVE.get())
-                .define('P', Items.REDSTONE_LAMP)
-                .define('I',  ModTags.Items.CIRCUITS_ADVANCED)
-                .define('B', registerItems.HEADHUNTING_PCB.get())
+                .define('I', ModTags.Items.PLATE_IRON)
+                .define('L', Items.REDSTONE)
                 .define('R', registerItems.RESISTOR_PRIMITIVE.get())
-                .pattern("WPW")
-                .pattern("RBR")
-                .pattern("CIC")
-                .unlockedBy("has_paddle", has(registerItems.DEFIB_PADDLE.get()))
+                .define('T', registerItems.CAPACITOR_PRIMITIVE.get())
+                .pattern(" I ")
+                .pattern("RLT")
+                .pattern("CPC")
+                .unlockedBy("has_plate", has(ModTags.Items.PLATE_COPPER))
+                .unlockedBy("has_polymer", has(registerItems.PLATE_POLYMER.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MOLD_EXTRACTION.get(), 1)
-                .define('N', Tags.Items.NUGGETS_IRON)
-                .define('P', ModTags.Items.PLATE_IRON)
-                .define('M', registerItems.MOLD_PLATE.get())
-                .pattern("PNP")
-                .pattern("PMP")
-                .pattern("NPN")
-                .unlockedBy("has_part", has(ModTags.Items.PLATE_IRON))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.OAK_PANTRY.get(), 1)
-                .define('C', Tags.Items.CHESTS)
-                .define('L', ItemTags.OAK_LOGS)
-                .define('P', Items.OAK_PLANKS)
-                .pattern("LPL")
-                .pattern("PCP")
-                .pattern("LPL")
-                .unlockedBy("has_part", has(ItemTags.OAK_LOGS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.ACACIA_PANTRY.get(), 1)
-                .define('C', Tags.Items.CHESTS)
-                .define('L', ItemTags.ACACIA_LOGS)
-                .define('P', Items.ACACIA_PLANKS)
-                .pattern("LPL")
-                .pattern("PCP")
-                .pattern("LPL")
-                .unlockedBy("has_part", has(ItemTags.ACACIA_LOGS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.BIRCH_PANTRY.get(), 1)
-                .define('C', Tags.Items.CHESTS)
-                .define('L', ItemTags.BIRCH_LOGS)
-                .define('P', Items.BIRCH_PLANKS)
-                .pattern("LPL")
-                .pattern("PCP")
-                .pattern("LPL")
-                .unlockedBy("has_part", has(ItemTags.BIRCH_LOGS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.SPRUCE_PANTRY.get(), 1)
-                .define('C', Tags.Items.CHESTS)
-                .define('L', ItemTags.SPRUCE_LOGS)
-                .define('P', Items.SPRUCE_PLANKS)
-                .pattern("LPL")
-                .pattern("PCP")
-                .pattern("LPL")
-                .unlockedBy("has_part", has(ItemTags.SPRUCE_LOGS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.DARK_OAK_PANTRY.get(), 1)
-                .define('C', Tags.Items.CHESTS)
-                .define('L', ItemTags.DARK_OAK_LOGS)
-                .define('P', Items.DARK_OAK_PLANKS)
-                .pattern("LPL")
-                .pattern("PCP")
-                .pattern("LPL")
-                .unlockedBy("has_part", has(ItemTags.DARK_OAK_LOGS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.JUNGLE_PANTRY.get(), 1)
-                .define('C', Tags.Items.CHESTS)
-                .define('L', ItemTags.JUNGLE_LOGS)
-                .define('P', Items.JUNGLE_PLANKS)
-                .pattern("LPL")
-                .pattern("PCP")
-                .pattern("LPL")
-                .unlockedBy("has_part", has(ItemTags.JUNGLE_LOGS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.WARPED_PANTRY.get(), 1)
-                .define('C', Tags.Items.CHESTS)
-                .define('L', ItemTags.WARPED_STEMS)
-                .define('P', Items.WARPED_PLANKS)
-                .pattern("LPL")
-                .pattern("PCP")
-                .pattern("LPL")
-                .unlockedBy("has_part", has(ItemTags.WARPED_STEMS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.CRIMSON_PANTRY.get(), 1)
-                .define('C', Tags.Items.CHESTS)
-                .define('L', ItemTags.CRIMSON_STEMS)
-                .define('P', Items.CRIMSON_PLANKS)
-                .pattern("LPL")
-                .pattern("PCP")
-                .pattern("LPL")
-                .unlockedBy("has_part", has(ItemTags.CRIMSON_STEMS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getStackForm().getItem(), 1)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('P', Blocks.PISTON.asItem())
-                .define('G', Blocks.GLASS.asItem())
-                .define('I', HatchTE.ItemHatchDefinition.getStackForm().getItem())
-                .define('D', registerBlocks.MACHINE_DYNAMO.get())
-                .pattern("PDP")
-                .pattern("IGI")
-                .pattern("CFC")
-                .unlockedBy("has_part", has(HatchTE.ItemHatchDefinition.getStackForm().getItem()))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(HatchTE.ItemHatchDefinition.getStackForm().getItem(), 4)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
-                .define('C', Tags.Items.CHESTS)
-                .pattern(" F ")
-                .pattern("FCF")
-                .pattern(" F ")
-                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerBlocks.MACHINE_DYNAMO.get(), 1)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
-                .define('C', registerItems.COPPER_COIL.get())
-                .define('P', ModTags.Items.PLATE_IRON)
+        ShapedRecipeBuilder.shaped(registerItems.MECHANICAL_PARTS.get(), 2)
+                .define('G', ModTags.Items.GEAR_STEEL)
+                .define('P', ModTags.Items.PLATE_STEEL)
                 .define('I', Tags.Items.INGOTS_IRON)
-                .pattern("PCP")
-                .pattern("IFI")
-                .pattern("PCP")
-                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .pattern("GPG")
+                .pattern("PIP")
+                .pattern("GPG")
+                .unlockedBy("has_gear", has(ModTags.Items.GEAR_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(HatchTE.EnergyHatchDefinition.getStackForm().getItem(), 4)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
-                .define('C', Tags.Items.STORAGE_BLOCKS_REDSTONE)
-                .pattern(" F ")
-                .pattern("FCF")
-                .pattern(" F ")
-                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+        ShapedRecipeBuilder.shaped(registerItems.CLAYMORE.get(), 1)
+                .define('S', Tags.Items.STORAGE_BLOCKS_IRON)
+                .define('P', registerItems.IRON_PIPE.get())
+                .pattern("PP")
+                .pattern("SS")
+                .pattern("SS")
+                .unlockedBy("has_gear", has(Tags.Items.STORAGE_BLOCKS_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.KYARU_STAFF.get(), 1)
-                .define('S', Items.STICK)
-                .define('C', ModTags.Items.INGOT_BRONZE)
-                .define('B', Items.ENCHANTED_BOOK)
-                .pattern(" CB")
-                .pattern(" SC")
-                .pattern("S  ")
-                .unlockedBy("has_part", has(Items.ENCHANTED_BOOK))
+        ShapedRecipeBuilder.shaped(registerItems.ORUNDUM.get(), 4)
+                .define('C', ModTags.Items.WIRE_COPPER)
+                .define('P', ModTags.Items.PLATE_STEEL)
+                .define('O', ModTags.Items.ORIGINITE)
+                .define('R', ModTags.Items.CIRCUITS_BASIC)
+                .pattern("CPC")
+                .pattern("ROR")
+                .pattern("CPC")
+                .unlockedBy("has_originite", has(ModTags.Items.ORIGINITE))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.HEADHUNTING_PCB.get())
+                .define('P', Items.ENDER_PEARL)
+                .define('E', Items.ENDER_EYE)
+                .define('R', ModTags.Items.CIRCUITS_BASIC)
+                .define('O', registerItems.ORUNDUM.get())
+                .pattern("EP")
+                .pattern("OR")
+                .unlockedBy("has_orundum", has(registerItems.ORUNDUM.get()))
+                .save(consumer);
+
+
+        ShapedRecipeBuilder.shaped(registerItems.BANDAGE_ROLL.get(), 4)
+                .define('W', ItemTags.WOOL)
+                .pattern("WWW")
+                .pattern("W W")
+                .pattern("WWW")
+                .unlockedBy("has_wool", has(ItemTags.WOOL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.ADVANCED_CIRCUIT.get(), 2)
+                .define('C', ModTags.Items.CIRCUITS_BASIC)
+                .define('O', registerItems.ORUNDUM.get())
+                .define('R', registerItems.RESISTOR_PRIMITIVE.get())
+                .define('T', registerItems.CAPACITOR_PRIMITIVE.get())
+                .define('K', registerItems.PLATE_POLYMER.get())
+                .pattern("ROT")
+                .pattern("CKC")
+                .unlockedBy("has_orundum", has(registerItems.ORUNDUM.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.SLEDGEHAMMER.get())
+                .define('S', registerItems.STEEL_PIPE.get())
+                .define('B', Tags.Items.STORAGE_BLOCKS_IRON)
+                .pattern("BBB")
+                .pattern(" S ")
+                .pattern(" S ")
+                .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
                 .save(consumer);
 
     }
@@ -1041,10 +1073,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     }
 
     protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Block blockOutput, String id) {
-        CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
-    }
-
-    protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Item blockOutput, String id) {
         CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
     }
 
