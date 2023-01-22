@@ -19,8 +19,8 @@ public class EntityRailgunProjectile extends ProjectileEntity {
         super(entityType, worldIn);
     }
 
-    public EntityRailgunProjectile(EntityType<? extends ProjectileEntity> entityType, World worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun, float power) {
-        super(entityType, worldIn, shooter, weapon, item, modifiedGun);
+    public EntityRailgunProjectile(EntityType<? extends ProjectileEntity> entityType, World worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun, float power, float randx, float randy) {
+        super(entityType, worldIn, shooter, weapon, item, modifiedGun, randx, randy);
         this.power = power;
     }
 

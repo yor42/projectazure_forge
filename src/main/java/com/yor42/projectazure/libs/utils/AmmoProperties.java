@@ -8,7 +8,7 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rollBooleanRNG;
 public class AmmoProperties {
 
     private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
-    private boolean shouldDamageMultipleComponant;
+    private final boolean shouldDamageMultipleComponant;
     enums.AmmoCategory category;
 
     public AmmoProperties(enums.AmmoCategory category, float damage_rigging, float damage_entity, float damage_component, float hitChance, float minimum_damage_modifier, boolean shouldDamageMultipleComponant){

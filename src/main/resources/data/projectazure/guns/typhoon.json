@@ -27,22 +27,18 @@
     "maxAmmo": 28,
     "reloadMagTimer": 80,
     "additionalReloadEmptyMagTimer": 0,
-    "preReloadPauseTicks": 7,
-    "maxAdditionalAmmoPerOC": [25, 50, 110],
-    "interReloadPauseTicks": 24,
+    "preReloadPauseTicks": 0,
+    "maxAdditionalAmmoPerOC": [5, 10, 20],
+    "interReloadPauseTicks": 20,
     "openBolt":true
   },
   "projectile": {
     "item": "projectazure:4mmcaseless",
     "visible": false,
-    "damage": 7,
-
+    "damage": 3,
     "size": 0.1,
-
     "speed": 28,
-
-    "life": 6,
-
+    "life": 10,
     "ricochet": false
   },
   "sounds": {
@@ -50,7 +46,7 @@
   },
   "display": {
     "flash": {
-      "yOffset": 8.56,
+      "yOffset": 8,
       "zOffset": -15.55,
       "size": 1.10
     },
@@ -60,7 +56,7 @@
   "modules": {
     "zoom": {
       "fovModifier": 0.8,
-      "yOffset": 13.5,
+      "yOffset": 13.25,
       "zOffset": -4.75
     },
     "attachments": {
