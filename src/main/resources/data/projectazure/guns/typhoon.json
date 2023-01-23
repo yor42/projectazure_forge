@@ -2,7 +2,7 @@
   "general": {
     "boltAction": false,
     "auto": true,
-    "rate": 1,
+    "rate": 1500,
     "rateSelector": [
       0,
       1,
@@ -17,7 +17,7 @@
     "recoilDuration": 0.185,
     "cameraRecoilModifier": 0.825,
     "alwaysSpread": true,
-    "spread": 29,
+    "spread": 10,
     "projectileAmount": 12,
     "weightKilo": 5.0,
     "movementInaccuracy": 0.0

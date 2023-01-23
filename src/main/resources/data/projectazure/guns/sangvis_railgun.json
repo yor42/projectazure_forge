@@ -2,7 +2,7 @@
   "general": {
     "boltAction": true,
     "auto": false,
-    "rate": 60,
+    "rate": 10,
     "rateSelector": [
       0,
       1
