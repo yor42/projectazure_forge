@@ -1,0 +1,20 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:plates/steel"
+      },
+      "count": 35
+    },
+    {
+      "item": {
+        "tag": "forge:circuits/advanced"
+      },
+      "count": 10
+    }
+  ],
+  "result": {
+    "item": "projectazure:sangvis_railgun"
+  }
+}
