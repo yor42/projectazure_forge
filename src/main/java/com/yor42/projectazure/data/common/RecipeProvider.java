@@ -44,6 +44,10 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_item", has(ModTags.Items.TREE_SAP))
                 .save(consumer);
 
+        CookingRecipeBuilder.blasting(Ingredient.of(registerBlocks.COBBLED_ORIROCK.get()), registerBlocks.ORIROCK.get(), 0.1F, 100)
+                .unlockedBy("has_item", has(registerBlocks.COBBLED_ORIROCK.get()))
+                .save(consumer);
+
         CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).save(consumer, "reloading_items");
         CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).save(consumer, "repairing_items");
         this.generateAlloyingRecipe(consumer);

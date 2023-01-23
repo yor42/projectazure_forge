@@ -43,13 +43,14 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.dropSelf(registerBlocks.JUNGLE_PANTRY.get());
         this.dropSelf(registerBlocks.DARK_OAK_PANTRY.get());
         this.dropSelf(registerBlocks.WARPED_PANTRY.get());
+        this.dropSelf(registerBlocks.COBBLED_ORIROCK.get());
 
         this.add(registerBlocks.METAL_PRESS.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
         this.add(registerBlocks.BASIC_REFINERY.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
         this.add(registerBlocks.ALLOY_FURNACE.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
         this.add(registerBlocks.RECRUIT_BEACON.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
         this.add(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
-        this.add(registerBlocks.ORIROCK.get(), (orirock) -> createSilkTouchDispatchTable(orirock, applyExplosionCondition(orirock, ItemLootEntry.lootTableItem(registerItems.ORIGINITE.get()).when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).otherwise(ItemLootEntry.lootTableItem(orirock)))));
+        this.add(registerBlocks.ORIROCK.get(), (orirock) -> createSilkTouchDispatchTable(orirock, applyExplosionCondition(orirock, ItemLootEntry.lootTableItem(registerItems.ORIGINITE.get()).when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).otherwise(ItemLootEntry.lootTableItem(registerBlocks.COBBLED_ORIROCK.get())))));
     }
     //.acceptFunction(SetCount.builder(RandomValueRange.of(4.0F, 5.0F)))
     protected static LootTable.Builder onlyWithHammerDoubling(IItemProvider item) {

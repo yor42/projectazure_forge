@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "projectazure:cobbled_orirock"
+  },
+  "result": "projectazure:orirock",
+  "experience": 0.1,
+  "cookingtime": 100
+}
