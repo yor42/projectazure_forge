@@ -1,0 +1,32 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:plates/steel"
+      },
+      "count": 25
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/steel"
+      },
+      "count": 30
+    },
+    {
+      "item": {
+        "tag": "forge:circuits/basic"
+      },
+      "count": 4
+    },
+    {
+      "item": {
+        "tag": "forge:circuits/advanced"
+      },
+      "count": 2
+    }
+  ],
+  "result": {
+    "item": "projectazure:typhoon"
+  }
+}

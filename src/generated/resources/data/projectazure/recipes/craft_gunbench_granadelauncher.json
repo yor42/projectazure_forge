@@ -1,0 +1,30 @@
+{
+  "type": "tac:workbench",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:plates/steel"
+      },
+      "count": 40
+    },
+    {
+      "item": {
+        "item": "projectazure:motor_basic"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "tag": "forge:circuits/basic"
+      }
+    },
+    {
+      "item": {
+        "tag": "forge:gems/diamond"
+      }
+    }
+  ],
+  "result": {
+    "item": "projectazure:granadelauncher"
+  }
+}

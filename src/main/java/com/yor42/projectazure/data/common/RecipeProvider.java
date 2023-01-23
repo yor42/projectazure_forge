@@ -58,6 +58,9 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     private void generateGunBenchRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
         WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),6).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(registerItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
         WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),6).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(Items.IRON_INGOT, 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_iron");
+
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 40).addIngredient(registerItems.BASIC_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(Tags.Items.GEMS_DIAMOND).build(consumer, Constants.MODID,"gunbench_granadelauncher");
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.TYPHOON.get()).addIngredient(ModTags.Items.PLATE_STEEL, 25).addIngredient(ModTags.Items.INGOT_STEEL, 30).addIngredient(ModTags.Items.CIRCUITS_BASIC,4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
     }
 
     private void generateMetalRecipes(@Nonnull Consumer<IFinishedRecipe> consumer){
