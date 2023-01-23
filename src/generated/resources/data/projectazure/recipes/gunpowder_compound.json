@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TGT",
+    "GSG",
+    "TGT"
+  ],
+  "key": {
+    "G": {
+      "tag": "forge:gunpowder"
+    },
+    "S": {
+      "tag": "forge:slimeballs"
+    },
+    "T": {
+      "tag": "forge:tree_sap"
+    }
+  },
+  "result": {
+    "item": "projectazure:gunpowder_compound",
+    "count": 5
+  }
+}

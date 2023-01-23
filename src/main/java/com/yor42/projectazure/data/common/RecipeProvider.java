@@ -56,8 +56,8 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     }
 
     private void generateGunBenchRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),2).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 5).addIngredient(registerItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),2).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 5).addIngredient(Items.IRON_INGOT, 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_iron");
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),6).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(registerItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),6).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(Items.IRON_INGOT, 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_iron");
     }
 
     private void generateMetalRecipes(@Nonnull Consumer<IFinishedRecipe> consumer){
@@ -182,6 +182,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("WBW")
                 .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
                 .unlockedBy("has_pipe", has(registerItems.IRON_PIPE.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.GUNPOWDER_COMPOUND.get(), 5)
+                .define('G', Tags.Items.GUNPOWDER)
+                .define('S', Tags.Items.SLIMEBALLS)
+                .define('T', ModTags.Items.TREE_SAP)
+                .pattern("TGT")
+                .pattern("GSG")
+                .pattern("TGT")
+                .unlockedBy("has_sap", has(ModTags.Items.TREE_SAP))
+                .unlockedBy("has_gunpowder", has(Tags.Items.GUNPOWDER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.HAMMER_IRON.get())
