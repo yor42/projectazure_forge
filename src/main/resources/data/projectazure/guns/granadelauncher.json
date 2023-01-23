@@ -51,13 +51,13 @@
   "modules": {
     "zoom": {
       "fovModifier":0.575,
-      "yOffset":13.75,
+      "yOffset":13.6,
       "zOffset":4.95
     },
     "attachments":{
       "scope": {
-        "yOffset": 9.2,
-        "zOffset": 4,
+        "yOffset": 12.5,
+        "zOffset": -4,
         "scale": 1.00
       },
       "underBarrel":{

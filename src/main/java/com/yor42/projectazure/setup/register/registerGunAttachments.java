@@ -26,7 +26,15 @@ public enum registerGunAttachments {
     WHITEFANG465_BODY("whitefang465_body"),
 
     SANGVIS_RAILGUN_BODY("sangvis_railgun"),
-    SANGVIS_RAILGUN_SAFE("sangvis_railgun_safe");
+    SANGVIS_RAILGUN_SAFE("sangvis_railgun_safe"),
+
+    TYPHOON_BODY("typhoon_body"),
+    TYPHOON_L_GRIP("typhoon_l_grip"),
+    TYPHOON_T_GRIP("typhoon_t_grip"),
+
+    GRANADELAUNCHER_BODY("granadelauncher_body"),
+    GRANADELAUNCHER_L_GRIP("granadelauncher_l_grip"),
+    GRANADELAUNCHER_T_GRIP("granadelauncher_t_grip");
 
 
     private final ResourceLocation modelLocation;

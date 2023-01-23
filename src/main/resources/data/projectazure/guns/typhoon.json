@@ -35,7 +35,7 @@
   "projectile": {
     "item": "projectazure:4mmcaseless",
     "visible": false,
-    "damage": 7,
+    "damage": 22,
 
     "size": 0.1,
 
@@ -65,12 +65,12 @@
     },
     "attachments": {
       "scope": {
-        "yOffset": 9.2,
-        "zOffset": 4,
+        "yOffset": 12.527,
+        "zOffset": -2,
         "scale": 1.00
       },
       "underBarrel": {
-        "yOffset": 7.799,
+        "yOffset": 0,
         "zOffset": -2.35,
         "scale": 0.00
       }
