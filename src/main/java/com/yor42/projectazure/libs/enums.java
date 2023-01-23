@@ -1,5 +1,6 @@
 package com.yor42.projectazure.libs;
 
+import com.tac.guns.common.Gun;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import net.minecraft.item.ItemStack;
 
@@ -230,19 +231,31 @@ public class enums {
     }
 
     public enum GunClass {
-        NONE("guntype.none"),
-        AR("guntype.assault_rifle"),
-        SG("guntype.shotgun"),
-        HG("guntype.handgun"),
-        SR("guntype.sniper");
+        NONE("guntype.none", -1),
+        AR("guntype.assault_rifle", 0),
+        MG("guntype.machinegun", 1),
+        SG("guntype.shotgun", 3),
+        SMG("guntype.submachinegun", 4),
+        HG("guntype.handgun", 2),
+        SR("guntype.sniper", 5);
 
         private final String name;
-        GunClass(String name) {
+        private final int category;
+        GunClass(String name, int category) {
             this.name = name;
+            this.category = category;
+        }
+
+        public boolean isGunSameCategory(Gun gun){
+            return gun.getDisplay().getWeaponType() == this.getCategory();
         }
 
         public String getName(){
             return this.name;
+        }
+
+        public int getCategory(){
+            return this.category;
         }
     }
 

@@ -56,8 +56,8 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     }
 
     private void generateGunBenchRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),2).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 5).addIngredient(registerItems.INGOT_LEAD.get(), 5).addCriterion("has_gunpowderCompound", has(registerItems.GUNPOWDER_COMPOUND.get())).build(consumer, "gunbench_4mmcaseless_lead");
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),2).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 5).addIngredient(Items.IRON_INGOT, 5).addCriterion("has_gunpowderCompound", has(registerItems.GUNPOWDER_COMPOUND.get())).build(consumer, "gunbench_4mmcaseless_iron");
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),2).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 5).addIngredient(registerItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),2).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 5).addIngredient(Items.IRON_INGOT, 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_iron");
     }
 
     private void generateMetalRecipes(@Nonnull Consumer<IFinishedRecipe> consumer){

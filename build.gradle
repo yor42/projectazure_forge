@@ -162,7 +162,7 @@ dependencies {
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
     //TaC
     implementation fg.deobf('curse.maven:obfuscate-289380:3740120')
-    implementation fg.deobf('curse.maven:timeless-and-classics-491264:3854371')
+    //implementation fg.deobf('curse.maven:timeless-and-classics-491264:3854371')
 
     compileOnly fg.deobf('curse.maven:realistic-torches-235729:3191715')
 
@@ -176,7 +176,7 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
-    //implementation fg.deobf('com.tac.guns:tac-d:0.3.4.2-1.16.5')
+    implementation fg.deobf('com.tac.guns:tac-a:0.3.4-1.16.5')
 
     runtimeOnly fg.deobf('curse.maven:roadrunner-529754:3683120')
     runtimeOnly fg.deobf('curse.maven:ferritecore-429235:3485636')

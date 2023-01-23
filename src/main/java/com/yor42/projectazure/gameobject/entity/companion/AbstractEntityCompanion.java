@@ -1173,71 +1173,77 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     private static final Predicate<LivingEntity> HOSTILE_ENTITIES = (entity) -> entity.getType().getRegistryName()!=null&&entity.getSoundSource() == SoundCategory.HOSTILE && !Config.COMMON.aggroMobs.exemptEntities.get().contains(entity.getType().getRegistryName().toString());
 
-    public void AttackUsingGun(ItemStack gun){
-        if(gun.getItem() instanceof GunItem){
-            GunItem item = (GunItem)gun.getItem();
-            Gun modifiedGun = item.getModifiedGun(gun);
-            if (modifiedGun != null) {
-                int count = modifiedGun.getGeneral().getProjectileAmount();
-                Gun.Projectile projectileProps = modifiedGun.getProjectile();
-                com.tac.guns.entity.ProjectileEntity[] spawnedProjectiles = new com.tac.guns.entity.ProjectileEntity[count];
-                for(int i = 0; i < count; ++i) {
-                    IProjectileFactory factory = ProjectileManager.getInstance().getFactory(projectileProps.getItem());
-                    com.tac.guns.entity.ProjectileEntity projectileEntity = factory.create(this.getCommandSenderWorld(), this, gun, item, modifiedGun);
-                    projectileEntity.setWeapon(gun);
-                    projectileEntity.setAdditionalDamage(Gun.getAdditionalDamage(gun));
-                    this.level.addFreshEntity(projectileEntity);
-                    spawnedProjectiles[i] = projectileEntity;
-                    projectileEntity.tick();
-                }
+    public void AttackUsingGun(ItemStack gun) {
 
-                if (!projectileProps.isVisible()) {
-                    MessageBulletTrail messageBulletTrail = new MessageBulletTrail(spawnedProjectiles, projectileProps, this.getId());
-                    PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getX(), this.getY(), this.getZ(), Config.COMMON.network.projectileTrackingRange.get(), this.level.dimension())), messageBulletTrail);
-                }
+        if (!(gun.getItem() instanceof GunItem)) {
+            return;
+        }
 
-                double posY;
-                double posZ;
-                double posX;
-                if (Config.COMMON.aggroMobs.enabled.get()) {
-                    double radius = GunModifierHelper.getModifiedFireSoundRadius(gun, Config.COMMON.aggroMobs.range.get());
-                    posX = this.getX();
-                    posY = this.getY() + 0.5D;
-                    posZ = this.getZ();
-                    AxisAlignedBB box = new AxisAlignedBB(posX - radius, posY - radius, posZ - radius, posX + radius, posY + radius, posZ + radius);
-                    radius *= radius;
+        GunItem item = (GunItem) gun.getItem();
+        Gun modifiedGun = item.getModifiedGun(gun);
+        if (modifiedGun != null) {
+            int count = modifiedGun.getGeneral().getProjectileAmount();
+            Gun.Projectile projectileProps = modifiedGun.getProjectile();
+            com.tac.guns.entity.ProjectileEntity[] spawnedProjectiles = new com.tac.guns.entity.ProjectileEntity[count];
+            for (int i = 0; i < count; ++i) {
+                IProjectileFactory factory = ProjectileManager.getInstance().getFactory(projectileProps.getItem());
 
-                    for (LivingEntity entity : this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, box, HOSTILE_ENTITIES)) {
-                        double dx = posX - entity.getX();
-                        double dy = posY - entity.getY();
-                        double dz = posZ - entity.getZ();
-                        if (dx * dx + dy * dy + dz * dz <= radius) {
-                            entity.setLastHurtByMob(Config.COMMON.aggroMobs.angerHostileMobs.get() ? this : entity);
-                        }
+                float isUsingTaledtedgun = this.getGunSpecialty().isGunSameCategory(modifiedGun)? 0.1F: 0.25F;
+
+                com.tac.guns.entity.ProjectileEntity projectileEntity = factory.create(this.getCommandSenderWorld(), this, gun, item, modifiedGun, isUsingTaledtedgun, isUsingTaledtedgun);
+                projectileEntity.setWeapon(gun);
+                projectileEntity.setAdditionalDamage(Gun.getAdditionalDamage(gun));
+                this.level.addFreshEntity(projectileEntity);
+                spawnedProjectiles[i] = projectileEntity;
+                projectileEntity.tick();
+            }
+
+            if (!projectileProps.isVisible()) {
+                MessageBulletTrail messageBulletTrail = new MessageBulletTrail(spawnedProjectiles, projectileProps, this.getId());
+                PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getX(), this.getY(), this.getZ(), Config.COMMON.network.projectileTrackingRange.get(), this.level.dimension())), messageBulletTrail);
+            }
+
+            double posY;
+            double posZ;
+            double posX;
+            if (Config.COMMON.aggroMobs.enabled.get()) {
+                double radius = GunModifierHelper.getModifiedFireSoundRadius(gun, Config.COMMON.aggroMobs.range.get());
+                posX = this.getX();
+                posY = this.getY() + 0.5D;
+                posZ = this.getZ();
+                AxisAlignedBB box = new AxisAlignedBB(posX - radius, posY - radius, posZ - radius, posX + radius, posY + radius, posZ + radius);
+                radius *= radius;
+
+                for (LivingEntity entity : this.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, box, HOSTILE_ENTITIES)) {
+                    double dx = posX - entity.getX();
+                    double dy = posY - entity.getY();
+                    double dz = posZ - entity.getZ();
+                    if (dx * dx + dy * dy + dz * dz <= radius) {
+                        entity.setLastHurtByMob(Config.COMMON.aggroMobs.angerHostileMobs.get() ? this : entity);
                     }
                 }
+            }
 
-                boolean silenced = GunModifierHelper.isSilencedFire(gun);
-                ResourceLocation fireSound = silenced ? modifiedGun.getSounds().getSilencedFire() : modifiedGun.getSounds().getFire();
-                if (fireSound != null) {
-                    posX = this.getX();
-                    posY = this.getY() + (double)this.getEyeHeight();
-                    posZ = this.getZ();
-                    float volume = GunModifierHelper.getFireSoundVolume(gun);
-                    float pitch = 0.9F + this.getCommandSenderWorld().random.nextFloat() * 0.2F;
-                    double radius = GunModifierHelper.getModifiedFireSoundRadius(gun, Config.SERVER.gunShotMaxDistance.get());
-                    boolean muzzle = modifiedGun.getDisplay().getFlash() != null;
-                    MessageGunSound messageSound = new MessageGunSound(fireSound, SoundCategory.PLAYERS, (float)posX, (float)posY, (float)posZ, volume, pitch, this.getId(), muzzle, false);
-                    PacketDistributor.TargetPoint targetPoint = new PacketDistributor.TargetPoint(posX, posY, posZ, radius, this.level.dimension());
-                    PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> targetPoint), messageSound);
-                }
+            boolean silenced = GunModifierHelper.isSilencedFire(gun);
+            ResourceLocation fireSound = silenced ? modifiedGun.getSounds().getSilencedFire() : modifiedGun.getSounds().getFire();
+            if (fireSound != null) {
+                posX = this.getX();
+                posY = this.getY() + (double) this.getEyeHeight();
+                posZ = this.getZ();
+                float volume = GunModifierHelper.getFireSoundVolume(gun);
+                float pitch = 0.9F + this.getCommandSenderWorld().random.nextFloat() * 0.2F;
+                double radius = GunModifierHelper.getModifiedFireSoundRadius(gun, Config.SERVER.gunShotMaxDistance.get());
+                boolean muzzle = modifiedGun.getDisplay().getFlash() != null;
+                MessageGunSound messageSound = new MessageGunSound(fireSound, SoundCategory.PLAYERS, (float) posX, (float) posY, (float) posZ, volume, pitch, this.getId(), muzzle, false);
+                PacketDistributor.TargetPoint targetPoint = new PacketDistributor.TargetPoint(posX, posY, posZ, radius, this.level.dimension());
+                PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> targetPoint), messageSound);
+            }
 
-                CompoundNBT tag = gun.getOrCreateTag();
-                if (!tag.getBoolean("IgnoreAmmo")) {
-                    int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.RECLAIMED.get(), gun);
-                    if (level == 0 || this.level.random.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0) {
-                        tag.putInt("AmmoCount", Math.max(0, tag.getInt("AmmoCount") - 1));
-                    }
+            CompoundNBT tag = gun.getOrCreateTag();
+            if (!tag.getBoolean("IgnoreAmmo")) {
+                int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.RECLAIMED.get(), gun);
+                if (level == 0 || this.level.random.nextInt(4 - MathHelper.clamp(level, 1, 2)) != 0) {
+                    tag.putInt("AmmoCount", Math.max(0, tag.getInt("AmmoCount") - 1));
                 }
             }
         }

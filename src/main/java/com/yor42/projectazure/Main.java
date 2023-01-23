@@ -137,7 +137,7 @@ public class Main
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        ProjectileManager.getInstance().registerFactory(registerItems.DUMMYAMMO_RAILGUN.get(), (worldIn, entity, weapon, item, modifiedGun) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F));
+        ProjectileManager.getInstance().registerFactory(registerItems.DUMMYAMMO_RAILGUN.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
         if (ModList.get().isLoaded("theoneprobe")) TOPCompat.register();
         if(ModList.get().isLoaded(CURIOS_MODID)) CuriosCompat.sendImc(event);
     }
