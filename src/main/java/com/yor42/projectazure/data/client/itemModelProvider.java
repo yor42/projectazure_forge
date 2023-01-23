@@ -1,5 +1,6 @@
 package com.yor42.projectazure.data.client;
 
+import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -121,11 +122,13 @@ public class itemModelProvider extends ItemModelProvider {
         buildSimpleBlockModel("ore_stone_zinc");
         buildSimpleBlockModel("reenforced_plank");
         buildSimpleBlockModel("orirock");
+        buildSimpleBlockModel("cobbled_orirock");
+
+        buildMultiblockControllerModel("ammo_press");
+        buildMultiblockControllerModel("originium_generator");
 
         buildSimpleBlockModel("machine_component");
         buildSimpleBlockModel("machine_dynamo");
-
-        buildSimpleBlockModel("originium_generator_controller");
 
         buildSimpleBlockModel("machine_frame");
         buildSimpleBlockModel("machine_frame_slab");
@@ -203,6 +206,10 @@ public class itemModelProvider extends ItemModelProvider {
 
     public void buildSimpleBlockModel(String name){
         withExistingParent(name, modLoc("block/"+name));
+    }
+
+    public void buildMultiblockControllerModel(String name){
+        withExistingParent(name, modLoc("block/"+name+"_controller"));
     }
 
     public ItemModelBuilder buildModel(String name){

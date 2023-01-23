@@ -24,6 +24,7 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
         simpleBlock(registerBlocks.ORIROCK.get());
         simpleBlock(registerBlocks.REENFORCEDCONCRETE.get());
         simpleBlock(registerBlocks.REENFORCED_PLANK.get());
+        simpleBlock(registerBlocks.COBBLED_ORIROCK.get());
 
         simpleBlock(registerBlocks.MACHINE_COMPONENTBLOCK.get());
 

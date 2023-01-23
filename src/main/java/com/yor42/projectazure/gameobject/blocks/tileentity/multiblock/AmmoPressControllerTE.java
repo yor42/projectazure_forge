@@ -30,7 +30,6 @@ public class AmmoPressControllerTE extends ControllerTileEntity {
 
     public static void registerTE(){
         AmmoPressDefinition.setRecipeMap(new RecipeMap("ammopress"));
-
         AmmoPressDefinition.getRecipeMap().inputCapabilities.add(ItemMultiblockCapability.CAP);
         AmmoPressDefinition.getRecipeMap().inputCapabilities.add(FEMultiblockCapability.CAP);
         AmmoPressDefinition.getRecipeMap().outputCapabilities.add(ItemMultiblockCapability.CAP);
