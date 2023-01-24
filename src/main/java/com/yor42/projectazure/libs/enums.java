@@ -141,7 +141,7 @@ public class enums {
         //Ah thats hot
         INCENDIARY(0.84F, 6, 3F,2, 0.8F, true, false),
         //Penetrates deep, and causes A LOTTA DAMAGE
-        SAP(0.85F, 10, 4, 2,0.8F, false, false),
+        SAP(0.85F, 10, 9, 2,0.8F, false, false),
         API(0.80F, 6, 3, 3,0.6F, true, false),
         //HEI(0.68F, ),
         HEIAP(0.82F, 8, 4F, 4F, 0.6F, true,true);
