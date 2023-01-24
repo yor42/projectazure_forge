@@ -16,11 +16,11 @@
       "tag": "forge:circuits/basic"
     },
     "S": {
-      "tag": "forge:plates/steel"
+      "tag": "forge:explosive"
     }
   },
   "result": {
-    "item": "projectazure:torpedo_ammo",
+    "item": "projectazure:missile_ammo",
     "count": 4
   }
 }

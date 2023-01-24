@@ -75,6 +75,10 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.DUST_ZINC).add(registerItems.DUST_ZINC.get());
         this.tag(ModTags.Items.DUST_COAL).add(registerItems.DUST_COAL.get());
         this.tag(ModTags.Items.DUST_GOLD).add(registerItems.DUST_GOLD.get());
+        this.tag(ModTags.Items.DUST_ORIGINIUM).add(registerItems.DUST_ORIGINIUM.get());
+        this.tag(ModTags.Items.DUST_ORIROCK).add(registerItems.DUST_ORIROCK.get());
+        this.tag(ModTags.Items.DUST_QUARTZ).add(registerItems.DUST_NETHER_QUARTZ.get());
+        this.tag(ModTags.Items.EXPLOSIVE_COMPOUND).add(registerItems.GUNPOWDER_COMPOUND.get());
         this.tag(ModTags.Items.DUST_STEEL).add(registerItems.DUST_STEEL.get());
         this.tag(ModTags.Items.DUST_BRASS).add(registerItems.DUST_BRASS.get());
 

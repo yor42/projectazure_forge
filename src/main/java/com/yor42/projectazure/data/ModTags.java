@@ -9,6 +9,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.Tags;
 
 public class ModTags {
 
@@ -93,6 +94,11 @@ public class ModTags {
         public static final ITag.INamedTag<Item> DUST_STEEL = forge("dusts/steel");
         public static final ITag.INamedTag<Item> DUST_BRASS = forge("dusts/brass");
         public static final ITag.INamedTag<Item> DUST_GOLD = forge("dusts/gold");
+        public static final ITag.INamedTag<Item> DUST_ORIGINIUM = forge("dusts/originium");
+        public static final ITag.INamedTag<Item> DUST_ORIROCK = forge("dusts/orirock");
+        public static final ITag.INamedTag<Item> DUST_QUARTZ = forge("dusts/quartz");
+
+        public static final ITag.INamedTag<Item> EXPLOSIVE_COMPOUND = forge("explosive");
 
         public static final ITag.INamedTag<Item> ORES_ALUMINIUM = forge("ores/aluminium");
         public static final ITag.INamedTag<Item> ORES_COPPER = forge("ores/copper");

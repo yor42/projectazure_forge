@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:steel_gunframe_rifle"
+      "minecraft:gunpowder"
     ]
   },
   "criteria": {
-    "has_parts": {
+    "has_mortar": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "projectazure:mechanical_parts"
+            "tag": "forge:mortar"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:steel_gunframe_rifle"
+        "recipe": "minecraft:gunpowder"
       }
     }
   },
   "requirements": [
     [
-      "has_parts",
+      "has_mortar",
       "has_the_recipe"
     ]
   ]

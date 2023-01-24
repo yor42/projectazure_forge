@@ -6,7 +6,6 @@ import com.yor42.projectazure.data.recipebuilder.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import com.yor42.projectazure.setup.register.registerFluids;
@@ -27,7 +26,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -53,7 +51,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         this.generateAlloyingRecipe(consumer);
         this.generatePressingRecipe(consumer);
         this.generateCrystalizingRecipe(consumer);
-        this.generateHammerRecipe(consumer);
+        this.generateCrushingRecipe(consumer);
         this.generateGunBenchRecipe(consumer);
         this.generateShapedRecipe(consumer);
         this.generateShapelessRecipe(consumer);
@@ -84,18 +82,19 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     }
 
-    private void generateHammerRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
+    private void generateCrushingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
         createHammerRecipes(consumer, Blocks.STONE, Blocks.COBBLESTONE, "cobblestone");
         createHammerRecipes(consumer, Blocks.COBBLESTONE, Blocks.GRAVEL, "gravel");
         createHammerRecipes(consumer, Blocks.GRAVEL, Blocks.SAND, "sand");
+        createHammerRecipes(consumer, registerBlocks.COBBLED_ORIROCK.get(), registerItems.DUST_ORIROCK.get(), 4, "orirock_from_cobble");
         createHammerRecipes(consumer, ModTags.Items.ORES_COPPER, registerItems.DUST_COPPER.get(), 2, "copper");
         createHammerRecipes(consumer, ModTags.Items.ORES_ALUMINIUM, registerItems.DUST_ALUMINIUM.get(), 2, "aluminium");
         createHammerRecipes(consumer, ModTags.Items.ORES_LEAD, registerItems.DUST_LEAD.get(), 2, "lead");
         createHammerRecipes(consumer, ModTags.Items.ORES_TIN, registerItems.DUST_TIN.get(), 2, "tin");
-        createHammerRecipes(consumer, ModTags.Items.ORES_ZINC, registerItems.DUST_ZINC.get(), 2, "zinc");
+        createHammerRecipes(consumer, ModTags.Items.ORES_ORIROCK, registerItems.DUST_ORIROCK.get(), 4, "orirock");
+        createHammerRecipes(consumer, Tags.Items.ORES_GOLD, registerItems.DUST_GOLD.get(), 2, "gold");
         createHammerRecipes(consumer, Tags.Items.ORES_IRON, registerItems.DUST_IRON.get(), 2, "iron");
         createHammerRecipes(consumer, Tags.Items.ORES_COAL, registerItems.DUST_COAL.get(), 2, "coal");
-        createHammerRecipes(consumer, Tags.Items.ORES_GOLD, registerItems.DUST_GOLD.get(), 2, "gold");
     }
 
     private void generateAlloyingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
@@ -161,6 +160,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .requires(ModTags.Items.DUST_COAL)
                 .unlockedBy("has_iron", has(ModTags.Items.DUST_IRON))
                 .save(consumer, new ResourceLocation("steel_dust_from_iron"));
+
+        ShapelessRecipeBuilder.shapeless(Items.GUNPOWDER, 1)
+                .requires(ModTags.Items.MORTAR)
+                .requires(Items.FLINT)
+                .unlockedBy("has_mortar", has(ModTags.Items.MORTAR))
+                .save(consumer);
 
     }
 
@@ -632,17 +637,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_diamond", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_RIFLE_FRAME.get(), 1)
-                .define('P', ModTags.Items.PLATE_STEEL)
-                .define('I', ModTags.Items.INGOT_STEEL)
-                .define('G', ModTags.Items.GEAR_STEEL)
-                .define('M', registerItems.MECHANICAL_PARTS.get())
-                .pattern("PPP")
-                .pattern("MIM")
-                .pattern("PPG")
-                .unlockedBy("has_parts", has(registerItems.MECHANICAL_PARTS.get()))
-                .save(consumer);
-
         ShapedRecipeBuilder.shaped(registerItems.COMMANDING_STICK.get(), 1)
                 .define('S', Items.STICK)
                 .define('B', Tags.Items.DYES_BLACK)
@@ -650,15 +644,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern(" S ")
                 .pattern("B  ")
                 .unlockedBy("has_sticc", has(Items.STICK))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(registerItems.PISTOL_GRIP.get(), 1)
-                .define('P', ModTags.Items.PLATE_STEEL)
-                .define('I', ModTags.Items.INGOT_STEEL)
-                .pattern("IP ")
-                .pattern("PIP")
-                .pattern(" PP")
-                .unlockedBy("has_parts", has(registerItems.MECHANICAL_PARTS.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.AMMO_GENERIC.get(), 2)
@@ -704,11 +689,24 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_ingot", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.AMMO_TORPEDO.get(), 1)
+        ShapedRecipeBuilder.shaped(registerItems.AMMO_TORPEDO.get(), 4)
                 .define('A', ModTags.Items.INGOT_ALUMINIUM)
                 .define('T', Blocks.TNT.asItem())
                 .define('C', ModTags.Items.CIRCUITS_BASIC)
                 .define('S', ModTags.Items.PLATE_STEEL)
+                .pattern(" AT")
+                .pattern("ACA")
+                .pattern("SA ")
+                .unlockedBy("has_aluminium", has(ModTags.Items.INGOT_ALUMINIUM))
+                .unlockedBy("has_circuit", has(ModTags.Items.CIRCUITS_BASIC))
+                .unlockedBy("has_tnt", has(Blocks.TNT.asItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.AMMO_MISSILE.get(), 4)
+                .define('A', ModTags.Items.INGOT_ALUMINIUM)
+                .define('T', Blocks.TNT.asItem())
+                .define('C', ModTags.Items.CIRCUITS_BASIC)
+                .define('S', ModTags.Items.EXPLOSIVE_COMPOUND)
                 .pattern(" AT")
                 .pattern("ACA")
                 .pattern("SA ")
@@ -1094,6 +1092,10 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Block blockOutput, String id) {
         CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
+    }
+
+    protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Item blockOutput, int count, String id) {
+        CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
     }
 
     protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, ITag<Item> blockInput, Item out, int count, String id) {

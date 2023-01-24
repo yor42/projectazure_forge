@@ -47,6 +47,7 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityMissileDrone>> MISSILEDRONE = ENTITIES.register("missiledrone", () -> EntityType.Builder.of(EntityMissileDrone::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("missiledrone").toString()));
     //Planes
     public static final RegistryObject<EntityType<EntityF4fWildcat>> PLANE_F4FWILDCAT = ENTITIES.register("planef4fwildcat", () -> EntityType.Builder.of(EntityF4fWildcat::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("entityplanef4fwildcat").toString()));
+
     //?????
     public static final RegistryObject<EntityType<EntityClaymore>> CLAYMORE = ENTITIES.register("entityclaymore", () -> EntityType.Builder.of(EntityClaymore::new, EntityClassification.CREATURE).sized(0.7F, 2.31F).build(ModResourceLocation("entityclaymore").toString()));
     public static final RegistryObject<EntityType<EntityRailgunProjectile>> PROJECTILE_RAILGUN = ENTITIES.register("projectile_railgun", () -> EntityType.Builder.<EntityRailgunProjectile>of(EntityRailgunProjectile::new, EntityClassification.MISC).sized(0.2F, 0.2F).build(ModResourceLocation("projectile_railgun").toString()));

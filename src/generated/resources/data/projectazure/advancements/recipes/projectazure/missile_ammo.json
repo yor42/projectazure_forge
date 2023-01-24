@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:missile_ammo"
+    ]
+  },
+  "criteria": {
+    "has_aluminium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/aluminium"
+          }
+        ]
+      }
+    },
+    "has_circuit": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:circuits/basic"
+          }
+        ]
+      }
+    },
+    "has_tnt": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:tnt"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:missile_ammo"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_aluminium",
+      "has_circuit",
+      "has_tnt",
+      "has_the_recipe"
+    ]
+  ]
+}

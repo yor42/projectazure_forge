@@ -3,11 +3,11 @@
   "results": [
     {
       "chance": 1.0,
-      "item": "projectazure:dust_zinc",
-      "count": 2
+      "item": "projectazure:dust_orirock",
+      "count": 4
     }
   ],
   "input": {
-    "tag": "forge:ores/zinc"
+    "item": "projectazure:cobbled_orirock"
   }
 }

@@ -134,6 +134,9 @@ public class registerItems {
     public static final RegistryObject<Item> ORIGINIUM_PRIME = ITEMS.register("originium_prime", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES).food(ModFoods.ORIGINIUM_PRIME)));
 
+    public static final RegistryObject<Item> DUST_ORIROCK = ITEMS.register("dust_orirock", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
     public static final RegistryObject<Item> HEADHUNTING_PCB = ITEMS.register("headhunting_pcb", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES).stacksTo(16)));
     public static final RegistryObject<Item> ORUNDUM = ITEMS.register("orundum", () -> new Item(new Item.Properties()
@@ -207,12 +210,6 @@ public class registerItems {
             return true;
         }
     });
-
-    public static final RegistryObject<Item> PISTOL_GRIP = ITEMS.register("pistol_grip", () -> new Item(new Item.Properties()
-            .tab(PA_GROUP)));
-
-    public static final RegistryObject<Item> STEEL_RIFLE_FRAME = ITEMS.register("steel_gunframe_rifle", () -> new Item(new Item.Properties()
-            .tab(PA_GROUP)));
 
     public static final RegistryObject<Item> AMMO_GENERIC = ITEMS.register("ammo_generic", () -> new ItemCannonshell(enums.AmmoCategory.GENERIC ,new Item.Properties()
             .tab(PA_GROUP)));

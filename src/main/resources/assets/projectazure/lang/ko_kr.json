@@ -101,6 +101,7 @@
   "item.projectazure.crescentkatana_shiro": "반월검 - 백",
   "item.projectazure.crescentkatana_shiro.tooltip": "손잡이 부근에 반달 모양의 날이 달린 검.",
   "item.projectazure.crescentkatana_kuro": "반월검 - 흑",
+  "item.projectazure.flexsword": "경량 한손검",
   "item.projectazure.tactical_knife": "전술 나이프",
   "item.projectazure.crescentkatana_kuro.tooltip": "손잡이 부근에 반달 모양의 날이 달린 검.",
   "item.projectazure.warhammer": "워해머",
@@ -114,6 +115,12 @@
   "item.projectazure.excalibur": "엑스칼리버",
   "item.projectazure.excalibur_sheath": "아발론",
   "item.projectazure.gae_bolg": "게 볼그",
+  "item.projectazure.lordchaldeas": "로드 칼데아스",
+
+  "item.projectazure.crude_oil_bucket": "원유 양동이",
+  "item.projectazure.gasoline_bucket": "휘발유 양동이",
+  "item.projectazure.diesel_bucket": "경유 양동이",
+  "item.projectazure.fuel_oil_bucket": "중유 양동이",
 
   "item.projectazure.gravinet": "그라비넷",
   "item.projectazure.gravinet.tooltip": "중력을 조작하는 힘이 깃들었다는 전설이 전해져오는 창. 악기로써 연주도 가능하나 개발자가 게을러서 여기서는 안 될듯 합니다.",
@@ -128,14 +135,12 @@
 
   "item.projectazure.whitefang465": "화이트팽 465",
   "item.projectazure.typhoon": "타이푼",
-  "item.projectazure.sangvis_railgun": "SF-2815 에너지 포",
+  "item.projectazure.sangvis_railgun": "SF-2815 에너지포",
   "item.projectazure.granadelauncher": "자동 유탄발사기",
 
   "item.projectazure.4mmcaseless": "4mm 무탄피 탄약",
 
   "item.projectazure.missiledrone": "미사일 드론",
-
-  "item.projectazure.lordchaldeas": "로드 칼데아스",
 
   "item.projectazure.dd_default_rigging.tooltip": "구축함 함선소녀 전용 기본 장비입니다",
   "item.projectazure.cv_default_rigging.tooltip": "항공모함 함선소녀 전용 기본 장비입니다",
@@ -204,6 +209,8 @@
   "item.tooltip.not_revived": "해당 동료는 빈사 상태입니다. 제세동기를 사용하세요!",
   "item.projectazure.ammo_generic": "통상탄",
 
+  "item.projectazure.dust_orirock": "원암 가루",
+
   "block.projectazure.recruit_beacon": "모집 신호기",
   "block.projectazure.recruit_beacon.tooltip": "동료를 모집하는데 쓰이는 신호기입니다",
   "block.projectazure.metal_press": "유압 프레스",
@@ -228,6 +235,10 @@
   "block.projectazure.reenforced_concrete.tooltip": "강철로 보강된 콘크리트입니다; 멀티블럭 구조물의 일부로 쓰입니다.",
   "block.projectazure.orirock": "원암",
   "block.projectazure.cobbled_orirock": "원암 조약돌",
+  "block.projectazure.crude_oil": "원유",
+  "block.projectazure.diesel": "경유",
+  "block.projectazure.fuel_oil": "중유",
+  "block.projectazure.gasoline": "휘발유",
   "block.projectazure.nether_quartz_solution": "네더 석영 수용액",
   "block.projectazure.originium_solution": "오리지늄 수용액",
   "block.projectazure.machine_component": "기계 부품",

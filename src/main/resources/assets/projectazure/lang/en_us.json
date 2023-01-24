@@ -101,6 +101,7 @@
   "item.projectazure.crescentkatana_shiro": "Crescent Katana - Shiro",
   "item.projectazure.crescentkatana_shiro.tooltip": "Silver katana with additional blade near handle.",
   "item.projectazure.crescentkatana_kuro": "Crescent Katana - Kuro",
+  "item.projectazure.flexsword": "Lightweight Katana",
   "item.projectazure.tactical_knife": "Tactical Knife",
   "item.projectazure.crescentkatana_kuro.tooltip": "Black katana with additional blade near handle.",
   "item.projectazure.warhammer": "War hammer",
@@ -114,6 +115,12 @@
   "item.projectazure.excalibur": "Excalibur",
   "item.projectazure.excalibur_sheath": "Avalon",
   "item.projectazure.gae_bolg": "Gáe Bolg",
+  "item.projectazure.lordchaldeas": "Lord Chaldeas",
+
+  "item.projectazure.crude_oil_bucket": "Crude Oil Bucket",
+  "item.projectazure.gasoline_bucket": "Gasoline Bucket",
+  "item.projectazure.diesel_bucket": "Diesel Bucket",
+  "item.projectazure.fuel_oil_bucket": "Fuel Oil Bucket",
 
   "item.projectazure.gravinet": "Gravinet",
   "item.projectazure.gravinet.tooltip": "Lance with legend says that it has power to manipulate gravity.",
@@ -134,8 +141,6 @@
   "item.projectazure.4mmcaseless": "4mm Caseless Ammo",
 
   "item.projectazure.missiledrone": "Missile Drone",
-
-  "item.projectazure.lordchaldeas": "Lord Chaldeas",
 
   "item.projectazure.dd_default_rigging.tooltip": "Basic Rigging for destroyer KANSEN.",
   "item.projectazure.cv_default_rigging.tooltip": "Basic Rigging for Aircraft Carrier KANSEN.",
@@ -204,6 +209,8 @@
   "item.tooltip.not_revived": "Companion is not revived yet. Use Defibtillator first!",
   "item.projectazure.ammo_generic": "Generic Shell",
 
+  "item.projectazure.dust_orirock": "Orirock Dust",
+
   "block.projectazure.recruit_beacon": "Recruit Beacon",
   "block.projectazure.recruit_beacon.tooltip": "Machine for Recruiting companion",
   "block.projectazure.metal_press": "Hydraulic Press",
@@ -228,6 +235,10 @@
   "block.projectazure.reenforced_concrete.tooltip":"Concrete Reenforced with steel; part of multiblock Structure.",
   "block.projectazure.orirock": "Orirock",
   "block.projectazure.cobbled_orirock": "Cobbled Orirock",
+  "block.projectazure.crude_oil": "Crude Oil",
+  "block.projectazure.diesel": "Diesel",
+  "block.projectazure.fuel_oil": "Fuel Oil",
+  "block.projectazure.gasoline": "Gasoline",
   "block.projectazure.nether_quartz_solution": "Nether Quartz Solution",
   "block.projectazure.originium_solution": "Originium Solution",
   "block.projectazure.machine_component": "Machine Component",

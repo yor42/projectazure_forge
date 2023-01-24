@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
+import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
 import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
 import com.yor42.projectazure.setup.register.registerFluids;
@@ -339,10 +340,13 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
     }
 
     public FluidStack getAmountfromItem(Item item){
-        if(item == registerItems.DUST_ORIGINIUM.get()){
+        if(item.is(ModTags.Items.DUST_ORIGINIUM)){
             return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 400);
         }
-        else if(item == registerItems.DUST_NETHER_QUARTZ.get()){
+        else if(item.is(ModTags.Items.DUST_ORIROCK)){
+            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 200);
+        }
+        else if(item.is(ModTags.Items.DUST_QUARTZ)){
             return new FluidStack(registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 800);
         }
         return FluidStack.EMPTY;
