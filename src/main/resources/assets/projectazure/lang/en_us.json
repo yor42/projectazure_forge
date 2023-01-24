@@ -146,7 +146,14 @@
   "item.projectazure.cv_default_rigging.tooltip": "Basic Rigging for Aircraft Carrier KANSEN.",
   "item.projectazure.bb_default_rigging.tooltip": "Basic Rigging for Battleship KANSEN.",
 
-  "item.projectazure.ammo_generic.tooltip": "Most basic ammunition for KANSEN. weak, but cheap.",
+  "item.projectazure.ammo_generic.tooltip": "Most basic shell for KANSEN. weak, but cheap.",
+  "item.projectazure.ammo_he.tooltip": "Shell with explosive inside which explodes on contact. excellent for damaging the equipments of enemy ship.",
+  "item.projectazure.ammo_incendiary.tooltip": "Shell that sets target on fire upon contact.",
+  "item.projectazure.ammo_ap.tooltip": "Shell with heavy duty core that penetrates armor.",
+  "item.projectazure.ammo_sap.tooltip": "Shell which explodes after penetrating armor. causing devastating damage to internals of target.",
+  "item.projectazure.ammo_api.tooltip": "Armor piercing shell with incendiary capability.",
+  "item.projectazure.ammo_heiap.tooltip": "Armor piercing shell with High explosive and incendiary capability which deals deadly blow to its target.",
+
   "item.projectazure.wisdomcube.tooltip": "Mysterious Glowing Cube. Used to Build KANSEN.",
   "item.projectazure.bandage_roll.tooltip": "Simple roll of bandage for quick patch up. not a toilet paper.",
 
@@ -190,6 +197,16 @@
   "tooltip.companion.cost": "Cost to summon: %s",
   "tooltip.energygun.remainingenergy": "Remaining Energy: %s",
 
+  "tooltip.shell.hitchance": "Hit Chance",
+  "tooltip.shell.riggingdamage": "Rigging Damage",
+  "tooltip.shell.componentdamage": "Equipment Damage",
+  "tooltip.shell.entitydamage": "Entity Damage",
+  "tooltip.shell.minimumdamagepercentage": "Minimum damage modifier",
+  "tooltip.shell.specialeffect": "Special effects",
+  "tooltip.shell.incendiary": "Ignition",
+  "tooltip.shell.explosive": "Explosion",
+  "tooltip.shell.none": "-NONE-",
+
   "item.projectazure.spawnegg.spawn": "Spawn: ",
 
   "item.projectazure.bonk_bat.tooltip": "Sends every being in existence who dares to cross this bat's path to horny jail. AND THERES NO EXCEPTION.",
@@ -207,7 +224,14 @@
   "item.tooltip.chargefailed_nobattery": "Charge FAILED: No Battery!",
   "item.tooltip.ready": "READY!",
   "item.tooltip.not_revived": "Companion is not revived yet. Use Defibtillator first!",
+
   "item.projectazure.ammo_generic": "Generic Shell",
+  "item.projectazure.ammo_he": "High Explosive Shell",
+  "item.projectazure.ammo_incendiary": "Incendiary Shell",
+  "item.projectazure.ammo_ap": "Armor Piercing Shell",
+  "item.projectazure.ammo_sap": "Semi Armor Piercing Shell",
+  "item.projectazure.ammo_api": "API Shell",
+  "item.projectazure.ammo_heiap": "HEIAP Shell",
 
   "item.projectazure.dust_orirock": "Orirock Dust",
 

@@ -133,29 +133,29 @@ public class enums {
         //APHE:Bigger Damage on Kansen
 
         //Big Lead boi
-        GENERIC(0.75F, 5, 1, 1, 0.8F, false, false),
+        GENERIC(0.80F, 5, 1, 1, 0.8F, false, false),
         //What are you doing, step-shell? ~~I'm sorry~~
-        AP(0.9F,7, 2,4, 0.3F,false, false),
+        AP(0.96F,7, 2,4, 0.3F,false, false),
         //haha Shell goes AW MAN
-        HE(0.65F,2, 1, 6, 0.8F, false, true),
+        HE(0.78F,2, 1, 6, 0.8F, false, true),
         //Ah thats hot
-        INCENDIARY(0.73F, 6, 3F,2, 0.8F, true, false),
-        //digs deep, and goes boom. does not do splash damage cuz it blows up inside of ship
-        SAP(0.78F, 9, 4, 2,0.8F, false, false),
-        API(0.8F, 6, 3, 3,0.6F, true, true),
+        INCENDIARY(0.84F, 6, 3F,2, 0.8F, true, false),
+        //Penetrates deep, and causes A LOTTA DAMAGE
+        SAP(0.85F, 10, 4, 2,0.8F, false, false),
+        API(0.80F, 6, 3, 3,0.6F, true, false),
         //HEI(0.68F, ),
-        HEIAP(0.78F, 8, 4F, 4F, 0.6F, false,true);
+        HEIAP(0.82F, 8, 4F, 4F, 0.6F, true,true);
 
         private final float damage_rigging, damage_entity, damage_component, hitChance, minimum_damage_modifier;
         private final boolean shouldDamageMultipleComponant;
         private final boolean isIncendiary;
-        AmmoCategory(float HitChance, float riggingDamage, float entityDamage, float componentDamage, float MinimumDamageModifier, boolean isFiery, boolean splashDamage) {
+        AmmoCategory(float HitChance, float riggingDamage, float entityDamage, float componentDamage, float MinimumDamageModifier, boolean isIncendiary, boolean splashDamage) {
             this.hitChance = HitChance;
             this.damage_rigging = riggingDamage;
             this.damage_entity = entityDamage;
             this.damage_component = componentDamage;
             this.minimum_damage_modifier = MinimumDamageModifier;
-            this.isIncendiary = isFiery;
+            this.isIncendiary = isIncendiary;
             this.shouldDamageMultipleComponant = splashDamage;
         }
 

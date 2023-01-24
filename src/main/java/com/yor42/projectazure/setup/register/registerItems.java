@@ -214,6 +214,25 @@ public class registerItems {
     public static final RegistryObject<Item> AMMO_GENERIC = ITEMS.register("ammo_generic", () -> new ItemCannonshell(enums.AmmoCategory.GENERIC ,new Item.Properties()
             .tab(PA_GROUP)));
 
+    public static final RegistryObject<Item> AMMO_HE = ITEMS.register("ammo_he", () -> new ItemCannonshell(enums.AmmoCategory.HE ,new Item.Properties()
+            .tab(PA_GROUP)));
+
+    public static final RegistryObject<Item> AMMO_INCENDIARY = ITEMS.register("ammo_incendiary", () -> new ItemCannonshell(enums.AmmoCategory.INCENDIARY ,new Item.Properties()
+            .tab(PA_GROUP)));
+
+    public static final RegistryObject<Item> AMMO_AP = ITEMS.register("ammo_ap", () -> new ItemCannonshell(enums.AmmoCategory.AP ,new Item.Properties()
+            .tab(PA_GROUP)));
+
+    public static final RegistryObject<Item> AMMO_SAP = ITEMS.register("ammo_sap", () -> new ItemCannonshell(enums.AmmoCategory.SAP ,new Item.Properties()
+            .tab(PA_GROUP).rarity(Rarity.UNCOMMON)));
+
+    public static final RegistryObject<Item> AMMO_API = ITEMS.register("ammo_api", () -> new ItemCannonshell(enums.AmmoCategory.API ,new Item.Properties()
+            .tab(PA_GROUP).rarity(Rarity.UNCOMMON)));
+
+    public static final RegistryObject<Item> AMMO_HEIAP = ITEMS.register("ammo_heiap", () -> new ItemCannonshell(enums.AmmoCategory.HEIAP ,new Item.Properties()
+            .tab(PA_GROUP).rarity(Rarity.RARE)));
+
+
     public static final RegistryObject<Item> AMMO_TORPEDO = ITEMS.register("torpedo_ammo", () -> new ItemAmmo(enums.AmmoCalibur.TORPEDO, 1 ,new Item.Properties()
             .tab(PA_GROUP).stacksTo(1)));
 

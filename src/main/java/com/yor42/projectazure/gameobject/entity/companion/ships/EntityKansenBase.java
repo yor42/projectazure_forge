@@ -203,7 +203,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         if(rollBooleanRNG((float) (property.getRawhitChance()*distanceMultiplier))) {
             if (this.hasRigging()) {
                 DamageItem(property.getDamage(enums.DamageType.RIGGING), this.getRigging());
-                DamageComponent(property.getDamage(enums.DamageType.COMPONENT), this.getRigging(), property.ShouldDamageMultipleComponent());
+                DamageComponent(property.getDamage(enums.DamageType.COMPONENT), this.getRigging(), property.isExplosive());
             }
             super.hurt(source, property.getDamage(enums.DamageType.ENTITY));
         }

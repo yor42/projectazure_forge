@@ -147,8 +147,15 @@
   "item.projectazure.bb_default_rigging.tooltip": "전함 함선소녀 전용 기본 장비입니다",
 
   "item.projectazure.ammo_generic.tooltip": "가장 기본적인 함선소녀용 탄약입니다. 약하지만, 그만큼 저렴합니다.",
+  "item.projectazure.ammo_he.tooltip": "충격시 폭발하는 폭발물이 탑재된 함선소녀용 탄약입니다. 표적 함선의 장비를 무력화하는데 탁월합니다.",
+  "item.projectazure.ammo_incendiary.tooltip": "착탄시 목표물에 불을 붙이는 함선소녀용 탄약입니다.",
+  "item.projectazure.ammo_ap.tooltip": "장갑을 관통하는 금속 심이 들어있는 함선소녀용 탄약입니다.",
+  "item.projectazure.ammo_sap.tooltip": "장갑을 관통한 후 폭발해 표적 내부에 치명적인 피해를 입히는 함선소녀용 탄약입니다.",
+  "item.projectazure.ammo_api.tooltip": "장갑을 관통한 후 표적 내부에 불을 붙이는 함선소녀용 탄약입니다.",
+  "item.projectazure.ammo_heiap.tooltip": "장갑을 관통한 후 표적 내부에서 폭발함과 동시에 화재를 일으키는 치명적인 함선소녀용 탄약입니다",
+
   "item.projectazure.wisdomcube.tooltip": "의미심장한 빛을 내뿜는 큐브입니다.",
-  "item.projectazure.bandage_roll.tooltip": "간단한 응금처치용 붕대입니다. ...화장지가 아닙니다.",
+  "item.projectazure.bandage_roll.tooltip": "간단한 응급처치용 붕대입니다. ...화장지가 아닙니다.",
 
   "item.projectazure.energy_drink.tooltip1": "수능을 앞둔 고3의 노하우로 만들어진 궁극의 에너지 드링크!",
   "item.projectazure.energy_drink.tooltip2": "벼락치기? 미룬 과제? 문제 없습니다!",
@@ -190,6 +197,16 @@
   "tooltip.companion.cost": "부활 비용: %s",
   "tooltip.energygun.remainingenergy": "잔여 에너지: %s",
 
+  "tooltip.shell.hitchance": "명중률",
+  "tooltip.shell.riggingdamage": "장비 피해량",
+  "tooltip.shell.componentdamage": "장착 무기 피해량",
+  "tooltip.shell.entitydamage": "엔티티 피해량",
+  "tooltip.shell.minimumdamagepercentage": "최소 피해량 배율",
+  "tooltip.shell.specialeffect": "특수효과",
+  "tooltip.shell.incendiary": "점화",
+  "tooltip.shell.explosive": "폭발",
+  "tooltip.shell.none": "-없음-",
+
   "item.projectazure.spawnegg.spawn": "생성: ",
 
   "item.projectazure.bonk_bat.tooltip": "???: Aㅏ. [검열됨]을 만들어 주마.",
@@ -207,7 +224,14 @@
   "item.tooltip.chargefailed_nobattery": "충전 실패: 전원이 부족합니다!",
   "item.tooltip.ready": "제세동 준비 완료",
   "item.tooltip.not_revived": "해당 동료는 빈사 상태입니다. 제세동기를 사용하세요!",
-  "item.projectazure.ammo_generic": "통상탄",
+
+  "item.projectazure.ammo_generic": "함포용 통상탄",
+  "item.projectazure.ammo_he": "함포용 고폭탄",
+  "item.projectazure.ammo_incendiary": "함포용 소이탄",
+  "item.projectazure.ammo_ap": "함포용 철갑탄",
+  "item.projectazure.ammo_sap": "함포용 철갑고폭탄",
+  "item.projectazure.ammo_api": "함포용 철갑소이탄",
+  "item.projectazure.ammo_heiap": "함포용 철갑고폭소이탄",
 
   "item.projectazure.dust_orirock": "원암 가루",
 

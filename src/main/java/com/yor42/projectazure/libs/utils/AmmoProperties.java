@@ -48,15 +48,11 @@ public class AmmoProperties {
         return (rand.nextFloat()*(1-this.minimum_damage_modifier)+this.minimum_damage_modifier);
     }
 
-    public boolean ShouldDamageMultipleComponent(){
+    public boolean isExplosive(){
         return this.shouldDamageMultipleComponant;
     }
 
     public boolean isFiery(){
-        return this.category.isFiery();
-    }
-
-    public boolean isExplosive(){
         return this.category.isFiery();
     }
 

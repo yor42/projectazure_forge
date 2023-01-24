@@ -62,11 +62,8 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
         super.onHitBlock(p_230299_1_);
         if(this.properties != null) {
             if (!this.level.isClientSide()) {
-
-                if (this.properties.ShouldDamageMultipleComponent()) {
-                    boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner());
-                    this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float) 1, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
-                }
+                boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner());
+                this.level.explode(this, this.getX(), this.getY(), this.getZ(), this.properties.isExplosive()? 1F:0.2F, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
             }
         }
         this.remove();
