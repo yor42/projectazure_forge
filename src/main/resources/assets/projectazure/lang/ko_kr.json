@@ -291,6 +291,8 @@
   "equiment.utility": "지원",
   "equiment.empty": "비어 있음",
 
+  "gui.alloy_furnace.name": "합금로",
+
   "gui.recruitbeacon_remainingtime": "모집 완료까지 남은 시간",
   "gui.construction_eta": "건조 완료까지 남은 시간",
 

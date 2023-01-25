@@ -131,7 +131,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("tileentity.basic_refinery");
+        return new TranslationTextComponent("tileentity.basic_refinery.name");
     }
 
     @Override

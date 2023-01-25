@@ -15,9 +15,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import javax.annotation.Nonnull;
+
 public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe> {
 
-    private IDrawable icon;
+    private final IDrawable icon;
     private final IDrawable background;
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_pressing");
 
@@ -29,31 +31,35 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
 
     }
 
+    @Nonnull
     @Override
     public ResourceLocation getUid() {
         return UID;
     }
 
+    @Nonnull
     @Override
     public Class<? extends PressingRecipe> getRecipeClass() {
         return PressingRecipe.class;
     }
 
+    @Nonnull
     @Override
-    public String getTitle() {
-        return "Pressing";
-    }
+    public String getTitle() {return "";}
 
+    @Nonnull
     @Override
     public ITextComponent getTitleAsTextComponent() {
         return new TranslationTextComponent("recipe.pressing");
     }
 
+    @Nonnull
     @Override
     public IDrawable getBackground() {
         return this.background;
     }
 
+    @Nonnull
     @Override
     public IDrawable getIcon() {
         return this.icon;

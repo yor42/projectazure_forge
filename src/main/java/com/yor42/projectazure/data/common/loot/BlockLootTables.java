@@ -52,7 +52,6 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.add(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), net.minecraft.data.loot.BlockLootTables::createNameableBlockEntityTable);
         this.add(registerBlocks.ORIROCK.get(), (orirock) -> createSilkTouchDispatchTable(orirock, applyExplosionCondition(orirock, ItemLootEntry.lootTableItem(registerItems.ORIGINITE.get()).when(TableBonus.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.2F, 0.35F, 0.5F, 1.0F)).otherwise(ItemLootEntry.lootTableItem(registerBlocks.COBBLED_ORIROCK.get())))));
     }
-    //.acceptFunction(SetCount.builder(RandomValueRange.of(4.0F, 5.0F)))
     protected static LootTable.Builder onlyWithHammerDoubling(IItemProvider item) {
         return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantRange.exactly(1)).when(WITH_SLEDGEHAMMER).apply(SetCount.setCount(RandomValueRange.between(2.0F, 2.1F))).add(ItemLootEntry.lootTableItem(item)));
     }

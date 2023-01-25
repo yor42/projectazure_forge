@@ -111,7 +111,7 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("metal_press");
+        return new TranslationTextComponent("tileentity.metal_press.name");
     }
 
     @Override

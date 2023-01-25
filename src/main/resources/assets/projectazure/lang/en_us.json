@@ -291,6 +291,11 @@
   "equiment.utility": "Utility",
   "equiment.empty": "Empty",
 
+  "tileentity.alloy_furnace.name": "Alloy Furnace",
+  "tileentity.basic_refinery.name": "Basic Refinery",
+  "tileentity.crystal_chamber.name": "Crystal Growth Chamber",
+  "tileentity.metal_press.name": "Hydraulic Press",
+
   "gui.recruitbeacon_remainingtime": "ETA Until Recruit is Complete",
   "gui.construction_eta": "Construction ETA",
 

@@ -12,6 +12,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe> {
 
@@ -39,7 +41,12 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
 
     @Override
     public String getTitle() {
-        return "recipe.alloying";
+        return "";
+    }
+
+    @Override
+    public ITextComponent getTitleAsTextComponent() {
+        return new TranslationTextComponent("recipe.alloying");
     }
 
     @Override
@@ -54,7 +61,7 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
 
     @Override
     public void setIngredients(AlloyingRecipe alloyingRecipe, IIngredients iIngredients) {
-        iIngredients.setInputs(VanillaTypes.ITEM, alloyingRecipe.getIngredientStack());
+        iIngredients.setInputLists(VanillaTypes.ITEM, alloyingRecipe.getIngredientStack());
         iIngredients.setOutput(VanillaTypes.ITEM, alloyingRecipe.getResultItem());
     }
 

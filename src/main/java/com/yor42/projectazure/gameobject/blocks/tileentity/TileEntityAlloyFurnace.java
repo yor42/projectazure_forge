@@ -123,7 +123,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
 
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("alloy_furnace");
+        return new TranslationTextComponent("tileentity.alloy_furnace.name");
     }
 
     @Override
@@ -296,9 +296,7 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
     }
 
     private void smelt(@Nullable IRecipe<?> recipe) {
-        if (recipe != null && this.canSmelt(recipe)) {
-            ItemStack input1 = this.inventory.getStackInSlot(0);
-            ItemStack input2 = this.inventory.getStackInSlot(1);
+        if (recipe instanceof AlloyingRecipe && this.canSmelt(recipe)) {
             ItemStack recipeOutput = recipe.getResultItem();
             ItemStack outputslot = this.inventory.getStackInSlot(3);
             if (outputslot.isEmpty()) {
@@ -311,15 +309,10 @@ public class TileEntityAlloyFurnace extends LockableTileEntity implements INamed
                 this.setRecipeUsed(recipe);
             }
 
-            int countslot1 = 1;
-            int countslot2 = 1;
-            if(recipe instanceof AlloyingRecipe){
-                countslot1 = ((AlloyingRecipe) recipe).getIng1Count();
-                countslot2 = ((AlloyingRecipe) recipe).getIng2Count();
+            for(int i=0; i<2; i++){
+                byte count = ((AlloyingRecipe)recipe).ingredients.get(i).getSecond();
+                this.inventory.getStackInSlot(i).shrink(count);
             }
-
-            input1.shrink(countslot1);
-            input2.shrink(countslot2);
         }
     }
 

@@ -103,9 +103,10 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
         this.recipeType = registerRecipes.Types.CRYSTALIZING;
     }
 
+    @Nonnull
     @Override
     protected ITextComponent getDefaultName() {
-        return new TranslationTextComponent("block.projectazure.crystal_chamber");
+        return new TranslationTextComponent("tileentity.crystal_chamber.name");
     }
 
     //TODO

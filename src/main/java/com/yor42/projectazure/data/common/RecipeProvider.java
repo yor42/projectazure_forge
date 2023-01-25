@@ -98,16 +98,15 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     }
 
     private void generateAlloyingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
-        AlloyingRecipeBuilder.addRecipe(Ingredient.of(ModTags.Items.INGOT_COPPER), 3,Ingredient.of(ModTags.Items.INGOT_TIN), 1, registerItems.INGOT_BRONZE.get(), 4, 300)
-                .addCriterion("hastin", has(ModTags.Items.INGOT_TIN))
-                .addCriterion("hascopper", has(ModTags.Items.INGOT_COPPER))
+        AlloyingRecipeBuilder.AlloyRecipe(registerItems.INGOT_BRONZE.get(), (byte)4)
+                .addIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), (byte) 3)
+                .addIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), (byte) 1)
                 .build(consumer);
 
-        AlloyingRecipeBuilder.addRecipe(Ingredient.of(ModTags.Items.INGOT_COPPER), 2,Ingredient.of(ModTags.Items.INGOT_ZINC), 1, registerItems.INGOT_BRASS.get(), 3, 300)
-                .addCriterion("haszinc", has(ModTags.Items.INGOT_ZINC))
-                .addCriterion("hascopper", has(ModTags.Items.INGOT_COPPER))
+        AlloyingRecipeBuilder.AlloyRecipe(registerItems.INGOT_BRASS.get(), (byte)3)
+                .addIngredient(Ingredient.of(ModTags.Items.INGOT_ZINC))
+                .addIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER))
                 .build(consumer);
-
     }
     private void generatePressingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
         PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.of(ItemTags.LOGS), Ingredient.of(registerItems.MOLD_EXTRACTION.get()), 1, 200)

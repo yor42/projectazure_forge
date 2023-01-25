@@ -13,6 +13,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import static com.yor42.projectazure.libs.Constants.CRYSTAL_CHAMBER_SOLUTION_TANK_CAPACITY;
 
@@ -43,7 +45,12 @@ public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<Crystalizi
 
     @Override
     public String getTitle() {
-        return "recipe.crystalizing";
+        return "";
+    }
+
+    @Override
+    public ITextComponent getTitleAsTextComponent() {
+        return new TranslationTextComponent("recipe.crystalizing");
     }
 
     @Override
