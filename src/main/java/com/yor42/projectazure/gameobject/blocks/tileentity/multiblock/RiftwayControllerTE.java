@@ -1,12 +1,19 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
+import com.lowdragmc.multiblocked.api.pattern.BlockPattern;
+import com.lowdragmc.multiblocked.api.pattern.FactoryBlockPattern;
+import com.lowdragmc.multiblocked.api.pattern.Predicates;
+import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
+import com.lowdragmc.multiblocked.common.capability.EntityMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
+import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.util.ResourceLocation;
 
 public class RiftwayControllerTE extends ControllerTileEntity {
@@ -18,8 +25,13 @@ public class RiftwayControllerTE extends ControllerTileEntity {
     public static void registerTE(){
         RiftwayDefinition.getRecipeMap().inputCapabilities.add(ItemMultiblockCapability.CAP);
         RiftwayDefinition.getRecipeMap().inputCapabilities.add(FEMultiblockCapability.CAP);
+        RiftwayDefinition.getRecipeMap().outputCapabilities.add(EntityMultiblockCapability.CAP);
+        RiftwayDefinition.setBasePattern(FactoryBlockPattern.start().aisle("CDLDC", "FDDDF", "FDDDF", "FFCFF").aisle("CCCCC", "FDFDF", "FDFDF", "FFCFF").aisle("LFEFL", "DFAF@", "CFAFC", "SSSSS").aisle("SSSSS", "AAAAA", "AAAAA", "AAAAA").where("A", Predicates.any()).where("@", Predicates.component(RiftwayDefinition)).where("E", Predicates.component(HatchTE.EntityDefinition).disableRenderFormed()).where("L", Predicates.component(HatchTE.EnergyHatchDefinition).or(Predicates.component(HatchTE.ItemHatchDefinition)).or(Predicates.component(HatchTE.FluidHatchDefinition))).where("A", Predicates.air()).where("S", Predicates.blocks(registerBlocks.MACHINE_FRAME_SLAB.get()).disableRenderFormed()).where("F", Predicates.blocks(registerBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("D", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).where("C", Predicates.blocks(registerBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).build());
         RiftwayDefinition.getBaseStatus().setRenderer(ResourceUtils.getMBDBlockModel("riftway_controller"));
-        RiftwayDefinition.getIdleStatus().setRenderer(new MBDGeoRenderer("riftway", true));
-        RiftwayDefinition.getWorkingStatus().setRenderer(new MBDGeoRenderer("riftway", true));
+        RiftwayDefinition.getIdleStatus().setRenderer(new MBDGeoRenderer("riftway_off", "riftway", true));
+        RiftwayDefinition.getWorkingStatus().setRenderer(new MBDGeoRenderer("riftway_on", "riftway", true));
+        RiftwayDefinition.properties.isOpaque = false;
+        RiftwayDefinition.properties.tabGroup = "pa_machines";
+        MbdComponents.registerComponent(RiftwayDefinition);
     }
 }

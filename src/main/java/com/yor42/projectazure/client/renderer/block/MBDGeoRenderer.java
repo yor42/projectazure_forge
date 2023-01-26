@@ -11,13 +11,20 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 
 public class MBDGeoRenderer extends GeoComponentRenderer {
-    public MBDGeoRenderer(String modelName, boolean isGlobal) {
+
+    private final String texturename;
+    public MBDGeoRenderer(String modelName, String texturename, boolean isGlobal) {
         super(modelName, isGlobal);
+        this.texturename = texturename;
+    }
+
+    public MBDGeoRenderer(String modelName, boolean isGlobal) {
+        this(modelName, modelName, isGlobal);
     }
 
     @OnlyIn(Dist.CLIENT)
     public void onTextureSwitchEvent(TextureStitchEvent.Pre event) {
-        event.addSprite(new ResourceLocation(Constants.MODID, this.modelName));
+        event.addSprite(new ResourceLocation(Constants.MODID, this.texturename));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -38,6 +45,6 @@ public class MBDGeoRenderer extends GeoComponentRenderer {
     }
 
     public ResourceLocation getTextureLocation(GeoComponentRenderer.ComponentFactory entity) {
-        return new ResourceLocation(Constants.MODID, String.format("textures/block/%s.png", this.modelName));
+        return new ResourceLocation(Constants.MODID, String.format("textures/block/%s.png", this.texturename));
     }
 }

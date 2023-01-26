@@ -128,6 +128,7 @@ public class itemModelProvider extends ItemModelProvider {
 
         buildMultiblockControllerModel("ammo_press");
         buildMultiblockControllerModel("originium_generator");
+        buildMultiblockControllerModel("riftway");
 
         buildSimpleBlockModel("machine_component");
         buildSimpleBlockModel("machine_dynamo");

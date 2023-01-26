@@ -1,6 +1,7 @@
 package com.yor42.projectazure.data.client;
 
 import com.mojang.datafixers.kinds.Const;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.SlabBlock;
@@ -24,8 +25,7 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
         simpleBlock(registerBlocks.ORIROCK.get());
         simpleBlock(registerBlocks.REENFORCEDCONCRETE.get());
         simpleBlock(registerBlocks.REENFORCED_PLANK.get());
-        simpleBlock(registerBlocks.COBBLED_ORIROCK.get());
-
+        simpleBlock(registerBlocks.COBBLED_ORIROCK.get());;
         simpleBlock(registerBlocks.MACHINE_COMPONENTBLOCK.get());
 
         slabBlock((SlabBlock) registerBlocks.MACHINE_FRAME_SLAB.get(), new ResourceLocation(Constants.MODID, "block/machine_frame"), new ResourceLocation(Constants.MODID, "block/machine_frame"));

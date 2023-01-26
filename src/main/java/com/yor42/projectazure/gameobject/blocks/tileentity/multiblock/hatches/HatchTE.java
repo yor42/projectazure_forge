@@ -34,12 +34,14 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
     public enum HatchType{
         FLUID,
         ENERGY,
-        ITEM
+        ITEM,
+        ENTITY
     }
 
     public static final PartDefinition ItemHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "item_hatch"), (definition)->new HatchTE(definition, HatchType.ITEM));
     public static final PartDefinition EnergyHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "energy_hatch"),(definition)->new HatchTE(definition, HatchType.ENERGY));
     public static final PartDefinition FluidHatchDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "fluid_hatch"),(definition)->new HatchTE(definition, HatchType.FLUID));
+    public static final PartDefinition EntityDefinition = new PartDefinition(new ResourceLocation(Constants.MODID, "entity_hatch"),(definition)->new HatchTE(definition, HatchType.ENTITY));
 
     private final HatchType type;
 
@@ -91,14 +93,33 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
 
     protected void initTraitUI(TabContainer tabContainer, PlayerEntity PlayerEntity) {
         WidgetGroup group = new WidgetGroup(20, 0, 176, 256);
-        String textureloc = this.type == HatchType.ITEM? Constants.MODID+":textures/gui/item_hatch.png":Constants.MODID+":textures/gui/hatch_other.png";
+
+        String textureloc;
+
+        switch (this.type){
+            case ITEM:
+                textureloc = Constants.MODID+":textures/gui/item_hatch.png";
+                break;
+            default:
+                textureloc = Constants.MODID+":textures/gui/hatch_other.png";
+                break;
+            case FLUID:
+                textureloc = Constants.MODID+":textures/gui/hatch_fluid.png";
+                break;
+        }
         tabContainer.addTab((new TabButton(0, tabContainer.containerGroup.widgets.size() * 20, 20, 20)).setTexture((new ResourceTexture("multiblocked:textures/gui/custom_gui_tab_button.png")).getSubTexture(0.0, 0.0, 1.0, 0.5), (new ResourceTexture("multiblocked:textures/gui/custom_gui_tab_button.png")).getSubTexture(0.0, 0.5, 1.0, 0.5)), group);
         group.addWidget(new ImageWidget(0, 0, 256, 256, new ResourceTexture(textureloc)));
-        if(this.type == HatchType.ITEM) {
-            group.addWidget(new SlotWidget(this.inventory, 0, 79, 35, true, true));
-        }
-        else if(this.type==HatchType.ENERGY){
-            group.addWidget((new ProgressWidget(this::getProgress, 7, 37, 162, 14, new ResourceTexture(Constants.MODID+":textures/gui/hatch_energybar.png"))).setDynamicHoverTips(this::dynamicHoverTips));
+
+        switch (this.type){
+            case ITEM:
+                group.addWidget(new SlotWidget(this.inventory, 0, 79, 35, true, true));
+                break;
+            case ENERGY:
+                group.addWidget((new ProgressWidget(this::getProgress, 7, 37, 162, 14, new ResourceTexture(Constants.MODID+":textures/gui/hatch_energybar.png"))).setDynamicHoverTips(this::dynamicEnergyHoverTips));
+                break;
+            case FLUID:
+                group.addWidget((new TankWidget(this.tank, 61, 16,54, 54, true, true)));
+                break;
         }
         
         int slot;
@@ -117,7 +138,7 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
     private double getProgress() {
         return ((float) this.battery.getEnergyStored() / (float)this.battery.getMaxEnergyStored());}
 
-    protected String dynamicHoverTips(double progress) {
+    protected String dynamicEnergyHoverTips(double progress) {
         return LocalizationUtils.format("multiblocked.gui.trait.fe.progress", (int)((double)this.battery.getMaxEnergyStored() * progress), this.battery.getMaxEnergyStored());
     }
 
@@ -155,6 +176,16 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
         EnergyHatchDefinition.properties.tabGroup = "pa_machines";
         EnergyHatchDefinition.properties.isOpaque = true;
         MbdComponents.registerComponent(EnergyHatchDefinition);
+        FluidHatchDefinition.getBaseStatus().setRenderer(()-> ResourceUtils.getMBDBlockModel("fluid_hatch"));
+        FluidHatchDefinition.properties.rotationState = CustomProperties.RotationState.NONE;
+        FluidHatchDefinition.properties.tabGroup = "pa_machines";
+        FluidHatchDefinition.properties.isOpaque = true;
+        MbdComponents.registerComponent(FluidHatchDefinition);
+        EntityDefinition.getBaseStatus().setRenderer(()-> ResourceUtils.getMBDBlockModel("entity_hatch"));
+        EntityDefinition.properties.rotationState = CustomProperties.RotationState.NONE;
+        EntityDefinition.properties.tabGroup = "pa_machines";
+        EntityDefinition.properties.isOpaque = true;
+        MbdComponents.registerComponent(EntityDefinition);
         /*
 
         FluidHatchDefinition.baseRenderer = ResourceUtils.getMBDBlockModel("fluid_hatch");
