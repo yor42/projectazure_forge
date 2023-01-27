@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.crafting;
+package com.yor42.projectazure.gameobject.crafting.recipes;
 
 import com.yor42.projectazure.interfaces.IItemDestroyable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;

@@ -1,6 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
-import com.yor42.projectazure.gameobject.crafting.*;
+import com.yor42.projectazure.gameobject.crafting.recipes.*;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;

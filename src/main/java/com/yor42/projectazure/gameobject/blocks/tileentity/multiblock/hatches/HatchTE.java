@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches;
 
+import com.google.gson.JsonObject;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
@@ -182,9 +183,10 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
         FluidHatchDefinition.properties.isOpaque = true;
         MbdComponents.registerComponent(FluidHatchDefinition);
         EntityDefinition.getBaseStatus().setRenderer(()-> ResourceUtils.getMBDBlockModel("entity_hatch"));
-        EntityDefinition.properties.rotationState = CustomProperties.RotationState.NONE;
+        EntityDefinition.properties.rotationState = CustomProperties.RotationState.Y_AXIS;
         EntityDefinition.properties.tabGroup = "pa_machines";
         EntityDefinition.properties.isOpaque = true;
+        EntityDefinition.traits.add("entity", new JsonObject());
         MbdComponents.registerComponent(EntityDefinition);
         /*
 

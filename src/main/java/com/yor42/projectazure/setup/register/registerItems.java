@@ -179,6 +179,8 @@ public class registerItems {
 
     public static final RegistryObject<Item> HAMMER_IRON = ITEMS.register("hammer_iron", () -> new ItemCraftTool(43));
 
+    public static final RegistryObject<Item> FOR_DESTABILIZER = ITEMS.register("fordestabilizer", () -> new ItemCraftTool(3));
+
     public static final RegistryObject<Item> STEEL_CUTTER = ITEMS.register("steel_cutter", () -> new ItemCraftTool(70));
 
     public static final RegistryObject<Item> GLITCHED_PHONE = ITEMS.register("glitched_phone", () -> new ItemGlitchedPhone(new Item.Properties().stacksTo(1).tab(PA_GROUP)));

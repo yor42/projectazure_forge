@@ -2,9 +2,8 @@ package com.yor42.projectazure.gameobject.blocks.tileentity;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerCrystalGrowthChamber;
-import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
+import com.yor42.projectazure.gameobject.crafting.recipes.CrystalizingRecipe;
 import com.yor42.projectazure.setup.register.registerFluids;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

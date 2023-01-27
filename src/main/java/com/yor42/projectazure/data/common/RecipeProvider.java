@@ -273,6 +273,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steel", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerItems.FOR_DESTABILIZER.get(),2)
+                .define('O', Tags.Items.OBSIDIAN)
+                .define('C', registerItems.ORUNDUM.get())
+                .define('E', Items.ENDER_EYE)
+                .pattern("OCO")
+                .pattern("CEC")
+                .pattern("OCO")
+                .unlockedBy("has_obsidian", has(Tags.Items.OBSIDIAN))
+                .unlockedBy("has_eye", has(Items.ENDER_EYE))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(registerBlocks.METAL_PRESS.get())
                 .define('L', Items.LEVER)
                 .define('R', Blocks.REDSTONE_BLOCK)

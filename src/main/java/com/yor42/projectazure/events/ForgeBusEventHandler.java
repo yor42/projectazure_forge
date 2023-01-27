@@ -1,6 +1,8 @@
 package com.yor42.projectazure.events;
 
+import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.lowdragmc.multiblocked.api.recipe.ItemsIngredient;
+import com.lowdragmc.multiblocked.common.capability.EntityMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.tac.guns.init.ModItems;
@@ -9,12 +11,16 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
-import com.yor42.projectazure.gameobject.crafting.CrushingRecipe;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
+import com.yor42.projectazure.gameobject.crafting.ingredients.EntityIngredientCompanions;
+import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.setup.register.registerEntity;
+import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.block.BedBlock;
@@ -173,6 +179,20 @@ public class ForgeBusEventHandler {
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), 1))
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_58x42.get(), 40)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
+            RiftwayControllerTE.RiftwayDefinition.getRecipeMap().start().name("akn")
+                    .inputItems(new ItemsIngredient(Ingredient.of(registerItems.ORUNDUM.get()),10), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .chance((float) (PAConfig.CONFIG.Star_4_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.AMIYA.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.NEARL.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.LAPPLAND.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.SIEGE.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.ROSMONTIS.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.MUDROCK.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.CHEN.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.W.get()))
+                    .chance(1F).perTick(true).inputFE(2500).duration(1200).buildAndRegister();
+
+
         }
         catch (Exception e){
             Main.LOGGER.error("Failed to register recipe:"+e.getMessage());

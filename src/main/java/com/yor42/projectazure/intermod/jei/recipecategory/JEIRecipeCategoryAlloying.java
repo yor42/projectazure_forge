@@ -1,6 +1,6 @@
 package com.yor42.projectazure.intermod.jei.recipecategory;
 
-import com.yor42.projectazure.gameobject.crafting.AlloyingRecipe;
+import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import mezz.jei.api.constants.VanillaTypes;

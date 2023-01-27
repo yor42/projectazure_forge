@@ -1,6 +1,6 @@
 package com.yor42.projectazure.intermod.jei.recipecategory;
 
-import com.yor42.projectazure.gameobject.crafting.PressingRecipe;
+import com.yor42.projectazure.gameobject.crafting.recipes.PressingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import mezz.jei.api.constants.VanillaTypes;

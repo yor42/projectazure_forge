@@ -32,6 +32,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -102,7 +103,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         if(AttackCount == 1) {
             this.playSound(CHEN_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
         }
-        boolean ishit = false;
+        boolean ishit;
         if(AttackCount == 2){
             ishit = target.hurt(this.isAngry()? DamageSources.causeRevengeDamage(this):DamageSource.mobAttack(this), damage+3);
             this.AttackCount = 0;
@@ -145,7 +146,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
@@ -156,32 +157,32 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_leg_start").addAnimation("sit_leg", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_leg_start").addAnimation("sit_leg", ILoopType.EDefaultLoopTypes.LOOP));
                 }
             }
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("swim_leg", true));
+            event.getController().setAnimation(builder.addAnimation("swim_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("melee_attack_leg", true));
+            event.getController().setAnimation(builder.addAnimation("melee_attack_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_leg", true));
+                event.getController().setAnimation(builder.addAnimation("run_leg", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walk_leg", true));
+                event.getController().setAnimation(builder.addAnimation("walk_leg", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
             return PlayState.STOP;
         }
-        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        event.getController().setAnimation(builder.addAnimation("idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.STOP;
     }
 
@@ -193,16 +194,16 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isOrderedToSit() && this.getVehicle() == null){
-            event.getController().setAnimation(builder.addAnimation("sit_tail_start").addAnimation("sit_tail", true));
+            event.getController().setAnimation(builder.addAnimation("sit_tail_start").addAnimation("sit_tail", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_tail", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_tail", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat_tail", true));
+            event.getController().setAnimation(builder.addAnimation("pat_tail", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else{
-            event.getController().setAnimation(builder.addAnimation("idle_tail", true));
+            event.getController().setAnimation(builder.addAnimation("idle_tail", ILoopType.EDefaultLoopTypes.LOOP));
         }
 
         return PlayState.CONTINUE;
@@ -231,27 +232,27 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             return PlayState.STOP;
         }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            event.getController().setAnimation(builder.addAnimation("lewd", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("melee_attack_arm", true));
+            event.getController().setAnimation(builder.addAnimation("melee_attack_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat", true));
+            event.getController().setAnimation(builder.addAnimation("pat", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.getUsedItemHand() == Hand.OFF_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
@@ -265,7 +266,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
@@ -273,20 +274,20 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
         }
         else if(this.isBlocking()){
-            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            event.getController().setAnimation(builder.addAnimation("shield_block", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isGettingHealed()){
-            event.getController().setAnimation(builder.addAnimation("heal_arm", true));
+            event.getController().setAnimation(builder.addAnimation("heal_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("swim_arm", true));
+            event.getController().setAnimation(builder.addAnimation("swim_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
@@ -299,10 +300,10 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
             }
             else {
                 if(this.getMainHandItem().getItem() instanceof TieredItem){
-                    event.getController().setAnimation(builder.addAnimation("sit_arm_toolmainhand", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_arm_toolmainhand", ILoopType.EDefaultLoopTypes.LOOP));
                 }
                 else {
-                    event.getController().setAnimation(builder.addAnimation("sit_arm_emptymainhand", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_arm_emptymainhand", ILoopType.EDefaultLoopTypes.LOOP));
                 }
             }
             return PlayState.CONTINUE;
@@ -312,7 +313,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
@@ -320,22 +321,22 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
         }
         else if(this.isMoving()) {
             if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_arm", true));
+                event.getController().setAnimation(builder.addAnimation("run_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walk_arm", true));
+                event.getController().setAnimation(builder.addAnimation("walk_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else{
-            event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+            event.getController().setAnimation(builder.addAnimation("idle_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
     }

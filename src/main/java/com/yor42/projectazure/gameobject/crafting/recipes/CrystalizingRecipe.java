@@ -1,4 +1,4 @@
-package com.yor42.projectazure.gameobject.crafting;
+package com.yor42.projectazure.gameobject.crafting.recipes;
 
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;

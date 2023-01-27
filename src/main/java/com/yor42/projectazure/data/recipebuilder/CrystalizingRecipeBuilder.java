@@ -1,7 +1,7 @@
 package com.yor42.projectazure.data.recipebuilder;
 
 import com.google.gson.JsonObject;
-import com.yor42.projectazure.gameobject.crafting.CrystalizingRecipe;
+import com.yor42.projectazure.gameobject.crafting.recipes.CrystalizingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;

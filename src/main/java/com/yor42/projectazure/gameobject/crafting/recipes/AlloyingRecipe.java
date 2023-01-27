@@ -1,7 +1,6 @@
-package com.yor42.projectazure.gameobject.crafting;
+package com.yor42.projectazure.gameobject.crafting.recipes;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;

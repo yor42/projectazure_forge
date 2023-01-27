@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OCO",
+    "CEC",
+    "OCO"
+  ],
+  "key": {
+    "O": {
+      "tag": "forge:obsidian"
+    },
+    "C": {
+      "item": "projectazure:orundum"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    }
+  },
+  "result": {
+    "item": "projectazure:fordestabilizer",
+    "count": 2
+  }
+}
