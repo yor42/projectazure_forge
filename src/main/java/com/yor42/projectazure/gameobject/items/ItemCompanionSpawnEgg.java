@@ -4,32 +4,58 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import javafx.util.Pair;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.SpawnEggItem;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
+import java.util.*;
 
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 
 public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends Item {
 
-    RegistryObject<EntityType<T>> Entity;
+    private final RegistryObject<EntityType<T>> Entity;
 
-    public ItemCompanionSpawnEgg(RegistryObject<EntityType<T>> Entity, Properties properties) {
+    private static final List<Pair<String, ItemCompanionSpawnEgg<?>>> TYPE_MAP = new ArrayList<>();
+
+    public ItemCompanionSpawnEgg(RegistryObject<EntityType<T>> type, Properties properties) {
         super(properties);
-        this.Entity = Entity;
+        this.Entity = type;
+        TYPE_MAP.add(new Pair<>(type.getId().toString(), this));
+    }
+
+    @Nullable
+    public static ItemCompanionSpawnEgg<?> fromEntityType(@Nullable EntityType<?> type)
+    {
+
+        if(type == null){
+            return null;
+        }
+        String string = type.getRegistryName().toString();
+
+        //For whatever reason map doesn't work here.
+        for(Pair<String, ItemCompanionSpawnEgg<?>> entry:TYPE_MAP){
+            if(Objects.equals(entry.getKey(), string)){
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     @Nonnull
@@ -67,6 +93,11 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
 
         return ActionResultType.CONSUME;
 
+    }
+
+    public EntityType<?> getType(@Nullable CompoundNBT tag)
+    {
+        return this.Entity.get();
     }
 
     @Override

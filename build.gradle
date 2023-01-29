@@ -191,10 +191,10 @@ dependencies {
     }
 
     // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
     //implementation fg.deobf('curse.maven:timeless-and-classics-491264:3802219')//Timeless and Classic
 
 

@@ -107,6 +107,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("pistol_grip");
 
         buildModel("orundum");
+        buildModel("saint_quartz");
         buildModel("headhunting_pcb");
 
         buildModel("originium_seed");

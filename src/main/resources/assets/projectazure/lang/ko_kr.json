@@ -40,6 +40,8 @@
   "item.projectazure.originite": "오리지늄 조각",
   "item.projectazure.originium_prime": "순오리지늄",
 
+  "item.projectazure.fordestabilizer": "차원 균열 생성기",
+
   "item.projectazure.developer_bonus": "프로젝트:애저 개발자 지원 패키지",
   "item.projectazure.developer_bonus.tooltip": "프로젝트 애저 개발자에게 지급되는 서버 디버깅용 패키지",
   "item.projectazure.developer_bonus.tooltip.owner": "소유자: ",
@@ -97,7 +99,7 @@
   "item.projectazure.sheath": "레이신 검",
   "item.projectazure.sheath.tooltip": "강철로 만든 검은 검.",
   "item.projectazure.chixiao": "적소",
-  "item.projectazure.chixiao.tooltip": "앰버 오리지늄으로 만든 붉은 검집의 검. \n 아츠 능력이 없는 사람에게는 일반 검일 뿐이지만,\n칼빵(+광석병) 앞에서는 모두가 평등합니다.",
+  "item.projectazure.chixiao.tooltip": "앰버 오리지늄으로 만든 붉은 검집의 검. \n 아츠 능력이 없는 사람에게는 일반 검일 뿐이지만,\n칼빵 앞에서는 모두가 평등합니다.",
   "item.projectazure.crescentkatana_shiro": "반월검 - 백",
   "item.projectazure.crescentkatana_shiro.tooltip": "손잡이 부근에 반달 모양의 날이 달린 검.",
   "item.projectazure.crescentkatana_kuro": "반월검 - 흑",
@@ -174,6 +176,17 @@
 
   "item.projectazure.bitumen": "역청",
 
+  "item.projectazure.ammo_generic": "함포용 통상탄",
+  "item.projectazure.ammo_he": "함포용 고폭탄",
+  "item.projectazure.ammo_incendiary": "함포용 소이탄",
+  "item.projectazure.ammo_ap": "함포용 철갑탄",
+  "item.projectazure.ammo_sap": "함포용 철갑고폭탄",
+  "item.projectazure.ammo_api": "함포용 철갑소이탄",
+  "item.projectazure.ammo_heiap": "함포용 철갑고폭소이탄",
+
+  "item.projectazure.dust_orirock": "원암 가루",
+
+
   "item.tooltip.gunclass": "화기 분류",
 
   "item.tooltip.equipmenttype": "장비 분류",
@@ -185,6 +198,24 @@
   "item.tooltip.shiftinfo": "더 자세한 정보를 보려면 %s 를 누르세요",
 
   "item.tooltip.bed_position": "저장된 침대 위치: %s",
+
+  "item.projectazure.spawnegg.spawn": "생성: ",
+
+  "item.projectazure.bonk_bat.tooltip": "???: Aㅏ. [검열됨]을 만들어 주마.",
+
+  "item.projectazure.rainbowcube.owner": "소유자:",
+  "item.projectazure.rainbowcube.tooltip1": "신비한 기운을 내뿜는 무지개색 큐브입니다.",
+  "item.projectazure.rainbowcube.tooltip2": "시작 함선을 선택하려먼 사용하세요.",
+
+  "item.tooltip.firerate": "발사 속도",
+  "item.tooltip.remainingammo": "남은 탄환",
+  "item.tooltip.remainingfuel": "남은 연료",
+  "item.tooltip.hanger_slot_usage": "격납고 사용량",
+  "item.tooltip.energystored": "저장된 에너지: %s",
+  "item.tooltip.chargeprogress": "충전 진행도: %s",
+  "item.tooltip.chargefailed_nobattery": "충전 실패: 전원이 부족합니다!",
+  "item.tooltip.ready": "제세동 준비 완료",
+  "item.tooltip.not_revived": "해당 동료는 빈사 상태입니다. 제세동기를 사용하세요!",
 
   "tooltip.companion.rarity": "희귀도",
   "tooltip.companion.type": "동료 분류",
@@ -207,37 +238,9 @@
   "tooltip.shell.explosive": "폭발",
   "tooltip.shell.none": "-없음-",
 
-  "item.projectazure.spawnegg.spawn": "생성: ",
-
-  "item.projectazure.bonk_bat.tooltip": "???: Aㅏ. [검열됨]을 만들어 주마.",
-
-  "item.projectazure.rainbowcube.owner": "소유자:",
-  "item.projectazure.rainbowcube.tooltip1": "신비한 기운을 내뿜는 무지개색 큐브입니다.",
-  "item.projectazure.rainbowcube.tooltip2": "시작 함선을 선택하려먼 사용하세요.",
-
-  "item.tooltip.firerate": "발사 속도",
-  "item.tooltip.remainingammo": "남은 탄환",
-  "item.tooltip.remainingfuel": "남은 연료",
-  "item.tooltip.hanger_slot_usage": "격납고 사용량",
-  "item.tooltip.energystored": "저장된 에너지: %s",
-  "item.tooltip.chargeprogress": "충전 진행도: %s",
-  "item.tooltip.chargefailed_nobattery": "충전 실패: 전원이 부족합니다!",
-  "item.tooltip.ready": "제세동 준비 완료",
-  "item.tooltip.not_revived": "해당 동료는 빈사 상태입니다. 제세동기를 사용하세요!",
-
-  "item.projectazure.ammo_generic": "함포용 통상탄",
-  "item.projectazure.ammo_he": "함포용 고폭탄",
-  "item.projectazure.ammo_incendiary": "함포용 소이탄",
-  "item.projectazure.ammo_ap": "함포용 철갑탄",
-  "item.projectazure.ammo_sap": "함포용 철갑고폭탄",
-  "item.projectazure.ammo_api": "함포용 철갑소이탄",
-  "item.projectazure.ammo_heiap": "함포용 철갑고폭소이탄",
-
-  "item.projectazure.dust_orirock": "원암 가루",
-
   "block.projectazure.recruit_beacon": "모집 신호기",
   "block.projectazure.recruit_beacon.tooltip": "동료를 모집하는데 쓰이는 신호기입니다",
-  "block.projectazure.metal_press": "유압 프레스",
+  "block.projectazure.metal_press": "유압 압착기",
   "block.projectazure.metal_press.tooltip": "재료에 강한 힘을 가하는 장비입니다.",
   "block.projectazure.alloy_furnace": "합금로",
   "block.projectazure.alloy_furnace.tooltip": "2개의 금속을 혼합해 하나의 합금으로 만드는 화로입니다.",
@@ -249,11 +252,10 @@
   "block.projectazure.drydock_controller": "Drydock Controller",
   "block.projectazure.drydock_controller.tooltip": "Brain of Drydock; part of multiblock Structure.",
   "block.projectazure.machine_frame": "기계 프레임",
+  "block.projectazure.machine_frame_slab": "기계 프레임 반블럭",
   "block.projectazure.item_hatch": "아이템 해치",
   "block.projectazure.energy_hatch": "에너지 해치",
   "block.projectazure.machine_dynamo": "다이너모 코일",
-  "block.projectazure.originium_generator": "오리지늄 반응로",
-  "block.projectazure.ammo_press": "탄약 압착기 제어 패널",
   "block.projectazure.reenforced_plank": "강화된 판자",
   "block.projectazure.reenforced_concrete": "강화 콘크리트",
   "block.projectazure.reenforced_concrete.tooltip": "강철로 보강된 콘크리트입니다; 멀티블럭 구조물의 일부로 쓰입니다.",
@@ -276,6 +278,10 @@
   "block.projectazure.warped_pantry": "뒤틀린 식품 저장고",
   "block.projectazure.crimson_pantry": "진홍빛 식품 저장고",
 
+  "block.projectazure.originium_generator": "오리지늄 반응로",
+  "block.projectazure.ammo_press": "탄약 압착기 제어 패널",
+  "block.projectazure.riftway": "차원 전송기",
+
 
   "originium_generator.name": "오리지늄 반응로",
   "ammo_press.name": "탄약 압착기",
@@ -291,10 +297,16 @@
   "equiment.utility": "지원",
   "equiment.empty": "비어 있음",
 
-  "gui.alloy_furnace.name": "합금로",
+  "tileentity.alloy_furnace.name": "합금로",
+  "tileentity.basic_refinery.name": "기본 정유기",
+  "tileentity.crystal_chamber.name": "결정 성장실",
+  "tileentity.metal_press.name": "유압 압착기",
 
   "gui.recruitbeacon_remainingtime": "모집 완료까지 남은 시간",
   "gui.construction_eta": "건조 완료까지 남은 시간",
+
+  "gui.riftway_remainingtime": "잔여 시간",
+  "gui.riftway_status": "상태: ",
 
   "gui.machine.start": "시작",
 
@@ -494,6 +506,10 @@
   "nether_quartz": "네더 석영",
   "originium": "오리지늄",
 
+  "idle": "대기 중",
+  "working": "작동 중",
+  "suspend": "중단됨",
+
   "message.energyguns.gun.ammo.energy": "포지 에너지",
 
   "recruit_beacon": "모집 신호기",
@@ -555,8 +571,11 @@
 
   "multiblocked.recupe_map.originium_generation": "오리지늄 반응",
   "multiblocked.recupe_map.ammopress": "탄약 압착기",
+  "multiblocked.recupe_map.riftway": "차원 전송",
 
-  "recipe.alloying": "Alloying",
-  "recipe.pressing": "Pressing",
-  "recipe.crystalizing": "Crystalizing"
+  "multiblocked.capability.companion": "컴패니언",
+
+  "recipe.alloying": "합금 제작",
+  "recipe.pressing": "압착",
+  "recipe.crystalizing": "결정 "
 }

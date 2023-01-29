@@ -9,6 +9,7 @@ import com.lowdragmc.multiblocked.api.recipe.RecipeLogic;
 import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.RiftwayRecipes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class RiftwayRecipeLogic extends RecipeLogic {
             if (handleFuelRecipe()) {
                 recipe.preWorking(this.controller);
                 if (recipe.handleRecipeIO(IO.IN, this.controller)) {
+                    this.canStart = false;
                     lastRecipe = recipe;
                     setStatus(Status.WORKING);
                     this.progress = 0;
@@ -35,6 +37,14 @@ public class RiftwayRecipeLogic extends RecipeLogic {
                     markDirty();
                 }
             }
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        if(timer % 5 == 0 && canStart){
+            canStart = false;
         }
     }
 
@@ -50,13 +60,31 @@ public class RiftwayRecipeLogic extends RecipeLogic {
 
         if(isRiftway){
             ((RiftwayRecipes) lastRecipe).setPlayerUUID(null);
-            this.userID = null;
         }
+        this.userID = null;
 
         setStatus(Status.IDLE);
         progress = 0;
         duration = 0;
         markDirty();
+    }
+
+    @Override
+    public void readFromNBT(CompoundNBT compound) {
+        if(compound.contains("userid")) {
+            this.userID = compound.getUUID("userid");
+        }
+        this.canStart = compound.getBoolean("canstart");
+        super.readFromNBT(compound);
+    }
+
+    @Override
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
+        if(this.userID != null) {
+            compound.putUUID("userid", this.userID);
+        }
+        compound.putBoolean("canstart", this.canStart);
+        return super.writeToNBT(compound);
     }
 
     public void startProcess(UUID player){

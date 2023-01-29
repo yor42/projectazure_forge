@@ -152,6 +152,16 @@ public class MathUtil {
         return new StringTextComponent(String.format("%02d", hour)+":"+String.format("%02d", minute)+":"+String.format("%02d", second)+":"+String.format("%03d", millisecs));
     }
 
+    public static String Tick2StringClock(int Tick){
+
+        int millisecs = Tick%20*50;
+        int second = Tick2Second(Tick)%60;
+        int minute = Tick2Minute(Tick)%60;
+        int hour = Tick2Hour(Tick);
+
+        return String.format("%02d", hour)+":"+String.format("%02d", minute)+":"+String.format("%02d", second)+":"+String.format("%03d", millisecs);
+    }
+
     public static BlockPos getRandomBlockposInRadius2D(World world, BlockPos originPos, int maxRadius, int minRadius){
         if(maxRadius-minRadius<0){
             throw new IllegalArgumentException("maxRadius must be larger then minRadius!");

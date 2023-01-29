@@ -82,7 +82,7 @@ public class enums {
         STAR_4("rarity.sr", 0x7200ff, PAConfig.CONFIG.Star_4_Chance.get()),
         STAR_5("rarity.ur", 0xffcc00, PAConfig.CONFIG.Star_5_Chance.get()),
         STAR_6("rarity.leg", 0xff6db5, PAConfig.CONFIG.Star_6_Chance.get()),
-        SPECIAL("rarity.sp", 0x00fcff, 0);
+        SPECIAL("rarity.sp", 0x00fcff, 0.1F);
 
         private final String translationkey;
         private final float weight;

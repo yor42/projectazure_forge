@@ -37,7 +37,7 @@ public class MBDGeoRenderer extends GeoComponentRenderer {
     }
 
     public ResourceLocation getAnimationFileLocation(GeoComponentRenderer.ComponentFactory entity) {
-        return new ResourceLocation(Constants.MODID, String.format("animations/block/machine/%s.animation.json", this.modelName));
+        return new ResourceLocation(Constants.MODID, String.format("animations/block/machine/%s.animation.json", this.texturename));
     }
 
     public ResourceLocation getModelLocation(GeoComponentRenderer.ComponentFactory animatable) {

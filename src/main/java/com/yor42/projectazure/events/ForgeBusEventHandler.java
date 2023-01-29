@@ -63,6 +63,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static net.minecraft.entity.EntityType.COW;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 
@@ -184,17 +185,64 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_58x42.get(), 40)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            ((WeightedRecipeBuilder)new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("akn")
+            new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("akn")
                     .inputItems(new ItemsIngredient(Ingredient.of(registerItems.ORUNDUM.get()),10), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
-                    .chance((float) (PAConfig.CONFIG.Star_4_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.AMIYA.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.NEARL.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.LAPPLAND.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.SIEGE.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.ROSMONTIS.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.MUDROCK.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.CHEN.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.W.get()))
-                    .chance(1F).perTick(true).inputFE(2500).duration(1200)).buildAndRegisterRiftway();
+                    .addCompanionOutput(registerEntity.AMIYA.get())
+                    .addCompanionOutput(registerEntity.NEARL.get())
+                    .addCompanionOutput(registerEntity.W.get())
+                    .addCompanionOutput(registerEntity.SCHWARZ.get())
+                    .addCompanionOutput(registerEntity.SIEGE.get())
+                    .addCompanionOutput(registerEntity.SCHWARZ.get())
+                    .addCompanionOutput(registerEntity.LAPPLAND.get())
+                    .addCompanionOutput(registerEntity.TEXAS.get())
+                    .addCompanionOutput(registerEntity.CHEN.get())
+                    .addCompanionOutput(registerEntity.MUDROCK.get())
+                    .addCompanionOutput(registerEntity.YATO.get())
+                    .addCompanionOutput(registerEntity.ROSMONTIS.get())
+
+                    .addCompanionOutput(registerEntity.CROWNSLAYER.get())
+                    .addCompanionOutput(registerEntity.FROSTNOVA.get())
+                    .addCompanionOutput(registerEntity.TALULAH.get())
+                    .chance(1F).perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
+
+            new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("fgo")
+                    .inputItems(new ItemsIngredient(Ingredient.of(registerItems.SAINT_QUARTZ.get()),3), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .addCompanionOutput(registerEntity.MASH.get())
+                    .addCompanionOutput(registerEntity.ARTORIA.get())
+                    .addCompanionOutput(registerEntity.SCATHATH.get())
+                    .addCompanionOutput(registerEntity.SHIKI.get())
+                    .perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
+
+            new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("etc")
+                    .inputItems(new ItemsIngredient(Ingredient.of(registerItems.HEADHUNTING_PCB.get()),2), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .addCompanionOutput(registerEntity.SHIROKO.get())
+                    .addCompanionOutput(registerEntity.SYLVI.get())
+                    .addCompanionOutput(registerEntity.KYARU.get())
+                    .addCompanionOutput(registerEntity.EXCELA.get())
+                    .perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
+
+            RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("cow")
+                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.CROPS_WHEAT),3), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .outputEntities(EntityIngredient.of(EntityType.COW.getRegistryName()))
+                    .perTick(true).inputFE(100).duration(120).buildAndRegister();
+
+            RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("chicken")
+                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.SEEDS_WHEAT),1), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .outputEntities(EntityIngredient.of(EntityType.CHICKEN.getRegistryName()))
+                    .chance(0.75F).outputEntities(EntityIngredient.of(EntityType.CHICKEN.getRegistryName()))
+                    .chance(0.3F).outputEntities(EntityIngredient.of(EntityType.CHICKEN.getRegistryName()))
+                    .chance(1).perTick(true).inputFE(100).duration(600).buildAndRegister();
+
+            RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("sheep")
+                    .inputItems(new ItemsIngredient(Ingredient.of(Items.GRASS),2), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .outputEntities(EntityIngredient.of(EntityType.SHEEP.getRegistryName()))
+                    .chance(0.5F).outputEntities(EntityIngredient.of(EntityType.SHEEP.getRegistryName()))
+                    .chance(1).perTick(true).inputFE(100).duration(120).buildAndRegister();
+
+            RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("pig")
+                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.CROPS_CARROT),3), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .outputEntities(EntityIngredient.of(EntityType.PIG.getRegistryName()))
+                    .chance(1).perTick(true).inputFE(100).duration(120).buildAndRegister();
 
 
         }

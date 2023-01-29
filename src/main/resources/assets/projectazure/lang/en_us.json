@@ -40,6 +40,8 @@
   "item.projectazure.originite": "Originite",
   "item.projectazure.originium_prime": "Originium Prime",
 
+  "item.projectazure.fordestabilizer": "Fabric of Reality Destabilizer",
+
   "item.projectazure.developer_bonus": "Project:Azure Developer Supply Package",
   "item.projectazure.developer_bonus.tooltip": "Supply Pack provided to Project:Azure Developer for live server debugging.",
   "item.projectazure.developer_bonus.tooltip.owner": "Owner: ",
@@ -174,6 +176,17 @@
 
   "item.projectazure.bitumen": "Bitumen",
 
+  "item.projectazure.ammo_generic": "Generic Shell",
+  "item.projectazure.ammo_he": "High Explosive Shell",
+  "item.projectazure.ammo_incendiary": "Incendiary Shell",
+  "item.projectazure.ammo_ap": "Armor Piercing Shell",
+  "item.projectazure.ammo_sap": "Semi Armor Piercing Shell",
+  "item.projectazure.ammo_api": "API Shell",
+  "item.projectazure.ammo_heiap": "HEIAP Shell",
+
+  "item.projectazure.dust_orirock": "Orirock Dust",
+
+
   "item.tooltip.gunclass": "Gun Category",
 
   "item.tooltip.equipmenttype": "Equipment Type",
@@ -185,6 +198,24 @@
   "item.tooltip.shiftinfo": "Press %s for more info",
 
   "item.tooltip.bed_position": "Saved Bed Position: %s",
+
+  "item.projectazure.spawnegg.spawn": "Spawn: ",
+
+  "item.projectazure.bonk_bat.tooltip": "Sends every being in existence who dares to cross this bat's path to horny jail. AND THERES NO EXCEPTION.",
+
+  "item.projectazure.rainbowcube.owner": "Owned by:",
+  "item.projectazure.rainbowcube.tooltip1": "Mysterious cube emitting weird aura with rainbow light.",
+  "item.projectazure.rainbowcube.tooltip2": "Use to select starting companion.",
+
+  "item.tooltip.firerate": "Fire Rate",
+  "item.tooltip.remainingammo" : "Remaining Ammo",
+  "item.tooltip.remainingfuel" : "Remaining Fuel",
+  "item.tooltip.hanger_slot_usage": "Hanger Usage",
+  "item.tooltip.energystored": "Energy Stored: %s",
+  "item.tooltip.chargeprogress": "Charge Progress: %s",
+  "item.tooltip.chargefailed_nobattery": "Charge FAILED: No Battery!",
+  "item.tooltip.ready": "READY!",
+  "item.tooltip.not_revived": "Companion is not revived yet. Use Defibrillator first!",
 
   "tooltip.companion.rarity": "Rarity",
   "tooltip.companion.type": "Companion Type",
@@ -207,34 +238,6 @@
   "tooltip.shell.explosive": "Explosion",
   "tooltip.shell.none": "-NONE-",
 
-  "item.projectazure.spawnegg.spawn": "Spawn: ",
-
-  "item.projectazure.bonk_bat.tooltip": "Sends every being in existence who dares to cross this bat's path to horny jail. AND THERES NO EXCEPTION.",
-
-  "item.projectazure.rainbowcube.owner": "Owned by:",
-  "item.projectazure.rainbowcube.tooltip1": "Mysterious cube emitting weird aura with rainbow light.",
-  "item.projectazure.rainbowcube.tooltip2": "Use to select starting companion.",
-
-  "item.tooltip.firerate": "Fire Rate",
-  "item.tooltip.remainingammo" : "Remaining Ammo",
-  "item.tooltip.remainingfuel" : "Remaining Fuel",
-  "item.tooltip.hanger_slot_usage": "Hanger Usage",
-  "item.tooltip.energystored": "Energy Stored: %s",
-  "item.tooltip.chargeprogress": "Charge Progress: %s",
-  "item.tooltip.chargefailed_nobattery": "Charge FAILED: No Battery!",
-  "item.tooltip.ready": "READY!",
-  "item.tooltip.not_revived": "Companion is not revived yet. Use Defibtillator first!",
-
-  "item.projectazure.ammo_generic": "Generic Shell",
-  "item.projectazure.ammo_he": "High Explosive Shell",
-  "item.projectazure.ammo_incendiary": "Incendiary Shell",
-  "item.projectazure.ammo_ap": "Armor Piercing Shell",
-  "item.projectazure.ammo_sap": "Semi Armor Piercing Shell",
-  "item.projectazure.ammo_api": "API Shell",
-  "item.projectazure.ammo_heiap": "HEIAP Shell",
-
-  "item.projectazure.dust_orirock": "Orirock Dust",
-
   "block.projectazure.recruit_beacon": "Recruit Beacon",
   "block.projectazure.recruit_beacon.tooltip": "Machine for Recruiting companion",
   "block.projectazure.metal_press": "Hydraulic Press",
@@ -249,11 +252,10 @@
   "block.projectazure.drydock_controller": "Drydock Controller",
   "block.projectazure.drydock_controller.tooltip":"Brain of Drydock; part of multiblock Structure.",
   "block.projectazure.machine_frame": "Machine Frame",
+  "block.projectazure.machine_frame_slab": "Machine Frame Slab",
   "block.projectazure.item_hatch": "Item Hatch",
   "block.projectazure.energy_hatch": "Energy Hatch",
   "block.projectazure.machine_dynamo": "Dynamo Coil",
-  "block.projectazure.originium_generator": "Originium Reactor Controller",
-  "block.projectazure.ammo_press": "Ammo Press Controller",
   "block.projectazure.reenforced_plank": "Reenforced Wooden Plank",
   "block.projectazure.reenforced_concrete": "Reenforced Concrete",
   "block.projectazure.reenforced_concrete.tooltip":"Concrete Reenforced with steel; part of multiblock Structure.",
@@ -275,6 +277,10 @@
   "block.projectazure.dark_oak_pantry": "Dark Oak Pantry",
   "block.projectazure.warped_pantry": "Warped Pantry",
   "block.projectazure.crimson_pantry": "Crimson Pantry",
+
+  "block.projectazure.originium_generator": "Originium Reactor Controller",
+  "block.projectazure.ammo_press": "Ammo Press Controller",
+  "block.projectazure.riftway": "Riftway",
 
 
   "originium_generator.name": "Originium Reactor",
@@ -298,6 +304,9 @@
 
   "gui.recruitbeacon_remainingtime": "ETA Until Recruit is Complete",
   "gui.construction_eta": "Construction ETA",
+
+  "gui.riftway_remainingtime": "REMAINING TIME",
+  "gui.riftway_status": "Status: ",
 
   "gui.machine.start": "Start",
 
@@ -497,6 +506,10 @@
   "nether_quartz": "Nether Quartz",
   "originium": "Originium",
 
+  "idle": "Idle",
+  "working": "Working",
+  "suspend": "Suspend",
+
   "message.energyguns.gun.ammo.energy": "Forge Energy",
 
   "recruit_beacon": "Recruit Beacon",
@@ -558,6 +571,9 @@
 
   "multiblocked.recupe_map.originium_generation": "Originium Reaction",
   "multiblocked.recupe_map.ammopress": "Ammo Press",
+  "multiblocked.recupe_map.riftway": "Riftway Transfer",
+
+  "multiblocked.capability.companion": "Companion",
 
   "recipe.alloying": "Alloying",
   "recipe.pressing": "Pressing",

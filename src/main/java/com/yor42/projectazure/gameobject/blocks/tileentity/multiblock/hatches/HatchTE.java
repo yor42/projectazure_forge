@@ -187,6 +187,7 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
         EntityDefinition.properties.tabGroup = "pa_machines";
         EntityDefinition.properties.isOpaque = true;
         EntityDefinition.traits.add("companion", new JsonObject());
+        EntityDefinition.traits.add("entity", new JsonObject());
         MbdComponents.registerComponent(EntityDefinition);
         /*
 

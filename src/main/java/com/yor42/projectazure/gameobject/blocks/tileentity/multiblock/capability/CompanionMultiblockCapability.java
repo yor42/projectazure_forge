@@ -10,18 +10,26 @@ import com.lowdragmc.multiblocked.api.capability.IO;
 import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
 import com.lowdragmc.multiblocked.api.capability.proxy.CapabilityProxy;
 import com.lowdragmc.multiblocked.api.capability.trait.CapabilityTrait;
+import com.lowdragmc.multiblocked.api.gui.recipe.ContentWidget;
 import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.lowdragmc.multiblocked.api.recipe.Recipe;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.ComponentTileEntity;
 import com.lowdragmc.multiblocked.common.capability.EntityMultiblockCapability;
+import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.client.gui.multiblocked.CompanionContentWidget;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.RiftwayRecipes;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.WeightedRandomRecipe;
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IAknOp;
+import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -60,6 +68,11 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
     @Override
     public EntityIngredient copyInner(EntityIngredient content) {
         return content.copy();
+    }
+
+    @Override
+    public ContentWidget<? super EntityIngredient> createContentWidget() {
+        return new CompanionContentWidget();
     }
 
     @Override
@@ -127,22 +140,44 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
                 } else if (io == IO.OUT){
                     if (!simulate && component.getLevel() instanceof ServerWorld) {
                         ServerWorld serverLevel = (ServerWorld) component.getLevel();
-                        for (EntityIngredient ingredient : left) {
-                            Entity entity = ingredient.type.spawn(serverLevel, ingredient.tag, null, null, pos, SpawnReason.NATURAL, false, false);
-                            if(recipe instanceof RiftwayRecipes && entity instanceof AbstractEntityCompanion){
-                                UUID playeruuid = ((RiftwayRecipes) recipe).getPlayerUUID();
-                                if(playeruuid == null){
-                                    return null;
+                        if(recipe instanceof RiftwayRecipes) {
+                            UUID playeruuid = ((RiftwayRecipes) recipe).getPlayerUUID();
+                            if (playeruuid == null) {
+                                return null;
+                            }
+                            PlayerEntity player = serverLevel.getPlayerByUUID(playeruuid);
+                            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability(player);
+                            for (EntityIngredient ingredient : left) {
+                                Entity entity;
+                                if (cap.isDupe(ingredient.type) && !PAConfig.CONFIG.ALLOW_DUPLICATE.get()) {
+                                    entity = new ItemEntity(serverLevel, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(registerItems.ORUNDUM.get()));
+                                }
+                                else {
+                                    entity = ingredient.type.spawn(serverLevel, ingredient.tag, null, null, pos, SpawnReason.NATURAL, false, false);
                                 }
 
-                                PlayerEntity player = serverLevel.getPlayerByUUID(playeruuid);
-                                AbstractEntityCompanion spawnedEntity = (AbstractEntityCompanion) entity;
-                                spawnedEntity.tame(player);
-                                spawnedEntity.setMorale(150);
-                                if(!(spawnedEntity instanceof IAknOp)) {
-                                    spawnedEntity.setAffection(50);
+
+                                if (entity instanceof AbstractEntityCompanion) {
+                                    AbstractEntityCompanion spawnedEntity = (AbstractEntityCompanion) entity;
+
+                                    spawnedEntity.tame(player);
+                                    spawnedEntity.setMorale(150);
+                                    cap.addCompanion(spawnedEntity);
+                                    if (!(spawnedEntity instanceof IAknOp)) {
+                                        spawnedEntity.setAffection(50);
+                                    }
+                                    serverLevel.addFreshEntity(spawnedEntity);
+
                                 }
-                                serverLevel.addFreshEntity(spawnedEntity);
+                                else{
+                                    serverLevel.addFreshEntity(entity);
+                                }
+                            }
+                        }
+                        else{
+                            for (EntityIngredient ingredient : left) {
+                                Entity entity = ingredient.type.spawn(serverLevel, ingredient.tag, null, null, pos, SpawnReason.NATURAL, false, false);
+                                serverLevel.addFreshEntity(entity);
                             }
                         }
                     }

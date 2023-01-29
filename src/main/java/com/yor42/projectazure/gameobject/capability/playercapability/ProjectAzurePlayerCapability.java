@@ -3,6 +3,7 @@ package com.yor42.projectazure.gameobject.capability.playercapability;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -14,6 +15,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Abs;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,8 +24,6 @@ import java.util.ArrayList;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class ProjectAzurePlayerCapability {
-    public int OffHandFireDelay = 0;
-    public int MainHandFireDelay = 0;
     //looks Kinda Unoptimal if you ask me...
     public ArrayList<AbstractEntityCompanion> companionList = new ArrayList<>();
 
@@ -52,6 +52,19 @@ public class ProjectAzurePlayerCapability {
 
     public void removeCompanion(AbstractEntityCompanion companion){
         this.companionList.remove(companion);
+    }
+
+    public boolean isDupe(AbstractEntityCompanion companion){
+        return isDupe(companion.getType());
+    }
+
+    public boolean isDupe(EntityType<?> companion){
+        for(AbstractEntityCompanion existing: this.companionList){
+            if(companion == existing.getType()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static ProjectAzurePlayerCapability getCapability(@Nonnull PlayerEntity player){
