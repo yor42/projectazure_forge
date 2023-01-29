@@ -12,6 +12,8 @@ import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
 import com.yor42.projectazure.gameobject.crafting.ingredients.EntityIngredientCompanions;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -26,6 +28,7 @@ import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -55,6 +58,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -180,22 +184,22 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_58x42.get(), 40)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            RiftwayControllerTE.RiftwayDefinition.getRecipeMap().start().name("akn")
+            ((WeightedRecipeBuilder)new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("akn")
                     .inputItems(new ItemsIngredient(Ingredient.of(registerItems.ORUNDUM.get()),10), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
-                    .chance((float) (PAConfig.CONFIG.Star_4_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.AMIYA.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.NEARL.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.LAPPLAND.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.SIEGE.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.ROSMONTIS.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.MUDROCK.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.CHEN.get()))
-                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(EntityMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.W.get()))
-                    .chance(1F).perTick(true).inputFE(2500).duration(1200).buildAndRegister();
+                    .chance((float) (PAConfig.CONFIG.Star_4_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.AMIYA.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.NEARL.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.LAPPLAND.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.SIEGE.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.ROSMONTIS.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.MUDROCK.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_6_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.CHEN.get()))
+                    .chance((float) (PAConfig.CONFIG.Star_5_Chance.get()/100)).output(CompanionMultiblockCapability.CAP, EntityIngredientCompanions.of(registerEntity.W.get()))
+                    .chance(1F).perTick(true).inputFE(2500).duration(1200)).buildAndRegisterRiftway();
 
 
         }
         catch (Exception e){
-            Main.LOGGER.error("Failed to register recipe:"+e.getMessage());
+            Main.LOGGER.error("Failed to register recipe:"+ Arrays.toString(e.getStackTrace()));
         }
     }
 

@@ -186,7 +186,7 @@ public class HatchTE extends PartTileEntity<PartDefinition> {
         EntityDefinition.properties.rotationState = CustomProperties.RotationState.Y_AXIS;
         EntityDefinition.properties.tabGroup = "pa_machines";
         EntityDefinition.properties.isOpaque = true;
-        EntityDefinition.traits.add("entity", new JsonObject());
+        EntityDefinition.traits.add("companion", new JsonObject());
         MbdComponents.registerComponent(EntityDefinition);
         /*
 

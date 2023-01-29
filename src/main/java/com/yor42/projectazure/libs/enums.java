@@ -1,6 +1,7 @@
 package com.yor42.projectazure.libs;
 
 import com.tac.guns.common.Gun;
+import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import net.minecraft.item.ItemStack;
 
@@ -75,23 +76,29 @@ public class enums {
     }
 
     public enum CompanionRarity {
-        STAR_1("rarity.c", 0xadadad),
-        STAR_2("rarity.uc", 0x007eff),
-        STAR_3("rarity.r", 0xb4ff00),
-        STAR_4("rarity.sr", 0x7200ff),
-        STAR_5("rarity.ur", 0xffcc00),
-        STAR_6("rarity.leg", 0xff6db5),
-        SPECIAL("rarity.sp", 0x00fcff);
+        STAR_1("rarity.c", 0xadadad, PAConfig.CONFIG.Star_1_Chance.get()),
+        STAR_2("rarity.uc", 0x007eff, PAConfig.CONFIG.Star_2_Chance.get()),
+        STAR_3("rarity.r", 0xb4ff00, PAConfig.CONFIG.Star_3_Chance.get()),
+        STAR_4("rarity.sr", 0x7200ff, PAConfig.CONFIG.Star_4_Chance.get()),
+        STAR_5("rarity.ur", 0xffcc00, PAConfig.CONFIG.Star_5_Chance.get()),
+        STAR_6("rarity.leg", 0xff6db5, PAConfig.CONFIG.Star_6_Chance.get()),
+        SPECIAL("rarity.sp", 0x00fcff, 0);
 
         private final String translationkey;
+        private final float weight;
         private final int rarityColor;
-        CompanionRarity(String name, int rarityColor) {
+        CompanionRarity(String name, int rarityColor, double weight) {
             this.translationkey = name;
             this.rarityColor = rarityColor;
+            this.weight = (float) (weight/100F);
         }
 
         public String getTranslationkey(){
             return this.translationkey;
+        }
+
+        public float getWeight() {
+            return weight;
         }
 
         public int getColor(){

@@ -177,8 +177,9 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelWisdomCube("spawnnagato");
         buildModelWisdomCube("spawnlaffey");
         buildModelWisdomCube("spawnz23");
-        buildModelWisdomCube("spawnyamato");
         buildModelWisdomCube("spawnpurifier");
+
+        buildModelKC("spawnyamato");
 
         buildModelGFL("spawnm4a1");
         buildModelGFL("spawnhk416");
@@ -256,6 +257,10 @@ public class itemModelProvider extends ItemModelProvider {
 
     private ItemModelBuilder buildModelGFL(String ItemName){
         return buildModelWithSingleTex(ItemName, "gfl_manufacture_contract");
+    }
+
+    private ItemModelBuilder buildModelKC(String ItemName){
+        return buildModelWithSingleTex(ItemName, "kc_card");
     }
 
     private ItemModelBuilder buildModelSR(String ItemName){

@@ -19,6 +19,12 @@ import java.util.Random;
 public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyTickTE{
 
     private class Entry {
+
+        public Entry(EntityType<? extends AbstractEntityCompanion> entityType, float weight){
+            this.accumulatedWeight = weight;
+            this.EntityType = entityType;
+        }
+
         double accumulatedWeight;
         EntityType<? extends AbstractEntityCompanion> EntityType;
     }
@@ -32,30 +38,20 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     protected boolean shouldProcess;
     private final Random rand = new Random();
 
-    public void addEntryCustomWeight(EntityType<? extends AbstractEntityCompanion> entity, double weight) {
-        if(weight<0){
-            this.addEntry(entity);
-        }
-        else {
-            accumulatedWeight += weight;
-            Entry e = new Entry();
-            e.EntityType = entity;
-            e.accumulatedWeight = accumulatedWeight;
-            entries.add(e);
+    public void addEntry(EntityType<? extends AbstractEntityCompanion> entity, double weight) {
+        if(this.level != null) {
+            AbstractEntityCompanion companion = entity.create(this.level);
+            if(companion!= null) {
+                accumulatedWeight += weight;
+                Entry e = new Entry(entity, (float) accumulatedWeight);
+                entries.add(e);
+            }
         }
     }
 
     public void addEntry(EntityType<? extends AbstractEntityCompanion> entityType) {
         if(this.level != null) {
-            AbstractEntityCompanion companion = entityType.create(this.level);
-            if(companion!= null) {
-                double weight = this.getWeightFromRarity(companion);
-                accumulatedWeight += weight;
-                Entry e = new Entry();
-                e.EntityType = entityType;
-                e.accumulatedWeight = accumulatedWeight;
-                entries.add(e);
-            }
+            addEntry(entityType, entityType.create(this.level).getRarity().getWeight());
         }
     }
 

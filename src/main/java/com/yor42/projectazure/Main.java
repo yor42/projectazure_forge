@@ -1,5 +1,9 @@
 package com.yor42.projectazure;
 
+import com.lowdragmc.multiblocked.CommonProxy;
+import com.lowdragmc.multiblocked.client.ClientProxy;
+import com.lowdragmc.multiblocked.common.capability.EntityMultiblockCapability;
+import com.lowdragmc.multiblocked.common.capability.FluidMultiblockCapability;
 import com.tac.guns.client.render.gun.IOverrideModel;
 import com.tac.guns.client.render.gun.ModelOverrides;
 import com.tac.guns.common.ProjectileManager;
@@ -10,6 +14,7 @@ import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.events.ModBusEventHandler;
 import com.yor42.projectazure.events.ModBusEventHandlerClient;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityRailgunProjectile;
@@ -26,10 +31,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.*;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -51,6 +53,7 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 import java.util.stream.Stream;
 
+import static com.lowdragmc.multiblocked.api.registry.MbdCapabilities.registerCapability;
 import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
 import static com.yor42.projectazure.libs.Constants.MODID;
 
@@ -124,6 +127,7 @@ public class Main
         GeckoLibMod.DISABLE_IN_DEV = true;
         GeckoLib.initialize();
 
+        registerCapability(CompanionMultiblockCapability.CAP);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldgenInit::registerWorldgen);
 
         // Register ourselves for server and other game events we are interested i
