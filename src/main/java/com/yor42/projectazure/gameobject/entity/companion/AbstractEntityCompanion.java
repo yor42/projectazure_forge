@@ -2912,6 +2912,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         else if(HeldItem == this.getLimitBreakItem()){
             this.doLimitBreak();
+            heldstacks.shrink(1);
+            return ActionResultType.SUCCESS;
         }
         else if(this.isOnFire() && HeldItem == Items.WATER_BUCKET){
             this.clearFire();
