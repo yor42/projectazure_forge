@@ -4,6 +4,7 @@ import com.tac.guns.crafting.WorkbenchRecipeBuilder;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.data.recipebuilder.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
@@ -491,6 +492,24 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(HatchTE.FluidHatchDefinition.getStackForm().getItem(), 4)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', Items.BUCKET)
+                .pattern(" F ")
+                .pattern("FCF")
+                .pattern(" F ")
+                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(HatchTE.EntityDefinition.getStackForm().getItem(), 4)
+                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', registerItems.FOR_DESTABILIZER.get())
+                .pattern(" F ")
+                .pattern("FCF")
+                .pattern(" F ")
+                .unlockedBy("has_part", has(registerItems.FOR_DESTABILIZER.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(registerItems.KYARU_STAFF.get(), 1)
                 .define('S', Items.STICK)
                 .define('C', ModTags.Items.INGOT_BRONZE)
@@ -941,6 +960,19 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern(" S ")
                 .pattern(" S ")
                 .unlockedBy("has_iron", has(Tags.Items.STORAGE_BLOCKS_IRON))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RiftwayControllerTE.RiftwayDefinition.getStackForm().getItem())
+                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('P', registerItems.HEADHUNTING_PCB.get())
+                .define('M', registerBlocks.MACHINE_FRAME.get())
+                .define('O', registerItems.ORUNDUM.get())
+                .define('D', registerItems.FOR_DESTABILIZER.get())
+                .define('L', registerItems.COPPER_COIL.get())
+                .pattern("LDL")
+                .pattern("COC")
+                .pattern("PMP")
+                .unlockedBy("has_item", has(registerItems.FOR_DESTABILIZER.get()))
                 .save(consumer);
 
     }

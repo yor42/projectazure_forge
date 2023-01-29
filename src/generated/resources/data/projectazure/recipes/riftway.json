@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LDL",
+    "COC",
+    "PMP"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:circuits/advanced"
+    },
+    "P": {
+      "item": "projectazure:headhunting_pcb"
+    },
+    "M": {
+      "item": "projectazure:machine_frame"
+    },
+    "O": {
+      "item": "projectazure:orundum"
+    },
+    "D": {
+      "item": "projectazure:fordestabilizer"
+    },
+    "L": {
+      "item": "projectazure:copper_coil"
+    }
+  },
+  "result": {
+    "item": "projectazure:riftway"
+  }
+}
