@@ -1886,6 +1886,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void doLimitBreak(){
         this.addLimitBreak(1);
+        this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
+        if(this.getLimitBreakSound()!= null){
+            this.playSound(this.getLimitBreakSound(), 1.0F, 1.0F);
+        }
+        if(!this.getCommandSenderWorld().isClientSide()) {
+            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.LIMITBREAK));
+        }
+    }
+
+    @Nullable
+    protected SoundEvent getLimitBreakSound(){
+        return null;
     }
 
     public float getAffection() {
@@ -2738,12 +2750,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         p_184454_1_.setYHeadRot(p_184454_1_.yRot);
     }
 
+    protected Item getLimitBreakItem(){
+        return registerItems.TOKEN.get();
+    }
+
     @Nonnull
     @Override
     public ActionResultType interactAt(@Nonnull PlayerEntity player, @Nonnull Vector3d vec, @Nonnull Hand hand) {
 
         ItemStack heldstacks = player.getMainHandItem();
-        Item HeldItem = heldstacks.getItem();
 
         if(this.isOwnedBy(player)) {
             if((this.isDeadOrDying() || this.isCriticallyInjured())){
@@ -2894,6 +2909,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     return ActionResultType.SUCCESS;
                 }
             }
+        }
+        else if(HeldItem == this.getLimitBreakItem()){
+            this.doLimitBreak();
         }
         else if(this.isOnFire() && HeldItem == Items.WATER_BUCKET){
             this.clearFire();
@@ -3417,26 +3435,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public boolean shouldHelpFarm(){
         return this.getBrain().getActiveNonCoreActivity().map((activity)->activity == WORK && this.getMainHandItem().getItem() instanceof HoeItem).orElse(false);
-    }
-
-    public enum ARMPOSES{
-        IDLE,
-        SLEEPING,
-        PAT,
-        SITTING,
-        SWIMMING,
-        WALKING,
-        RUNNING,
-        LEWDING,
-        OPENING_DOOR,
-        USING_GUN,
-        RELOADING_GUN,
-        SWINGING,
-        MELEEATTACK,
-        HOLDING_BOW,
-        CHARGING_BOW,
-        HOLDING_CROSSBOW,
-        CHARGING_CROSSBOW
     }
 
     public enum MOVE_STATUS{

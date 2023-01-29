@@ -16,8 +16,11 @@
   "item.projectazure.glitched_phone.tooltip2": "Shape of device itself is glitching out...",
 
   "item.projectazure.music_disc": "Music Disc",
+
   "item.projectazure.oath_ring": "Oath Ring",
   "item.projectazure.oath_ring.tooltip": "Shiny Ring that means your affection toward your life companion.",
+
+  "item.projectazure.token": "Token of Companionship",
 
   "item.projectazure.bonk_bat": "The Bonk™ Bat",
 
@@ -35,6 +38,8 @@
   "item.projectazure.polymer_plate": "Polymer Plate",
   "item.projectazure.tree_sap": "Tree Sap",
   "item.projectazure.gunpowder_compound": "Explosive Compound",
+
+  "item.projectazure.saint_quartz": "Saint Quartz",
 
   "item.projectazure.orundum": "Orundum",
   "item.projectazure.originite": "Originite",
@@ -253,8 +258,12 @@
   "block.projectazure.drydock_controller.tooltip":"Brain of Drydock; part of multiblock Structure.",
   "block.projectazure.machine_frame": "Machine Frame",
   "block.projectazure.machine_frame_slab": "Machine Frame Slab",
+
   "block.projectazure.item_hatch": "Item Hatch",
   "block.projectazure.energy_hatch": "Energy Hatch",
+  "block.projectazure.fluid_hatch": "Fluid Hatch",
+  "block.projectazure.entity_hatch": "Entity Hatch",
+
   "block.projectazure.machine_dynamo": "Dynamo Coil",
   "block.projectazure.reenforced_plank": "Reenforced Wooden Plank",
   "block.projectazure.reenforced_concrete": "Reenforced Concrete",

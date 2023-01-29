@@ -117,6 +117,8 @@ public class itemModelProvider extends ItemModelProvider {
 
         buildModel("bitumen");
 
+        buildModel("token");
+
         /*
         Build Ore Block Item model
          */

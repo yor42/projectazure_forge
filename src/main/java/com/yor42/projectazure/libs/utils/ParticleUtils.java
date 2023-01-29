@@ -1,6 +1,8 @@
 package com.yor42.projectazure.libs.utils;
 
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.BoneMealItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
@@ -58,6 +60,20 @@ public class ParticleUtils {
         if(target != null) {
             for(int i = 0; i < 32; ++i) {
                 world.addParticle(ParticleTypes.PORTAL, target.getX(), target.getY() + MathUtil.getRand().nextDouble() * 2.0D, target.getZ(), MathUtil.getRand().nextGaussian(), 0.0D, MathUtil.getRand().nextGaussian());
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void spawnLimitBreakParticle(int EntityID){
+        World world = ClientUtils.getClientWorld();
+        Entity target = world.getEntity(EntityID);
+        if(target != null) {
+            for(int i = 0; i < 5; ++i) {
+                double d0 = MathUtil.getRand().nextGaussian() * 0.02D;
+                double d1 = MathUtil.getRand().nextGaussian() * 0.02D;
+                double d2 = MathUtil.getRand().nextGaussian() * 0.02D;
+                world.addParticle(ParticleTypes.HAPPY_VILLAGER, target.getRandomX(1.0D), target.getRandomY() + 1.0D, target.getRandomZ(1.0D), d0, d1, d2);
             }
         }
     }

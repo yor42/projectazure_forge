@@ -145,6 +145,9 @@ public class registerItems {
     public static final RegistryObject<Item> SAINT_QUARTZ = ITEMS.register("saint_quartz", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
 
+    public static final RegistryObject<Item> TOKEN = ITEMS.register("token", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
     public static final RegistryObject<Item> MOLD_PLATE = ITEMS.register("mold_plate", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_WIRE = ITEMS.register("mold_wire", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_EXTRACTION = ITEMS.register("mold_extraction", () -> new ItemCraftTool(128));

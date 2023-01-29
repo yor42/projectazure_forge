@@ -16,8 +16,11 @@
   "item.projectazure.glitched_phone.tooltip2": "폰 모양 그 자체가 오류가 난 듯 지직거립니다...",
 
   "item.projectazure.music_disc": "음반",
+
   "item.projectazure.oath_ring": "서약 반지",
-  "item.projectazure.oath_ring.tooltip": "당신의 동료를 향한 우정을 상징하는 빛나는 반지",
+  "item.projectazure.oath_ring.tooltip": "당신의 동료를 향한 신뢰를 상징하는 빛나는 반지",
+
+  "item.projectazure.token": "우정의 증표",
 
   "item.projectazure.bonk_bat": "[검열됨] 메이커 곤봉",
 
@@ -35,6 +38,8 @@
   "item.projectazure.polymer_plate": "폴리머 판",
   "item.projectazure.tree_sap": "나무 수액",
   "item.projectazure.gunpowder_compound": "고형 폭발물",
+
+  "item.projectazure.saint_quartz": "성정석",
 
   "item.projectazure.orundum": "합성옥 소자",
   "item.projectazure.originite": "오리지늄 조각",
@@ -253,8 +258,12 @@
   "block.projectazure.drydock_controller.tooltip": "Brain of Drydock; part of multiblock Structure.",
   "block.projectazure.machine_frame": "기계 프레임",
   "block.projectazure.machine_frame_slab": "기계 프레임 반블럭",
+
   "block.projectazure.item_hatch": "아이템 해치",
   "block.projectazure.energy_hatch": "에너지 해치",
+  "block.projectazure.fluid_hatch": "유체 해치",
+  "block.projectazure.entity_hatch": "엔티티 해치",
+
   "block.projectazure.machine_dynamo": "다이너모 코일",
   "block.projectazure.reenforced_plank": "강화된 판자",
   "block.projectazure.reenforced_concrete": "강화 콘크리트",

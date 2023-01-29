@@ -149,6 +149,10 @@ public class spawnParticlePacket {
                     if(message.stack != null){
                         ParticleUtils.SpawnItemParticles(message.EntityID, message.stack);
                     }
+                    break;
+                }
+                case LIMITBREAK:{
+                    ParticleUtils.spawnLimitBreakParticle(message.EntityID);
                 }
             }
 
@@ -161,7 +165,8 @@ public class spawnParticlePacket {
         AFFECTION_HEART,
         AFFECTION_SMOKE,
         ITEM_PARTICLE,
-        TELEPORT
+        TELEPORT,
+        LIMITBREAK
     }
 
 }
