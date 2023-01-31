@@ -1,9 +1,7 @@
 package com.yor42.projectazure.data.client;
 
-import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.datafix.fixes.TippedArrow;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -118,6 +116,8 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("bitumen");
 
         buildModel("token");
+        buildModel("cognitive_chip");
+        buildModel("cognitive_array");
 
         /*
         Build Ore Block Item model

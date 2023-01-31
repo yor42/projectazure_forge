@@ -3,8 +3,6 @@ package com.yor42.projectazure.client.gui.buttons.multiblocked;
 import com.lowdragmc.lowdraglib.gui.texture.ColorBorderTexture;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
-import com.lowdragmc.lowdraglib.gui.util.ClickData;
-import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.yor42.projectazure.libs.utils.ModifiedClickData;
 import net.minecraft.network.PacketBuffer;

@@ -21,6 +21,9 @@
   "item.projectazure.oath_ring.tooltip": "당신의 동료를 향한 신뢰를 상징하는 빛나는 반지",
 
   "item.projectazure.token": "우정의 증표",
+  "item.projectazure.token_with_validentity": "%s의 증표",
+  "item.projectazure.token.tooltip.with_validentity": "%s의 당신을 향한 신뢰의 증표",
+  "item.projectazure.token.tooltip": "당신을 향한 모두의 신뢰를 상징하는 증표",
 
   "item.projectazure.bonk_bat": "[검열됨] 메이커 곤봉",
 
@@ -101,8 +104,8 @@
   "item.projectazure.equipment_gun_127mm": "127mm 단장포",
   "item.projectazure.equipment_plane_f4fwildcat": "F4F 와일드캣",
 
-  "item.projectazure.sheath": "레이신 검",
-  "item.projectazure.sheath.tooltip": "강철로 만든 검은 검.",
+  "item.projectazure.sheath": "로도스 아일랜드 제식 전투검",
+  "item.projectazure.sheath.tooltip": "강철로 만든 검은 검. 멀티버스 한 구석에 존재하는 우주 속 군사조직(?)의 제식 무기입니다.",
   "item.projectazure.chixiao": "적소",
   "item.projectazure.chixiao.tooltip": "앰버 오리지늄으로 만든 붉은 검집의 검. \n 아츠 능력이 없는 사람에게는 일반 검일 뿐이지만,\n칼빵 앞에서는 모두가 평등합니다.",
   "item.projectazure.crescentkatana_shiro": "반월검 - 백",
@@ -527,7 +530,7 @@
 
   "effect.projectazure.acute_oripathy": "급성 광석병",
 
-  "message.rainbow_cube.notowner": "이 큐브가 당신의 손을 거부하는듯 합니다. 이 큐브는 당신 것이 아닌 것 같습니다.",
+  "message.rainbow_cube.notowner": "이 큐브가 당신의 손을 거부합니다. 이 큐브는 당신 것이 아닌 것 같습니다.",
 
   "message.commandstick.bedpos_saved": "침대 위치 %s가 지휘봉에 저장되었습니다.",
   "message.commandstick.bedpos_cleared": "지휘봉에 저장된 침대 위치를 지웠습니다.",
@@ -570,7 +573,7 @@
 
   "death.attack.ate_originium_prime_0": "%1$s 가 방금 오리지늄을 먹었습니다. ..세상에나.",
   "death.attack.ate_originium_prime_1": "%1$s 이(가) 방금 오리지늄의 맛을 깨우쳤습니다.",
-  "death.attack.ate_originium_prime_2": "%1$s 이(가) 아츠를 배우려고 시도했으나, 이 모드에는 구현되어 있지 않았습니다.",
+  "death.attack.ate_originium_prime_2": "%1$s 이(가) 아츠를 다루려고 시도했으나, 이 모드에는 구현되어 있지 않았습니다.",
   "death.attack.ate_originium_prime_3": "%1$s 이(가) 이성을 회복하려다 실패했습니다.",
   "death.attack.ate_originium_prime_4": "%1$s 이(가) 급성 오리지늄 중독으로 사망했습니다.",
 

@@ -2,7 +2,6 @@ package com.yor42.projectazure.client.model.entity.gunUser;
 
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityHK416;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityW;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

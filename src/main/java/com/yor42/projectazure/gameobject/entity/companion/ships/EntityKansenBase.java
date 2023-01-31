@@ -14,6 +14,7 @@ import com.yor42.projectazure.libs.enums.AmmoCategory;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
+import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EntityType;
@@ -74,6 +75,15 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             EntityKansenBase.this.entityData.set(ITEM_RIGGING, this.getStackInSlot(0));
         }
     };
+
+    @Nullable
+    @Override
+    protected Item getLimitBreakItem() {
+        if(this.getLimitBreakLv() == 0){
+            return registerItems.COGNITIVE_CHIP.get();
+        }
+        return registerItems.COGNITIVE_ARRAY.get();
+    }
 
     @Override
     public enums.EntityType getEntityType() {

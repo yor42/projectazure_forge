@@ -15,17 +15,14 @@ import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.lowdragmc.multiblocked.api.recipe.Recipe;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.ComponentTileEntity;
-import com.lowdragmc.multiblocked.common.capability.EntityMultiblockCapability;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.client.gui.multiblocked.CompanionContentWidget;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.RiftwayRecipes;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.WeightedRandomRecipe;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -150,7 +147,9 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
                             for (EntityIngredient ingredient : left) {
                                 Entity entity;
                                 if (cap.isDupe(ingredient.type) && !PAConfig.CONFIG.ALLOW_DUPLICATE.get()) {
-                                    entity = new ItemEntity(serverLevel, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(registerItems.ORUNDUM.get()));
+                                    ItemStack stack = new ItemStack(registerItems.TOKEN.get());
+                                    stack.getOrCreateTag().putString("vaildentity", ingredient.type.toString());
+                                    entity = new ItemEntity(serverLevel, pos.getX(), pos.getY(), pos.getZ(), stack);
                                 }
                                 else {
                                     entity = ingredient.type.spawn(serverLevel, ingredient.tag, null, null, pos, SpawnReason.NATURAL, false, false);

@@ -1,8 +1,6 @@
 package com.yor42.projectazure.libs.utils;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.BoneMealItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;

@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class CompanionContentWidget extends ContentWidget<EntityIngredient> {

@@ -1,10 +1,7 @@
 package com.yor42.projectazure.client.gui.multiblocked;
 
 import com.lowdragmc.lowdraglib.gui.texture.IGuiTexture;
-import com.lowdragmc.lowdraglib.gui.widget.ImageWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
-import com.lowdragmc.lowdraglib.utils.Position;
-import com.lowdragmc.lowdraglib.utils.Size;
 import com.lowdragmc.multiblocked.api.recipe.RecipeLogic;
 
 public class MachineStatusIconWidget extends Widget {

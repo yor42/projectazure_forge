@@ -18,9 +18,15 @@
   "item.projectazure.music_disc": "Music Disc",
 
   "item.projectazure.oath_ring": "Oath Ring",
-  "item.projectazure.oath_ring.tooltip": "Shiny Ring that means your affection toward your life companion.",
+  "item.projectazure.oath_ring.tooltip": "Shiny Ring representing your affection toward your life companion.",
 
   "item.projectazure.token": "Token of Companionship",
+  "item.projectazure.token_with_validentity": "%s's Token of Companionship",
+  "item.projectazure.token.tooltip.with_validentity": "Token representing %s's trust in you.",
+  "item.projectazure.token.tooltip": "Token representing everyone's trust in you.",
+
+  "item.projectazure.cognitive_chip": "Cognitive Chip",
+  "item.projectazure.cognitive_array": "Cognitive Array",
 
   "item.projectazure.bonk_bat": "The Bonk™ Bat",
 
@@ -101,8 +107,8 @@
   "item.projectazure.equipment_gun_127mm": "Single 127mm (SK C/34)",
   "item.projectazure.equipment_plane_f4fwildcat": "F4F Wildcat",
 
-  "item.projectazure.sheath": "Raythean Sword",
-  "item.projectazure.sheath.tooltip": "Black Sword made from steel.",
+  "item.projectazure.sheath": "Rhodes Island Standard Combat Sword",
+  "item.projectazure.sheath.tooltip": "Black Sword made from steel. Standard Combat sword of military organization in one of multiverse.",
   "item.projectazure.chixiao": "Chi Xiao",
   "item.projectazure.chixiao.tooltip": "Red Sword made from mysterious material. its heavy.",
   "item.projectazure.crescentkatana_shiro": "Crescent Katana - Shiro",

@@ -15,7 +15,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Abs;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -35,7 +35,9 @@ import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
 import com.yor42.projectazure.gameobject.items.tools.ItemCommandStick;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
-import com.yor42.projectazure.interfaces.*;
+import com.yor42.projectazure.interfaces.IAknOp;
+import com.yor42.projectazure.interfaces.IAzurLaneKansen;
+import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.DirectionUtil;
@@ -88,7 +90,10 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.registry.Registry;
@@ -163,6 +168,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public float getBowRange() {
         return 4;
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return super.getDisplayName();
     }
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
@@ -2750,8 +2760,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         p_184454_1_.setYHeadRot(p_184454_1_.yRot);
     }
 
+    @Nullable
     protected Item getLimitBreakItem(){
-        return registerItems.TOKEN.get();
+        if(this instanceof IAknOp) {
+            return registerItems.TOKEN.get();
+        }
+        return null;
     }
 
     @Nonnull
@@ -2910,7 +2924,12 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 }
             }
         }
-        else if(HeldItem == this.getLimitBreakItem()){
+        else if(this.getLimitBreakItem() != null && HeldItem == this.getLimitBreakItem()){
+            CompoundNBT compound = heldstacks.getOrCreateTag();
+            if(compound.contains("vaildentity") && !compound.getString("vaildentity").equals(this.getType().toString())){
+                return ActionResultType.FAIL;
+            }
+
             this.doLimitBreak();
             heldstacks.shrink(1);
             return ActionResultType.SUCCESS;

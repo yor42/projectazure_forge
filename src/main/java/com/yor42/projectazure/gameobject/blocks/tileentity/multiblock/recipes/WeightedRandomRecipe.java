@@ -9,15 +9,11 @@ import com.lowdragmc.multiblocked.api.capability.IO;
 import com.lowdragmc.multiblocked.api.capability.MultiblockCapability;
 import com.lowdragmc.multiblocked.api.capability.proxy.CapabilityProxy;
 import com.lowdragmc.multiblocked.api.recipe.Content;
-import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.lowdragmc.multiblocked.api.recipe.Recipe;
 import com.lowdragmc.multiblocked.api.recipe.RecipeCondition;
-import com.lowdragmc.multiblocked.common.capability.EntityMultiblockCapability;
-import com.yor42.projectazure.gameobject.blocks.tileentity.AbstractTileEntityGacha;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import net.minecraft.entity.EntityType;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.*;

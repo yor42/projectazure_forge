@@ -145,7 +145,13 @@ public class registerItems {
     public static final RegistryObject<Item> SAINT_QUARTZ = ITEMS.register("saint_quartz", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
 
-    public static final RegistryObject<Item> TOKEN = ITEMS.register("token", () -> new Item(new Item.Properties()
+    public static final RegistryObject<Item> TOKEN = ITEMS.register("token", () -> new ItemCompanionUpgrade(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> COGNITIVE_CHIP = ITEMS.register("cognitive_chip", () -> new ItemCompanionUpgrade(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> COGNITIVE_ARRAY = ITEMS.register("cognitive_array", () -> new ItemCompanionUpgrade(new Item.Properties()
             .tab(PA_RESOURCES)));
 
     public static final RegistryObject<Item> MOLD_PLATE = ITEMS.register("mold_plate", () -> new ItemCraftTool(128));

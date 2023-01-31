@@ -1,6 +1,5 @@
 package com.yor42.projectazure.libs.utils;
 
-import com.lowdragmc.lowdraglib.gui.util.ClickData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHelper;
 import net.minecraft.client.util.InputMappings;

@@ -1,8 +1,6 @@
 package com.yor42.projectazure.client.model.entity.kansen;
 
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityHK416;
-import com.yor42.projectazure.gameobject.entity.companion.ships.EntityLaffey;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityPurifier;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;
