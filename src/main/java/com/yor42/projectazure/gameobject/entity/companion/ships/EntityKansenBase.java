@@ -188,6 +188,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         NetworkHooks.openGui(player, new ContainerALInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
+    @Override
+    public int getMaxLevel(){
+        return 70+(this.getLimitBreakLv()*10+(this.getAwakeningLv()*10));
+    }
+
 
     public boolean hasRigging(){
         return this.getRigging().getItem() instanceof ItemRiggingBase && ((ItemRiggingBase) this.getRigging().getItem()).getValidclass() == this.getShipClass();

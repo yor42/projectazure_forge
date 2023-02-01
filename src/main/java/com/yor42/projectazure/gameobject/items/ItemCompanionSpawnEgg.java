@@ -1,10 +1,10 @@
 package com.yor42.projectazure.gameobject.items;
 
+import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
-import javafx.util.Pair;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
@@ -42,7 +42,6 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
     @Nullable
     public static ItemCompanionSpawnEgg<?> fromEntityType(@Nullable EntityType<?> type)
     {
-
         if(type == null){
             return null;
         }
@@ -50,8 +49,8 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
 
         //For whatever reason map doesn't work here.
         for(Pair<String, ItemCompanionSpawnEgg<?>> entry:TYPE_MAP){
-            if(Objects.equals(entry.getKey(), string)){
-                return entry.getValue();
+            if(Objects.equals(entry.getFirst(), string)){
+                return entry.getSecond();
             }
         }
         return null;

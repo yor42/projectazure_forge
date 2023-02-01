@@ -123,6 +123,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import software.bernie.shadowed.eliotlash.mclib.utils.MathUtils;
 
 import javax.annotation.Nonnull;
@@ -381,7 +382,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected int toldtomovecount = 0;
     public boolean shouldBeSitting;
     public boolean isMovingtoRecruitStation = false;
-    protected int awakeningLevel;
     @Nullable
     public BlockPos RECRUIT_BEACON_POS;
     private final MovementController SwimController;
@@ -406,7 +406,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Boolean> USING_SKILL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Float> MORALE = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
     protected static final DataParameter<Float> EXP = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.FLOAT);
+
     protected static final DataParameter<Integer> LIMITBREAKLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> UPGRADELEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> AWAKENINGLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
+
     protected static final DataParameter<Integer> LEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> ANGRYTIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> INJURYCURETIMER = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
@@ -610,10 +614,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return PAConfig.CONFIG.EnablePVP.get();
     }
 
-    protected int getAwakeningLevel(){
-        return this.awakeningLevel;
-    }
-
     public void setUsingGun(boolean val){
         this.getEntityData().set(ISUSINGGUN, val);
     }
@@ -741,7 +741,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putDouble("exp", this.getEntityData().get(EXP));
         compound.putInt("level", this.getEntityData().get(LEVEL));
         compound.putInt("limitbreaklv", this.getEntityData().get(LIMITBREAKLEVEL));
-        compound.putInt("awaken", this.awakeningLevel);
+        compound.putInt("upgradelevel", this.getEntityUpgradeLv());
         compound.putDouble("morale", this.getEntityData().get(MORALE));
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
@@ -840,8 +840,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(ANGRYTIMER, compound.getInt("angrytimer"));
         this.getEntityData().set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
         this.getEntityData().set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
+        this.getEntityData().set(UPGRADELEVEL, compound.getInt("upgradelevel"));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
-        this.awakeningLevel = compound.getInt("awaken");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
         this.getInventory().deserializeNBT(compound.getCompound("inventory"));
         this.lastSlept = compound.getLong("lastslept");
@@ -1682,7 +1682,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return false;
     }
 
-    protected final AnimationFactory factory = new AnimationFactory(this);
+    protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public boolean isAngry(){
         return this.getEntityData().get(ANGRYTIMER)>0;
@@ -1714,7 +1714,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().define(SPELLDELAY, 0);
         this.getEntityData().define(SKILLDELAYTICK, 0);
         this.getEntityData().define(EXP, 0.0F);
+        this.getEntityData().define(UPGRADELEVEL, 0);
         this.getEntityData().define(LIMITBREAKLEVEL, 0);
+        this.getEntityData().define(AWAKENINGLEVEL, 0);
         this.getEntityData().define(MORALE, 0.0F);
         this.getEntityData().define(CHARGING_CROSSBOW, false);
         this.getEntityData().define(LEVEL, 0);
@@ -1894,20 +1896,114 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         setLimitBreakLv(this.getLimitBreakLv() + delta);
     }
 
-    public void doLimitBreak(){
+    protected int getMaxLimitBreak(){
+
+        if(this instanceof IFGOServant){
+            return 21;
+        }
+
+        return 2;
+    }
+
+    public boolean doLimitBreak(){
+
+        if(this.getMaxLimitBreak() <= this.getLimitBreakLv()){
+            return false;
+        }
+
         this.addLimitBreak(1);
         this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
-        if(this.getLimitBreakSound()!= null){
-            this.playSound(this.getLimitBreakSound(), 1.0F, 1.0F);
-        }
+        this.getLimitBreakSound().ifPresent((sound)->this.playSound(sound, 1.0F, 1.0F));
+
         if(!this.getCommandSenderWorld().isClientSide()) {
             Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.LIMITBREAK));
         }
+        return true;
     }
 
-    @Nullable
-    protected SoundEvent getLimitBreakSound(){
-        return null;
+    public int getEntityUpgradeLv() {
+        return this.getEntityData().get(UPGRADELEVEL);
+    }
+
+    public void setEntityUpgradeLv(int value) {
+        this.getEntityData().set(UPGRADELEVEL, value);
+    }
+
+    public void addEntityUpgrade(int delta){
+        setEntityUpgradeLv(this.getEntityUpgradeLv() + delta);
+    }
+
+    protected int getMaxEntityUpgrade(){
+        if(this instanceof IAknOp){
+            return 6;
+        }
+
+        return -1;
+    }
+
+    public boolean doEntityUpgrade(){
+
+        if(this.getEntityUpgradeLv() >= this.getMaxEntityUpgrade()){
+            return false;
+        }
+
+        this.addEntityUpgrade(1);
+        this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
+        this.getUpgradeSound().ifPresent((sound)->this.playSound(sound, 1.0F, 1.0F));
+
+        if(!this.getCommandSenderWorld().isClientSide()) {
+            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.LIMITBREAK));
+        }
+        return true;
+    }
+
+
+    public int getAwakeningLv() {
+        return this.getEntityData().get(AWAKENINGLEVEL);
+    }
+
+    public void setAwakeningLv(int value) {
+        this.getEntityData().set(AWAKENINGLEVEL, value);
+    }
+
+    public void addAwakeningLevel(int delta){
+        setAwakeningLv(this.getAwakeningLv() + delta);
+    }
+
+    protected int getMaxAwakeningLevel(){
+        if(this instanceof IAknOp || this instanceof IFGOServant){
+            return 0;
+        }
+
+        return 2;
+    }
+
+    public boolean doAwakening(PlayerEntity player){
+
+        if(this.getLimitBreakLv()<this.getMaxAwakeningLevel()){
+            return false;
+        }
+
+        if(this.getAwakeningLv() >= this.getMaxAwakeningLevel()){
+            return false;
+        }
+
+        this.addAwakeningLevel(1);
+        this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
+        this.getUpgradeSound().ifPresent((sound)->this.playSound(sound, 1.0F, 1.0F));
+
+        if(!this.getCommandSenderWorld().isClientSide()) {
+            Main.NETWORK.send(TRACKING_ENTITY.with(() -> this), new spawnParticlePacket(this, spawnParticlePacket.Particles.LIMITBREAK));
+        }
+        return true;
+    }
+
+    protected Optional<SoundEvent> getLimitBreakSound(){
+        return Optional.empty();
+    }
+
+    protected Optional<SoundEvent> getUpgradeSound() {
+        return Optional.empty();
     }
 
     public float getAffection() {
@@ -2016,23 +2112,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public int getMaxLevel(){
-        switch (this.getLimitBreakLv()) {
-            default:
-                return 70;
-            case 1:
-                return 80;
-            case 2:
-                return 90;
-            case 3:
-                switch (this.getAwakeningLevel()){
-                    default:
-                        return 100;
-                    case 1:
-                        return 110;
-                    case 2:
-                        return 120;
-                }
+        if(this instanceof IAknOp){
+            switch(this.getLimitBreakLv()) {
+                default:
+                    return 50;
+                case 1:
+                    return 70;
+                case 2:
+                    return 80;
+            }
         }
+        else if(this instanceof IFGOServant){
+            return Math.min(60+this.getLimitBreakLv()<7?(this.getLimitBreakLv()*5):(this.getLimitBreakLv()*2), 120);
+        }
+        return 100;
     }
 
     public void addExp(double deltaExp){
