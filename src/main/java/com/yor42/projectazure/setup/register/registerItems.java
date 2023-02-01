@@ -154,6 +154,12 @@ public class registerItems {
     public static final RegistryObject<Item> COGNITIVE_ARRAY = ITEMS.register("cognitive_array", () -> new ItemCompanionUpgrade(new Item.Properties()
             .tab(PA_RESOURCES)));
 
+    public static final RegistryObject<Item> HOLY_GRAIL = ITEMS.register("holygrail", () -> new ItemCompanionUpgrade(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> PROMOTION_KIT = ITEMS.register("promotion_kit", () -> new ItemCompanionUpgrade(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
     public static final RegistryObject<Item> MOLD_PLATE = ITEMS.register("mold_plate", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_WIRE = ITEMS.register("mold_wire", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_EXTRACTION = ITEMS.register("mold_extraction", () -> new ItemCraftTool(128));

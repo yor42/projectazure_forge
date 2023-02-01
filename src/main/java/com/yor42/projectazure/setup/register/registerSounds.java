@@ -105,6 +105,9 @@ public final class registerSounds {
     public static final SoundEvent TEXAS_TALK_PAT = registerSoundEvent("texas_talk_pat");
     public static final SoundEvent TEXAS_TALK_ATTACK = registerSoundEvent("texas_talk_attack");
     public static final SoundEvent TEXAS_TALK_AGGRO = registerSoundEvent("texas_talk_aggro");
+    public static final SoundEvent TEXAS_PROMOTION_1 = registerSoundEvent("texas_promotion1");
+
+    public static final SoundEvent TEXAS_PROMOTION_2 = registerSoundEvent("texas_promotion2");
     public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION1 = registerSoundEvent("texas_talk_high_affection1");
     public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION2 = registerSoundEvent("texas_talk_high_affection2");
     public static final SoundEvent TEXAS_TALK_HIGH_AFFECTION3 = registerSoundEvent("texas_talk_high_affection3");

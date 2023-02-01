@@ -25,6 +25,11 @@
   "item.projectazure.token.tooltip.with_validentity": "%s의 당신을 향한 신뢰의 증표",
   "item.projectazure.token.tooltip": "당신을 향한 모두의 신뢰를 상징하는 증표",
 
+  "item.projectazure.cognitive_chip": "성정 유닛",
+  "item.projectazure.cognitive_array": "성정 회로",
+  "item.projectazure.promotion_kit": "정예화 키트",
+  "item.projectazure.holygrail": "성배",
+
   "item.projectazure.bonk_bat": "[검열됨] 메이커 곤봉",
 
   "item.projectazure.bandage_roll": "붕대",

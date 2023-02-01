@@ -117,6 +117,8 @@ public class itemModelProvider extends ItemModelProvider {
 
         buildModel("token");
         buildModel("cognitive_chip");
+        buildModel("holygrail");
+        buildModel("promotion_kit");
         buildModel("cognitive_array");
 
         /*

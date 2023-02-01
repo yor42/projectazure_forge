@@ -706,6 +706,20 @@
       }
     ]
   },
+  "texas_promotion1": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/promotion1"
+      }
+    ]
+  },
+  "texas_promotion2": {
+    "sounds": [
+      {
+        "name": "projectazure:entity/akn/texas/voice/promotion2"
+      }
+    ]
+  },
   "texas_talk_attack": {
     "sounds": [
       {

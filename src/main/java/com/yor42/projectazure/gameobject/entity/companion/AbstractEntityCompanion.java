@@ -27,6 +27,7 @@ import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
+import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -2012,10 +2013,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void setAffection(float affection){
         float prevvalue = this.getAffection();
-        float aftervalue = affection;
         this.getEntityData().set(AFFECTION, affection);
         if(this.getOwner() instanceof PlayerEntity) {
-            this.onAffectionChange(prevvalue, aftervalue, (PlayerEntity) this.getOwner());
+            this.onAffectionChange(prevvalue, affection, (PlayerEntity) this.getOwner());
         }
     }
 
@@ -2194,7 +2194,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void aiStep() {
         super.aiStep();
 
-        if(this.getOwner() != null && this.getOwner() instanceof PlayerEntity && this.isAlive()){
+        if(this.getOwner() != null && this.getOwner() instanceof PlayerEntity && this.isAlive()&&this.tickCount%100==0){
             ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
             if(!cap.getCompanionList().contains(this)){
                 cap.addCompanion(this);
@@ -2854,9 +2854,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     @Nullable
-    protected Item getLimitBreakItem(){
-        if(this instanceof IAknOp) {
-            return registerItems.TOKEN.get();
+    protected Item getLimitBreakItem() {
+        if (this instanceof IAknOp) {
+            return registerItems.PROMOTION_KIT.get();
+        } else if (this instanceof IFGOServant) {
+            return registerItems.HOLY_GRAIL.get();
         }
         return null;
     }
