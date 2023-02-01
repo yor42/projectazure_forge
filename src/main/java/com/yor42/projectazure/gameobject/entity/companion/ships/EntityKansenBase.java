@@ -13,6 +13,7 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.enums.AmmoCategory;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
@@ -56,8 +57,6 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.*;
 
 public abstract class EntityKansenBase extends AbstractEntityCompanion {
-
-    Random rand = new Random();
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
     private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",5F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
@@ -342,7 +341,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                 Vector3d offset = new Vector3d(-0.5F,0,0).yRot(this.yBodyRot);
                 shell.setPos(this.getX()+offset.x, this.getY(0.5)+offset.y, this.getZ()+offset.z);
                 shell.shoot(x,y,z, 1F, 0.05F);
-                this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+                this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (MathUtil.getRand().nextFloat() - MathUtil.getRand().nextFloat()) * 0.2F + 1.0F);
                 this.level.addFreshEntity(shell);
                 Ammostack.shrink(1);
                 Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));

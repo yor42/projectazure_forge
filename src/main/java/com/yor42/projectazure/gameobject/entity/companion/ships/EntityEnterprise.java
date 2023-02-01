@@ -7,6 +7,7 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
 import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -300,7 +301,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
 
         if (this.level.isClientSide && this.getInvincibleTimer()>0 && this.tickCount%10 == 0) {
             for(int i = 0; i < 2; ++i) {
-                this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+                this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), (MathUtil.getRand().nextDouble() - 0.5D) * 2.0D, -MathUtil.getRand().nextDouble(), (MathUtil.getRand().nextDouble() - 0.5D) * 2.0D);
             }
         }
     }
@@ -311,9 +312,9 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             this.setInvincibleTimer(240);
             plane.setAttackDamage(plane.getAttackDamage()*2);
             for(int i = 0; i < 5; ++i) {
-                double d0 = this.rand.nextGaussian() * 0.02D;
-                double d1 = this.rand.nextGaussian() * 0.02D;
-                double d2 = this.rand.nextGaussian() * 0.02D;
+                double d0 = MathUtil.getRand().nextGaussian() * 0.02D;
+                double d1 = MathUtil.getRand().nextGaussian() * 0.02D;
+                double d2 = MathUtil.getRand().nextGaussian() * 0.02D;
                 this.level.addParticle(ParticleTypes.HAPPY_VILLAGER, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
             }
         }
