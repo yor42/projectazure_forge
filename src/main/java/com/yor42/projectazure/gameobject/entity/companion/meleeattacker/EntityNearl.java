@@ -43,7 +43,7 @@ import static com.yor42.projectazure.libs.enums.CompanionRarity.STAR_5;
 import static com.yor42.projectazure.setup.register.registerItems.WARHAMMER;
 
 public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
-    public List<Entity> HealTarget = new ArrayList<>();
+    public List<LivingEntity> HealTarget = new ArrayList<>();
 
     public EntityNearl(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -329,9 +329,12 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
                 return true;
             }
             else if(this.getSkillPoints()>=6 && this.getOwner()!=null){
-                List<Entity> HealTarget = this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(5, 2, 5), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F));
+                this.HealTarget.clear();
+                this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(5, 2, 5), (entity) -> entity instanceof LivingEntity && (EntityNearl.this.isOwnedBy((LivingEntity) entity) || (entity instanceof TameableEntity && ((TameableEntity) entity).isOwnedBy(EntityNearl.this.getOwner()))) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F)).forEach((candidate)->{
+                    this.HealTarget.add((LivingEntity)candidate);
+                });
+
                 if(!HealTarget.isEmpty()){
-                    this.HealTarget = HealTarget;
                     return true;
                 };
             }
@@ -350,23 +353,17 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
             this.setSkillAnimationTime(this.SkillAnimationLength());
         }
         else if(Timer == 20){
+
+            this.HealTarget.sort((entity1,entity2)-> (int) (entity1.getHealth()-entity2.getHealth()));
+
             if(!this.HealTarget.isEmpty()) {
-                Entity entity2heal = HealTarget.get(0);
+                LivingEntity entity2heal = HealTarget.get(0);
                 if(this.getHealth()/this.getMaxHealth()<=0.5F){
                     entity2heal = this;
                 }
-                else {
-                    for (Entity entity : HealTarget) {
-                        if (entity2heal instanceof LivingEntity && entity instanceof LivingEntity) {
-                            if (((LivingEntity) entity).getHealth() <= ((LivingEntity) entity2heal).getHealth()) {
-                                entity2heal = entity;
-                            }
-                        }
-                    }
-                }
 
-                if (entity2heal instanceof LivingEntity) {
-                    ((LivingEntity) entity2heal).heal(Math.max(5, this.getAttackDamageMainHand()));
+                if (entity2heal != null) {
+                    entity2heal.heal(Math.max(5, this.getAttackDamageMainHand()));
                     for(int i = 0; i < 5; ++i) {
                         double d0 = this.random.nextGaussian() * 0.02D;
                         double d1 = this.random.nextGaussian() * 0.02D;
