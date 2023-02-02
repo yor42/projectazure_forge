@@ -9,6 +9,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
@@ -92,7 +93,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        if(AttackCount == 1){
+        if(AttackCount == 1 && MathUtil.rollBooleanRNG(0.25F)){
             this.playSound(registerSounds.ARTORIA_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
         }
         target.hurt(DamageSource.mobAttack(this), damage*4);

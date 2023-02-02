@@ -7,6 +7,7 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -318,7 +319,9 @@ public class EntityYato extends AbstractSwordUserBase implements IAknOp {
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
         target.hurt(DamageSource.mobAttack(this), damage);
-        this.playSound(registerSounds.YATO_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
+        if(MathUtil.rollBooleanRNG(0.25F)){
+            this.playSound(registerSounds.YATO_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
+        }
     }
 
     @Override

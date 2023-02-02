@@ -8,8 +8,10 @@ import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
+import com.yor42.solarapocalypse.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -56,14 +58,14 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public int MeleeAttackAnimationLength() {
-        return 31;
+        return 34;
     }
 
     @Override
     public ArrayList<Integer> getAttackDamageDelay() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(4);
-        list.add(12);
+        list.add(21);
         return list;
     }
 
@@ -100,7 +102,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public void PerformMeleeAttack(LivingEntity target, float damage, int AttackCount) {
-        if(AttackCount == 1) {
+        if(AttackCount == 1 && MathUtil.rollBooleanRNG(0.25F)) {
             this.playSound(CHEN_TALK_ATTACK, this.getSoundVolume(), this.getVoicePitch());
         }
         boolean ishit;
@@ -118,6 +120,7 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
         }
     }
 
+
     @Override
     public float getAttackSpeedModifier(boolean isUsingTalentedWeapon) {
         return isUsingTalentedWeapon? 1:1.2F;
@@ -125,7 +128,10 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        super.registerControllers(animationData);
+        AnimationController<?> UpperBodycontroller = new AnimationController<>(this, "controller_lowerbody", 1, this::predicate_lowerbody);
+        animationData.addAnimationController(UpperBodycontroller);
+        animationData.addAnimationController(new AnimationController<>(this, "controller_upperbody", 0, this::predicate_upperbody));
+        animationData.addAnimationController(new AnimationController<>(this, "controller_head", 1, this::predicate_head));
         animationData.addAnimationController(new AnimationController<>(this, "controller_tail", 10, this::predicate_tail));
     }
 

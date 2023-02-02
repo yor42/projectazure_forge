@@ -347,6 +347,12 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
         return this.HealTarget.isEmpty();
     }
 
+    @Nullable
+    @Override
+    public SoundEvent getPatSoundEvent() {
+        return registerSounds.NEARL_TALK_PAT;
+    }
+
     @Override
     public boolean performSkillTick(LivingEntity target, int Timer) {
         if(Timer == 0){
