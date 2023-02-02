@@ -75,6 +75,10 @@ public class MathUtil {
         return rand.nextInt(bound);
     }
 
+    public static int generateRandomIntInRange(int min, int max) {
+        return (int)(rand.nextFloat()*(max-min))+min;
+    }
+
     public static int rollDamagingRiggingCount(int RiggingCount){
         if(RiggingCount>=3) {
 

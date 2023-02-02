@@ -151,14 +151,18 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
+    protected void handleItemAndBlockBoneRendering(MatrixStack stack, GeoBone bone, @Nullable ItemStack boneItem, @Nullable BlockState boneBlock, int packedLightIn) {
+        if(!this.currentEntityBeingRendered.isPassenger()) {
+            super.handleItemAndBlockBoneRendering(stack, bone, boneItem, boneBlock, packedLightIn);
+        }
+    }
+
+    @Override
     protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
         matrixStack.scale(1F/0.4F,1F/0.4F,1F/0.4F);
         if (item == this.mainHand || item == this.offHand) {
             matrixStack.translate((bone.getPositionX()/16)*-0.4F, (bone.getPositionY()/16)*-0.4F, (bone.getPositionZ()/16)*-0.4F);
             matrixStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-            matrixStack.mulPose(Vector3f.XP.rotation(bone.getRotationX()*-1));
-            matrixStack.mulPose(Vector3f.YP.rotation(bone.getRotationY()*-1));
-            matrixStack.mulPose(Vector3f.ZP.rotation(bone.getRotationZ()*-1));
             boolean shieldFlag = item.isShield(currentEntity) || item.getItem() instanceof ShieldItem;
             if (item == this.mainHand) {
                 if (shieldFlag) {

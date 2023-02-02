@@ -48,8 +48,8 @@ public class ModelProjectileFallingnSword extends EntityModel<EntityFallingSword
 
 	@Override
 	public void setupAnim(EntityFallingSword entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		this.bone.xRot = headPitch*-1 * ((float)Math.PI / 180F);
-		this.bone.yRot = (netHeadYaw+90) * ((float)Math.PI / 180F);
+		//this.bone.xRot = headPitch*-1 * ((float)Math.PI / 180F);
+		//this.bone.yRot = (netHeadYaw+90) * ((float)Math.PI / 180F);
 	}
 
 	@Override

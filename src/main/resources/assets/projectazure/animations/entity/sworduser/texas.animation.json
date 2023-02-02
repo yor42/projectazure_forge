@@ -256,7 +256,7 @@
 			}
 		},
 		"skill": {
-			"animation_length": 2.2,
+			"animation_length": 2.05,
 			"bones": {
 				"Body": {
 					"rotation": {
@@ -583,12 +583,17 @@
 							"vector": [-180, 0, 0],
 							"easing": "easeInOutSine"
 						},
-						"1.6": {
+						"1.5": {
 							"vector": [-180, 0, 0],
 							"easing": "easeInOutSine"
 						},
-						"1.9": {
-							"vector": [0, 0, 0]
+						"1.75": {
+							"vector": [-180, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.05": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutCubic"
 						}
 					}
 				},
@@ -999,12 +1004,17 @@
 							"vector": [-180, 0, 0],
 							"easing": "easeInOutSine"
 						},
-						"1.6": {
+						"1.5": {
 							"vector": [-180, 0, 0],
 							"easing": "easeInOutSine"
 						},
-						"1.9": {
-							"vector": [0, 0, 0]
+						"1.75": {
+							"vector": [-180, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"2.05": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutCubic"
 						}
 					}
 				},
@@ -2056,10 +2066,12 @@
 							"vector": [30, 0, 0]
 						},
 						"0.5833": {
-							"vector": [-32.5, 0, 0]
+							"vector": [-32.5, 0, 0],
+							"easing": "easeInOutSine"
 						},
 						"1.1667": {
-							"vector": [30, 0, 0]
+							"vector": [30, 0, 0],
+							"easing": "easeInOutSine"
 						}
 					}
 				},
@@ -2084,10 +2096,12 @@
 							"vector": [-32.5, 0, 0]
 						},
 						"0.5833": {
-							"vector": [30, 0, 0]
+							"vector": [30, 0, 0],
+							"easing": "easeInOutSine"
 						},
 						"1.1667": {
-							"vector": [-32.5, 0, 0]
+							"vector": [-32.5, 0, 0],
+							"easing": "easeInOutSine"
 						}
 					}
 				},
@@ -2097,10 +2111,12 @@
 							"vector": [-22.5, 0, 0]
 						},
 						"0.5833": {
-							"vector": [0, 0, 0]
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
 						},
 						"1.1667": {
-							"vector": [-22.5, 0, 0]
+							"vector": [-22.5, 0, 0],
+							"easing": "easeInOutSine"
 						}
 					}
 				}
@@ -3750,6 +3766,19 @@
 						"0.85": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"itemOffHand": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [-37.5, 0, 0]
+						},
+						"0.4": {
+							"vector": [67.5, 0, 0]
 						}
 					}
 				}

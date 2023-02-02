@@ -5,12 +5,15 @@ import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
+import com.yor42.projectazure.gameobject.entity.projectiles.EntityFallingSword;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -38,9 +41,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
+
+    private final List<LivingEntity> targets = new ArrayList<>();
+    private final List<Entity> projectiles = new ArrayList<>();
     public EntityTexas(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -70,7 +79,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public int maxSkillPoint() {
-        return 18;
+        return 40;
     }
 
     @Override
@@ -326,6 +335,74 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
         return new ArrayList<>(Collections.singletonList(registerItems.FLEXABLE_SWORD_THINGY.get()));
+    }
+
+    @Override
+    public boolean canUseSkill(@Nullable LivingEntity target) {
+        int currentspelldelay = this.getNonVanillaMeleeAttackDelay();
+
+        if(target == null){
+            return false;
+        }
+        int sp = this.getSkillPoints();
+        boolean hasSkillpoint = sp>39;
+        if(currentspelldelay == 0 &&hasSkillpoint){
+            this.targets.clear();
+            this.targets.add(target);
+            this.getCommandSenderWorld().getEntities(target, target.getBoundingBox().inflate(5, 2, 5), (canditate)-> canditate instanceof LivingEntity && !this.isAlly((LivingEntity) canditate)).forEach((entity)->{
+                this.targets.add((LivingEntity) entity);
+            });
+            return !this.targets.isEmpty() && this.getTalentedWeaponList().contains(this.getOffhandItem().getItem());
+        }
+        return false;
+    }
+
+    @Override
+    public boolean performOneTimeSkill(LivingEntity target) {
+        return false;
+    }
+
+    //Sword Rain :d
+    @Override
+    public boolean performSkillTick(LivingEntity target, int Timer) {
+        if(Timer == 0){
+            this.projectiles.clear();
+            this.setSkillAnimationTime(44);
+        }else if(Timer == 15) {
+            int count = MathUtil.generateRandomIntInRange(9,14);
+            int index = 0;
+            while(index<count){
+                if(index<this.targets.size()){
+                    LivingEntity tgt = this.targets.get(index);
+                    EntityFallingSword sword = new EntityFallingSword(this, tgt.getX(0.5), this.getY()+15, tgt.getZ(0.5), this.getCommandSenderWorld());
+                    sword.shoot(0, -20, 0,2, 0.5F);
+                    this.projectiles.add(sword);
+                }
+                else{
+                    float randomx = (float) ((target.getX(0.5)-5)+(MathUtil.getRand().nextFloat()*10));
+                    float randomy = (float) (target.getY()+15);
+                    float randomz = (float) ((target.getZ(0.5)-5)+(MathUtil.getRand().nextFloat()*10));
+                    EntityFallingSword sword = new EntityFallingSword(this, randomx, randomy, randomz, this.getCommandSenderWorld());
+                    sword.shoot(0, -20, 0,2, 0.5F);
+                    this.projectiles.add(sword);
+                }
+                index++;
+            }
+        }
+        else if(Timer >= 27){
+            int index = Timer-27;
+            if(index<this.projectiles.size()){
+                this.getCommandSenderWorld().addFreshEntity(this.projectiles.get(index));
+            }
+            else{
+                this.projectiles.clear();
+                this.addMorale(-0.3);
+                this.setSkillDelay();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

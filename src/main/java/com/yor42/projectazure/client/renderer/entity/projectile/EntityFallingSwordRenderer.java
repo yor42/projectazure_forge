@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nonnull;
 
@@ -39,9 +40,9 @@ public class EntityFallingSwordRenderer extends EntityRenderer<EntityFallingSwor
         EntityModel<EntityFallingSword> model = new ModelProjectileFallingnSword();
         IVertexBuilder builder = bufferIn.getBuffer(RENDER_TYPE);
         matrixStackIn.pushPose();
-        float f = MathHelper.rotLerp(partialTicks, entityIn.yRotO, entityIn.yRot);
-        float f6 = MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot);
-        model.setupAnim(entityIn,partialTicks,0.0F, -0.1F, f, f6);
+        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.yRotO, entityIn.yRot) - 90.0F));
+        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(MathHelper.lerp(partialTicks, entityIn.xRotO, entityIn.xRot)));
+        //model.setupAnim(entityIn,partialTicks,0.0F, -0.1F, f, f6);
         model.renderToBuffer(matrixStackIn, builder, packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0F);
         matrixStackIn.popPose();
     }
