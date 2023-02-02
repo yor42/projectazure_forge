@@ -58,6 +58,7 @@ public class registerEntity {
     //projectile
     public static final RegistryObject<EntityType<EntityCannonPelllet>> PROJECTILE_CANNONSHELL = ENTITIES.register("entitycannonshell", () -> EntityType.Builder.<EntityCannonPelllet>of(EntityCannonPelllet::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("projectilecannonshell").toString()));
     public static final RegistryObject<EntityType<EntitySpellBall>> PROJECTILE_SPELLBALL = ENTITIES.register("entityspellball", () -> EntityType.Builder.<EntitySpellBall>of(EntitySpellBall::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("projectilespellball").toString()));
+    public static final RegistryObject<EntityType<EntityFallingSword>> PROJECTILE_FALLINGSWIRD = ENTITIES.register("entityfaillingsword", () -> EntityType.Builder.of(EntityFallingSword::new, EntityClassification.MISC).sized(1F, 1F).build(ModResourceLocation("projectilefallingsword").toString()));
 
     public static final RegistryObject<EntityType<EntityArtoria>> ARTORIA = ENTITIES.register("entityartoria", () -> EntityType.Builder.of(EntityArtoria::new, EntityClassification.CREATURE).sized(0.572F, 1.54F).build(ModResourceLocation("entityartoria").toString()));
     public static final RegistryObject<EntityType<EntityScathath>> SCATHATH = ENTITIES.register("entityscathath", () -> EntityType.Builder.of(EntityScathath::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityscathath").toString()));
@@ -180,6 +181,7 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_ARTS.get(), EntityArtsProjectileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_THROWN_KNIFE.get(), EntityThrownKnifeRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_FALLINGSWIRD.get(), EntityFallingSwordRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.CLAYMORE.get(), EntityClaymoreRenderer::new);
 
