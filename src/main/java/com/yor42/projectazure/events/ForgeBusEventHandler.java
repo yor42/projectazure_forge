@@ -12,6 +12,7 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressC
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
+import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
@@ -46,6 +47,7 @@ import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

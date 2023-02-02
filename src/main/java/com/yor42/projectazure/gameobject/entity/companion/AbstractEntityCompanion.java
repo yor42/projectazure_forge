@@ -27,7 +27,6 @@ import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
-import com.yor42.projectazure.gameobject.entity.companion.ranged.EntitySchwarz;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
@@ -110,8 +109,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -170,11 +167,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public float getBowRange() {
         return 4;
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        return super.getDisplayName();
     }
 
     protected final IItemHandlerModifiable EQUIPMENT = new IItemHandlerModifiable() {
@@ -372,13 +364,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             return stack.getItem() instanceof ItemCannonshell || stack.getItem() instanceof AmmoItem || stack.getItem() instanceof ArrowItem;
         }
     };
-
-    protected int patTimer;
-    protected int shieldCoolDown;
     public int RangedAttackCoolDown;
-    protected int qinteractionTimer;
-    private int ItemSwapIndexOffhand = -1;
-    private int ItemSwapIndexMainHand = -1;
+    protected int qinteractionTimer, shieldCoolDown, patTimer;
+    private int ItemSwapIndexOffhand = -1, ItemSwapIndexMainHand = -1;
     protected int lastAggroedTimeStamp = 0;
     protected int toldtomovecount = 0;
     public boolean shouldBeSitting;
@@ -392,7 +380,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private final PathNavigator sailingNav;
     protected CompanionFoodStats foodStats = new CompanionFoodStats();
     private List<ExperienceOrbEntity> nearbyExpList;
-    protected long lastSlept, lastWokenup;
+    protected long lastSlept, lastWokenup, lastsleepingheal;
     private int forcewakeupExpireTimer, forceWakeupCounter, expdelay;
     public int StartedMeleeAttackTimeStamp = -1;
     public int AttackCount = 0;
@@ -746,6 +734,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putDouble("morale", this.getEntityData().get(MORALE));
         compound.putLong("lastslept", this.lastSlept);
         compound.putLong("lastwoken", this.lastWokenup);
+        compound.putLong("lastsleepingheal", this.lastsleepingheal);
         compound.putBoolean("isMovingtoRecruitStation", this.isMovingtoRecruitStation);
         compound.put("inventory", this.getInventory().serializeNBT());
         compound.putInt("shieldcooldown", this.shieldCoolDown);
@@ -847,6 +836,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getInventory().deserializeNBT(compound.getCompound("inventory"));
         this.lastSlept = compound.getLong("lastslept");
         this.lastWokenup = compound.getLong("lastwoken");
+        this.lastsleepingheal = compound.getLong("lastsleepingheal");
         this.getAmmoStorage().deserializeNBT(compound.getCompound("ammostorage"));
         this.getFoodStats().read(compound);
         this.ItemSwapIndexMainHand = compound.getInt("SwapIndexMainHand");
@@ -1701,7 +1691,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> pAnimationEvent){
         return PlayState.STOP;
-    };
+    }
 
     protected abstract <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event);
 
@@ -2460,6 +2450,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.heal(1F);
                 this.addAffection(0.1);
                 this.addMorale(2.5F);
+                this.lastsleepingheal = this.getCommandSenderWorld().dayTime();
             }
 
             if(this.isCriticallyInjured()){
@@ -3417,16 +3408,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public void stopSleeping() {
         super.stopSleeping();
         this.setLastWokenup(this.getCommandSenderWorld().getDayTime());
-    }
-
-    @SubscribeEvent
-    public void OnTimeSkip(PlayerWakeUpEvent event){
-        this.setLastWokenup(this.getCommandSenderWorld().getDayTime());
         this.CalculateMoraleBasedonTime(this.getLastSlept(), this.getLastWokenup());
     }
 
-    private void CalculateMoraleBasedonTime(long lastSlept, long lastWokenup) {
-        long deltaTime = lastSlept-lastWokenup;
+    public void CalculateMoraleBasedonTime(long lastSlept, long lastWokenup) {
+        long deltaTime = Math.max(0,Math.max(this.lastsleepingheal, lastSlept)-lastWokenup);
         this.addAffection(0.02*((float)deltaTime/300));
         this.addMorale(((float)deltaTime/1000)*30);
     }
