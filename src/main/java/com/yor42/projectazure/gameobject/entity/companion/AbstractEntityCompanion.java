@@ -3434,6 +3434,25 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setMorale((float) MathUtils.clamp(prevmorale+value, 0, this.getMaxMorale()));
     }
 
+    public enums.Morale moraleValuetoLevel(){
+        double morale = this.getMorale();
+        if(morale>=120.0D){
+            return enums.Morale.REALLY_HAPPY;
+        }
+        else if(morale>=70){
+            return enums.Morale.HAPPY;
+        }
+        else if(morale>=30){
+            return enums.Morale.NEUTRAL;
+        }
+        else if(morale>10){
+            return enums.Morale.TIRED;
+        }
+        else{
+            return enums.Morale.EXHAUSTED;
+        }
+    }
+
     public Optional<BlockPos> getStayCenterPos() {
         return this.getEntityData().get(STAYPOINT);
     }

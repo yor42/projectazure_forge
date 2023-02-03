@@ -78,24 +78,6 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
         }
     }
 
-    private enums.Morale moraleValuetoLevel(){
-        if(this.morale>=120.0D){
-            return enums.Morale.REALLY_HAPPY;
-        }
-        else if(this.morale>=70){
-            return enums.Morale.HAPPY;
-        }
-        else if(this.morale>=30){
-            return enums.Morale.NEUTRAL;
-        }
-        else if(this.morale>10){
-            return enums.Morale.TIRED;
-        }
-        else{
-            return enums.Morale.EXHAUSTED;
-        }
-    }
-
     public int getY() {
         return this.topPos;
     }
@@ -195,15 +177,6 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
         this.host.SwitchFreeRoamingStatus();
     }
 
-    private void renderButton(MatrixStack matrixStack) {
-        for (int i = 0; i < 5; i++){
-            if(i==0)
-                continue;
-            int finalI = i;
-            new ImageButton(81+(12*i)+8,6,12,12,1,193,0,TEXTURE, action -> moveTab(finalI));
-        }
-    }
-
     private void moveTab(int finalI) {
         inventory.player.closeContainer();
     }
@@ -276,7 +249,7 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
         int textureY = 13;
         int textureX = 176;
 
-        enums.Morale morale = this.moraleValuetoLevel();
+        enums.Morale morale = this.host.moraleValuetoLevel();
 
         int color=16777215;
         switch (morale){

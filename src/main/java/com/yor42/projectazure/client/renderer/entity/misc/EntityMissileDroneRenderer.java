@@ -12,6 +12,7 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
@@ -24,14 +25,14 @@ public class EntityMissileDroneRenderer extends GeoEntityRenderer<EntityMissileD
         super(renderManager, new ModelMissileDroneEntity());
     }
 
+    @Nonnull
     @Override
-    public ResourceLocation getTextureLocation(EntityMissileDrone entity) {
+    public ResourceLocation getTextureLocation(@Nonnull EntityMissileDrone entity) {
         return ModResourceLocation("textures/planes/missiledrone.png");
     }
 
     @Override
     public void renderEarly(EntityMissileDrone animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        this.ammo = animatable.getammo();
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
     }
 
@@ -47,7 +48,7 @@ public class EntityMissileDroneRenderer extends GeoEntityRenderer<EntityMissileD
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         String name = bone.getName();
         if(name.contains("missile")){
-            int missilenumber = Integer.parseInt(name.replaceAll("[^0-9]", ""));
+            int missilenumber = Integer.parseInt(name.replaceAll("\\D", ""));
             bone.setHidden(!(missilenumber<=this.ammo));
         }
 

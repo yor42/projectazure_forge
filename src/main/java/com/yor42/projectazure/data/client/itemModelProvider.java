@@ -174,6 +174,7 @@ public class itemModelProvider extends ItemModelProvider {
         buildModel("stasis_crystal");
         buildModel("gunpowder_compound");
         buildModel("5.56_magazine");
+        buildModel("computercore");
 
         buildModelWisdomCube("spawnayanami");
         buildModelWisdomCube("spawnjavelin");
@@ -212,7 +213,6 @@ public class itemModelProvider extends ItemModelProvider {
         buildModelFGO("spawnmash");
 
         buildModelPCR("spawnkyaru");
-
 
         buildModelcls("spawnsylvi");
 

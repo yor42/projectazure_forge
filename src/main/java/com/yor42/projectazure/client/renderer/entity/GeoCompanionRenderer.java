@@ -1,16 +1,22 @@
 package com.yor42.projectazure.client.renderer.entity;
 
+import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Pose;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -22,6 +28,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -152,7 +160,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
 
     @Override
     protected void handleItemAndBlockBoneRendering(MatrixStack stack, GeoBone bone, @Nullable ItemStack boneItem, @Nullable BlockState boneBlock, int packedLightIn) {
-        if(!this.currentEntityBeingRendered.isPassenger()) {
+        if(!this.currentEntityBeingRendered.isPassenger() && !this.currentEntityBeingRendered.isBeingPatted() && !this.currentEntityBeingRendered.islewded()) {
             super.handleItemAndBlockBoneRendering(stack, bone, boneItem, boneBlock, packedLightIn);
         }
     }
@@ -330,6 +338,8 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             float renderscale = 0.3F;
             float f = (entity.getBbHeight() + 0.1F) / renderscale;
             stack.pushPose();
+            FontRenderer fontrenderer = this.getFont();
+            float f2 = (float) (-fontrenderer.width(text) / 2);
             stack.scale(renderscale, renderscale, renderscale);
             stack.translate(0.0D, f, 0.0D);
             stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
@@ -337,13 +347,36 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             Matrix4f matrix4f = stack.last().pose();
             float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
             int j = (int) (f1 * 255.0F) << 24;
-            FontRenderer fontrenderer = this.getFont();
-            float f2 = (float) (-fontrenderer.width(text) / 2);
             fontrenderer.drawInBatch(text, f2, (float) 0, 553648127, false, matrix4f, iRenderTypeBuffer, flag, j, p_225629_5_);
             if (flag) {
                 fontrenderer.drawInBatch(text, f2, (float) 0, -1, false, matrix4f, iRenderTypeBuffer, false, 0, p_225629_5_);
             }
 
+            renderscale = 8;
+            stack.scale(renderscale,renderscale,renderscale);
+
+            ResourceTexture texture = new ResourceTexture( ResourceUtils.ModResourceLocation("textures/gui/ship_inventory.png"),176/256F,13/256F, 12/256F,12/256F);
+
+            if(this.currentEntityBeingRendered != null) {
+                switch (this.currentEntityBeingRendered.moraleValuetoLevel()) {
+                    default:
+                        texture = texture.getSubTexture(0,0,1,1);
+                        break;
+                    case REALLY_HAPPY:
+                        texture = texture.getSubTexture(4,0,1,1);
+                        break;
+                    case HAPPY:
+                        texture = texture.getSubTexture(3,0,1,1);
+                        break;
+                    case NEUTRAL:
+                        texture = texture.getSubTexture(2,0,1,1);
+                        break;
+                    case TIRED:
+                        texture = texture.getSubTexture(1,0,1,1);
+                        break;
+                }
+                texture.draw(stack, 0,0 , (f2-12)/renderscale,0,1,1);
+            }
             stack.popPose();
         }
     }

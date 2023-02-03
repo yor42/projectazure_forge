@@ -144,6 +144,8 @@ public class registerItems {
 
     public static final RegistryObject<Item> SAINT_QUARTZ = ITEMS.register("saint_quartz", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> COMPUTERCORE = ITEMS.register("computercore", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
 
     public static final RegistryObject<Item> TOKEN = ITEMS.register("token", () -> new ItemCompanionUpgrade(new Item.Properties()
             .tab(PA_RESOURCES)));
@@ -168,7 +170,7 @@ public class registerItems {
             .tab(PA_GROUP)
             .rarity(Rarity.EPIC)){
         @Override
-        public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
             if(worldIn != null && worldIn.isClientSide) {
                 if (Screen.hasShiftDown()) {
@@ -226,7 +228,7 @@ public class registerItems {
             .rarity(Rarity.EPIC)
             .stacksTo(1)){
         @Override
-        public boolean isFoil(ItemStack stack) {
+        public boolean isFoil(@Nonnull ItemStack stack) {
             return true;
         }
     });

@@ -43,11 +43,11 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
-        if(Minecraft.getInstance().isPaused()){
+        AnimationBuilder builder = new AnimationBuilder();
+        if(Minecraft.getInstance().isPaused() || this.swinging){
             return PlayState.STOP;
         }
-        AnimationBuilder builder = new AnimationBuilder();
-        if(this.isDeadOrDying()){
+        else if(this.isDeadOrDying()){
             if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
@@ -55,9 +55,6 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
                 event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop"));
             }
             return PlayState.CONTINUE;
-        }
-        else if(this.swinging){
-            return PlayState.STOP;
         }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
             event.getController().setAnimation(builder.addAnimation("lewd_chest", ILoopType.EDefaultLoopTypes.LOOP));

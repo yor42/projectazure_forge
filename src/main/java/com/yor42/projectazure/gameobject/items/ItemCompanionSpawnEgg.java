@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.items;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
@@ -21,9 +22,7 @@ import net.minecraftforge.fml.RegistryObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 
@@ -31,12 +30,12 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
 
     private final RegistryObject<EntityType<T>> Entity;
 
-    private static final List<Pair<String, ItemCompanionSpawnEgg<?>>> TYPE_MAP = new ArrayList<>();
+    private static final HashMap<String, ItemCompanionSpawnEgg<?>> MAP = new HashMap<>();
 
     public ItemCompanionSpawnEgg(RegistryObject<EntityType<T>> type, Properties properties) {
         super(properties);
         this.Entity = type;
-        TYPE_MAP.add(new Pair<>(type.getId().toString(), this));
+        MAP.put(type.getId().toString(), this);
     }
 
     @Nullable
@@ -45,15 +44,9 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
         if(type == null){
             return null;
         }
-        String string = type.getRegistryName().toString();
+        String string = Objects.requireNonNull(type.getRegistryName()).toString();
 
-        //For whatever reason map doesn't work here.
-        for(Pair<String, ItemCompanionSpawnEgg<?>> entry:TYPE_MAP){
-            if(Objects.equals(entry.getFirst(), string)){
-                return entry.getSecond();
-            }
-        }
-        return null;
+        return MAP.get(string);
     }
 
     @Nonnull

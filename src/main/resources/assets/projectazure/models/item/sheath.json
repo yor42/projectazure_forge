@@ -258,25 +258,34 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 4.25, 1]
+			"translation": [0, 2, 0.75],
+			"scale": [0.75, 0.75, 0.75]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 4.25, 1]
+			"translation": [0, 2, 0.75],
+			"scale": [0.75, 0.75, 0.75]
 		},
 		"firstperson_righthand": {
-			"translation": [0, 4.25, 1]
+			"translation": [0, 2, 0.75],
+			"scale": [0.75, 0.75, 0.75]
 		},
 		"firstperson_lefthand": {
-			"translation": [0, 4.25, 1]
+			"translation": [0, 2, 0.75],
+			"scale": [0.75, 0.75, 0.75]
 		},
 		"ground": {
-			"rotation": [0, 0, -90],
-			"translation": [0, 1.25, 1]
+			"rotation": [0, 0, 90],
+			"translation": [4.75, 0, 0],
+			"scale": [0.75, 0.75, 0.75]
 		},
 		"gui": {
 			"rotation": [0, 90, 0],
 			"translation": [0, -2.5, 0],
 			"scale": [0.45, 0.45, 0.45]
+		},
+		"head": {
+			"translation": [0, 2, 0.75],
+			"scale": [0.75, 0.75, 0.75]
 		},
 		"fixed": {
 			"rotation": [0, -90, 0],
@@ -291,6 +300,8 @@
 			"name": "group",
 			"origin": [7.75, 8.69552, 8.50573],
 			"color": 0,
+			"nbt": "{}",
+			"armAnimationEnabled": false,
 			"children": [
 				3,
 				4,
@@ -298,6 +309,8 @@
 					"name": "group",
 					"origin": [8, 8.92926, 8],
 					"color": 0,
+					"nbt": "{}",
+					"armAnimationEnabled": false,
 					"children": [5]
 				}
 			]
@@ -306,6 +319,8 @@
 			"name": "group",
 			"origin": [8, 2.8822, 10.91615],
 			"color": 0,
+			"nbt": "{}",
+			"armAnimationEnabled": false,
 			"children": [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 		}
 	]
