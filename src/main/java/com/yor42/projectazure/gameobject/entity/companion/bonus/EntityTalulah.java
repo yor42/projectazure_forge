@@ -70,7 +70,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
+                event.getController().setAnimation(builder.addAnimation("faint_arm", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
             }
             return PlayState.CONTINUE;
         }
@@ -184,7 +184,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
+                event.getController().setAnimation(builder.addAnimation("faint_leg", ILoopType.EDefaultLoopTypes.HOLD_ON_LAST_FRAME));
             }
             return PlayState.CONTINUE;
         }

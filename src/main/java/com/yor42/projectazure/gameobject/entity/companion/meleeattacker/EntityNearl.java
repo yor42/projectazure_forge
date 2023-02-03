@@ -9,7 +9,6 @@ import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -330,13 +329,9 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
             }
             else if(this.getSkillPoints()>=6 && this.getOwner()!=null){
                 this.HealTarget.clear();
-                this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(5, 2, 5), (entity) -> entity instanceof LivingEntity && this.isAlly((LivingEntity) entity) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F)).forEach((candidate)->{
-                    this.HealTarget.add((LivingEntity)candidate);
-                });
+                this.getCommandSenderWorld().getEntities(this, this.getBoundingBox().inflate(5, 2, 5), (entity) -> entity instanceof LivingEntity && this.isAlly((LivingEntity) entity) && ((((LivingEntity) entity).getHealth()/((LivingEntity) entity).getMaxHealth())<=0.5F)).forEach((candidate)-> this.HealTarget.add((LivingEntity)candidate));
 
-                if(!HealTarget.isEmpty()){
-                    return true;
-                };
+                return !HealTarget.isEmpty();
             }
         }
         return false;

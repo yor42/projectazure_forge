@@ -2,10 +2,11 @@ package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.task.Task;
 import net.minecraft.world.server.ServerWorld;
+
+import javax.annotation.Nonnull;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 
@@ -18,17 +19,17 @@ public class CompanionUseSkillTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion companion) {
+    protected boolean checkExtraStartConditions(@Nonnull ServerWorld p_212832_1_, AbstractEntityCompanion companion) {
         return companion.getBrain().getMemory(ATTACK_TARGET).map(companion::canUseSkill).orElse(false);
     }
 
     @Override
-    protected boolean canStillUse(ServerWorld p_212834_1_, AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
+    protected boolean canStillUse(@Nonnull ServerWorld p_212834_1_, @Nonnull AbstractEntityCompanion p_212834_2_, long p_212834_3_) {
         return true;
     }
 
     @Override
-    protected void start(ServerWorld p_212831_1_, AbstractEntityCompanion companion, long p_212831_3_) {
+    protected void start(@Nonnull ServerWorld p_212831_1_, AbstractEntityCompanion companion, long p_212831_3_) {
         companion.getBrain().getMemory(ATTACK_TARGET).ifPresent((target)->{
             companion.setUsingSkill(true);
             if(companion.performOneTimeSkill(target)){
@@ -38,7 +39,7 @@ public class CompanionUseSkillTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void stop(ServerWorld p_212835_1_, AbstractEntityCompanion companion, long p_212835_3_) {
+    protected void stop(@Nonnull ServerWorld p_212835_1_, AbstractEntityCompanion companion, long p_212835_3_) {
         companion.resetSkill();
         companion.setSkillDelay();
         companion.setUsingSkill(false);
@@ -46,7 +47,7 @@ public class CompanionUseSkillTask extends Task<AbstractEntityCompanion> {
     }
 
     @Override
-    protected void tick(ServerWorld p_212833_1_, AbstractEntityCompanion companion, long p_212833_3_) {
+    protected void tick(@Nonnull ServerWorld p_212833_1_, AbstractEntityCompanion companion, long p_212833_3_) {
 
         companion.getBrain().getMemory(ATTACK_TARGET).ifPresent((target)->{
             if(companion.performSkillTick(target, this.SkillTimer)){

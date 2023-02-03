@@ -4,8 +4,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -21,7 +19,7 @@ public class ItemCompanionUpgrade extends Item {
     }
 
     @Override
-    public boolean isFoil(ItemStack p_77636_1_) {
+    public boolean isFoil(@Nonnull ItemStack p_77636_1_) {
         return true;
     }
 

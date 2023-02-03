@@ -11,7 +11,6 @@ import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerSounds;
-import com.yor42.solarapocalypse.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

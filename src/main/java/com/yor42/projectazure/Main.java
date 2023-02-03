@@ -12,7 +12,6 @@ import com.yor42.projectazure.events.ModBusEventHandlerClient;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityRailgunProjectile;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.intermod.top.TOPCompat;

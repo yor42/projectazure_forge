@@ -29,6 +29,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
@@ -56,43 +57,43 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop", true));
+                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
             return PlayState.STOP;
         }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            event.getController().setAnimation(builder.addAnimation("lewd", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isUsingSpell()){
-            event.getController().setAnimation(builder.addAnimation("ranged_attack_arm", false));
+            event.getController().setAnimation(builder.addAnimation("ranged_attack_arm", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.getUsedItemHand() == Hand.OFF_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat", true));
+            event.getController().setAnimation(builder.addAnimation("pat", ILoopType.EDefaultLoopTypes.LOOP));
 
             return PlayState.CONTINUE;
         }
         else if(this.isGettingHealed()){
-            event.getController().setAnimation(builder.addAnimation("heal_arm", true));
+            event.getController().setAnimation(builder.addAnimation("heal_arm", ILoopType.EDefaultLoopTypes.LOOP));
 
             return PlayState.CONTINUE;
         }
@@ -105,7 +106,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", true));
+                event.getController().setAnimation(builder.addAnimation("sit_arm").addAnimation("sit_arm_idle", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
@@ -114,7 +115,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
                 event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
@@ -122,39 +123,39 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
         }
         else if(this.isBlocking()){
-            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            event.getController().setAnimation(builder.addAnimation("shield_block", ILoopType.EDefaultLoopTypes.LOOP));
 
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("swim_arm", true));
+            event.getController().setAnimation(builder.addAnimation("swim_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_arm", true));
+                event.getController().setAnimation(builder.addAnimation("run_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walk_arm", true));
+                event.getController().setAnimation(builder.addAnimation("walk_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.getMainHandItem().getItem() instanceof GunItem){
             if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
 
-        event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+        event.getController().setAnimation(builder.addAnimation("idle_arm", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -186,12 +187,12 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop", true));
+                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", ILoopType.EDefaultLoopTypes.LOOP));
 
             return PlayState.CONTINUE;
         }
@@ -201,7 +202,7 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             }
             else {
                 if (this.isCriticallyInjured()) {
-                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg", false).addAnimation("sit_injured_leg_idle", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("sit_injured_leg_idle", ILoopType.EDefaultLoopTypes.LOOP));
                 } else {
                     event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
                 }
@@ -209,30 +210,25 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
             return PlayState.CONTINUE;
         }
         else if(this.isUsingSpell()){
-            event.getController().setAnimation(builder.addAnimation("ranged_attack_leg", false));
+            event.getController().setAnimation(builder.addAnimation("ranged_attack_leg", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("swim_leg", true));
+            event.getController().setAnimation(builder.addAnimation("swim_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
 
         if (isMoving()) {
             if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_leg", true));
+                event.getController().setAnimation(builder.addAnimation("run_leg", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walk_leg", true));
+                event.getController().setAnimation(builder.addAnimation("walk_leg", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        event.getController().setAnimation(builder.addAnimation("idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    public ItemStack getItemInHand(Hand p_184586_1_) {
-        return super.getItemInHand(p_184586_1_);
     }
 
     @Override

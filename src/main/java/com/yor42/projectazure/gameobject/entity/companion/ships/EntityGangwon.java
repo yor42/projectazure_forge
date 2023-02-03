@@ -17,6 +17,7 @@ import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
@@ -45,32 +46,32 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
         else if (this.isSleeping()) {
-            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep_arm", true));
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
             return PlayState.STOP;
         }else if (this.entityData.get(ECCI_ANIMATION_TIME) > 0 && !this.isAngry()) {
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            event.getController().setAnimation(builder.addAnimation("lewd", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (this.isBlocking()) {
-            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            event.getController().setAnimation(builder.addAnimation("shield_block", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         } else if (this.isBeingPatted()) {
             if (this.isOrderedToSit())
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat_sit", ILoopType.EDefaultLoopTypes.LOOP));
             else
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.pat", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         } else if (this.isGettingHealed()) {
-            event.getController().setAnimation(builder.addAnimation("animation.gangwon.heal_arm", true));
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.heal_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }else if (this.isEating()) {
             if (this.getUsedItemHand() == Hand.MAIN_HAND) {
-                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             } else if (this.getUsedItemHand() == Hand.OFF_HAND) {
-                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
@@ -83,7 +84,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
@@ -92,7 +93,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
                 event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
@@ -100,7 +101,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
@@ -110,23 +111,23 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
         else if (this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_arm", true));
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         } else if (isMoving()) {
             if (this.isSailing()) {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail_arm", ILoopType.EDefaultLoopTypes.LOOP));
             } else if (this.isSprinting()) {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.run_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.run_arm", ILoopType.EDefaultLoopTypes.LOOP));
             } else {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.getMainHandItem().getItem() instanceof GunItem){
             if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
@@ -162,7 +163,7 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep", true));
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.sleep", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
@@ -170,22 +171,22 @@ public class EntityGangwon extends EntityKansenDestroyer implements IAnimatable{
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_start").addAnimation("animation.gangwon.sit", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sit_start").addAnimation("animation.gangwon.sit", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_leg", true));
+            event.getController().setAnimation(builder.addAnimation("animation.gangwon.swim_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.sail", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.run", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.run", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk", true));
+                event.getController().setAnimation(builder.addAnimation("animation.gangwon.walk", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }

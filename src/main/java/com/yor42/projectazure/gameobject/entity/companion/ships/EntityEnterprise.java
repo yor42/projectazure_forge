@@ -30,6 +30,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
@@ -56,7 +57,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+            event.getController().setAnimation(builder.addAnimation("idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
@@ -65,29 +66,29 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             else {
                 if (this.isCriticallyInjured()) {
-                    event.getController().setAnimation(builder.addAnimation("sit_injured", false).addAnimation("sit_injured_idle", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_injured", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("sit_injured_idle", ILoopType.EDefaultLoopTypes.LOOP));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("animation.enterprise.sit_start").addAnimation("animation.enterprise.sit", true));
+                    event.getController().setAnimation(builder.addAnimation("animation.enterprise.sit_start").addAnimation("animation.enterprise.sit", ILoopType.EDefaultLoopTypes.LOOP));
                 }
             }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("animation.enterprise.swim_leg", true));
+            event.getController().setAnimation(builder.addAnimation("animation.enterprise.swim_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail", true));
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.run", true));
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.run", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.walk", true));
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.walk", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        event.getController().setAnimation(builder.addAnimation("idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -113,7 +114,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.enterprise.sleep", true));
+            event.getController().setAnimation(builder.addAnimation("animation.enterprise.sleep", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
@@ -125,7 +126,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
-                    event.getController().setAnimation(builder.addAnimation("animation.enterprise.idle", true));
+                    event.getController().setAnimation(builder.addAnimation("animation.enterprise.idle", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
@@ -133,14 +134,14 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.STOP;
         }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            event.getController().setAnimation(builder.addAnimation("lewd", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
             if(this.isOrderedToSit())
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", true));
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat_sit", ILoopType.EDefaultLoopTypes.LOOP));
             else
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", true));
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.pat", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
@@ -153,7 +154,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
                 
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
@@ -161,7 +162,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
@@ -172,50 +173,50 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
         }
         else if(this.isEating()){
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.getUsedItemHand() == Hand.OFF_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.isBlocking()){
-            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            event.getController().setAnimation(builder.addAnimation("shield_block", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isBlocking()){
-            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            event.getController().setAnimation(builder.addAnimation("shield_block", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isGettingHealed()){
-            event.getController().setAnimation(builder.addAnimation("animation.enterprise.heal_arm", true));
+            event.getController().setAnimation(builder.addAnimation("animation.enterprise.heal_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("animation.enterprise.swim_arm", true));
+            event.getController().setAnimation(builder.addAnimation("animation.enterprise.swim_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.sail_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.run_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.run_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.enterprise.walk_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.enterprise.walk_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.getMainHandItem().getItem() instanceof GunItem){
             if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("animation.enterprise.idle", true));
+        event.getController().setAnimation(builder.addAnimation("animation.enterprise.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -284,7 +285,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@Nonnull DamageSource source, float amount) {
         if(this.getInvincibleTimer()>0){
             return false;
         }

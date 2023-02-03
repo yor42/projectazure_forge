@@ -43,8 +43,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
@@ -290,7 +288,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
             return PlayState.CONTINUE;
         }
         if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("melee_attack_leg", false));
+            event.getController().setAnimation(builder.addAnimation("melee_attack_leg", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {
@@ -349,9 +347,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
         if(currentspelldelay == 0 &&hasSkillpoint){
             this.targets.clear();
             this.targets.add(target);
-            this.getCommandSenderWorld().getEntities(target, target.getBoundingBox().inflate(5, 2, 5), (canditate)-> canditate instanceof LivingEntity && !this.isAlly((LivingEntity) canditate)).forEach((entity)->{
-                this.targets.add((LivingEntity) entity);
-            });
+            this.getCommandSenderWorld().getEntities(target, target.getBoundingBox().inflate(5, 2, 5), (canditate)-> canditate instanceof LivingEntity && !this.isAlly((LivingEntity) canditate)).forEach((entity)-> this.targets.add((LivingEntity) entity));
             return !this.targets.isEmpty() && this.getTalentedWeaponList().contains(this.getOffhandItem().getItem());
         }
         return false;

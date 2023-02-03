@@ -18,6 +18,7 @@ import net.minecraftforge.common.ForgeMod;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
@@ -46,19 +47,19 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.STOP;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_body", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_upper_body", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isBlocking()){
-            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            event.getController().setAnimation(builder.addAnimation("shield_block", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            event.getController().setAnimation(builder.addAnimation("lewd", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.pat", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
@@ -76,10 +77,10 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
         }
         else if(this.isEating()){
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else{
-                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
@@ -96,7 +97,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
                 event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
@@ -104,40 +105,40 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
         }
         else if(this.isGettingHealed()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.heal_arm", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.heal_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_arm", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk_arm", true));
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.getMainHandItem().getItem() instanceof GunItem){
             if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", true));
+        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -160,7 +161,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_leg", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.sleep_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
@@ -171,29 +172,29 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", true));
+                    event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", ILoopType.EDefaultLoopTypes.LOOP));
                 }
             }
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_leg", true));
+            event.getController().setAnimation(builder.addAnimation("animation.ayanami.swim_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSailing()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", true));
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.sail", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run", true));
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.run", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk", true));
+                event.getController().setAnimation(builder.addAnimation("animation.ayanami.walk", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
 
-        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle_leg", true));
+        event.getController().setAnimation(builder.addAnimation("animation.ayanami.idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 

@@ -49,7 +49,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Random;
 import java.util.UUID;
 
 import static com.yor42.projectazure.libs.enums.SLOTTYPE.MAIN_GUN;
