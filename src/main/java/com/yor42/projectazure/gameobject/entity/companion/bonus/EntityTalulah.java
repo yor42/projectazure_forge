@@ -42,6 +42,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
@@ -64,7 +65,6 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
-
         if(this.isDeadOrDying()){
             if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
@@ -78,27 +78,27 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.STOP;
         }
         else if(this.isUsingWorldSkill()){
-            event.getController().setAnimation(builder.addAnimation("worldskill", true));
+            event.getController().setAnimation(builder.addAnimation("worldskill", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.entityData.get(ECCI_ANIMATION_TIME)>0 && !this.isAngry()){
-            event.getController().setAnimation(builder.addAnimation("lewd", true));
+            event.getController().setAnimation(builder.addAnimation("lewd", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("meleeattack_arm", true));
+            event.getController().setAnimation(builder.addAnimation("meleeattack_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isUsingSpell()){
-            event.getController().setAnimation(builder.addAnimation("rangedattack_arm", true));
+            event.getController().setAnimation(builder.addAnimation("rangedattack_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isEating()){
             if(this.getUsedItemHand() == Hand.MAIN_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_mainhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_mainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(this.getUsedItemHand() == Hand.OFF_HAND){
-                event.getController().setAnimation(builder.addAnimation("eat_offhand", true));
+                event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
@@ -108,11 +108,11 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_arm", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat", true));
+            event.getController().setAnimation(builder.addAnimation("pat", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isReloadingMainHand()) {
@@ -120,7 +120,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
                 event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }else if(this.isUsingGun()){
@@ -128,50 +128,50 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
                 event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
 
             return PlayState.CONTINUE;
         }
         else if(this.isBlocking()){
-            event.getController().setAnimation(builder.addAnimation("shield_block", true));
+            event.getController().setAnimation(builder.addAnimation("shield_block", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isGettingHealed()){
-            event.getController().setAnimation(builder.addAnimation("heal_arm", true));
+            event.getController().setAnimation(builder.addAnimation("heal_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("swim_arm", true));
+            event.getController().setAnimation(builder.addAnimation("swim_arm", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit()){
             if(this.getMainHandItem().getItem() instanceof TieredItem){
-                event.getController().setAnimation(builder.addAnimation("sit_idle_arm_toolmainhand", true));
+                event.getController().setAnimation(builder.addAnimation("sit_idle_arm_toolmainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("sit_idle_arm_emptymainhand", true));
+                event.getController().setAnimation(builder.addAnimation("sit_idle_arm_emptymainhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.getMainHandItem().getItem() instanceof GunItem){
             if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", true));
+                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
         else if(this.isMoving()) {
             if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_arm", true));
+                event.getController().setAnimation(builder.addAnimation("run_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walk_arm", true));
+                event.getController().setAnimation(builder.addAnimation("walk_arm", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("idle_arm", true));
+        event.getController().setAnimation(builder.addAnimation("idle_arm", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -189,7 +189,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_leg", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
@@ -200,28 +200,28 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", true));
+                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
                 }
             }
             return PlayState.CONTINUE;
         }else if(this.isSwimming()) {
-            event.getController().setAnimation(builder.addAnimation("swim_leg", true));
+            event.getController().setAnimation(builder.addAnimation("swim_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isNonVanillaMeleeAttacking()){
-            event.getController().setAnimation(builder.addAnimation("meleeattack_leg", true));
+            event.getController().setAnimation(builder.addAnimation("meleeattack_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if (isMoving()) {
             if(this.isSprinting()){
-                event.getController().setAnimation(builder.addAnimation("run_leg", true));
+                event.getController().setAnimation(builder.addAnimation("run_leg", ILoopType.EDefaultLoopTypes.LOOP));
             }
             else {
-                event.getController().setAnimation(builder.addAnimation("walk_leg", true));
+                event.getController().setAnimation(builder.addAnimation("walk_leg", ILoopType.EDefaultLoopTypes.LOOP));
             }
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(builder.addAnimation("idle_leg", true));
+        event.getController().setAnimation(builder.addAnimation("idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
@@ -234,16 +234,16 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         AnimationBuilder builder = new AnimationBuilder();
 
         if(this.isOrderedToSit() && this.getVehicle() == null){
-            event.getController().setAnimation(builder.addAnimation("sit_tail").addAnimation("sit_tail_idle", true));
+            event.getController().setAnimation(builder.addAnimation("sit_tail").addAnimation("sit_tail_idle", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else if(this.isSleeping()){
-            event.getController().setAnimation(builder.addAnimation("sleep_tail", true));
+            event.getController().setAnimation(builder.addAnimation("sleep_tail", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else if(this.isBeingPatted()){
-            event.getController().setAnimation(builder.addAnimation("pat_tail", true));
+            event.getController().setAnimation(builder.addAnimation("pat_tail", ILoopType.EDefaultLoopTypes.LOOP));
         }
         else{
-            event.getController().setAnimation(builder.addAnimation("idle_tail", true));
+            event.getController().setAnimation(builder.addAnimation("idle_tail", ILoopType.EDefaultLoopTypes.LOOP));
         }
 
         return PlayState.CONTINUE;
@@ -314,7 +314,7 @@ public class EntityTalulah extends AbstractEntityCompanion implements IAknOp, IM
         if(te instanceof AbstractFurnaceTileEntity){
             AbstractFurnaceTileEntity furnace = (AbstractFurnaceTileEntity)te;
             IRecipeType<? extends AbstractCookingRecipe> recipe = ((FurnaceAccessors) furnace).getRecipeType();
-            Optional<? extends AbstractCookingRecipe> output = furnace.getLevel().getRecipeManager().getRecipeFor(recipe, furnace, furnace.getLevel());
+            Optional<? extends AbstractCookingRecipe> output = this.getCommandSenderWorld().getRecipeManager().getRecipeFor(recipe, furnace, this.getCommandSenderWorld());
             if(!output.isPresent())
                 return false;
             ItemStack fuelstack = furnace.getItem(1);
