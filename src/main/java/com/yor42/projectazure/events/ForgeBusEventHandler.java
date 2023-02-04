@@ -104,20 +104,12 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_10g.get(), 16)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
-            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("357magnum")
-                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS)))
-                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 2))
-                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 2))
-                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GEMS_DIAMOND), 1))
-                    .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.MAGNUM_BULLET.get(), 12)))
-                    .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
-
             AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("50bmg")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_BRASS), 2))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER), 3))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 3))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GEMS_DIAMOND), 1))
-                    .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.MAGNUM_BULLET.get(), 12)))
+                    .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_50_BMG.get(), 12)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
             AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("30winchester")

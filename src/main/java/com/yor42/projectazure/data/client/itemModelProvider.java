@@ -37,6 +37,8 @@ public class itemModelProvider extends ItemModelProvider {
             buildModelWithSingleTex(entry.getFirst(), entry.getSecond());
         }
 
+        buildModel("codex");
+
         buildMultiblockControllerModel("ammo_press");
         buildMultiblockControllerModel("originium_generator");
         buildMultiblockControllerModel("riftway");

@@ -10,7 +10,7 @@
       "tag": "forge:plates/copper"
     },
     "C": {
-      "tag": "forge:cutter"
+      "tag": "forge:tools/cutter"
     }
   },
   "result": {

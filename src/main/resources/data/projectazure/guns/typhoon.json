@@ -5,7 +5,6 @@
     "rate": 1500,
     "rateSelector": [
       0,
-      1,
       2
     ],
     "gripType": "tac:two_handed_ak47",
@@ -20,7 +19,7 @@
     "spread": 10,
     "projectileAmount": 12,
     "weightKilo": 5.0,
-    "movementInaccuracy": 0.0
+    "movementInaccuracy": 0.5
   },
   "reloads": {
     "magFed": true,
@@ -39,7 +38,7 @@
 
     "size": 0.1,
 
-    "speed": 28,
+    "speed": 5,
 
     "life": 6,
 

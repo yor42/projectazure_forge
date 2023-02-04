@@ -1,0 +1,8 @@
+{
+  "name": "projectazure.codex.title",
+  "landing_text": "projectazure.codex.welcometext",
+  "version": 1,
+  "model": "projectazure:codex",
+  "creative_tab": "projectazure",
+  "i18n": true
+}

@@ -129,7 +129,8 @@ public class ItemTagProvider extends ItemTagsProvider {
 
         this.tag(ModTags.Items.MORTAR).add(registerItems.MORTAR_IRON.get());
         this.tag(ModTags.Items.CUTTER).add(registerItems.STEEL_CUTTER.get());
-        this.tag(ModTags.Items.HAMMER).add(registerItems.HAMMER_IRON.get());
+        this.tag(ModTags.Items.HAMMER).add(registerItems.HAMMER_IRON.get()).add(registerItems.SLEDGEHAMMER.get());
+        this.tag(ModTags.Items.KNIFE).add(registerItems.KITCHEN_KNIFE.get(), registerItems.TACTICAL_KNIFE.get());
 
     }
 }

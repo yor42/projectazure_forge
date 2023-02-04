@@ -173,6 +173,28 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_mortar", has(ModTags.Items.MORTAR))
                 .save(consumer);
 
+        ShapelessRecipeBuilder.shapeless(registerItems.PIG_FAT.get(), 1)
+                .requires(Items.PORKCHOP)
+                .unlockedBy("has_porkchop", has(Items.PORKCHOP))
+                .save(consumer, ResourceUtils.ModResourceLocation("pork_raw_noknife"));
+
+        ShapelessRecipeBuilder.shapeless(registerItems.PIG_FAT.get(), 2)
+                .requires(Items.PORKCHOP)
+                .requires(ModTags.Items.KNIFE)
+                .unlockedBy("has_knife", has(ModTags.Items.KNIFE))
+                .save(consumer, ResourceUtils.ModResourceLocation("pork_raw_knife"));
+
+        ShapelessRecipeBuilder.shapeless(registerItems.PIG_FAT.get(), 2)
+                .requires(Items.COOKED_PORKCHOP)
+                .unlockedBy("has_porkchop", has(Items.PORKCHOP))
+                .save(consumer, ResourceUtils.ModResourceLocation("pork_cooked_noknife"));
+
+        ShapelessRecipeBuilder.shapeless(registerItems.PIG_FAT.get(), 4)
+                .requires(Items.COOKED_PORKCHOP)
+                .requires(ModTags.Items.KNIFE)
+                .unlockedBy("has_knife", has(ModTags.Items.KNIFE))
+                .save(consumer, ResourceUtils.ModResourceLocation("pork_cooked_knife"));
+
     }
 
     private void generateShapedRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){

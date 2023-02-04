@@ -1,0 +1,12 @@
+{
+  "name": "block.projectazure.alloy_furnace",
+  "icon": "projectazure:alloy_furnace",
+  "category": "projectazure:machines",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:alloy_furnace",
+      "text": "projectazure.codex.entry.alloy_furnace.description"
+    }
+  ]
+}

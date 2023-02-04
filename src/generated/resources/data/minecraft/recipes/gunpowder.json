@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:mortar"
+      "tag": "forge:tools/mortar"
     },
     {
       "item": "minecraft:flint"

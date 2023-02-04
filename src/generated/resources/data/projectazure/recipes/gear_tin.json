@@ -10,7 +10,7 @@
       "tag": "forge:plates/tin"
     },
     "C": {
-      "tag": "forge:cutter"
+      "tag": "forge:tools/cutter"
     }
   },
   "result": {

@@ -50,6 +50,7 @@
   "item.projectazure.polymer_plate": "Polymer Plate",
   "item.projectazure.tree_sap": "Tree Sap",
   "item.projectazure.gunpowder_compound": "Explosive Compound",
+  "item.projectazure.pork_fat": "Pork Fat",
 
   "item.projectazure.saint_quartz": "Saint Quartz",
   "item.projectazure.computercore": "Computing Core",
@@ -604,5 +605,19 @@
 
   "recipe.alloying": "Alloying",
   "recipe.pressing": "Pressing",
-  "recipe.crystalizing": "Crystalization"
+  "recipe.crystalizing": "Crystalization",
+
+  "projectazure.codex.title": "Project: Azure CODEX",
+  "projectazure.codex.welcometext": "Beginner's guide to Tech, Magic, and A N I M E S",
+
+  "projectazure.codex.category.machine.title": "Machine / Techs",
+  "projectazure.codex.category.machine.description": "Machines and Techs of Project:Azure",
+
+  "projectazure.codex.category.worldgens.title": "Resource / Worldgens",
+  "projectazure.codex.category.worldgens.description": "Resource and Worldgens of Project:Azure",
+
+  "projectazure.codex.entry.alloy_furnace.description": "Alloy Furnace is modified version of furnace that mixes 2 different metal and makes alloy.$(br)It is also the stepping stone for every machine or Project:Azure.",
+
+  "projectazure.codex.entry.pantry.title": "Pantry",
+  "projectazure.codex.entry.pantry.description": "Pantries are very similar to large chest, but smaller, and can only store foods.$(br)also, your companions can take food from pantries by their own.$(br)you can also use different types of wood for different design."
 }

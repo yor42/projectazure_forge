@@ -1,0 +1,12 @@
+{
+  "name": "projectazure.codex.entry.pantry.title",
+  "icon": "projectazure:oak_pantry",
+  "category": "projectazure:machines",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:oak_pantry",
+      "text": "projectazure.codex.entry.pantry.description"
+    }
+  ]
+}

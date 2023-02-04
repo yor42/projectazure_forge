@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "forge:crafting_hammer"
+      "tag": "forge:tools/crafting_hammer"
     },
     {
       "tag": "forge:ingots/tin"

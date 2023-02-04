@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:pork_cooked_knife"
+    ]
+  },
+  "criteria": {
+    "has_knife": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:tools/knife"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:pork_cooked_knife"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_knife",
+      "has_the_recipe"
+    ]
+  ]
+}

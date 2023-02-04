@@ -19,6 +19,7 @@ import com.yor42.projectazure.gameobject.items.tools.*;
 import com.yor42.projectazure.gameobject.misc.ModFoods;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
@@ -180,6 +181,9 @@ public class registerItems {
 
     public static final RegistryObject<Item> PROMOTION_KIT = register("promotion_kit", () -> new ItemCompanionUpgrade(new Item.Properties()
             .tab(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> PIG_FAT = register("pork_fat", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES).food(new Food.Builder().meat().nutrition(1).saturationMod(0.8F).fast().build())));
 
     public static final RegistryObject<Item> MOLD_PLATE = register("mold_plate", () -> new ItemCraftTool(128));
     public static final RegistryObject<Item> MOLD_WIRE = register("mold_wire", () -> new ItemCraftTool(128));
@@ -448,7 +452,21 @@ public class registerItems {
             .rarity(Rarity.UNCOMMON)
             .stacksTo(1)));
 
-    public static final RegistryObject<Item> KITCHEN_KNIFE = register_withoutTexture("kitchenknife", () -> new ModSwordItem(ModMaterials.KITCHEN_KNIFE, 1, -0.35F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> KITCHEN_KNIFE = register_withoutTexture("kitchenknife", () -> new ModSwordItem(ModMaterials.KITCHEN_KNIFE, 1, -0.35F, new Item.Properties().tab(PA_WEAPONS)){
+        @Override
+        public boolean hasContainerItem(ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public ItemStack getContainerItem(ItemStack itemStack) {
+            ItemStack stack = itemStack.copy();
+            if (!stack.hurt(1, MathUtil.getRand(), null)) {
+                return stack;
+            }
+            else return ItemStack.EMPTY;
+        }
+    });
 
     public static final RegistryObject<Item> SLEDGEHAMMER = register_withoutTexture("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = register_withoutTexture("claymore", ItemClaymore::new);
@@ -648,6 +666,7 @@ public class registerItems {
         }
         return ITEMS.register(id, supplier);
     }
+
 
     public static void register(){};
 

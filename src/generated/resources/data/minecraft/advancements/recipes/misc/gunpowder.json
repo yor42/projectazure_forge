@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:mortar"
+            "tag": "forge:tools/mortar"
           }
         ]
       }

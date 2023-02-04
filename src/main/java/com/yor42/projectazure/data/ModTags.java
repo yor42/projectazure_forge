@@ -159,9 +159,10 @@ public class ModTags {
         public static final ITag.INamedTag<Item> ORIGINIUM_PRIME = forge("gems/originium");
         //public static final ITag.INamedTag<Item> ORES_ZINC = forge("ores/zinc");
 
-        public static final ITag.INamedTag<Item> MORTAR = forge("mortar");
-        public static final ITag.INamedTag<Item> CUTTER = forge("cutter");
-        public static final ITag.INamedTag<Item> HAMMER = forge("crafting_hammer");
+        public static final ITag.INamedTag<Item> MORTAR = forge("tools/mortar");
+        public static final ITag.INamedTag<Item> CUTTER = forge("tools/cutter");
+        public static final ITag.INamedTag<Item> KNIFE = forge("tools/knife");
+        public static final ITag.INamedTag<Item> HAMMER = forge("tools/crafting_hammer");
 
         public static final ITag.INamedTag<Item> SLEDGEHAMMER = forge("sledgehammer");
 
