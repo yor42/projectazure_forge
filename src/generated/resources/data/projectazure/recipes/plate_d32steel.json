@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:crafting_hammer"
+    },
+    {
+      "tag": "forge:ingots/d32"
+    }
+  ],
+  "result": {
+    "item": "projectazure:plate_d32steel"
+  }
+}

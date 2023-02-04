@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:mortar"
+    },
+    {
+      "tag": "forge:ingots/rma70-24"
+    }
+  ],
+  "result": {
+    "item": "projectazure:dust_rma7024"
+  }
+}

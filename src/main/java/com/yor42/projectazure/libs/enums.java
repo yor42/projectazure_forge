@@ -367,6 +367,7 @@ public class enums {
         DUST("dust"),
         WIRE("wire"),
         ORE("ore"),
+        BLOCK("block"),
         NUGGET("nugget");
 
         private final String name;

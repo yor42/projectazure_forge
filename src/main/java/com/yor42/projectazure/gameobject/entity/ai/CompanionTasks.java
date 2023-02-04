@@ -102,6 +102,7 @@ public class CompanionTasks {
                 Pair.of(2, new CompanionMoveforWorkTask()),
                 Pair.of(2, new CompanionHealAllyAndPlayerTask(40, 20, 10)),
                 Pair.of(2, new CompanionUseWorldSkill()),
+                Pair.of(2, new FindInteractionAndLookTargetTask(EntityType.PLAYER, 5)),
                 Pair.of(3, new CompanionTakeFoodFromPantryGoal()),
                 Pair.of(10, new GatherPOITask(PointOfInterestType.HOME, MemoryModuleType.HOME, false, Optional.of((byte)14))),
                 Pair.of(2, new CompanionEatTask()));
@@ -149,8 +150,7 @@ public class CompanionTasks {
 
     private static void addSittingActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         brain.addActivityAndRemoveMemoryWhenStopped(RegisterAI.SITTING.get(), 0, ImmutableList.<net.minecraft.entity.ai.brain.task.Task<? super AbstractEntityCompanion>>of(
-                new CompanionClearMovementTask(),
-                new FindInteractionAndLookTargetTask(EntityType.PLAYER, 5)
+                new CompanionClearMovementTask()
                 ), RegisterAI.MEMORY_SITTING.get());
 
     }

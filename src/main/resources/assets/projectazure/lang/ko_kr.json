@@ -26,9 +26,13 @@
   "item.projectazure.token.tooltip": "당신을 향한 모두의 신뢰를 상징하는 증표",
 
   "item.projectazure.cognitive_chip": "성정 유닛",
+  "item.projectazure.cognitive_chip.tooltip": "성정큐브와 유사한 구조의 소형 연산칩",
   "item.projectazure.cognitive_array": "성정 회로",
+  "item.projectazure.cognitive_array.tooltip": "성정유닛 여러개를 병렬로 연결한 대형 연산칩",
   "item.projectazure.promotion_kit": "정예화 키트",
+  "item.projectazure.promotion_kit.tooltip": "뇌물용 돈가방...은 아닐 겁니다.",
   "item.projectazure.holygrail": "성배",
+  "item.projectazure.holygrail.tooltip": "소원을 이루어주는 기능은 9*10^90원 DLC입니다.",
 
   "item.projectazure.bonk_bat": "[검열됨] 메이커 곤봉",
 
@@ -53,6 +57,10 @@
   "item.projectazure.orundum": "합성옥 소자",
   "item.projectazure.originite": "오리지늄 조각",
   "item.projectazure.originium_prime": "순오리지늄",
+  "item.projectazure.dust_orirock": "원암 가루",
+  "item.projectazure.bitumen": "역청",
+  "item.projectazure.crystalline_circuit": "결정 회로",
+  "item.projectazure.crystalline_component": "결정 부품",
 
   "item.projectazure.fordestabilizer": "차원 균열 생성기",
 
@@ -188,8 +196,6 @@
 
   "item.projectazure.commanding_stick": "지휘봉",
 
-  "item.projectazure.bitumen": "역청",
-
   "item.projectazure.ammo_generic": "함포용 통상탄",
   "item.projectazure.ammo_he": "함포용 고폭탄",
   "item.projectazure.ammo_incendiary": "함포용 소이탄",
@@ -197,9 +203,6 @@
   "item.projectazure.ammo_sap": "함포용 철갑고폭탄",
   "item.projectazure.ammo_api": "함포용 철갑소이탄",
   "item.projectazure.ammo_heiap": "함포용 철갑고폭소이탄",
-
-  "item.projectazure.dust_orirock": "원암 가루",
-
 
   "item.tooltip.gunclass": "화기 분류",
 
@@ -509,6 +512,7 @@
   "nugget": "조각",
   "ore": "광석",
   "gear": "기어",
+  "block": "블럭",
 
   "brass": "황동",
   "copper": "구리",
@@ -521,8 +525,13 @@
   "coal": "석탄",
   "lead": "납",
   "gold": "금",
+  "orirock": "원암",
   "nether_quartz": "네더 석영",
   "originium": "오리지늄",
+
+  "rma7012": "RMA70-12",
+  "rma7024": "RMA70-24",
+  "d32steel": "D32강",
 
   "idle": "대기 중",
   "working": "작동 중",
@@ -595,5 +604,5 @@
 
   "recipe.alloying": "합금 제작",
   "recipe.pressing": "압착",
-  "recipe.crystalizing": "결정 "
+  "recipe.crystalizing": "결정화"
 }

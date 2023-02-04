@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/d32"
+    }
+  ],
+  "result": {
+    "item": "projectazure:nugget_d32steel",
+    "count": 9
+  }
+}

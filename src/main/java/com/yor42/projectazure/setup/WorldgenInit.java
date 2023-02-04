@@ -31,6 +31,9 @@ public class WorldgenInit {
         if(PAConfig.CONFIG.ENABLE_ZINC.get()) {
             addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.ZINC_ORE, PAConfig.CONFIG.ZINC_VEINSIZE.get(), PAConfig.CONFIG.ZINC_MINHEIGHT.get(), PAConfig.CONFIG.ZINC_MAXHEIGHT.get(), PAConfig.CONFIG.ZINC_VEINSPERCHUNK.get());
         }
+        if(PAConfig.CONFIG.ENABLE_RMA7012.get()) {
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.RMA_7012_ORE, PAConfig.CONFIG.RMA7012_VEINSIZE.get(), PAConfig.CONFIG.RMA7012_MINHEIGHT.get(), PAConfig.CONFIG.RMA7012_MAXHEIGHT.get(), PAConfig.CONFIG.RMA7012_VEINSPERCHUNK.get());
+        }
     }
 
 

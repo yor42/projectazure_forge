@@ -17,6 +17,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundEvent;
@@ -146,6 +147,20 @@ public class ModBusEventHandler {
             ServerPlayerEntity serverplayer = (ServerPlayerEntity) event.getPlayer();
             ProjectAzureWorldSavedData.getSaveddata(serverplayer.getLevel()).SyncEntireTeamListtoPlayer(serverplayer);
 
+            for(INBT inbt : playerData.getList("PRJA:passengers", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND)){
+                if(inbt instanceof CompoundNBT){
+                    CompoundNBT compoundNBT = (CompoundNBT) inbt;
+                    Entity entity1 = EntityType.loadEntityRecursive(compoundNBT.getCompound("Entity"), serverplayer.getLevel(), (p_217885_1_) -> !serverplayer.getLevel().addWithUUID(p_217885_1_) ? null : p_217885_1_);
+
+                    if(entity1 == null){
+                        continue;
+                    }
+
+                    serverplayer.getLevel().addFreshEntity(entity1);
+                    entity1.startRiding(serverplayer, true);
+                }
+            }
+
         }
 
     }
@@ -161,15 +176,11 @@ public class ModBusEventHandler {
                 for(Entity entity : player.getPassengers()) {
                     if(entity instanceof AbstractEntityCompanion) {
 
-                        entity.stopRiding();
-                        ((AbstractEntityCompanion) entity).setOrderedToSit(true);
-                        /*
                         CompoundNBT compoundnbt = new CompoundNBT();
                         if (entity.saveAsPassenger(compoundnbt)) {
                             listnbt1.add(compoundnbt);
                         }
-
-                         */
+                        playerData.put("PRJA:passengers", listnbt1);
                     }
                 }
 

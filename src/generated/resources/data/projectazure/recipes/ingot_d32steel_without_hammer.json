@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:ingots/d32"
+    }
+  },
+  "result": {
+    "item": "projectazure:plate_d32steel"
+  }
+}

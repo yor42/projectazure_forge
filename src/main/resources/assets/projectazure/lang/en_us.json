@@ -26,9 +26,13 @@
   "item.projectazure.token.tooltip": "Token representing everyone's trust in you.",
 
   "item.projectazure.cognitive_chip": "Cognitive Chip",
+  "item.projectazure.cognitive_chip.tooltip": "'Looks complicated, but in reality its just a simple redstone.' -Not Mumbo Jumbo",
   "item.projectazure.cognitive_array": "Cognitive Array",
+  "item.projectazure.cognitive_array.tooltip": "'Looks complicated, but in reality its STILL just a simple redstone.' -Not Mumbo Jumbo",
   "item.projectazure.promotion_kit": "Promotion Kit",
+  "item.projectazure.promotion_kit.tooltip": "I'll make an offer... IN CA- Oh wait, wrong game.",
   "item.projectazure.holygrail": "Holy Grail",
+  "item.projectazure.holygrail.tooltip": "Granting-wish element is paid DLC with just 99999 LMD.",
 
   "item.projectazure.bonk_bat": "The Bonk™ Bat",
 
@@ -53,6 +57,10 @@
   "item.projectazure.orundum": "Orundum",
   "item.projectazure.originite": "Originite",
   "item.projectazure.originium_prime": "Originium Prime",
+  "item.projectazure.dust_orirock": "Orirock Dust",
+  "item.projectazure.bitumen": "Bitumen",
+  "item.projectazure.crystalline_circuit": "Crystalline Circuit",
+  "item.projectazure.crystalline_component": "Crystalline Component",
 
   "item.projectazure.fordestabilizer": "Fabric of Reality Destabilizer",
 
@@ -188,8 +196,6 @@
 
   "item.projectazure.commanding_stick": "Command Stick",
 
-  "item.projectazure.bitumen": "Bitumen",
-
   "item.projectazure.ammo_generic": "Generic Shell",
   "item.projectazure.ammo_he": "High Explosive Shell",
   "item.projectazure.ammo_incendiary": "Incendiary Shell",
@@ -197,9 +203,6 @@
   "item.projectazure.ammo_sap": "Semi Armor Piercing Shell",
   "item.projectazure.ammo_api": "API Shell",
   "item.projectazure.ammo_heiap": "HEIAP Shell",
-
-  "item.projectazure.dust_orirock": "Orirock Dust",
-
 
   "item.tooltip.gunclass": "Gun Category",
 
@@ -509,6 +512,7 @@
   "nugget": "Nugget",
   "ore": "Ore",
   "gear": "Gear",
+  "block": "Block",
 
   "brass": "Brass",
   "copper": "Copper",
@@ -521,8 +525,13 @@
   "coal": "Coal",
   "lead": "Lead",
   "gold": "Gold",
+  "orirock": "Orirock",
   "nether_quartz": "Nether Quartz",
   "originium": "Originium",
+
+  "rma7012": "RMA70-12",
+  "rma7024": "RMA70-24",
+  "d32steel": "D32 Steel",
 
   "idle": "Idle",
   "working": "Working",
@@ -595,5 +604,5 @@
 
   "recipe.alloying": "Alloying",
   "recipe.pressing": "Pressing",
-  "recipe.crystalizing": "Crystalizing"
+  "recipe.crystalizing": "Crystalization"
 }

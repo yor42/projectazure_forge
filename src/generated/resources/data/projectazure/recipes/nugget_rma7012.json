@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/rma70-12"
+    }
+  ],
+  "result": {
+    "item": "projectazure:nugget_rma7012",
+    "count": 9
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:zinc_block",
+    "projectazure:aluminium_block",
+    "projectazure:copper_block",
+    "projectazure:tin_block",
+    "projectazure:lead_block",
+    "projectazure:bronze_block",
+    "projectazure:rma7012_block",
+    "projectazure:rma7024_block",
+    "projectazure:d32steel_block",
+    "projectazure:steel_block"
+  ]
+}

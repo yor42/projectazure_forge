@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/rma70-12"
+    }
+  ],
+  "result": {
+    "item": "projectazure:ingot_rma7012",
+    "count": 9
+  }
+}

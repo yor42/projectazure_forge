@@ -23,12 +23,28 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
+
         copy(ModTags.Blocks.ORES_COPPER, ModTags.Items.ORES_COPPER);
         copy(ModTags.Blocks.ORES_TIN, ModTags.Items.ORES_TIN);
         copy(ModTags.Blocks.ORES_LEAD, ModTags.Items.ORES_LEAD);
         copy(ModTags.Blocks.ORES_ALUMINIUM, ModTags.Items.ORES_ALUMINIUM);
         copy(ModTags.Blocks.ORES_ZINC, ModTags.Items.ORES_ZINC);
         copy(ModTags.Blocks.ORES_ORIROCK, ModTags.Items.ORES_ORIROCK);
+        copy(ModTags.Blocks.ORES_RMA7012, ModTags.Items.ORES_RMA7012);
+
+        copy(ModTags.Blocks.BLOCK_D32, ModTags.Items.BLOCK_D32);
+        copy(ModTags.Blocks.BLOCK_ALUMINIUM, ModTags.Items.BLOCK_ALUMINIUM);
+        copy(ModTags.Blocks.BLOCK_BRASS, ModTags.Items.BLOCK_BRASS);
+        copy(ModTags.Blocks.BLOCK_BRONZE, ModTags.Items.BLOCK_BRONZE);
+        copy(ModTags.Blocks.BLOCK_COPPER, ModTags.Items.BLOCK_COPPER);
+        copy(ModTags.Blocks.BLOCK_LEAD, ModTags.Items.BLOCK_LEAD);
+        copy(ModTags.Blocks.BLOCK_RMA7012, ModTags.Items.BLOCK_RMA7012);
+        copy(ModTags.Blocks.BLOCK_RMA7024, ModTags.Items.BLOCK_RMA7024);
+        copy(ModTags.Blocks.BLOCK_TIN, ModTags.Items.BLOCK_TIN);
+        copy(ModTags.Blocks.BLOCK_ZINC, ModTags.Items.BLOCK_ZINC);
+        copy(ModTags.Blocks.BLOCK_STEEL, ModTags.Items.BLOCK_STEEL);
+
+        copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
 
         this.tag(ModTags.Items.INGOT_ALUMINIUM).add(registerItems.INGOT_ALUMINIUM.get());
@@ -39,6 +55,10 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.INGOT_ZINC).add(registerItems.INGOT_ZINC.get());
         this.tag(ModTags.Items.INGOT_STEEL).add(registerItems.INGOT_STEEL.get());
         this.tag(ModTags.Items.INGOT_BRASS).add(registerItems.INGOT_BRASS.get());
+        this.tag(ModTags.Items.INGOT_RMA7012).add(registerItems.INGOT_RMA7012.get());
+        this.tag(ModTags.Items.INGOT_RMA7024).add(registerItems.INGOT_RMA7024.get());
+        this.tag(ModTags.Items.INGOT_D32).add(registerItems.INGOT_D32.get());
+
 
         this.tag(ModTags.Items.NUGGET_COPPER).add(registerItems.NUGGET_COPPER.get());
         this.tag(ModTags.Items.NUGGET_TIN).add(registerItems.NUGGET_TIN.get());
@@ -47,6 +67,9 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.NUGGET_ZINC).add(registerItems.NUGGET_ZINC.get());
         this.tag(ModTags.Items.NUGGET_STEEL).add(registerItems.NUGGET_STEEL.get());
         this.tag(ModTags.Items.NUGGET_BRASS).add(registerItems.NUGGET_BRASS.get());
+        this.tag(ModTags.Items.NUGGET_RMA7012).add(registerItems.NUGGET_RMA7012.get());
+        this.tag(ModTags.Items.NUGGET_RMA7024).add(registerItems.NUGGET_RMA7024.get());
+        this.tag(ModTags.Items.NUGGET_D32).add(registerItems.NUGGET_D32.get());
 
         this.tag(ModTags.Items.PLATE_ALUMINIUM).add(registerItems.PLATE_ALUMINIUM.get());
         this.tag(ModTags.Items.PLATE_COPPER).add(registerItems.PLATE_COPPER.get());
@@ -58,6 +81,9 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.PLATE_GOLD).add(registerItems.PLATE_GOLD.get());
         this.tag(ModTags.Items.PLATE_STEEL).add(registerItems.PLATE_STEEL.get());
         this.tag(ModTags.Items.PLATE_BRASS).add(registerItems.PLATE_BRASS.get());
+        this.tag(ModTags.Items.PLATE_RMA7012).add(registerItems.PLATE_RMA7012.get());
+        this.tag(ModTags.Items.PLATE_RMA7024).add(registerItems.PLATE_RMA7024.get());
+        this.tag(ModTags.Items.PLATE_D32).add(registerItems.PLATE_D32.get());
 
         this.tag(ModTags.Items.GEAR_STEEL).add(registerItems.GEAR_STEEL.get());
         this.tag(ModTags.Items.GEAR_BRONZE).add(registerItems.GEAR_BRONZE.get());
@@ -78,9 +104,13 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.DUST_ORIGINIUM).add(registerItems.DUST_ORIGINIUM.get());
         this.tag(ModTags.Items.DUST_ORIROCK).add(registerItems.DUST_ORIROCK.get());
         this.tag(ModTags.Items.DUST_QUARTZ).add(registerItems.DUST_NETHER_QUARTZ.get());
-        this.tag(ModTags.Items.EXPLOSIVE_COMPOUND).add(registerItems.GUNPOWDER_COMPOUND.get());
         this.tag(ModTags.Items.DUST_STEEL).add(registerItems.DUST_STEEL.get());
         this.tag(ModTags.Items.DUST_BRASS).add(registerItems.DUST_BRASS.get());
+        this.tag(ModTags.Items.DUST_RMA7012).add(registerItems.DUST_RMA7012.get());
+        this.tag(ModTags.Items.DUST_RMA7024).add(registerItems.DUST_RMA7024.get());
+        this.tag(ModTags.Items.DUST_D32).add(registerItems.DUST_D32.get());
+
+        this.tag(ModTags.Items.EXPLOSIVE_COMPOUND).add(registerItems.GUNPOWDER_COMPOUND.get());
 
         this.tag(ModTags.Items.SLEDGEHAMMER).add(registerItems.SLEDGEHAMMER.get());
 

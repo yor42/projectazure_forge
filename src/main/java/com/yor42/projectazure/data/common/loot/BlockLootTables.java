@@ -28,6 +28,20 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.dropSelf(registerBlocks.TIN_ORE.get());
         this.dropSelf(registerBlocks.LEAD_ORE.get());
         this.dropSelf(registerBlocks.ZINC_ORE.get());
+        this.dropSelf(registerBlocks.RMA_7012_ORE.get());
+
+        this.dropSelf(registerBlocks.BRASS_BLOCK.get());
+        this.dropSelf(registerBlocks.COPPER_BLOCK.get());
+        this.dropSelf(registerBlocks.TIN_BLOCK.get());
+        this.dropSelf(registerBlocks.ZINC_BLOCK.get());
+        this.dropSelf(registerBlocks.LEAD_BLOCK.get());
+        this.dropSelf(registerBlocks.BRONZE_BLOCK.get());
+        this.dropSelf(registerBlocks.STEEL_BLOCK.get());
+        this.dropSelf(registerBlocks.ALUMINIUM_BLOCK.get());
+        this.dropSelf(registerBlocks.RMA_7012_BLOCK.get());
+        this.dropSelf(registerBlocks.RMA_7024_BLOCK.get());
+        this.dropSelf(registerBlocks.D32_BLOCK.get());
+
         this.dropSelf(registerBlocks.REENFORCED_PLANK.get());
         this.dropSelf(registerBlocks.MACHINE_FRAME.get());
         this.dropSelf(registerBlocks.MACHINE_FRAME_SLAB.get());

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/d32"
+    }
+  ],
+  "result": {
+    "item": "projectazure:ingot_d32steel",
+    "count": 9
+  }
+}

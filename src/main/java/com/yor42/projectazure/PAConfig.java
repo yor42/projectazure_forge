@@ -226,6 +226,12 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue ZINC_MINHEIGHT;
         public final ForgeConfigSpec.IntValue ZINC_MAXHEIGHT;
 
+        public final ForgeConfigSpec.BooleanValue ENABLE_RMA7012;
+        public final ForgeConfigSpec.IntValue RMA7012_VEINSIZE;
+        public final ForgeConfigSpec.IntValue RMA7012_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue RMA7012_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue RMA7012_MAXHEIGHT;
+
         public final ForgeConfigSpec.BooleanValue ENABLE_TIN;
         public final ForgeConfigSpec.IntValue TIN_VEINSIZE;
         public final ForgeConfigSpec.IntValue TIN_VEINSPERCHUNK;
@@ -482,6 +488,12 @@ public class PAConfig {
             ZINC_VEINSIZE = builder.defineInRange("Size of Zinc vein", 5,0,512);
             ZINC_MINHEIGHT = builder.defineInRange("Minimum Y axis value that Zinc can generate", 0,0,256);
             ZINC_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that Zinc can generate", 40,0,256);
+
+            ENABLE_RMA7012 = builder.define("Enable RMA7012 Generation", true);
+            RMA7012_VEINSPERCHUNK = builder.defineInRange("Count of RMA7012 vein in single chunk", 6,0,128);
+            RMA7012_VEINSIZE = builder.defineInRange("Size of RMA7012 vein", 4,0,512);
+            RMA7012_MINHEIGHT = builder.defineInRange("Minimum Y axis value that RMA7012 can generate", 0,0,256);
+            RMA7012_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that RMA7012 can generate", 40,0,256);
 
             ENABLE_TIN = builder.define("Enable Tin Generation", true);
             TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 4,0,128);

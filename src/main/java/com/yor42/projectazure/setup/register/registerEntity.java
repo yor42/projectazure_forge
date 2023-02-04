@@ -26,6 +26,7 @@ import com.yor42.projectazure.gameobject.entity.misc.EntityMissileDrone;
 import com.yor42.projectazure.gameobject.entity.planes.EntityF4fWildcat;
 import com.yor42.projectazure.gameobject.entity.projectiles.*;
 import com.yor42.projectazure.libs.Constants;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,6 +38,8 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.function.Supplier;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -62,8 +65,11 @@ public class registerEntity {
 
     public static final RegistryObject<EntityType<EntityArtoria>> ARTORIA = ENTITIES.register("entityartoria", () -> EntityType.Builder.of(EntityArtoria::new, EntityClassification.CREATURE).sized(0.572F, 1.54F).build(ModResourceLocation("entityartoria").toString()));
     public static final RegistryObject<EntityType<EntityScathath>> SCATHATH = ENTITIES.register("entityscathath", () -> EntityType.Builder.of(EntityScathath::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entityscathath").toString()));
+
     public static final RegistryObject<EntityType<EntityYamato>> YAMATO = ENTITIES.register("entityyamato", () -> EntityType.Builder.of(EntityYamato::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityyamato").toString()));
+
     public static final RegistryObject<EntityType<EntitySylvi>> SYLVI = ENTITIES.register("entitysylvi", () -> EntityType.Builder.of(EntitySylvi::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityschwarz").toString()));
+
     public static final RegistryObject<EntityType<EntityNearl>> NEARL = ENTITIES.register("entitynearl", () -> EntityType.Builder.of(EntityNearl::new, EntityClassification.CREATURE).sized(0.572F, 1.71F).build(ModResourceLocation("entitynearl").toString()));
     public static final RegistryObject<EntityType<EntitySchwarz>> SCHWARZ = ENTITIES.register("entityschwarz", () -> EntityType.Builder.of(EntitySchwarz::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityschwarz").toString()));
     public static final RegistryObject<EntityType<EntitySiege>> SIEGE = ENTITIES.register("entitysiege", () -> EntityType.Builder.of(EntitySiege::new, EntityClassification.CREATURE).sized(0.572F, 1.72F).build(ModResourceLocation("entitysiege").toString()));
@@ -78,10 +84,10 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityMudrock>> MUDROCK = ENTITIES.register("entitymudrock", () -> EntityType.Builder.of(EntityMudrock::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitymudrock").toString()));
     public static final RegistryObject<EntityType<EntityChen>> CHEN = ENTITIES.register("entitychen", () -> EntityType.Builder.of(EntityChen::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entitychen").toString()));
     public static final RegistryObject<EntityType<EntityW>> W = ENTITIES.register("entityw", () -> EntityType.Builder.of(EntityW::new, EntityClassification.CREATURE).sized(0.572F, 1.65F).build(ModResourceLocation("entityw").toString()));
-    public static final RegistryObject<EntityType<EntityHK416>> HK416 = ENTITIES.register("entityhk416", () -> EntityType.Builder.of(EntityHK416::new, EntityClassification.CREATURE).sized(0.572F, 1.58F).build(ModResourceLocation("entityhk416").toString()));
 
     public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> EntityType.Builder.of(EntityShiroko::new, EntityClassification.CREATURE).sized(0.572F, 1.575F).build(ModResourceLocation("entityshiroko").toString()));
-    public static final RegistryObject<EntityType<EntityM4A1>> M4A1 = ENTITIES.register("entitym4a1", () -> EntityType.Builder.of(EntityM4A1::new, EntityClassification.CREATURE).sized(0.65F, 1.825F).build(ModResourceLocation("entitym4a1").toString()));
+
+    public static final RegistryObject<EntityType<EntityHK416>> HK416 = ENTITIES.register("entityhk416", () -> EntityType.Builder.of(EntityHK416::new, EntityClassification.CREATURE).sized(0.572F, 1.58F).build(ModResourceLocation("entityhk416").toString()));public static final RegistryObject<EntityType<EntityM4A1>> M4A1 = ENTITIES.register("entitym4a1", () -> EntityType.Builder.of(EntityM4A1::new, EntityClassification.CREATURE).sized(0.65F, 1.825F).build(ModResourceLocation("entitym4a1").toString()));
     public static final RegistryObject<EntityType<EntityNagato>> NAGATO = ENTITIES.register("entitynagato", () -> EntityType.Builder.of(EntityNagato::new, EntityClassification.CREATURE).sized(0.572F, 1.32F).build(ModResourceLocation("entitynagato").toString()));
     public static final RegistryObject<EntityType<EntityEnterprise>> ENTERPRISE = ENTITIES.register("entityenterprise", () -> EntityType.Builder.of(EntityEnterprise::new, EntityClassification.CREATURE).sized(0.65F, 1.825F).build(ModResourceLocation("entityenterprise").toString()));
     public static final RegistryObject<EntityType<EntityGangwon>> GANGWON = ENTITIES.register("entitygangwon", () -> EntityType.Builder.of(EntityGangwon::new, EntityClassification.CREATURE).sized(0.572F, 1.35F).build(ModResourceLocation("entitygandwon").toString()));
@@ -96,6 +102,7 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityMash>> MASH = ENTITIES.register("entitymash", () -> EntityType.Builder.of(EntityMash::new, EntityClassification.CREATURE).sized(0.572F, 1.64F).build(ModResourceLocation("entitymash").toString()));
 
     public static final RegistryObject<EntityType<EntityCausalBlackhole>> BLACKHOLE = ENTITIES.register("entitycausalblackhole", () -> EntityType.Builder.<EntityCausalBlackhole>of(EntityCausalBlackhole::new, EntityClassification.MISC).sized(3F, 3F).build(ModResourceLocation("entitycausalblackhole").toString()));
+
     @SubscribeEvent
     public static void RegisterAttributes(EntityAttributeCreationEvent event){
         event.put(AYANAMI.get(), EntityAyanami.MutableAttribute().build());

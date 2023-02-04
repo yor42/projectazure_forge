@@ -56,6 +56,12 @@ public class EntityYato extends AbstractSwordUserBase implements IAknOp {
         return enums.EntityType.OPERATOR;
     }
 
+    //k e k
+    @Override
+    protected int getMaxLimitBreak() {
+        return 0;
+    }
+
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
         if(Minecraft.getInstance().isPaused()){
