@@ -605,5 +605,19 @@
 
   "recipe.alloying": "합금 제작",
   "recipe.pressing": "압착",
-  "recipe.crystalizing": "결정화"
+  "recipe.crystalizing": "결정화",
+
+  "projectazure.codex.title": "프로젝트: 애저 코덱스",
+  "projectazure.codex.welcometext": "기술/마법(?)/입덕의 세계를 여행하는 플레이어를 위한 안내서",
+
+  "projectazure.codex.category.machine.title": "기계 / 기술",
+  "projectazure.codex.category.machine.description": "프로젝트: 애저가 추가하는 기계 및 기술을 다룹니다",
+
+  "projectazure.codex.category.worldgens.title": "자원",
+  "projectazure.codex.category.worldgens.description": "프로젝트: 애저가 추가하는 자원을 다룹니다",
+
+  "projectazure.codex.entry.alloy_furnace.description": "합금로는 두개 이상의 금속을 섞어 합금을 만들어내는 기계입니다.$(br)또한 프로젝트: 애저의 모든 기계의 주춧돌이기도 합니다.",
+
+  "projectazure.codex.entry.pantry.title": "식품 저장고",
+  "projectazure.codex.entry.pantry.description": "식품 저장고는 큰 상자와 매우 유사하지만, 음식만 담을 수 있고, 더 작습니다.$(br)또한 동료들은 여기서 자유롭게 음식을 가져갈 수 있으며,$(br)사용하는 나무 종류별로 다른 디자인이 나옵니다."
 }
