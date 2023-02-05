@@ -183,10 +183,10 @@ public class CrushingRecipeBuilder implements IFinishedRecipe {
         }
     }
 
-    public void build(Consumer<IFinishedRecipe> out, ResourceLocation id) {
+    public void build(Consumer<IFinishedRecipe> consumer, ResourceLocation id) {
         Preconditions.checkArgument(isComplete(), "This recipe is incomplete.");
         this.id = id;
-        out.accept(this);
+        consumer.accept(this);
     }
 
     @Override

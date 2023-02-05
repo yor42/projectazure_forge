@@ -26,12 +26,12 @@ import static com.yor42.projectazure.setup.register.registerFluids.*;
 public abstract class OriginiumSolutionFluid extends FlowingFluid {
     @Override
     public Fluid getFlowing() {
-        return ORIGINIUM_SOLUTION_FLOWING;
+        return ORIGINIUM_SOLUTION_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return ORIGINIUM_SOLUTION_SOURCE;
+        return ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get();
     }
 
     @Override
@@ -94,7 +94,7 @@ public abstract class OriginiumSolutionFluid extends FlowingFluid {
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == GASOLINE_SOURCE || fluidIn == GASOLINE_FLOWING;
+        return fluidIn == GASOLINE_SOURCE_REGISTRY.get() || fluidIn == GASOLINE_FLOWING_REGISTRY.get();
     }
 
     public static class Flowing extends OriginiumSolutionFluid {

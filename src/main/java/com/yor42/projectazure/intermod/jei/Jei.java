@@ -2,6 +2,7 @@ package com.yor42.projectazure.intermod.jei;
 
 import com.yor42.projectazure.client.gui.container.*;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryAlloying;
+import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryBasicChemicalReaction;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
@@ -106,6 +107,7 @@ public class Jei implements IModPlugin {
         registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.PRESSING), JEIRecipeCategoryPressing.UID);
         registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.ALLOYING), JEIRecipeCategoryAlloying.UID);
         registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.CRYSTALIZING), JEIRecipeCategoryCrystalizing.UID);
+        registration.addRecipes(recipeManager.getAllRecipesFor(registerRecipes.Types.BASIC_CHEMICAL_REACTION), JEIRecipeCategoryBasicChemicalReaction.UID);
     }
 
     @Override
@@ -113,6 +115,7 @@ public class Jei implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(registerBlocks.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.UID);
         registration.addRecipeCatalyst(new ItemStack(registerBlocks.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.UID);
         registration.addRecipeCatalyst(new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.UID);
+        registration.addRecipeCatalyst(new ItemStack(registerBlocks.BASIC_CHEMICAL_REACTOR.get().asItem()), JEIRecipeCategoryBasicChemicalReaction.UID);
     }
 
     @Override
@@ -120,5 +123,6 @@ public class Jei implements IModPlugin {
         registration.addRecipeCategories(new JEIRecipeCategoryPressing(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new JEIRecipeCategoryAlloying(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new JEIRecipeCategoryCrystalizing(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new JEIRecipeCategoryBasicChemicalReaction(registration.getJeiHelpers().getGuiHelper()));
     }
 }

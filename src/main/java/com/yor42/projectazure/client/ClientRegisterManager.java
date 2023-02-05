@@ -23,6 +23,7 @@ public class ClientRegisterManager {
         ScreenManager.register(RegisterContainer.BASIC_REFINERY_CONTAINER.get(), guiBasicRefinery::new);
         ScreenManager.register(RegisterContainer.GROWTH_CHAMBER_CONTAINER.get(), GuiCrystalGrowthChamber::new);
         ScreenManager.register(RegisterContainer.PANTRY_CONTAINER.get(), GuiPantryInventory::new);
+        ScreenManager.register(RegisterContainer.BASICCCHEMICALREACTOR.get(), GuiBasicChemicalReactor::new);
     }
 
 }

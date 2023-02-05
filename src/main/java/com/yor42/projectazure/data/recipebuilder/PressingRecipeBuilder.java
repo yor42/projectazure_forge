@@ -2,6 +2,7 @@ package com.yor42.projectazure.data.recipebuilder;
 
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.crafting.recipes.PressingRecipe;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -17,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
@@ -25,7 +27,6 @@ public class PressingRecipeBuilder {
     private final Item result;
     private final Ingredient ingredient, mold;
     private final int processingTime, count;
-    private final Advancement.Builder advancementBuilder = Advancement.Builder.advancement();
 
     public PressingRecipeBuilder(IItemProvider result, Ingredient ingredient, Ingredient mold, int count, int processingTime) {
         this.result = result.asItem();
@@ -40,20 +41,12 @@ public class PressingRecipeBuilder {
     }
 
     public void build(Consumer<IFinishedRecipe> consumerIn) {
-        this.build(consumerIn, Registry.ITEM.getKey(this.result));
-    }
-
-    /**
-     * Adds a criterion needed to unlock the recipe.
-     */
-    public PressingRecipeBuilder addCriterion(String name, ICriterionInstance criterionIn) {
-        this.advancementBuilder.addCriterion(name, criterionIn);
-        return this;
+        this.build(consumerIn, ForgeRegistries.ITEMS.getKey(this.result));
     }
 
     public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
-        ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
-        ResourceLocation resourcelocation1 = new ResourceLocation(save);
+        ResourceLocation resourcelocation = ForgeRegistries.ITEMS.getKey(this.result);
+        ResourceLocation resourcelocation1 = ResourceUtils.ModResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
             throw new IllegalStateException("Recipe " + resourcelocation1 + " should remove its 'save' argument");
         } else {
@@ -62,15 +55,7 @@ public class PressingRecipeBuilder {
     }
 
     public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
-        this.validate(id);
-        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
-        consumerIn.accept(new PressingRecipeBuilder.Result(id, "", this.ingredient, this.mold, this.result, this.count, this.processingTime, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.PRESSING.get()));
-    }
-
-    private void validate(ResourceLocation id) {
-        if (this.advancementBuilder.getCriteria().isEmpty()) {
-            throw new IllegalStateException("No way of obtaining recipe " + id);
-        }
+        consumerIn.accept(new PressingRecipeBuilder.Result(id, "", this.ingredient, this.mold, this.result, this.count, this.processingTime, registerRecipes.Serializers.PRESSING.get()));
     }
 
     public static class Result implements IFinishedRecipe {
@@ -79,11 +64,9 @@ public class PressingRecipeBuilder {
         private final String group;
         private final Item result;
         private final int cookingTime, count;
-        private final Advancement.Builder advancementBuilder;
-        private final ResourceLocation advancementId;
         private final IRecipeSerializer<PressingRecipe> serializer;
 
-        public Result(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, Ingredient moldIn, Item resultIn, int count, int cookingTimeIn, Advancement.Builder advancementBuilderIn, ResourceLocation advancementIdIn, IRecipeSerializer<PressingRecipe> serializerIn) {
+        public Result(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, Ingredient moldIn, Item resultIn, int count, int cookingTimeIn, IRecipeSerializer<PressingRecipe> serializerIn) {
             this.id = idIn;
             this.group = groupIn;
             this.ingredient = ingredientIn;
@@ -91,12 +74,10 @@ public class PressingRecipeBuilder {
             this.result = resultIn;
             this.count = count;
             this.cookingTime = cookingTimeIn;
-            this.advancementBuilder = advancementBuilderIn;
-            this.advancementId = advancementIdIn;
             this.serializer = serializerIn;
         }
 
-        public void serializeRecipeData(JsonObject json) {
+        public void serializeRecipeData(@Nonnull JsonObject json) {
 
             if (!this.group.isEmpty()) {
                 json.addProperty("group", this.group);
@@ -125,12 +106,12 @@ public class PressingRecipeBuilder {
          */
         @Nullable
         public JsonObject serializeAdvancement() {
-            return this.advancementBuilder.serializeToJson();
+            return null;
         }
 
         @Nullable
         public ResourceLocation getAdvancementId() {
-            return this.advancementId;
+            return null;
         }
     }
 }

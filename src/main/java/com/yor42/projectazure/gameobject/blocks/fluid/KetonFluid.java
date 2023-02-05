@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
 import com.yor42.projectazure.setup.register.registerBlocks;
-import com.yor42.projectazure.setup.register.registerItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -21,20 +20,21 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.DIESEL_FLOWING_REGISTRY;
-import static com.yor42.projectazure.setup.register.registerFluids.DIESEL_SOURCE_REGISTRY;
+import javax.annotation.Nonnull;
 
+import static com.yor42.projectazure.setup.register.registerBlocks.KETON;
+import static com.yor42.projectazure.setup.register.registerFluids.*;
+import static com.yor42.projectazure.setup.register.registerItems.KETON_BUCKET;
 
-public abstract class DieselFluid extends FlowingFluid {
-
+public abstract class KetonFluid extends FlowingFluid {
     @Override
     public Fluid getFlowing() {
-        return DIESEL_FLOWING_REGISTRY.get();
+        return KETON_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return DIESEL_SOURCE_REGISTRY.get();
+        return KETON_SOURCE_REGISTRY.get();
     }
 
     @Override
@@ -49,40 +49,28 @@ public abstract class DieselFluid extends FlowingFluid {
     }
 
     @Override
-    protected int getSlopeFindDistance(IWorldReader worldIn) {
-        return 4;
+    protected int getSlopeFindDistance(IWorldReader p_185698_1_) {
+        return 6;
     }
 
     @Override
-    protected int getDropOff(IWorldReader worldIn) {
+    protected int getDropOff(IWorldReader p_204528_1_) {
         return 1;
     }
 
     @Override
     public Item getBucket() {
-        return registerItems.DIESEL_BUCKET.get();
+        return KETON_BUCKET.get();
     }
 
     @Override
-    protected boolean canBeReplacedWith(FluidState fluidState, IBlockReader blockReader, BlockPos pos, Fluid fluid, Direction direction) {
+    protected boolean canBeReplacedWith(FluidState p_215665_1_, IBlockReader p_215665_2_, BlockPos p_215665_3_, Fluid fluid, Direction direction) {
         return direction == Direction.DOWN && !fluid.is(FluidTags.WATER);
     }
 
     @Override
-    protected FluidAttributes createAttributes() {
-        return net.minecraftforge.fluids.FluidAttributes.builder(
-                        new ResourceLocation("block/water_still"),
-                        new ResourceLocation("block/water_flow"))
-                .overlay(new ResourceLocation("block/water_overlay"))
-                .translationKey("block.projectazure.diesel")
-                .color(0x88aa7d00).density(2000).viscosity(2000)
-                .sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
-                .build(this);
-    }
-
-    @Override
     public int getTickDelay(IWorldReader p_205569_1_) {
-        return 10;
+        return 5;
     }
 
     @Override
@@ -90,17 +78,26 @@ public abstract class DieselFluid extends FlowingFluid {
         return 100;
     }
 
+    @Nonnull
     @Override
-    protected BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.DIESEL.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getLegacyLevel(state));
+    protected BlockState createLegacyBlock(@Nonnull FluidState p_204527_1_) {
+        return KETON.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getLegacyLevel(p_204527_1_));
     }
 
+    @Nonnull
     @Override
-    public boolean isSame(Fluid fluidIn) {
-        return fluidIn == DIESEL_SOURCE_REGISTRY.get() || fluidIn == DIESEL_FLOWING_REGISTRY.get();
+    protected FluidAttributes createAttributes() {
+        return net.minecraftforge.fluids.FluidAttributes.builder(
+                        new ResourceLocation("block/water_still"),
+                        new ResourceLocation("block/water_flow"))
+                .overlay(new ResourceLocation("block/water_overlay"))
+                .translationKey("block.projectazure.keton")
+                .color(0xfffad900).density(1500).viscosity(1500)
+                .sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY)
+                .build(this);
     }
 
-    public static class Flowing extends DieselFluid {
+    public static class Flowing extends KetonFluid {
         protected void createFluidStateDefinition(StateContainer.Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
@@ -115,7 +112,7 @@ public abstract class DieselFluid extends FlowingFluid {
         }
     }
 
-    public static class Source extends DieselFluid {
+    public static class Source extends KetonFluid {
         public int getAmount(FluidState state) {
             return 8;
         }

@@ -1,6 +1,7 @@
-package com.yor42.projectazure.gameobject.blocks;
+package com.yor42.projectazure.gameobject.blocks.machines;
 
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
+import com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock;
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -15,23 +16,23 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class RecruitBeaconBlock extends AbstractElectricMachineBlock {
+public class MetalPressBlock extends AbstractElectricMachineBlock {
 
-    public RecruitBeaconBlock() {
+
+    public MetalPressBlock() {
         super((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()));
     }
 
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityRecruitBeacon();
+        return new TileEntityMetalPress();
     }
 
-    @Override
     protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
         TileEntity TileentityAtPos = worldIn.getBlockEntity(pos);
-        if(TileentityAtPos instanceof TileEntityRecruitBeacon && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
-            TileEntityRecruitBeacon TE = (TileEntityRecruitBeacon) TileentityAtPos;
+        if(player instanceof ServerPlayerEntity && TileentityAtPos instanceof TileEntityMetalPress){
+            TileEntityMetalPress TE = (TileEntityMetalPress) TileentityAtPos;
             NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
         }
     }

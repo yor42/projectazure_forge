@@ -15,6 +15,7 @@ public class registerTE {
     public static final RegistryObject<TileEntityType<TileEntityAlloyFurnace>> ALLOY_FURNACE = register("alloy_furnace", TileEntityAlloyFurnace::new, registerBlocks.ALLOY_FURNACE);
     public static final RegistryObject<TileEntityType<TileEntityBasicRefinery>> BASIC_REFINERY = register("basic_refinery_te", TileEntityBasicRefinery::new, registerBlocks.BASIC_REFINERY);
     public static final RegistryObject<TileEntityType<TileEntityRecruitBeacon>> RECRUIT_BEACON = register("recruit_beacon_te", TileEntityRecruitBeacon::new, registerBlocks.RECRUIT_BEACON);
+    public static final RegistryObject<TileEntityType<TileEntityBasicChemicalReactor>> BASIC_CHEMICAL_REACTOR = register("basic_chemical_reactor_te", TileEntityBasicChemicalReactor::new, registerBlocks.BASIC_CHEMICAL_REACTOR);
     public static final RegistryObject<TileEntityType<TileEntityCrystalGrowthChamber>> CRYSTAL_GROWTH_CHAMBER = register("crystal_growth_chamber_te", TileEntityCrystalGrowthChamber::new, registerBlocks.CRYSTAL_GROWTH_CHAMBER);
     public static final RegistryObject<TileEntityType<TileEntityPantry>> PANTRY = register("pantry_te", TileEntityPantry::new, registerBlocks.OAK_PANTRY, registerBlocks.CRIMSON_PANTRY, registerBlocks.JUNGLE_PANTRY, registerBlocks.ACACIA_PANTRY, registerBlocks.BIRCH_PANTRY, registerBlocks.SPRUCE_PANTRY, registerBlocks.WARPED_PANTRY, registerBlocks.DARK_OAK_PANTRY);
     @SafeVarargs

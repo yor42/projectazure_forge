@@ -21,19 +21,18 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.FUEL_OIL_FLOWING;
-import static com.yor42.projectazure.setup.register.registerFluids.FUEL_OIL_SOURCE;
+import static com.yor42.projectazure.setup.register.registerFluids.*;
 
 public abstract class FuelOilFluid extends FlowingFluid {
 
     @Override
     public Fluid getFlowing() {
-        return FUEL_OIL_FLOWING;
+        return FUEL_OIL_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return FUEL_OIL_SOURCE;
+        return FUEL_OIL_SOURCE_REGISTRY.get();
     }
 
     @Override
@@ -96,7 +95,7 @@ public abstract class FuelOilFluid extends FlowingFluid {
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == FUEL_OIL_SOURCE || fluidIn == FUEL_OIL_FLOWING;
+        return fluidIn == FUEL_OIL_SOURCE_REGISTRY.get() || fluidIn == FUEL_OIL_FLOWING_REGISTRY.get();
     }
 
     public static class Flowing extends FuelOilFluid {

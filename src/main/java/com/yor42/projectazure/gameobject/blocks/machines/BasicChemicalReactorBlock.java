@@ -1,7 +1,10 @@
-package com.yor42.projectazure.gameobject.blocks;
+package com.yor42.projectazure.gameobject.blocks.machines;
 
+import com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock;
+import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicChemicalReactor;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -15,24 +18,28 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class MetalPressBlock extends AbstractElectricMachineBlock {
-
-
-    public MetalPressBlock() {
+public class BasicChemicalReactorBlock extends AbstractElectricMachineBlock {
+    public BasicChemicalReactorBlock() {
         super((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL).noOcclusion()));
     }
 
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileEntityMetalPress();
+        return new TileEntityBasicChemicalReactor();
     }
 
+    @Override
     protected void interactWith(World worldIn, BlockPos pos, PlayerEntity player) {
         TileEntity TileentityAtPos = worldIn.getBlockEntity(pos);
-        if(TileentityAtPos instanceof TileEntityMetalPress && player instanceof ServerPlayerEntity && !worldIn.isClientSide()){
-            TileEntityMetalPress TE = (TileEntityMetalPress) TileentityAtPos;
+        if(player instanceof ServerPlayerEntity && TileentityAtPos instanceof TileEntityBasicChemicalReactor){
+            TileEntityBasicChemicalReactor TE = (TileEntityBasicChemicalReactor) TileentityAtPos;
             NetworkHooks.openGui((ServerPlayerEntity) player, TE, TE::encodeExtraData);
         }
+    }
+
+    @Override
+    public BlockRenderType getRenderShape(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 }

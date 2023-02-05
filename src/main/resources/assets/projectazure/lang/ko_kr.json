@@ -267,6 +267,7 @@
   "block.projectazure.crystal_growth_chamber.tooltip": "수용액으로부터 고순도의 결정을 만드는 기계입니다.",
   "block.projectazure.basic_refinery": "기본 정유기",
   "block.projectazure.basic_refinery.tooltip": "원유를 다양한 연료로 바꾸는 기계입니다.",
+  "block.projectazure.basic_chemicalreactor": "화학 반응로",
   "block.projectazure.drydock_controller": "Drydock Controller",
   "block.projectazure.drydock_controller.tooltip": "Brain of Drydock; part of multiblock Structure.",
   "block.projectazure.machine_frame": "기계 프레임",
@@ -289,6 +290,8 @@
   "block.projectazure.gasoline": "휘발유",
   "block.projectazure.nether_quartz_solution": "네더 석영 수용액",
   "block.projectazure.originium_solution": "오리지늄 수용액",
+  "block.projectazure.keton": "케톤",
+
   "block.projectazure.machine_component": "기계 부품",
 
   "block.projectazure.oak_pantry": "참나무 식품 저장고",
@@ -323,6 +326,7 @@
   "tileentity.basic_refinery.name": "기본 정유기",
   "tileentity.crystal_chamber.name": "결정 성장실",
   "tileentity.metal_press.name": "유압 압착기",
+  "tileentity.basic_chemicalreactor.name": "화학 반응로",
 
   "gui.recruitbeacon_remainingtime": "모집 완료까지 남은 시간",
   "gui.construction_eta": "건조 완료까지 남은 시간",

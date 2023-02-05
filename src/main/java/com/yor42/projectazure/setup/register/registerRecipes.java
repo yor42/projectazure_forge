@@ -2,6 +2,7 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.gameobject.crafting.recipes.*;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
@@ -24,6 +25,8 @@ public class registerRecipes {
         public static final IRecipeType<CrushingRecipe> CRUSHING = IRecipeType.register(Constants.MODID+":crushing");
         public static final IRecipeType<AlloyingRecipe> ALLOYING = IRecipeType.register(Constants.MODID+":alloying");
         public static final IRecipeType<CrystalizingRecipe> CRYSTALIZING = IRecipeType.register(Constants.MODID+":crystalizing");
+
+        public static final IRecipeType<BasicChemicalReactionRecipe> BASIC_CHEMICAL_REACTION = IRecipeType.register(Constants.MODID+":basic_chemicalreaction");
         public static void register(){}
     }
 
@@ -33,6 +36,7 @@ public class registerRecipes {
         public static final RegistryObject<IRecipeSerializer<CrushingRecipe>> CRUSHING = register("crushing", CrushingRecipe.Serializer::new);
         public static final RegistryObject<IRecipeSerializer<AlloyingRecipe>> ALLOYING = register("alloying", AlloyingRecipe.Serializer::new);
         public static final RegistryObject<IRecipeSerializer<CrystalizingRecipe>> CRYSTALIZING = register("crystalizing", CrystalizingRecipe.Serializer::new);
+        public static final RegistryObject<IRecipeSerializer<BasicChemicalReactionRecipe>> BASICCHEMICALREACTION = register("basic_chemicalreaction", BasicChemicalReactionRecipe.Serializer::new);
 
         //Special Crafting Recipe
         public static final RegistryObject<IRecipeSerializer<ReloadRecipes>> RELOADING = register("reloading", ()-> new SpecialRecipeSerializer<>(ReloadRecipes::new));
@@ -43,9 +47,6 @@ public class registerRecipes {
             return RECIPE_SERIALIZERS.register(name, serializer);
         }
 
-        private static <T extends IRecipe<?>> RegistryObject<IRecipeSerializer<T>> register_special_recipe(String name, Supplier<IRecipeSerializer<T>> serializer){
-            return RECIPE_SERIALIZERS.register(name, serializer);
-        }
         public static void register(){};
     }
 

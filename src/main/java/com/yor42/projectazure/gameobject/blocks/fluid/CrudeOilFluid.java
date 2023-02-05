@@ -25,12 +25,12 @@ import net.minecraftforge.fluids.FluidAttributes;
 public abstract class CrudeOilFluid extends FlowingFluid {
     @Override
     public Fluid getFlowing() {
-        return registerFluids.CRUDE_OIL_FLOWING;
+        return registerFluids.CRUDE_OIL_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return registerFluids.CRUDE_OIL_SOURCE;
+        return registerFluids.CRUDE_OIL_SOURCE_REGISTRY.get();
     }
 
     @Override
@@ -91,7 +91,7 @@ public abstract class CrudeOilFluid extends FlowingFluid {
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == registerFluids.CRUDE_OIL_FLOWING || fluidIn == registerFluids.CRUDE_OIL_SOURCE;
+        return fluidIn == registerFluids.CRUDE_OIL_FLOWING_REGISTRY.get() || fluidIn == registerFluids.CRUDE_OIL_SOURCE_REGISTRY.get();
     }
 
     public static class Flowing extends CrudeOilFluid {

@@ -1,0 +1,11 @@
+{
+  "type": "projectazure:basic_chemicalreaction",
+  "output": {
+    "fluid": "projectazure:keton_source",
+    "amount": 100
+  },
+  "input": {
+    "item": "projectazure:pork_fat"
+  },
+  "processtime": 200
+}

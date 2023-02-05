@@ -136,8 +136,14 @@ public class TileEntityMetalPress extends AbstractAnimatedTileEntityMachines {
     protected void playsound() {
     }
 
-    protected int getTargetProcessTime(){
-        return this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends PressingRecipe>)this.recipeType, this, this.level).map(PressingRecipe::getProcessTick).orElse(200);
+    @Override
+    protected int getTargetProcessTime(IRecipe<?> iRecipe) {
+
+        if(iRecipe instanceof PressingRecipe){
+            return ((PressingRecipe) iRecipe).getProcessTick();
+        }
+
+        return 200;
     }
 
     protected void process(IRecipe<?> irecipe) {

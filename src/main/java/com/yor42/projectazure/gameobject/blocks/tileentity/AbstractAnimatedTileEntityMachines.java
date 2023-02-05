@@ -47,10 +47,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         boolean isPowered = this.isPowered();
 
         if (this.level != null && !this.level.isClientSide) {
-            ItemStack ingredient = this.inventory.getStackInSlot(0);
-            ItemStack mold = this.inventory.getStackInSlot(1);
 
-            if (!ingredient.isEmpty() && !mold.isEmpty()) {
                 IRecipe<?> irecipe = this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends IRecipe<IInventory>>) this.recipeType, this, this.level).orElse(null);
 
                 boolean flag1 = this.energyStorage.getEnergyStored() >= this.powerConsumption;
@@ -58,23 +55,19 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
 
                 if (flag1 && flag2) {
                     if (this.totalProcessTime == 0) {
-                        this.totalProcessTime = this.getTargetProcessTime();
+                        this.totalProcessTime = this.getTargetProcessTime(irecipe);
                     }
                     shouldsave = true;
                     this.ProcessTime++;
                     this.energyStorage.extractEnergy(this.powerConsumption, false);
                     if (this.ProcessTime == this.totalProcessTime) {
                         this.ProcessTime = 0;
-                        this.totalProcessTime = this.getTargetProcessTime();
+                        this.totalProcessTime = this.getTargetProcessTime(irecipe);
                         this.process(irecipe);
                     }
                 } else {
                     this.ProcessTime = 0;
                 }
-            }
-            else {
-                this.ProcessTime = 0;
-            }
 
         }
         if(shouldsave){
@@ -100,7 +93,7 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         }
     }
 
-    protected abstract int getTargetProcessTime();
+    protected abstract int getTargetProcessTime(IRecipe<?> iRecipe);
 
     protected abstract void process(IRecipe<?> irecipe);
 
@@ -145,18 +138,9 @@ public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimate
         boolean flag = !stack.isEmpty() && stack.sameItem(stack1) && ItemStack.tagMatches(stack, stack1);
 
         if (index == 0 || index==1 && !flag) {
-            this.totalProcessTime = this.getTargetProcessTime();
             this.ProcessTime = 0;
             this.setChanged();
         }
-    }
-
-    public int getTotalProcessTime() {
-        return this.totalProcessTime;
-    }
-
-    public int getProcessTime() {
-        return this.ProcessTime;
     }
     @Override
     public boolean stillValid(PlayerEntity player) {

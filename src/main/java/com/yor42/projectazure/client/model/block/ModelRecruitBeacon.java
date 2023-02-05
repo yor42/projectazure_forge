@@ -1,6 +1,6 @@
 package com.yor42.projectazure.client.model.block;
 
-import com.yor42.projectazure.gameobject.blocks.RecruitBeaconBlock;
+import com.yor42.projectazure.gameobject.blocks.machines.RecruitBeaconBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityRecruitBeacon;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.util.ResourceLocation;

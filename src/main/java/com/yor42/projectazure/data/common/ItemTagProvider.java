@@ -119,6 +119,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.CIRCUITS).add(registerItems.PRIMITIVE_CIRCUIT.get());
         this.tag(ModTags.Items.CIRCUITS_BASIC).add(registerItems.PRIMITIVE_CIRCUIT.get());
         this.tag(ModTags.Items.CIRCUITS_ADVANCED).add(registerItems.ADVANCED_CIRCUIT.get());
+        this.tag(ModTags.Items.CIRCUITS_CRYSTALLINE).add(registerItems.CRYSTALLINE_CIRCUIT.get());
 
         this.tag(ModTags.Items.ORIGINITE).add(registerItems.ORIGINITE.get());
         this.tag(ModTags.Items.ORIGINIUM_PRIME).add(registerItems.ORIGINIUM_PRIME.get());

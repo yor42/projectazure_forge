@@ -19,6 +19,7 @@ public class ModTags {
         public static final ITag.INamedTag<Fluid> DIESEL = forge("diesel");
         public static final ITag.INamedTag<Fluid> FUELOIL = forge("heavy_fuel_oil");
         public static final ITag.INamedTag<Fluid> GASOLINE = forge("gasoline");
+        public static final ITag.INamedTag<Fluid> KETON = forge("keton");
 
         private static ITag.INamedTag<Fluid> forge(String path) {
             return FluidTags.bind(new ResourceLocation("forge", path).toString());
@@ -174,6 +175,8 @@ public class ModTags {
         public static final ITag.INamedTag<Item> CIRCUITS = forge("circuits");
         public static final ITag.INamedTag<Item> CIRCUITS_BASIC = forge("circuits/basic");
         public static final ITag.INamedTag<Item> CIRCUITS_ADVANCED = forge("circuits/advanced");
+
+        public static final ITag.INamedTag<Item> CIRCUITS_CRYSTALLINE = forge("circuits/crystalline");
 
         private static ITag.INamedTag<Item> forge(String path) {
             return ItemTags.bind(new ResourceLocation("forge", path).toString());

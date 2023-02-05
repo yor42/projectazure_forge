@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
@@ -60,7 +61,7 @@ public class AlloyingRecipeBuilder {
 
     public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
         ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
-        ResourceLocation resourcelocation1 = new ResourceLocation(save);
+        ResourceLocation resourcelocation1 = ResourceUtils.ModResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
             throw new IllegalStateException("Recipe " + resourcelocation1 + " should remove its 'save' argument");
         } else {

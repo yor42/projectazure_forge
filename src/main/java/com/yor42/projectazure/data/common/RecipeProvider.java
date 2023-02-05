@@ -2,10 +2,7 @@ package com.yor42.projectazure.data.common;
 
 import com.tac.guns.crafting.WorkbenchRecipeBuilder;
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.data.recipebuilder.AlloyingRecipeBuilder;
-import com.yor42.projectazure.data.recipebuilder.CrushingRecipeBuilder;
-import com.yor42.projectazure.data.recipebuilder.CrystalizingRecipeBuilder;
-import com.yor42.projectazure.data.recipebuilder.PressingRecipeBuilder;
+import com.yor42.projectazure.data.recipebuilder.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
@@ -28,6 +25,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -59,6 +57,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         this.generateGunBenchRecipe(consumer);
         this.generateShapedRecipe(consumer);
         this.generateShapelessRecipe(consumer);
+
+        this.generateChemicalReactionRecipe(consumer);
+    }
+
+    private void generateChemicalReactionRecipe(Consumer<IFinishedRecipe> consumer) {
+        ChemicalReactorRecipeBuilder.add(registerFluids.KETON_SOURCE_REGISTRY.get(), 100, Ingredient.of(registerItems.PIG_FAT.get()), consumer);
     }
 
     private void generateGunBenchRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
@@ -117,17 +121,14 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     }
     private void generatePressingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
         PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.of(ItemTags.LOGS), Ingredient.of(registerItems.MOLD_EXTRACTION.get()), 1, 200)
-                .addCriterion("hasmold", has(registerItems.MOLD_EXTRACTION.get()))
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
     }
 
     private void generateCrystalizingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
-        CrystalizingRecipeBuilder.addRecipe(registerItems.ORIGINIUM_PRIME.get(), Ingredient.of(registerItems.ORIGINIUM_SEED.get()), registerFluids.ORIGINIUM_SOLUTION_SOURCE, 3000)
-                .addCriterion("hasseed", has(registerItems.ORIGINIUM_SEED.get()))
+        CrystalizingRecipeBuilder.addRecipe(registerItems.ORIGINIUM_PRIME.get(), Ingredient.of(registerItems.ORIGINIUM_SEED.get()), registerFluids.ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get(), 3000)
                 .build(consumer, new ResourceLocation("originium_crystalizing"));
 
-        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.of(registerItems.NETHER_QUARTZ_SEED.get()), registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 400)
-                .addCriterion("hasseed", has(registerItems.NETHER_QUARTZ_SEED.get()))
+        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.of(registerItems.NETHER_QUARTZ_SEED.get()), registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY.get(), 400)
                 .build(consumer, new ResourceLocation("quartz_crystalizing"));
     }
 
@@ -1087,7 +1088,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                     .save(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_without_hammer"));
 
             PressingRecipeBuilder.addRecipe(metal.plate, Ingredient.of(metal.ingotTag), Ingredient.of(registerItems.MOLD_PLATE.get()), 1, 200)
-                    .addCriterion("hasmold", has(registerItems.MOLD_PLATE.get()))
                     .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_pressing"));
         }
     }
@@ -1161,14 +1161,14 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     }
 
     protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Block blockOutput, String id) {
-        CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
+        CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
     }
 
     protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, Block blockInput, Item blockOutput, int count, String id) {
-        CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
+        CrushingRecipeBuilder.builder().input(blockInput).addDrop(blockOutput, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
     }
 
     protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, ITag<Item> blockInput, Item out, int count, String id) {
-        CrushingRecipeBuilder.builder().input(blockInput).addDrop(out, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer/"+id));
+        CrushingRecipeBuilder.builder().input(blockInput).addDrop(out, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
     }
 }

@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
-import com.yor42.projectazure.gameobject.blocks.AlloyFurnaceBlock;
+import com.yor42.projectazure.gameobject.blocks.machines.AlloyFurnaceBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerAlloyFurnace;
 import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
 import com.yor42.projectazure.setup.register.registerRecipes;

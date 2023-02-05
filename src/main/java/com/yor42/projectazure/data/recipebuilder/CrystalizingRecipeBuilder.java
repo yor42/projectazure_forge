@@ -2,6 +2,7 @@ package com.yor42.projectazure.data.recipebuilder;
 
 import com.google.gson.JsonObject;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrystalizingRecipe;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
@@ -27,7 +28,6 @@ public class CrystalizingRecipeBuilder {
     private final Ingredient seed;
     private final Fluid solution;
     private final int growthTime;
-    private final Advancement.Builder advancementBuilder = Advancement.Builder.advancement();
 
     public CrystalizingRecipeBuilder(IItemProvider result, Ingredient seed, Fluid solution, int growthTime){
         this.result = result.asItem();
@@ -41,23 +41,12 @@ public class CrystalizingRecipeBuilder {
     }
 
     public void build(Consumer<IFinishedRecipe> consumerIn) {
-        this.build(consumerIn, Registry.ITEM.getKey(this.result));
-    }
-
-    public CrystalizingRecipeBuilder addCriterion(String name, ICriterionInstance criterionIn) {
-        this.advancementBuilder.addCriterion(name, criterionIn);
-        return this;
-    }
-
-    private void validate(ResourceLocation id) {
-        if (this.advancementBuilder.getCriteria().isEmpty()) {
-            throw new IllegalStateException("No way of obtaining recipe " + id);
-        }
+        this.build(consumerIn, ForgeRegistries.ITEMS.getKey(this.result));
     }
 
     public void build(Consumer<IFinishedRecipe> consumerIn, String save) {
-        ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
-        ResourceLocation resourcelocation1 = new ResourceLocation(save);
+        ResourceLocation resourcelocation = ForgeRegistries.ITEMS.getKey(this.result);
+        ResourceLocation resourcelocation1 = ResourceUtils.ModResourceLocation(save);
         if (resourcelocation1.equals(resourcelocation)) {
             throw new IllegalStateException("Recipe " + resourcelocation1 + " should remove its 'save' argument");
         } else {
@@ -66,9 +55,7 @@ public class CrystalizingRecipeBuilder {
     }
 
     public void build(Consumer<IFinishedRecipe> consumerIn, ResourceLocation id) {
-        this.validate(id);
-        this.advancementBuilder.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(IRequirementsStrategy.OR);
-        consumerIn.accept(new CrystalizingRecipeBuilder.Result(id, "", this.seed, this.result, this.growthTime, this.solution, this.advancementBuilder, new ResourceLocation(id.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + id.getPath()), registerRecipes.Serializers.CRYSTALIZING.get()));
+        consumerIn.accept(new CrystalizingRecipeBuilder.Result(id, "", this.seed, this.result, this.growthTime, this.solution, registerRecipes.Serializers.CRYSTALIZING.get()));
     }
 
     public static class Result implements IFinishedRecipe {
@@ -78,19 +65,15 @@ public class CrystalizingRecipeBuilder {
         private final String group;
         private final Item result;
         private final int GrowthTime;
-        private final Advancement.Builder advancementBuilder;
-        private final ResourceLocation advancementId;
         private final IRecipeSerializer<CrystalizingRecipe> serializer;
 
-        public Result(ResourceLocation idIn, String groupIn, Ingredient seedIn, Item resultIn, int growthTimeIn, Fluid fluidIn, Advancement.Builder advancementBuilderIn, ResourceLocation advancementIdIn, IRecipeSerializer<CrystalizingRecipe> serializerIn){
+        public Result(ResourceLocation idIn, String groupIn, Ingredient seedIn, Item resultIn, int growthTimeIn, Fluid fluidIn, IRecipeSerializer<CrystalizingRecipe> serializerIn){
             this.id = idIn;
             this.group = groupIn;
             this.seed = seedIn;
             this.result = resultIn;
             this.GrowthTime = growthTimeIn;
             this.solution = fluidIn;
-            this.advancementBuilder = advancementBuilderIn;
-            this.advancementId = advancementIdIn;
             this.serializer = serializerIn;
         }
 
@@ -119,13 +102,13 @@ public class CrystalizingRecipeBuilder {
         @Nullable
         @Override
         public JsonObject serializeAdvancement() {
-            return advancementBuilder.serializeToJson();
+            return null;
         }
 
         @Nullable
         @Override
         public ResourceLocation getAdvancementId() {
-            return advancementId;
+            return null;
         }
     }
 

@@ -1,5 +1,6 @@
-package com.yor42.projectazure.gameobject.blocks;
+package com.yor42.projectazure.gameobject.blocks.machines;
 
+import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityCrystalGrowthChamber;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class CrystalGrowthChamberBlock extends AbstractMachineBlock{
+public class CrystalGrowthChamberBlock extends AbstractMachineBlock {
     public CrystalGrowthChamberBlock(Properties properties) {
         super(properties);
     }

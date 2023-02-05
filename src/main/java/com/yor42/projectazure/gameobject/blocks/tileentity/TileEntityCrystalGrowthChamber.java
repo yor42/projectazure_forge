@@ -341,13 +341,13 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
 
     public FluidStack getAmountfromItem(Item item){
         if(item.is(ModTags.Items.DUST_ORIGINIUM)){
-            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 400);
+            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get(), 400);
         }
         else if(item.is(ModTags.Items.DUST_ORIROCK)){
-            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE, 200);
+            return new FluidStack(registerFluids.ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get(), 200);
         }
         else if(item.is(ModTags.Items.DUST_QUARTZ)){
-            return new FluidStack(registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE, 800);
+            return new FluidStack(registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY.get(), 800);
         }
         return FluidStack.EMPTY;
     }

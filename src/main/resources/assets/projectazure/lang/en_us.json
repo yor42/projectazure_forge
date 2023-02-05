@@ -267,6 +267,7 @@
   "block.projectazure.crystal_growth_chamber.tooltip": "Machine for Growing High purity Crystal from low purity crystal powder.",
   "block.projectazure.basic_refinery": "Basic Refinery",
   "block.projectazure.basic_refinery.tooltip": "Machine for extracting useful oils from crude oil.",
+  "block.projectazure.basic_chemicalreactor": "Chemical Reactor",
   "block.projectazure.drydock_controller": "Drydock Controller",
   "block.projectazure.drydock_controller.tooltip":"Brain of Drydock; part of multiblock Structure.",
   "block.projectazure.machine_frame": "Machine Frame",
@@ -289,6 +290,8 @@
   "block.projectazure.gasoline": "Gasoline",
   "block.projectazure.nether_quartz_solution": "Nether Quartz Solution",
   "block.projectazure.originium_solution": "Originium Solution",
+  "block.projectazure.keton": "Keton",
+
   "block.projectazure.machine_component": "Machine Component",
 
   "block.projectazure.oak_pantry": "Oak Pantry",
@@ -323,6 +326,7 @@
   "tileentity.basic_refinery.name": "Basic Refinery",
   "tileentity.crystal_chamber.name": "Crystal Growth Chamber",
   "tileentity.metal_press.name": "Hydraulic Press",
+  "tileentity.basic_chemicalreactor.name": "Chemical Reactor",
 
   "gui.recruitbeacon_remainingtime": "ETA Until Recruit is Complete",
   "gui.construction_eta": "Construction ETA",

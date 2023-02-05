@@ -1,5 +1,6 @@
-package com.yor42.projectazure.gameobject.blocks;
+package com.yor42.projectazure.gameobject.blocks.machines;
 
+import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
 import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.AbstractBlock;

@@ -255,20 +255,12 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                     }
                     int finalSlot = slot;
                     NonNullConsumer<IFluidHandlerItem> TransferLiquidtoStack = (FluidHandler)->{
-                        ItemStack existingStack = this.ITEMHANDLER.getStackInSlot(finalSlot+1);
-                        int existingStacklimit = Math.min(existingStack.getMaxStackSize(), 64);
-                        int Itemcount = existingStack.getCount()+FluidHandler.getContainer().getCount();
-                        if(existingStack.isEmpty() || Itemcount<=existingStacklimit) {
+                        FluidActionResult simresult = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, false);
+                        if(simresult.isSuccess() && this.ITEMHANDLER.insertItem(finalSlot+1, simresult.getResult(), true).isEmpty()) {
                             FluidActionResult result = FluidUtil.tryFillContainer(stack, tank, tank.getCapacity(), null, true);
-                            if(result.isSuccess()){
-                                stack.shrink(1);
-                                if(existingStack.isEmpty()){
-                                    this.ITEMHANDLER.setStackInSlot(finalSlot+1, result.getResult());
-                                }else{
-                                    this.ITEMHANDLER.getStackInSlot(finalSlot+1).grow(result.getResult().getCount());
-                                }
-                                this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
-                            }
+                            stack.shrink(1);
+                            this.ITEMHANDLER.insertItem(finalSlot+1, result.getResult(), false);
+                            this.ITEMHANDLER.setStackInSlot(finalSlot, stack);
                         }
                     };
                     FluidUtil.getFluidHandler(stack).ifPresent(TransferLiquidtoStack);
@@ -303,9 +295,9 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
                         int FuelOilAmount = (int) (drainedAmount*0.3);
                         int GasolineAmount = (int) (drainedAmount*0.46);
                         int DieselAmount = (int) (drainedAmount*0.3);
-                        int DieselFill = this.DieselTank.fill(new FluidStack(registerFluids.DIESEL_SOURCE, DieselAmount), IFluidHandler.FluidAction.EXECUTE);
-                        int GasolineFill = this.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE, GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
-                        int FuelFill = this.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE, FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int DieselFill = this.DieselTank.fill(new FluidStack(registerFluids.DIESEL_SOURCE_REGISTRY.get(), DieselAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int GasolineFill = this.GasolineTank.fill(new FluidStack(registerFluids.GASOLINE_SOURCE_REGISTRY.get(), GasolineAmount), IFluidHandler.FluidAction.EXECUTE);
+                        int FuelFill = this.FuelOilTank.fill(new FluidStack(registerFluids.FUEL_OIL_SOURCE_REGISTRY.get(), FuelOilAmount), IFluidHandler.FluidAction.EXECUTE);
                         int MaxFill = Math.max(Math.max(DieselFill, GasolineFill), FuelFill);
                         this.CrudeOilTank.drain(MaxFill == 0? 0: 10, IFluidHandler.FluidAction.EXECUTE);
                         if(this.bitumentick>=600){
@@ -388,7 +380,7 @@ public class TileEntityBasicRefinery extends LockableTileEntity implements IName
         }
         else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
             if(this.getBlockState().hasProperty(AbstractMachineBlock.FACING))
-            switch (DirectionUtil.getRelativeDirection(direction, this.getLevel().getBlockState(this.getBlockPos()).getValue(AbstractMachineBlock.FACING))){
+            switch (DirectionUtil.getRelativeDirection(direction, this.getBlockState().getValue(AbstractMachineBlock.FACING))){
                 case LEFT:
                     return this.crudeTankCap.cast();
                 case FRONT:

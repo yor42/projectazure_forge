@@ -1,0 +1,7 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "projectazure:block/basic_chemicalreactor",
+	"textures": {
+		"1": "projectazure:block/basic_chemicalreactor_off"
+	}
+}

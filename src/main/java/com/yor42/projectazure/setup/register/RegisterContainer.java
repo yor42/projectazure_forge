@@ -16,6 +16,7 @@ public class RegisterContainer {
     public static final DeferredRegister<ContainerType<?>> CONTAINER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MODID);
     public static final RegistryObject<ContainerType<ContainerPantry>> PANTRY_CONTAINER = CONTAINER.register("pantry_container", () -> IForgeContainerType.create(ContainerPantry::new));
     public static final RegistryObject<ContainerType<ContainerCrystalGrowthChamber>> GROWTH_CHAMBER_CONTAINER = CONTAINER.register("crystal_growth_chamber_container", () -> IForgeContainerType.create(ContainerCrystalGrowthChamber::new));
+    public static final RegistryObject<ContainerType<ContainerBasicChemicalReactor>> BASICCCHEMICALREACTOR = CONTAINER.register("basic_chemical_reactor_container", () -> IForgeContainerType.create(ContainerBasicChemicalReactor::new));
     public static final RegistryObject<ContainerType<ContainerBasicRefinery>> BASIC_REFINERY_CONTAINER = CONTAINER.register("basic_refinery_container", () -> IForgeContainerType.create(ContainerBasicRefinery::new));
     public static final RegistryObject<ContainerType<ContainerRecruitBeacon>> RECRUIT_BEACON_CONTAINER = CONTAINER.register("recruit_beacon_container", () -> IForgeContainerType.create(ContainerRecruitBeacon::new));
     public static final RegistryObject<ContainerType<ContainerAlloyFurnace>> ALLOY_FURNACE_CONTAINER = CONTAINER.register("alloy_furnace_container", () -> IForgeContainerType.create(ContainerAlloyFurnace::new));

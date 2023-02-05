@@ -26,12 +26,12 @@ import static com.yor42.projectazure.setup.register.registerFluids.*;
 public abstract class NetherQuartzSolutionFluid extends FlowingFluid {
     @Override
     public Fluid getFlowing() {
-        return NETHER_QUARTZ_SOLUTION_FLOWING;
+        return NETHER_QUARTZ_SOLUTION_FLOWING_REGISTRY.get();
     }
 
     @Override
     public Fluid getSource() {
-        return NETHER_QUARTZ_SOLUTION_SOURCE;
+        return NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY.get();
     }
 
     @Override
@@ -94,7 +94,7 @@ public abstract class NetherQuartzSolutionFluid extends FlowingFluid {
 
     @Override
     public boolean isSame(Fluid fluidIn) {
-        return fluidIn == GASOLINE_SOURCE || fluidIn == GASOLINE_FLOWING;
+        return fluidIn == NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY.get() || fluidIn == NETHER_QUARTZ_SOLUTION_FLOWING_REGISTRY.get();
     }
 
     public static class Flowing extends NetherQuartzSolutionFluid {

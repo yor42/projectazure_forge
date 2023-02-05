@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:keton_source",
+    "projectazure:keton_flowing"
+  ]
+}
