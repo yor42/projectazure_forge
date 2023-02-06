@@ -1,9 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity;
 
-import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.containers.machine.ContainerBasicChemicalReactor;
 import com.yor42.projectazure.gameobject.crafting.recipes.BasicChemicalReactionRecipe;
-import com.yor42.projectazure.libs.utils.DirectionUtil;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.block.BlockState;
@@ -14,7 +12,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.text.ITextComponent;

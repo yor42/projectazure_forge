@@ -1,7 +1,7 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.libs.utils.DirectionUtil;
+import com.yor42.projectazure.libs.utils.BlockUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -77,7 +77,7 @@ public class EntityInteractionPacket {
                             entity.stopRiding();
                             if(msg.pos != null) {
                                 if (((AbstractEntityCompanion) entity).isCriticallyInjured() || world.isNight()) {
-                                    DirectionUtil.getAvailableBedPos(world, msg.pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
+                                    BlockUtil.getAvailableBedPos(world, msg.pos, (LivingEntity) entity).ifPresent(((AbstractEntityCompanion) entity)::startSleeping);
                                 }
                             }
                         case HEAL:

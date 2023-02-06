@@ -40,7 +40,7 @@ import com.yor42.projectazure.interfaces.IAzurLaneKansen;
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.DirectionUtil;
+import com.yor42.projectazure.libs.utils.BlockUtil;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.DeleteHomePacket;
 import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
@@ -134,7 +134,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.PAConfig.COMPANION_DEATH.RESPAWN;
-import static com.yor42.projectazure.libs.utils.DirectionUtil.RelativeDirection.FRONT;
+import static com.yor42.projectazure.libs.utils.BlockUtil.RelativeDirection.FRONT;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_PANTRY;
 import static com.yor42.projectazure.setup.register.RegisterAI.KILLED_ENTITY;
@@ -2890,7 +2890,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                  * Mowzie's mob is licensed under cutom license. I do hope tht this falls under Non-Compete/Non-Imitate/Non-Manipulate...
                  */
 
-                DirectionUtil.RelativeDirection interactionDirection;
+                BlockUtil.RelativeDirection interactionDirection;
                 float entityHitAngle = (float) ((Math.atan2(player.getZ() - getZ(), player.getX() - getX()) * (180 / Math.PI) - 90) % 360);
                 float entityAttackingAngle = yBodyRot % 360;
                 if (entityHitAngle < 0) {
@@ -2909,13 +2909,13 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     interactionDirection = FRONT;
                 }
                 else if(entityRelativeAngle>45 && entityRelativeAngle<135){
-                    interactionDirection = DirectionUtil.RelativeDirection.RIGHT;
+                    interactionDirection = BlockUtil.RelativeDirection.RIGHT;
                 }
                 else if(entityRelativeAngle>135 && entityRelativeAngle<225){
-                    interactionDirection = DirectionUtil.RelativeDirection.BACK;
+                    interactionDirection = BlockUtil.RelativeDirection.BACK;
                 }
                 else{
-                    interactionDirection = DirectionUtil.RelativeDirection.LEFT;
+                    interactionDirection = BlockUtil.RelativeDirection.LEFT;
                 }
 
                 Vector3d PlayerLook = player.getViewVector(1.0F).normalize();

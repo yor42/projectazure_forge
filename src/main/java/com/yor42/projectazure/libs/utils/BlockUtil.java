@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class DirectionUtil {
+public class BlockUtil {
 
     public static RelativeDirection getRelativeDirection(Direction direction, Direction MachineFacings) {
         switch (MachineFacings) {

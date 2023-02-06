@@ -1,5 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AdvancedAlloySmelterControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
@@ -20,6 +21,7 @@ public class registerMultiBlocks {
         OriginiumGeneratorControllerTE.registerTE();
         AmmoPressControllerTE.registerTE();
         RiftwayControllerTE.registerTE();
+        AdvancedAlloySmelterControllerTE.registerTE();
     }
 
     public static void register(){};
