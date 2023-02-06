@@ -10,7 +10,12 @@
   "horizontalRecoilAngle":0.0,
   "recoilAdsReduction":0.125,
   "alwaysSpread":true,
-  "spread":1.45,
+  "spread": 1.85,
+  "firstShotSpread": 0.072,
+  "hipFireInaccuracy": 2.4,
+  "projToMinAccuracy": 3.1,
+  "msToAccuracyReset": 250,
+  "movementInaccuracy": 0.72,
   "weightKilo":5
 },
   "reloads":{
