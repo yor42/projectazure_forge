@@ -427,7 +427,7 @@ public class registerItems {
 
     public static final RegistryObject<Item> CASELESS_4MM = register_withoutTexture("4mmcaseless", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
 
-    public static final RegistryObject<Item> DUMMYAMMO_RAILGUN = register_withoutTexture("dummyammo_sangvisrailgun", ()->new AmmoItem((new Item.Properties())));
+    public static final RegistryObject<Item> RAILGUN_AMMO = register("ammo_sangvisrailgun", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
     //not-so-shooty-stuff
     public static final RegistryObject<Item> CHIXIAO = register_withoutTexture("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = register_withoutTexture("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));
@@ -444,15 +444,11 @@ public class registerItems {
             .tab(PA_WEAPONS)
             .rarity(Rarity.EPIC)
             .stacksTo(1)));
-
     public static final RegistryObject<Item> GRAVINET = register_withoutTexture("gravinet", () -> new ModSwordItem(ModMaterials.GRAVINET, 1, -1.6F, new Item.Properties().tab(PA_WEAPONS)));
-
-
     public static final RegistryObject<Item> KYARU_STAFF = register_withoutTexture("kyarustaff", () -> new Item(new Item.Properties()
             .tab(PA_WEAPONS)
             .rarity(Rarity.UNCOMMON)
             .stacksTo(1)));
-
     public static final RegistryObject<Item> KITCHEN_KNIFE = register_withoutTexture("kitchenknife", () -> new ModSwordItem(ModMaterials.KITCHEN_KNIFE, 1, -0.35F, new Item.Properties().tab(PA_WEAPONS)){
         @Override
         public boolean hasContainerItem(ItemStack stack) {
@@ -468,6 +464,19 @@ public class registerItems {
             else return ItemStack.EMPTY;
         }
     });
+
+    public static final RegistryObject<Item> RMA7024_pickaxe = register("rma7024_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_24, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_axe = register("rma7024_axe", () -> new AxeItem(ModMaterials.RMA_70_24, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_hoe = register("rma7024_hoe", () -> new HoeItem(ModMaterials.RMA_70_24, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_shovel = register("rma7024_shovel", () -> new ShovelItem(ModMaterials.RMA_70_24, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7024_sword = register("rma7024_sword", () -> new SwordItem(ModMaterials.RMA_70_24, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_pickaxe = register("d32_pickaxe", () -> new PickaxeItem(ModMaterials.D32, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_axe = register("d32_axe", () -> new AxeItem(ModMaterials.D32, 4, -2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_hoe = register("d32_hoe", () -> new HoeItem(ModMaterials.D32, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_shovel = register("d32_shovel", () -> new ShovelItem(ModMaterials.D32, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> D32_sword = register("d32_sword", () -> new SwordItem(ModMaterials.D32, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+
+
 
     public static final RegistryObject<Item> SLEDGEHAMMER = register_withoutTexture("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = register_withoutTexture("claymore", ItemClaymore::new);

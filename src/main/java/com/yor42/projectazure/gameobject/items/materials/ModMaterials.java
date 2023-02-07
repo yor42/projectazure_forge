@@ -26,28 +26,25 @@ public enum ModMaterials implements IItemTier {
     EXCALIBUR(3, 1024, 5.5F, 4, 1, () -> {
         return Ingredient.of(Tags.Items.INGOTS_IRON);}),
 
-    SLEDGEHAMMER(2, 600, 0.5F, 1, 3, () -> {
-        return Ingredient.of(Tags.Items.INGOTS_IRON);}),
+    SLEDGEHAMMER(2, 600, 0.5F, 1, 3, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
 
-    WARHAMMER(7, 600, 0.5F, 6, 3, () -> {
-        return Ingredient.of(Tags.Items.INGOTS_IRON);}),
+    WARHAMMER(7, 600, 0.5F, 6, 3, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
 
-    CLAYMORE(2, 5100, 1F, 11, 3, () -> {
-        return Ingredient.of(ModTags.Items.INGOT_STEEL);}),
+    CLAYMORE(2, 5100, 1F, 11, 3, () -> Ingredient.of(ModTags.Items.INGOT_STEEL)),
 
-    CRESCENT_KATANA_KURO(2, 756, 1F, 5, 3, () -> {
-        return Ingredient.of(ModTags.Items.INGOT_STEEL);}),
+    CRESCENT_KATANA_KURO(2, 756, 1F, 5, 3, () -> Ingredient.of(ModTags.Items.INGOT_STEEL)),
 
-    CRESCENT_KATANA_SHIRO(2, 540, 1F, 3, 3, () -> {
-        return Ingredient.of(Tags.Items.INGOTS_IRON);}),
+    CRESCENT_KATANA_SHIRO(2, 540, 1F, 3, 3, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
 
-    KNIFE(2, 730, 6.0F, 2.0F, 3, () -> {
-        return Ingredient.of(ModTags.Items.INGOT_STEEL);
-    }),
+    KNIFE(2, 730, 6.0F, 2.0F, 3, () -> Ingredient.of(ModTags.Items.INGOT_STEEL)),
 
-    KITCHEN_KNIFE(1, 600, 4.5F, 4.0F, 5, () -> {
-        return Ingredient.of(Items.IRON_INGOT);
-    });
+    KITCHEN_KNIFE(1, 600, 4.5F, 4.0F, 5, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
+
+    RMA_70_12(2, 324, 6.75F, 2F, 15, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
+
+    RMA_70_24(3, 1200, 8.25F, 4.5F, 18, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
+
+    D32(4, 2562, 12F, 3F, 30, () -> Ingredient.of(Tags.Items.INGOTS_IRON));
 
     private final int harvestLevel;
     private final int maxUses;

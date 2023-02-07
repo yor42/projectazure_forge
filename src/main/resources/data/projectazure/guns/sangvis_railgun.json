@@ -29,7 +29,7 @@
     "interReloadPauseTicks": 24
   },
   "projectile": {
-    "item": "projectazure:dummyammo_sangvisrailgun",
+    "item": "projectazure:ammo_sangvisrailgun",
     "visible": true,
     "damage": 60,
     "size": 0.4,
