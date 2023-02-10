@@ -1004,6 +1004,144 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_item", has(registerItems.FOR_DESTABILIZER.get()))
                 .save(consumer);
 
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7012_sword.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7012)
+                .pattern("I")
+                .pattern("I")
+                .pattern("S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7012_pickaxe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7012)
+                .pattern("III")
+                .pattern(" S ")
+                .pattern(" S ")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7012_axe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7012)
+                .pattern("II")
+                .pattern("IS")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7012_hoe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7012)
+                .pattern("II")
+                .pattern(" S")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7012_shovel.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7012)
+                .pattern(" I")
+                .pattern(" S")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
+                .save(consumer);
+
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7024_sword.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7024)
+                .pattern("I")
+                .pattern("I")
+                .pattern("S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7024_pickaxe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7024)
+                .pattern("III")
+                .pattern(" S ")
+                .pattern(" S ")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7024_axe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7024)
+                .pattern("II")
+                .pattern("IS")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7024_hoe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7024)
+                .pattern("II")
+                .pattern(" S")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RMA7024_shovel.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_RMA7024)
+                .pattern(" I")
+                .pattern(" S")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
+                .save(consumer);
+
+
+        ShapedRecipeBuilder.shaped(registerItems.D32_sword.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_D32)
+                .pattern("I")
+                .pattern("I")
+                .pattern("S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.D32_pickaxe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_D32)
+                .pattern("III")
+                .pattern(" S ")
+                .pattern(" S ")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.D32_axe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_D32)
+                .pattern("II")
+                .pattern("IS")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.D32_hoe.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_D32)
+                .pattern("II")
+                .pattern(" S")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.D32_shovel.get())
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('I', ModTags.Items.INGOT_D32)
+                .pattern(" I")
+                .pattern(" S")
+                .pattern(" S")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
+                .save(consumer);
+
     }
 
     private void BuildMetalRecipe(Consumer<IFinishedRecipe> consumer, float smeltingXp, Metals metal) {

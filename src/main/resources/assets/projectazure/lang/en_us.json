@@ -160,7 +160,8 @@
 
   "item.projectazure.whitefang465": "WHITE FANG 465",
   "item.projectazure.typhoon": "TYPHOON",
-  "item.projectazure.sangvis_railgun": "SF-2815 Energy Cannon",
+  "item.projectazure.sangvis_railgun": "SF-2815 Railgun",
+  "item.projectazure.ammo_sangvisrailgun": "SF-2815 Railgun Ammunition",
   "item.projectazure.granadelauncher": "Automatic Granade Launcher",
 
   "item.projectazure.4mmcaseless": "4mm Caseless Ammo",
@@ -204,6 +205,22 @@
   "item.projectazure.ammo_sap": "Semi Armor Piercing Shell",
   "item.projectazure.ammo_api": "API Shell",
   "item.projectazure.ammo_heiap": "HEIAP Shell",
+
+  "item.projectazure.rma7012_pickaxe": "RMA70-12 Pickaxe",
+  "item.projectazure.rma7012_axe": "RMA70-12 Axe",
+  "item.projectazure.rma7012_sword": "RMA70-12 Sword",
+  "item.projectazure.rma7012_hoe": "RMA70-12 Hoe",
+  "item.projectazure.rma7012_shovel": "RMA70-12 Shovel",
+  "item.projectazure.rma7024_pickaxe": "RMA70-24 Pickaxe",
+  "item.projectazure.rma7024_axe": "RMA70-24 Axe",
+  "item.projectazure.rma7024_sword": "RMA70-24 Sword",
+  "item.projectazure.rma7024_hoe": "RMA70-24 Hoe",
+  "item.projectazure.rma7024_shovel": "RMA70-24 Shovel",
+  "item.projectazure.d32_pickaxe": "D32 Steel Pickaxe",
+  "item.projectazure.d32_axe": "D32 Steel Axe",
+  "item.projectazure.d32_sword": "D32 Steel Sword",
+  "item.projectazure.d32_hoe": "D32 Steel Hoe",
+  "item.projectazure.d32_shovel": "D32 Steel Shovel",
 
   "item.tooltip.gunclass": "Gun Category",
 
@@ -306,6 +323,7 @@
   "block.projectazure.originium_generator": "Originium Reactor Controller",
   "block.projectazure.ammo_press": "Ammo Press Controller",
   "block.projectazure.riftway": "Riftway",
+  "block.projectazure.advanced_alloy_smelter": "Advanced Alloy smelter",
 
 
   "originium_generator.name": "Originium Reactor",
@@ -604,6 +622,7 @@
   "multiblocked.recupe_map.originium_generation": "Originium Reaction",
   "multiblocked.recupe_map.ammopress": "Ammo Press",
   "multiblocked.recupe_map.riftway": "Riftway Transfer",
+  "multiblocked.recupe_map.advanced_alloy_smelter": "Advanced Alloy Smelter",
 
   "multiblocked.capability.companion": "Companion",
 

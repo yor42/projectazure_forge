@@ -475,8 +475,11 @@ public class registerItems {
     public static final RegistryObject<Item> D32_hoe = register("d32_hoe", () -> new HoeItem(ModMaterials.D32, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> D32_shovel = register("d32_shovel", () -> new ShovelItem(ModMaterials.D32, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> D32_sword = register("d32_sword", () -> new SwordItem(ModMaterials.D32, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
-
-
+    public static final RegistryObject<Item> RMA7012_pickaxe = register("rma7012_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_12, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_axe = register("rma7012_axe", () -> new AxeItem(ModMaterials.RMA_70_12, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_hoe = register("rma7012_hoe", () -> new HoeItem(ModMaterials.RMA_70_12, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_shovel = register("rma7012_shovel", () -> new ShovelItem(ModMaterials.RMA_70_12, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> RMA7012_sword = register("rma7012_sword", () -> new SwordItem(ModMaterials.RMA_70_12, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
 
     public static final RegistryObject<Item> SLEDGEHAMMER = register_withoutTexture("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = register_withoutTexture("claymore", ItemClaymore::new);
@@ -623,9 +626,8 @@ public class registerItems {
     public static final RegistryObject<Item> CONTRIBUTOR_BONUS = register("contributor_bonus", () -> new ItemContributorBonus(new Item.Properties()));
 
 
-    public static RegistryObject<Item> registerResource(String id, enums.ResourceType type){
-        SIMPLETEXTURELIST.add(type.getName()+"_"+id);
-        return ITEMS.register(type.getName()+"_"+id, () -> new ItemResource(id, type));
+    public static RegistryObject<Item> registerResource(String id, enums.ResourceType type){;
+        return register_withTexturename(type.getName()+"_"+id, type.getName()+"_"+id, () -> new ItemResource(id, type));
     }
 
     public static RegistryObject<Item> register(String id, Supplier<? extends Item> supplier){
