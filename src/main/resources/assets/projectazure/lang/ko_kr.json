@@ -54,6 +54,9 @@
 
   "item.projectazure.saint_quartz": "성정석",
   "item.projectazure.computercore": "연산코어",
+  "item.projectazure.loxickohl": "로식 콜",
+  "item.projectazure.vitrifiedoriginium": "유리화 오리지늄",
+  "item.projectazure.amberoriginium": "앰버 오리지늄",
 
   "item.projectazure.orundum": "합성옥 소자",
   "item.projectazure.originite": "오리지늄 조각",
@@ -62,6 +65,8 @@
   "item.projectazure.bitumen": "역청",
   "item.projectazure.crystalline_circuit": "결정 회로",
   "item.projectazure.crystalline_component": "결정 부품",
+  "item.projectazure.c99": "C99 카본",
+  "item.projectazure.amber_originium_fuel_rod": "앰버 오리지늄 연료봉",
 
   "item.projectazure.fordestabilizer": "차원 균열 생성기",
 
@@ -80,8 +85,35 @@
   "item.projectazure.mold_plate": "판 압출 틀",
   "item.projectazure.mold_extraction": "압출 틀",
   "item.projectazure.mold_wire": "케이블 압출 틀",
-  "item.projectazure.hammer_iron": "철 망치",
+
+  "item.projectazure.iron_hammer": "철 망치",
+  "item.projectazure.copper_hammer": "구리 망치",
+  "item.projectazure.stone_hammer": "돌 망치",
+  "item.projectazure.tin_hammer": "주석 망치",
+  "item.projectazure.bronze_hammer": "청동 망치",
+  "item.projectazure.diamond_hammer": "다이아몬드, 망치",
+  "item.projectazure.netherite_hammer": "네더라이트 망치",
+  "item.projectazure.gold_hammer": "금 망치",
+  "item.projectazure.steel_hammer": "강철 망치",
+  "item.projectazure.rma7012_hammer": "RMA70-12 망치",
+  "item.projectazure.rma7024_hammer": "RMA70-24 망치",
+  "item.projectazure.d32_hammer": "D32강 망치",
+
+  "item.projectazure.iron_saw": "철 톱",
+  "item.projectazure.copper_saw": "구리 톱",
+  "item.projectazure.stone_saw": "돌 톱",
+  "item.projectazure.tin_saw": "주석 톱",
+  "item.projectazure.bronze_saw": "청동 톱",
+  "item.projectazure.diamond_saw": "다이아몬드 톱",
+  "item.projectazure.netherite_saw": "네더라이트 톱",
+  "item.projectazure.gold_saw": "금 톱",
+  "item.projectazure.steel_saw": "강철 톱",
+  "item.projectazure.rma7012_saw": "RMA70-12 톱",
+  "item.projectazure.rma7024_saw": "RMA70-24 톱",
+  "item.projectazure.d32_saw": "D32강 톱",
+
   "item.projectazure.mortar_iron": "철 막자사발",
+
   "item.projectazure.steel_cutter": "강철 절단기",
 
   "item.projectazure.originium_seed": "오리지늄 결정 씨앗",
@@ -160,7 +192,8 @@
 
   "item.projectazure.whitefang465": "화이트팽 465",
   "item.projectazure.typhoon": "타이푼",
-  "item.projectazure.sangvis_railgun": "SF-2815 에너지포",
+  "item.projectazure.sangvis_railgun": "SF-2815 레일건",
+  "item.projectazure.ammo_sangvisrailgun": "SF-2815 레일건 탄약",
   "item.projectazure.granadelauncher": "자동 유탄발사기",
 
   "item.projectazure.4mmcaseless": "4mm 무탄피 탄약",
@@ -204,6 +237,53 @@
   "item.projectazure.ammo_sap": "함포용 철갑고폭탄",
   "item.projectazure.ammo_api": "함포용 철갑소이탄",
   "item.projectazure.ammo_heiap": "함포용 철갑고폭소이탄",
+
+  "item.projectazure.rma7012_pickaxe": "RMA70-12 곡괭이",
+  "item.projectazure.rma7012_axe": "RMA70-12 도끼",
+  "item.projectazure.rma7012_sword": "RMA70-12 검",
+  "item.projectazure.rma7012_hoe": "RMA70-12 괭이",
+  "item.projectazure.rma7012_shovel": "RMA70-12 삽",
+  "item.projectazure.rma7024_pickaxe": "RMA70-24 곡괭이",
+  "item.projectazure.rma7024_axe": "RMA70-24 도끼",
+  "item.projectazure.rma7024_sword": "RMA70-24 검",
+  "item.projectazure.rma7024_hoe": "RMA70-24 괭이",
+  "item.projectazure.rma7024_shovel": "RMA70-24 삽",
+  "item.projectazure.d32_pickaxe": "D32강 곡괭이",
+  "item.projectazure.d32_axe": "D32강 도끼",
+  "item.projectazure.d32_sword": "D32강 검",
+  "item.projectazure.d32_hoe": "D32강 괭이",
+  "item.projectazure.d32_shovel": "D32강 삽",
+
+  "item.projectazure.lead_pickaxe": "납 곡괭이",
+  "item.projectazure.lead_axe": "납 도끼",
+  "item.projectazure.lead_sword": "납 검",
+  "item.projectazure.lead_hoe": "납 괭이",
+  "item.projectazure.lead_shovel": "납 삽",
+
+  "item.projectazure.copper_pickaxe": "구리 곡괭이",
+  "item.projectazure.copper_axe": "구리 도끼",
+  "item.projectazure.copper_sword": "구리 검",
+  "item.projectazure.copper_hoe": "구리 괭이",
+  "item.projectazure.copper_shovel": "구리 삽",
+
+  "item.projectazure.tin_pickaxe": "주석 곡괭이",
+  "item.projectazure.tin_axe": "주석 도끼",
+  "item.projectazure.tin_sword": "주석 검",
+  "item.projectazure.tin_hoe": "주석 괭이",
+  "item.projectazure.tin_shovel": "주석 삽",
+
+  "item.projectazure.bronze_pickaxe": "청동 곡괭이",
+  "item.projectazure.bronze_axe": "청동 도끼",
+  "item.projectazure.bronze_sword": "청동 검",
+  "item.projectazure.bronze_hoe": "청동 괭이",
+  "item.projectazure.bronze_shovel": "청동 삽",
+
+  "item.projectazure.steel_pickaxe": "강철 곡괭이",
+  "item.projectazure.steel_axe": "강철 도끼",
+  "item.projectazure.steel_sword": "강철 검",
+  "item.projectazure.steel_hoe": "강철 괭이",
+  "item.projectazure.steel_shovel": "강철 삽",
+
 
   "item.tooltip.gunclass": "화기 분류",
 
@@ -306,6 +386,7 @@
   "block.projectazure.originium_generator": "오리지늄 반응로",
   "block.projectazure.ammo_press": "탄약 압착기 제어 패널",
   "block.projectazure.riftway": "차원 전송기",
+  "block.projectazure.advanced_alloy_smelter": "고급 합금로",
 
 
   "originium_generator.name": "오리지늄 반응로",
@@ -604,6 +685,7 @@
   "multiblocked.recupe_map.originium_generation": "오리지늄 반응",
   "multiblocked.recupe_map.ammopress": "탄약 압착기",
   "multiblocked.recupe_map.riftway": "차원 전송",
+  "multiblocked.recupe_map.advanced_alloy_smelter": "고급 합금로",
 
   "multiblocked.capability.companion": "컴패니언",
 

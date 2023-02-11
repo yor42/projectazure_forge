@@ -250,17 +250,23 @@ public class registerItems {
     public static final RegistryObject<Item> HAMMER_GOLD = register("gold_hammer", () -> new ItemCraftTool(40));
     public static final RegistryObject<Item> HAMMER_STEEL = register("steel_hammer", () -> new ItemCraftTool(90));
     public static final RegistryObject<Item> HAMMER_DIAMOND = register("diamond_hammer", () -> new ItemCraftTool(112));
-    public static final RegistryObject<Item> HAMMER_NETHERITE = register("netherite_hammer", () -> new ItemCraftTool(275));
+    public static final RegistryObject<Item> HAMMER_NETHERITE = register("netherite_hammer", () -> new ItemCraftTool(286));
+    public static final RegistryObject<Item> HAMMER_RMA7012 = register("rma7012_hammer", () -> new ItemCraftTool(84));
+    public static final RegistryObject<Item> HAMMER_RMA7024 = register("rma7024_hammer", () -> new ItemCraftTool(132));
+    public static final RegistryObject<Item> HAMMER_D32 = register("d32_hammer", () -> new ItemCraftTool(315));
 
     public static final RegistryObject<Item> SAW_STONE = register("stone_saw", () -> new ItemCraftTool(12));
     public static final RegistryObject<Item> SAW_COPPER = register("copper_saw", () -> new ItemCraftTool(34));
     public static final RegistryObject<Item> SAW_TIN = register("tin_saw", () -> new ItemCraftTool(41));
     public static final RegistryObject<Item> SAW_BRONZE = register("bronze_saw", () -> new ItemCraftTool(67));
     public static final RegistryObject<Item> SAW_IRON = register("iron_saw", () -> new ItemCraftTool(130));
+    public static final RegistryObject<Item> SAW_RMA7012 = register("rma7012_saw", () -> new ItemCraftTool(273));
+    public static final RegistryObject<Item> SAW_RMA7024 = register("rma7024_saw", () -> new ItemCraftTool(626));
+    public static final RegistryObject<Item> SAW_D32 = register("d32_saw", () -> new ItemCraftTool(986));
     public static final RegistryObject<Item> SAW_GOLD = register("gold_saw", () -> new ItemCraftTool(62));
     public static final RegistryObject<Item> SAW_STEEL = register("steel_saw", () -> new ItemCraftTool(358));
     public static final RegistryObject<Item> SAW_DIAMOND = register("diamond_saw", () -> new ItemCraftTool(598));
-    public static final RegistryObject<Item> SAW_NETHERITE = register("netherite_saw", () -> new ItemCraftTool(1182));
+    public static final RegistryObject<Item> SAW_NETHERITE = register("netherite_saw", () -> new ItemCraftTool(792));
 
 
     public static final RegistryObject<Item> FOR_DESTABILIZER = register("fordestabilizer", () -> new ItemCraftTool(3));

@@ -95,6 +95,9 @@
   "item.projectazure.netherite_hammer": "Netherite Hammer",
   "item.projectazure.gold_hammer": "Gold Hammer",
   "item.projectazure.steel_hammer": "Steel Hammer",
+  "item.projectazure.rma7012_hammer": "RMA70-12 Hammer",
+  "item.projectazure.rma7024_hammer": "RMA70-24 Hammer",
+  "item.projectazure.d32_hammer": "D32 Steel Hammer",
 
   "item.projectazure.iron_saw": "Iron Saw",
   "item.projectazure.copper_saw": "Copper Saw",
@@ -105,6 +108,9 @@
   "item.projectazure.netherite_saw": "Netherite Saw",
   "item.projectazure.gold_saw": "Gold Saw",
   "item.projectazure.steel_saw": "Steel Saw",
+  "item.projectazure.rma7012_saw": "RMA70-12 Saw",
+  "item.projectazure.rma7024_saw": "RMA70-24 Saw",
+  "item.projectazure.d32_saw": "D32 Steel Saw",
 
   "item.projectazure.mortar_iron": "Iron Mortar",
 
