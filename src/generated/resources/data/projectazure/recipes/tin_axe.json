@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "II",
+    "IS",
+    " S"
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
+    "I": {
+      "tag": "forge:ingots/tin"
+    }
+  },
+  "result": {
+    "item": "projectazure:tin_axe"
+  }
+}

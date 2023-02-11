@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:stone_saw",
+    "projectazure:copper_saw",
+    "projectazure:tin_saw",
+    "projectazure:bronze_saw",
+    "projectazure:iron_saw",
+    "projectazure:gold_saw",
+    "projectazure:steel_saw",
+    "projectazure:diamond_saw",
+    "projectazure:netherite_saw"
+  ]
+}

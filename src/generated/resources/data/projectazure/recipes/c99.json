@@ -1,0 +1,19 @@
+{
+  "type": "projectazure:alloying",
+  "materials": [
+    {
+      "item": {
+        "tag": "minecraft:coals"
+      }
+    },
+    {
+      "item": {
+        "item": "minecraft:sand"
+      },
+      "count": 2
+    }
+  ],
+  "result": "projectazure:c99",
+  "resultcount": 1,
+  "processtime": 300
+}

@@ -37,6 +37,7 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.state.properties.BedPart;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -87,6 +88,9 @@ public class ForgeBusEventHandler {
         try{
             OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("prime_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME), 1)).perTick(true).output(FEMultiblockCapability.CAP, 2000).duration(1200).buildAndRegister();
             OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("originite_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINITE), 1)).perTick(true).output(FEMultiblockCapability.CAP, 4000).duration(400).buildAndRegister();
+
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.AMBER_ORIGINIUM.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 8000).duration(500).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_fuel_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.AMBER_ORIGINIUM_FUEL_ROD.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 10000).duration(1000).buildAndRegister();
 
             AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("9mm")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS)))
@@ -199,6 +203,11 @@ public class ForgeBusEventHandler {
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("originium_amber")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME)), new ItemsIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), 1), new ItemsIngredient(Ingredient.of(Tags.Items.RODS_BLAZE), 1))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.AMBER_ORIGINIUM.get(),2)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
+
+            AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("c99")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ItemTags.COALS)))
                     .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.AMBER_ORIGINIUM.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
 

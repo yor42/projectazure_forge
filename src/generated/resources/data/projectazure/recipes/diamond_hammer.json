@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " IS",
+    " SI",
+    "S  "
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:gems/diamond"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "projectazure:diamond_hammer"
+  }
+}

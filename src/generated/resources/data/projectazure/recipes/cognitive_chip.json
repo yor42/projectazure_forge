@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "QOQ",
+    "OAO",
+    "QOQ"
+  ],
+  "key": {
+    "O": {
+      "item": "projectazure:vitrifiedoriginium"
+    },
+    "A": {
+      "item": "projectazure:crystalline_component"
+    },
+    "Q": {
+      "tag": "forge:gems/quartz"
+    }
+  },
+  "result": {
+    "item": "projectazure:cognitive_chip",
+    "count": 2
+  }
+}

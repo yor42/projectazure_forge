@@ -23,8 +23,11 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -157,7 +160,6 @@ public class registerItems {
             .tab(PA_RESOURCES).stacksTo(16)));
     public static final RegistryObject<Item> ORUNDUM = register("orundum", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
-
     public static final RegistryObject<Item> SAINT_QUARTZ = register("saint_quartz", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> COMPUTERCORE = register("computercore", () -> new Item(new Item.Properties()
@@ -172,6 +174,20 @@ public class registerItems {
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> LOXICKOHL = register("loxickohl", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> C99_CARBON = register("c99", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)){
+        @Override
+        public int getBurnTime(ItemStack itemStack, @Nullable IRecipeType<?> recipeType) {
+            return 2400;
+        }
+    });
+    public static final RegistryObject<Item> AMBER_ORIGINIUM_FUEL_ROD = register("amber_originium_fuel_rod", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)){
+        @Override
+        public int getBurnTime(ItemStack itemStack, @Nullable IRecipeType<?> recipeType) {
+            return 25000;
+        }
+    });
 
     public static final RegistryObject<Item> TOKEN = register("token", () -> new ItemCompanionUpgrade(new Item.Properties()
             .tab(PA_RESOURCES)));
@@ -226,7 +242,26 @@ public class registerItems {
     //crafting items
     public static final RegistryObject<Item> MORTAR_IRON = register("mortar_iron", () -> new ItemCraftTool(50));
 
-    public static final RegistryObject<Item> HAMMER_IRON = register("hammer_iron", () -> new ItemCraftTool(43));
+    public static final RegistryObject<Item> HAMMER_STONE = register("stone_hammer", () -> new ItemCraftTool(24));
+    public static final RegistryObject<Item> HAMMER_COPPER = register("copper_hammer", () -> new ItemCraftTool(39));
+    public static final RegistryObject<Item> HAMMER_TIN = register("tin_hammer", () -> new ItemCraftTool(39));
+    public static final RegistryObject<Item> HAMMER_BRONZE = register("bronze_hammer", () -> new ItemCraftTool(52));
+    public static final RegistryObject<Item> HAMMER_IRON = register("iron_hammer", () -> new ItemCraftTool(67));
+    public static final RegistryObject<Item> HAMMER_GOLD = register("gold_hammer", () -> new ItemCraftTool(40));
+    public static final RegistryObject<Item> HAMMER_STEEL = register("steel_hammer", () -> new ItemCraftTool(90));
+    public static final RegistryObject<Item> HAMMER_DIAMOND = register("diamond_hammer", () -> new ItemCraftTool(112));
+    public static final RegistryObject<Item> HAMMER_NETHERITE = register("netherite_hammer", () -> new ItemCraftTool(275));
+
+    public static final RegistryObject<Item> SAW_STONE = register("stone_saw", () -> new ItemCraftTool(12));
+    public static final RegistryObject<Item> SAW_COPPER = register("copper_saw", () -> new ItemCraftTool(34));
+    public static final RegistryObject<Item> SAW_TIN = register("tin_saw", () -> new ItemCraftTool(41));
+    public static final RegistryObject<Item> SAW_BRONZE = register("bronze_saw", () -> new ItemCraftTool(67));
+    public static final RegistryObject<Item> SAW_IRON = register("iron_saw", () -> new ItemCraftTool(130));
+    public static final RegistryObject<Item> SAW_GOLD = register("gold_saw", () -> new ItemCraftTool(62));
+    public static final RegistryObject<Item> SAW_STEEL = register("steel_saw", () -> new ItemCraftTool(358));
+    public static final RegistryObject<Item> SAW_DIAMOND = register("diamond_saw", () -> new ItemCraftTool(598));
+    public static final RegistryObject<Item> SAW_NETHERITE = register("netherite_saw", () -> new ItemCraftTool(1182));
+
 
     public static final RegistryObject<Item> FOR_DESTABILIZER = register("fordestabilizer", () -> new ItemCraftTool(3));
 
@@ -486,6 +521,38 @@ public class registerItems {
     public static final RegistryObject<Item> RMA7012_hoe = register("rma7012_hoe", () -> new HoeItem(ModMaterials.RMA_70_12, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> RMA7012_shovel = register("rma7012_shovel", () -> new ShovelItem(ModMaterials.RMA_70_12, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> RMA7012_sword = register("rma7012_sword", () -> new SwordItem(ModMaterials.RMA_70_12, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+
+    public static final RegistryObject<Item> LEAD_pickaxe = register("lead_pickaxe", () -> new PickaxeItem(ModMaterials.LEAD, 2, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_axe = register("lead_axe", () -> new AxeItem(ModMaterials.LEAD, 7, -3.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_hoe = register("lead_hoe", () -> new HoeItem(ModMaterials.LEAD, 1, -1.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_shovel = register("lead_shovel", () -> new ShovelItem(ModMaterials.LEAD, 2.5F, -3.2F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> LEAD_sword = register("lead_sword", () -> new SwordItem(ModMaterials.LEAD, 4, -2.6F, new Item.Properties().tab(PA_WEAPONS)));
+
+
+    public static final RegistryObject<Item> COPPER_pickaxe = register("copper_pickaxe", () -> new PickaxeItem(ModMaterials.COPPER, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_axe = register("copper_axe", () -> new AxeItem(ModMaterials.COPPER, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_hoe = register("copper_hoe", () -> new HoeItem(ModMaterials.COPPER, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_shovel = register("copper_shovel", () -> new ShovelItem(ModMaterials.COPPER, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> COPPER_sword = register("copper_sword", () -> new SwordItem(ModMaterials.COPPER, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+
+    public static final RegistryObject<Item> TIN_pickaxe = register("tin_pickaxe", () -> new PickaxeItem(ModMaterials.TIN, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_axe = register("tin_axe", () -> new AxeItem(ModMaterials.TIN, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_hoe = register("tin_hoe", () -> new HoeItem(ModMaterials.TIN, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_shovel = register("tin_shovel", () -> new ShovelItem(ModMaterials.TIN, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TIN_sword = register("tin_sword", () -> new SwordItem(ModMaterials.TIN, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+
+    public static final RegistryObject<Item> BRONZE_pickaxe = register("bronze_pickaxe", () -> new PickaxeItem(ModMaterials.BRONZE, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_axe = register("bronze_axe", () -> new AxeItem(ModMaterials.BRONZE, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_hoe = register("bronze_hoe", () -> new HoeItem(ModMaterials.BRONZE, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_shovel = register("bronze_shovel", () -> new ShovelItem(ModMaterials.BRONZE, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> BRONZE_sword = register("bronze_sword", () -> new SwordItem(ModMaterials.BRONZE, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+
+    public static final RegistryObject<Item> STEEL_pickaxe = register("steel_pickaxe", () -> new PickaxeItem(ModMaterials.STEEL, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_axe = register("steel_axe", () -> new AxeItem(ModMaterials.STEEL, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_hoe = register("steel_hoe", () -> new HoeItem(ModMaterials.STEEL, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_shovel = register("steel_shovel", () -> new ShovelItem(ModMaterials.STEEL, 1.5F, -3F, new Item.Properties().tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> STEEL_sword = register("steel_sword", () -> new SwordItem(ModMaterials.STEEL, 3, -2.4F, new Item.Properties().tab(PA_WEAPONS)));
+
 
     public static final RegistryObject<Item> SLEDGEHAMMER = register_withoutTexture("sledgehammer", () -> new ItemSledgeHammer(10, -3.75F, ModMaterials.SLEDGEHAMMER, new Item.Properties().tab(PA_WEAPONS).stacksTo(1)));
     public static final RegistryObject<Item> CLAYMORE = register_withoutTexture("claymore", ItemClaymore::new);

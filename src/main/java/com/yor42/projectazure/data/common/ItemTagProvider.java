@@ -130,7 +130,8 @@ public class ItemTagProvider extends ItemTagsProvider {
 
         this.tag(ModTags.Items.MORTAR).add(registerItems.MORTAR_IRON.get());
         this.tag(ModTags.Items.CUTTER).add(registerItems.STEEL_CUTTER.get());
-        this.tag(ModTags.Items.HAMMER).add(registerItems.HAMMER_IRON.get()).add(registerItems.SLEDGEHAMMER.get());
+        this.tag(ModTags.Items.HAMMER).add(registerItems.HAMMER_STONE.get()).add(registerItems.HAMMER_COPPER.get()).add(registerItems.HAMMER_TIN.get()).add(registerItems.HAMMER_BRONZE.get()).add(registerItems.HAMMER_IRON.get()).add(registerItems.HAMMER_GOLD.get()).add(registerItems.HAMMER_STEEL.get()).add(registerItems.HAMMER_DIAMOND.get()).add(registerItems.HAMMER_NETHERITE.get()).add(registerItems.SLEDGEHAMMER.get());
+        this.tag(ModTags.Items.SAW).add(registerItems.SAW_STONE.get()).add(registerItems.SAW_COPPER.get()).add(registerItems.SAW_TIN.get()).add(registerItems.SAW_BRONZE.get()).add(registerItems.SAW_IRON.get()).add(registerItems.SAW_GOLD.get()).add(registerItems.SAW_STEEL.get()).add(registerItems.SAW_DIAMOND.get()).add(registerItems.SAW_NETHERITE.get());
         this.tag(ModTags.Items.KNIFE).add(registerItems.KITCHEN_KNIFE.get(), registerItems.TACTICAL_KNIFE.get());
 
     }

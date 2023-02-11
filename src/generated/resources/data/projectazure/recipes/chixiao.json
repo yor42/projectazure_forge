@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I",
+    "I",
+    "S"
+  ],
+  "key": {
+    "I": {
+      "item": "projectazure:amberoriginium"
+    },
+    "S": {
+      "item": "projectazure:c99"
+    }
+  },
+  "result": {
+    "item": "projectazure:chixiao"
+  }
+}

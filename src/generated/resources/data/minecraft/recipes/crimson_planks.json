@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "minecraft:crimson_stems"
+    },
+    {
+      "tag": "forge:tools/saw"
+    }
+  ],
+  "result": {
+    "item": "minecraft:crimson_planks",
+    "count": 6
+  }
+}

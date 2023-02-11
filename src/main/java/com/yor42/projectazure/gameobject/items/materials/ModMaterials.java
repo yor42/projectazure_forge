@@ -4,6 +4,7 @@ import com.yor42.projectazure.data.ModTags;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.LazyValue;
 import net.minecraftforge.common.Tags;
 
@@ -11,20 +12,15 @@ import java.util.function.Supplier;
 
 public enum ModMaterials implements IItemTier {
 
-    CHIXIAO(3, 2500, 7.5F, 7, 8, () -> {
-        return Ingredient.of(ModTags.Items.INGOT_TIN);}),
+    CHIXIAO(3, 2500, 7.5F, 7, 8, () -> Ingredient.of(ModTags.Items.INGOT_TIN)),
 
-    SHEATH(2, 1256, 5.5F, 5, 8, () -> {
-        return Ingredient.of(ModTags.Items.INGOT_TIN);}),
+    SHEATH(2, 1256, 5.5F, 5, 8, () -> Ingredient.of(ModTags.Items.INGOT_TIN)),
 
-    FLEXABLESWORD(2, 340, 5.5F, 3, 8, () -> {
-        return Ingredient.of(ModTags.Items.INGOT_TIN);}),
+    FLEXABLESWORD(2, 340, 5.5F, 3, 8, () -> Ingredient.of(ModTags.Items.INGOT_TIN)),
 
-    GRAVINET(2, 924, 3.5F, 9, 3, () -> {
-        return Ingredient.of(ModTags.Items.INGOT_STEEL);}),
+    GRAVINET(2, 924, 3.5F, 9, 3, () -> Ingredient.of(ModTags.Items.INGOT_STEEL)),
 
-    EXCALIBUR(3, 1024, 5.5F, 4, 1, () -> {
-        return Ingredient.of(Tags.Items.INGOTS_IRON);}),
+    EXCALIBUR(3, 1024, 5.5F, 4, 1, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
 
     SLEDGEHAMMER(2, 600, 0.5F, 1, 3, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
 
@@ -40,11 +36,17 @@ public enum ModMaterials implements IItemTier {
 
     KITCHEN_KNIFE(1, 600, 4.5F, 4.0F, 5, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
 
-    RMA_70_12(2, 324, 6.75F, 2F, 15, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
+    LEAD(1, 125, 5.5F, 6F, 6, () -> Ingredient.of(ModTags.Items.INGOT_LEAD)),
+    STEEL(2, 310, 8.0F, 3.0F, 14, () -> Ingredient.of(ModTags.Items.INGOT_STEEL)),
+    COPPER(1, 205, 5F, 1.5F, 12, () -> Ingredient.of(ModTags.Items.INGOT_COPPER)),
+    TIN(1, 220, 5F, 1.5F, 10, () -> Ingredient.of(ModTags.Items.INGOT_TIN)),
+    BRONZE(1, 230, 5.5F, 2.0F, 13, () -> Ingredient.of(ModTags.Items.INGOT_BRONZE)),
+    RMA_70_12(2, 276, 6.75F, 2F, 15, () -> Ingredient.of(ModTags.Items.INGOT_RMA7012)),
 
-    RMA_70_24(3, 1200, 8.25F, 4.5F, 18, () -> Ingredient.of(Tags.Items.INGOTS_IRON)),
 
-    D32(4, 2562, 12F, 3F, 30, () -> Ingredient.of(Tags.Items.INGOTS_IRON));
+    RMA_70_24(3, 1200, 8.25F, 4.5F, 18, () -> Ingredient.of(ModTags.Items.INGOT_RMA7024)),
+
+    D32(4, 2562, 12F, 3F, 30, () -> Ingredient.of(ModTags.Items.INGOT_D32));
 
     private final int harvestLevel;
     private final int maxUses;
@@ -80,6 +82,10 @@ public enum ModMaterials implements IItemTier {
 
     public int getEnchantmentValue() {
         return this.enchantability;
+    }
+
+    public String getmaterialname(){
+        return this.toString().toLowerCase();
     }
 
     public Ingredient getRepairIngredient() {

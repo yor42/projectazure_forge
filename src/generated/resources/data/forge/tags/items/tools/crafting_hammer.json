@@ -1,7 +1,15 @@
 {
   "replace": false,
   "values": [
-    "projectazure:hammer_iron",
+    "projectazure:stone_hammer",
+    "projectazure:copper_hammer",
+    "projectazure:tin_hammer",
+    "projectazure:bronze_hammer",
+    "projectazure:iron_hammer",
+    "projectazure:gold_hammer",
+    "projectazure:steel_hammer",
+    "projectazure:diamond_hammer",
+    "projectazure:netherite_hammer",
     "projectazure:sledgehammer"
   ]
 }

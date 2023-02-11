@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SI",
+    "SI",
+    "S "
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:plates/tin"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "projectazure:tin_saw"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:originium_dust_from_prime"
+    ]
+  },
+  "criteria": {
+    "has_originite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "projectazure:originite"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:originium_dust_from_prime"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_originite",
+      "has_the_recipe"
+    ]
+  ]
+}

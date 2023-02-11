@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SIS",
+    "SIS",
+    "SIS"
+  ],
+  "key": {
+    "S": {
+      "item": "projectazure:amberoriginium"
+    },
+    "I": {
+      "item": "projectazure:c99"
+    }
+  },
+  "result": {
+    "item": "projectazure:amber_originium_fuel_rod",
+    "count": 3
+  }
+}

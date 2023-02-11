@@ -65,6 +65,8 @@
   "item.projectazure.bitumen": "Bitumen",
   "item.projectazure.crystalline_circuit": "Crystalline Circuit",
   "item.projectazure.crystalline_component": "Crystalline Component",
+  "item.projectazure.c99": "C99 Carbon",
+  "item.projectazure.amber_originium_fuel_rod": "Amber Originium Fuel Rod",
 
   "item.projectazure.fordestabilizer": "Fabric of Reality Destabilizer",
 
@@ -83,8 +85,29 @@
   "item.projectazure.mold_plate": "Plate Mold",
   "item.projectazure.mold_extraction": "Extraction Mold",
   "item.projectazure.mold_wire": "Wire Mold",
-  "item.projectazure.hammer_iron": "Iron Hammer",
+
+  "item.projectazure.iron_hammer": "Iron Hammer",
+  "item.projectazure.copper_hammer": "Copper Hammer",
+  "item.projectazure.stone_hammer": "Stone Hammer",
+  "item.projectazure.tin_hammer": "Tin Hammer",
+  "item.projectazure.bronze_hammer": "Bronze Hammer",
+  "item.projectazure.diamond_hammer": "Diamond Hammer",
+  "item.projectazure.netherite_hammer": "Netherite Hammer",
+  "item.projectazure.gold_hammer": "Gold Hammer",
+  "item.projectazure.steel_hammer": "Steel Hammer",
+
+  "item.projectazure.iron_saw": "Iron Saw",
+  "item.projectazure.copper_saw": "Copper Saw",
+  "item.projectazure.stone_saw": "Stone Saw",
+  "item.projectazure.tin_saw": "Tin Saw",
+  "item.projectazure.bronze_saw": "Bronze Saw",
+  "item.projectazure.diamond_saw": "Diamond Saw",
+  "item.projectazure.netherite_saw": "Netherite Saw",
+  "item.projectazure.gold_saw": "Gold Saw",
+  "item.projectazure.steel_saw": "Steel Saw",
+
   "item.projectazure.mortar_iron": "Iron Mortar",
+
   "item.projectazure.steel_cutter": "Steel Cutter",
 
   "item.projectazure.originium_seed": "Originium Seed",
@@ -224,6 +247,37 @@
   "item.projectazure.d32_sword": "D32 Steel Sword",
   "item.projectazure.d32_hoe": "D32 Steel Hoe",
   "item.projectazure.d32_shovel": "D32 Steel Shovel",
+
+  "item.projectazure.lead_pickaxe": "Lead Pickaxe",
+  "item.projectazure.lead_axe": "Lead Axe",
+  "item.projectazure.lead_sword": "Lead Sword",
+  "item.projectazure.lead_hoe": "Lead Hoe",
+  "item.projectazure.lead_shovel": "Lead Shovel",
+
+  "item.projectazure.copper_pickaxe": "Copper Pickaxe",
+  "item.projectazure.copper_axe": "Copper Axe",
+  "item.projectazure.copper_sword": "Copper Sword",
+  "item.projectazure.copper_hoe": "Copper Hoe",
+  "item.projectazure.copper_shovel": "Copper Shovel",
+
+  "item.projectazure.tin_pickaxe": "Tin Pickaxe",
+  "item.projectazure.tin_axe": "Tin Axe",
+  "item.projectazure.tin_sword": "Tin Sword",
+  "item.projectazure.tin_hoe": "Tin Hoe",
+  "item.projectazure.tin_shovel": "Tin Shovel",
+
+  "item.projectazure.bronze_pickaxe": "Bronze Pickaxe",
+  "item.projectazure.bronze_axe": "Bronze Axe",
+  "item.projectazure.bronze_sword": "Bronze Sword",
+  "item.projectazure.bronze_hoe": "Bronze Hoe",
+  "item.projectazure.bronze_shovel": "Bronze Shovel",
+
+  "item.projectazure.steel_pickaxe": "Steel Pickaxe",
+  "item.projectazure.steel_axe": "Steel Axe",
+  "item.projectazure.steel_sword": "Steel Sword",
+  "item.projectazure.steel_hoe": "Steel Hoe",
+  "item.projectazure.steel_shovel": "Steel Shovel",
+
 
   "item.tooltip.gunclass": "Gun Category",
 

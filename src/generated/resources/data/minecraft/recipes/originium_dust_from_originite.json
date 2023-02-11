@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "projectazure:originite"
+      "tag": "forge:gems/originite"
     },
     {
-      "item": "projectazure:hammer_iron"
+      "tag": "forge:tools/crafting_hammer"
     }
   ],
   "result": {
     "item": "projectazure:dust_originium",
-    "count": 3
+    "count": 4
   }
 }

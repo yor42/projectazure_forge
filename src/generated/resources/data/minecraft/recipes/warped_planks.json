@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "minecraft:warped_stems"
+    },
+    {
+      "tag": "forge:tools/saw"
+    }
+  ],
+  "result": {
+    "item": "minecraft:warped_planks",
+    "count": 6
+  }
+}
