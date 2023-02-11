@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OCO",
+    "PCP",
+    "OCO"
+  ],
+  "key": {
+    "C": {
+      "item": "projectazure:vitrifiedoriginium"
+    },
+    "P": {
+      "tag": "forge:plates/steel"
+    },
+    "O": {
+      "item": "projectazure:orundum"
+    }
+  },
+  "result": {
+    "item": "projectazure:crystalline_component",
+    "count": 2
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "COC",
+    "ORO",
+    "CPC"
+  ],
+  "key": {
+    "C": {
+      "tag": "forge:wires/copper"
+    },
+    "P": {
+      "tag": "forge:plates/steel"
+    },
+    "O": {
+      "tag": "forge:gems/originium"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "result": {
+    "item": "projectazure:orundum",
+    "count": 4
+  }
+}

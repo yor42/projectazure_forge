@@ -166,6 +166,12 @@ public class registerItems {
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> CRYSTALLINE_COMPONENT = register("crystalline_component", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> VITRIFIED_ORIGINIUM = register("vitrifiedoriginium", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> AMBER_ORIGINIUM = register("amberoriginium", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> LOXICKOHL = register("loxickohl", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
 
     public static final RegistryObject<Item> TOKEN = register("token", () -> new ItemCompanionUpgrade(new Item.Properties()
             .tab(PA_RESOURCES)));

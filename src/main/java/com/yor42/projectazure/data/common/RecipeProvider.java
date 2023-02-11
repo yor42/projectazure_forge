@@ -114,9 +114,14 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), (byte) 1)
                 .build(consumer);
 
-        AlloyingRecipeBuilder.AlloyRecipe(registerItems.INGOT_BRASS.get(), (byte)3)
+        AlloyingRecipeBuilder.AlloyRecipe(registerItems.INGOT_BRASS.get(), (byte)2)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_ZINC))
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER))
+                .build(consumer);
+
+        AlloyingRecipeBuilder.AlloyRecipe(registerItems.VITRIFIED_ORIGINIUM.get(), (byte)1)
+                .addIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME))
+                .addIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), (byte) 2)
                 .build(consumer);
     }
     private void generatePressingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
@@ -941,15 +946,47 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_gear", has(Tags.Items.STORAGE_BLOCKS_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.ORUNDUM.get(), 4)
+        ShapedRecipeBuilder.shaped(registerItems.ORUNDUM.get(), 2)
                 .define('C', ModTags.Items.WIRE_COPPER)
                 .define('P', ModTags.Items.PLATE_STEEL)
                 .define('O', ModTags.Items.ORIGINITE)
-                .define('R', ModTags.Items.CIRCUITS_BASIC)
-                .pattern("CPC")
-                .pattern("ROR")
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .pattern("COC")
+                .pattern("ORO")
                 .pattern("CPC")
                 .unlockedBy("has_originite", has(ModTags.Items.ORIGINITE))
+                .save(consumer, "orundum_from_originite");
+
+        ShapedRecipeBuilder.shaped(registerItems.ORUNDUM.get(), 4)
+                .define('C', ModTags.Items.WIRE_COPPER)
+                .define('P', ModTags.Items.PLATE_STEEL)
+                .define('O', ModTags.Items.ORIGINIUM_PRIME)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .pattern("COC")
+                .pattern("ORO")
+                .pattern("CPC")
+                .unlockedBy("has_originite", has(ModTags.Items.ORIGINIUM_PRIME))
+                .save(consumer, "orundum_from_prime");
+
+        ShapedRecipeBuilder.shaped(registerItems.CRYSTALLINE_COMPONENT.get(), 2)
+                .define('C', registerItems.VITRIFIED_ORIGINIUM.get())
+                .define('P', ModTags.Items.PLATE_STEEL)
+                .define('O', registerItems.ORUNDUM.get())
+                .pattern("OCO")
+                .pattern("PCP")
+                .pattern("OCO")
+                .unlockedBy("has_material", has(registerItems.VITRIFIED_ORIGINIUM.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.CRYSTALLINE_CIRCUIT.get(), 2)
+                .define('P', registerItems.CRYSTALLINE_COMPONENT.get())
+                .define('A', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('S', ModTags.Items.PLATE_RMA7024)
+                .define('O', registerItems.ORUNDUM.get())
+                .define('C', registerItems.COGNITIVE_CHIP.get())
+                .pattern("POC")
+                .pattern("SAS")
+                .unlockedBy("has_material", has(registerItems.CRYSTALLINE_COMPONENT.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.HEADHUNTING_PCB.get())

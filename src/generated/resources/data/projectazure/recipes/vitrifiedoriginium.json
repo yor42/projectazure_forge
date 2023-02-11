@@ -1,0 +1,19 @@
+{
+  "type": "projectazure:alloying",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:gems/originium"
+      }
+    },
+    {
+      "item": {
+        "tag": "forge:gems/quartz"
+      },
+      "count": 2
+    }
+  ],
+  "result": "projectazure:vitrifiedoriginium",
+  "resultcount": 1,
+  "processtime": 300
+}

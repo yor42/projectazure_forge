@@ -182,6 +182,26 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.INGOT_RMA7024.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 300).duration(400).buildAndRegister();
 
+            AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("bronze")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), 3), new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), 1))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.INGOT_BRONZE.get(),4)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 120).duration(100).buildAndRegister();
+
+            AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("brass")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER)), new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_ZINC)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.INGOT_BRASS.get(),2)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 120).duration(100).buildAndRegister();
+
+            AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("originium_vitrified")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME)), new ItemsIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), 2))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.VITRIFIED_ORIGINIUM.get(),2)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 200).duration(200).buildAndRegister();
+
+            AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("originium_amber")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME)), new ItemsIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), 1), new ItemsIngredient(Ingredient.of(Tags.Items.RODS_BLAZE), 1))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.AMBER_ORIGINIUM.get(),2)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
+
             new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("akn")
                     .inputItems(new ItemsIngredient(Ingredient.of(registerItems.ORUNDUM.get()),10), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
                     .addCompanionOutput(registerEntity.AMIYA.get())

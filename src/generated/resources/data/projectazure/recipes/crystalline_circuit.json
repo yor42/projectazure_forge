@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "POC",
+    "SAS"
+  ],
+  "key": {
+    "P": {
+      "item": "projectazure:crystalline_component"
+    },
+    "A": {
+      "tag": "forge:circuits/advanced"
+    },
+    "S": {
+      "tag": "forge:plates/rma70-24"
+    },
+    "O": {
+      "item": "projectazure:orundum"
+    },
+    "C": {
+      "item": "projectazure:cognitive_chip"
+    }
+  },
+  "result": {
+    "item": "projectazure:crystalline_circuit",
+    "count": 2
+  }
+}
