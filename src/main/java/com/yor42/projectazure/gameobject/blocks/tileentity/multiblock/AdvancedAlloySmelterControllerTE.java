@@ -17,6 +17,7 @@ import com.lowdragmc.multiblocked.common.capability.FluidMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
 import com.yor42.projectazure.client.gui.multiblocked.RiftwayRecipePage;
 import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
+import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipelogics.RiftwayRecipeLogic;
@@ -38,7 +39,7 @@ public class AdvancedAlloySmelterControllerTE extends ControllerTileEntity {
         SMELTRYDefinition.getRecipeMap().inputCapabilities.add(FluidMultiblockCapability.CAP);
         SMELTRYDefinition.getRecipeMap().inputCapabilities.add(FEMultiblockCapability.CAP);
         SMELTRYDefinition.getRecipeMap().outputCapabilities.add(ItemMultiblockCapability.CAP);
-        SMELTRYDefinition.setBasePattern(FactoryBlockPattern.start().aisle("PPP", "PFP","PPP").aisle("PCP", "FEF", "PCP").aisle("PPP", "P@P", "PPP").where("A", Predicates.any()).where("@", Predicates.component(SMELTRYDefinition)).where("P", Predicates.component(HatchTE.EnergyHatchDefinition).or(Predicates.component(HatchTE.ItemHatchDefinition)).or(Predicates.component(HatchTE.FluidHatchDefinition)).or(Predicates.blocks(registerBlocks.MACHINE_FRAME.get()))).where("E", Predicates.air()).where("F", Predicates.blocks(registerBlocks.MACHINE_FRAME.get())).where("C", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get())).build());
+        SMELTRYDefinition.setBasePattern(FactoryBlockPattern.start().aisle("PPP", "PFP","PPP").aisle("PCP", "FEF", "PCP").aisle("PPP", "P@P", "PPP").where("A", Predicates.any()).where("@", Predicates.component(SMELTRYDefinition)).where("P", Predicates.component(HatchTE.EnergyHatchDefinition).or(Predicates.component(HatchTE.ItemHatchDefinition)).or(Predicates.component(HatchTE.FluidHatchDefinition)).or(Predicates.blocks(registerBlocks.MACHINE_FRAME.get()))).where("E", Predicates.air()).where("F", Predicates.blocks(registerBlocks.INCANDESCENT_ALLOY_BLOCK.get())).where("C", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get())).build());
         SMELTRYDefinition.getBaseStatus().setRenderer(ResourceUtils.getMBDBlockModel("advanced_alloy_smelter_off"));
         SMELTRYDefinition.getIdleStatus().setRenderer(ResourceUtils.getMBDBlockModel("advanced_alloy_smelter_off"));
         SMELTRYDefinition.getWorkingStatus().setRenderer(ResourceUtils.getMBDBlockModel("advanced_alloy_smelter_off"));
