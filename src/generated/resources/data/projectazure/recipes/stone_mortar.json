@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  S",
+    "CIC",
+    " C "
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "C": {
+      "tag": "forge:cobblestone"
+    }
+  },
+  "result": {
+    "item": "projectazure:stone_mortar"
+  }
+}

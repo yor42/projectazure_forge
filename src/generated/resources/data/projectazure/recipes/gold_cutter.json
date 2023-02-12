@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "INS",
+    " S "
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:plates/bronze"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "projectazure:gold_cutter"
+  }
+}

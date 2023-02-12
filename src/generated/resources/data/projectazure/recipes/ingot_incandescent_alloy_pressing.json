@@ -1,0 +1,12 @@
+{
+  "type": "projectazure:pressing",
+  "ingredient": {
+    "tag": "forge:ingots/incandescent_alloy"
+  },
+  "mold": {
+    "item": "projectazure:mold_plate"
+  },
+  "result": "projectazure:plate_incandescent_alloy",
+  "count": 1,
+  "cookingtime": 200
+}

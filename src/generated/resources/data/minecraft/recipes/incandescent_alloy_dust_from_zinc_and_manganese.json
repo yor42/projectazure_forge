@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:dusts/zinc"
+    },
+    {
+      "tag": "forge:dusts/manganese"
+    }
+  ],
+  "result": {
+    "item": "projectazure:dust_incandescent_alloy",
+    "count": 2
+  }
+}

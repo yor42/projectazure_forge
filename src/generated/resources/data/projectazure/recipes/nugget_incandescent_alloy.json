@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/incandescent_alloy"
+    }
+  ],
+  "result": {
+    "item": "projectazure:nugget_incandescent_alloy",
+    "count": 9
+  }
+}

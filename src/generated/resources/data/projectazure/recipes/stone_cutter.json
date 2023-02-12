@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "IIS",
+    " S "
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:cobblestone"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "projectazure:stone_cutter"
+  }
+}

@@ -38,6 +38,7 @@ public class ModTags {
         public static final ITag.INamedTag<Block> ORES_ZINC = forge("ores/zinc");
         public static final ITag.INamedTag<Block> ORES_ORIROCK = forge("ores/originium");
         public static final ITag.INamedTag<Block> ORES_RMA7012 = forge("ores/rma70-12");
+        public static final ITag.INamedTag<Block> ORES_MANGANESE = forge("ores/manganese");
 
         public static final ITag.INamedTag<Block> BLOCK_ALUMINIUM = forge("storage_blocks/aluminium");
         public static final ITag.INamedTag<Block> BLOCK_COPPER = forge("storage_blocks/copper");
@@ -50,6 +51,8 @@ public class ModTags {
         public static final ITag.INamedTag<Block> BLOCK_RMA7024 = forge("storage_blocks/rma70-24");
         public static final ITag.INamedTag<Block> BLOCK_D32 = forge("storage_blocks/d32");
         public static final ITag.INamedTag<Block> BLOCK_STEEL = forge("storage_blocks/steel");
+        public static final ITag.INamedTag<Block> BLOCK_INCANDESCENT_ALLOY = forge("storage_blocks/incandescent_alloy");
+        public static final ITag.INamedTag<Block> BLOCK_MANGANESE = forge("storage_blocks/manganese");
 
         private static ITag.INamedTag<Block> forge(String path) {
             return BlockTags.bind(new ResourceLocation("forge", path).toString());
@@ -71,7 +74,8 @@ public class ModTags {
         public static final ITag.INamedTag<Item> INGOT_STEEL = forge("ingots/steel");
         public static final ITag.INamedTag<Item> INGOT_BRASS = forge("ingots/brass");
         public static final ITag.INamedTag<Item> INGOT_RMA7012 = forge("ingots/rma70-12");
-
+        public static final ITag.INamedTag<Item> INGOT_MANGANESE = forge("ingots/manganese");
+        public static final ITag.INamedTag<Item> INGOT_INCANDESCENT_ALLOY = forge("ingots/incandescent_alloy");
         public static final ITag.INamedTag<Item> INGOT_RMA7024 = forge("ingots/rma70-24");
 
         public static final ITag.INamedTag<Item> INGOT_D32 = forge("ingots/d32");
@@ -88,6 +92,8 @@ public class ModTags {
         public static final ITag.INamedTag<Item> NUGGET_RMA7024 = forge("nuggets/rma70-24");
 
         public static final ITag.INamedTag<Item> NUGGET_D32 = forge("nuggets/d32");
+        public static final ITag.INamedTag<Item> NUGGET_MANGANESE = forge("nuggets/manganese");
+        public static final ITag.INamedTag<Item> NUGGET_INCANDESCENT_ALLOY = forge("nuggets/incandescent_alloy");
 
         public static final ITag.INamedTag<Item> GEAR_COPPER = forge("gears/copper");
         public static final ITag.INamedTag<Item> GEAR_TIN = forge("gears/tin");
@@ -107,10 +113,10 @@ public class ModTags {
         public static final ITag.INamedTag<Item> PLATE_BRASS = forge("plates/brass");
         public static final ITag.INamedTag<Item> PLATE_GOLD = forge("plates/gold");
         public static final ITag.INamedTag<Item> PLATE_RMA7012 = forge("plates/rma70-12");
-
         public static final ITag.INamedTag<Item> PLATE_RMA7024 = forge("plates/rma70-24");
-
         public static final ITag.INamedTag<Item> PLATE_D32 = forge("plates/d32");
+        public static final ITag.INamedTag<Item> PLATE_MANGANESE = forge("plates/manganese");
+        public static final ITag.INamedTag<Item> PLATE_INCANDESCENT_ALLOY = forge("plates/incandescent_alloy");
 
         public static final ITag.INamedTag<Item> DUST_ALUMINIUM = forge("dusts/aluminium");
         public static final ITag.INamedTag<Item> DUST_COPPER = forge("dusts/copper");
@@ -128,6 +134,8 @@ public class ModTags {
         public static final ITag.INamedTag<Item> DUST_QUARTZ = forge("dusts/quartz");
         public static final ITag.INamedTag<Item> DUST_RMA7012 = forge("dusts/rma70-12");
         public static final ITag.INamedTag<Item> DUST_RMA7024 = forge("dusts/rma70-24");
+        public static final ITag.INamedTag<Item> DUST_MANGANESE = forge("dusts/manganese");
+        public static final ITag.INamedTag<Item> DUST_INCANDESCENT_ALLOY = forge("dusts/incandescent_alloy");
 
         public static final ITag.INamedTag<Item> BLOCK_ALUMINIUM = forge("storage_blocks/aluminium");
         public static final ITag.INamedTag<Item> BLOCK_COPPER = forge("storage_blocks/copper");
@@ -140,6 +148,8 @@ public class ModTags {
         public static final ITag.INamedTag<Item> BLOCK_RMA7024 = forge("storage_blocks/rma70-24");
         public static final ITag.INamedTag<Item> BLOCK_D32 = forge("storage_blocks/d32");
         public static final ITag.INamedTag<Item> BLOCK_STEEL = forge("storage_blocks/steel");
+        public static final ITag.INamedTag<Item> BLOCK_MANGANESE = forge("storage_blocks/manganese");
+        public static final ITag.INamedTag<Item> BLOCK_INCANDESCENT_ALLOY = forge("storage_blocks/incandescent_alloy");
 
 
         public static final ITag.INamedTag<Item> DUST_D32 = forge("dusts/d32");
@@ -153,7 +163,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> ORES_ZINC = forge("ores/zinc");
         public static final ITag.INamedTag<Item> ORES_ORIROCK = forge("ores/originium");
         public static final ITag.INamedTag<Item> ORES_RMA7012 = forge("ores/rma70-12");
-
+        public static final ITag.INamedTag<Item> ORES_MANGANESE = forge("ores/manganese");
         public static final ITag.INamedTag<Item> WIRE_COPPER = forge("wires/copper");
 
         public static final ITag.INamedTag<Item> ORIGINITE = forge("gems/originite");
@@ -181,10 +191,6 @@ public class ModTags {
 
         private static ITag.INamedTag<Item> forge(String path) {
             return ItemTags.bind(new ResourceLocation("forge", path).toString());
-        }
-
-        private static ITag.INamedTag<Item> mc(String path) {
-            return ItemTags.bind(new ResourceLocation("minecraft", path).toString());
         }
 
         private static ITag.INamedTag<Item> mod(String path) {

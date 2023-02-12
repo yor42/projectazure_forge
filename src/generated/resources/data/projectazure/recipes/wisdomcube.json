@@ -1,29 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "QCQ",
-    "LDR",
-    "QCQ"
+    "QOQ",
+    "LQL",
+    "QOQ"
   ],
   "key": {
-    "D": {
-      "tag": "forge:gems/diamond"
+    "O": {
+      "item": "projectazure:cognitive_array"
     },
     "Q": {
-      "tag": "forge:gems/quartz"
-    },
-    "C": {
-      "tag": "forge:circuits/basic"
+      "item": "projectazure:cognitive_chip"
     },
     "L": {
       "tag": "forge:gems/lapis"
-    },
-    "R": {
-      "tag": "forge:dusts/redstone"
     }
   },
   "result": {
-    "item": "projectazure:wisdomcube",
-    "count": 2
+    "item": "projectazure:wisdomcube"
   }
 }

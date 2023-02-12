@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "SIS",
-    "SIS",
+    "SPS",
     "SIS"
   ],
   "key": {
@@ -11,6 +11,9 @@
     },
     "I": {
       "item": "projectazure:c99"
+    },
+    "P": {
+      "tag": "forge:dusts/coal"
     }
   },
   "result": {

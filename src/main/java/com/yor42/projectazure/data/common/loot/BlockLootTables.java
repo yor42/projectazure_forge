@@ -29,6 +29,7 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.dropSelf(registerBlocks.LEAD_ORE.get());
         this.dropSelf(registerBlocks.ZINC_ORE.get());
         this.dropSelf(registerBlocks.RMA_7012_ORE.get());
+        this.dropSelf(registerBlocks.MANGANESE_ORE.get());
         this.dropSelf(registerBlocks.BASIC_CHEMICAL_REACTOR.get());
 
         this.dropSelf(registerBlocks.BRASS_BLOCK.get());
@@ -42,6 +43,8 @@ public class BlockLootTables extends net.minecraft.data.loot.BlockLootTables {
         this.dropSelf(registerBlocks.RMA_7012_BLOCK.get());
         this.dropSelf(registerBlocks.RMA_7024_BLOCK.get());
         this.dropSelf(registerBlocks.D32_BLOCK.get());
+        this.dropSelf(registerBlocks.INCANDESCENT_ALLOY_BLOCK.get());
+        this.dropSelf(registerBlocks.MANGANESE_BLOCK.get());
 
         this.dropSelf(registerBlocks.REENFORCED_PLANK.get());
         this.dropSelf(registerBlocks.MACHINE_FRAME.get());

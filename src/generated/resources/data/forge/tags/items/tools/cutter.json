@@ -1,6 +1,17 @@
 {
   "replace": false,
   "values": [
-    "projectazure:steel_cutter"
+    "projectazure:stone_cutter",
+    "projectazure:copper_cutter",
+    "projectazure:tin_cutter",
+    "projectazure:bronze_cutter",
+    "projectazure:iron_cutter",
+    "projectazure:steel_cutter",
+    "projectazure:gold_cutter",
+    "projectazure:diamond_cutter",
+    "projectazure:netherite_cutter",
+    "projectazure:rma7012_cutter",
+    "projectazure:rma7024_cutter",
+    "projectazure:d32_cutter"
   ]
 }

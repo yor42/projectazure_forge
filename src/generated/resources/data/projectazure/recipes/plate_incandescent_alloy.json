@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:tools/crafting_hammer"
+    },
+    {
+      "tag": "forge:ingots/incandescent_alloy"
+    }
+  ],
+  "result": {
+    "item": "projectazure:plate_incandescent_alloy"
+  }
+}

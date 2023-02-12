@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:ingots/incandescent_alloy"
+    }
+  },
+  "result": {
+    "item": "projectazure:plate_incandescent_alloy"
+  }
+}

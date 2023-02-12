@@ -16,12 +16,12 @@
         ]
       }
     },
-    "has_iron": {
+    "has_material": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/iron"
+            "tag": "forge:plates/steel"
           }
         ]
       }
@@ -36,7 +36,7 @@
   "requirements": [
     [
       "has_stick",
-      "has_iron",
+      "has_material",
       "has_the_recipe"
     ]
   ]

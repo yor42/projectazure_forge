@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:incandescent_alloy_dust_from_zinc_and_manganese"
+    ]
+  },
+  "criteria": {
+    "has_manganese": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dusts/manganese"
+          }
+        ]
+      }
+    },
+    "has_zinc": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dusts/zinc"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:incandescent_alloy_dust_from_zinc_and_manganese"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_manganese",
+      "has_zinc",
+      "has_the_recipe"
+    ]
+  ]
+}

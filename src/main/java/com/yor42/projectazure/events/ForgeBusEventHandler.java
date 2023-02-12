@@ -208,7 +208,12 @@ public class ForgeBusEventHandler {
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("c99")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ItemTags.COALS)))
-                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.AMBER_ORIGINIUM.get(),2)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.C99_CARBON.get(),2)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
+
+            AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("incandescent_alloy")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_MANGANESE)), new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_RMA7012)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.INGOT_INCANDESCENT_ALLOY.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
 
             new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("akn")

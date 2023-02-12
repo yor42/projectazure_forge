@@ -25,6 +25,7 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(ModTags.Blocks.ORES_ZINC).add(registerBlocks.ZINC_ORE.get());
         this.tag(ModTags.Blocks.ORES_ORIROCK).add(registerBlocks.ORIROCK.get());
         this.tag(ModTags.Blocks.ORES_RMA7012).add(registerBlocks.RMA_7012_ORE.get());
+        this.tag(ModTags.Blocks.ORES_MANGANESE).add(registerBlocks.MANGANESE_ORE.get());
 
         this.tag(ModTags.Blocks.BLOCK_ZINC).add(registerBlocks.ZINC_BLOCK.get());
         this.tag(ModTags.Blocks.BLOCK_ALUMINIUM).add(registerBlocks.ALUMINIUM_BLOCK.get());
@@ -37,8 +38,11 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(ModTags.Blocks.BLOCK_RMA7024).add(registerBlocks.RMA_7024_BLOCK.get());
         this.tag(ModTags.Blocks.BLOCK_D32).add(registerBlocks.D32_BLOCK.get());
         this.tag(ModTags.Blocks.BLOCK_STEEL).add(registerBlocks.STEEL_BLOCK.get());
+        this.tag(ModTags.Blocks.BLOCK_INCANDESCENT_ALLOY).add(registerBlocks.INCANDESCENT_ALLOY_BLOCK.get());
+        this.tag(ModTags.Blocks.BLOCK_MANGANESE).add(registerBlocks.MANGANESE_BLOCK.get());
 
-        this.tag(Tags.Blocks.ORES).add(registerBlocks.BAUXITE_ORE.get()).add(registerBlocks.COPPER_ORE.get()).add(registerBlocks.LEAD_ORE.get()).add(registerBlocks.TIN_ORE.get()).add(registerBlocks.ZINC_ORE.get()).add(registerBlocks.ORIROCK.get()).add(registerBlocks.RMA_7012_ORE.get());
-        this.tag(Tags.Blocks.STORAGE_BLOCKS).add(registerBlocks.ZINC_BLOCK.get()).add(registerBlocks.ALUMINIUM_BLOCK.get()).add(registerBlocks.COPPER_BLOCK.get()).add(registerBlocks.TIN_BLOCK.get()).add(registerBlocks.LEAD_BLOCK.get()).add(registerBlocks.BRONZE_BLOCK.get()).add(registerBlocks.RMA_7012_BLOCK.get()).add(registerBlocks.RMA_7024_BLOCK.get()).add(registerBlocks.D32_BLOCK.get()).add(registerBlocks.STEEL_BLOCK.get());
+        this.tag(Tags.Blocks.ORES).add(registerBlocks.BAUXITE_ORE.get()).add(registerBlocks.COPPER_ORE.get()).add(registerBlocks.LEAD_ORE.get()).add(registerBlocks.TIN_ORE.get()).add(registerBlocks.ZINC_ORE.get()).add(registerBlocks.ORIROCK.get()).add(registerBlocks.RMA_7012_ORE.get()).add(registerBlocks.MANGANESE_ORE.get());
+        this.tag(Tags.Blocks.STORAGE_BLOCKS).add(registerBlocks.ZINC_BLOCK.get()).add(registerBlocks.ALUMINIUM_BLOCK.get()).add(registerBlocks.COPPER_BLOCK.get()).add(registerBlocks.TIN_BLOCK.get()).add(registerBlocks.LEAD_BLOCK.get()).add(registerBlocks.BRONZE_BLOCK.get()).add(registerBlocks.RMA_7012_BLOCK.get()).add(registerBlocks.RMA_7024_BLOCK.get()).add(registerBlocks.D32_BLOCK.get()).add(registerBlocks.STEEL_BLOCK.get())
+                .add(registerBlocks.MANGANESE_BLOCK.get()).add(registerBlocks.INCANDESCENT_ALLOY_BLOCK.get());
     }
 }

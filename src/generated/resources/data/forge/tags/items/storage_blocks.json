@@ -10,6 +10,8 @@
     "projectazure:rma7012_block",
     "projectazure:rma7024_block",
     "projectazure:d32steel_block",
-    "projectazure:steel_block"
+    "projectazure:steel_block",
+    "projectazure:manganese_block",
+    "projectazure:incandescent_alloy_block"
   ]
 }

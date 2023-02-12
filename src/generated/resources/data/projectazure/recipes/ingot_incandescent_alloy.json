@@ -1,0 +1,18 @@
+{
+  "type": "projectazure:alloying",
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/manganese"
+      }
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/rma70-12"
+      }
+    }
+  ],
+  "result": "projectazure:ingot_incandescent_alloy",
+  "resultcount": 1,
+  "processtime": 300
+}

@@ -1,6 +1,17 @@
 {
   "replace": false,
   "values": [
-    "projectazure:mortar_iron"
+    "projectazure:stone_mortar",
+    "projectazure:copper_mortar",
+    "projectazure:tin_mortar",
+    "projectazure:bronze_mortar",
+    "projectazure:iron_mortar",
+    "projectazure:steel_mortar",
+    "projectazure:gold_mortar",
+    "projectazure:diamond_mortar",
+    "projectazure:netherite_mortar",
+    "projectazure:rma7012_mortar",
+    "projectazure:rma7024_mortar",
+    "projectazure:d32_mortar"
   ]
 }

@@ -58,6 +58,8 @@ public class registerItems {
     public static final RegistryObject<Item> INGOT_RMA7024 = registerResource("rma7024", enums.ResourceType.INGOT);
     public static final RegistryObject<Item> INGOT_RMA7012 = registerResource("rma7012", enums.ResourceType.INGOT);
     public static final RegistryObject<Item> INGOT_D32 = registerResource("d32steel", enums.ResourceType.INGOT);
+    public static final RegistryObject<Item> INGOT_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.INGOT);
+    public static final RegistryObject<Item> INGOT_MANGANESE = registerResource("manganese", enums.ResourceType.INGOT);
 
 
     public static final RegistryObject<Item> GEAR_COPPER = registerResource("copper", enums.ResourceType.GEAR);
@@ -84,6 +86,8 @@ public class registerItems {
     public static final RegistryObject<Item> DUST_RMA7024 = registerResource("rma7024", enums.ResourceType.DUST);
     public static final RegistryObject<Item> DUST_RMA7012 = registerResource("rma7012",  enums.ResourceType.DUST);
     public static final RegistryObject<Item> DUST_D32 = registerResource("d32steel", enums.ResourceType.DUST);
+    public static final RegistryObject<Item> DUST_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.DUST);
+    public static final RegistryObject<Item> DUST_MANGANESE = registerResource("manganese", enums.ResourceType.DUST);
 
     public static final RegistryObject<Item> PLATE_COPPER = registerResource("copper", enums.ResourceType.PLATE);
     public static final RegistryObject<Item> PLATE_LEAD = registerResource("lead", enums.ResourceType.PLATE);
@@ -99,6 +103,9 @@ public class registerItems {
     public static final RegistryObject<Item> PLATE_RMA7012 = registerResource("rma7012", enums.ResourceType.PLATE);
     public static final RegistryObject<Item> PLATE_D32 = registerResource("d32steel", enums.ResourceType.PLATE);
 
+    public static final RegistryObject<Item> PLATE_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.PLATE);
+    public static final RegistryObject<Item> PLATE_MANGANESE = registerResource("manganese", enums.ResourceType.PLATE);
+
     public static final RegistryObject<Item> NUGGET_COPPER = registerResource("copper", enums.ResourceType.NUGGET);
     public static final RegistryObject<Item> NUGGET_LEAD = registerResource("lead", enums.ResourceType.NUGGET);
     public static final RegistryObject<Item> NUGGET_TIN = registerResource("tin", enums.ResourceType.NUGGET);
@@ -109,6 +116,8 @@ public class registerItems {
     public static final RegistryObject<Item> NUGGET_RMA7024 = registerResource("rma7024", enums.ResourceType.NUGGET);
     public static final RegistryObject<Item> NUGGET_RMA7012 = registerResource("rma7012", enums.ResourceType.NUGGET);
     public static final RegistryObject<Item> NUGGET_D32 = registerResource("d32steel", enums.ResourceType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.NUGGET);
+    public static final RegistryObject<Item> NUGGET_MANGANESE = registerResource("manganese", enums.ResourceType.NUGGET);
 
     //Electronic Stuff
     public static final RegistryObject<Item> COPPER_WIRE = register("copper_wire", () -> new ItemResource("copper", enums.ResourceType.WIRE));
@@ -240,7 +249,32 @@ public class registerItems {
 
 
     //crafting items
-    public static final RegistryObject<Item> MORTAR_IRON = register("mortar_iron", () -> new ItemCraftTool(50));
+
+    public static final RegistryObject<Item> CUTTER_STONE = register("stone_cutter", () -> new ItemCraftTool(25));
+    public static final RegistryObject<Item> CUTTER_IRON = register("iron_cutter", () -> new ItemCraftTool(92));
+    public static final RegistryObject<Item> CUTTER_STEEL = register("steel_cutter", () -> new ItemCraftTool(105));
+    public static final RegistryObject<Item> CUTTER_COPPER = register("copper_cutter", () -> new ItemCraftTool(50));
+    public static final RegistryObject<Item> CUTTER_TIN = register("tin_cutter", () -> new ItemCraftTool(61));
+    public static final RegistryObject<Item> CUTTER_BRONZE = register("bronze_cutter", () -> new ItemCraftTool(82));
+    public static final RegistryObject<Item> CUTTER_GOLD = register("gold_cutter", () -> new ItemCraftTool(35));
+    public static final RegistryObject<Item> CUTTER_DIAMOND = register("diamond_cutter", () -> new ItemCraftTool(155));
+    public static final RegistryObject<Item> CUTTER_NETHERITE = register("netherite_cutter", () -> new ItemCraftTool(281));
+    public static final RegistryObject<Item> CUTTER_RMA7012 = register("rma7012_cutter", () -> new ItemCraftTool(101));
+    public static final RegistryObject<Item> CUTTER_RMA7024 = register("rma7024_cutter", () -> new ItemCraftTool(137));
+    public static final RegistryObject<Item> CUTTER_D32 = register("d32_cutter", () -> new ItemCraftTool(451));
+
+    public static final RegistryObject<Item> MORTAR_STONE = register("stone_mortar", () -> new ItemCraftTool(21));
+    public static final RegistryObject<Item> MORTAR_IRON = register("iron_mortar", () -> new ItemCraftTool(80));
+    public static final RegistryObject<Item> MORTAR_STEEL = register("steel_mortar", () -> new ItemCraftTool(84));
+    public static final RegistryObject<Item> MORTAR_COPPER = register("copper_mortar", () -> new ItemCraftTool(38));
+    public static final RegistryObject<Item> MORTAR_TIN = register("tin_mortar", () -> new ItemCraftTool(45));
+    public static final RegistryObject<Item> MORTAR_BRONZE = register("bronze_mortar", () -> new ItemCraftTool(67));
+    public static final RegistryObject<Item> MORTAR_GOLD = register("gold_mortar", () -> new ItemCraftTool(32));
+    public static final RegistryObject<Item> MORTAR_DIAMOND = register("diamond_mortar", () -> new ItemCraftTool(150));
+    public static final RegistryObject<Item> MORTAR_NETHERITE = register("netherite_mortar", () -> new ItemCraftTool(261));
+    public static final RegistryObject<Item> MORTAR_RMA7012 = register("rma7012_mortar", () -> new ItemCraftTool(109));
+    public static final RegistryObject<Item> MORTAR_RMA7024 = register("rma7024_mortar", () -> new ItemCraftTool(138));
+    public static final RegistryObject<Item> MORTAR_D32 = register("d32_mortar", () -> new ItemCraftTool(457));
 
     public static final RegistryObject<Item> HAMMER_STONE = register("stone_hammer", () -> new ItemCraftTool(24));
     public static final RegistryObject<Item> HAMMER_COPPER = register("copper_hammer", () -> new ItemCraftTool(39));
@@ -270,9 +304,6 @@ public class registerItems {
 
 
     public static final RegistryObject<Item> FOR_DESTABILIZER = register("fordestabilizer", () -> new ItemCraftTool(3));
-
-    public static final RegistryObject<Item> STEEL_CUTTER = register("steel_cutter", () -> new ItemCraftTool(70));
-
     public static final RegistryObject<Item> GLITCHED_PHONE = register("glitched_phone", () -> new ItemGlitchedPhone(new Item.Properties().stacksTo(1).tab(PA_GROUP)));
 
     public static final RegistryObject<Item> Rainbow_Wisdom_Cube = register("rainbow_wisdomcube", () -> new itemRainbowWisdomCube(new Item.Properties()

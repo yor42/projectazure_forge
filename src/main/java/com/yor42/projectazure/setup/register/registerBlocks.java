@@ -46,6 +46,7 @@ public class registerBlocks {
     public static final RegistryObject<Block> LEAD_ORE = registerMetalOre_Stone("lead");
     public static final RegistryObject<Block> ZINC_ORE = registerMetalOre_Stone("zinc");
     public static final RegistryObject<Block> RMA_7012_ORE = registerMetalOre_Stone("rma7012");
+    public static final RegistryObject<Block> MANGANESE_ORE = registerMetalOre_Stone("manganese");
 
     public static final RegistryObject<Block> ALUMINIUM_BLOCK = registerMaterialBlock("aluminium");
     public static final RegistryObject<Block> COPPER_BLOCK = registerMaterialBlock("copper");
@@ -58,6 +59,8 @@ public class registerBlocks {
     public static final RegistryObject<Block> RMA_7024_BLOCK = registerMaterialBlock("rma7024");
     public static final RegistryObject<Block> D32_BLOCK = registerMaterialBlock("d32steel");
     public static final RegistryObject<Block> STEEL_BLOCK = registerMaterialBlock("steel");
+    public static final RegistryObject<Block> MANGANESE_BLOCK = registerMaterialBlock("manganese");
+    public static final RegistryObject<Block> INCANDESCENT_ALLOY_BLOCK = registerMaterialBlock("incandescent_alloy");
 
     public static final RegistryObject<Block> ORIROCK = register_simplemodel("orirock",() -> new OreBlock(AbstractBlock.Properties.of(Material.STONE).harvestLevel(0).strength(1.5F, 3F)), Main.PA_RESOURCES);
     public static final RegistryObject<Block> COBBLED_ORIROCK = register_simplemodel("cobbled_orirock",() -> new Block(AbstractBlock.Properties.of(Material.STONE).harvestLevel(0).strength(1.5F, 3F)), Main.PA_RESOURCES);

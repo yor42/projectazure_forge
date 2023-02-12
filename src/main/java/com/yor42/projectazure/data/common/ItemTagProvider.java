@@ -31,6 +31,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         copy(ModTags.Blocks.ORES_ZINC, ModTags.Items.ORES_ZINC);
         copy(ModTags.Blocks.ORES_ORIROCK, ModTags.Items.ORES_ORIROCK);
         copy(ModTags.Blocks.ORES_RMA7012, ModTags.Items.ORES_RMA7012);
+        copy(ModTags.Blocks.ORES_MANGANESE, ModTags.Items.ORES_MANGANESE);
 
         copy(ModTags.Blocks.BLOCK_D32, ModTags.Items.BLOCK_D32);
         copy(ModTags.Blocks.BLOCK_ALUMINIUM, ModTags.Items.BLOCK_ALUMINIUM);
@@ -43,6 +44,8 @@ public class ItemTagProvider extends ItemTagsProvider {
         copy(ModTags.Blocks.BLOCK_TIN, ModTags.Items.BLOCK_TIN);
         copy(ModTags.Blocks.BLOCK_ZINC, ModTags.Items.BLOCK_ZINC);
         copy(ModTags.Blocks.BLOCK_STEEL, ModTags.Items.BLOCK_STEEL);
+        copy(ModTags.Blocks.BLOCK_MANGANESE, ModTags.Items.BLOCK_MANGANESE);
+        copy(ModTags.Blocks.BLOCK_INCANDESCENT_ALLOY, ModTags.Items.BLOCK_INCANDESCENT_ALLOY);
 
         copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
         copy(Tags.Blocks.ORES, Tags.Items.ORES);
@@ -58,6 +61,8 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.INGOT_RMA7012).add(registerItems.INGOT_RMA7012.get());
         this.tag(ModTags.Items.INGOT_RMA7024).add(registerItems.INGOT_RMA7024.get());
         this.tag(ModTags.Items.INGOT_D32).add(registerItems.INGOT_D32.get());
+        this.tag(ModTags.Items.INGOT_MANGANESE).add(registerItems.INGOT_MANGANESE.get());
+        this.tag(ModTags.Items.INGOT_INCANDESCENT_ALLOY).add(registerItems.INGOT_INCANDESCENT_ALLOY.get());
 
 
         this.tag(ModTags.Items.NUGGET_COPPER).add(registerItems.NUGGET_COPPER.get());
@@ -70,6 +75,8 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.NUGGET_RMA7012).add(registerItems.NUGGET_RMA7012.get());
         this.tag(ModTags.Items.NUGGET_RMA7024).add(registerItems.NUGGET_RMA7024.get());
         this.tag(ModTags.Items.NUGGET_D32).add(registerItems.NUGGET_D32.get());
+        this.tag(ModTags.Items.NUGGET_MANGANESE).add(registerItems.NUGGET_MANGANESE.get());
+        this.tag(ModTags.Items.NUGGET_INCANDESCENT_ALLOY).add(registerItems.NUGGET_INCANDESCENT_ALLOY.get());
 
         this.tag(ModTags.Items.PLATE_ALUMINIUM).add(registerItems.PLATE_ALUMINIUM.get());
         this.tag(ModTags.Items.PLATE_COPPER).add(registerItems.PLATE_COPPER.get());
@@ -84,6 +91,8 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.PLATE_RMA7012).add(registerItems.PLATE_RMA7012.get());
         this.tag(ModTags.Items.PLATE_RMA7024).add(registerItems.PLATE_RMA7024.get());
         this.tag(ModTags.Items.PLATE_D32).add(registerItems.PLATE_D32.get());
+        this.tag(ModTags.Items.PLATE_MANGANESE).add(registerItems.PLATE_MANGANESE.get());
+        this.tag(ModTags.Items.PLATE_INCANDESCENT_ALLOY).add(registerItems.PLATE_INCANDESCENT_ALLOY.get());
 
         this.tag(ModTags.Items.GEAR_STEEL).add(registerItems.GEAR_STEEL.get());
         this.tag(ModTags.Items.GEAR_BRONZE).add(registerItems.GEAR_BRONZE.get());
@@ -109,6 +118,8 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.DUST_RMA7012).add(registerItems.DUST_RMA7012.get());
         this.tag(ModTags.Items.DUST_RMA7024).add(registerItems.DUST_RMA7024.get());
         this.tag(ModTags.Items.DUST_D32).add(registerItems.DUST_D32.get());
+        this.tag(ModTags.Items.DUST_MANGANESE).add(registerItems.DUST_MANGANESE.get());
+        this.tag(ModTags.Items.DUST_INCANDESCENT_ALLOY).add(registerItems.DUST_INCANDESCENT_ALLOY.get());
 
         this.tag(ModTags.Items.EXPLOSIVE_COMPOUND).add(registerItems.GUNPOWDER_COMPOUND.get());
 
@@ -128,8 +139,8 @@ public class ItemTagProvider extends ItemTagsProvider {
 
         this.tag(ModTags.Items.EXTRUSION_MOLD).add(registerItems.MOLD_PLATE.get()).add(registerItems.MOLD_WIRE.get()).add(registerItems.MOLD_EXTRACTION.get());
 
-        this.tag(ModTags.Items.MORTAR).add(registerItems.MORTAR_IRON.get());
-        this.tag(ModTags.Items.CUTTER).add(registerItems.STEEL_CUTTER.get());
+        this.tag(ModTags.Items.MORTAR).add(registerItems.MORTAR_STONE.get()).add(registerItems.MORTAR_COPPER.get()).add(registerItems.MORTAR_TIN.get()).add(registerItems.MORTAR_BRONZE.get()).add(registerItems.MORTAR_IRON.get()).add(registerItems.MORTAR_STEEL.get()).add(registerItems.MORTAR_GOLD.get()).add(registerItems.MORTAR_DIAMOND.get()).add(registerItems.MORTAR_NETHERITE.get()).add(registerItems.MORTAR_RMA7012.get()).add(registerItems.MORTAR_RMA7024.get()).add(registerItems.MORTAR_D32.get());
+        this.tag(ModTags.Items.CUTTER).add(registerItems.CUTTER_STONE.get()).add(registerItems.CUTTER_COPPER.get()).add(registerItems.CUTTER_TIN.get()).add(registerItems.CUTTER_BRONZE.get()).add(registerItems.CUTTER_IRON.get()).add(registerItems.CUTTER_STEEL.get()).add(registerItems.CUTTER_GOLD.get()).add(registerItems.CUTTER_DIAMOND.get()).add(registerItems.CUTTER_NETHERITE.get()).add(registerItems.CUTTER_RMA7012.get()).add(registerItems.CUTTER_RMA7024.get()).add(registerItems.CUTTER_D32.get());
         this.tag(ModTags.Items.HAMMER).add(registerItems.HAMMER_STONE.get()).add(registerItems.HAMMER_COPPER.get()).add(registerItems.HAMMER_TIN.get()).add(registerItems.HAMMER_BRONZE.get()).add(registerItems.HAMMER_IRON.get()).add(registerItems.HAMMER_GOLD.get()).add(registerItems.HAMMER_STEEL.get()).add(registerItems.HAMMER_DIAMOND.get()).add(registerItems.HAMMER_RMA7012.get()).add(registerItems.HAMMER_RMA7024.get()).add(registerItems.HAMMER_D32.get()).add(registerItems.HAMMER_NETHERITE.get()).add(registerItems.SLEDGEHAMMER.get());
         this.tag(ModTags.Items.SAW).add(registerItems.SAW_STONE.get()).add(registerItems.SAW_COPPER.get()).add(registerItems.SAW_TIN.get()).add(registerItems.SAW_BRONZE.get()).add(registerItems.SAW_IRON.get()).add(registerItems.SAW_GOLD.get()).add(registerItems.SAW_STEEL.get()).add(registerItems.SAW_DIAMOND.get()).add(registerItems.SAW_NETHERITE.get()).add(registerItems.SAW_RMA7012.get()).add(registerItems.SAW_RMA7024.get()).add(registerItems.SAW_D32.get());
         this.tag(ModTags.Items.KNIFE).add(registerItems.KITCHEN_KNIFE.get(), registerItems.TACTICAL_KNIFE.get());
