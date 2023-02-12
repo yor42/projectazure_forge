@@ -5,11 +5,11 @@
       "tag": "forge:tools/cutter"
     },
     {
-      "tag": "forge:plates/copper"
+      "tag": "forge:plates/gold"
     }
   ],
   "result": {
-    "item": "projectazure:copper_wire",
+    "item": "projectazure:gold_wire",
     "count": 4
   }
 }

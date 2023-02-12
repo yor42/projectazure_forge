@@ -12,10 +12,10 @@
       "item": "projectazure:orundum"
     },
     "R": {
-      "item": "projectazure:resistor_primitive"
+      "item": "projectazure:resistor_basic"
     },
     "T": {
-      "item": "projectazure:capacitor_primitive"
+      "item": "projectazure:capacitor_advanced"
     },
     "K": {
       "item": "projectazure:polymer_plate"

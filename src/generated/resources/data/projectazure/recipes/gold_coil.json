@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WBW",
+    "WBW",
+    "WBW"
+  ],
+  "key": {
+    "W": {
+      "item": "projectazure:gold_wire"
+    },
+    "B": {
+      "item": "projectazure:iron_pipe"
+    }
+  },
+  "result": {
+    "item": "projectazure:gold_coil",
+    "count": 2
+  }
+}

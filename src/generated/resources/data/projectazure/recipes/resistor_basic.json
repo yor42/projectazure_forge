@@ -2,25 +2,25 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     " C ",
-    "WPW",
+    "WRW",
     " D "
   ],
   "key": {
     "C": {
-      "tag": "forge:dusts/coal"
+      "item": "projectazure:c99"
     },
     "D": {
-      "item": "projectazure:dust_iron"
+      "tag": "forge:dusts/iron"
     },
-    "P": {
-      "item": "minecraft:paper"
+    "R": {
+      "item": "projectazure:polymer_plate"
     },
     "W": {
       "item": "projectazure:copper_wire"
     }
   },
   "result": {
-    "item": "projectazure:resistor_primitive",
+    "item": "projectazure:resistor_basic",
     "count": 2
   }
 }

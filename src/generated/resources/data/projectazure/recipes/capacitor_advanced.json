@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "APA",
+    "GPG",
     "APA",
     "C C"
   ],
@@ -10,14 +10,17 @@
       "item": "projectazure:plate_aluminium"
     },
     "P": {
-      "item": "minecraft:paper"
+      "item": "projectazure:polymer_plate"
+    },
+    "G": {
+      "tag": "forge:plates/gold"
     },
     "C": {
-      "item": "projectazure:copper_wire"
+      "item": "projectazure:gold_wire"
     }
   },
   "result": {
-    "item": "projectazure:capacitor_primitive",
+    "item": "projectazure:capacitor_advanced",
     "count": 2
   }
 }

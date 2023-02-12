@@ -13,14 +13,14 @@
       "item": "minecraft:iron_ingot"
     },
     "P": {
-      "item": "projectazure:plate_aluminium"
+      "item": "projectazure:plate_iron"
     },
     "W": {
-      "item": "projectazure:gold_coil"
+      "item": "projectazure:copper_wire"
     }
   },
   "result": {
-    "item": "projectazure:motor_basic",
+    "item": "projectazure:motor_primitive",
     "count": 2
   }
 }

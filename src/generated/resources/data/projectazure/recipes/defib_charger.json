@@ -7,10 +7,10 @@
   ],
   "key": {
     "W": {
-      "item": "projectazure:copper_coil"
+      "item": "projectazure:gold_coil"
     },
     "C": {
-      "item": "projectazure:capacitor_primitive"
+      "item": "projectazure:capacitor_advanced"
     },
     "P": {
       "item": "minecraft:redstone_lamp"
@@ -19,10 +19,10 @@
       "tag": "forge:circuits/advanced"
     },
     "B": {
-      "item": "projectazure:headhunting_pcb"
+      "item": "projectazure:crystalline_circuit"
     },
     "R": {
-      "item": "projectazure:resistor_primitive"
+      "item": "projectazure:resistor_basic"
     }
   },
   "result": {

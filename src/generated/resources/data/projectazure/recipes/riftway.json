@@ -7,10 +7,10 @@
   ],
   "key": {
     "C": {
-      "tag": "forge:circuits/advanced"
+      "item": "projectazure:resistor_advanced"
     },
     "P": {
-      "item": "projectazure:headhunting_pcb"
+      "item": "projectazure:crystalline_circuit"
     },
     "M": {
       "item": "projectazure:machine_frame"

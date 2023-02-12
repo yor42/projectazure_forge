@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "RMR",
+    "GCG"
+  ],
+  "key": {
+    "M": {
+      "item": "projectazure:motor_basic"
+    },
+    "G": {
+      "item": "projectazure:gold_coil"
+    },
+    "C": {
+      "tag": "forge:circuits/basic"
+    },
+    "R": {
+      "item": "projectazure:resistor_basic"
+    },
+    "D": {
+      "item": "projectazure:iron_pipe"
+    }
+  },
+  "result": {
+    "item": "projectazure:motor_advanced"
+  }
+}

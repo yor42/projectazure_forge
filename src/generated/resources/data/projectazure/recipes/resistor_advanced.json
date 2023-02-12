@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "WRW",
+    " D "
+  ],
+  "key": {
+    "C": {
+      "item": "projectazure:c99"
+    },
+    "D": {
+      "item": "minecraft:clay"
+    },
+    "R": {
+      "item": "projectazure:polymer_plate"
+    },
+    "W": {
+      "item": "projectazure:gold_wire"
+    }
+  },
+  "result": {
+    "item": "projectazure:resistor_advanced",
+    "count": 2
+  }
+}

@@ -1,7 +1,6 @@
 package com.yor42.projectazure.setup.register;
 
 import com.mojang.datafixers.util.Pair;
-import com.tac.guns.item.AmmoItem;
 import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
@@ -24,10 +23,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.tileentity.AbstractFurnaceTileEntity;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -39,7 +36,6 @@ import java.util.function.Supplier;
 
 import static com.yor42.projectazure.Main.*;
 import static com.yor42.projectazure.data.client.itemModelProvider.ITEMENTRY;
-import static com.yor42.projectazure.data.client.itemModelProvider.SIMPLETEXTURELIST;
 
 public class registerItems {
 
@@ -102,7 +98,6 @@ public class registerItems {
     public static final RegistryObject<Item> PLATE_RMA7024 = registerResource("rma7024", enums.ResourceType.PLATE);
     public static final RegistryObject<Item> PLATE_RMA7012 = registerResource("rma7012", enums.ResourceType.PLATE);
     public static final RegistryObject<Item> PLATE_D32 = registerResource("d32steel", enums.ResourceType.PLATE);
-
     public static final RegistryObject<Item> PLATE_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.PLATE);
     public static final RegistryObject<Item> PLATE_MANGANESE = registerResource("manganese", enums.ResourceType.PLATE);
 
@@ -121,28 +116,40 @@ public class registerItems {
 
     //Electronic Stuff
     public static final RegistryObject<Item> COPPER_WIRE = register("copper_wire", () -> new ItemResource("copper", enums.ResourceType.WIRE));
+    public static final RegistryObject<Item> GOLD_WIRE = register("gold_wire", () -> new ItemResource("gold", enums.ResourceType.WIRE));
     public static final RegistryObject<Item> IRON_PIPE = register("iron_pipe", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> STEEL_PIPE = register("steel_pipe", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> MECHANICAL_PARTS = register("mechanical_parts", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> PRIMITIVE_MOTOR = register("motor_primitive", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> BASIC_MOTOR = register("motor_basic", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> ADVANCED_MOTOR = register("motor_advanced", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> PRIMITIVE_CIRCUIT = register("circuit_primitive", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> ADVANCED_CIRCUIT = register("circuit_advanced", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
 
     public static final RegistryObject<Item> GUNPOWDER_COMPOUND = register("gunpowder_compound", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
 
-    public static final RegistryObject<Item> ADVANCED_CIRCUIT = register("circuit_advanced", () -> new Item(new Item.Properties()
-            .tab(PA_RESOURCES)));
-
     public static final RegistryObject<Item> COPPER_COIL = register("copper_coil", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> GOLD_COIL = register("gold_coil", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> CAPACITOR_PRIMITIVE = register("capacitor_primitive", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> CAPACITOR_ADVANCED = register("capacitor_advanced", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> RESISTOR_PRIMITIVE = register("resistor_primitive", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> RESISTOR_BASIC = register("resistor_basic", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> RESISTOR_ADVANCED = register("resistor_advanced", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
 
     //Natural Resource

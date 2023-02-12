@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:motor_basic"
+      "projectazure:motor_primitive"
     ]
   },
   "criteria": {
@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "item": "projectazure:gold_coil"
+            "item": "projectazure:copper_coil"
           }
         ]
       }
@@ -29,7 +29,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:motor_basic"
+        "recipe": "projectazure:motor_primitive"
       }
     }
   },

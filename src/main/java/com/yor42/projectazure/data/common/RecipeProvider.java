@@ -25,8 +25,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -70,7 +68,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),6).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(registerItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
         WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),6).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(Items.IRON_INGOT, 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_iron");
 
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(registerItems.BASIC_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(Tags.Items.GEMS_DIAMOND).build(consumer, Constants.MODID,"gunbench_granadelauncher");
+        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(registerItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(Tags.Items.GEMS_DIAMOND).build(consumer, Constants.MODID,"gunbench_granadelauncher");
         WorkbenchRecipeBuilder.workbenchRecipe(registerItems.TYPHOON.get()).addIngredient(ModTags.Items.PLATE_STEEL, 25).addIngredient(ModTags.Items.INGOT_STEEL, 30).addIngredient(ModTags.Items.CIRCUITS_BASIC,4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
         WorkbenchRecipeBuilder.workbenchRecipe(registerItems.WHITEFANG_465.get()).addIngredient(ModTags.Items.PLATE_STEEL, 9).addIngredient(ModTags.Items.INGOT_STEEL, 10).build(consumer, Constants.MODID,"gunbench_whitefang");
         WorkbenchRecipeBuilder.workbenchRecipe(registerItems.SANGVIS_RAILGUN.get()).addIngredient(ModTags.Items.PLATE_STEEL, 35).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 10).build(consumer, Constants.MODID,"gunbench_cannon");
@@ -152,10 +150,17 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     private void generateShapelessRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
 
-        ShapelessRecipeBuilder.shapeless(registerItems.COPPER_WIRE.get(), 3)
+        ShapelessRecipeBuilder.shapeless(registerItems.COPPER_WIRE.get(), 4)
                 .requires(ModTags.Items.CUTTER)
                 .requires(ModTags.Items.PLATE_COPPER)
                 .unlockedBy("has_copper_plate", has(ModTags.Items.PLATE_COPPER))
+                .unlockedBy("has_cutter", has(ModTags.Items.CUTTER))
+                .save(consumer);
+
+        ShapelessRecipeBuilder.shapeless(registerItems.GOLD_WIRE.get(), 4)
+                .requires(ModTags.Items.CUTTER)
+                .requires(ModTags.Items.PLATE_GOLD)
+                .unlockedBy("has_copper_plate", has(ModTags.Items.PLATE_GOLD))
                 .unlockedBy("has_cutter", has(ModTags.Items.CUTTER))
                 .save(consumer);
 
@@ -303,6 +308,16 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("WBW")
                 .pattern("WBW")
                 .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_pipe", has(registerItems.IRON_PIPE.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.GOLD_COIL.get(), 2)
+                .define('W', registerItems.GOLD_WIRE.get())
+                .define('B', registerItems.IRON_PIPE.get())
+                .pattern("WBW")
+                .pattern("WBW")
+                .pattern("WBW")
+                .unlockedBy("has_wire", has(registerItems.GOLD_WIRE.get()))
                 .unlockedBy("has_pipe", has(registerItems.IRON_PIPE.get()))
                 .save(consumer);
 
@@ -805,7 +820,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .define('S', ModTags.Items.PLATE_STEEL)
                 .define('B', registerItems.STEEL_PIPE.get())
                 .define('P', registerItems.MECHANICAL_PARTS.get())
-                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('M', registerItems.PRIMITIVE_MOTOR.get())
                 .define('E', registerItems.PRIMITIVE_CIRCUIT.get())
                 .pattern("PSS")
                 .pattern("BPS")
@@ -826,12 +841,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.DEFIB_CHARGER.get(), 1)
-                .define('W', registerItems.COPPER_COIL.get())
-                .define('C', registerItems.CAPACITOR_PRIMITIVE.get())
+                .define('W', registerItems.GOLD_COIL.get())
+                .define('C', registerItems.CAPACITOR_ADVANCED.get())
                 .define('P', Items.REDSTONE_LAMP)
                 .define('I',  ModTags.Items.CIRCUITS_ADVANCED)
-                .define('B', registerItems.HEADHUNTING_PCB.get())
-                .define('R', registerItems.RESISTOR_PRIMITIVE.get())
+                .define('B', registerItems.CRYSTALLINE_CIRCUIT.get())
+                .define('R', registerItems.RESISTOR_BASIC.get())
                 .pattern("WPW")
                 .pattern("RBR")
                 .pattern("CIC")
@@ -1004,13 +1019,13 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .define('G', ModTags.Items.GEAR_STEEL)
                 .define('P', registerItems.MECHANICAL_PARTS.get())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('M', registerItems.PRIMITIVE_MOTOR.get())
                 .define('W', registerItems.WISDOM_CUBE.get())
                 .pattern("CSP")
                 .pattern("AWG")
                 .pattern(" MA")
                 .unlockedBy("has_cube", has(registerItems.WISDOM_CUBE.get()))
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .unlockedBy("has_motor", has(registerItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.IRON_PIPE.get(), 1)
@@ -1033,18 +1048,18 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .define('G', ModTags.Items.GEAR_STEEL)
                 .define('P', registerItems.MECHANICAL_PARTS.get())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('M', registerItems.PRIMITIVE_MOTOR.get())
                 .define('D', registerItems.DD_DEFAULT_RIGGING.get())
                 .pattern("SMS")
                 .pattern("PDG")
                 .pattern("ACA")
                 .unlockedBy("has_dd_rigging", has(registerItems.DD_DEFAULT_RIGGING.get()))
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .unlockedBy("has_motor", has(registerItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.CV_DEFAULT_RIGGING.get(), 1)
                 .define('W', registerBlocks.REENFORCED_PLANK.get().asItem())
-                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('M', registerItems.PRIMITIVE_MOTOR.get())
                 .define('D', registerItems.DD_DEFAULT_RIGGING.get())
                 .define('P', registerItems.MECHANICAL_PARTS.get())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
@@ -1054,7 +1069,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("IDW")
                 .pattern("PCM")
                 .unlockedBy("has_dd_rigging", has(registerItems.DD_DEFAULT_RIGGING.get()))
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .unlockedBy("has_motor", has(registerItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.EQUIPMENT_TORPEDO_533MM.get(), 1)
@@ -1063,13 +1078,13 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .define('G', ModTags.Items.GEAR_STEEL)
                 .define('P', registerItems.MECHANICAL_PARTS.get())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('M', registerItems.PRIMITIVE_MOTOR.get())
                 .pattern("ACA")
                 .pattern("SSS")
                 .pattern("GMP")
                 .unlockedBy("has_barrel", has(registerItems.STEEL_PIPE.get()))
                 .unlockedBy("has_part", has(registerItems.MECHANICAL_PARTS.get()))
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .unlockedBy("has_motor", has(registerItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
 
@@ -1310,6 +1325,18 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_sand", has(ModTags.Items.ORIGINIUM_PRIME))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerItems.CAPACITOR_ADVANCED.get(), 2)
+                .define('A', registerItems.PLATE_ALUMINIUM.get())
+                .define('P', registerItems.PLATE_POLYMER.get())
+                .define('G', ModTags.Items.PLATE_GOLD)
+                .define('C', registerItems.GOLD_WIRE.get())
+                .pattern("GPG")
+                .pattern("APA")
+                .pattern("C C")
+                .unlockedBy("has_wire", has(registerItems.GOLD_WIRE.get()))
+                .unlockedBy("has_aluminium", has(ModTags.Items.PLATE_ALUMINIUM))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(registerItems.CAPACITOR_PRIMITIVE.get(), 1)
                 .define('A', registerItems.PLATE_ALUMINIUM.get())
                 .define('P', Items.PAPER)
@@ -1321,19 +1348,43 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_aluminium", has(ModTags.Items.PLATE_ALUMINIUM))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_PRIMITIVE.get(), 1)
+        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_PRIMITIVE.get(), 2)
                 .define('C', ModTags.Items.DUST_COAL)
                 .define('D', registerItems.DUST_IRON.get())
                 .define('P', Items.PAPER)
                 .define('W', registerItems.COPPER_WIRE.get())
-                .pattern(" P ")
-                .pattern("WCW")
+                .pattern(" C ")
+                .pattern("WPW")
                 .pattern(" D ")
                 .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
                 .unlockedBy("has_carbon", has(ModTags.Items.DUST_COAL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.BASIC_MOTOR.get(), 1)
+        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_BASIC.get(), 2)
+                .define('C', registerItems.C99_CARBON.get())
+                .define('D', ModTags.Items.DUST_IRON)
+                .define('R', registerItems.PLATE_POLYMER.get())
+                .define('W', registerItems.COPPER_WIRE.get())
+                .pattern(" C ")
+                .pattern("WRW")
+                .pattern(" D ")
+                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_carbon", has(ModTags.Items.DUST_COAL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_ADVANCED.get(), 2)
+                .define('C', registerItems.C99_CARBON.get())
+                .define('D', Items.CLAY)
+                .define('R', registerItems.PLATE_POLYMER.get())
+                .define('W', registerItems.GOLD_WIRE.get())
+                .pattern(" C ")
+                .pattern("WRW")
+                .pattern(" D ")
+                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_carbon", has(ModTags.Items.DUST_COAL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.PRIMITIVE_MOTOR.get(), 2)
                 .define('C', registerItems.COPPER_COIL.get())
                 .define('D', Items.IRON_INGOT)
                 .define('P', registerItems.PLATE_IRON.get())
@@ -1343,6 +1394,31 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("PWP")
                 .unlockedBy("has_coil", has(registerItems.COPPER_COIL.get()))
                 .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.BASIC_MOTOR.get(), 2)
+                .define('C', registerItems.COPPER_COIL.get())
+                .define('D', Items.IRON_INGOT)
+                .define('P', registerItems.PLATE_ALUMINIUM.get())
+                .define('W', registerItems.GOLD_COIL.get())
+                .pattern(" D ")
+                .pattern("PCP")
+                .pattern("PWP")
+                .unlockedBy("has_coil", has(registerItems.GOLD_COIL.get()))
+                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.ADVANCED_MOTOR.get(), 1)
+                .define('M', registerItems.BASIC_MOTOR.get())
+                .define('G', registerItems.GOLD_COIL.get())
+                .define('C', ModTags.Items.CIRCUITS_BASIC)
+                .define('R', registerItems.RESISTOR_BASIC.get())
+                .define('D', registerItems.IRON_PIPE.get())
+                .pattern(" D ")
+                .pattern("RMR")
+                .pattern("GCG")
+                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .unlockedBy("has_circuit", has(ModTags.Items.CIRCUITS_BASIC))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(registerItems.PRIMITIVE_CIRCUIT.get(), 1)
@@ -1473,8 +1549,8 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         ShapedRecipeBuilder.shaped(registerItems.ADVANCED_CIRCUIT.get(), 2)
                 .define('C', ModTags.Items.CIRCUITS_BASIC)
                 .define('O', registerItems.ORUNDUM.get())
-                .define('R', registerItems.RESISTOR_PRIMITIVE.get())
-                .define('T', registerItems.CAPACITOR_PRIMITIVE.get())
+                .define('R', registerItems.RESISTOR_BASIC.get())
+                .define('T', registerItems.CAPACITOR_ADVANCED.get())
                 .define('K', registerItems.PLATE_POLYMER.get())
                 .pattern("ROT")
                 .pattern("CKC")
@@ -1491,8 +1567,8 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RiftwayControllerTE.RiftwayDefinition.getStackForm().getItem())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('P', registerItems.HEADHUNTING_PCB.get())
+                .define('C', registerItems.RESISTOR_ADVANCED.get())
+                .define('P', registerItems.CRYSTALLINE_CIRCUIT.get())
                 .define('M', registerBlocks.MACHINE_FRAME.get())
                 .define('O', registerItems.ORUNDUM.get())
                 .define('D', registerItems.FOR_DESTABILIZER.get())

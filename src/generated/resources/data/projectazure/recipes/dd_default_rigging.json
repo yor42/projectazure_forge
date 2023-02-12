@@ -22,7 +22,7 @@
       "tag": "forge:circuits/advanced"
     },
     "M": {
-      "item": "projectazure:motor_basic"
+      "item": "projectazure:motor_primitive"
     },
     "W": {
       "item": "projectazure:wisdomcube"

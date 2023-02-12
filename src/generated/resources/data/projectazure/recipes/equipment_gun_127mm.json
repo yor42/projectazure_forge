@@ -16,7 +16,7 @@
       "item": "projectazure:mechanical_parts"
     },
     "M": {
-      "item": "projectazure:motor_basic"
+      "item": "projectazure:motor_primitive"
     },
     "E": {
       "item": "projectazure:circuit_primitive"

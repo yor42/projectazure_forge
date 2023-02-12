@@ -2,26 +2,26 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:motor_basic"
+      "projectazure:gold_coil"
     ]
   },
   "criteria": {
-    "has_coil": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "projectazure:gold_coil"
-          }
-        ]
-      }
-    },
     "has_wire": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "projectazure:copper_wire"
+            "item": "projectazure:gold_wire"
+          }
+        ]
+      }
+    },
+    "has_pipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "projectazure:iron_pipe"
           }
         ]
       }
@@ -29,14 +29,14 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:motor_basic"
+        "recipe": "projectazure:gold_coil"
       }
     }
   },
   "requirements": [
     [
-      "has_coil",
       "has_wire",
+      "has_pipe",
       "has_the_recipe"
     ]
   ]

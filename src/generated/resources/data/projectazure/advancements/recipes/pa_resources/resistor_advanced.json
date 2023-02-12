@@ -2,20 +2,10 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:motor_basic"
+      "projectazure:resistor_advanced"
     ]
   },
   "criteria": {
-    "has_coil": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "projectazure:gold_coil"
-          }
-        ]
-      }
-    },
     "has_wire": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -26,17 +16,27 @@
         ]
       }
     },
+    "has_carbon": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dusts/coal"
+          }
+        ]
+      }
+    },
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:motor_basic"
+        "recipe": "projectazure:resistor_advanced"
       }
     }
   },
   "requirements": [
     [
-      "has_coil",
       "has_wire",
+      "has_carbon",
       "has_the_recipe"
     ]
   ]
