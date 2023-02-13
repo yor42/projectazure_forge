@@ -1,6 +1,5 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
-import com.yor42.projectazure.setup.register.registerBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -23,7 +22,8 @@ import net.minecraftforge.fluids.FluidAttributes;
 import javax.annotation.Nonnull;
 
 import static com.yor42.projectazure.setup.register.registerBlocks.KETON;
-import static com.yor42.projectazure.setup.register.registerFluids.*;
+import static com.yor42.projectazure.setup.register.registerFluids.KETON_FLOWING_REGISTRY;
+import static com.yor42.projectazure.setup.register.registerFluids.KETON_SOURCE_REGISTRY;
 import static com.yor42.projectazure.setup.register.registerItems.KETON_BUCKET;
 
 public abstract class KetonFluid extends FlowingFluid {

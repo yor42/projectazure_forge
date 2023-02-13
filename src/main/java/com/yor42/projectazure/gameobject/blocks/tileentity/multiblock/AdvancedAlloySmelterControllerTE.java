@@ -1,30 +1,18 @@
 package com.yor42.projectazure.gameobject.blocks.tileentity.multiblock;
 
-import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
-import com.lowdragmc.lowdraglib.gui.widget.TabContainer;
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
-import com.lowdragmc.multiblocked.api.gui.controller.IOPageWidget;
-import com.lowdragmc.multiblocked.api.gui.controller.structure.StructurePageWidget;
 import com.lowdragmc.multiblocked.api.pattern.FactoryBlockPattern;
 import com.lowdragmc.multiblocked.api.pattern.Predicates;
-import com.lowdragmc.multiblocked.api.recipe.RecipeLogic;
 import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.lowdragmc.multiblocked.api.tile.ControllerTileEntity;
-import com.lowdragmc.multiblocked.common.capability.EntityMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.FluidMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
-import com.yor42.projectazure.client.gui.multiblocked.RiftwayRecipePage;
-import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
-import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipelogics.RiftwayRecipeLogic;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.registerBlocks;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class AdvancedAlloySmelterControllerTE extends ControllerTileEntity {

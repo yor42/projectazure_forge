@@ -14,7 +14,6 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressC
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
-import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
@@ -45,13 +44,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -64,6 +63,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
+import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 
@@ -326,12 +327,12 @@ public class ForgeBusEventHandler {
 
         if(target instanceof LivingEntity){
             if(stack.getItem() instanceof ItemDefibPaddle && otherHandStack.getItem() instanceof ItemDefibPaddle){
-
                 if(hand == OFF_HAND){
                     event.setCanceled(true);
                     return;
                 }
                 ItemStack ChargerStack = ItemStack.EMPTY;
+                boolean isCurio = false;
                 for (int i = 0; i < player.inventory.getContainerSize(); i++) {
                     ItemStack invstack = player.inventory.getItem(i);
                     Item item = invstack.getItem();
@@ -339,8 +340,16 @@ public class ForgeBusEventHandler {
                         ChargerStack = invstack;
                         break;
                     }
-
                 }
+
+                if(ChargerStack.isEmpty() && ModList.get().isLoaded(CURIOS_MODID)){
+                    ChargerStack = getCurioItemStack(player, (itemstack)->{
+                        Item item = itemstack.getItem();
+                        return item instanceof ItemDefibCharger && ItemDefibCharger.isOn(itemstack) && ItemDefibCharger.getChargeProgress(itemstack) == 100;
+                    });
+                    isCurio = true;
+                }
+
                 if(!ChargerStack.isEmpty()){
 
                     if(!world.isClientSide()){
@@ -362,6 +371,11 @@ public class ForgeBusEventHandler {
                         } else {
                             target.hurt(DamageSources.causeDefibDamage(player), 20);
                         }
+
+                        if(isCurio){
+                            ItemDefibCharger.setOn(ChargerStack, false);
+                        }
+
                         event.setCanceled(true);
                     }
                 }

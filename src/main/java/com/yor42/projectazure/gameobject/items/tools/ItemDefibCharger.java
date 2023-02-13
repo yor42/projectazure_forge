@@ -1,20 +1,27 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemDefibChargerRenderer;
-import com.yor42.projectazure.gameobject.capability.ItemPowerCapabilityProvider;
+import com.yor42.projectazure.gameobject.items.CurioItem;
+import com.yor42.projectazure.intermod.curios.CuriosCompat;
+import com.yor42.projectazure.intermod.curios.client.CurioRenderer;
+import com.yor42.projectazure.intermod.curios.client.RenderDefib;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -37,7 +44,7 @@ import java.util.List;
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.setup.register.registerSounds.*;
 
-public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
+public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncable {
     private static final int ANIM_ON = 0;
     private static final int ANIM_OFF = 1;
     public static final String controllerName = "defibcharger_controller";
@@ -50,7 +57,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return new ItemPowerCapabilityProvider(stack, 40000);
+        return CuriosCompat.addEnergyCapability(stack, 40000);
     }
     @Override
     public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
@@ -64,6 +71,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
                     player.playSound(DEFIB_NOBATTERY, 1.0F, 1.0F);
                     return ActionResult.fail(stack);
                 }
+
                 if(!world.isClientSide()){
                     final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
 
@@ -99,7 +107,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
             if(ShouldCharging(stack)){
                 if(stack.getCapability(CapabilityEnergy.ENERGY).map((e)->e.extractEnergy(100, true)>=100).orElse(false)) {
                     int charge = Math.min(100, chargeprogress + 1);
-                    if (charge >= 100) {
+                    if (charge == 100) {
                         setCharging(stack, false);
                         p_77663_3_.playSound(DEFIB_READY, 1.0F, 1.0F);
                     }
@@ -259,6 +267,16 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
+    public void fillItemCategory(ItemGroup p_150895_1_, NonNullList<ItemStack> p_150895_2_) {
+        if (this.allowdedIn(p_150895_1_)) {
+            ItemStack stack = new ItemStack(this);
+            stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((battery)->battery.receiveEnergy(battery.getMaxEnergyStored(), false));
+            p_150895_2_.add(stack);
+            p_150895_2_.add(new ItemStack(this));
+        }
+    }
+
+    @Override
     public void onAnimationSync(int id, int state) {
         if (state == ANIM_ON) {
             // Always use GeckoLibUtil to get AnimationControllers when you don't have
@@ -290,5 +308,10 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable {
     @Override
     public CompoundNBT getShareTag(ItemStack stack) {
         return super.getShareTag(stack);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public CurioRenderer getSlotRenderer(){
+        return RenderDefib.getRendererInstance();
     }
 }

@@ -15,6 +15,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.ModList;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -29,6 +30,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
+import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
+import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
@@ -77,6 +80,20 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
                         }
                     }
                 }
+                if(ChargerStack.isEmpty() && ModList.get().isLoaded(CURIOS_MODID)){
+                    ChargerStack = getCurioItemStack(entity, (stack)->{
+                        Item item = stack.getItem();
+                        if (item instanceof ItemDefibCharger&& ItemDefibCharger.getChargeProgress(stack)<100) {
+                            return stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(100, true) == 100).orElse(false);
+                        }
+                        return false;
+                    });
+
+                    if(!ItemDefibCharger.isOn(ChargerStack)){
+                        ItemDefibCharger.setOn(ChargerStack, true);
+                    }
+                }
+
                 if(!ChargerStack.isEmpty()) {
                     if (!ItemDefibCharger.ShouldCharging(ChargerStack)) {
                         ItemDefibCharger.setCharging(ChargerStack, true);

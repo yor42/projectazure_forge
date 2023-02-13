@@ -467,6 +467,15 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_IRON))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(registerItems.TACTICAL_KNIFE.get())
+                .define('I', ModTags.Items.PLATE_STEEL)
+                .define('S', registerItems.C99_CARBON.get())
+                .pattern("I")
+                .pattern("S")
+                .unlockedBy("has_stick", has(registerItems.C99_CARBON.get()))
+                .unlockedBy("has_material", has(ModTags.Items.PLATE_STEEL))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(registerItems.CHIXIAO.get())
                 .define('I', registerItems.AMBER_ORIGINIUM.get())
                 .define('S', registerItems.C99_CARBON.get())
@@ -1524,6 +1533,18 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("QOQ")
                 .pattern("LQL")
                 .pattern("QOQ")
+                .unlockedBy("has_material", has(registerItems.COGNITIVE_ARRAY.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(registerItems.COMPUTERCORE.get())
+                .define('A', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('O', registerItems.COGNITIVE_ARRAY.get())
+                .define('C', registerItems.CRYSTALLINE_CIRCUIT.get())
+                .define('G', Tags.Items.GLASS_BLACK)
+                .define('Q', ModTags.Items.INGOT_ALUMINIUM)
+                .pattern("QAQ")
+                .pattern("OGC")
+                .pattern("QAQ")
                 .unlockedBy("has_material", has(registerItems.COGNITIVE_ARRAY.get()))
                 .save(consumer);
 

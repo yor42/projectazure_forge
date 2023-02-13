@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "QAQ",
+    "OGC",
+    "QAQ"
+  ],
+  "key": {
+    "A": {
+      "tag": "forge:circuits/advanced"
+    },
+    "O": {
+      "item": "projectazure:cognitive_array"
+    },
+    "C": {
+      "item": "projectazure:crystalline_circuit"
+    },
+    "G": {
+      "tag": "forge:glass/black"
+    },
+    "Q": {
+      "tag": "forge:ingots/aluminium"
+    }
+  },
+  "result": {
+    "item": "projectazure:computercore"
+  }
+}

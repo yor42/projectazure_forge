@@ -47,6 +47,7 @@ public class PantryBlock extends HorizontalBlock implements IWaterLoggable {
             else{
                 if(!world.isClientSide()) {
                     this.openGUI(pos, world, (ServerPlayerEntity) p_225533_4_);
+                    return ActionResultType.SUCCESS;
                 }
             }
         }

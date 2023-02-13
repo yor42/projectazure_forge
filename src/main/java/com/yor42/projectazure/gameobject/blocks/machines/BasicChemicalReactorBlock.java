@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.blocks.machines;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractElectricMachineBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityBasicChemicalReactor;
-import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityMetalPress;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;

@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 public class CuriosCapabilityProvider implements ICapabilityProvider {
 
-    private final ItemStack stack;
+    protected final ItemStack stack;
 
     public CuriosCapabilityProvider(ItemStack stack){
         this.stack = stack;

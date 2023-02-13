@@ -21,7 +21,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.*;
+import static com.yor42.projectazure.setup.register.registerFluids.NETHER_QUARTZ_SOLUTION_FLOWING_REGISTRY;
+import static com.yor42.projectazure.setup.register.registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY;
 
 public abstract class NetherQuartzSolutionFluid extends FlowingFluid {
     @Override

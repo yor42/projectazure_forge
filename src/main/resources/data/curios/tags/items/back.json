@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "projectazure:excalibur_sheath"
+    "projectazure:excalibur_sheath",
+    "projectazure:defib_charger"
   ]
 }

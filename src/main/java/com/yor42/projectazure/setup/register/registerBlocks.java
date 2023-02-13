@@ -2,7 +2,9 @@ package com.yor42.projectazure.setup.register;
 
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.renderer.items.ItemRecruitBeaconRenderer;
-import com.yor42.projectazure.gameobject.blocks.*;
+import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
+import com.yor42.projectazure.gameobject.blocks.PAOreBlock;
+import com.yor42.projectazure.gameobject.blocks.PantryBlock;
 import com.yor42.projectazure.gameobject.blocks.machines.*;
 import com.yor42.projectazure.gameobject.items.AnimateableMachineBlockItems;
 import com.yor42.projectazure.gameobject.items.PAOreBlockItem;

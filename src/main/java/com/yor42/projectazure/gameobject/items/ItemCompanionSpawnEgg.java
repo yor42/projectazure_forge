@@ -1,7 +1,5 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.interfaces.IAknOp;
@@ -22,7 +20,9 @@ import net.minecraftforge.fml.RegistryObject;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 
