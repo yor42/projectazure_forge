@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "tag": "forge:ingots/d32"
+  },
+  "value": 1,
+  "needed": 1,
+  "material": "projectazure:d32"
+}

@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:gears/d32_melting",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "ingredient": {
+    "tag": "forge:gears/d32_melting"
+  },
+  "result": {
+    "fluid": "projectazure:molten_d32",
+    "amount": 576
+  },
+  "temperature": 2200,
+  "time": 194
+}

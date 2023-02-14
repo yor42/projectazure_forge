@@ -25,7 +25,7 @@ public class PAMaterialProvider extends AbstractMaterialDataProvider {
 
     @Override
     protected void addMaterials() {
-        addMaterial(D32, 4,ORDER_HARVEST, false, 0xc2dbec);
+        addMaterial(D32, 4,ORDER_GENERAL, false, 0xc2dbec);
 
     }
 

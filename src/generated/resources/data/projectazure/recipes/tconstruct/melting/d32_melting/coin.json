@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:coins/d32_melting",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "ingredient": {
+    "tag": "forge:coins/d32_melting"
+  },
+  "result": {
+    "fluid": "projectazure:molten_d32",
+    "amount": 48
+  },
+  "temperature": 2200,
+  "time": 65
+}

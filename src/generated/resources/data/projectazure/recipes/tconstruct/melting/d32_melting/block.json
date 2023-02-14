@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "tag": "forge:storage_blocks/d32_melting"
+  },
+  "result": {
+    "fluid": "projectazure:molten_d32",
+    "amount": 1296
+  },
+  "temperature": 2200,
+  "time": 292
+}
