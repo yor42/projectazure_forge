@@ -2,7 +2,7 @@ package com.yor42.projectazure.intermod.jei.recipecategory;
 
 import com.yor42.projectazure.gameobject.crafting.recipes.PressingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -24,7 +24,7 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_pressing");
 
     public JEIRecipeCategoryPressing(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(registerBlocks.METAL_PRESS.get().asItem()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegisterBlocks.METAL_PRESS.get().asItem()));
 
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/metal_press.png");
         this.background = guiHelper.createDrawable(TEXTURE, 4,4, 165, 75);

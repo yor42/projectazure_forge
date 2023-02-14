@@ -11,7 +11,7 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -307,7 +307,7 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.GRAVINET.get()));
+        return new ArrayList<>(Collections.singletonList(RegisterItems.GRAVINET.get()));
     }
 
     @Nullable

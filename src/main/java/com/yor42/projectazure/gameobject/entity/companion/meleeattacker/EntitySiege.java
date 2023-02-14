@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yor42.projectazure.setup.register.registerItems.WARHAMMER;
+import static com.yor42.projectazure.setup.register.RegisterItems.WARHAMMER;
 
 public class EntitySiege extends AbstractSwordUserBase implements IAknOp {
     public EntitySiege(EntityType<? extends TameableEntity> type, World worldIn) {

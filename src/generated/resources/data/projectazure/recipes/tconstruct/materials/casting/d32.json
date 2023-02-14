@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material_fluid",
+  "fluid": {
+    "tag": "projectazure:molten_d32",
+    "amount": 144
+  },
+  "temperature": 2200,
+  "output": "projectazure:d32"
+}

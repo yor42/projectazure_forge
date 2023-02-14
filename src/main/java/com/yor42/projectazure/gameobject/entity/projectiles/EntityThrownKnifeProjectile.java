@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.projectiles;
 
 import com.yor42.projectazure.gameobject.misc.DamageSources;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -111,7 +111,7 @@ public class EntityThrownKnifeProjectile extends AbstractArrowEntity implements 
         float f = 2.0F;
         if (entity instanceof LivingEntity) {
             LivingEntity livingentity = (LivingEntity)entity;
-            f += EnchantmentHelper.getDamageBonus(new ItemStack(registerItems.TACTICAL_KNIFE.get()), livingentity.getMobType());
+            f += EnchantmentHelper.getDamageBonus(new ItemStack(RegisterItems.TACTICAL_KNIFE.get()), livingentity.getMobType());
         }
 
         Entity entity1 = this.getOwner();
@@ -138,8 +138,8 @@ public class EntityThrownKnifeProjectile extends AbstractArrowEntity implements 
 
     @Override
     protected ItemStack getPickupItem() {
-        ItemStack stack = new ItemStack(registerItems.TACTICAL_KNIFE.get());
-        boolean isbroken =  this.previousDamage+1>=registerItems.TACTICAL_KNIFE.get().getMaxDamage(stack);
+        ItemStack stack = new ItemStack(RegisterItems.TACTICAL_KNIFE.get());
+        boolean isbroken =  this.previousDamage+1>= RegisterItems.TACTICAL_KNIFE.get().getMaxDamage(stack);
         stack.setDamageValue(this.previousDamage+1);
         return isbroken? ItemStack.EMPTY: stack;
     }

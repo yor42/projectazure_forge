@@ -2,7 +2,7 @@ package com.yor42.projectazure.intermod.jei.recipecategory;
 
 import com.yor42.projectazure.gameobject.crafting.recipes.AlloyingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -22,7 +22,7 @@ public class JEIRecipeCategoryAlloying implements IRecipeCategory<AlloyingRecipe
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_alloying");
 
     public JEIRecipeCategoryAlloying(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(registerBlocks.ALLOY_FURNACE.get().asItem()));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegisterBlocks.ALLOY_FURNACE.get().asItem()));
 
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/alloy_furnace.png");
         this.background = guiHelper.createDrawable(TEXTURE, 4,4, 168, 75);

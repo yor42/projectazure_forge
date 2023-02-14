@@ -8,7 +8,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -124,7 +124,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
         inventory = inventories.getInventory(enums.SLOTTYPE.TORPEDO.ordinal());
         stack = inventory.getStackInSlot(0);
         if (stack != ItemStack.EMPTY) {
-            if (stack.getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
+            if (stack.getItem() == RegisterItems.EQUIPMENT_TORPEDO_533MM.get()) {
                 matrixStackIn.pushPose();
                 RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                 matrixStackIn.translate((11.5 + hostbone.getPositionX()) / 16, (23.6 + hostbone.getPositionY()) / 16, (11.5 + hostbone.getPositionZ()) / 16);
@@ -147,7 +147,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
 
         stack = inventory.getStackInSlot(1);
         if (stack != ItemStack.EMPTY) {
-            if (stack.getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
+            if (stack.getItem() == RegisterItems.EQUIPMENT_TORPEDO_533MM.get()) {
                 matrixStackIn.pushPose();
                 RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                 matrixStackIn.translate((0 + hostbone.getPositionX()) / 16, (26.6 + hostbone.getPositionY()) / 16, (25.75 + hostbone.getPositionZ()) / 16);
@@ -170,7 +170,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
 
         stack = inventory.getStackInSlot(2);
         if (stack != ItemStack.EMPTY) {
-            if (stack.getItem() == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
+            if (stack.getItem() == RegisterItems.EQUIPMENT_TORPEDO_533MM.get()) {
                 matrixStackIn.pushPose();
                 RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                 matrixStackIn.translate(-(11.5 + hostbone.getPositionX()) / 16, (23.6 + hostbone.getPositionY()) / 16, (11.5 + hostbone.getPositionZ()) / 16);

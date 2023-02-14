@@ -35,13 +35,13 @@ public class PACuriosCap implements ICurio {
 
     @Override
     public boolean canEquipFromUse(SlotContext slotContext) {
-        Item item = this.stack.getItem();
-        return ((CurioItem) item).getSlotRenderer() != null;
+        return true;
     }
 
     @Override
     public boolean canRender(String identifier, int index, LivingEntity livingEntity) {
-        return true;
+        Item item = this.stack.getItem();
+        return ((CurioItem) item).getSlotRenderer() != null;
     }
 
     @Override

@@ -44,13 +44,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
@@ -64,7 +62,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
-import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
+import static com.yor42.projectazure.libs.Constants.isCurioLoaded;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 
@@ -90,8 +88,8 @@ public class ForgeBusEventHandler {
             OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("prime_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME), 1)).perTick(true).output(FEMultiblockCapability.CAP, 2000).duration(1200).buildAndRegister();
             OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("originite_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINITE), 1)).perTick(true).output(FEMultiblockCapability.CAP, 4000).duration(400).buildAndRegister();
 
-            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.AMBER_ORIGINIUM.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 8000).duration(500).buildAndRegister();
-            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_fuel_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(registerItems.AMBER_ORIGINIUM_FUEL_ROD.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 10000).duration(1000).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(RegisterItems.AMBER_ORIGINIUM.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 8000).duration(500).buildAndRegister();
+            OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("amber_originium_fuel_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(RegisterItems.AMBER_ORIGINIUM_FUEL_ROD.get()), 1)).perTick(true).output(FEMultiblockCapability.CAP, 10000).duration(1000).buildAndRegister();
 
             AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("9mm")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS)))
@@ -183,42 +181,42 @@ public class ForgeBusEventHandler {
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("rma70-24")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_RMA7012), 1), new ItemsIngredient(Ingredient.of(ModTags.Items.ORES_ORIROCK), 2))
-                    .input(FluidMultiblockCapability.CAP, new FluidStack(registerFluids.KETON_SOURCE_REGISTRY.get(), 100))
-                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.INGOT_RMA7024.get(),2)))
+                    .input(FluidMultiblockCapability.CAP, new FluidStack(RegisterFluids.KETON_SOURCE_REGISTRY.get(), 100))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.INGOT_RMA7024.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 300).duration(400).buildAndRegister();
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("bronze")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), 3), new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), 1))
-                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.INGOT_BRONZE.get(),4)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.INGOT_BRONZE.get(),4)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 120).duration(100).buildAndRegister();
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("brass")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER)), new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_ZINC)))
-                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.INGOT_BRASS.get(),2)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.INGOT_BRASS.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 120).duration(100).buildAndRegister();
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("originium_vitrified")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME)), new ItemsIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), 2))
-                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.VITRIFIED_ORIGINIUM.get(),2)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.VITRIFIED_ORIGINIUM.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 200).duration(200).buildAndRegister();
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("originium_amber")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME)), new ItemsIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), 1), new ItemsIngredient(Ingredient.of(Tags.Items.RODS_BLAZE), 1))
-                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.AMBER_ORIGINIUM.get(),2)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.AMBER_ORIGINIUM.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("c99")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ItemTags.COALS)))
-                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.C99_CARBON.get(),2)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.C99_CARBON.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
 
             AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("incandescent_alloy")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_MANGANESE)), new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_RMA7012)))
-                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(registerItems.INGOT_INCANDESCENT_ALLOY.get(),2)))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.INGOT_INCANDESCENT_ALLOY.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
 
             new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("akn")
-                    .inputItems(new ItemsIngredient(Ingredient.of(registerItems.ORUNDUM.get()),10), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .inputItems(new ItemsIngredient(Ingredient.of(RegisterItems.ORUNDUM.get()),10), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .addCompanionOutput(registerEntity.AMIYA.get())
                     .addCompanionOutput(registerEntity.NEARL.get())
                     .addCompanionOutput(registerEntity.W.get())
@@ -238,7 +236,7 @@ public class ForgeBusEventHandler {
                     .chance(1F).perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
 
             new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("fgo")
-                    .inputItems(new ItemsIngredient(Ingredient.of(registerItems.SAINT_QUARTZ.get()),3), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .inputItems(new ItemsIngredient(Ingredient.of(RegisterItems.SAINT_QUARTZ.get()),3), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .addCompanionOutput(registerEntity.MASH.get())
                     .addCompanionOutput(registerEntity.ARTORIA.get())
                     .addCompanionOutput(registerEntity.SCATHATH.get())
@@ -246,7 +244,7 @@ public class ForgeBusEventHandler {
                     .perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
 
             new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("etc")
-                    .inputItems(new ItemsIngredient(Ingredient.of(registerItems.HEADHUNTING_PCB.get()),2), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .inputItems(new ItemsIngredient(Ingredient.of(RegisterItems.HEADHUNTING_PCB.get()),2), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .addCompanionOutput(registerEntity.SHIROKO.get())
                     .addCompanionOutput(registerEntity.SYLVI.get())
                     .addCompanionOutput(registerEntity.KYARU.get())
@@ -254,25 +252,25 @@ public class ForgeBusEventHandler {
                     .perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
 
             RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("cow")
-                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.CROPS_WHEAT),3), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.CROPS_WHEAT),3), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .outputEntities(EntityIngredient.of(EntityType.COW.getRegistryName()))
                     .perTick(true).inputFE(100).duration(120).buildAndRegister();
 
             RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("chicken")
-                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.SEEDS_WHEAT),1), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.SEEDS_WHEAT),1), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .outputEntities(EntityIngredient.of(EntityType.CHICKEN.getRegistryName()))
                     .chance(0.75F).outputEntities(EntityIngredient.of(EntityType.CHICKEN.getRegistryName()))
                     .chance(0.3F).outputEntities(EntityIngredient.of(EntityType.CHICKEN.getRegistryName()))
                     .chance(1).perTick(true).inputFE(100).duration(600).buildAndRegister();
 
             RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("sheep")
-                    .inputItems(new ItemsIngredient(Ingredient.of(Items.GRASS),2), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .inputItems(new ItemsIngredient(Ingredient.of(Items.GRASS),2), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .outputEntities(EntityIngredient.of(EntityType.SHEEP.getRegistryName()))
                     .chance(0.5F).outputEntities(EntityIngredient.of(EntityType.SHEEP.getRegistryName()))
                     .chance(1).perTick(true).inputFE(100).duration(120).buildAndRegister();
 
             RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("pig")
-                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.CROPS_CARROT),3), new ItemsIngredient(Ingredient.of(registerItems.FOR_DESTABILIZER.get()),1))
+                    .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.CROPS_CARROT),3), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .outputEntities(EntityIngredient.of(EntityType.PIG.getRegistryName()))
                     .chance(1).perTick(true).inputFE(100).duration(120).buildAndRegister();
 
@@ -342,7 +340,7 @@ public class ForgeBusEventHandler {
                     }
                 }
 
-                if(ChargerStack.isEmpty() && ModList.get().isLoaded(CURIOS_MODID)){
+                if(ChargerStack.isEmpty() && isCurioLoaded()){
                     ChargerStack = getCurioItemStack(player, (itemstack)->{
                         Item item = itemstack.getItem();
                         return item instanceof ItemDefibCharger && ItemDefibCharger.isOn(itemstack) && ItemDefibCharger.getChargeProgress(itemstack) == 100;

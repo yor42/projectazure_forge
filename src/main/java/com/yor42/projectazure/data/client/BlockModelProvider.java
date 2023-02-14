@@ -1,7 +1,7 @@
 package com.yor42.projectazure.data.client;
 
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.data.DataGenerator;
@@ -25,6 +25,6 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
         for(RegistryObject<? extends Block> block:SIMPLEBLOCKLIST){
             simpleBlock(block.get());
         }
-        slabBlock((SlabBlock) registerBlocks.MACHINE_FRAME_SLAB.get(), new ResourceLocation(Constants.MODID, "block/machine_frame"), new ResourceLocation(Constants.MODID, "block/machine_frame"));
+        slabBlock((SlabBlock) RegisterBlocks.MACHINE_FRAME_SLAB.get(), new ResourceLocation(Constants.MODID, "block/machine_frame"), new ResourceLocation(Constants.MODID, "block/machine_frame"));
     }
 }

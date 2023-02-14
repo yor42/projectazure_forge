@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.yor42.projectazure.setup.register.registerItems.GAE_BOLG;
+import static com.yor42.projectazure.setup.register.RegisterItems.GAE_BOLG;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class EntityScathath extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {

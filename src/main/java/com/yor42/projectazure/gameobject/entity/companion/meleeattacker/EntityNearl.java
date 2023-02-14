@@ -39,7 +39,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.enums.CompanionRarity.STAR_5;
-import static com.yor42.projectazure.setup.register.registerItems.WARHAMMER;
+import static com.yor42.projectazure.setup.register.RegisterItems.WARHAMMER;
 
 public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
     public List<LivingEntity> HealTarget = new ArrayList<>();

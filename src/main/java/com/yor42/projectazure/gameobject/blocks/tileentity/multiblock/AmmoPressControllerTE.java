@@ -13,7 +13,7 @@ import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 
@@ -39,9 +39,9 @@ public class AmmoPressControllerTE extends ControllerTileEntity {
         AmmoPressDefinition.properties.isOpaque = false;
         AmmoPressDefinition.properties.tabGroup = "pa_machines";
         AmmoPressDefinition.setBasePattern(FactoryBlockPattern.start().aisle("PPPP", "kkkk", "MMMM").aisle("PPPP", "kMMk", "MDDM").aisle("P@PP", "GGGG", "MMMM")
-                .where("P", Predicates.component(HatchTE.EnergyHatchDefinition).or(Predicates.component(HatchTE.ItemHatchDefinition)).or(Predicates.blocks(registerBlocks.MACHINE_FRAME.get())))
-                .where("k", Predicates.blocks(registerBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("M", Predicates.blocks(registerBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed())
-                .where("G", Predicates.blocks(Blocks.GLASS).disableRenderFormed()).where("@", Predicates.component(AmmoPressDefinition)).where("D", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).build());
+                .where("P", Predicates.component(HatchTE.EnergyHatchDefinition).or(Predicates.component(HatchTE.ItemHatchDefinition)).or(Predicates.blocks(RegisterBlocks.MACHINE_FRAME.get())))
+                .where("k", Predicates.blocks(RegisterBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("M", Predicates.blocks(RegisterBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed())
+                .where("G", Predicates.blocks(Blocks.GLASS).disableRenderFormed()).where("@", Predicates.component(AmmoPressDefinition)).where("D", Predicates.blocks(RegisterBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).build());
 
         RecipeMap.register(AmmoPressDefinition.getRecipeMap());
         MbdComponents.registerComponent(AmmoPressDefinition);

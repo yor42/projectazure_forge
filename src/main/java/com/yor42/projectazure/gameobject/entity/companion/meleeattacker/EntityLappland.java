@@ -38,8 +38,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.yor42.projectazure.setup.register.registerItems.CRESCENTKATANA_KURO;
-import static com.yor42.projectazure.setup.register.registerItems.CRESCENTKATANA_SHIRO;
+import static com.yor42.projectazure.setup.register.RegisterItems.CRESCENTKATANA_KURO;
+import static com.yor42.projectazure.setup.register.RegisterItems.CRESCENTKATANA_SHIRO;
 
 public class EntityLappland extends AbstractSwordUserBase implements IAknOp {
     public EntityLappland(EntityType<? extends TameableEntity> type, World worldIn) {

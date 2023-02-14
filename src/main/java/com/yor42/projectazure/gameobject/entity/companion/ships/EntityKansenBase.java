@@ -15,7 +15,7 @@ import com.yor42.projectazure.libs.utils.AmmoProperties;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EntityType;
@@ -78,9 +78,9 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     @Override
     protected Item getLimitBreakItem() {
         if(this.getLimitBreakLv() == 0){
-            return registerItems.COGNITIVE_CHIP.get();
+            return RegisterItems.COGNITIVE_CHIP.get();
         }
-        return registerItems.COGNITIVE_ARRAY.get();
+        return RegisterItems.COGNITIVE_ARRAY.get();
     }
 
     @Override

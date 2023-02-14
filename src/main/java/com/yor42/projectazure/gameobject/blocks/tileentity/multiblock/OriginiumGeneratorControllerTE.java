@@ -12,7 +12,7 @@ import com.yor42.projectazure.client.renderer.block.MBDGeoRenderer;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 
@@ -32,7 +32,7 @@ public class OriginiumGeneratorControllerTE extends ControllerTileEntity {
         OriginiumGeneratorDefinition.getWorkingStatus().setRenderer(()-> new MBDGeoRenderer("originium_generator_on", true));
         OriginiumGeneratorDefinition.properties.isOpaque = false;
         OriginiumGeneratorDefinition.properties.tabGroup = "pa_machines";
-        OriginiumGeneratorDefinition.setBasePattern(FactoryBlockPattern.start().aisle("PCP", " E ", " @ ", " F ").aisle("IPI", "F F", "L L", "   ").aisle("FPF", "   ", "   ", "   ").where(' ', Predicates.any()).where('I', Predicates.component(HatchTE.ItemHatchDefinition).disableRenderFormed()).where('E', Predicates.component(HatchTE.EnergyHatchDefinition).disableRenderFormed()).where('@', Predicates.component(OriginiumGeneratorDefinition)).where('P', Predicates.blocks(registerBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).where('F', Predicates.blocks(registerBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("L", Predicates.blocks(Blocks.PISTON).disableRenderFormed()).where("C", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).build());
+        OriginiumGeneratorDefinition.setBasePattern(FactoryBlockPattern.start().aisle("PCP", " E ", " @ ", " F ").aisle("IPI", "F F", "L L", "   ").aisle("FPF", "   ", "   ", "   ").where(' ', Predicates.any()).where('I', Predicates.component(HatchTE.ItemHatchDefinition).disableRenderFormed()).where('E', Predicates.component(HatchTE.EnergyHatchDefinition).disableRenderFormed()).where('@', Predicates.component(OriginiumGeneratorDefinition)).where('P', Predicates.blocks(RegisterBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).where('F', Predicates.blocks(RegisterBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("L", Predicates.blocks(Blocks.PISTON).disableRenderFormed()).where("C", Predicates.blocks(RegisterBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).build());
         RecipeMap.register(OriginiumGeneratorDefinition.getRecipeMap());
         MbdComponents.registerComponent(OriginiumGeneratorDefinition);
     }

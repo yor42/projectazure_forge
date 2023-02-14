@@ -15,6 +15,7 @@ import net.minecraftforge.fml.ModList;
 import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
+import static com.yor42.projectazure.libs.Constants.isCurioLoaded;
 
 public class CurioItem extends Item {
     public CurioItem(Properties properties) {
@@ -24,7 +25,7 @@ public class CurioItem extends Item {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        if(ModList.get().isLoaded(CURIOS_MODID)){
+        if(isCurioLoaded()){
             return CuriosCompat.addCapability(stack);
         }
         return super.initCapabilities(stack, nbt);

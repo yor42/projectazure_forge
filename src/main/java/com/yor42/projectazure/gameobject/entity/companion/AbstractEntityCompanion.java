@@ -47,7 +47,7 @@ import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.RegisterAI;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
 import net.minecraft.block.material.PushReaction;
@@ -1083,7 +1083,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.setLevel(0);
         this.setLimitBreakLv(0);
         this.addAffection(-20);
-        ItemStack stack = new ItemStack(registerItems.STASIS_CRYSTAL.get());
+        ItemStack stack = new ItemStack(RegisterItems.STASIS_CRYSTAL.get());
         CompoundNBT nbt = stack.getOrCreateTag();
         nbt.putInt("cost", 10+this.getLevel());
         nbt.put("entity", this.serializeNBT());
@@ -1200,7 +1200,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
 
             if (!projectileProps.isVisible()) {
-                MessageBulletTrail messageBulletTrail = new MessageBulletTrail(spawnedProjectiles, projectileProps, this.getId());
+                MessageBulletTrail messageBulletTrail = new MessageBulletTrail(spawnedProjectiles, projectileProps, this.getId(), projectileProps.getSize());
                 PacketHandler.getPlayChannel().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(this.getX(), this.getY(), this.getZ(), Config.COMMON.network.projectileTrackingRange.get(), this.level.dimension())), messageBulletTrail);
             }
 
@@ -2847,9 +2847,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Nullable
     protected Item getLimitBreakItem() {
         if (this instanceof IAknOp) {
-            return registerItems.PROMOTION_KIT.get();
+            return RegisterItems.PROMOTION_KIT.get();
         } else if (this instanceof IFGOServant) {
-            return registerItems.HOLY_GRAIL.get();
+            return RegisterItems.HOLY_GRAIL.get();
         }
         return null;
     }
@@ -2968,7 +2968,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             return ActionResultType.FAIL;
         }
         else{
-            if(player.getMainHandItem().getItem() == registerItems.Rainbow_Wisdom_Cube.get()&&!this.isTame()){
+            if(player.getMainHandItem().getItem() == RegisterItems.Rainbow_Wisdom_Cube.get()&&!this.isTame()){
                 this.tame(player);
                 player.getItemInHand(hand).shrink(1);
                 return ActionResultType.CONSUME;
@@ -3026,7 +3026,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.playSound(SoundEvents.FIRE_EXTINGUISH, 0.8F+(0.4F*this.getRandom().nextFloat()), 0.8F+(0.4F*this.getRandom().nextFloat()));
         }
         //food
-        else if (HeldItem != registerItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
+        else if (HeldItem != RegisterItems.ORIGINIUM_PRIME.get() && HeldItem.getFoodProperties() != null && this.canEat(HeldItem.getFoodProperties().canAlwaysEat())) {
             ItemStack stack = this.eat(this.getCommandSenderWorld(), player.getItemInHand(hand));
             this.addAffection(0.03);
             if (!player.isCreative()) {
@@ -3051,7 +3051,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
             }
             return ActionResultType.SUCCESS;
-        } else if (heldstacks.getItem() == registerItems.OATHRING.get()) {
+        } else if (heldstacks.getItem() == RegisterItems.OATHRING.get()) {
             if (this.getAffection() < 100 && !player.isCreative()) {
                 player.sendMessage(new TranslationTextComponent("entity.not_enough_affection"), this.getUUID());
                 return ActionResultType.FAIL;
@@ -3069,7 +3069,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     return ActionResultType.SUCCESS;
                 }
             }
-        } else if (heldstacks.getItem() == registerItems.ENERGY_DRINK_DEBUG.get()) {
+        } else if (heldstacks.getItem() == RegisterItems.ENERGY_DRINK_DEBUG.get()) {
             this.setMorale(150);
             if (!player.isCreative()) {
                 heldstacks.shrink(1);

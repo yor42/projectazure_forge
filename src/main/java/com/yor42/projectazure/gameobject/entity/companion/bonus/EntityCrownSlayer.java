@@ -7,7 +7,7 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.AbstractSwordUserBase;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -289,7 +289,7 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
 
     public boolean hasMeleeItem(){
         Item item = this.getItemInHand(this.getNonVanillaMeleeAttackHand()).getItem();
-        return item == registerItems.TACTICAL_KNIFE.get();
+        return item == RegisterItems.TACTICAL_KNIFE.get();
     }
 
     @Override
@@ -323,7 +323,7 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.TACTICAL_KNIFE.get()));
+        return new ArrayList<>(Collections.singletonList(RegisterItems.TACTICAL_KNIFE.get()));
     }
 
     @Override

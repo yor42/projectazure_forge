@@ -9,7 +9,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.ItemEnergyGun;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -70,55 +70,55 @@ public class ModBusEventHandler {
                 boolean isGilagmesh = player.getUUID().equals(GilgameshID);
                 boolean isGuri = player.getUUID().equals(GuriUUID);
 
-                ItemStack cubeStack = new ItemStack(registerItems.GLITCHED_PHONE.get());
+                ItemStack cubeStack = new ItemStack(RegisterItems.GLITCHED_PHONE.get());
                 CompoundNBT nbt = cubeStack.getOrCreateTag();
                 nbt.putUUID("owner", player.getUUID());
                 player.inventory.setItem(player.inventory.getFreeSlot(), cubeStack);
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
-                    stacks.add(registerItems.SPAWN_NAGATO.get());
-                    stacks.add(registerItems.SPAWM_ENTERPRISE.get());
-                    stacks.add(registerItems.SPAWN_CHEN.get());
-                    stacks.add(registerItems.SPAWN_SHIROKO.get());
-                    stacks.add(registerItems.SPAWN_EXCELA.get());
-                    stacks.add(registerItems.SPAWN_AMIYA.get());
-                    stacks.add(registerItems.SPAWN_MUDROCK.get());
-                    stacks.add(registerItems.SPAWN_Z23.get());
-                    stacks.add(registerItems.SPAWM_JAVELIN.get());
-                    stacks.add(registerItems.SPAWN_TALULAH.get());
-                    stacks.add(registerItems.SPAWN_M4A1.get());
-                    stacks.add(registerItems.SPAWN_TEXAS.get());
-                    stacks.add(registerItems.SPAWN_FROSTNOVA.get());
-                    stacks.add(registerItems.SPAWN_LAPPLAND.get());
-                    stacks.add(registerItems.SPAWN_SIEGE.get());
-                    stacks.add(registerItems.SPAWN_SCHWARZ.get());
-                    stacks.add(registerItems.SPAWN_CROWNSLAYER.get());
-                    stacks.add(registerItems.SPAWN_KYARU.get());
-                    stacks.add(registerItems.SPAWN_ARTORIA.get());
-                    stacks.add(registerItems.SPAWN_SHIKI.get());
-                    stacks.add(registerItems.SPAWN_SCATHATH.get());
-                    stacks.add(registerItems.SPAWN_NEARL.get());
-                    stacks.add(registerItems.SPAWN_SYLVI.get());
-                    stacks.add(registerItems.SPAWN_YAMATO.get());
-                    stacks.add(registerItems.SPAWN_YATO.get());
+                    stacks.add(RegisterItems.SPAWN_NAGATO.get());
+                    stacks.add(RegisterItems.SPAWM_ENTERPRISE.get());
+                    stacks.add(RegisterItems.SPAWN_CHEN.get());
+                    stacks.add(RegisterItems.SPAWN_SHIROKO.get());
+                    stacks.add(RegisterItems.SPAWN_EXCELA.get());
+                    stacks.add(RegisterItems.SPAWN_AMIYA.get());
+                    stacks.add(RegisterItems.SPAWN_MUDROCK.get());
+                    stacks.add(RegisterItems.SPAWN_Z23.get());
+                    stacks.add(RegisterItems.SPAWM_JAVELIN.get());
+                    stacks.add(RegisterItems.SPAWN_TALULAH.get());
+                    stacks.add(RegisterItems.SPAWN_M4A1.get());
+                    stacks.add(RegisterItems.SPAWN_TEXAS.get());
+                    stacks.add(RegisterItems.SPAWN_FROSTNOVA.get());
+                    stacks.add(RegisterItems.SPAWN_LAPPLAND.get());
+                    stacks.add(RegisterItems.SPAWN_SIEGE.get());
+                    stacks.add(RegisterItems.SPAWN_SCHWARZ.get());
+                    stacks.add(RegisterItems.SPAWN_CROWNSLAYER.get());
+                    stacks.add(RegisterItems.SPAWN_KYARU.get());
+                    stacks.add(RegisterItems.SPAWN_ARTORIA.get());
+                    stacks.add(RegisterItems.SPAWN_SHIKI.get());
+                    stacks.add(RegisterItems.SPAWN_SCATHATH.get());
+                    stacks.add(RegisterItems.SPAWN_NEARL.get());
+                    stacks.add(RegisterItems.SPAWN_SYLVI.get());
+                    stacks.add(RegisterItems.SPAWN_YAMATO.get());
+                    stacks.add(RegisterItems.SPAWN_YATO.get());
                 }
                 else if(isAoichi){
-                    stacks.add(registerItems.SPAWN_MUDROCK.get());
-                    stacks.add(registerItems.SPAWN_ROSMONTIS.get());
+                    stacks.add(RegisterItems.SPAWN_MUDROCK.get());
+                    stacks.add(RegisterItems.SPAWN_ROSMONTIS.get());
                 }else if(isNecrom){
-                    stacks.add(registerItems.SPAWN_AMIYA.get());
+                    stacks.add(RegisterItems.SPAWN_AMIYA.get());
                 }
                 else if(isGilagmesh){
-                    stacks.add(registerItems.SPAWN_ARTORIA.get());
-                    stacks.add(registerItems.SPAWN_SHIKI.get());
-                    stacks.add(registerItems.SPAWN_SCATHATH.get());
+                    stacks.add(RegisterItems.SPAWN_ARTORIA.get());
+                    stacks.add(RegisterItems.SPAWN_SHIKI.get());
+                    stacks.add(RegisterItems.SPAWN_SCATHATH.get());
                 }
                 else if(isGuri){
-                    stacks.add(registerItems.SPAWN_W.get());
+                    stacks.add(RegisterItems.SPAWN_W.get());
                 }
 
                 if(!stacks.isEmpty()){
-                    ItemStack stack = new ItemStack(isDev? registerItems.DEVELOPER_BONUS.get():registerItems.CONTRIBUTOR_BONUS.get());
+                    ItemStack stack = new ItemStack(isDev? RegisterItems.DEVELOPER_BONUS.get(): RegisterItems.CONTRIBUTOR_BONUS.get());
                     CompoundNBT compound = stack.getOrCreateTag();
                     compound.putUUID("owner", player.getUUID());
                     ListNBT stackList = new ListNBT();

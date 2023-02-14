@@ -1,7 +1,7 @@
 package com.yor42.projectazure.setup;
 
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.gen.GenerationStage;
@@ -17,22 +17,22 @@ public class WorldgenInit {
 
     public static void registerWorldgen(final BiomeLoadingEvent event){
         if(PAConfig.CONFIG.ENABLE_COPPER.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.COPPER_ORE, PAConfig.CONFIG.COPPER_VEINSIZE.get(), PAConfig.CONFIG.COPPER_MINHEIGHT.get(), PAConfig.CONFIG.COPPER_MAXHEIGHT.get(), PAConfig.CONFIG.COPPER_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.COPPER_ORE, PAConfig.CONFIG.COPPER_VEINSIZE.get(), PAConfig.CONFIG.COPPER_MINHEIGHT.get(), PAConfig.CONFIG.COPPER_MAXHEIGHT.get(), PAConfig.CONFIG.COPPER_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_TIN.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.TIN_ORE, PAConfig.CONFIG.TIN_VEINSIZE.get(), PAConfig.CONFIG.TIN_MINHEIGHT.get(), PAConfig.CONFIG.TIN_MAXHEIGHT.get(), PAConfig.CONFIG.TIN_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.TIN_ORE, PAConfig.CONFIG.TIN_VEINSIZE.get(), PAConfig.CONFIG.TIN_MINHEIGHT.get(), PAConfig.CONFIG.TIN_MAXHEIGHT.get(), PAConfig.CONFIG.TIN_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_LEAD.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.LEAD_ORE, PAConfig.CONFIG.LEAD_VEINSIZE.get(), PAConfig.CONFIG.LEAD_MINHEIGHT.get(), PAConfig.CONFIG.LEAD_MAXHEIGHT.get(), PAConfig.CONFIG.LEAD_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.LEAD_ORE, PAConfig.CONFIG.LEAD_VEINSIZE.get(), PAConfig.CONFIG.LEAD_MINHEIGHT.get(), PAConfig.CONFIG.LEAD_MAXHEIGHT.get(), PAConfig.CONFIG.LEAD_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_ORIROCK.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.ORIROCK, PAConfig.CONFIG.ORIROCK_VEINSIZE.get(), PAConfig.CONFIG.ORIROCK_MINHEIGHT.get(), PAConfig.CONFIG.ORIROCK_MAXHEIGHT.get(), PAConfig.CONFIG.ORIROCK_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.ORIROCK, PAConfig.CONFIG.ORIROCK_VEINSIZE.get(), PAConfig.CONFIG.ORIROCK_MINHEIGHT.get(), PAConfig.CONFIG.ORIROCK_MAXHEIGHT.get(), PAConfig.CONFIG.ORIROCK_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_ZINC.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.ZINC_ORE, PAConfig.CONFIG.ZINC_VEINSIZE.get(), PAConfig.CONFIG.ZINC_MINHEIGHT.get(), PAConfig.CONFIG.ZINC_MAXHEIGHT.get(), PAConfig.CONFIG.ZINC_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.ZINC_ORE, PAConfig.CONFIG.ZINC_VEINSIZE.get(), PAConfig.CONFIG.ZINC_MINHEIGHT.get(), PAConfig.CONFIG.ZINC_MAXHEIGHT.get(), PAConfig.CONFIG.ZINC_VEINSPERCHUNK.get());
         }
         if(PAConfig.CONFIG.ENABLE_RMA7012.get()) {
-            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, registerBlocks.RMA_7012_ORE, PAConfig.CONFIG.RMA7012_VEINSIZE.get(), PAConfig.CONFIG.RMA7012_MINHEIGHT.get(), PAConfig.CONFIG.RMA7012_MAXHEIGHT.get(), PAConfig.CONFIG.RMA7012_VEINSPERCHUNK.get());
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.RMA_7012_ORE, PAConfig.CONFIG.RMA7012_VEINSIZE.get(), PAConfig.CONFIG.RMA7012_MINHEIGHT.get(), PAConfig.CONFIG.RMA7012_MAXHEIGHT.get(), PAConfig.CONFIG.RMA7012_VEINSPERCHUNK.get());
         }
     }
 

@@ -6,11 +6,13 @@ import com.yor42.projectazure.data.recipebuilder.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
+import com.yor42.projectazure.intermod.tconstruct.Tconstruct;
+import com.yor42.projectazure.intermod.tconstruct.datagen.PATConRecipeProvider;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
-import com.yor42.projectazure.setup.register.registerFluids;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
+import com.yor42.projectazure.setup.register.RegisterFluids;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Block;
@@ -39,12 +41,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> consumer) {
         this.generateMetalRecipes(consumer);
 
-        CookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.TREE_SAP), registerItems.PLATE_POLYMER.get(), 0.5F, 200)
+        CookingRecipeBuilder.smelting(Ingredient.of(ModTags.Items.TREE_SAP), RegisterItems.PLATE_POLYMER.get(), 0.5F, 200)
                 .unlockedBy("has_item", has(ModTags.Items.TREE_SAP))
                 .save(consumer);
 
-        CookingRecipeBuilder.blasting(Ingredient.of(registerBlocks.COBBLED_ORIROCK.get()), registerBlocks.ORIROCK.get(), 0.1F, 100)
-                .unlockedBy("has_item", has(registerBlocks.COBBLED_ORIROCK.get()))
+        CookingRecipeBuilder.blasting(Ingredient.of(RegisterBlocks.COBBLED_ORIROCK.get()), RegisterBlocks.ORIROCK.get(), 0.1F, 100)
+                .unlockedBy("has_item", has(RegisterBlocks.COBBLED_ORIROCK.get()))
                 .save(consumer);
 
         CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).save(consumer, "reloading_items");
@@ -61,35 +63,35 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
     }
 
     private void generateChemicalReactionRecipe(Consumer<IFinishedRecipe> consumer) {
-        ChemicalReactorRecipeBuilder.add(registerFluids.KETON_SOURCE_REGISTRY.get(), 100, Ingredient.of(registerItems.PIG_FAT.get()), consumer);
+        ChemicalReactorRecipeBuilder.add(RegisterFluids.KETON_SOURCE_REGISTRY.get(), 100, Ingredient.of(RegisterItems.PIG_FAT.get()), consumer);
     }
 
     private void generateGunBenchRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),6).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(registerItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.CASELESS_4MM.get(),6).addIngredient(registerItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(Items.IRON_INGOT, 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_iron");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.CASELESS_4MM.get(),6).addIngredient(RegisterItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(RegisterItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.CASELESS_4MM.get(),6).addIngredient(RegisterItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(Items.IRON_INGOT, 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_iron");
 
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(registerItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(Tags.Items.GEMS_DIAMOND).build(consumer, Constants.MODID,"gunbench_granadelauncher");
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.TYPHOON.get()).addIngredient(ModTags.Items.PLATE_STEEL, 25).addIngredient(ModTags.Items.INGOT_STEEL, 30).addIngredient(ModTags.Items.CIRCUITS_BASIC,4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.WHITEFANG_465.get()).addIngredient(ModTags.Items.PLATE_STEEL, 9).addIngredient(ModTags.Items.INGOT_STEEL, 10).build(consumer, Constants.MODID,"gunbench_whitefang");
-        WorkbenchRecipeBuilder.workbenchRecipe(registerItems.SANGVIS_RAILGUN.get()).addIngredient(ModTags.Items.PLATE_STEEL, 35).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 10).build(consumer, Constants.MODID,"gunbench_cannon");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(RegisterItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(Tags.Items.GEMS_DIAMOND).build(consumer, Constants.MODID,"gunbench_granadelauncher");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.TYPHOON.get()).addIngredient(ModTags.Items.PLATE_STEEL, 25).addIngredient(ModTags.Items.INGOT_STEEL, 30).addIngredient(ModTags.Items.CIRCUITS_BASIC,4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.WHITEFANG_465.get()).addIngredient(ModTags.Items.PLATE_STEEL, 9).addIngredient(ModTags.Items.INGOT_STEEL, 10).build(consumer, Constants.MODID,"gunbench_whitefang");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SANGVIS_RAILGUN.get()).addIngredient(ModTags.Items.PLATE_STEEL, 35).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 10).build(consumer, Constants.MODID,"gunbench_cannon");
     }
 
     private void generateMetalRecipes(@Nonnull Consumer<IFinishedRecipe> consumer){
-        BuildMetalRecipe(consumer, 0.5F, new Metals("copper", registerItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).block(registerBlocks.COPPER_BLOCK.get(), ModTags.Items.BLOCK_COPPER).ore(registerBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(registerItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(registerItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER).gear(registerItems.GEAR_COPPER.get(), ModTags.Items.GEAR_COPPER).nugget(registerItems.NUGGET_COPPER.get(), ModTags.Items.NUGGET_COPPER));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("tin", registerItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).block(registerBlocks.TIN_BLOCK.get(), ModTags.Items.BLOCK_TIN).ore(registerBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(registerItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(registerItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN).gear(registerItems.GEAR_TIN.get(), ModTags.Items.GEAR_TIN).nugget(registerItems.NUGGET_TIN.get(), ModTags.Items.NUGGET_TIN));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("lead", registerItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).block(registerBlocks.LEAD_BLOCK.get(), ModTags.Items.BLOCK_LEAD).ore(registerBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(registerItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(registerItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD).nugget(registerItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD).nugget(registerItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", registerItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).block(registerBlocks.BRONZE_BLOCK.get(), ModTags.Items.BLOCK_BRONZE).dust(registerItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE).plates(registerItems.PLATE_BRONZE.get(), ModTags.Items.PLATE_BRONZE).gear(registerItems.GEAR_BRONZE.get(), ModTags.Items.GEAR_BRONZE).nugget(registerItems.NUGGET_BRONZE.get(), ModTags.Items.NUGGET_BRONZE));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", registerItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).block(registerBlocks.ALUMINIUM_BLOCK.get(), ModTags.Items.BLOCK_ALUMINIUM).ore(registerBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(registerItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM).plates(registerItems.PLATE_ALUMINIUM.get(), ModTags.Items.PLATE_ALUMINIUM));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("steel", registerItems.INGOT_STEEL.get(), ModTags.Items.INGOT_STEEL).block(registerBlocks.STEEL_BLOCK.get(), ModTags.Items.BLOCK_STEEL).dust(registerItems.DUST_STEEL.get(), ModTags.Items.DUST_STEEL).plates(registerItems.PLATE_STEEL.get(), ModTags.Items.PLATE_STEEL).gear(registerItems.GEAR_STEEL.get(), ModTags.Items.GEAR_STEEL).nugget(registerItems.NUGGET_STEEL.get(), ModTags.Items.NUGGET_STEEL));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("brass", registerItems.INGOT_BRASS.get(), ModTags.Items.INGOT_BRASS).block(registerBlocks.BRASS_BLOCK.get(), ModTags.Items.BLOCK_BRASS).dust(registerItems.DUST_BRASS.get(), ModTags.Items.DUST_BRASS).plates(registerItems.PLATE_BRASS.get(), ModTags.Items.PLATE_BRASS).nugget(registerItems.NUGGET_BRASS.get(), ModTags.Items.PLATE_BRASS));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("zinc", registerItems.INGOT_ZINC.get(), ModTags.Items.INGOT_ZINC).block(registerBlocks.ZINC_BLOCK.get(), ModTags.Items.BLOCK_ZINC).dust(registerItems.DUST_ZINC.get(), ModTags.Items.DUST_ZINC).plates(registerItems.PLATE_ZINC.get(), ModTags.Items.PLATE_ZINC).nugget(registerItems.NUGGET_ZINC.get(), ModTags.Items.NUGGET_ZINC));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("rma70-12", registerItems.INGOT_RMA7012.get(), ModTags.Items.INGOT_RMA7012).block(registerBlocks.RMA_7012_BLOCK.get(), ModTags.Items.BLOCK_RMA7012).ore(registerBlocks.RMA_7012_ORE.get(), ModTags.Items.ORES_RMA7012).dust(registerItems.DUST_RMA7012.get(), ModTags.Items.DUST_RMA7012).plates(registerItems.PLATE_RMA7012.get(), ModTags.Items.PLATE_RMA7012).nugget(registerItems.NUGGET_RMA7012.get(), ModTags.Items.NUGGET_RMA7012));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("rma70-24", registerItems.INGOT_RMA7024.get(), ModTags.Items.INGOT_RMA7024).block(registerBlocks.RMA_7024_BLOCK.get(), ModTags.Items.BLOCK_RMA7024).dust(registerItems.DUST_RMA7024.get(), ModTags.Items.DUST_RMA7024).plates(registerItems.PLATE_RMA7024.get(), ModTags.Items.PLATE_RMA7024).nugget(registerItems.NUGGET_RMA7024.get(), ModTags.Items.NUGGET_RMA7024));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("d32steel", registerItems.INGOT_D32.get(), ModTags.Items.INGOT_D32).block(registerBlocks.D32_BLOCK.get(), ModTags.Items.BLOCK_D32).dust(registerItems.DUST_D32.get(), ModTags.Items.DUST_D32).plates(registerItems.PLATE_D32.get(), ModTags.Items.PLATE_D32).nugget(registerItems.NUGGET_D32.get(), ModTags.Items.NUGGET_D32));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("incandescent_alloy", registerItems.INGOT_INCANDESCENT_ALLOY.get(), ModTags.Items.INGOT_INCANDESCENT_ALLOY).dust(registerItems.DUST_INCANDESCENT_ALLOY.get(), ModTags.Items.DUST_INCANDESCENT_ALLOY).plates(registerItems.PLATE_INCANDESCENT_ALLOY.get(), ModTags.Items.PLATE_INCANDESCENT_ALLOY).block(registerBlocks.INCANDESCENT_ALLOY_BLOCK.get(), ModTags.Items.BLOCK_INCANDESCENT_ALLOY).nugget(registerItems.NUGGET_INCANDESCENT_ALLOY.get(), ModTags.Items.NUGGET_INCANDESCENT_ALLOY));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("manganese", registerItems.INGOT_MANGANESE.get(), ModTags.Items.INGOT_MANGANESE).dust(registerItems.DUST_MANGANESE.get(), ModTags.Items.DUST_MANGANESE).plates(registerItems.PLATE_MANGANESE.get(), ModTags.Items.PLATE_MANGANESE).block(registerBlocks.MANGANESE_BLOCK.get(), ModTags.Items.BLOCK_MANGANESE).nugget(registerItems.NUGGET_MANGANESE.get(), ModTags.Items.NUGGET_MANGANESE));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(registerItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(registerItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON).gear(registerItems.GEAR_IRON.get(), ModTags.Items.GEAR_IRON));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("gold", Items.GOLD_INGOT, Tags.Items.INGOTS_GOLD).dust(registerItems.DUST_GOLD.get(), ModTags.Items.DUST_GOLD).plates(registerItems.PLATE_GOLD.get(), ModTags.Items.PLATE_GOLD).gear(registerItems.GEAR_GOLD.get(), ModTags.Items.GEAR_GOLD));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("copper", RegisterItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).block(RegisterBlocks.COPPER_BLOCK.get(), ModTags.Items.BLOCK_COPPER).ore(RegisterBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(RegisterItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(RegisterItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER).gear(RegisterItems.GEAR_COPPER.get(), ModTags.Items.GEAR_COPPER).nugget(RegisterItems.NUGGET_COPPER.get(), ModTags.Items.NUGGET_COPPER));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("tin", RegisterItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).block(RegisterBlocks.TIN_BLOCK.get(), ModTags.Items.BLOCK_TIN).ore(RegisterBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(RegisterItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(RegisterItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN).gear(RegisterItems.GEAR_TIN.get(), ModTags.Items.GEAR_TIN).nugget(RegisterItems.NUGGET_TIN.get(), ModTags.Items.NUGGET_TIN));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("lead", RegisterItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).block(RegisterBlocks.LEAD_BLOCK.get(), ModTags.Items.BLOCK_LEAD).ore(RegisterBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(RegisterItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(RegisterItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", RegisterItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).block(RegisterBlocks.BRONZE_BLOCK.get(), ModTags.Items.BLOCK_BRONZE).dust(RegisterItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE).plates(RegisterItems.PLATE_BRONZE.get(), ModTags.Items.PLATE_BRONZE).gear(RegisterItems.GEAR_BRONZE.get(), ModTags.Items.GEAR_BRONZE).nugget(RegisterItems.NUGGET_BRONZE.get(), ModTags.Items.NUGGET_BRONZE));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", RegisterItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).block(RegisterBlocks.ALUMINIUM_BLOCK.get(), ModTags.Items.BLOCK_ALUMINIUM).ore(RegisterBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(RegisterItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM).plates(RegisterItems.PLATE_ALUMINIUM.get(), ModTags.Items.PLATE_ALUMINIUM));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("steel", RegisterItems.INGOT_STEEL.get(), ModTags.Items.INGOT_STEEL).block(RegisterBlocks.STEEL_BLOCK.get(), ModTags.Items.BLOCK_STEEL).dust(RegisterItems.DUST_STEEL.get(), ModTags.Items.DUST_STEEL).plates(RegisterItems.PLATE_STEEL.get(), ModTags.Items.PLATE_STEEL).gear(RegisterItems.GEAR_STEEL.get(), ModTags.Items.GEAR_STEEL).nugget(RegisterItems.NUGGET_STEEL.get(), ModTags.Items.NUGGET_STEEL));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("brass", RegisterItems.INGOT_BRASS.get(), ModTags.Items.INGOT_BRASS).block(RegisterBlocks.BRASS_BLOCK.get(), ModTags.Items.BLOCK_BRASS).dust(RegisterItems.DUST_BRASS.get(), ModTags.Items.DUST_BRASS).plates(RegisterItems.PLATE_BRASS.get(), ModTags.Items.PLATE_BRASS).nugget(RegisterItems.NUGGET_BRASS.get(), ModTags.Items.PLATE_BRASS));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("zinc", RegisterItems.INGOT_ZINC.get(), ModTags.Items.INGOT_ZINC).block(RegisterBlocks.ZINC_BLOCK.get(), ModTags.Items.BLOCK_ZINC).dust(RegisterItems.DUST_ZINC.get(), ModTags.Items.DUST_ZINC).plates(RegisterItems.PLATE_ZINC.get(), ModTags.Items.PLATE_ZINC).nugget(RegisterItems.NUGGET_ZINC.get(), ModTags.Items.NUGGET_ZINC));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("rma70-12", RegisterItems.INGOT_RMA7012.get(), ModTags.Items.INGOT_RMA7012).block(RegisterBlocks.RMA_7012_BLOCK.get(), ModTags.Items.BLOCK_RMA7012).ore(RegisterBlocks.RMA_7012_ORE.get(), ModTags.Items.ORES_RMA7012).dust(RegisterItems.DUST_RMA7012.get(), ModTags.Items.DUST_RMA7012).plates(RegisterItems.PLATE_RMA7012.get(), ModTags.Items.PLATE_RMA7012).nugget(RegisterItems.NUGGET_RMA7012.get(), ModTags.Items.NUGGET_RMA7012));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("rma70-24", RegisterItems.INGOT_RMA7024.get(), ModTags.Items.INGOT_RMA7024).block(RegisterBlocks.RMA_7024_BLOCK.get(), ModTags.Items.BLOCK_RMA7024).dust(RegisterItems.DUST_RMA7024.get(), ModTags.Items.DUST_RMA7024).plates(RegisterItems.PLATE_RMA7024.get(), ModTags.Items.PLATE_RMA7024).nugget(RegisterItems.NUGGET_RMA7024.get(), ModTags.Items.NUGGET_RMA7024));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("d32steel", RegisterItems.INGOT_D32.get(), ModTags.Items.INGOT_D32).block(RegisterBlocks.D32_BLOCK.get(), ModTags.Items.BLOCK_D32).dust(RegisterItems.DUST_D32.get(), ModTags.Items.DUST_D32).plates(RegisterItems.PLATE_D32.get(), ModTags.Items.PLATE_D32).nugget(RegisterItems.NUGGET_D32.get(), ModTags.Items.NUGGET_D32));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("incandescent_alloy", RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), ModTags.Items.INGOT_INCANDESCENT_ALLOY).dust(RegisterItems.DUST_INCANDESCENT_ALLOY.get(), ModTags.Items.DUST_INCANDESCENT_ALLOY).plates(RegisterItems.PLATE_INCANDESCENT_ALLOY.get(), ModTags.Items.PLATE_INCANDESCENT_ALLOY).block(RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get(), ModTags.Items.BLOCK_INCANDESCENT_ALLOY).nugget(RegisterItems.NUGGET_INCANDESCENT_ALLOY.get(), ModTags.Items.NUGGET_INCANDESCENT_ALLOY));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("manganese", RegisterItems.INGOT_MANGANESE.get(), ModTags.Items.INGOT_MANGANESE).dust(RegisterItems.DUST_MANGANESE.get(), ModTags.Items.DUST_MANGANESE).plates(RegisterItems.PLATE_MANGANESE.get(), ModTags.Items.PLATE_MANGANESE).block(RegisterBlocks.MANGANESE_BLOCK.get(), ModTags.Items.BLOCK_MANGANESE).nugget(RegisterItems.NUGGET_MANGANESE.get(), ModTags.Items.NUGGET_MANGANESE));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(RegisterItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(RegisterItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON).gear(RegisterItems.GEAR_IRON.get(), ModTags.Items.GEAR_IRON));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("gold", Items.GOLD_INGOT, Tags.Items.INGOTS_GOLD).dust(RegisterItems.DUST_GOLD.get(), ModTags.Items.DUST_GOLD).plates(RegisterItems.PLATE_GOLD.get(), ModTags.Items.PLATE_GOLD).gear(RegisterItems.GEAR_GOLD.get(), ModTags.Items.GEAR_GOLD));
 
     }
 
@@ -97,107 +99,107 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         createHammerRecipes(consumer, Blocks.STONE, Blocks.COBBLESTONE, "cobblestone");
         createHammerRecipes(consumer, Blocks.COBBLESTONE, Blocks.GRAVEL, "gravel");
         createHammerRecipes(consumer, Blocks.GRAVEL, Blocks.SAND, "sand");
-        createHammerRecipes(consumer, registerBlocks.COBBLED_ORIROCK.get(), registerItems.DUST_ORIROCK.get(), 4, "orirock_from_cobble");
-        createHammerRecipes(consumer, ModTags.Items.ORES_COPPER, registerItems.DUST_COPPER.get(), 2, "copper");
-        createHammerRecipes(consumer, ModTags.Items.ORES_ALUMINIUM, registerItems.DUST_ALUMINIUM.get(), 2, "aluminium");
-        createHammerRecipes(consumer, ModTags.Items.ORES_LEAD, registerItems.DUST_LEAD.get(), 2, "lead");
-        createHammerRecipes(consumer, ModTags.Items.ORES_TIN, registerItems.DUST_TIN.get(), 2, "tin");
-        createHammerRecipes(consumer, ModTags.Items.ORES_ORIROCK, registerItems.DUST_ORIROCK.get(), 4, "orirock");
-        createHammerRecipes(consumer, Tags.Items.ORES_GOLD, registerItems.DUST_GOLD.get(), 2, "gold");
-        createHammerRecipes(consumer, Tags.Items.ORES_IRON, registerItems.DUST_IRON.get(), 2, "iron");
-        createHammerRecipes(consumer, Tags.Items.ORES_COAL, registerItems.DUST_COAL.get(), 2, "coal");
+        createHammerRecipes(consumer, RegisterBlocks.COBBLED_ORIROCK.get(), RegisterItems.DUST_ORIROCK.get(), 4, "orirock_from_cobble");
+        createHammerRecipes(consumer, ModTags.Items.ORES_COPPER, RegisterItems.DUST_COPPER.get(), 2, "copper");
+        createHammerRecipes(consumer, ModTags.Items.ORES_ALUMINIUM, RegisterItems.DUST_ALUMINIUM.get(), 2, "aluminium");
+        createHammerRecipes(consumer, ModTags.Items.ORES_LEAD, RegisterItems.DUST_LEAD.get(), 2, "lead");
+        createHammerRecipes(consumer, ModTags.Items.ORES_TIN, RegisterItems.DUST_TIN.get(), 2, "tin");
+        createHammerRecipes(consumer, ModTags.Items.ORES_ORIROCK, RegisterItems.DUST_ORIROCK.get(), 4, "orirock");
+        createHammerRecipes(consumer, Tags.Items.ORES_GOLD, RegisterItems.DUST_GOLD.get(), 2, "gold");
+        createHammerRecipes(consumer, Tags.Items.ORES_IRON, RegisterItems.DUST_IRON.get(), 2, "iron");
+        createHammerRecipes(consumer, Tags.Items.ORES_COAL, RegisterItems.DUST_COAL.get(), 2, "coal");
 
     }
 
     private void generateAlloyingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
-        AlloyingRecipeBuilder.AlloyRecipe(registerItems.INGOT_BRONZE.get(), (byte)4)
+        AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.INGOT_BRONZE.get(), (byte)4)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER), (byte) 3)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_TIN), (byte) 1)
                 .build(consumer);
 
-        AlloyingRecipeBuilder.AlloyRecipe(registerItems.INGOT_BRASS.get(), (byte)2)
+        AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.INGOT_BRASS.get(), (byte)2)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_ZINC))
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_COPPER))
                 .build(consumer);
 
-        AlloyingRecipeBuilder.AlloyRecipe(registerItems.VITRIFIED_ORIGINIUM.get(), (byte)1)
+        AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.VITRIFIED_ORIGINIUM.get(), (byte)1)
                 .addIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME))
                 .addIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), (byte) 2)
                 .build(consumer);
 
-        AlloyingRecipeBuilder.AlloyRecipe(registerItems.C99_CARBON.get(), (byte)1)
+        AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.C99_CARBON.get(), (byte)1)
                 .addIngredient(Ingredient.of(ItemTags.COALS), (byte) 1)
                 .addIngredient(Ingredient.of(Items.SAND), (byte) 2)
                 .build(consumer);
 
-        AlloyingRecipeBuilder.AlloyRecipe(registerItems.INGOT_INCANDESCENT_ALLOY.get(), (byte)1)
+        AlloyingRecipeBuilder.AlloyRecipe(RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), (byte)1)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_MANGANESE), (byte) 1)
                 .addIngredient(Ingredient.of(ModTags.Items.INGOT_RMA7012), (byte) 1)
                 .build(consumer);
     }
     private void generatePressingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer) {
-        PressingRecipeBuilder.addRecipe(registerItems.TREE_SAP.get(), Ingredient.of(ItemTags.LOGS), Ingredient.of(registerItems.MOLD_EXTRACTION.get()), 1, 200)
+        PressingRecipeBuilder.addRecipe(RegisterItems.TREE_SAP.get(), Ingredient.of(ItemTags.LOGS), Ingredient.of(RegisterItems.MOLD_EXTRACTION.get()), 1, 200)
                 .build(consumer, new ResourceLocation("iron_plate_pressing"));
     }
 
     private void generateCrystalizingRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
-        CrystalizingRecipeBuilder.addRecipe(registerItems.ORIGINIUM_PRIME.get(), Ingredient.of(registerItems.ORIGINIUM_SEED.get()), registerFluids.ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get(), 3000)
+        CrystalizingRecipeBuilder.addRecipe(RegisterItems.ORIGINIUM_PRIME.get(), Ingredient.of(RegisterItems.ORIGINIUM_SEED.get()), RegisterFluids.ORIGINIUM_SOLUTION_SOURCE_REGISTRY.get(), 3000)
                 .build(consumer, new ResourceLocation("originium_crystalizing"));
 
-        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.of(registerItems.NETHER_QUARTZ_SEED.get()), registerFluids.NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY.get(), 400)
+        CrystalizingRecipeBuilder.addRecipe(Items.QUARTZ, Ingredient.of(RegisterItems.NETHER_QUARTZ_SEED.get()), RegisterFluids.NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY.get(), 400)
                 .build(consumer, new ResourceLocation("quartz_crystalizing"));
     }
 
     private void generateShapelessRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
 
-        ShapelessRecipeBuilder.shapeless(registerItems.COPPER_WIRE.get(), 4)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.COPPER_WIRE.get(), 4)
                 .requires(ModTags.Items.CUTTER)
                 .requires(ModTags.Items.PLATE_COPPER)
                 .unlockedBy("has_copper_plate", has(ModTags.Items.PLATE_COPPER))
                 .unlockedBy("has_cutter", has(ModTags.Items.CUTTER))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(registerItems.GOLD_WIRE.get(), 4)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.GOLD_WIRE.get(), 4)
                 .requires(ModTags.Items.CUTTER)
                 .requires(ModTags.Items.PLATE_GOLD)
                 .unlockedBy("has_copper_plate", has(ModTags.Items.PLATE_GOLD))
                 .unlockedBy("has_cutter", has(ModTags.Items.CUTTER))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(registerItems.ORIGINITE.get(), 9)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.ORIGINITE.get(), 9)
                 .requires(ModTags.Items.ORIGINIUM_PRIME).unlockedBy("hasoriginium", has(ModTags.Items.ORIGINIUM_PRIME));
 
-        ShapelessRecipeBuilder.shapeless(registerItems.DISC_SANDROLL.get(),1).requires(registerItems.DISC_SANDSTORM.get()).requires(registerItems.DISC_RICKROLL.get())
-                .unlockedBy("has_sandstorm", has(registerItems.DISC_SANDSTORM.get()))
-                .unlockedBy("has_rickroll", has(registerItems.DISC_RICKROLL.get()))
+        ShapelessRecipeBuilder.shapeless(RegisterItems.DISC_SANDROLL.get(),1).requires(RegisterItems.DISC_SANDSTORM.get()).requires(RegisterItems.DISC_RICKROLL.get())
+                .unlockedBy("has_sandstorm", has(RegisterItems.DISC_SANDSTORM.get()))
+                .unlockedBy("has_rickroll", has(RegisterItems.DISC_RICKROLL.get()))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(registerItems.DUST_ORIGINIUM.get(), 4)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.DUST_ORIGINIUM.get(), 4)
             .requires(ModTags.Items.ORIGINITE)
             .requires(ModTags.Items.HAMMER)
-            .unlockedBy("has_originite", has(registerItems.ORIGINITE.get()))
+            .unlockedBy("has_originite", has(RegisterItems.ORIGINITE.get()))
             .save(consumer, new ResourceLocation("originium_dust_from_originite"));
 
-        ShapelessRecipeBuilder.shapeless(registerItems.DUST_ORIGINIUM.get(), 2)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.DUST_ORIGINIUM.get(), 2)
                 .requires(ModTags.Items.ORIGINIUM_PRIME)
                 .requires(ModTags.Items.HAMMER)
-                .unlockedBy("has_originite", has(registerItems.ORIGINITE.get()))
+                .unlockedBy("has_originite", has(RegisterItems.ORIGINITE.get()))
                 .save(consumer, new ResourceLocation("originium_dust_from_prime"));
 
-        ShapelessRecipeBuilder.shapeless(registerItems.DUST_NETHER_QUARTZ.get(), 2)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.DUST_NETHER_QUARTZ.get(), 2)
                 .requires(Items.QUARTZ)
                 .requires(ModTags.Items.HAMMER)
                 .unlockedBy("has_quartz", has(Items.QUARTZ))
                 .save(consumer, new ResourceLocation("quartz_dust_from_quartz"));
 
-        ShapelessRecipeBuilder.shapeless(registerItems.DUST_STEEL.get(), 2)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.DUST_STEEL.get(), 2)
                 .requires(ModTags.Items.DUST_IRON)
                 .requires(ModTags.Items.DUST_IRON)
                 .requires(ModTags.Items.DUST_COAL)
                 .unlockedBy("has_iron", has(ModTags.Items.DUST_IRON))
                 .save(consumer, new ResourceLocation("steel_dust_from_iron"));
 
-        ShapelessRecipeBuilder.shapeless(registerItems.DUST_INCANDESCENT_ALLOY.get(), 2)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.DUST_INCANDESCENT_ALLOY.get(), 2)
                 .requires(ModTags.Items.DUST_ZINC)
                 .requires(ModTags.Items.DUST_MANGANESE)
                 .unlockedBy("has_manganese", has(ModTags.Items.DUST_MANGANESE))
@@ -210,23 +212,23 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_mortar", has(ModTags.Items.MORTAR))
                 .save(consumer);
 
-        ShapelessRecipeBuilder.shapeless(registerItems.PIG_FAT.get(), 1)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.PIG_FAT.get(), 1)
                 .requires(Items.PORKCHOP)
                 .unlockedBy("has_porkchop", has(Items.PORKCHOP))
                 .save(consumer, ResourceUtils.ModResourceLocation("pork_raw_noknife"));
 
-        ShapelessRecipeBuilder.shapeless(registerItems.PIG_FAT.get(), 2)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.PIG_FAT.get(), 2)
                 .requires(Items.PORKCHOP)
                 .requires(ModTags.Items.KNIFE)
                 .unlockedBy("has_knife", has(ModTags.Items.KNIFE))
                 .save(consumer, ResourceUtils.ModResourceLocation("pork_raw_knife"));
 
-        ShapelessRecipeBuilder.shapeless(registerItems.PIG_FAT.get(), 2)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.PIG_FAT.get(), 2)
                 .requires(Items.COOKED_PORKCHOP)
                 .unlockedBy("has_porkchop", has(Items.PORKCHOP))
                 .save(consumer, ResourceUtils.ModResourceLocation("pork_cooked_noknife"));
 
-        ShapelessRecipeBuilder.shapeless(registerItems.PIG_FAT.get(), 4)
+        ShapelessRecipeBuilder.shapeless(RegisterItems.PIG_FAT.get(), 4)
                 .requires(Items.COOKED_PORKCHOP)
                 .requires(ModTags.Items.KNIFE)
                 .unlockedBy("has_knife", has(ModTags.Items.KNIFE))
@@ -284,7 +286,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     private void generateShapedRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
 
-        ShapedRecipeBuilder.shaped(registerItems.TREE_SAP.get(),2)
+        ShapedRecipeBuilder.shaped(RegisterItems.TREE_SAP.get(),2)
                 .define('L', ItemTags.LOGS)
                 .pattern("LLL")
                 .pattern("LLL")
@@ -292,7 +294,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_log", has(ItemTags.LOGS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.REENFORCEDCONCRETE.get().asItem(),2)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.REENFORCEDCONCRETE.get().asItem(),2)
                 .define('G', Blocks.GRAY_CONCRETE_POWDER)
                 .define('S', ModTags.Items.PLATE_STEEL)
                 .pattern("SGS")
@@ -301,27 +303,27 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_concrete_powder", has(Blocks.GRAY_CONCRETE_POWDER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COPPER_COIL.get(), 2)
-                .define('W', registerItems.COPPER_WIRE.get())
-                .define('B', registerItems.IRON_PIPE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COPPER_COIL.get(), 2)
+                .define('W', RegisterItems.COPPER_WIRE.get())
+                .define('B', RegisterItems.IRON_PIPE.get())
                 .pattern("WBW")
                 .pattern("WBW")
                 .pattern("WBW")
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
-                .unlockedBy("has_pipe", has(registerItems.IRON_PIPE.get()))
+                .unlockedBy("has_wire", has(RegisterItems.COPPER_WIRE.get()))
+                .unlockedBy("has_pipe", has(RegisterItems.IRON_PIPE.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.GOLD_COIL.get(), 2)
-                .define('W', registerItems.GOLD_WIRE.get())
-                .define('B', registerItems.IRON_PIPE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.GOLD_COIL.get(), 2)
+                .define('W', RegisterItems.GOLD_WIRE.get())
+                .define('B', RegisterItems.IRON_PIPE.get())
                 .pattern("WBW")
                 .pattern("WBW")
                 .pattern("WBW")
-                .unlockedBy("has_wire", has(registerItems.GOLD_WIRE.get()))
-                .unlockedBy("has_pipe", has(registerItems.IRON_PIPE.get()))
+                .unlockedBy("has_wire", has(RegisterItems.GOLD_WIRE.get()))
+                .unlockedBy("has_pipe", has(RegisterItems.IRON_PIPE.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.GUNPOWDER_COMPOUND.get(), 5)
+        ShapedRecipeBuilder.shaped(RegisterItems.GUNPOWDER_COMPOUND.get(), 5)
                 .define('G', Tags.Items.GUNPOWDER)
                 .define('S', Tags.Items.SLIMEBALLS)
                 .define('T', ModTags.Items.TREE_SAP)
@@ -332,7 +334,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_gunpowder", has(Tags.Items.GUNPOWDER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.HAMMER_STONE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_STONE.get())
                 .define('I', Tags.Items.COBBLESTONE)
                 .define('S', Items.STICK)
                 .pattern(" IS")
@@ -341,7 +343,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(Tags.Items.COBBLESTONE))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.HAMMER_IRON.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_IRON.get())
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('S', Items.STICK)
                 .pattern(" IS")
@@ -349,7 +351,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("S  ")
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_IRON));
-        ShapedRecipeBuilder.shaped(registerItems.HAMMER_COPPER.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_COPPER.get())
                 .define('I', ModTags.Items.INGOT_COPPER)
                 .define('S', Items.STICK)
                 .pattern(" IS")
@@ -358,7 +360,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.HAMMER_TIN.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_TIN.get())
                 .define('I', ModTags.Items.INGOT_TIN)
                 .define('S', Items.STICK)
                 .pattern(" IS")
@@ -367,7 +369,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.HAMMER_GOLD.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_GOLD.get())
                 .define('I', Tags.Items.INGOTS_GOLD)
                 .define('S', Items.STICK)
                 .pattern(" IS")
@@ -376,7 +378,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_GOLD))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.HAMMER_STEEL.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_STEEL.get())
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .define('S', Items.STICK)
                 .pattern(" IS")
@@ -385,7 +387,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.HAMMER_DIAMOND.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_DIAMOND.get())
                 .define('I', Tags.Items.GEMS_DIAMOND)
                 .define('S', Items.STICK)
                 .pattern(" IS")
@@ -395,7 +397,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.SAW_STONE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SAW_STONE.get())
                 .define('I', Tags.Items.COBBLESTONE)
                 .define('S', Items.STICK)
                 .pattern("SI")
@@ -404,7 +406,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(Tags.Items.COBBLESTONE))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.SAW_IRON.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SAW_IRON.get())
                 .define('I', ModTags.Items.PLATE_IRON)
                 .define('S', Items.STICK)
                 .pattern("SI")
@@ -412,7 +414,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("S ")
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_IRON));
-        ShapedRecipeBuilder.shaped(registerItems.SAW_COPPER.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SAW_COPPER.get())
                 .define('I', ModTags.Items.PLATE_COPPER)
                 .define('S', Items.STICK)
                 .pattern("SI")
@@ -421,7 +423,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_COPPER))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.SAW_TIN.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SAW_TIN.get())
                 .define('I', ModTags.Items.PLATE_TIN)
                 .define('S', Items.STICK)
                 .pattern("SI")
@@ -430,7 +432,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_TIN))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.SAW_GOLD.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SAW_GOLD.get())
                 .define('I', ModTags.Items.PLATE_GOLD)
                 .define('S', Items.STICK)
                 .pattern("SI")
@@ -439,7 +441,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_GOLD))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.SAW_STEEL.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SAW_STEEL.get())
                 .define('I', ModTags.Items.PLATE_STEEL)
                 .define('S', Items.STICK)
                 .pattern("SI")
@@ -448,7 +450,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_stick", has(Items.STICK))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
-        ShapedRecipeBuilder.shaped(registerItems.SAW_DIAMOND.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SAW_DIAMOND.get())
                 .define('I', Tags.Items.GEMS_DIAMOND)
                 .define('S', Items.STICK)
                 .pattern("SI")
@@ -458,7 +460,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.KITCHEN_KNIFE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.KITCHEN_KNIFE.get())
                 .define('I', ModTags.Items.PLATE_IRON)
                 .define('S', Items.STICK)
                 .pattern("I")
@@ -467,30 +469,30 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.TACTICAL_KNIFE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.TACTICAL_KNIFE.get())
                 .define('I', ModTags.Items.PLATE_STEEL)
-                .define('S', registerItems.C99_CARBON.get())
+                .define('S', RegisterItems.C99_CARBON.get())
                 .pattern("I")
                 .pattern("S")
-                .unlockedBy("has_stick", has(registerItems.C99_CARBON.get()))
+                .unlockedBy("has_stick", has(RegisterItems.C99_CARBON.get()))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CHIXIAO.get())
-                .define('I', registerItems.AMBER_ORIGINIUM.get())
-                .define('S', registerItems.C99_CARBON.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CHIXIAO.get())
+                .define('I', RegisterItems.AMBER_ORIGINIUM.get())
+                .define('S', RegisterItems.C99_CARBON.get())
                 .pattern("I")
                 .pattern("I")
                 .pattern("S")
                 .unlockedBy("has_stick", has(Items.STICK))
-                .unlockedBy("has_material", has(registerItems.AMBER_ORIGINIUM.get()))
+                .unlockedBy("has_material", has(RegisterItems.AMBER_ORIGINIUM.get()))
                 .save(consumer);
 
-        SmithingRecipeBuilder.smithing(Ingredient.of(registerItems.SAW_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), registerItems.SAW_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritesaw"));
-        SmithingRecipeBuilder.smithing(Ingredient.of(registerItems.HAMMER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), registerItems.HAMMER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritehammer"));
-        SmithingRecipeBuilder.smithing(Ingredient.of(registerItems.CUTTER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), registerItems.CUTTER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritecutter"));
+        SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.SAW_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.SAW_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritesaw"));
+        SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.HAMMER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.HAMMER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritehammer"));
+        SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.CUTTER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.CUTTER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritecutter"));
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_STONE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_STONE.get())
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -501,7 +503,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.COBBLESTONE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_IRON.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_IRON.get())
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -512,7 +514,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_STEEL.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_STEEL.get())
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -523,7 +525,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_COPPER.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_COPPER.get())
                 .define('I', ModTags.Items.INGOT_COPPER)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -534,7 +536,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_TIN.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_TIN.get())
                 .define('I', ModTags.Items.INGOT_TIN)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -545,7 +547,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_BRONZE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_BRONZE.get())
                 .define('I', ModTags.Items.INGOT_BRONZE)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -556,7 +558,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_BRONZE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_GOLD.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_GOLD.get())
                 .define('I', Tags.Items.INGOTS_GOLD)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -567,7 +569,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_GOLD))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_DIAMOND.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_DIAMOND.get())
                 .define('I', Tags.Items.GEMS_DIAMOND)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -578,7 +580,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_NETHERITE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_NETHERITE.get())
                 .define('I', Tags.Items.INGOTS_NETHERITE)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -589,7 +591,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_NETHERITE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_RMA7012.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_RMA7012.get())
                 .define('I', ModTags.Items.INGOT_RMA7012)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -600,7 +602,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_RMA7024.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_RMA7024.get())
                 .define('I', ModTags.Items.INGOT_RMA7024)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -611,7 +613,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MORTAR_D32.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_D32.get())
                 .define('I', ModTags.Items.INGOT_D32)
                 .define('S', Items.STICK)
                 .define('C', Tags.Items.COBBLESTONE)
@@ -622,7 +624,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_STONE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_STONE.get())
                 .define('I', Tags.Items.COBBLESTONE)
                 .define('S', Items.STICK)
                 .pattern(" I ")
@@ -632,7 +634,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.COBBLESTONE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_IRON.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_IRON.get())
                 .define('I', ModTags.Items.PLATE_IRON)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -643,7 +645,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_STEEL.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_STEEL.get())
                 .define('I', ModTags.Items.PLATE_STEEL)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -654,7 +656,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_COPPER.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_COPPER.get())
                 .define('I', ModTags.Items.PLATE_COPPER)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -665,7 +667,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_COPPER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_TIN.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_TIN.get())
                 .define('I', ModTags.Items.PLATE_TIN)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -676,7 +678,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_TIN))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_BRONZE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_BRONZE.get())
                 .define('I', ModTags.Items.PLATE_BRONZE)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -687,7 +689,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_BRONZE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_GOLD.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_GOLD.get())
                 .define('I', ModTags.Items.PLATE_BRONZE)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -698,7 +700,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_BRONZE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_DIAMOND.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_DIAMOND.get())
                 .define('I', Tags.Items.GEMS_DIAMOND)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -709,7 +711,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_RMA7012.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_RMA7012.get())
                 .define('I', ModTags.Items.PLATE_RMA7012)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -720,7 +722,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_RMA7012))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_RMA7024.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_RMA7024.get())
                 .define('I', ModTags.Items.PLATE_RMA7024)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -731,7 +733,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_RMA7024))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CUTTER_D32.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_D32.get())
                 .define('I', ModTags.Items.PLATE_D32)
                 .define('S', Items.STICK)
                 .define('N', Items.IRON_NUGGET)
@@ -742,9 +744,9 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_D32))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.MACHINE_FRAME.get())
+        ShapedRecipeBuilder.shaped(RegisterBlocks.MACHINE_FRAME.get())
                 .define('I', ModTags.Items.PLATE_STEEL)
-                .define('P', registerItems.MECHANICAL_PARTS.get())
+                .define('P', RegisterItems.MECHANICAL_PARTS.get())
                 .define('N', Tags.Items.INGOTS_IRON)
                 .pattern("NIN")
                 .pattern("IPI")
@@ -753,9 +755,9 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steel", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.BASIC_REFINERY.get())
-                .define('M', registerBlocks.MACHINE_FRAME.get())
-                .define('P', registerItems.STEEL_PIPE.get())
+        ShapedRecipeBuilder.shaped(RegisterBlocks.BASIC_REFINERY.get())
+                .define('M', RegisterBlocks.MACHINE_FRAME.get())
+                .define('P', RegisterItems.STEEL_PIPE.get())
                 .define('B', Items.BLAST_FURNACE)
                 .define('S', Items.SMOOTH_STONE_SLAB)
                 .pattern("MPP")
@@ -765,7 +767,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steel", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.ALLOY_FURNACE.get())
+        ShapedRecipeBuilder.shaped(RegisterBlocks.ALLOY_FURNACE.get())
                 .define('F', Items.FURNACE)
                 .define('B', Blocks.BRICKS)
                 .define('S', ModTags.Items.PLATE_STEEL)
@@ -776,9 +778,9 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steel", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.FOR_DESTABILIZER.get(),2)
+        ShapedRecipeBuilder.shaped(RegisterItems.FOR_DESTABILIZER.get(),2)
                 .define('O', Tags.Items.OBSIDIAN)
-                .define('C', registerItems.ORUNDUM.get())
+                .define('C', RegisterItems.ORUNDUM.get())
                 .define('E', Items.ENDER_EYE)
                 .pattern("OCO")
                 .pattern("CEC")
@@ -787,14 +789,14 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_eye", has(Items.ENDER_EYE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.METAL_PRESS.get())
+        ShapedRecipeBuilder.shaped(RegisterBlocks.METAL_PRESS.get())
                 .define('L', Items.LEVER)
                 .define('R', Blocks.REDSTONE_BLOCK)
                 .define('P', Items.PISTON)
-                .define('S', registerBlocks.MACHINE_FRAME.get())
-                .define('B', registerItems.PRIMITIVE_CIRCUIT.get())
-                .define('W', registerItems.COPPER_WIRE.get())
-                .define('C', registerItems.COPPER_COIL.get())
+                .define('S', RegisterBlocks.MACHINE_FRAME.get())
+                .define('B', RegisterItems.PRIMITIVE_CIRCUIT.get())
+                .define('W', RegisterItems.COPPER_WIRE.get())
+                .define('C', RegisterItems.COPPER_COIL.get())
                 .pattern("WBL")
                 .pattern("PRP")
                 .pattern("CSC")
@@ -802,13 +804,13 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steel", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.RECRUIT_BEACON.get())
-                .define('L', registerItems.STEEL_PIPE.get())
+        ShapedRecipeBuilder.shaped(RegisterBlocks.RECRUIT_BEACON.get())
+                .define('L', RegisterItems.STEEL_PIPE.get())
                 .define('R', ModTags.Items.PLATE_STEEL)
-                .define('O', registerItems.ORUNDUM.get())
-                .define('S', registerBlocks.MACHINE_FRAME.get())
-                .define('B', registerItems.PRIMITIVE_CIRCUIT.get())
-                .define('C', registerItems.COPPER_COIL.get())
+                .define('O', RegisterItems.ORUNDUM.get())
+                .define('S', RegisterBlocks.MACHINE_FRAME.get())
+                .define('B', RegisterItems.PRIMITIVE_CIRCUIT.get())
+                .define('C', RegisterItems.COPPER_COIL.get())
                 .pattern("  L")
                 .pattern("ORC")
                 .pattern("BSB")
@@ -816,7 +818,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steel", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DUST_BRONZE.get(), 2)
+        ShapedRecipeBuilder.shaped(RegisterItems.DUST_BRONZE.get(), 2)
                 .define('C', ModTags.Items.DUST_COPPER)
                 .define('T', ModTags.Items.DUST_TIN)
                 .pattern("CC")
@@ -825,54 +827,54 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_tin", has(ModTags.Items.DUST_TIN))
                 .save(consumer, new ResourceLocation("bronze_powder_alloying"));
 
-        ShapedRecipeBuilder.shaped(registerItems.EQUIPMENT_GUN_127MM.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.EQUIPMENT_GUN_127MM.get())
                 .define('S', ModTags.Items.PLATE_STEEL)
-                .define('B', registerItems.STEEL_PIPE.get())
-                .define('P', registerItems.MECHANICAL_PARTS.get())
-                .define('M', registerItems.PRIMITIVE_MOTOR.get())
-                .define('E', registerItems.PRIMITIVE_CIRCUIT.get())
+                .define('B', RegisterItems.STEEL_PIPE.get())
+                .define('P', RegisterItems.MECHANICAL_PARTS.get())
+                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
+                .define('E', RegisterItems.PRIMITIVE_CIRCUIT.get())
                 .pattern("PSS")
                 .pattern("BPS")
                 .pattern("EME")
-                .unlockedBy("has_circuit", has(registerItems.PRIMITIVE_CIRCUIT.get()))
+                .unlockedBy("has_circuit", has(RegisterItems.PRIMITIVE_CIRCUIT.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DEFIB_PADDLE.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DEFIB_PADDLE.get(), 1)
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('B', Items.STONE_BUTTON)
-                .define('P', registerItems.PLATE_POLYMER.get())
-                .define('C', registerItems.COPPER_COIL.get())
+                .define('P', RegisterItems.PLATE_POLYMER.get())
+                .define('C', RegisterItems.COPPER_COIL.get())
                 .define('H', ModTags.Items.CIRCUITS_BASIC)
                 .pattern("BPP")
                 .pattern("PCH")
                 .pattern("III")
-                .unlockedBy("has_part", has(registerItems.PRIMITIVE_CIRCUIT.get()))
+                .unlockedBy("has_part", has(RegisterItems.PRIMITIVE_CIRCUIT.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DEFIB_CHARGER.get(), 1)
-                .define('W', registerItems.GOLD_COIL.get())
-                .define('C', registerItems.CAPACITOR_ADVANCED.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.DEFIB_CHARGER.get(), 1)
+                .define('W', RegisterItems.GOLD_COIL.get())
+                .define('C', RegisterItems.CAPACITOR_ADVANCED.get())
                 .define('P', Items.REDSTONE_LAMP)
                 .define('I',  ModTags.Items.CIRCUITS_ADVANCED)
-                .define('B', registerItems.CRYSTALLINE_CIRCUIT.get())
-                .define('R', registerItems.RESISTOR_BASIC.get())
+                .define('B', RegisterItems.CRYSTALLINE_CIRCUIT.get())
+                .define('R', RegisterItems.RESISTOR_BASIC.get())
                 .pattern("WPW")
                 .pattern("RBR")
                 .pattern("CIC")
-                .unlockedBy("has_paddle", has(registerItems.DEFIB_PADDLE.get()))
+                .unlockedBy("has_paddle", has(RegisterItems.DEFIB_PADDLE.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MOLD_EXTRACTION.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.MOLD_EXTRACTION.get(), 1)
                 .define('N', Tags.Items.NUGGETS_IRON)
                 .define('P', ModTags.Items.PLATE_IRON)
-                .define('M', registerItems.MOLD_PLATE.get())
+                .define('M', RegisterItems.MOLD_PLATE.get())
                 .pattern("PNP")
                 .pattern("PMP")
                 .pattern("NPN")
                 .unlockedBy("has_part", has(ModTags.Items.PLATE_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.OAK_PANTRY.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.OAK_PANTRY.get(), 1)
                 .define('C', Tags.Items.CHESTS)
                 .define('L', ItemTags.OAK_LOGS)
                 .define('P', Items.OAK_PLANKS)
@@ -882,7 +884,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(ItemTags.OAK_LOGS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.ACACIA_PANTRY.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.ACACIA_PANTRY.get(), 1)
                 .define('C', Tags.Items.CHESTS)
                 .define('L', ItemTags.ACACIA_LOGS)
                 .define('P', Items.ACACIA_PLANKS)
@@ -892,7 +894,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(ItemTags.ACACIA_LOGS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.BIRCH_PANTRY.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.BIRCH_PANTRY.get(), 1)
                 .define('C', Tags.Items.CHESTS)
                 .define('L', ItemTags.BIRCH_LOGS)
                 .define('P', Items.BIRCH_PLANKS)
@@ -902,7 +904,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(ItemTags.BIRCH_LOGS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.SPRUCE_PANTRY.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.SPRUCE_PANTRY.get(), 1)
                 .define('C', Tags.Items.CHESTS)
                 .define('L', ItemTags.SPRUCE_LOGS)
                 .define('P', Items.SPRUCE_PLANKS)
@@ -912,7 +914,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(ItemTags.SPRUCE_LOGS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.DARK_OAK_PANTRY.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.DARK_OAK_PANTRY.get(), 1)
                 .define('C', Tags.Items.CHESTS)
                 .define('L', ItemTags.DARK_OAK_LOGS)
                 .define('P', Items.DARK_OAK_PLANKS)
@@ -922,7 +924,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(ItemTags.DARK_OAK_LOGS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.JUNGLE_PANTRY.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.JUNGLE_PANTRY.get(), 1)
                 .define('C', Tags.Items.CHESTS)
                 .define('L', ItemTags.JUNGLE_LOGS)
                 .define('P', Items.JUNGLE_PLANKS)
@@ -932,7 +934,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(ItemTags.JUNGLE_LOGS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.WARPED_PANTRY.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.WARPED_PANTRY.get(), 1)
                 .define('C', Tags.Items.CHESTS)
                 .define('L', ItemTags.WARPED_STEMS)
                 .define('P', Items.WARPED_PLANKS)
@@ -942,7 +944,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(ItemTags.WARPED_STEMS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.CRIMSON_PANTRY.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.CRIMSON_PANTRY.get(), 1)
                 .define('C', Tags.Items.CHESTS)
                 .define('L', ItemTags.CRIMSON_STEMS)
                 .define('P', Items.CRIMSON_PLANKS)
@@ -953,12 +955,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getStackForm().getItem(), 1)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
                 .define('P', Blocks.PISTON.asItem())
                 .define('G', Blocks.GLASS.asItem())
                 .define('I', HatchTE.ItemHatchDefinition.getStackForm().getItem())
-                .define('D', registerBlocks.MACHINE_DYNAMO.get())
+                .define('D', RegisterBlocks.MACHINE_DYNAMO.get())
                 .pattern("PDP")
                 .pattern("IGI")
                 .pattern("CFC")
@@ -966,53 +968,53 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(HatchTE.ItemHatchDefinition.getStackForm().getItem(), 4)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', Tags.Items.CHESTS)
                 .pattern(" F ")
                 .pattern("FCF")
                 .pattern(" F ")
-                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .unlockedBy("has_part", has(RegisterBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.MACHINE_DYNAMO.get(), 1)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
-                .define('C', registerItems.COPPER_COIL.get())
+        ShapedRecipeBuilder.shaped(RegisterBlocks.MACHINE_DYNAMO.get(), 1)
+                .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', RegisterItems.COPPER_COIL.get())
                 .define('P', ModTags.Items.PLATE_IRON)
                 .define('I', Tags.Items.INGOTS_IRON)
                 .pattern("PCP")
                 .pattern("IFI")
                 .pattern("PCP")
-                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .unlockedBy("has_part", has(RegisterBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(HatchTE.EnergyHatchDefinition.getStackForm().getItem(), 4)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', Tags.Items.STORAGE_BLOCKS_REDSTONE)
                 .pattern(" F ")
                 .pattern("FCF")
                 .pattern(" F ")
-                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .unlockedBy("has_part", has(RegisterBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(HatchTE.FluidHatchDefinition.getStackForm().getItem(), 4)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
+                .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
                 .define('C', Items.BUCKET)
                 .pattern(" F ")
                 .pattern("FCF")
                 .pattern(" F ")
-                .unlockedBy("has_part", has(registerBlocks.MACHINE_FRAME.get().asItem()))
+                .unlockedBy("has_part", has(RegisterBlocks.MACHINE_FRAME.get().asItem()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(HatchTE.EntityDefinition.getStackForm().getItem(), 4)
-                .define('F', registerBlocks.MACHINE_FRAME.get().asItem())
-                .define('C', registerItems.FOR_DESTABILIZER.get())
+                .define('F', RegisterBlocks.MACHINE_FRAME.get().asItem())
+                .define('C', RegisterItems.FOR_DESTABILIZER.get())
                 .pattern(" F ")
                 .pattern("FCF")
                 .pattern(" F ")
-                .unlockedBy("has_part", has(registerItems.FOR_DESTABILIZER.get()))
+                .unlockedBy("has_part", has(RegisterItems.FOR_DESTABILIZER.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.KYARU_STAFF.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.KYARU_STAFF.get(), 1)
                 .define('S', Items.STICK)
                 .define('C', ModTags.Items.INGOT_BRONZE)
                 .define('B', Items.ENCHANTED_BOOK)
@@ -1022,84 +1024,84 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_part", has(Items.ENCHANTED_BOOK))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DD_DEFAULT_RIGGING.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DD_DEFAULT_RIGGING.get(), 1)
                 .define('A', ModTags.Items.PLATE_ALUMINIUM)
                 .define('S', ModTags.Items.INGOT_STEEL)
                 .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', registerItems.MECHANICAL_PARTS.get())
+                .define('P', RegisterItems.MECHANICAL_PARTS.get())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.PRIMITIVE_MOTOR.get())
-                .define('W', registerItems.WISDOM_CUBE.get())
+                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
+                .define('W', RegisterItems.WISDOM_CUBE.get())
                 .pattern("CSP")
                 .pattern("AWG")
                 .pattern(" MA")
-                .unlockedBy("has_cube", has(registerItems.WISDOM_CUBE.get()))
-                .unlockedBy("has_motor", has(registerItems.PRIMITIVE_MOTOR.get()))
+                .unlockedBy("has_cube", has(RegisterItems.WISDOM_CUBE.get()))
+                .unlockedBy("has_motor", has(RegisterItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.IRON_PIPE.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.IRON_PIPE.get(), 1)
                 .define('A', ModTags.Items.PLATE_IRON)
                 .pattern("A")
                 .pattern("A")
                 .unlockedBy("has_ironplate", has(ModTags.Items.PLATE_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_PIPE.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.STEEL_PIPE.get(), 1)
                 .define('A', ModTags.Items.PLATE_STEEL)
                 .pattern("A")
                 .pattern("A")
                 .unlockedBy("has_steelplate", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.BB_DEFAULT_RIGGING.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.BB_DEFAULT_RIGGING.get(), 1)
                 .define('A', ModTags.Items.PLATE_ALUMINIUM)
                 .define('S', ModTags.Items.PLATE_STEEL)
                 .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', registerItems.MECHANICAL_PARTS.get())
+                .define('P', RegisterItems.MECHANICAL_PARTS.get())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.PRIMITIVE_MOTOR.get())
-                .define('D', registerItems.DD_DEFAULT_RIGGING.get())
+                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
+                .define('D', RegisterItems.DD_DEFAULT_RIGGING.get())
                 .pattern("SMS")
                 .pattern("PDG")
                 .pattern("ACA")
-                .unlockedBy("has_dd_rigging", has(registerItems.DD_DEFAULT_RIGGING.get()))
-                .unlockedBy("has_motor", has(registerItems.PRIMITIVE_MOTOR.get()))
+                .unlockedBy("has_dd_rigging", has(RegisterItems.DD_DEFAULT_RIGGING.get()))
+                .unlockedBy("has_motor", has(RegisterItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CV_DEFAULT_RIGGING.get(), 1)
-                .define('W', registerBlocks.REENFORCED_PLANK.get().asItem())
-                .define('M', registerItems.PRIMITIVE_MOTOR.get())
-                .define('D', registerItems.DD_DEFAULT_RIGGING.get())
-                .define('P', registerItems.MECHANICAL_PARTS.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CV_DEFAULT_RIGGING.get(), 1)
+                .define('W', RegisterBlocks.REENFORCED_PLANK.get().asItem())
+                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
+                .define('D', RegisterItems.DD_DEFAULT_RIGGING.get())
+                .define('P', RegisterItems.MECHANICAL_PARTS.get())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
                 .define('S', ModTags.Items.PLATE_STEEL)
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .pattern("SSW")
                 .pattern("IDW")
                 .pattern("PCM")
-                .unlockedBy("has_dd_rigging", has(registerItems.DD_DEFAULT_RIGGING.get()))
-                .unlockedBy("has_motor", has(registerItems.PRIMITIVE_MOTOR.get()))
+                .unlockedBy("has_dd_rigging", has(RegisterItems.DD_DEFAULT_RIGGING.get()))
+                .unlockedBy("has_motor", has(RegisterItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.EQUIPMENT_TORPEDO_533MM.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.EQUIPMENT_TORPEDO_533MM.get(), 1)
                 .define('A', ModTags.Items.PLATE_ALUMINIUM)
-                .define('S', registerItems.STEEL_PIPE.get())
+                .define('S', RegisterItems.STEEL_PIPE.get())
                 .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', registerItems.MECHANICAL_PARTS.get())
+                .define('P', RegisterItems.MECHANICAL_PARTS.get())
                 .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', registerItems.PRIMITIVE_MOTOR.get())
+                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
                 .pattern("ACA")
                 .pattern("SSS")
                 .pattern("GMP")
-                .unlockedBy("has_barrel", has(registerItems.STEEL_PIPE.get()))
-                .unlockedBy("has_part", has(registerItems.MECHANICAL_PARTS.get()))
-                .unlockedBy("has_motor", has(registerItems.PRIMITIVE_MOTOR.get()))
+                .unlockedBy("has_barrel", has(RegisterItems.STEEL_PIPE.get()))
+                .unlockedBy("has_part", has(RegisterItems.MECHANICAL_PARTS.get()))
+                .unlockedBy("has_motor", has(RegisterItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
 
-        ShapedRecipeBuilder.shaped(registerItems.SHEATH.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SHEATH.get())
                 .define('B', ModTags.Items.PLATE_STEEL)
-                .define('L', registerItems.STEEL_PIPE.get())
+                .define('L', RegisterItems.STEEL_PIPE.get())
                 .pattern("  B")
                 .pattern(" B ")
                 .pattern("L  ")
@@ -1107,19 +1109,19 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         //Temp Recipe
-        ShapedRecipeBuilder.shaped(registerItems.FLEXABLE_SWORD_THINGY.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.FLEXABLE_SWORD_THINGY.get())
                 .define('B', ModTags.Items.PLATE_STEEL)
-                .define('L', registerItems.PLATE_POLYMER.get())
+                .define('L', RegisterItems.PLATE_POLYMER.get())
                 .pattern("  B")
                 .pattern(" B ")
                 .pattern("L  ")
                 .unlockedBy("has_plate", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.CRYSTAL_GROWTH_CHAMBER.get(), 1)
                 .define('S', Blocks.SMOOTH_STONE_SLAB)
                 .define('C', Blocks.CAULDRON)
-                .define('P', registerItems.STEEL_PIPE.get())
+                .define('P', RegisterItems.STEEL_PIPE.get())
                 .define('I', ModTags.Items.PLATE_STEEL)
                 .pattern("III")
                 .pattern("CPC")
@@ -1128,7 +1130,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_sand", has(ItemTags.SAND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.NETHER_QUARTZ_SEED.get(), 4)
+        ShapedRecipeBuilder.shaped(RegisterItems.NETHER_QUARTZ_SEED.get(), 4)
                 .define('S', ItemTags.SAND)
                 .define('Q', Tags.Items.GEMS_QUARTZ)
                 .pattern("SQ")
@@ -1137,16 +1139,16 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_sand", has(ItemTags.SAND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.ORIGINIUM_SEED.get(), 4)
+        ShapedRecipeBuilder.shaped(RegisterItems.ORIGINIUM_SEED.get(), 4)
                 .define('S', ItemTags.SAND)
-                .define('O', registerItems.DUST_ORIGINIUM.get())
+                .define('O', RegisterItems.DUST_ORIGINIUM.get())
                 .pattern("SO")
                 .pattern("OS")
-                .unlockedBy("has_originium", has(registerItems.DUST_ORIGINIUM.get()))
+                .unlockedBy("has_originium", has(RegisterItems.DUST_ORIGINIUM.get()))
                 .unlockedBy("has_sand", has(ItemTags.SAND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_RICKROLL.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_RICKROLL.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Tags.Items.DYES_GRAY)
                 .pattern(" S ")
@@ -1156,7 +1158,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Tags.Items.DYES_GRAY))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COMMANDING_STICK.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.COMMANDING_STICK.get(), 1)
                 .define('S', Items.STICK)
                 .define('B', Tags.Items.DYES_BLACK)
                 .pattern("  S")
@@ -1165,7 +1167,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_sticc", has(Items.STICK))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.AMMO_GENERIC.get(), 2)
+        ShapedRecipeBuilder.shaped(RegisterItems.AMMO_GENERIC.get(), 2)
                 .define('B', ModTags.Items.PLATE_BRASS)
                 .define('L', ModTags.Items.INGOT_LEAD)
                 .define('G', Tags.Items.GUNPOWDER)
@@ -1177,38 +1179,38 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_gunpowder", has(Tags.Items.GUNPOWDER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CRESCENTKATANA_KURO.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CRESCENTKATANA_KURO.get())
                 .define('B', ModTags.Items.INGOT_STEEL)
                 .define('P', ModTags.Items.PLATE_STEEL)
-                .define('L', registerItems.STEEL_PIPE.get())
+                .define('L', RegisterItems.STEEL_PIPE.get())
                 .pattern("  B")
                 .pattern(" BP")
                 .pattern("LP ")
                 .unlockedBy("has_ingot", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CRESCENTKATANA_SHIRO.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CRESCENTKATANA_SHIRO.get())
                 .define('B', Tags.Items.INGOTS_IRON)
                 .define('P', ModTags.Items.PLATE_STEEL)
-                .define('L', registerItems.STEEL_PIPE.get())
+                .define('L', RegisterItems.STEEL_PIPE.get())
                 .pattern("  B")
                 .pattern(" BP")
                 .pattern("LP ")
                 .unlockedBy("has_ingot", has(Tags.Items.INGOTS_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.WARHAMMER.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.WARHAMMER.get())
                 .define('B', Tags.Items.STORAGE_BLOCKS_IRON)
                 .define('S', ModTags.Items.INGOT_STEEL)
                 .define('P', ModTags.Items.PLATE_STEEL)
-                .define('L', registerItems.STEEL_PIPE.get())
+                .define('L', RegisterItems.STEEL_PIPE.get())
                 .pattern("BSP")
                 .pattern(" L ")
                 .pattern(" L ")
                 .unlockedBy("has_ingot", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.AMMO_TORPEDO.get(), 4)
+        ShapedRecipeBuilder.shaped(RegisterItems.AMMO_TORPEDO.get(), 4)
                 .define('A', ModTags.Items.INGOT_ALUMINIUM)
                 .define('T', Blocks.TNT.asItem())
                 .define('C', ModTags.Items.CIRCUITS_BASIC)
@@ -1221,7 +1223,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_tnt", has(Blocks.TNT.asItem()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.AMMO_MISSILE.get(), 4)
+        ShapedRecipeBuilder.shaped(RegisterItems.AMMO_MISSILE.get(), 4)
                 .define('A', ModTags.Items.INGOT_ALUMINIUM)
                 .define('T', Blocks.TNT.asItem())
                 .define('C', ModTags.Items.CIRCUITS_BASIC)
@@ -1234,7 +1236,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_tnt", has(Blocks.TNT.asItem()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_FRIDAYNIGHT.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_FRIDAYNIGHT.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Tags.Items.DYES_GREEN)
                 .pattern(" S ")
@@ -1244,7 +1246,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Tags.Items.DYES_GREEN))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_REVENGE.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_REVENGE.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Tags.Items.GUNPOWDER)
                 .pattern(" S ")
@@ -1254,7 +1256,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Tags.Items.GUNPOWDER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_FALLEN_KINGDOM.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_FALLEN_KINGDOM.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Items.GOLDEN_SWORD)
                 .pattern(" S ")
@@ -1264,7 +1266,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Items.GOLDEN_SWORD))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_FIND_THE_PIECES.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_FIND_THE_PIECES.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Tags.Items.GEMS_EMERALD)
                 .pattern(" S ")
@@ -1274,7 +1276,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Tags.Items.GEMS_EMERALD))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_TAKE_BACK_THE_NIGHT.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_TAKE_BACK_THE_NIGHT.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Blocks.CRYING_OBSIDIAN.asItem())
                 .pattern(" S ")
@@ -1284,7 +1286,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Blocks.CRYING_OBSIDIAN.asItem()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_DRAGONHEARTED.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_DRAGONHEARTED.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Items.ENDER_EYE)
                 .pattern(" S ")
@@ -1294,7 +1296,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Items.ENDER_EYE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerBlocks.REENFORCED_PLANK.get(), 4)
+        ShapedRecipeBuilder.shaped(RegisterBlocks.REENFORCED_PLANK.get(), 4)
                 .define('P', ItemTags.PLANKS)
                 .define('S', ModTags.Items.INGOT_STEEL)
                 .pattern("SPS")
@@ -1304,7 +1306,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_plank", has(ItemTags.PLANKS))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_BRAINPOWER.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_BRAINPOWER.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Tags.Items.DYES_BLACK)
                 .pattern(" S ")
@@ -1314,7 +1316,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_dye", has(Tags.Items.DYES_BLACK))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_SANDSTORM.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_SANDSTORM.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', Tags.Items.SAND)
                 .pattern(" S ")
@@ -1324,7 +1326,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_sand", has(Tags.Items.SAND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.DISC_CC5.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.DISC_CC5.get(), 1)
                 .define('S', ModTags.Items.PLATE_IRON)
                 .define('D', ModTags.Items.ORIGINIUM_PRIME)
                 .pattern(" S ")
@@ -1334,117 +1336,117 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_sand", has(ModTags.Items.ORIGINIUM_PRIME))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CAPACITOR_ADVANCED.get(), 2)
-                .define('A', registerItems.PLATE_ALUMINIUM.get())
-                .define('P', registerItems.PLATE_POLYMER.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CAPACITOR_ADVANCED.get(), 2)
+                .define('A', RegisterItems.PLATE_ALUMINIUM.get())
+                .define('P', RegisterItems.PLATE_POLYMER.get())
                 .define('G', ModTags.Items.PLATE_GOLD)
-                .define('C', registerItems.GOLD_WIRE.get())
+                .define('C', RegisterItems.GOLD_WIRE.get())
                 .pattern("GPG")
                 .pattern("APA")
                 .pattern("C C")
-                .unlockedBy("has_wire", has(registerItems.GOLD_WIRE.get()))
+                .unlockedBy("has_wire", has(RegisterItems.GOLD_WIRE.get()))
                 .unlockedBy("has_aluminium", has(ModTags.Items.PLATE_ALUMINIUM))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CAPACITOR_PRIMITIVE.get(), 1)
-                .define('A', registerItems.PLATE_ALUMINIUM.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CAPACITOR_PRIMITIVE.get(), 1)
+                .define('A', RegisterItems.PLATE_ALUMINIUM.get())
                 .define('P', Items.PAPER)
-                .define('C', registerItems.COPPER_WIRE.get())
+                .define('C', RegisterItems.COPPER_WIRE.get())
                 .pattern("APA")
                 .pattern("APA")
                 .pattern("C C")
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_wire", has(RegisterItems.COPPER_WIRE.get()))
                 .unlockedBy("has_aluminium", has(ModTags.Items.PLATE_ALUMINIUM))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_PRIMITIVE.get(), 2)
+        ShapedRecipeBuilder.shaped(RegisterItems.RESISTOR_PRIMITIVE.get(), 2)
                 .define('C', ModTags.Items.DUST_COAL)
-                .define('D', registerItems.DUST_IRON.get())
+                .define('D', RegisterItems.DUST_IRON.get())
                 .define('P', Items.PAPER)
-                .define('W', registerItems.COPPER_WIRE.get())
+                .define('W', RegisterItems.COPPER_WIRE.get())
                 .pattern(" C ")
                 .pattern("WPW")
                 .pattern(" D ")
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_wire", has(RegisterItems.COPPER_WIRE.get()))
                 .unlockedBy("has_carbon", has(ModTags.Items.DUST_COAL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_BASIC.get(), 2)
-                .define('C', registerItems.C99_CARBON.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RESISTOR_BASIC.get(), 2)
+                .define('C', RegisterItems.C99_CARBON.get())
                 .define('D', ModTags.Items.DUST_IRON)
-                .define('R', registerItems.PLATE_POLYMER.get())
-                .define('W', registerItems.COPPER_WIRE.get())
+                .define('R', RegisterItems.PLATE_POLYMER.get())
+                .define('W', RegisterItems.COPPER_WIRE.get())
                 .pattern(" C ")
                 .pattern("WRW")
                 .pattern(" D ")
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_wire", has(RegisterItems.COPPER_WIRE.get()))
                 .unlockedBy("has_carbon", has(ModTags.Items.DUST_COAL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RESISTOR_ADVANCED.get(), 2)
-                .define('C', registerItems.C99_CARBON.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RESISTOR_ADVANCED.get(), 2)
+                .define('C', RegisterItems.C99_CARBON.get())
                 .define('D', Items.CLAY)
-                .define('R', registerItems.PLATE_POLYMER.get())
-                .define('W', registerItems.GOLD_WIRE.get())
+                .define('R', RegisterItems.PLATE_POLYMER.get())
+                .define('W', RegisterItems.GOLD_WIRE.get())
                 .pattern(" C ")
                 .pattern("WRW")
                 .pattern(" D ")
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_wire", has(RegisterItems.COPPER_WIRE.get()))
                 .unlockedBy("has_carbon", has(ModTags.Items.DUST_COAL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.PRIMITIVE_MOTOR.get(), 2)
-                .define('C', registerItems.COPPER_COIL.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.PRIMITIVE_MOTOR.get(), 2)
+                .define('C', RegisterItems.COPPER_COIL.get())
                 .define('D', Items.IRON_INGOT)
-                .define('P', registerItems.PLATE_IRON.get())
-                .define('W', registerItems.COPPER_WIRE.get())
+                .define('P', RegisterItems.PLATE_IRON.get())
+                .define('W', RegisterItems.COPPER_WIRE.get())
                 .pattern(" D ")
                 .pattern("PCP")
                 .pattern("PWP")
-                .unlockedBy("has_coil", has(registerItems.COPPER_COIL.get()))
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_coil", has(RegisterItems.COPPER_COIL.get()))
+                .unlockedBy("has_wire", has(RegisterItems.COPPER_WIRE.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.BASIC_MOTOR.get(), 2)
-                .define('C', registerItems.COPPER_COIL.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.BASIC_MOTOR.get(), 2)
+                .define('C', RegisterItems.COPPER_COIL.get())
                 .define('D', Items.IRON_INGOT)
-                .define('P', registerItems.PLATE_ALUMINIUM.get())
-                .define('W', registerItems.GOLD_COIL.get())
+                .define('P', RegisterItems.PLATE_ALUMINIUM.get())
+                .define('W', RegisterItems.GOLD_COIL.get())
                 .pattern(" D ")
                 .pattern("PCP")
                 .pattern("PWP")
-                .unlockedBy("has_coil", has(registerItems.GOLD_COIL.get()))
-                .unlockedBy("has_wire", has(registerItems.COPPER_WIRE.get()))
+                .unlockedBy("has_coil", has(RegisterItems.GOLD_COIL.get()))
+                .unlockedBy("has_wire", has(RegisterItems.COPPER_WIRE.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.ADVANCED_MOTOR.get(), 1)
-                .define('M', registerItems.BASIC_MOTOR.get())
-                .define('G', registerItems.GOLD_COIL.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.ADVANCED_MOTOR.get(), 1)
+                .define('M', RegisterItems.BASIC_MOTOR.get())
+                .define('G', RegisterItems.GOLD_COIL.get())
                 .define('C', ModTags.Items.CIRCUITS_BASIC)
-                .define('R', registerItems.RESISTOR_BASIC.get())
-                .define('D', registerItems.IRON_PIPE.get())
+                .define('R', RegisterItems.RESISTOR_BASIC.get())
+                .define('D', RegisterItems.IRON_PIPE.get())
                 .pattern(" D ")
                 .pattern("RMR")
                 .pattern("GCG")
-                .unlockedBy("has_motor", has(registerItems.BASIC_MOTOR.get()))
+                .unlockedBy("has_motor", has(RegisterItems.BASIC_MOTOR.get()))
                 .unlockedBy("has_circuit", has(ModTags.Items.CIRCUITS_BASIC))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.PRIMITIVE_CIRCUIT.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.PRIMITIVE_CIRCUIT.get(), 1)
                 .define('C', ModTags.Items.PLATE_COPPER)
-                .define('P', registerItems.PLATE_POLYMER.get())
+                .define('P', RegisterItems.PLATE_POLYMER.get())
                 .define('I', ModTags.Items.PLATE_IRON)
                 .define('L', Items.REDSTONE)
-                .define('R', registerItems.RESISTOR_PRIMITIVE.get())
-                .define('T', registerItems.CAPACITOR_PRIMITIVE.get())
+                .define('R', RegisterItems.RESISTOR_PRIMITIVE.get())
+                .define('T', RegisterItems.CAPACITOR_PRIMITIVE.get())
                 .pattern(" I ")
                 .pattern("RLT")
                 .pattern("CPC")
                 .unlockedBy("has_plate", has(ModTags.Items.PLATE_COPPER))
-                .unlockedBy("has_polymer", has(registerItems.PLATE_POLYMER.get()))
+                .unlockedBy("has_polymer", has(RegisterItems.PLATE_POLYMER.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.MECHANICAL_PARTS.get(), 2)
+        ShapedRecipeBuilder.shaped(RegisterItems.MECHANICAL_PARTS.get(), 2)
                 .define('G', ModTags.Items.GEAR_STEEL)
                 .define('P', ModTags.Items.PLATE_STEEL)
                 .define('I', Tags.Items.INGOTS_IRON)
@@ -1454,16 +1456,16 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_gear", has(ModTags.Items.GEAR_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CLAYMORE.get(), 1)
+        ShapedRecipeBuilder.shaped(RegisterItems.CLAYMORE.get(), 1)
                 .define('S', Tags.Items.STORAGE_BLOCKS_IRON)
-                .define('P', registerItems.IRON_PIPE.get())
+                .define('P', RegisterItems.IRON_PIPE.get())
                 .pattern("PP")
                 .pattern("SS")
                 .pattern("SS")
                 .unlockedBy("has_gear", has(Tags.Items.STORAGE_BLOCKS_IRON))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.ORUNDUM.get(), 2)
+        ShapedRecipeBuilder.shaped(RegisterItems.ORUNDUM.get(), 2)
                 .define('C', ModTags.Items.WIRE_COPPER)
                 .define('P', ModTags.Items.PLATE_STEEL)
                 .define('O', ModTags.Items.ORIGINITE)
@@ -1474,7 +1476,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_originite", has(ModTags.Items.ORIGINITE))
                 .save(consumer, "orundum_from_originite");
 
-        ShapedRecipeBuilder.shaped(registerItems.ORUNDUM.get(), 4)
+        ShapedRecipeBuilder.shaped(RegisterItems.ORUNDUM.get(), 4)
                 .define('C', ModTags.Items.WIRE_COPPER)
                 .define('P', ModTags.Items.PLATE_STEEL)
                 .define('O', ModTags.Items.ORIGINIUM_PRIME)
@@ -1485,81 +1487,81 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_originite", has(ModTags.Items.ORIGINIUM_PRIME))
                 .save(consumer, "orundum_from_prime");
 
-        ShapedRecipeBuilder.shaped(registerItems.CRYSTALLINE_COMPONENT.get(), 2)
-                .define('C', registerItems.VITRIFIED_ORIGINIUM.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CRYSTALLINE_COMPONENT.get(), 2)
+                .define('C', RegisterItems.VITRIFIED_ORIGINIUM.get())
                 .define('P', ModTags.Items.PLATE_STEEL)
-                .define('O', registerItems.ORUNDUM.get())
+                .define('O', RegisterItems.ORUNDUM.get())
                 .pattern("OCO")
                 .pattern("PCP")
                 .pattern("OCO")
-                .unlockedBy("has_material", has(registerItems.VITRIFIED_ORIGINIUM.get()))
+                .unlockedBy("has_material", has(RegisterItems.VITRIFIED_ORIGINIUM.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.CRYSTALLINE_CIRCUIT.get(), 2)
-                .define('P', registerItems.CRYSTALLINE_COMPONENT.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.CRYSTALLINE_CIRCUIT.get(), 2)
+                .define('P', RegisterItems.CRYSTALLINE_COMPONENT.get())
                 .define('A', ModTags.Items.CIRCUITS_ADVANCED)
                 .define('S', ModTags.Items.PLATE_RMA7024)
-                .define('O', registerItems.ORUNDUM.get())
-                .define('C', registerItems.COGNITIVE_CHIP.get())
+                .define('O', RegisterItems.ORUNDUM.get())
+                .define('C', RegisterItems.COGNITIVE_CHIP.get())
                 .pattern("POC")
                 .pattern("SAS")
-                .unlockedBy("has_material", has(registerItems.CRYSTALLINE_COMPONENT.get()))
+                .unlockedBy("has_material", has(RegisterItems.CRYSTALLINE_COMPONENT.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COGNITIVE_CHIP.get(), 2)
-                .define('O', registerItems.VITRIFIED_ORIGINIUM.get())
-                .define('A', registerItems.CRYSTALLINE_COMPONENT.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COGNITIVE_CHIP.get(), 2)
+                .define('O', RegisterItems.VITRIFIED_ORIGINIUM.get())
+                .define('A', RegisterItems.CRYSTALLINE_COMPONENT.get())
                 .define('Q', Tags.Items.GEMS_QUARTZ)
                 .pattern("QOQ")
                 .pattern("OAO")
                 .pattern("QOQ")
-                .unlockedBy("has_material", has(registerItems.CRYSTALLINE_COMPONENT.get()))
+                .unlockedBy("has_material", has(RegisterItems.CRYSTALLINE_COMPONENT.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COGNITIVE_ARRAY.get(), 2)
-                .define('O', registerItems.VITRIFIED_ORIGINIUM.get())
-                .define('A', registerItems.CRYSTALLINE_CIRCUIT.get())
-                .define('Q', registerItems.COGNITIVE_CHIP.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COGNITIVE_ARRAY.get(), 2)
+                .define('O', RegisterItems.VITRIFIED_ORIGINIUM.get())
+                .define('A', RegisterItems.CRYSTALLINE_CIRCUIT.get())
+                .define('Q', RegisterItems.COGNITIVE_CHIP.get())
                 .pattern("QOQ")
                 .pattern("OAO")
                 .pattern("QOQ")
-                .unlockedBy("has_material", has(registerItems.COGNITIVE_CHIP.get()))
+                .unlockedBy("has_material", has(RegisterItems.COGNITIVE_CHIP.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.WISDOM_CUBE.get())
-                .define('O', registerItems.COGNITIVE_ARRAY.get())
-                .define('Q', registerItems.COGNITIVE_CHIP.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.WISDOM_CUBE.get())
+                .define('O', RegisterItems.COGNITIVE_ARRAY.get())
+                .define('Q', RegisterItems.COGNITIVE_CHIP.get())
                 .define('L', Tags.Items.GEMS_LAPIS)
                 .pattern("QOQ")
                 .pattern("LQL")
                 .pattern("QOQ")
-                .unlockedBy("has_material", has(registerItems.COGNITIVE_ARRAY.get()))
+                .unlockedBy("has_material", has(RegisterItems.COGNITIVE_ARRAY.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COMPUTERCORE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COMPUTERCORE.get())
                 .define('A', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('O', registerItems.COGNITIVE_ARRAY.get())
-                .define('C', registerItems.CRYSTALLINE_CIRCUIT.get())
+                .define('O', RegisterItems.COGNITIVE_ARRAY.get())
+                .define('C', RegisterItems.CRYSTALLINE_CIRCUIT.get())
                 .define('G', Tags.Items.GLASS_BLACK)
                 .define('Q', ModTags.Items.INGOT_ALUMINIUM)
                 .pattern("QAQ")
                 .pattern("OGC")
                 .pattern("QAQ")
-                .unlockedBy("has_material", has(registerItems.COGNITIVE_ARRAY.get()))
+                .unlockedBy("has_material", has(RegisterItems.COGNITIVE_ARRAY.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.HEADHUNTING_PCB.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.HEADHUNTING_PCB.get())
                 .define('P', Items.ENDER_PEARL)
                 .define('E', Items.ENDER_EYE)
                 .define('R', ModTags.Items.CIRCUITS_BASIC)
-                .define('O', registerItems.ORUNDUM.get())
+                .define('O', RegisterItems.ORUNDUM.get())
                 .pattern("EP")
                 .pattern("OR")
-                .unlockedBy("has_material", has(registerItems.ORUNDUM.get()))
+                .unlockedBy("has_material", has(RegisterItems.ORUNDUM.get()))
                 .save(consumer);
 
 
-        ShapedRecipeBuilder.shaped(registerItems.BANDAGE_ROLL.get(), 4)
+        ShapedRecipeBuilder.shaped(RegisterItems.BANDAGE_ROLL.get(), 4)
                 .define('W', ItemTags.WOOL)
                 .pattern("WWW")
                 .pattern("W W")
@@ -1567,19 +1569,19 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_wool", has(ItemTags.WOOL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.ADVANCED_CIRCUIT.get(), 2)
+        ShapedRecipeBuilder.shaped(RegisterItems.ADVANCED_CIRCUIT.get(), 2)
                 .define('C', ModTags.Items.CIRCUITS_BASIC)
-                .define('O', registerItems.ORUNDUM.get())
-                .define('R', registerItems.RESISTOR_BASIC.get())
-                .define('T', registerItems.CAPACITOR_ADVANCED.get())
-                .define('K', registerItems.PLATE_POLYMER.get())
+                .define('O', RegisterItems.ORUNDUM.get())
+                .define('R', RegisterItems.RESISTOR_BASIC.get())
+                .define('T', RegisterItems.CAPACITOR_ADVANCED.get())
+                .define('K', RegisterItems.PLATE_POLYMER.get())
                 .pattern("ROT")
                 .pattern("CKC")
-                .unlockedBy("has_orundum", has(registerItems.ORUNDUM.get()))
+                .unlockedBy("has_orundum", has(RegisterItems.ORUNDUM.get()))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.SLEDGEHAMMER.get())
-                .define('S', registerItems.STEEL_PIPE.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.SLEDGEHAMMER.get())
+                .define('S', RegisterItems.STEEL_PIPE.get())
                 .define('B', Tags.Items.STORAGE_BLOCKS_IRON)
                 .pattern("BBB")
                 .pattern(" S ")
@@ -1588,20 +1590,20 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RiftwayControllerTE.RiftwayDefinition.getStackForm().getItem())
-                .define('C', registerItems.RESISTOR_ADVANCED.get())
-                .define('P', registerItems.CRYSTALLINE_CIRCUIT.get())
-                .define('M', registerBlocks.MACHINE_FRAME.get())
-                .define('O', registerItems.ORUNDUM.get())
-                .define('D', registerItems.FOR_DESTABILIZER.get())
-                .define('L', registerItems.COPPER_COIL.get())
+                .define('C', RegisterItems.RESISTOR_ADVANCED.get())
+                .define('P', RegisterItems.CRYSTALLINE_CIRCUIT.get())
+                .define('M', RegisterBlocks.MACHINE_FRAME.get())
+                .define('O', RegisterItems.ORUNDUM.get())
+                .define('D', RegisterItems.FOR_DESTABILIZER.get())
+                .define('L', RegisterItems.COPPER_COIL.get())
                 .pattern("LDL")
                 .pattern("COC")
                 .pattern("PMP")
-                .unlockedBy("has_item", has(registerItems.FOR_DESTABILIZER.get()))
+                .unlockedBy("has_item", has(RegisterItems.FOR_DESTABILIZER.get()))
                 .save(consumer);
 
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7012_sword.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7012_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7012)
                 .pattern("I")
@@ -1610,7 +1612,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7012_pickaxe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7012_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7012)
                 .pattern("III")
@@ -1619,7 +1621,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7012_axe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7012_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7012)
                 .pattern("II")
@@ -1628,7 +1630,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7012_hoe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7012_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7012)
                 .pattern("II")
@@ -1637,7 +1639,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7012_shovel.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7012_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7012)
                 .pattern("I")
@@ -1647,7 +1649,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7024_sword.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7024_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7024)
                 .pattern("I")
@@ -1656,7 +1658,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7024_pickaxe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7024_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7024)
                 .pattern("III")
@@ -1665,7 +1667,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7024_axe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7024_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7024)
                 .pattern("II")
@@ -1674,7 +1676,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7024_hoe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7024_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7024)
                 .pattern("II")
@@ -1683,7 +1685,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.RMA7024_shovel.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.RMA7024_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_RMA7024)
                 .pattern("I")
@@ -1693,7 +1695,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
 
-        ShapedRecipeBuilder.shaped(registerItems.D32_sword.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.D32_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_D32)
                 .pattern("I")
@@ -1702,7 +1704,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.D32_pickaxe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.D32_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_D32)
                 .pattern("III")
@@ -1711,7 +1713,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.D32_axe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.D32_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_D32)
                 .pattern("II")
@@ -1720,7 +1722,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.D32_hoe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.D32_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_D32)
                 .pattern("II")
@@ -1729,7 +1731,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.D32_shovel.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.D32_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_D32)
                 .pattern("I")
@@ -1738,7 +1740,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_sword.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.STEEL_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .pattern("I")
@@ -1747,7 +1749,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_pickaxe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.STEEL_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .pattern("III")
@@ -1756,7 +1758,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_axe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.STEEL_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .pattern("II")
@@ -1765,7 +1767,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_hoe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.STEEL_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .pattern("II")
@@ -1774,7 +1776,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.STEEL_shovel.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.STEEL_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_STEEL)
                 .pattern("I")
@@ -1783,7 +1785,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COPPER_sword.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COPPER_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_COPPER)
                 .pattern("I")
@@ -1792,7 +1794,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COPPER_pickaxe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COPPER_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_COPPER)
                 .pattern("III")
@@ -1801,7 +1803,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COPPER_axe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COPPER_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_COPPER)
                 .pattern("II")
@@ -1810,7 +1812,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COPPER_hoe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COPPER_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_COPPER)
                 .pattern("II")
@@ -1819,7 +1821,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.COPPER_shovel.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.COPPER_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_COPPER)
                 .pattern("I")
@@ -1828,7 +1830,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.TIN_sword.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.TIN_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_TIN)
                 .pattern("I")
@@ -1837,7 +1839,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.TIN_pickaxe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.TIN_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_TIN)
                 .pattern("III")
@@ -1846,7 +1848,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.TIN_axe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.TIN_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_TIN)
                 .pattern("II")
@@ -1855,7 +1857,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.TIN_hoe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.TIN_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_TIN)
                 .pattern("II")
@@ -1864,7 +1866,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.TIN_shovel.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.TIN_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_TIN)
                 .pattern("I")
@@ -1873,7 +1875,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.BRONZE_sword.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.BRONZE_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_BRONZE)
                 .pattern("I")
@@ -1882,7 +1884,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_BRONZE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.BRONZE_pickaxe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.BRONZE_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_BRONZE)
                 .pattern("III")
@@ -1891,7 +1893,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_BRONZE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.BRONZE_axe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.BRONZE_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_BRONZE)
                 .pattern("II")
@@ -1900,7 +1902,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_BRONZE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.BRONZE_hoe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.BRONZE_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_BRONZE)
                 .pattern("II")
@@ -1909,7 +1911,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_BRONZE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.BRONZE_shovel.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.BRONZE_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_BRONZE)
                 .pattern("I")
@@ -1918,7 +1920,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_BRONZE))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.LEAD_sword.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.LEAD_sword.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_LEAD)
                 .pattern("I")
@@ -1927,7 +1929,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_LEAD))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.LEAD_pickaxe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.LEAD_pickaxe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_LEAD)
                 .pattern("III")
@@ -1936,7 +1938,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_LEAD))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.LEAD_axe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.LEAD_axe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_LEAD)
                 .pattern("II")
@@ -1945,7 +1947,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_LEAD))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.LEAD_hoe.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.LEAD_hoe.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_LEAD)
                 .pattern("II")
@@ -1954,7 +1956,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_LEAD))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.LEAD_shovel.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.LEAD_shovel.get())
                 .define('S', Tags.Items.RODS_WOODEN)
                 .define('I', ModTags.Items.INGOT_LEAD)
                 .pattern("I")
@@ -1963,14 +1965,14 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_LEAD))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(registerItems.AMBER_ORIGINIUM_FUEL_ROD.get(), 3)
-                .define('S', registerItems.AMBER_ORIGINIUM.get())
-                .define('I', registerItems.C99_CARBON.get())
+        ShapedRecipeBuilder.shaped(RegisterItems.AMBER_ORIGINIUM_FUEL_ROD.get(), 3)
+                .define('S', RegisterItems.AMBER_ORIGINIUM.get())
+                .define('I', RegisterItems.C99_CARBON.get())
                 .define('P', ModTags.Items.DUST_COAL)
                 .pattern("SIS")
                 .pattern("SPS")
                 .pattern("SIS")
-                .unlockedBy("has_material", has(registerItems.AMBER_ORIGINIUM.get()))
+                .unlockedBy("has_material", has(RegisterItems.AMBER_ORIGINIUM.get()))
                 .save(consumer);
 
     }
@@ -2056,7 +2058,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                     .unlockedBy("has_item", hasIngot)
                     .save(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_without_hammer"));
 
-            PressingRecipeBuilder.addRecipe(metal.plate, Ingredient.of(metal.ingotTag), Ingredient.of(registerItems.MOLD_PLATE.get()), 1, 200)
+            PressingRecipeBuilder.addRecipe(metal.plate, Ingredient.of(metal.ingotTag), Ingredient.of(RegisterItems.MOLD_PLATE.get()), 1, 200)
                     .build(consumer, new ResourceLocation(metal.ingot.asItem().getRegistryName() + "_pressing"));
         }
     }

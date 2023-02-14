@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "tag": "forge:nuggets/d32"
+  },
+  "result": {
+    "fluid": "projectazure:molten_d32",
+    "amount": 16
+  },
+  "temperature": 2200,
+  "time": 32
+}

@@ -51,8 +51,7 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 import static com.lowdragmc.multiblocked.api.registry.MbdCapabilities.registerCapability;
-import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
-import static com.yor42.projectazure.libs.Constants.MODID;
+import static com.yor42.projectazure.libs.Constants.*;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MODID)
@@ -67,7 +66,7 @@ public class Main
         @Nonnull
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
+            return new ItemStack(RegisterItems.Rainbow_Wisdom_Cube.get());
         }
     };
 
@@ -75,7 +74,7 @@ public class Main
         @Nonnull
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(registerItems.WISDOM_CUBE.get());
+            return new ItemStack(RegisterItems.WISDOM_CUBE.get());
         }
     };
 
@@ -83,7 +82,7 @@ public class Main
         @Nonnull
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(registerItems.INGOT_COPPER.get().asItem());
+            return new ItemStack(RegisterItems.INGOT_COPPER.get().asItem());
         }
     };
 
@@ -91,7 +90,7 @@ public class Main
         @Nonnull
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(registerBlocks.METAL_PRESS.get().asItem());
+            return new ItemStack(RegisterBlocks.METAL_PRESS.get().asItem());
         }
     };
 
@@ -99,7 +98,7 @@ public class Main
         @Nonnull
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(registerItems.BONKBAT.get());
+            return new ItemStack(RegisterItems.BONKBAT.get());
         }
     };
 
@@ -138,9 +137,9 @@ public class Main
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
-        ProjectileManager.getInstance().registerFactory(registerItems.RAILGUN_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
+        ProjectileManager.getInstance().registerFactory(RegisterItems.RAILGUN_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
         if (ModList.get().isLoaded("theoneprobe")) TOPCompat.register();
-        if(ModList.get().isLoaded(CURIOS_MODID)) CuriosCompat.sendImc(event);
+        if(isCurioLoaded()) CuriosCompat.sendImc(event);
     }
 
     private void processIMC(final InterModProcessEvent event)
@@ -164,7 +163,7 @@ public class Main
         ClientRegisterManager.registerScreen();
 
         //We do some reflect magic for gun here
-        for (Field field : registerItems.class.getDeclaredFields()) {
+        for (Field field : RegisterItems.class.getDeclaredFields()) {
             RegistryObject<?> object;
             try {
                 object = (RegistryObject<?>) field.get(null);

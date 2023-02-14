@@ -2,7 +2,7 @@ package com.yor42.projectazure.intermod.jei.recipecategory;
 
 import com.yor42.projectazure.gameobject.crafting.recipes.CrystalizingRecipe;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -26,7 +26,7 @@ public class JEIRecipeCategoryCrystalizing implements IRecipeCategory<Crystalizi
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_crystalizing");
 
     public JEIRecipeCategoryCrystalizing(IGuiHelper helper){
-        this.icon = helper.createDrawableIngredient(new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()));
+        this.icon = helper.createDrawableIngredient(new ItemStack(RegisterBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()));
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/crystal_growth_chamber.png");
         this.background = helper.createDrawable(TEXTURE, 4,3, 168, 80);
         this.Tank_Overlay = helper.createDrawable(TEXTURE, 176, 49, 18, 36);

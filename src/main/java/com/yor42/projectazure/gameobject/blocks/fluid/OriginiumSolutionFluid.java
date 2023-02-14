@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -21,7 +21,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.*;
+import static com.yor42.projectazure.setup.register.RegisterFluids.*;
 
 public abstract class OriginiumSolutionFluid extends FlowingFluid {
     @Override
@@ -89,7 +89,7 @@ public abstract class OriginiumSolutionFluid extends FlowingFluid {
 
     @Override
     protected BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.GASOLINE.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getLegacyLevel(state));
+        return RegisterBlocks.GASOLINE.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override

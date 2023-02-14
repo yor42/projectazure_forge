@@ -32,6 +32,7 @@ import java.util.List;
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
 import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
+import static com.yor42.projectazure.libs.Constants.isCurioLoaded;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
@@ -80,7 +81,7 @@ public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
                         }
                     }
                 }
-                if(ChargerStack.isEmpty() && ModList.get().isLoaded(CURIOS_MODID)){
+                if(ChargerStack.isEmpty() && isCurioLoaded()){
                     ChargerStack = getCurioItemStack(entity, (stack)->{
                         Item item = stack.getItem();
                         if (item instanceof ItemDefibCharger&& ItemDefibCharger.getChargeProgress(stack)<100) {

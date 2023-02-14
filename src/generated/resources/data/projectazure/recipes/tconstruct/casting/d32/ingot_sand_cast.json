@@ -1,0 +1,15 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": {
+    "tag": "tconstruct:casts/single_use/ingot"
+  },
+  "cast_consumed": true,
+  "fluid": {
+    "tag": "forge:molten_d32",
+    "amount": 144
+  },
+  "result": {
+    "tag": "forge:ingots/d32"
+  },
+  "cooling_time": 97
+}

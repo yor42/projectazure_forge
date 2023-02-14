@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.blocks.fluid;
 
-import com.yor42.projectazure.setup.register.registerBlocks;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -21,8 +21,8 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraftforge.fluids.FluidAttributes;
 
-import static com.yor42.projectazure.setup.register.registerFluids.FUEL_OIL_FLOWING_REGISTRY;
-import static com.yor42.projectazure.setup.register.registerFluids.FUEL_OIL_SOURCE_REGISTRY;
+import static com.yor42.projectazure.setup.register.RegisterFluids.FUEL_OIL_FLOWING_REGISTRY;
+import static com.yor42.projectazure.setup.register.RegisterFluids.FUEL_OIL_SOURCE_REGISTRY;
 
 public abstract class FuelOilFluid extends FlowingFluid {
 
@@ -59,7 +59,7 @@ public abstract class FuelOilFluid extends FlowingFluid {
 
     @Override
     public Item getBucket() {
-        return registerItems.FUEL_OIL_BUCKET.get();
+        return RegisterItems.FUEL_OIL_BUCKET.get();
     }
 
     @Override
@@ -91,7 +91,7 @@ public abstract class FuelOilFluid extends FlowingFluid {
 
     @Override
     protected BlockState createLegacyBlock(FluidState state) {
-        return registerBlocks.FUEL_OIL.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getLegacyLevel(state));
+        return RegisterBlocks.FUEL_OIL.get().defaultBlockState().setValue(FlowingFluidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override

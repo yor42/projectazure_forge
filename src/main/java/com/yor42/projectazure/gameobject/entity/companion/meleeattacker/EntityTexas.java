@@ -10,7 +10,7 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -332,7 +332,7 @@ public class EntityTexas extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.FLEXABLE_SWORD_THINGY.get()));
+        return new ArrayList<>(Collections.singletonList(RegisterItems.FLEXABLE_SWORD_THINGY.get()));
     }
 
     @Override

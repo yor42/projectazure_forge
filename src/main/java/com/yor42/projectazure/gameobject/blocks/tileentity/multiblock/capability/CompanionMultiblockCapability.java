@@ -21,7 +21,7 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.Ri
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IAknOp;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.item.ItemEntity;
@@ -147,7 +147,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
                             for (EntityIngredient ingredient : left) {
                                 Entity entity;
                                 if (cap.isDupe(ingredient.type) && !PAConfig.CONFIG.ALLOW_DUPLICATE.get()) {
-                                    ItemStack stack = new ItemStack(registerItems.TOKEN.get());
+                                    ItemStack stack = new ItemStack(RegisterItems.TOKEN.get());
                                     stack.getOrCreateTag().putString("vaildentity", ingredient.type.toString());
                                     entity = new ItemEntity(serverLevel, pos.getX(), pos.getY(), pos.getZ(), stack);
                                 }

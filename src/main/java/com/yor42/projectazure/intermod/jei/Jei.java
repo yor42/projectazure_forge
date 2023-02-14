@@ -6,7 +6,7 @@ import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryBasic
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryCrystalizing;
 import com.yor42.projectazure.intermod.jei.recipecategory.JEIRecipeCategoryPressing;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.registerRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -112,10 +112,10 @@ public class Jei implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(registerBlocks.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.UID);
-        registration.addRecipeCatalyst(new ItemStack(registerBlocks.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.UID);
-        registration.addRecipeCatalyst(new ItemStack(registerBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.UID);
-        registration.addRecipeCatalyst(new ItemStack(registerBlocks.BASIC_CHEMICAL_REACTOR.get().asItem()), JEIRecipeCategoryBasicChemicalReaction.UID);
+        registration.addRecipeCatalyst(new ItemStack(RegisterBlocks.METAL_PRESS.get().asItem()), JEIRecipeCategoryPressing.UID);
+        registration.addRecipeCatalyst(new ItemStack(RegisterBlocks.ALLOY_FURNACE.get().asItem()), JEIRecipeCategoryAlloying.UID);
+        registration.addRecipeCatalyst(new ItemStack(RegisterBlocks.CRYSTAL_GROWTH_CHAMBER.get().asItem()), JEIRecipeCategoryCrystalizing.UID);
+        registration.addRecipeCatalyst(new ItemStack(RegisterBlocks.BASIC_CHEMICAL_REACTOR.get().asItem()), JEIRecipeCategoryBasicChemicalReaction.UID);
     }
 
     @Override

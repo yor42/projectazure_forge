@@ -37,7 +37,7 @@ import java.util.function.Supplier;
 import static com.yor42.projectazure.Main.*;
 import static com.yor42.projectazure.data.client.itemModelProvider.ITEMENTRY;
 
-public class registerItems {
+public class RegisterItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 
@@ -128,6 +128,13 @@ public class registerItems {
     public static final RegistryObject<Item> BASIC_MOTOR = register("motor_basic", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> ADVANCED_MOTOR = register("motor_advanced", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> PRIMITIVE_DEVICE = register("device_primitive", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> BASIC_DEVICE = register("device_basic", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> ADVANCED_DEVICE = register("device_advanced", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> PRIMITIVE_CIRCUIT = register("circuit_primitive", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
@@ -321,11 +328,11 @@ public class registerItems {
     //No.....
     //AND THERE'S MORE.
     //DEAR GOD....
-    public static final RegistryObject<Item> CRUDE_OIL_BUCKET = register("crude_oil_bucket", ()-> new BucketItem(registerFluids.CRUDE_OIL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> GASOLINE_BUCKET = register("gasoline_bucket", ()-> new BucketItem(registerFluids.GASOLINE_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> DIESEL_BUCKET = register("diesel_bucket", ()-> new BucketItem(registerFluids.DIESEL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> KETON_BUCKET = register("keton_bucket", ()-> new BucketItem(registerFluids.KETON_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<Item> FUEL_OIL_BUCKET = register("fuel_oil_bucket", ()-> new BucketItem(registerFluids.FUEL_OIL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> CRUDE_OIL_BUCKET = register("crude_oil_bucket", ()-> new BucketItem(RegisterFluids.CRUDE_OIL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> GASOLINE_BUCKET = register("gasoline_bucket", ()-> new BucketItem(RegisterFluids.GASOLINE_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> DIESEL_BUCKET = register("diesel_bucket", ()-> new BucketItem(RegisterFluids.DIESEL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> KETON_BUCKET = register("keton_bucket", ()-> new BucketItem(RegisterFluids.KETON_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> FUEL_OIL_BUCKET = register("fuel_oil_bucket", ()-> new BucketItem(RegisterFluids.FUEL_OIL_SOURCE_REGISTRY, (new Item.Properties()).craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
 
 
     public static final RegistryObject<Item> WISDOM_CUBE = register("wisdomcube", () -> new ItemBaseTooltip(new Item.Properties()

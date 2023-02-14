@@ -7,7 +7,7 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerPCRInventory;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntitySpellBall;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -274,7 +274,7 @@ public class EntityKyaru extends AbstractCompanionMagicUser {
 
     @Override
     public boolean shouldUseSpell(LivingEntity Target) {
-        return !isSwimming() && this.getMainHandItem().getItem() == registerItems.KYARU_STAFF.get();
+        return !isSwimming() && this.getMainHandItem().getItem() == RegisterItems.KYARU_STAFF.get();
     }
 
     @Override

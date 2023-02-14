@@ -11,13 +11,13 @@ import java.util.function.Supplier;
 
 public class registerTE {
 
-    public static final RegistryObject<TileEntityType<TileEntityMetalPress>> METAL_PRESS = register("metal_press_te", TileEntityMetalPress::new, registerBlocks.METAL_PRESS);
-    public static final RegistryObject<TileEntityType<TileEntityAlloyFurnace>> ALLOY_FURNACE = register("alloy_furnace", TileEntityAlloyFurnace::new, registerBlocks.ALLOY_FURNACE);
-    public static final RegistryObject<TileEntityType<TileEntityBasicRefinery>> BASIC_REFINERY = register("basic_refinery_te", TileEntityBasicRefinery::new, registerBlocks.BASIC_REFINERY);
-    public static final RegistryObject<TileEntityType<TileEntityRecruitBeacon>> RECRUIT_BEACON = register("recruit_beacon_te", TileEntityRecruitBeacon::new, registerBlocks.RECRUIT_BEACON);
-    public static final RegistryObject<TileEntityType<TileEntityBasicChemicalReactor>> BASIC_CHEMICAL_REACTOR = register("basic_chemical_reactor_te", TileEntityBasicChemicalReactor::new, registerBlocks.BASIC_CHEMICAL_REACTOR);
-    public static final RegistryObject<TileEntityType<TileEntityCrystalGrowthChamber>> CRYSTAL_GROWTH_CHAMBER = register("crystal_growth_chamber_te", TileEntityCrystalGrowthChamber::new, registerBlocks.CRYSTAL_GROWTH_CHAMBER);
-    public static final RegistryObject<TileEntityType<TileEntityPantry>> PANTRY = register("pantry_te", TileEntityPantry::new, registerBlocks.OAK_PANTRY, registerBlocks.CRIMSON_PANTRY, registerBlocks.JUNGLE_PANTRY, registerBlocks.ACACIA_PANTRY, registerBlocks.BIRCH_PANTRY, registerBlocks.SPRUCE_PANTRY, registerBlocks.WARPED_PANTRY, registerBlocks.DARK_OAK_PANTRY);
+    public static final RegistryObject<TileEntityType<TileEntityMetalPress>> METAL_PRESS = register("metal_press_te", TileEntityMetalPress::new, RegisterBlocks.METAL_PRESS);
+    public static final RegistryObject<TileEntityType<TileEntityAlloyFurnace>> ALLOY_FURNACE = register("alloy_furnace", TileEntityAlloyFurnace::new, RegisterBlocks.ALLOY_FURNACE);
+    public static final RegistryObject<TileEntityType<TileEntityBasicRefinery>> BASIC_REFINERY = register("basic_refinery_te", TileEntityBasicRefinery::new, RegisterBlocks.BASIC_REFINERY);
+    public static final RegistryObject<TileEntityType<TileEntityRecruitBeacon>> RECRUIT_BEACON = register("recruit_beacon_te", TileEntityRecruitBeacon::new, RegisterBlocks.RECRUIT_BEACON);
+    public static final RegistryObject<TileEntityType<TileEntityBasicChemicalReactor>> BASIC_CHEMICAL_REACTOR = register("basic_chemical_reactor_te", TileEntityBasicChemicalReactor::new, RegisterBlocks.BASIC_CHEMICAL_REACTOR);
+    public static final RegistryObject<TileEntityType<TileEntityCrystalGrowthChamber>> CRYSTAL_GROWTH_CHAMBER = register("crystal_growth_chamber_te", TileEntityCrystalGrowthChamber::new, RegisterBlocks.CRYSTAL_GROWTH_CHAMBER);
+    public static final RegistryObject<TileEntityType<TileEntityPantry>> PANTRY = register("pantry_te", TileEntityPantry::new, RegisterBlocks.OAK_PANTRY, RegisterBlocks.CRIMSON_PANTRY, RegisterBlocks.JUNGLE_PANTRY, RegisterBlocks.ACACIA_PANTRY, RegisterBlocks.BIRCH_PANTRY, RegisterBlocks.SPRUCE_PANTRY, RegisterBlocks.WARPED_PANTRY, RegisterBlocks.DARK_OAK_PANTRY);
     @SafeVarargs
     private static <T extends TileEntity> RegistryObject<TileEntityType<T>> register(String name, Supplier<T> factory, RegistryObject<Block>... block){
         //About Mojang's Data Fixer. Afaik Mod can't even use it. and its annotated to non null. KEKW

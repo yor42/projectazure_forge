@@ -21,10 +21,10 @@ import net.minecraftforge.fluids.FluidAttributes;
 
 import javax.annotation.Nonnull;
 
-import static com.yor42.projectazure.setup.register.registerBlocks.KETON;
-import static com.yor42.projectazure.setup.register.registerFluids.KETON_FLOWING_REGISTRY;
-import static com.yor42.projectazure.setup.register.registerFluids.KETON_SOURCE_REGISTRY;
-import static com.yor42.projectazure.setup.register.registerItems.KETON_BUCKET;
+import static com.yor42.projectazure.setup.register.RegisterBlocks.KETON;
+import static com.yor42.projectazure.setup.register.RegisterFluids.KETON_FLOWING_REGISTRY;
+import static com.yor42.projectazure.setup.register.RegisterFluids.KETON_SOURCE_REGISTRY;
+import static com.yor42.projectazure.setup.register.RegisterItems.KETON_BUCKET;
 
 public abstract class KetonFluid extends FlowingFluid {
     @Override

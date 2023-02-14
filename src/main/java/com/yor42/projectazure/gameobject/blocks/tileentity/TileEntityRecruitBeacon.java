@@ -8,8 +8,8 @@ import com.yor42.projectazure.gameobject.containers.machine.ContainerRecruitBeac
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.intermod.SolarApocalypse;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerEntity;
-import com.yor42.projectazure.setup.register.registerItems;
 import com.yor42.projectazure.setup.register.registerTE;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -168,7 +168,7 @@ public class TileEntityRecruitBeacon extends AbstractTileEntityGacha {
             }
             else{
                 blockpos = this.getBlockPos().relative(this.getLevel().getBlockState(this.getBlockPos()).getValue(FACING), 1);
-                ItemEntity entity = new ItemEntity(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), new ItemStack(registerItems.ORIGINIUM_PRIME.get(), 5));
+                ItemEntity entity = new ItemEntity(this.level, blockpos.getX(), blockpos.getY(), blockpos.getZ(), new ItemStack(RegisterItems.ORIGINIUM_PRIME.get(), 5));
                 this.level.addFreshEntity(entity);
             }
         }

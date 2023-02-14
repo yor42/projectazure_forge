@@ -7,6 +7,8 @@ import com.yor42.projectazure.data.common.FluidTagProvider;
 import com.yor42.projectazure.data.common.ItemTagProvider;
 import com.yor42.projectazure.data.common.RecipeProvider;
 import com.yor42.projectazure.data.common.loot.LootTableProvider;
+import com.yor42.projectazure.intermod.tconstruct.Tconstruct;
+import com.yor42.projectazure.intermod.tconstruct.datagen.PATConRecipeProvider;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -35,6 +37,10 @@ public class datagenerator {
         gen.addProvider(new ItemTagProvider(gen, blockTagProvider, filehelper));
         gen.addProvider(new LootTableProvider(gen));
         gen.addProvider(new RecipeProvider(gen));
+
+        if(Constants.isTConLoaded()){
+            Tconstruct.runDatagens(event);
+        }
     }
 
 }

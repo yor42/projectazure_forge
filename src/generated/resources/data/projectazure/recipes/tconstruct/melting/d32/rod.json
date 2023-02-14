@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:rods/d32",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "ingredient": {
+    "tag": "forge:rods/d32"
+  },
+  "result": {
+    "fluid": "projectazure:molten_d32",
+    "amount": 72
+  },
+  "temperature": 2200,
+  "time": 19
+}

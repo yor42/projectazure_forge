@@ -10,7 +10,7 @@ import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -229,7 +229,7 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        if(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(true) && this.getMainHandItem().getItem() == registerItems.KITCHEN_KNIFE.get()){
+        if(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(true) && this.getMainHandItem().getItem() == RegisterItems.KITCHEN_KNIFE.get()){
             int swapindex = this.getItemSwapIndex(MAIN_HAND);
             if(swapindex>-1){
                 this.setItemInHand(MAIN_HAND, this.getInventory().extractItem(swapindex, this.getInventory().getStackInSlot(swapindex).getCount(), false));
@@ -268,7 +268,7 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.KITCHEN_KNIFE.get()));
+        return new ArrayList<>(Collections.singletonList(RegisterItems.KITCHEN_KNIFE.get()));
     }
 
     @Nullable
@@ -362,7 +362,7 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
     @Nonnull
     @Override
     public ItemStack createWeaponStack() {
-        ItemStack stack = new ItemStack(registerItems.KITCHEN_KNIFE.get());
+        ItemStack stack = new ItemStack(RegisterItems.KITCHEN_KNIFE.get());
         stack.getOrCreateTag().putUUID("owner", this.getUUID());
         return stack;
     }

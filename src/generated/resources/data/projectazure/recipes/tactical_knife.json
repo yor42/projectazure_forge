@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I",
+    "S"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:plates/steel"
+    },
+    "S": {
+      "item": "projectazure:c99"
+    }
+  },
+  "result": {
+    "item": "projectazure:tactical_knife"
+  }
+}

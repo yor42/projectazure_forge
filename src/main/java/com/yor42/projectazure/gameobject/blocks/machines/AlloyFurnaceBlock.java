@@ -2,7 +2,7 @@ package com.yor42.projectazure.gameobject.blocks.machines;
 
 import com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock;
 import com.yor42.projectazure.gameobject.blocks.tileentity.TileEntityAlloyFurnace;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -28,7 +28,7 @@ import java.util.Random;
 public class AlloyFurnaceBlock extends AbstractMachineBlock {
 
     public AlloyFurnaceBlock() {
-        super((AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).lightLevel(registerBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
+        super((AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).lightLevel(RegisterBlocks.getLightValueLit(13)).sound(SoundType.STONE)));
     }
 
     @Override

@@ -21,7 +21,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import static com.yor42.projectazure.setup.register.registerEntity.DRONE_MISSILE;
-import static com.yor42.projectazure.setup.register.registerItems.DRONE_BAMISSILE;
+import static com.yor42.projectazure.setup.register.RegisterItems.DRONE_BAMISSILE;
 
 public class EntityMissileDrone extends AbstractEntityDrone{
 

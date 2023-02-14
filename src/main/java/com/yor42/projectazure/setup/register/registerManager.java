@@ -7,9 +7,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class registerManager {
     public static void register() {
         registerEntity.loadClass();
-        registerFluids.register();
-        registerItems.register();
-        registerFluids.register();
+        RegisterFluids.register();
+        RegisterItems.register();
+        RegisterFluids.register();
         registerTE.register();
         RegisterContainer.register();
         registerBiomes.register();
@@ -21,9 +21,9 @@ public class registerManager {
         IEventBus eventbus = FMLJavaModLoadingContext.get().getModEventBus();
         registerEntity.ENTITIES.register(eventbus);
         registerBiomes.BIOMES.register(eventbus);
-        registerFluids.FLUIDS.register(eventbus);
-        registerBlocks.BLOCKS.register(eventbus);
-        registerItems.ITEMS.register(eventbus);
+        RegisterFluids.FLUIDS.register(eventbus);
+        RegisterBlocks.BLOCKS.register(eventbus);
+        RegisterItems.ITEMS.register(eventbus);
         RegisterContainer.CONTAINER.register(eventbus);
         RegisterContainer.TILE_ENTITY.register(eventbus);
         RegisterAI.ACTIVITIES.register(eventbus);

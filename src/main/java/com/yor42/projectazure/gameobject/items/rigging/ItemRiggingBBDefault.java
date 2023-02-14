@@ -8,7 +8,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -166,7 +166,7 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
         stack = inventory.getStackInSlot(0);
         if (stack != ItemStack.EMPTY) {
             ItemEquipmentBase EquipmentItem = ((ItemEquipmentBase) stack.getItem());
-            if (EquipmentItem == registerItems.EQUIPMENT_TORPEDO_533MM.get()) {
+            if (EquipmentItem == RegisterItems.EQUIPMENT_TORPEDO_533MM.get()) {
                 matrixStackIn.pushPose();
                 RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
                 matrixStackIn.translate((0 + hostbone.getPositionX()) / 16, (-10 + hostbone.getPositionY() + riggingoffset) / 16, (26.75 + hostbone.getPositionZ()) / 16);

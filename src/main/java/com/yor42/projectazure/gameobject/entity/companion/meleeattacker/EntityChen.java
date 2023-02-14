@@ -9,7 +9,7 @@ import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -81,11 +81,11 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     }
 
     public ArrayList<Item> getTalentedWeaponList(){
-        return new ArrayList<>(Arrays.asList(registerItems.CHIXIAO.get(), registerItems.SHEATH.get()));
+        return new ArrayList<>(Arrays.asList(RegisterItems.CHIXIAO.get(), RegisterItems.SHEATH.get()));
     }
 
     public SoundEvent getAttackSound(){
-        return this.getMainHandItem().getItem() == registerItems.CHIXIAO.get()? CHIXIAO_HIT:SHEATH_HIT;
+        return this.getMainHandItem().getItem() == RegisterItems.CHIXIAO.get()? CHIXIAO_HIT:SHEATH_HIT;
     }
 
     @Override
@@ -405,6 +405,6 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
 
     @Override
     public boolean isSkillItem(ItemStack stack) {
-        return stack.getItem() == registerItems.CHIXIAO.get();
+        return stack.getItem() == RegisterItems.CHIXIAO.get();
     }
 }

@@ -1,7 +1,7 @@
 package com.yor42.projectazure.network;
 
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -29,7 +29,7 @@ public class serverEvents {
                 EntityKansenBase entity = (EntityKansenBase) entitytype.spawn((ServerWorld)world, player.getUseItem(), player, player.blockPosition(), SpawnReason.SPAWN_EGG, false, false);
                 if (entity != null){
                     if(!player.isCreative()) {
-                        if(player.getItemInHand(Hand.MAIN_HAND).getItem() == registerItems.Rainbow_Wisdom_Cube.get())
+                        if(player.getItemInHand(Hand.MAIN_HAND).getItem() == RegisterItems.Rainbow_Wisdom_Cube.get())
                             player.getItemInHand(Hand.MAIN_HAND).shrink(1);
                         else
                             player.getItemInHand(Hand.OFF_HAND).shrink(1);
@@ -47,10 +47,10 @@ public class serverEvents {
         playerEntity.getItemInHand(hand).shrink(1);
         if(id == 0){
             //AKN
-            playerEntity.setItemInHand(hand, new ItemStack(registerItems.SPAWN_AMIYA.get()));
+            playerEntity.setItemInHand(hand, new ItemStack(RegisterItems.SPAWN_AMIYA.get()));
         }
         else{
-            ItemStack cubeStack = new ItemStack(registerItems.Rainbow_Wisdom_Cube.get());
+            ItemStack cubeStack = new ItemStack(RegisterItems.Rainbow_Wisdom_Cube.get());
             CompoundNBT nbt = cubeStack.getOrCreateTag();
             nbt.putUUID("owner", playerEntity.getUUID());
             playerEntity.setItemInHand(hand, cubeStack);

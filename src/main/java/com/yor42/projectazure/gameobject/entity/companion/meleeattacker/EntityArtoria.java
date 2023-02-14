@@ -10,7 +10,7 @@ import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -66,7 +66,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.EXCALIBUR.get()));
+        return new ArrayList<>(Collections.singletonList(RegisterItems.EXCALIBUR.get()));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
             }
         }
 
-        if(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(true) && this.getMainHandItem().getItem() == registerItems.EXCALIBUR.get()){
+        if(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).map(LivingEntity::isDeadOrDying).orElse(true) && this.getMainHandItem().getItem() == RegisterItems.EXCALIBUR.get()){
             int swapindex = this.getItemSwapIndex(MAIN_HAND);
             if(swapindex>-1){
                 this.setItemInHand(MAIN_HAND, this.getInventory().extractItem(swapindex, this.getInventory().getStackInSlot(swapindex).getCount(), false));
@@ -125,7 +125,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     }
 
     private void giveSheath(PlayerEntity player) {
-        ItemStack stack = new ItemStack(registerItems.EXCALIBUR_SHEATH.get());
+        ItemStack stack = new ItemStack(RegisterItems.EXCALIBUR_SHEATH.get());
         stack.getOrCreateTag().putUUID("owner", this.getUUID());
         if(player.inventory.add(stack)){
             this.gaveSheath = true;
@@ -424,7 +424,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     @Nonnull
     @Override
     public ItemStack createWeaponStack() {
-        ItemStack stack = new ItemStack(registerItems.EXCALIBUR.get());
+        ItemStack stack = new ItemStack(RegisterItems.EXCALIBUR.get());
         stack.getOrCreateTag().putUUID("owner", this.getUUID());
         return stack;
     }

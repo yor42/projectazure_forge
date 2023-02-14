@@ -21,7 +21,7 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.Ha
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipelogics.RiftwayRecipeLogic;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
-import com.yor42.projectazure.setup.register.registerBlocks;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -39,7 +39,7 @@ public class RiftwayControllerTE extends ControllerTileEntity {
         RiftwayDefinition.getRecipeMap().inputCapabilities.add(FEMultiblockCapability.CAP);
         RiftwayDefinition.getRecipeMap().outputCapabilities.add(CompanionMultiblockCapability.CAP);
         RiftwayDefinition.getRecipeMap().outputCapabilities.add(EntityMultiblockCapability.CAP);
-        RiftwayDefinition.setBasePattern(FactoryBlockPattern.start().aisle("CDLDC", "FDDDF", "FDDDF", "FFCFF").aisle("CCCCC", "FDFDF", "FDFDF", "FFCFF").aisle("LFEFL", "DFAF@", "CFAFC", "SSSSS").aisle("SSSSS", "AAAAA", "AAAAA", "AAAAA").where("A", Predicates.any()).where("@", Predicates.component(RiftwayDefinition)).where("E", Predicates.component(HatchTE.EntityDefinition).disableRenderFormed()).where("L", Predicates.component(HatchTE.EnergyHatchDefinition).or(Predicates.component(HatchTE.ItemHatchDefinition)).or(Predicates.component(HatchTE.FluidHatchDefinition))).where("A", Predicates.air()).where("S", Predicates.blocks(registerBlocks.MACHINE_FRAME_SLAB.get()).disableRenderFormed()).where("F", Predicates.blocks(registerBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("D", Predicates.blocks(registerBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).where("C", Predicates.blocks(registerBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).build());
+        RiftwayDefinition.setBasePattern(FactoryBlockPattern.start().aisle("CDLDC", "FDDDF", "FDDDF", "FFCFF").aisle("CCCCC", "FDFDF", "FDFDF", "FFCFF").aisle("LFEFL", "DFAF@", "CFAFC", "SSSSS").aisle("SSSSS", "AAAAA", "AAAAA", "AAAAA").where("A", Predicates.any()).where("@", Predicates.component(RiftwayDefinition)).where("E", Predicates.component(HatchTE.EntityDefinition).disableRenderFormed()).where("L", Predicates.component(HatchTE.EnergyHatchDefinition).or(Predicates.component(HatchTE.ItemHatchDefinition)).or(Predicates.component(HatchTE.FluidHatchDefinition))).where("A", Predicates.air()).where("S", Predicates.blocks(RegisterBlocks.MACHINE_FRAME_SLAB.get()).disableRenderFormed()).where("F", Predicates.blocks(RegisterBlocks.MACHINE_FRAME.get()).disableRenderFormed()).where("D", Predicates.blocks(RegisterBlocks.MACHINE_DYNAMO.get()).disableRenderFormed()).where("C", Predicates.blocks(RegisterBlocks.MACHINE_COMPONENTBLOCK.get()).disableRenderFormed()).build());
         RiftwayDefinition.getBaseStatus().setRenderer(ResourceUtils.getMBDBlockModel("riftway_controller"));
         RiftwayDefinition.getIdleStatus().setRenderer(new MBDGeoRenderer("riftway_off", "riftway", true));
         RiftwayDefinition.getWorkingStatus().setRenderer(new MBDGeoRenderer("riftway_on", "riftway", true));

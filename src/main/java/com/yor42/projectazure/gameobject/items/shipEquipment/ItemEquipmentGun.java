@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.items.shipEquipment;
 
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
@@ -34,10 +34,10 @@ public abstract class ItemEquipmentGun extends ItemEquipmentBase{
 
     @Override
     public int getRepairAmount(ItemStack candidateItem) {
-        if(candidateItem.getItem() == registerItems.PLATE_STEEL.get()){
+        if(candidateItem.getItem() == RegisterItems.PLATE_STEEL.get()){
             return 2;
         }
-        else if(candidateItem.getItem() == registerItems.MECHANICAL_PARTS.get()){
+        else if(candidateItem.getItem() == RegisterItems.MECHANICAL_PARTS.get()){
             return 4;
         }
         return super.getRepairAmount(candidateItem);

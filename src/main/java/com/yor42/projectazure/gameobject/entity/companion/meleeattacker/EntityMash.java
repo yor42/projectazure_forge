@@ -9,7 +9,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.setup.register.registerItems;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static com.yor42.projectazure.libs.enums.SERVANT_CLASSES.SHIELDER;
-import static com.yor42.projectazure.setup.register.registerItems.GAE_BOLG;
+import static com.yor42.projectazure.setup.register.RegisterItems.GAE_BOLG;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
@@ -273,7 +273,7 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
     @Nonnull
     @Override
     public ItemStack createWeaponStack() {
-        return new ItemStack(registerItems.LORD_CHALDEAS.get());
+        return new ItemStack(RegisterItems.LORD_CHALDEAS.get());
     }
 
     @Override
@@ -288,7 +288,7 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
 
     @Override
     public ArrayList<Item> getTalentedWeaponList() {
-        return new ArrayList<>(Collections.singletonList(registerItems.LORD_CHALDEAS.get()));
+        return new ArrayList<>(Collections.singletonList(RegisterItems.LORD_CHALDEAS.get()));
     }
 
     @Override
