@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:casting_basin",
+  "fluid": {
+    "tag": "forge:molten_d32",
+    "amount": 1296
+  },
+  "result": {
+    "tag": "forge:storage_blocks/d32"
+  },
+  "cooling_time": 160
+}

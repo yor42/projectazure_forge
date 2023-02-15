@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.intermod.curios.client.CurioRenderer;
-import com.yor42.projectazure.intermod.curios.client.RenderDefib;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,12 +9,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 
-import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
-import static com.yor42.projectazure.libs.Constants.isCurioLoaded;
+import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
 
 public class CurioItem extends Item {
     public CurioItem(Properties properties) {

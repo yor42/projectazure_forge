@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:ingot_lead",
+    "projectazure:plate_lead",
+    "projectazure:nugget_lead",
+    "projectazure:lead_block"
+  ]
+}

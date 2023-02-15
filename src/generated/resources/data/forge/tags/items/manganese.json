@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:ingot_manganese",
+    "projectazure:plate_manganese",
+    "projectazure:nugget_manganese",
+    "projectazure:manganese_block"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:ingot_zinc",
+    "projectazure:plate_zinc",
+    "projectazure:nugget_zinc",
+    "projectazure:zinc_block"
+  ]
+}

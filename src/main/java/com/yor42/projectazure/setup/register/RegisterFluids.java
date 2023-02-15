@@ -46,9 +46,6 @@ public class RegisterFluids {
 
     public static final RegistryObject<Fluid> NETHER_QUARTZ_SOLUTION_SOURCE_REGISTRY = FLUIDS.register("nether_quartz_solution_source", NetherQuartzSolutionFluid.Source::new);
     public static final RegistryObject<Fluid> NETHER_QUARTZ_SOLUTION_FLOWING_REGISTRY = FLUIDS.register("nether_quartz_solution_flowing", NetherQuartzSolutionFluid.Flowing::new);
-
-    public static final TinkersFluids MOLTEN_D32 = new TinkersFluids("molten_d32", "Molten D32 Steel", 2500, 15, 3000, 6000);
-
     public static void register() {
     }
 
@@ -58,51 +55,4 @@ public class RegisterFluids {
     https://github.com/RCXcrafter/Materialis/blob/1.16/LICENSE.md
      */
 
-    public static class TinkersFluids {
-
-        public final ForgeFlowingFluid.Properties PROPERTIES;
-
-        public final RegistryObject<ForgeFlowingFluid.Source> FLUID;
-        public final RegistryObject<ForgeFlowingFluid.Flowing> FLUID_FLOW;
-
-        public final ResourceLocation TEXTURE_STILL;
-        public final ResourceLocation TEXTURE_FLOW;
-
-        public final RegistryObject<FlowingFluidBlock> FLUID_BLOCK;
-
-        public final RegistryObject<BucketItem> FLUID_BUCKET;
-
-        public final String name;
-        public final String localizedName;
-        public final int temperature;
-        public final int light;
-        public final int density;
-        public final int viscosity;
-
-        public TinkersFluids(String name, String localizedName, int temperature, int light, int density, int viscosity) {
-            this.name = name;
-            this.localizedName = localizedName;
-            this.temperature = temperature;
-            this.light = light;
-            this.density = density;
-            this.viscosity = viscosity;
-
-            FLUID = FLUIDS.register(name, () -> new ForgeFlowingFluid.Source(getFluidProperties()));
-            FLUID_FLOW = FLUIDS.register("flowing_" + name, () -> new ForgeFlowingFluid.Flowing(getFluidProperties()));
-
-            TEXTURE_STILL = new ResourceLocation(Constants.MODID, "block/" + name + "_still");
-            TEXTURE_FLOW = new ResourceLocation(Constants.MODID, "block/" + name + "_flow");
-
-            PROPERTIES = new ForgeFlowingFluid.Properties(FLUID, FLUID_FLOW, FluidAttributes.builder(TEXTURE_STILL, TEXTURE_FLOW).overlay(TEXTURE_STILL).luminosity(light).density(density).viscosity(6000).temperature(temperature).sound(SoundEvents.BUCKET_FILL_LAVA, SoundEvents.BUCKET_EMPTY_LAVA));
-
-            FLUID_BLOCK = BLOCKS.register(name + "_block", () -> new FlowingFluidBlock(FLUID, Block.Properties.of(Material.LAVA).lightLevel((state) -> { return light; }).randomTicks().strength(100.0F).noDrops()));
-            FLUID_BUCKET = ITEMS.register(name + "_bucket", () -> new BucketItem(FLUID, new BucketItem.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(ItemGroup.TAB_MISC)));
-            itemModelProvider.ITEMENTRY.add(new Pair<>(name + "_bucket", name + "_bucket"));
-            PROPERTIES.bucket(FLUID_BUCKET).block(FLUID_BLOCK).explosionResistance(1000F).tickRate(9);
-        }
-
-        public ForgeFlowingFluid.Properties getFluidProperties() {
-            return PROPERTIES;
-        }
-    }
 }

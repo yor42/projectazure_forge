@@ -62,7 +62,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
-import static com.yor42.projectazure.libs.Constants.isCurioLoaded;
+import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 

@@ -15,7 +15,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.fml.ModList;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -31,8 +30,7 @@ import java.util.List;
 
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
-import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
-import static com.yor42.projectazure.libs.Constants.isCurioLoaded;
+import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {

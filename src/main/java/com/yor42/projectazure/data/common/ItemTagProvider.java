@@ -2,6 +2,7 @@ package com.yor42.projectazure.data.common;
 
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
@@ -133,6 +134,22 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.ORIGINIUM_PRIME).add(RegisterItems.ORIGINIUM_PRIME.get());
 
         this.tag(ModTags.Items.TREE_SAP).add(RegisterItems.TREE_SAP.get());
+
+        this.tag(ModTags.Items.MATERIAL_D32).add(RegisterItems.INGOT_D32.get(), RegisterItems.PLATE_D32.get(), RegisterItems.NUGGET_D32.get(), RegisterBlocks.D32_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_COPPER).add(RegisterItems.INGOT_COPPER.get(), RegisterItems.PLATE_COPPER.get(), RegisterItems.NUGGET_COPPER.get(), RegisterBlocks.COPPER_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_TIN).add(RegisterItems.INGOT_TIN.get(), RegisterItems.PLATE_TIN.get(), RegisterItems.NUGGET_TIN.get(), RegisterBlocks.TIN_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_STEEL).add(RegisterItems.INGOT_STEEL.get(), RegisterItems.PLATE_STEEL.get(), RegisterItems.NUGGET_STEEL.get(), RegisterBlocks.STEEL_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_MANGANESE).add(RegisterItems.INGOT_MANGANESE.get(), RegisterItems.PLATE_MANGANESE.get(), RegisterItems.NUGGET_MANGANESE.get(), RegisterBlocks.MANGANESE_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_BRONZE).add(RegisterItems.INGOT_BRONZE.get(), RegisterItems.PLATE_BRONZE.get(), RegisterItems.NUGGET_BRONZE.get(), RegisterBlocks.BRONZE_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_BRASS).add(RegisterItems.INGOT_BRASS.get(), RegisterItems.PLATE_BRASS.get(), RegisterItems.NUGGET_BRASS.get(), RegisterBlocks.BRASS_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_ZINC).add(RegisterItems.INGOT_ZINC.get(), RegisterItems.PLATE_ZINC.get(), RegisterItems.NUGGET_ZINC.get(), RegisterBlocks.ZINC_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_LEAD).add(RegisterItems.INGOT_LEAD.get(), RegisterItems.PLATE_LEAD.get(), RegisterItems.NUGGET_LEAD.get(), RegisterBlocks.LEAD_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_ALUMINIUM).add(RegisterItems.INGOT_ALUMINIUM.get(), RegisterItems.PLATE_ALUMINIUM.get(), RegisterBlocks.ALUMINIUM_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_RMA7012).add(RegisterItems.INGOT_RMA7012.get(), RegisterItems.PLATE_RMA7012.get(), RegisterItems.NUGGET_RMA7012.get(), RegisterBlocks.RMA_7012_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_RMA7024).add(RegisterItems.INGOT_RMA7024.get(), RegisterItems.PLATE_RMA7024.get(), RegisterItems.NUGGET_RMA7024.get(), RegisterBlocks.RMA_7024_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_INCANDESCENT_ALLOY).add(RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), RegisterItems.PLATE_INCANDESCENT_ALLOY.get(), RegisterItems.NUGGET_INCANDESCENT_ALLOY.get(), RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get().asItem());
+
+
 
         this.tag(ModTags.Items.EXTRUSION_MOLD).add(RegisterItems.MOLD_PLATE.get()).add(RegisterItems.MOLD_WIRE.get()).add(RegisterItems.MOLD_EXTRACTION.get());
 

@@ -1,5 +1,7 @@
 package com.yor42.projectazure.setup.register;
 
+import com.yor42.projectazure.intermod.tconstruct.TinkersRegistry;
+import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -10,6 +12,9 @@ public class registerManager {
         RegisterFluids.register();
         RegisterItems.register();
         RegisterFluids.register();
+        if(CompatibilityUtils.isTConLoaded()){
+            TinkersRegistry.register();
+        }
         registerTE.register();
         RegisterContainer.register();
         registerBiomes.register();
@@ -22,6 +27,9 @@ public class registerManager {
         registerEntity.ENTITIES.register(eventbus);
         registerBiomes.BIOMES.register(eventbus);
         RegisterFluids.FLUIDS.register(eventbus);
+        if(CompatibilityUtils.isTConLoaded()){
+            TinkersRegistry.registerTinkers(eventbus);
+        }
         RegisterBlocks.BLOCKS.register(eventbus);
         RegisterItems.ITEMS.register(eventbus);
         RegisterContainer.CONTAINER.register(eventbus);

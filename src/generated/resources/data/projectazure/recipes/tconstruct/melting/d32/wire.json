@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:wires/d32",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "ingredient": {
+    "tag": "forge:wires/d32"
+  },
+  "result": {
+    "fluid": "projectazure:molten_d32",
+    "amount": 72
+  },
+  "temperature": 600,
+  "time": 11
+}

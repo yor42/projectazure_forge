@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "projectazure:ingot_d32steel",
+    "projectazure:plate_d32steel",
+    "projectazure:nugget_d32steel",
+    "projectazure:d32steel_block"
+  ]
+}

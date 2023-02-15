@@ -21,8 +21,6 @@ import slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider;
 
 public class Tconstruct {
 
-    protected static final FluidDeferredRegister FLUIDS = new FluidDeferredRegister(TConstruct.MOD_ID);
-
     public static void runDatagens(GatherDataEvent event){
 
         if(event.includeClient()) {
@@ -31,6 +29,7 @@ public class Tconstruct {
 
         if(event.includeServer()) {
             DataGenerator gen = event.getGenerator();
+            gen.addProvider(new PATconFluidTag(gen, event.getExistingFileHelper()));
             gen.addProvider(new PATConRecipeProvider(gen));
             AbstractMaterialDataProvider materials = new PAMaterialProvider(gen);
             gen.addProvider(materials);
@@ -41,12 +40,8 @@ public class Tconstruct {
     private static void runTextureProviders(GatherDataEvent event){
         DataGenerator gen = event.getGenerator();
         PAMaterialSpriteGenerator materialSpriteGenerator = new PAMaterialSpriteGenerator();
-        gen.addProvider(new PAMaterialRenderInfoProvider(gen, materialSpriteGenerator));
         gen.addProvider(new MaterialPartTextureGenerator(gen, event.getExistingFileHelper(), new TinkerPartSpriteProvider(), materialSpriteGenerator));
-    }
-
-    public static FluidObject<? extends FlowingFluid> TINKERSFLUID_TO_FLUIDOBJECT(RegisterFluids.TinkersFluids fluids){
-        return new FluidObject<>(new ResourceLocation(Constants.MODID, fluids.name), fluids.name, fluids.FLUID, fluids.FLUID_FLOW, fluids.FLUID_BLOCK);
+        gen.addProvider(new PAMaterialRenderInfoProvider(gen, materialSpriteGenerator));
     }
 
 }

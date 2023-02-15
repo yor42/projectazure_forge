@@ -13,11 +13,11 @@ public class PAMaterialRenderInfoProvider extends AbstractMaterialRenderInfoProv
 
     @Override
     protected void addMaterialRenderInfo() {
-        buildRenderInfo(PAMaterialProvider.D32).color(0xc2dbec).fallbacks("metal");
+        buildRenderInfo(PAMaterialProvider.D32);
     }
 
     @Override
     public String getName() {
-        return "Project Azure TConstructMaterialRenderInfo";
+        return "Project Azure TConstruct Material RenderInfo";
     }
 }

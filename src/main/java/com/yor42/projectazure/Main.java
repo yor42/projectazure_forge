@@ -16,6 +16,7 @@ import com.yor42.projectazure.gameobject.entity.projectiles.EntityRailgunProject
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.intermod.top.TOPCompat;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.setup.CrushingRecipeCache;
 import com.yor42.projectazure.setup.WorldgenInit;
 import com.yor42.projectazure.setup.register.*;
@@ -139,7 +140,7 @@ public class Main
     {
         ProjectileManager.getInstance().registerFactory(RegisterItems.RAILGUN_AMMO.get(), (worldIn, entity, weapon, item, modifiedGun, randx, randy) -> new EntityRailgunProjectile(registerEntity.PROJECTILE_RAILGUN.get(), worldIn, entity, weapon, item, modifiedGun, 4F, randx, randy));
         if (ModList.get().isLoaded("theoneprobe")) TOPCompat.register();
-        if(isCurioLoaded()) CuriosCompat.sendImc(event);
+        if(CompatibilityUtils.isCurioLoaded()) CuriosCompat.sendImc(event);
     }
 
     private void processIMC(final InterModProcessEvent event)

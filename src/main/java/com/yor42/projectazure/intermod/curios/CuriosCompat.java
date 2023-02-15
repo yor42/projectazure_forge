@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
-import static com.yor42.projectazure.libs.Constants.CURIOS_MODID;
+import static com.yor42.projectazure.libs.utils.CompatibilityUtils.CURIOS_MODID;
 
 public class CuriosCompat {
 

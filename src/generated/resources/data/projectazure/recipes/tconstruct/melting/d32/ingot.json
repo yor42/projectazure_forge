@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "tag": "forge:ingots/d32"
+  },
+  "result": {
+    "fluid": "projectazure:molten_d32",
+    "amount": 144
+  },
+  "temperature": 600,
+  "time": 53
+}
