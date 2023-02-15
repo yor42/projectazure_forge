@@ -58,13 +58,9 @@ public class RegisterItems {
     public static final RegistryObject<Item> INGOT_MANGANESE = registerResource("manganese", enums.ResourceType.INGOT);
 
 
-    public static final RegistryObject<Item> GEAR_COPPER = registerResource("copper", enums.ResourceType.GEAR);
-    public static final RegistryObject<Item> GEAR_TIN = registerResource("tin", enums.ResourceType.GEAR);
     public static final RegistryObject<Item> GEAR_BRONZE = registerResource("bronze", enums.ResourceType.GEAR);
     public static final RegistryObject<Item> GEAR_STEEL = registerResource("steel", enums.ResourceType.GEAR);
     public static final RegistryObject<Item> GEAR_IRON = registerResource("iron", enums.ResourceType.GEAR);
-    public static final RegistryObject<Item> GEAR_GOLD = registerResource("gold", enums.ResourceType.GEAR);
-
     public static final RegistryObject<Item> DUST_COPPER = registerResource("copper", enums.ResourceType.DUST);
     public static final RegistryObject<Item> DUST_LEAD = registerResource("lead", enums.ResourceType.DUST);
     public static final RegistryObject<Item> DUST_TIN = registerResource("tin", enums.ResourceType.DUST);

@@ -7,7 +7,7 @@
   ],
   "key": {
     "S": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     "C": {
       "tag": "forge:ingots/bronze"

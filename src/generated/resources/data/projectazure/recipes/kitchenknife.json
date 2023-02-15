@@ -9,7 +9,7 @@
       "tag": "forge:plates/iron"
     },
     "S": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     }
   },
   "result": {

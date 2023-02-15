@@ -20,8 +20,9 @@
     },
     {
       "item": {
-        "tag": "forge:gems/diamond"
-      }
+        "item": "projectazure:mechanical_parts"
+      },
+      "count": 4
     }
   ],
   "result": {

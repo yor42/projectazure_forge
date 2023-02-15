@@ -94,12 +94,9 @@ public class ModTags {
         public static final ITag.INamedTag<Item> NUGGET_MANGANESE = forge("nuggets/manganese");
         public static final ITag.INamedTag<Item> NUGGET_INCANDESCENT_ALLOY = forge("nuggets/incandescent_alloy");
 
-        public static final ITag.INamedTag<Item> GEAR_COPPER = forge("gears/copper");
-        public static final ITag.INamedTag<Item> GEAR_TIN = forge("gears/tin");
         public static final ITag.INamedTag<Item> GEAR_BRONZE = forge("gears/bronze");
         public static final ITag.INamedTag<Item> GEAR_IRON = forge("gears/iron");
         public static final ITag.INamedTag<Item> GEAR_STEEL = forge("gears/steel");
-        public static final ITag.INamedTag<Item> GEAR_GOLD = forge("gears/gold");
 
         public static final ITag.INamedTag<Item> PLATE_ALUMINIUM = forge("plates/aluminium");
         public static final ITag.INamedTag<Item> PLATE_COPPER = forge("plates/copper");

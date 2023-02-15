@@ -10,10 +10,10 @@
       "tag": "forge:gems/diamond"
     },
     "S": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     "N": {
-      "item": "minecraft:iron_nugget"
+      "tag": "forge:nuggets/iron"
     }
   },
   "result": {

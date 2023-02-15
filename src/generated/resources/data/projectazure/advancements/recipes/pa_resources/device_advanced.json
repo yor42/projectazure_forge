@@ -2,26 +2,26 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:diamond_mortar"
+      "projectazure:device_advanced"
     ]
   },
   "criteria": {
-    "has_stick": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "forge:rods/wooden"
-          }
-        ]
-      }
-    },
     "has_material": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:gems/diamond"
+            "tag": "forge:circuits/advanced"
+          }
+        ]
+      }
+    },
+    "has_material2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "projectazure:motor_advanced"
           }
         ]
       }
@@ -29,14 +29,14 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:diamond_mortar"
+        "recipe": "projectazure:device_advanced"
       }
     }
   },
   "requirements": [
     [
-      "has_stick",
       "has_material",
+      "has_material2",
       "has_the_recipe"
     ]
   ]

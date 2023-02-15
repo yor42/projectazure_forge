@@ -9,13 +9,19 @@
     },
     {
       "item": {
-        "tag": "forge:ingots/steel"
+        "tag": "forge:plates/aluminium"
+      },
+      "count": 10
+    },
+    {
+      "item": {
+        "tag": "forge:ingots/incandescent_alloy"
       },
       "count": 30
     },
     {
       "item": {
-        "tag": "forge:circuits/basic"
+        "item": "projectazure:crystalline_component"
       },
       "count": 4
     },

@@ -24,19 +24,21 @@ public class datagenerator {
     public static void gatherData(GatherDataEvent event){
         DataGenerator gen = event.getGenerator();
         ExistingFileHelper filehelper = event.getExistingFileHelper();
+        if(event.includeClient()) {
+            gen.addProvider(new BlockModelProvider(gen, filehelper));
+            gen.addProvider(new itemModelProvider(gen, filehelper));
+        }
+        if(event.includeServer()) {
+            BlockTagProvider blockTagProvider = new BlockTagProvider(gen, filehelper);
+            gen.addProvider(blockTagProvider);
 
-        gen.addProvider(new BlockModelProvider(gen, filehelper));
-        gen.addProvider(new itemModelProvider(gen, filehelper));
+            FluidTagProvider fluidTagProvider = new FluidTagProvider(gen, filehelper);
+            gen.addProvider(fluidTagProvider);
 
-        BlockTagProvider blockTagProvider = new BlockTagProvider(gen, filehelper);
-        gen.addProvider(blockTagProvider);
-
-        FluidTagProvider fluidTagProvider = new FluidTagProvider(gen, filehelper);
-        gen.addProvider(fluidTagProvider);
-
-        gen.addProvider(new ItemTagProvider(gen, blockTagProvider, filehelper));
-        gen.addProvider(new LootTableProvider(gen));
-        gen.addProvider(new RecipeProvider(gen));
+            gen.addProvider(new ItemTagProvider(gen, blockTagProvider, filehelper));
+            gen.addProvider(new LootTableProvider(gen));
+            gen.addProvider(new RecipeProvider(gen));
+        }
 
         if(Constants.isTConLoaded()){
             Tconstruct.runDatagens(event);

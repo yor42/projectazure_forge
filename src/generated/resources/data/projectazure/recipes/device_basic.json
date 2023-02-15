@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "COC",
+    "MBM",
+    "CRC"
+  ],
+  "key": {
+    "M": {
+      "item": "projectazure:motor_basic"
+    },
+    "C": {
+      "item": "projectazure:device_primitive"
+    },
+    "B": {
+      "tag": "forge:circuits/advanced"
+    },
+    "O": {
+      "item": "projectazure:crystalline_component"
+    },
+    "R": {
+      "tag": "forge:gears/steel"
+    }
+  },
+  "result": {
+    "item": "projectazure:device_basic"
+  }
+}

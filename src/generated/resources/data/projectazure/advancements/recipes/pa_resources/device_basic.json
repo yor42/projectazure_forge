@@ -2,16 +2,26 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:gear_gold"
+      "projectazure:device_basic"
     ]
   },
   "criteria": {
-    "has_plate": {
+    "has_material": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:plates/gold"
+            "tag": "forge:circuits/advanced"
+          }
+        ]
+      }
+    },
+    "has_material2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "projectazure:motor_basic"
           }
         ]
       }
@@ -19,13 +29,14 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:gear_gold"
+        "recipe": "projectazure:device_basic"
       }
     }
   },
   "requirements": [
     [
-      "has_plate",
+      "has_material",
+      "has_material2",
       "has_the_recipe"
     ]
   ]

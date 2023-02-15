@@ -1,6 +1,7 @@
 package com.yor42.projectazure.intermod.tconstruct;
 
 import com.yor42.projectazure.intermod.tconstruct.datagen.PAMaterialProvider;
+import com.yor42.projectazure.intermod.tconstruct.datagen.PAMaterialRenderInfoProvider;
 import com.yor42.projectazure.intermod.tconstruct.datagen.PAMaterialSpriteGenerator;
 import com.yor42.projectazure.intermod.tconstruct.datagen.PATConRecipeProvider;
 import com.yor42.projectazure.libs.Constants;
@@ -19,20 +20,24 @@ import slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider;
 public class Tconstruct {
 
     public static void runDatagens(GatherDataEvent event){
-        runTextureProviders(event);
-        DataGenerator gen = event.getGenerator();
-        gen.addProvider(new PATConRecipeProvider(gen));
+
+        if(event.includeClient()) {
+            runTextureProviders(event);
+        }
+
+        if(event.includeServer()) {
+            DataGenerator gen = event.getGenerator();
+            gen.addProvider(new PATConRecipeProvider(gen));
+            AbstractMaterialDataProvider materials = new PAMaterialProvider(gen);
+            gen.addProvider(materials);
+            gen.addProvider(new PAMaterialProvider.PAMaterialStats(gen, materials));
+            gen.addProvider(new PAMaterialProvider.PAMaterialTraits(gen, materials));
+        }
     }
     private static void runTextureProviders(GatherDataEvent event){
         DataGenerator gen = event.getGenerator();
-
-        AbstractMaterialDataProvider materials = new PAMaterialProvider(gen);
-        gen.addProvider(materials);
-        gen.addProvider(new PAMaterialProvider.PAMaterialStats(gen, materials));
-        gen.addProvider(new PAMaterialProvider.PAMaterialTraits(gen, materials));
-
         PAMaterialSpriteGenerator materialSpriteGenerator = new PAMaterialSpriteGenerator();
-        TinkerMaterialSpriteProvider tinkerMaterialSprites = new TinkerMaterialSpriteProvider();
+        gen.addProvider(new PAMaterialRenderInfoProvider(gen, materialSpriteGenerator));
         gen.addProvider(new MaterialPartTextureGenerator(gen, event.getExistingFileHelper(), new TinkerPartSpriteProvider(), materialSpriteGenerator));
     }
 

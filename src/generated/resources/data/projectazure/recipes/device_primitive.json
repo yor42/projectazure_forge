@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "QRQ",
+    "MCM",
+    "POP"
+  ],
+  "key": {
+    "M": {
+      "item": "projectazure:motor_primitive"
+    },
+    "C": {
+      "tag": "forge:circuits/basic"
+    },
+    "P": {
+      "tag": "forge:plates/steel"
+    },
+    "O": {
+      "item": "projectazure:orundum"
+    },
+    "Q": {
+      "tag": "forge:gems/quartz"
+    },
+    "R": {
+      "tag": "forge:gears/bronze"
+    }
+  },
+  "result": {
+    "item": "projectazure:device_primitive"
+  }
+}

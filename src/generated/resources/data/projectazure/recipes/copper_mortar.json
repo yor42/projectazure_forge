@@ -10,7 +10,7 @@
       "tag": "forge:ingots/copper"
     },
     "S": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     "C": {
       "tag": "forge:cobblestone"

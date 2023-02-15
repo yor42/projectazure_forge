@@ -10,7 +10,7 @@
       "tag": "forge:ingots/rma70-24"
     },
     "S": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     "C": {
       "tag": "forge:cobblestone"

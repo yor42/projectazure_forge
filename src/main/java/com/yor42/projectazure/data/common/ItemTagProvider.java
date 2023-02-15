@@ -96,10 +96,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 
         this.tag(ModTags.Items.GEAR_STEEL).add(RegisterItems.GEAR_STEEL.get());
         this.tag(ModTags.Items.GEAR_BRONZE).add(RegisterItems.GEAR_BRONZE.get());
-        this.tag(ModTags.Items.GEAR_TIN).add(RegisterItems.GEAR_TIN.get());
         this.tag(ModTags.Items.GEAR_IRON).add(RegisterItems.GEAR_IRON.get());
-        this.tag(ModTags.Items.GEAR_GOLD).add(RegisterItems.GEAR_GOLD.get());
-        this.tag(ModTags.Items.GEAR_COPPER).add(RegisterItems.GEAR_COPPER.get());
 
         this.tag(ModTags.Items.DUST_ALUMINIUM).add(RegisterItems.DUST_ALUMINIUM.get());
         this.tag(ModTags.Items.DUST_COPPER).add(RegisterItems.DUST_COPPER.get());

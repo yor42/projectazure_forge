@@ -68,17 +68,16 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     private void generateGunBenchRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.CASELESS_4MM.get(),6).addIngredient(RegisterItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(RegisterItems.INGOT_LEAD.get(), 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_lead");
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.CASELESS_4MM.get(),6).addIngredient(RegisterItems.GUNPOWDER_COMPOUND.get(), 3).addIngredient(Items.IRON_INGOT, 5).build(consumer, Constants.MODID,"gunbench_4mmcaseless_iron");
 
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(RegisterItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(Tags.Items.GEMS_DIAMOND).build(consumer, Constants.MODID,"gunbench_granadelauncher");
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.TYPHOON.get()).addIngredient(ModTags.Items.PLATE_STEEL, 25).addIngredient(ModTags.Items.INGOT_STEEL, 30).addIngredient(ModTags.Items.CIRCUITS_BASIC,4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(RegisterItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(RegisterItems.MECHANICAL_PARTS.get(), 4).build(consumer, Constants.MODID,"gunbench_granadelauncher");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.TYPHOON.get()).addIngredient(ModTags.Items.PLATE_STEEL, 25).addIngredient(ModTags.Items.PLATE_ALUMINIUM, 10).addIngredient(ModTags.Items.INGOT_INCANDESCENT_ALLOY, 30).addIngredient(RegisterItems.CRYSTALLINE_COMPONENT.get(),4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.WHITEFANG_465.get()).addIngredient(ModTags.Items.PLATE_STEEL, 9).addIngredient(ModTags.Items.INGOT_STEEL, 10).build(consumer, Constants.MODID,"gunbench_whitefang");
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SANGVIS_RAILGUN.get()).addIngredient(ModTags.Items.PLATE_STEEL, 35).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 10).build(consumer, Constants.MODID,"gunbench_cannon");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SANGVIS_RAILGUN.get()).addIngredient(ModTags.Items.PLATE_STEEL, 35).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 10).build(consumer, Constants.MODID,"gunbench_cannon");
     }
 
     private void generateMetalRecipes(@Nonnull Consumer<IFinishedRecipe> consumer){
-        BuildMetalRecipe(consumer, 0.5F, new Metals("copper", RegisterItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).block(RegisterBlocks.COPPER_BLOCK.get(), ModTags.Items.BLOCK_COPPER).ore(RegisterBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(RegisterItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(RegisterItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER).gear(RegisterItems.GEAR_COPPER.get(), ModTags.Items.GEAR_COPPER).nugget(RegisterItems.NUGGET_COPPER.get(), ModTags.Items.NUGGET_COPPER));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("tin", RegisterItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).block(RegisterBlocks.TIN_BLOCK.get(), ModTags.Items.BLOCK_TIN).ore(RegisterBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(RegisterItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(RegisterItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN).gear(RegisterItems.GEAR_TIN.get(), ModTags.Items.GEAR_TIN).nugget(RegisterItems.NUGGET_TIN.get(), ModTags.Items.NUGGET_TIN));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("copper", RegisterItems.INGOT_COPPER.get(), ModTags.Items.INGOT_COPPER).block(RegisterBlocks.COPPER_BLOCK.get(), ModTags.Items.BLOCK_COPPER).ore(RegisterBlocks.COPPER_ORE.get().asItem(), ModTags.Items.ORES_COPPER).dust(RegisterItems.DUST_COPPER.get(), ModTags.Items.DUST_COPPER).plates(RegisterItems.PLATE_COPPER.get(), ModTags.Items.PLATE_COPPER).nugget(RegisterItems.NUGGET_COPPER.get(), ModTags.Items.NUGGET_COPPER));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("tin", RegisterItems.INGOT_TIN.get(), ModTags.Items.INGOT_TIN).block(RegisterBlocks.TIN_BLOCK.get(), ModTags.Items.BLOCK_TIN).ore(RegisterBlocks.TIN_ORE.get().asItem(), ModTags.Items.ORES_TIN).dust(RegisterItems.DUST_TIN.get(), ModTags.Items.DUST_TIN).plates(RegisterItems.PLATE_TIN.get(), ModTags.Items.PLATE_TIN).nugget(RegisterItems.NUGGET_TIN.get(), ModTags.Items.NUGGET_TIN));
         BuildMetalRecipe(consumer, 0.5F, new Metals("lead", RegisterItems.INGOT_LEAD.get(), ModTags.Items.INGOT_LEAD).block(RegisterBlocks.LEAD_BLOCK.get(), ModTags.Items.BLOCK_LEAD).ore(RegisterBlocks.LEAD_ORE.get().asItem(), ModTags.Items.ORES_LEAD).dust(RegisterItems.DUST_LEAD.get(), ModTags.Items.DUST_LEAD).plates(RegisterItems.PLATE_LEAD.get(), ModTags.Items.PLATE_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD).nugget(RegisterItems.NUGGET_LEAD.get(), ModTags.Items.NUGGET_LEAD));
         BuildMetalRecipe(consumer, 0.5F, new Metals("bronze", RegisterItems.INGOT_BRONZE.get(), ModTags.Items.INGOT_BRONZE).block(RegisterBlocks.BRONZE_BLOCK.get(), ModTags.Items.BLOCK_BRONZE).dust(RegisterItems.DUST_BRONZE.get(), ModTags.Items.DUST_BRONZE).plates(RegisterItems.PLATE_BRONZE.get(), ModTags.Items.PLATE_BRONZE).gear(RegisterItems.GEAR_BRONZE.get(), ModTags.Items.GEAR_BRONZE).nugget(RegisterItems.NUGGET_BRONZE.get(), ModTags.Items.NUGGET_BRONZE));
         BuildMetalRecipe(consumer, 0.5F, new Metals("aluminium", RegisterItems.INGOT_ALUMINIUM.get(), ModTags.Items.INGOT_ALUMINIUM).block(RegisterBlocks.ALUMINIUM_BLOCK.get(), ModTags.Items.BLOCK_ALUMINIUM).ore(RegisterBlocks.BAUXITE_ORE.get().asItem(), ModTags.Items.ORES_ALUMINIUM).dust(RegisterItems.DUST_ALUMINIUM.get(), ModTags.Items.DUST_ALUMINIUM).plates(RegisterItems.PLATE_ALUMINIUM.get(), ModTags.Items.PLATE_ALUMINIUM));
@@ -91,7 +90,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         BuildMetalRecipe(consumer, 0.5F, new Metals("incandescent_alloy", RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), ModTags.Items.INGOT_INCANDESCENT_ALLOY).dust(RegisterItems.DUST_INCANDESCENT_ALLOY.get(), ModTags.Items.DUST_INCANDESCENT_ALLOY).plates(RegisterItems.PLATE_INCANDESCENT_ALLOY.get(), ModTags.Items.PLATE_INCANDESCENT_ALLOY).block(RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get(), ModTags.Items.BLOCK_INCANDESCENT_ALLOY).nugget(RegisterItems.NUGGET_INCANDESCENT_ALLOY.get(), ModTags.Items.NUGGET_INCANDESCENT_ALLOY));
         BuildMetalRecipe(consumer, 0.5F, new Metals("manganese", RegisterItems.INGOT_MANGANESE.get(), ModTags.Items.INGOT_MANGANESE).dust(RegisterItems.DUST_MANGANESE.get(), ModTags.Items.DUST_MANGANESE).plates(RegisterItems.PLATE_MANGANESE.get(), ModTags.Items.PLATE_MANGANESE).block(RegisterBlocks.MANGANESE_BLOCK.get(), ModTags.Items.BLOCK_MANGANESE).nugget(RegisterItems.NUGGET_MANGANESE.get(), ModTags.Items.NUGGET_MANGANESE));
         BuildMetalRecipe(consumer, 0.5F, new Metals("iron", Items.IRON_INGOT, Tags.Items.INGOTS_IRON).dust(RegisterItems.DUST_IRON.get(), ModTags.Items.DUST_IRON).plates(RegisterItems.PLATE_IRON.get(), ModTags.Items.PLATE_IRON).gear(RegisterItems.GEAR_IRON.get(), ModTags.Items.GEAR_IRON));
-        BuildMetalRecipe(consumer, 0.5F, new Metals("gold", Items.GOLD_INGOT, Tags.Items.INGOTS_GOLD).dust(RegisterItems.DUST_GOLD.get(), ModTags.Items.DUST_GOLD).plates(RegisterItems.PLATE_GOLD.get(), ModTags.Items.PLATE_GOLD).gear(RegisterItems.GEAR_GOLD.get(), ModTags.Items.GEAR_GOLD));
+        BuildMetalRecipe(consumer, 0.5F, new Metals("gold", Items.GOLD_INGOT, Tags.Items.INGOTS_GOLD).dust(RegisterItems.DUST_GOLD.get(), ModTags.Items.DUST_GOLD).plates(RegisterItems.PLATE_GOLD.get(), ModTags.Items.PLATE_GOLD));
 
     }
 
@@ -336,136 +335,136 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_STONE.get())
                 .define('I', Tags.Items.COBBLESTONE)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" IS")
                 .pattern(" SI")
                 .pattern("S  ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.COBBLESTONE))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_IRON.get())
                 .define('I', Tags.Items.INGOTS_IRON)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" IS")
                 .pattern(" SI")
                 .pattern("S  ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_IRON));
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_COPPER.get())
                 .define('I', ModTags.Items.INGOT_COPPER)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" IS")
                 .pattern(" SI")
                 .pattern("S  ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_TIN.get())
                 .define('I', ModTags.Items.INGOT_TIN)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" IS")
                 .pattern(" SI")
                 .pattern("S  ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_GOLD.get())
                 .define('I', Tags.Items.INGOTS_GOLD)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" IS")
                 .pattern(" SI")
                 .pattern("S  ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_GOLD))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_STEEL.get())
                 .define('I', ModTags.Items.INGOT_STEEL)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" IS")
                 .pattern(" SI")
                 .pattern("S  ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_DIAMOND.get())
                 .define('I', Tags.Items.GEMS_DIAMOND)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" IS")
                 .pattern(" SI")
                 .pattern("S  ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.SAW_STONE.get())
                 .define('I', Tags.Items.COBBLESTONE)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern("SI")
                 .pattern("SI")
                 .pattern("S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.COBBLESTONE))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.SAW_IRON.get())
                 .define('I', ModTags.Items.PLATE_IRON)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern("SI")
                 .pattern("SI")
                 .pattern("S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_IRON));
         ShapedRecipeBuilder.shaped(RegisterItems.SAW_COPPER.get())
                 .define('I', ModTags.Items.PLATE_COPPER)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern("SI")
                 .pattern("SI")
                 .pattern("S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_COPPER))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.SAW_TIN.get())
                 .define('I', ModTags.Items.PLATE_TIN)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern("SI")
                 .pattern("SI")
                 .pattern("S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_TIN))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.SAW_GOLD.get())
                 .define('I', ModTags.Items.PLATE_GOLD)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern("SI")
                 .pattern("SI")
                 .pattern("S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_GOLD))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.SAW_STEEL.get())
                 .define('I', ModTags.Items.PLATE_STEEL)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern("SI")
                 .pattern("SI")
                 .pattern("S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
         ShapedRecipeBuilder.shaped(RegisterItems.SAW_DIAMOND.get())
                 .define('I', Tags.Items.GEMS_DIAMOND)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern("SI")
                 .pattern("SI")
                 .pattern("S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.KITCHEN_KNIFE.get())
                 .define('I', ModTags.Items.PLATE_IRON)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern("I")
                 .pattern("S")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_IRON))
                 .save(consumer);
 
@@ -484,8 +483,47 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("I")
                 .pattern("I")
                 .pattern("S")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(RegisterItems.AMBER_ORIGINIUM.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.PRIMITIVE_DEVICE.get())
+                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
+                .define('C', ModTags.Items.CIRCUITS_BASIC)
+                .define('P', ModTags.Items.PLATE_STEEL)
+                .define('O', RegisterItems.ORUNDUM.get())
+                .define('Q', Tags.Items.GEMS_QUARTZ)
+                .define('R', ModTags.Items.GEAR_BRONZE)
+                .pattern("QRQ")
+                .pattern("MCM")
+                .pattern("POP")
+                .unlockedBy("has_material", has(ModTags.Items.CIRCUITS_BASIC))
+                .unlockedBy("has_material2", has(RegisterItems.PRIMITIVE_MOTOR.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.BASIC_DEVICE.get())
+                .define('M', RegisterItems.BASIC_MOTOR.get())
+                .define('C', RegisterItems.PRIMITIVE_DEVICE.get())
+                .define('B', ModTags.Items.CIRCUITS_ADVANCED)
+                .define('O', RegisterItems.CRYSTALLINE_COMPONENT.get())
+                .define('R', ModTags.Items.GEAR_STEEL)
+                .pattern("COC")
+                .pattern("MBM")
+                .pattern("CRC")
+                .unlockedBy("has_material", has(ModTags.Items.CIRCUITS_ADVANCED))
+                .unlockedBy("has_material2", has(RegisterItems.BASIC_MOTOR.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.ADVANCED_DEVICE.get())
+                .define('M', RegisterItems.ADVANCED_MOTOR.get())
+                .define('C', RegisterItems.BASIC_DEVICE.get())
+                .define('B', ModTags.Items.CIRCUITS_CRYSTALLINE)
+                .define('O', RegisterItems.LOXICKOHL.get())
+                .pattern("COC")
+                .pattern("MBM")
+                .pattern("COC")
+                .unlockedBy("has_material", has(ModTags.Items.CIRCUITS_ADVANCED))
+                .unlockedBy("has_material2", has(RegisterItems.ADVANCED_MOTOR.get()))
                 .save(consumer);
 
         SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.SAW_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.SAW_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritesaw"));
@@ -494,253 +532,253 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_STONE.get())
                 .define('I', Tags.Items.INGOTS_IRON)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.COBBLESTONE))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_IRON.get())
                 .define('I', Tags.Items.INGOTS_IRON)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_IRON))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_STEEL.get())
                 .define('I', ModTags.Items.INGOT_STEEL)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_STEEL))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_COPPER.get())
                 .define('I', ModTags.Items.INGOT_COPPER)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_COPPER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_TIN.get())
                 .define('I', ModTags.Items.INGOT_TIN)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_TIN))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_BRONZE.get())
                 .define('I', ModTags.Items.INGOT_BRONZE)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_BRONZE))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_GOLD.get())
                 .define('I', Tags.Items.INGOTS_GOLD)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_GOLD))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_DIAMOND.get())
                 .define('I', Tags.Items.GEMS_DIAMOND)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_NETHERITE.get())
                 .define('I', Tags.Items.INGOTS_NETHERITE)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.INGOTS_NETHERITE))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_RMA7012.get())
                 .define('I', ModTags.Items.INGOT_RMA7012)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7012))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_RMA7024.get())
                 .define('I', ModTags.Items.INGOT_RMA7024)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_RMA7024))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_D32.get())
                 .define('I', ModTags.Items.INGOT_D32)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', Tags.Items.COBBLESTONE)
                 .pattern("  S")
                 .pattern("CIC")
                 .pattern(" C ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.INGOT_D32))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_STONE.get())
                 .define('I', Tags.Items.COBBLESTONE)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .pattern(" I ")
                 .pattern("IIS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.COBBLESTONE))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_IRON.get())
                 .define('I', ModTags.Items.PLATE_IRON)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_IRON))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_STEEL.get())
                 .define('I', ModTags.Items.PLATE_STEEL)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_COPPER.get())
                 .define('I', ModTags.Items.PLATE_COPPER)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_COPPER))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_TIN.get())
                 .define('I', ModTags.Items.PLATE_TIN)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_TIN))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_BRONZE.get())
                 .define('I', ModTags.Items.PLATE_BRONZE)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_BRONZE))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_GOLD.get())
                 .define('I', ModTags.Items.PLATE_BRONZE)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_BRONZE))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_DIAMOND.get())
                 .define('I', Tags.Items.GEMS_DIAMOND)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(Tags.Items.GEMS_DIAMOND))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_RMA7012.get())
                 .define('I', ModTags.Items.PLATE_RMA7012)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_RMA7012))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_RMA7024.get())
                 .define('I', ModTags.Items.PLATE_RMA7024)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_RMA7024))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CUTTER_D32.get())
                 .define('I', ModTags.Items.PLATE_D32)
-                .define('S', Items.STICK)
-                .define('N', Items.IRON_NUGGET)
+                .define('S', Tags.Items.RODS_WOODEN)
+                .define('N', Tags.Items.NUGGETS_IRON)
                 .pattern(" I ")
                 .pattern("INS")
                 .pattern(" S ")
-                .unlockedBy("has_stick", has(Items.STICK))
+                .unlockedBy("has_stick", has(Tags.Items.RODS_WOODEN))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_D32))
                 .save(consumer);
 
@@ -1015,7 +1053,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.KYARU_STAFF.get(), 1)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('C', ModTags.Items.INGOT_BRONZE)
                 .define('B', Items.ENCHANTED_BOOK)
                 .pattern(" CB")
@@ -1159,12 +1197,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.COMMANDING_STICK.get(), 1)
-                .define('S', Items.STICK)
+                .define('S', Tags.Items.RODS_WOODEN)
                 .define('B', Tags.Items.DYES_BLACK)
                 .pattern("  S")
                 .pattern(" S ")
                 .pattern("B  ")
-                .unlockedBy("has_sticc", has(Items.STICK))
+                .unlockedBy("has_sticc", has(Tags.Items.RODS_WOODEN))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.AMMO_GENERIC.get(), 2)

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "COC",
+    "MBM",
+    "COC"
+  ],
+  "key": {
+    "M": {
+      "item": "projectazure:motor_advanced"
+    },
+    "C": {
+      "item": "projectazure:device_basic"
+    },
+    "B": {
+      "tag": "forge:circuits/crystalline"
+    },
+    "O": {
+      "item": "projectazure:loxickohl"
+    }
+  },
+  "result": {
+    "item": "projectazure:device_advanced"
+  }
+}
