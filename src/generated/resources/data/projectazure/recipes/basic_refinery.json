@@ -1,13 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "MPP",
-    "MMM",
+    "KPP",
+    "KMK",
     "BSS"
   ],
   "key": {
     "M": {
       "item": "projectazure:machine_frame"
+    },
+    "K": {
+      "tag": "forge:plates/steel"
     },
     "P": {
       "item": "projectazure:steel_pipe"

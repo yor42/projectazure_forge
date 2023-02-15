@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "GPG",
-    "PIP",
+    "CIC",
     "GPG"
   ],
   "key": {
@@ -11,6 +11,9 @@
     },
     "P": {
       "tag": "forge:plates/steel"
+    },
+    "C": {
+      "tag": "forge:gears/bronze"
     },
     "I": {
       "tag": "forge:ingots/iron"

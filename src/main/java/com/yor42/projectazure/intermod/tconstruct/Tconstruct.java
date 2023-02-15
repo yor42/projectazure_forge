@@ -10,7 +10,9 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
 import slimeknights.mantle.registration.object.FluidObject;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.GeneratorPartTextureJsonGenerator;
 import slimeknights.tconstruct.library.client.data.material.MaterialPartTextureGenerator;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
@@ -18,6 +20,8 @@ import slimeknights.tconstruct.tools.data.sprite.TinkerMaterialSpriteProvider;
 import slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider;
 
 public class Tconstruct {
+
+    protected static final FluidDeferredRegister FLUIDS = new FluidDeferredRegister(TConstruct.MOD_ID);
 
     public static void runDatagens(GatherDataEvent event){
 

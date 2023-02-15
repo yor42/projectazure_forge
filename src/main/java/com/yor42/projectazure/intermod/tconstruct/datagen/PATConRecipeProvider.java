@@ -34,7 +34,7 @@ public class PATConRecipeProvider extends RecipeProvider implements IMaterialRec
     public void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
         metalMelting(consumer, RegisterFluids.MOLTEN_D32.FLUID.get(), "d32_melting", false, meltingfoler, false);
         metalTagCasting(consumer, Tconstruct.TINKERSFLUID_TO_FLUIDOBJECT(RegisterFluids.MOLTEN_D32), "d32_casting", castingfoler, true);
-        metalMaterialRecipe(consumer, PAMaterialProvider.D32, materials, PAMaterialProvider.D32.getPath(), false);
+        metalMaterialRecipe(consumer, PAMaterialProvider.D32, materials, "d32", false);
         materialMeltingCasting(consumer,  PAMaterialProvider.D32, Tconstruct.TINKERSFLUID_TO_FLUIDOBJECT(RegisterFluids.MOLTEN_D32), "");
     }
 }

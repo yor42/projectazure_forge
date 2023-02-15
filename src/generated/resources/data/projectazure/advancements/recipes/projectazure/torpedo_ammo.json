@@ -31,7 +31,7 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:tnt"
+            "item": "projectazure:gunpowder_compound"
           }
         ]
       }

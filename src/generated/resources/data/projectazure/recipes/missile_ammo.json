@@ -10,7 +10,7 @@
       "tag": "forge:ingots/aluminium"
     },
     "T": {
-      "item": "minecraft:tnt"
+      "item": "projectazure:gunpowder_compound"
     },
     "C": {
       "tag": "forge:circuits/basic"

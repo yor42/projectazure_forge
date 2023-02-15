@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     " F ",
-    "FCF",
+    "DCD",
     " F "
   ],
   "key": {
@@ -11,6 +11,9 @@
     },
     "C": {
       "tag": "forge:chests"
+    },
+    "D": {
+      "item": "projectazure:device_primitive"
     }
   },
   "result": {

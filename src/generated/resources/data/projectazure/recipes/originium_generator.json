@@ -16,13 +16,13 @@
       "item": "minecraft:piston"
     },
     "G": {
-      "item": "minecraft:glass"
+      "item": "projectazure:device_advanced"
     },
     "I": {
-      "item": "projectazure:item_hatch"
+      "item": "projectazure:crystalline_circuit"
     },
     "D": {
-      "item": "projectazure:machine_dynamo"
+      "item": "projectazure:motor_advanced"
     }
   },
   "result": {
