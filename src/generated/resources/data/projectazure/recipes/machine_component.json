@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NIN",
+    "CPC",
+    "NIN"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:plates/incandescent_alloy"
+    },
+    "C": {
+      "tag": "forge:plates/aluminium"
+    },
+    "P": {
+      "item": "projectazure:device_basic"
+    },
+    "N": {
+      "item": "projectazure:machine_frame"
+    }
+  },
+  "result": {
+    "item": "projectazure:machine_component"
+  }
+}

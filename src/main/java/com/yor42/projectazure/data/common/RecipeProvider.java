@@ -793,6 +793,18 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steel", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(RegisterBlocks.MACHINE_COMPONENTBLOCK.get())
+                .define('I', ModTags.Items.PLATE_INCANDESCENT_ALLOY)
+                .define('C', ModTags.Items.PLATE_ALUMINIUM)
+                .define('P', RegisterItems.BASIC_DEVICE.get())
+                .define('N', RegisterBlocks.MACHINE_FRAME.get())
+                .pattern("NIN")
+                .pattern("CPC")
+                .pattern("NIN")
+                .unlockedBy("has_iron", has(Tags.Items.INGOTS_IRON))
+                .unlockedBy("has_steel", has(ModTags.Items.PLATE_STEEL))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(RegisterBlocks.BASIC_REFINERY.get())
                 .define('M', RegisterBlocks.MACHINE_FRAME.get())
                 .define('P', RegisterItems.STEEL_PIPE.get())
