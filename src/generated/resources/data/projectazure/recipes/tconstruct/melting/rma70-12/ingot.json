@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "tag": "forge:ingots/rma70-12"
+  },
+  "result": {
+    "fluid": "projectazure:molten_rma7012",
+    "amount": 144
+  },
+  "temperature": 300,
+  "time": 42
+}

@@ -14,6 +14,7 @@ public class PAMaterialRenderInfoProvider extends AbstractMaterialRenderInfoProv
     @Override
     protected void addMaterialRenderInfo() {
         buildRenderInfo(PAMaterialProvider.D32);
+        buildRenderInfo(PAMaterialProvider.RMA70_12);
     }
 
     @Override

@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:casting_basin",
+  "fluid": {
+    "tag": "forge:molten_rma7012",
+    "amount": 1296
+  },
+  "result": {
+    "tag": "forge:storage_blocks/rma70-12"
+  },
+  "cooling_time": 127
+}

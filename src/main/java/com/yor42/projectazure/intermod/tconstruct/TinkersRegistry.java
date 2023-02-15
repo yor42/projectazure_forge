@@ -32,6 +32,7 @@ import static com.yor42.projectazure.setup.register.RegisterItems.ITEMS;
 
 public class TinkersRegistry {
     public static final TinkersFluids MoltenD32 = new TinkersFluids("molten_d32", "Molten D32", 900,15, 3000,6000);
+    public static final TinkersFluids MoltenRMA7012 = new TinkersFluids("molten_rma7012", "Molten RMA70-12", 600,15, 3000,6000);
 
     private static FluidAttributes.Builder hotBuilder() {
         return ModelFluidAttributes.builder().density(2000).viscosity(10000).temperature(1000).sound(SoundEvents.BUCKET_FILL_LAVA, SoundEvents.BUCKET_EMPTY_LAVA);

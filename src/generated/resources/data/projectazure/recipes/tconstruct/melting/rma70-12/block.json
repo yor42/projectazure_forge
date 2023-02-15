@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "tag": "forge:storage_blocks/rma70-12"
+  },
+  "result": {
+    "fluid": "projectazure:molten_rma7012",
+    "amount": 1296
+  },
+  "temperature": 300,
+  "time": 127
+}

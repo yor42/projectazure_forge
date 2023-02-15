@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:coins/rma70-12",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "ingredient": {
+    "tag": "forge:coins/rma70-12"
+  },
+  "result": {
+    "fluid": "projectazure:molten_rma7012",
+    "amount": 48
+  },
+  "temperature": 300,
+  "time": 28
+}

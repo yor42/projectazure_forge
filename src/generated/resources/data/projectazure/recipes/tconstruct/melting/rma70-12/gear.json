@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:gears/rma70-12",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "ingredient": {
+    "tag": "forge:gears/rma70-12"
+  },
+  "result": {
+    "fluid": "projectazure:molten_rma7012",
+    "amount": 576
+  },
+  "temperature": 300,
+  "time": 84
+}

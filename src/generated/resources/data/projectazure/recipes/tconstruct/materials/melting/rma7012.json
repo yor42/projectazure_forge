@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material_melting",
+  "input": "projectazure:rma7012",
+  "temperature": 300,
+  "result": {
+    "fluid": "projectazure:molten_rma7012",
+    "amount": 144
+  }
+}

@@ -6,16 +6,20 @@ import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvide
 import slimeknights.tconstruct.library.data.material.AbstractMaterialStatsDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
+import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.traits.MaterialTraits;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.data.material.MaterialTraitsDataProvider;
 import slimeknights.tconstruct.tools.modifiers.traits.general.LightweightModifier;
+import slimeknights.tconstruct.tools.stats.ExtraMaterialStats;
+import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 
 public class PAMaterialProvider extends AbstractMaterialDataProvider {
 
-    //public static final MaterialId RMA70_12 = makeMaterial("rma7012");
+    public static final MaterialId RMA70_12 = makeMaterial("rma7012");
     //public static final MaterialId RMA70_24 = makeMaterial("rma7024");
     public static final MaterialId D32 = makeMaterial("d32");
 
@@ -26,6 +30,7 @@ public class PAMaterialProvider extends AbstractMaterialDataProvider {
     @Override
     protected void addMaterials() {
         addMaterial(D32, 4,ORDER_GENERAL, false, 0xc2dbec);
+        addMaterial(RMA70_12, 2,ORDER_GENERAL, false, 0xe6c580);
 
     }
 
@@ -47,6 +52,7 @@ public class PAMaterialProvider extends AbstractMaterialDataProvider {
         @Override
         protected void addMaterialTraits() {
             this.addDefaultTraits(D32, TinkerModifiers.lightweight.get());
+            this.addDefaultTraits(RMA70_12, TinkerModifiers.conducting.get());
         }
 
         @Override
@@ -64,7 +70,8 @@ public class PAMaterialProvider extends AbstractMaterialDataProvider {
 
         @Override
         protected void addMaterialStats() {
-            addMaterialStats(D32, new HeadMaterialStats(1285, 3,4,2.5F));
+            addMaterialStats(D32, new HeadMaterialStats(1285, 3,4,2.5F), HandleMaterialStats.DEFAULT.withDurability(1.5F), ExtraMaterialStats.DEFAULT);
+            this.addMaterialStats(RMA70_12, new HeadMaterialStats(261, 5.5F, 2, 2.5F), HandleMaterialStats.DEFAULT.withDurability(0.9F), ExtraMaterialStats.DEFAULT);
         }
 
         @Override
