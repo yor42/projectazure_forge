@@ -14,11 +14,17 @@ import javax.annotation.Nullable;
 public class ItemPowerCapabilityProvider implements ICapabilityProvider {
 
     protected ItemStack Stack;
-    private int EnergyCapacity;
+    private final int EnergyCapacity, maxin, maxout;
 
     public ItemPowerCapabilityProvider(ItemStack stack, int capacity){
+        this(stack, capacity, capacity, capacity);
+    }
+
+    public ItemPowerCapabilityProvider(ItemStack stack, int capacity, int maxin, int maxout){
         this.Stack = stack;
         this.EnergyCapacity = capacity;
+        this.maxin = maxin;
+        this.maxout = maxout;
     }
 
 
@@ -28,7 +34,7 @@ public class ItemPowerCapabilityProvider implements ICapabilityProvider {
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if(this.Stack != null) {
             if (cap == CapabilityEnergy.ENERGY) {
-                final LazyOptional<CustomEnergyStorageItem> EnergyStorage = LazyOptional.of(() -> new CustomEnergyStorageItem(this.Stack, this.EnergyCapacity));
+                final LazyOptional<CustomEnergyStorageItem> EnergyStorage = LazyOptional.of(() -> new CustomEnergyStorageItem(this.Stack, this.EnergyCapacity, this.maxin, this.maxout));
                 EnergyStorage.resolve();
                 return EnergyStorage.cast();
             }

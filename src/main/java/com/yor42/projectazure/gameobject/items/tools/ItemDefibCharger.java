@@ -5,6 +5,7 @@ import com.yor42.projectazure.gameobject.items.CurioItem;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.intermod.curios.client.CurioRenderer;
 import com.yor42.projectazure.intermod.curios.client.RenderDefib;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +17,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -24,6 +26,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -47,6 +50,7 @@ import static com.yor42.projectazure.setup.register.registerSounds.*;
 public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncable {
     private static final int ANIM_ON = 0;
     private static final int ANIM_OFF = 1;
+    private final int batterysize = 40000;
     public static final String controllerName = "defibcharger_controller";
     public AnimationFactory factory = new AnimationFactory(this);
     public ItemDefibCharger() {
@@ -57,7 +61,7 @@ public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncabl
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-        return CuriosCompat.addEnergyCapability(stack, 40000);
+        return CuriosCompat.addEnergyCapability(stack, this.batterysize);
     }
     @Override
     public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
@@ -293,7 +297,23 @@ public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncabl
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldin, @Nonnull List<ITextComponent> tooltips, @Nonnull ITooltipFlag tooltipadvanced) {
         tooltips.add(new TranslationTextComponent(this.getDescriptionId()+".tooltip").withStyle(TextFormatting.GRAY));
-        stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((cap)->tooltips.add(new TranslationTextComponent("item.tooltip.energystored", cap.getEnergyStored()+"/"+cap.getMaxEnergyStored()).withStyle(TextFormatting.GRAY)));
+
+        int remainingBattery = stack.getCapability(CapabilityEnergy.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+        float percentage = (float) remainingBattery/this.batterysize;
+
+        TextFormatting color;
+        if(percentage>=0.6){
+            color = TextFormatting.GREEN;
+        }
+        else if(percentage>=0.3){
+            color = TextFormatting.YELLOW;
+        }
+        else{
+            color = TextFormatting.DARK_RED;
+        }
+        percentage*=100;
+        tooltips.add(new TranslationTextComponent("item.tooltip.energystored", new StringTextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.batterysize)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color)));
+
         if(ShouldCharging(stack)){
             int charge = (int) (((float)getChargeProgress(stack)/100)*100);
             tooltips.add(new TranslationTextComponent("item.tooltip.energystored", charge+"%").withStyle(TextFormatting.AQUA));

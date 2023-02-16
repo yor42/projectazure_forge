@@ -38,14 +38,21 @@
 
   "item.projectazure.bandage_roll": "Roll of bandage",
 
+  "item.projectazure.primitive_originium_battery": "Primitive Originium Battery",
+
   "item.projectazure.mechanical_parts": "Mechanical Parts",
   "item.projectazure.iron_pipe": "Iron Pipe",
   "item.projectazure.steel_pipe": "Steel Pipe",
+  "item.projectazure.motor_primitive": "Primitive Motor",
   "item.projectazure.motor_basic": "Basic Motor",
+  "item.projectazure.motor_advanced": "Advanced Motor",
   "item.projectazure.circuit_primitive": "Primitive Circuit",
+  "item.projectazure.circuit_basic": "Basic Circuit",
   "item.projectazure.resistor_primitive": "Primitive Resistor",
+  "item.projectazure.resistor_basic": "Basic Resistor",
+  "item.projectazure.resistor_advanced": "Advanced Resistor",
   "item.projectazure.capacitor_primitive": "Primitive Capacitor",
-  "item.projectazure.circuit_advanced": "Advanced Circuit",
+  "item.projectazure.capacitor_advanced": "Advanced Capacitor",
   "item.projectazure.copper_coil": "Copper Coil",
   "item.projectazure.polymer_plate": "Polymer Plate",
   "item.projectazure.tree_sap": "Tree Sap",
@@ -143,13 +150,6 @@
 
   "item.projectazure.torpedo_ammo": "Torpedo Round",
   "item.projectazure.missile_ammo": "Missile Round",
-  "item.projectazure.5_56_ammo": "5.56mm Bullets",
-
-  "item.projectazure.5.56_magazine": "5.56mm Magazine",
-  "item.projectazure.5.56_magazine.tooltip": "Standard 30 round magazine for 5.56mm Ammo",
-
-  "item.projectazure.pistol_grip": "Pistol Grip",
-  "item.projectazure.steel_gunframe_rifle": "Steel Rifle Frame",
 
   "item.projectazure.energy_drink": "Cursed Energy Mix from Deep part of hell (Debug Item)",
 
@@ -174,13 +174,14 @@
   "item.projectazure.equipment_plane_f4fwildcat": "F4F Wildcat",
 
   "item.projectazure.sheath": "Rhodes Island Standard Combat Sword",
-  "item.projectazure.sheath.tooltip": "Black Sword made from steel. Standard Combat sword of military organization in one of multiverse.",
+  "item.projectazure.sheath.tooltip": "Standard Steel Combat sword of military organization in one of multiverse.",
   "item.projectazure.chixiao": "Chi Xiao",
-  "item.projectazure.chixiao.tooltip": "Red Sword made from mysterious material. its heavy.",
+  "item.projectazure.chixiao.tooltip": "Red Sword made from Amber Originium. its heavy.",
   "item.projectazure.crescentkatana_shiro": "Crescent Katana - Shiro",
   "item.projectazure.crescentkatana_shiro.tooltip": "Silver katana with additional blade near handle.",
   "item.projectazure.crescentkatana_kuro": "Crescent Katana - Kuro",
-  "item.projectazure.flexsword": "Lightweight Katana",
+  "item.projectazure.flexsword": "Lightweight Blade",
+  "item.projectazure.flexsword.tooltip": "Lightweight Blade Made out of RMA70-12",
   "item.projectazure.tactical_knife": "Tactical Knife",
   "item.projectazure.crescentkatana_kuro.tooltip": "Black katana with additional blade near handle.",
   "item.projectazure.warhammer": "War hammer",
@@ -190,8 +191,10 @@
   "item.projectazure.sledgehammer": "Sledgehammer",
   "item.projectazure.kyarustaff": "Chaos Grimore Staff",
   "item.projectazure.kitchenknife": "Kitchen Knife",
+  "item.projectazure.kitchenknife.tooltip": "Both good for stabbing and cutting.",
 
   "item.projectazure.excalibur": "Excalibur",
+  "item.projectazure.excalibur.tooltip": "Legandary sword for King of Britain.",
   "item.projectazure.excalibur_sheath": "Avalon",
   "item.projectazure.gae_bolg": "Gáe Bolg",
   "item.projectazure.lordchaldeas": "Lord Chaldeas",
@@ -410,6 +413,8 @@
   "block.projectazure.riftway": "Riftway",
   "block.projectazure.advanced_alloy_smelter": "Advanced Alloy smelter",
 
+  "material.projectazure.d32": "D32 Steel",
+  "material.projectazure.rma7012": "RMA70-12",
 
   "originium_generator.name": "Originium Reactor",
   "ammo_press.name": "Ammunition Press",

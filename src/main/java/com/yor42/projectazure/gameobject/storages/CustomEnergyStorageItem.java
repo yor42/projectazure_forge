@@ -8,10 +8,15 @@ public class CustomEnergyStorageItem implements IEnergyStorage {
     private final ItemStack stack;
     public CustomEnergyStorageItem(ItemStack stack, int capacity)
     {
+        this(stack, capacity, capacity, capacity);
+    }
+
+    public CustomEnergyStorageItem(ItemStack stack, int capacity, int maxin, int maxout)
+    {
         this.stack = stack;
         this.setCapacity(capacity);
-        this.setMaxExtract(capacity);
-        this.setMaxReceive(capacity);
+        this.setMaxExtract(maxout);
+        this.setMaxReceive(maxin);
     }
 
     @Override
@@ -45,8 +50,7 @@ public class CustomEnergyStorageItem implements IEnergyStorage {
     @Override
     public int getEnergyStored()
     {
-        int energy = this.getCompound().getInt("energy");
-        return energy;
+        return this.getCompound().getInt("energy");
     }
 
     @Override
@@ -58,25 +62,25 @@ public class CustomEnergyStorageItem implements IEnergyStorage {
     public void setEnergyStored(int value){
         CompoundNBT storage = this.getCompound();
         storage.putInt("energy", value);
-        this.stack.getOrCreateTag().put("energystorage", storage);
+        this.setCompound(storage);
     }
 
     public void setMaxExtract(int value){
         CompoundNBT storage = this.getCompound();
         storage.putInt("maxExtract", value);
-        this.stack.getOrCreateTag().put("energystorage", storage);
+        this.setCompound(storage);
     }
 
     public void setMaxReceive(int value){
         CompoundNBT storage = this.getCompound();
         storage.putInt("maxReceive", value);
-        this.stack.getOrCreateTag().put("energystorage", storage);
+        this.setCompound(storage);
     }
 
     public void setCapacity(int value){
         CompoundNBT storage = this.getCompound();
         storage.putInt("capacity", value);
-        this.stack.getOrCreateTag().put("energystorage", storage);
+        this.setCompound(storage);
     }
 
     public int getMaxExtract()
@@ -103,6 +107,10 @@ public class CustomEnergyStorageItem implements IEnergyStorage {
 
     protected CompoundNBT getCompound(){
         return this.stack.getOrCreateTag().getCompound("energystorage");
+    }
+
+    protected void setCompound(CompoundNBT compoundNBT){
+        this.stack.getOrCreateTag().put("energystorage", compoundNBT);
     }
 
 

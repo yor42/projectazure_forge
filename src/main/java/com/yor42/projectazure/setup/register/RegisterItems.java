@@ -37,11 +37,12 @@ import java.util.function.Supplier;
 import static com.yor42.projectazure.Main.*;
 import static com.yor42.projectazure.data.client.itemModelProvider.ITEMENTRY;
 
+@SuppressWarnings("unused")
 public class RegisterItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Constants.MODID);
 
-    //Resources.
+    //Resources
     //Remove on 1.17
     public static final RegistryObject<Item> INGOT_COPPER = registerResource("copper", enums.ResourceType.INGOT);
     public static final RegistryObject<Item> INGOT_LEAD = registerResource("lead", enums.ResourceType.INGOT);
@@ -56,7 +57,6 @@ public class RegisterItems {
     public static final RegistryObject<Item> INGOT_D32 = registerResource("d32steel", enums.ResourceType.INGOT);
     public static final RegistryObject<Item> INGOT_INCANDESCENT_ALLOY = registerResource("incandescent_alloy", enums.ResourceType.INGOT);
     public static final RegistryObject<Item> INGOT_MANGANESE = registerResource("manganese", enums.ResourceType.INGOT);
-
 
     public static final RegistryObject<Item> GEAR_BRONZE = registerResource("bronze", enums.ResourceType.GEAR);
     public static final RegistryObject<Item> GEAR_STEEL = registerResource("steel", enums.ResourceType.GEAR);
@@ -136,6 +136,9 @@ public class RegisterItems {
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> ADVANCED_CIRCUIT = register("circuit_advanced", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> PRIMITIVE_ORIGINIUM_BATTERY = register("primitive_originium_battery", () -> new ItemBattery(new Item.Properties()
+            .tab(PA_RESOURCES), 1600, 200, 200));
 
     public static final RegistryObject<Item> GUNPOWDER_COMPOUND = register("gunpowder_compound", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
@@ -234,7 +237,7 @@ public class RegisterItems {
             .tab(PA_GROUP)
             .rarity(Rarity.EPIC)){
         @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
             if(worldIn != null && worldIn.isClientSide) {
                 if (Screen.hasShiftDown()) {
@@ -501,7 +504,7 @@ public class RegisterItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
             super.appendHoverText(stack, worldIn, tooltip, flagIn);
             tooltip.add(new TranslationTextComponent("disc.enterthebeginning.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
         }
@@ -746,7 +749,7 @@ public class RegisterItems {
     public static final RegistryObject<Item> CONTRIBUTOR_BONUS = register("contributor_bonus", () -> new ItemContributorBonus(new Item.Properties()));
 
 
-    public static RegistryObject<Item> registerResource(String id, enums.ResourceType type){;
+    public static RegistryObject<Item> registerResource(String id, enums.ResourceType type){
         return register_withTexturename(type.getName()+"_"+id, type.getName()+"_"+id, () -> new ItemResource(id, type));
     }
 
@@ -800,6 +803,6 @@ public class RegisterItems {
     }
 
 
-    public static void register(){};
+    public static void register(){}
 
 }

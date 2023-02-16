@@ -7,6 +7,31 @@
       "type": "patchouli:crafting",
       "recipe": "projectazure:oak_pantry",
       "text": "projectazure.codex.entry.pantry.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:spruce_pantry",
+      "text": "projectazure.codex.entry.pantry.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:birch_pantry",
+      "text": "projectazure.codex.entry.pantry.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:jungle_pantry",
+      "text": "projectazure.codex.entry.pantry.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:acacia_pantry",
+      "text": "projectazure.codex.entry.pantry.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:dark_oak_pantry",
+      "text": "projectazure.codex.entry.pantry.description"
     }
   ]
 }

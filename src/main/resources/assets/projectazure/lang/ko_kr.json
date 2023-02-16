@@ -143,13 +143,6 @@
 
   "item.projectazure.torpedo_ammo": "어뢰 탄환",
   "item.projectazure.missile_ammo": "미사일 탄환",
-  "item.projectazure.5_56_ammo": "5.56mm 탄약",
-
-  "item.projectazure.5.56_magazine": "5.56mm 탄창",
-  "item.projectazure.5.56_magazine.tooltip": "5.56mm 탄 전용 평범한 30발들이 탄창",
-
-  "item.projectazure.pistol_grip": "피스톨 그립",
-  "item.projectazure.steel_gunframe_rifle": "강철 소총 프레임",
 
   "item.projectazure.energy_drink": "뒤틀린 불지옥 25층에서 기어올라온 저주받은 화학물질 (디버그 아이템)",
 
@@ -181,6 +174,7 @@
   "item.projectazure.crescentkatana_shiro.tooltip": "손잡이 부근에 반달 모양의 날이 달린 검.",
   "item.projectazure.crescentkatana_kuro": "반월검 - 흑",
   "item.projectazure.flexsword": "경량 한손검",
+  "item.projectazure.flexsword.tooltip": "Lightweight Blade Made out of RMA70-12",
   "item.projectazure.tactical_knife": "전술 나이프",
   "item.projectazure.crescentkatana_kuro.tooltip": "손잡이 부근에 반달 모양의 날이 달린 검.",
   "item.projectazure.warhammer": "워해머",
@@ -190,8 +184,10 @@
   "item.projectazure.sledgehammer": "슬레지해머",
   "item.projectazure.kyarustaff": "카오스 그리모어 지팡이",
   "item.projectazure.kitchenknife": "주방칼",
+  "item.projectazure.kitchenknife.tooltip": "Both good for stabbing and cutting.",
 
   "item.projectazure.excalibur": "엑스칼리버",
+  "item.projectazure.excalibur.tooltip": "Legandary sword for King of Britain.",
   "item.projectazure.excalibur_sheath": "아발론",
   "item.projectazure.gae_bolg": "게 볼그",
   "item.projectazure.lordchaldeas": "로드 칼데아스",
@@ -410,6 +406,8 @@
   "block.projectazure.riftway": "차원 전송기",
   "block.projectazure.advanced_alloy_smelter": "고급 합금로",
 
+  "material.projectazure.d32": "D32 Steel",
+  "material.projectazure.rma7012": "RMA70-12",
 
   "originium_generator.name": "오리지늄 반응로",
   "ammo_press.name": "탄약 압착기",

@@ -166,6 +166,17 @@ public class MathUtil {
         return String.format("%02d", hour)+":"+String.format("%02d", minute)+":"+String.format("%02d", second)+":"+String.format("%03d", millisecs);
     }
 
+    //This method is slight modification of what is written by chatgpt because I am damn lazy
+    public static String formatValueMatric(float value){
+        String[] suffix = new String[] {"", "K", "M", "B", "T" , "P", "E", "Z", "Y", "R" , "Q"};
+        int index = 0;
+        while (value >= 1000 && index < suffix.length - 1) {
+            value /= 1000;
+            index++;
+        }
+        return String.format("%.2f%s", value, suffix[index]);
+    }
+
     public static BlockPos getRandomBlockposInRadius2D(World world, BlockPos originPos, int maxRadius, int minRadius){
         if(maxRadius-minRadius<0){
             throw new IllegalArgumentException("maxRadius must be larger then minRadius!");
