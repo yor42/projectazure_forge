@@ -20,7 +20,7 @@ apply plugin: 'maven-publish'
 //we mix some ins
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.9.3-IDP'
+version = '0.9.5-IDP'
 group = 'com.yor42.projectrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
