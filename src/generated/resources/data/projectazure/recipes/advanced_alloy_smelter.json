@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CIC",
+    "CDC",
+    "PFP"
+  ],
+  "key": {
+    "C": {
+      "item": "projectazure:machine_dynamo"
+    },
+    "D": {
+      "item": "projectazure:device_primitive"
+    },
+    "I": {
+      "item": "projectazure:incandescent_alloy_block"
+    },
+    "F": {
+      "item": "projectazure:machine_frame"
+    },
+    "P": {
+      "tag": "forge:circuits/basic"
+    }
+  },
+  "result": {
+    "item": "projectazure:advanced_alloy_smelter"
+  }
+}

@@ -2,26 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:dd_default_rigging"
+      "projectazure:equipment_plane_f4fwildcat"
     ]
   },
   "criteria": {
-    "has_cube": {
+    "has_item": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "projectazure:wisdomcube"
-          }
-        ]
-      }
-    },
-    "has_motor": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "projectazure:motor_advanced"
+            "item": "projectazure:motor_basic"
           }
         ]
       }
@@ -29,14 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:dd_default_rigging"
+        "recipe": "projectazure:equipment_plane_f4fwildcat"
       }
     }
   },
   "requirements": [
     [
-      "has_cube",
-      "has_motor",
+      "has_item",
       "has_the_recipe"
     ]
   ]

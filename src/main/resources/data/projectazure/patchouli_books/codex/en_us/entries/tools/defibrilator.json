@@ -1,0 +1,33 @@
+{
+  "name": "projectazure.codex.entry.defibrilator.title",
+  "icon": "projectazure:defib_charger",
+  "category": "projectazure:tools",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "projectazure.codex.entry.defibrilator.introduction1"
+    },
+    {
+      "type": "patchouli:image",
+      "images": [
+        "projectazure:textures/gui/codex/defib_charger/guide1.png",
+        "projectazure:textures/gui/codex/defib_charger/guide2.png",
+        "projectazure:textures/gui/codex/defib_charger/guide3.png"
+      ],
+      "border": true,
+      "title": "projectazure.codex.entry.defib_paddle.guide.title",
+      "text": "projectazure.codex.entry.defib_paddle.guide.text"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:defib_charger",
+      "text": "projectazure.codex.entry.defib_charger.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:defib_paddle",
+      "text": "projectazure.codex.entry.defib_paddle.description"
+    }
+
+  ]
+}

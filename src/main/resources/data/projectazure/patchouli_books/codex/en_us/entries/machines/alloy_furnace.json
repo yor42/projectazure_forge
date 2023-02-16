@@ -4,9 +4,12 @@
   "category": "projectazure:machines",
   "pages": [
     {
-      "type": "patchouli:crafting",
-      "recipe": "projectazure:alloy_furnace",
+      "type": "patchouli:text",
       "text": "projectazure.codex.entry.alloy_furnace.description"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:alloy_furnace"
     }
   ]
 }

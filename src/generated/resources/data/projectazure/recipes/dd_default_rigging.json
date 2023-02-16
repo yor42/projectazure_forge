@@ -2,27 +2,27 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "CSP",
-    "AWG",
-    " MA"
+    "AWA",
+    "GMG"
   ],
   "key": {
     "A": {
-      "tag": "forge:plates/aluminium"
+      "tag": "forge:storage_blocks/d32"
     },
     "S": {
-      "tag": "forge:ingots/steel"
+      "item": "projectazure:cognitive_array"
     },
     "G": {
       "tag": "forge:gears/steel"
     },
     "P": {
-      "item": "projectazure:mechanical_parts"
+      "item": "projectazure:device_advanced"
     },
     "C": {
-      "tag": "forge:circuits/advanced"
+      "tag": "forge:circuits/crystalline"
     },
     "M": {
-      "item": "projectazure:motor_primitive"
+      "item": "projectazure:motor_advanced"
     },
     "W": {
       "item": "projectazure:wisdomcube"

@@ -1,0 +1,12 @@
+{
+  "name": "item.projectazure.primitive_originium_battery",
+  "icon": "projectazure:primitive_originium_battery",
+  "category": "projectazure:tools",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "projectazure:primitive_originium_battery",
+      "text": "projectazure.codex.entry.primitive_originium_battery.description"
+    }
+  ]
+}

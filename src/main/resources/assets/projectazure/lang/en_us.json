@@ -43,17 +43,22 @@
   "item.projectazure.mechanical_parts": "Mechanical Parts",
   "item.projectazure.iron_pipe": "Iron Pipe",
   "item.projectazure.steel_pipe": "Steel Pipe",
+  "item.projectazure.device_primitive": "Primitive Mechanical Device",
+  "item.projectazure.device_basic": "Basic Mechanical Device",
+  "item.projectazure.device_advanced": "Advanced Mechanical Device",
   "item.projectazure.motor_primitive": "Primitive Motor",
   "item.projectazure.motor_basic": "Basic Motor",
   "item.projectazure.motor_advanced": "Advanced Motor",
   "item.projectazure.circuit_primitive": "Primitive Circuit",
   "item.projectazure.circuit_basic": "Basic Circuit",
+  "item.projectazure.circuit_advanced": "advanced Circuit",
   "item.projectazure.resistor_primitive": "Primitive Resistor",
   "item.projectazure.resistor_basic": "Basic Resistor",
   "item.projectazure.resistor_advanced": "Advanced Resistor",
   "item.projectazure.capacitor_primitive": "Primitive Capacitor",
   "item.projectazure.capacitor_advanced": "Advanced Capacitor",
   "item.projectazure.copper_coil": "Copper Coil",
+  "item.projectazure.gold_coil": "Gold Coil",
   "item.projectazure.polymer_plate": "Polymer Plate",
   "item.projectazure.tree_sap": "Tree Sap",
   "item.projectazure.gunpowder_compound": "Explosive Compound",
@@ -731,7 +736,20 @@
   "projectazure.codex.category.worldgens.title": "Resource / Worldgens",
   "projectazure.codex.category.worldgens.description": "Resource and Worldgens of Project:Azure",
 
+  "projectazure.codex.category.tools.title": "Tools",
+  "projectazure.codex.category.tools.description": "Tools added by Project: Azure",
+
+  "projectazure.codex.entry.defibrilator.title": "Defibrillators",
+  "projectazure.codex.entry.defibrilator.introduction1": "Sometimes we all make mistakes. creeper, digging straight down, lava... and sometimes it takes out our friends. but with defibrillator, we can CHEAT DEATH. no matter the reason, just like all FPS games! not only that, you can use this powerful electrical surge to electrocute others, too!",
+  "projectazure.codex.entry.defibrilator.introduction2": "But this tool works bit differently from conventional tools. you need 2 paddles, and 1 charger with energy stored in order to work. first, Sneak+Right Click the charger to turn it on, and put paddles on each hand. Sneak+Right Click to start charging. once it reaches 100%, right click the target.",
+
+  "projectazure.codex.entry.defib_paddle.guide.title": "How to use Defibrillator",
+  "projectazure.codex.entry.defib_paddle.guide.text": "Its quite different from other conventional tools, but its easy as 123.",
+  "projectazure.codex.entry.defib_charger.description": "HERO'S NEVER DIES!$(br)Device with battery and capacitor. used for conducting electrical shock to fallen companion's heart.",
+  "projectazure.codex.entry.defib_paddle.description": "CLEAR! *Bzzzt*",
+
   "projectazure.codex.entry.alloy_furnace.description": "Alloy Furnace is modified version of furnace that mixes 2 different metal and makes alloy.$(br)It is also the stepping stone for every machine or Project:Azure.",
+  "projectazure.codex.entry.primitive_originium_battery.description": "\"This is just an iron and copper rod shoved into originium prime! how does this even store power!?\"$(br)$(br)- Old Reunion movement Research note",
 
   "projectazure.codex.entry.pantry.title": "Pantry",
   "projectazure.codex.entry.pantry.description": "Pantries are very similar to large chest, but smaller, and can only store foods.$(br)also, your companions can take food from pantries by their own.$(br)you can also use different types of wood for different design."

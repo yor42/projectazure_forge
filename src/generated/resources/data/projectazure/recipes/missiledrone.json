@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DID",
+    "MCM",
+    "PIP"
+  ],
+  "key": {
+    "C": {
+      "item": "projectazure:computercore"
+    },
+    "M": {
+      "item": "projectazure:motor_basic"
+    },
+    "D": {
+      "item": "projectazure:device_basic"
+    },
+    "I": {
+      "tag": "forge:plates/aluminium"
+    },
+    "P": {
+      "tag": "forge:circuits/advanced"
+    }
+  },
+  "result": {
+    "item": "projectazure:missiledrone"
+  }
+}

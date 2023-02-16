@@ -10,19 +10,19 @@
       "tag": "forge:plates/aluminium"
     },
     "S": {
-      "tag": "forge:plates/steel"
+      "tag": "forge:plates/d32"
     },
     "G": {
       "tag": "forge:gears/steel"
     },
     "P": {
-      "item": "projectazure:mechanical_parts"
+      "item": "projectazure:device_advanced"
     },
     "C": {
-      "tag": "forge:circuits/advanced"
+      "tag": "forge:circuits/crystalline"
     },
     "M": {
-      "item": "projectazure:motor_primitive"
+      "item": "projectazure:motor_advanced"
     },
     "D": {
       "item": "projectazure:dd_default_rigging"

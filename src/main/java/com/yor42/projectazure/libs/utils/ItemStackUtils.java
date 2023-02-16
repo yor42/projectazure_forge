@@ -219,11 +219,12 @@ public class ItemStackUtils {
 
 
     public static boolean hasAttackableCannon(ItemStack rigging) {
-        //TODO: check for correctness
         if (rigging.getItem() instanceof ItemRiggingBase) {
             IItemHandler mainGuns = MultiInvUtil.getCap(rigging).getInventory(enums.SLOTTYPE.MAIN_GUN.ordinal());
             for (int i = 0; i < mainGuns.getSlots(); i++) {
-                return !isDestroyed(mainGuns.getStackInSlot(i));
+                if(!isDestroyed(mainGuns.getStackInSlot(i))){
+                    return true;
+                }
             }
         }
         return false;

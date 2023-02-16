@@ -7,7 +7,7 @@
   ],
   "key": {
     "M": {
-      "item": "projectazure:motor_basic"
+      "item": "projectazure:motor_primitive"
     },
     "C": {
       "item": "projectazure:device_primitive"

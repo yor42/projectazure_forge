@@ -3,6 +3,8 @@ package com.yor42.projectazure.data.common;
 import com.tac.guns.crafting.WorkbenchRecipeBuilder;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.data.recipebuilder.*;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AdvancedAlloySmelterControllerTE;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
@@ -285,7 +287,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     private void generateShapedRecipe(@Nonnull Consumer<IFinishedRecipe> consumer){
 
-        ShapedRecipeBuilder.shaped(RegisterItems.TREE_SAP.get(),2)
+        ShapedRecipeBuilder.shaped(RegisterItems.TREE_SAP.get(),4)
                 .define('L', ItemTags.LOGS)
                 .pattern("LLL")
                 .pattern("LLL")
@@ -331,6 +333,16 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("TGT")
                 .unlockedBy("has_sap", has(ModTags.Items.TREE_SAP))
                 .unlockedBy("has_gunpowder", has(Tags.Items.GUNPOWDER))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.PRIMITIVE_ORIGINIUM_BATTERY.get(),1)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('C', ModTags.Items.INGOT_COPPER)
+                .define('O', ModTags.Items.ORIGINIUM_PRIME)
+                .define('W', ModTags.Items.WIRE_COPPER)
+                .pattern("IW")
+                .pattern("OC")
+                .unlockedBy("has_material", has(ModTags.Items.ORIGINIUM_PRIME))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_STONE.get())
@@ -492,7 +504,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.BASIC_DEVICE.get())
-                .define('M', RegisterItems.BASIC_MOTOR.get())
+                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
                 .define('C', RegisterItems.PRIMITIVE_DEVICE.get())
                 .define('B', ModTags.Items.CIRCUITS_ADVANCED)
                 .define('O', RegisterItems.CRYSTALLINE_COMPONENT.get())
@@ -1061,27 +1073,12 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
         ShapedRecipeBuilder.shaped(RegisterItems.KYARU_STAFF.get(), 1)
                 .define('S', Tags.Items.RODS_WOODEN)
-                .define('C', ModTags.Items.INGOT_BRONZE)
+                .define('C', ModTags.Items.INGOT_BRASS)
                 .define('B', Items.ENCHANTED_BOOK)
                 .pattern(" CB")
                 .pattern(" SC")
                 .pattern("S  ")
                 .unlockedBy("has_part", has(Items.ENCHANTED_BOOK))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(RegisterItems.DD_DEFAULT_RIGGING.get(), 1)
-                .define('A', ModTags.Items.PLATE_ALUMINIUM)
-                .define('S', ModTags.Items.INGOT_STEEL)
-                .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', RegisterItems.MECHANICAL_PARTS.get())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
-                .define('W', RegisterItems.WISDOM_CUBE.get())
-                .pattern("CSP")
-                .pattern("AWG")
-                .pattern(" MA")
-                .unlockedBy("has_cube", has(RegisterItems.WISDOM_CUBE.get()))
-                .unlockedBy("has_motor", has(RegisterItems.PRIMITIVE_MOTOR.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.IRON_PIPE.get(), 1)
@@ -1098,34 +1095,48 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_steelplate", has(ModTags.Items.PLATE_STEEL))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(RegisterItems.DD_DEFAULT_RIGGING.get(), 1)
+                .define('A', ModTags.Items.BLOCK_D32)
+                .define('S', RegisterItems.COGNITIVE_ARRAY.get())
+                .define('G', ModTags.Items.GEAR_STEEL)
+                .define('P', RegisterItems.ADVANCED_DEVICE.get())
+                .define('C', ModTags.Items.CIRCUITS_CRYSTALLINE)
+                .define('M', RegisterItems.ADVANCED_MOTOR.get())
+                .define('W', RegisterItems.WISDOM_CUBE.get())
+                .pattern("CSP")
+                .pattern("AWA")
+                .pattern("GMG")
+                .unlockedBy("has_cube", has(RegisterItems.WISDOM_CUBE.get()))
+                .unlockedBy("has_motor", has(RegisterItems.ADVANCED_MOTOR.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(RegisterItems.BB_DEFAULT_RIGGING.get(), 1)
                 .define('A', ModTags.Items.PLATE_ALUMINIUM)
-                .define('S', ModTags.Items.PLATE_STEEL)
+                .define('S', ModTags.Items.PLATE_D32)
                 .define('G', ModTags.Items.GEAR_STEEL)
-                .define('P', RegisterItems.MECHANICAL_PARTS.get())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
+                .define('P', RegisterItems.ADVANCED_DEVICE.get())
+                .define('C', ModTags.Items.CIRCUITS_CRYSTALLINE)
+                .define('M', RegisterItems.ADVANCED_MOTOR.get())
                 .define('D', RegisterItems.DD_DEFAULT_RIGGING.get())
                 .pattern("SMS")
                 .pattern("PDG")
                 .pattern("ACA")
                 .unlockedBy("has_dd_rigging", has(RegisterItems.DD_DEFAULT_RIGGING.get()))
-                .unlockedBy("has_motor", has(RegisterItems.PRIMITIVE_MOTOR.get()))
+                .unlockedBy("has_motor", has(RegisterItems.ADVANCED_MOTOR.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.CV_DEFAULT_RIGGING.get(), 1)
                 .define('W', RegisterBlocks.REENFORCED_PLANK.get().asItem())
-                .define('M', RegisterItems.PRIMITIVE_MOTOR.get())
+                .define('M', RegisterItems.ADVANCED_MOTOR.get())
                 .define('D', RegisterItems.DD_DEFAULT_RIGGING.get())
-                .define('P', RegisterItems.MECHANICAL_PARTS.get())
-                .define('C', ModTags.Items.CIRCUITS_ADVANCED)
-                .define('S', ModTags.Items.PLATE_STEEL)
-                .define('I', ModTags.Items.INGOT_STEEL)
+                .define('P', RegisterItems.ADVANCED_DEVICE.get())
+                .define('C', ModTags.Items.CIRCUITS_CRYSTALLINE)
+                .define('S', ModTags.Items.BLOCK_STEEL)
                 .pattern("SSW")
-                .pattern("IDW")
+                .pattern("SDW")
                 .pattern("PCM")
                 .unlockedBy("has_dd_rigging", has(RegisterItems.DD_DEFAULT_RIGGING.get()))
-                .unlockedBy("has_motor", has(RegisterItems.PRIMITIVE_MOTOR.get()))
+                .unlockedBy("has_motor", has(RegisterItems.ADVANCED_MOTOR.get()))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.EQUIPMENT_TORPEDO_533MM.get(), 1)
@@ -1645,16 +1656,66 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RiftwayControllerTE.RiftwayDefinition.getStackForm().getItem())
-                .define('C', RegisterItems.RESISTOR_ADVANCED.get())
+                .define('C', RegisterItems.COMPUTERCORE.get())
+                .define('W', RegisterItems.WISDOM_CUBE.get())
                 .define('P', RegisterItems.CRYSTALLINE_CIRCUIT.get())
-                .define('M', RegisterBlocks.MACHINE_FRAME.get())
+                .define('M', RegisterItems.ADVANCED_DEVICE.get())
                 .define('O', RegisterItems.ORUNDUM.get())
                 .define('D', RegisterItems.FOR_DESTABILIZER.get())
                 .define('L', RegisterBlocks.MACHINE_DYNAMO.get())
                 .pattern("LDL")
-                .pattern("COC")
+                .pattern("COW")
                 .pattern("PMP")
                 .unlockedBy("has_item", has(RegisterItems.FOR_DESTABILIZER.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getStackForm().getItem())
+                .define('C', RegisterBlocks.MACHINE_DYNAMO.get())
+                .define('D', RegisterItems.PRIMITIVE_DEVICE.get())
+                .define('I', RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get())
+                .define('F', RegisterBlocks.MACHINE_FRAME.get())
+                .define('P', ModTags.Items.CIRCUITS_BASIC)
+                .pattern("CIC")
+                .pattern("CDC")
+                .pattern("PFP")
+                .unlockedBy("has_item", has(RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(AmmoPressControllerTE.AmmoPressDefinition.getStackForm().getItem())
+                .define('C', RegisterBlocks.MACHINE_DYNAMO.get())
+                .define('D', RegisterItems.BASIC_DEVICE.get())
+                .define('I', Blocks.PISTON)
+                .define('M', RegisterItems.BASIC_MOTOR.get())
+                .define('O', RegisterItems.ORUNDUM.get())
+                .define('P', ModTags.Items.CIRCUITS_BASIC)
+                .pattern("CIC")
+                .pattern("MDM")
+                .pattern("POP")
+                .unlockedBy("has_item", has(RegisterItems.BASIC_MOTOR.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.DRONE_BAMISSILE.get())
+                .define('C', RegisterItems.COMPUTERCORE.get())
+                .define('M', RegisterItems.BASIC_MOTOR.get())
+                .define('D', RegisterItems.BASIC_DEVICE.get())
+                .define('I', ModTags.Items.PLATE_ALUMINIUM)
+                .define('P', ModTags.Items.CIRCUITS_ADVANCED)
+                .pattern("DID")
+                .pattern("MCM")
+                .pattern("PIP")
+                .unlockedBy("has_item", has(RegisterItems.BASIC_MOTOR.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.EQUIPMENT_PLANE_F4FWildcat.get())
+                .define('C', RegisterItems.COMPUTERCORE.get())
+                .define('M', RegisterItems.BASIC_MOTOR.get())
+                .define('D', RegisterItems.BASIC_DEVICE.get())
+                .define('I', ModTags.Items.PLATE_ALUMINIUM)
+                .define('P', ModTags.Items.CIRCUITS_ADVANCED)
+                .pattern(" M ")
+                .pattern("ICI")
+                .pattern("DPD")
+                .unlockedBy("has_item", has(RegisterItems.BASIC_MOTOR.get()))
                 .save(consumer);
 
 

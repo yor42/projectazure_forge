@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " M ",
+    "ICI",
+    "DPD"
+  ],
+  "key": {
+    "C": {
+      "item": "projectazure:computercore"
+    },
+    "M": {
+      "item": "projectazure:motor_basic"
+    },
+    "D": {
+      "item": "projectazure:device_basic"
+    },
+    "I": {
+      "tag": "forge:plates/aluminium"
+    },
+    "P": {
+      "tag": "forge:circuits/advanced"
+    }
+  },
+  "result": {
+    "item": "projectazure:equipment_plane_f4fwildcat"
+  }
+}

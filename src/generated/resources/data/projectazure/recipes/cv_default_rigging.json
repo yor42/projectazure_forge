@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "SSW",
-    "IDW",
+    "SDW",
     "PCM"
   ],
   "key": {
@@ -10,22 +10,19 @@
       "item": "projectazure:reenforced_plank"
     },
     "M": {
-      "item": "projectazure:motor_primitive"
+      "item": "projectazure:motor_advanced"
     },
     "D": {
       "item": "projectazure:dd_default_rigging"
     },
     "P": {
-      "item": "projectazure:mechanical_parts"
+      "item": "projectazure:device_advanced"
     },
     "C": {
-      "tag": "forge:circuits/advanced"
+      "tag": "forge:circuits/crystalline"
     },
     "S": {
-      "tag": "forge:plates/steel"
-    },
-    "I": {
-      "tag": "forge:ingots/steel"
+      "tag": "forge:storage_blocks/steel"
     }
   },
   "result": {

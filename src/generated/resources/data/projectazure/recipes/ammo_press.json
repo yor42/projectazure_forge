@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CIC",
+    "MDM",
+    "POP"
+  ],
+  "key": {
+    "C": {
+      "item": "projectazure:machine_dynamo"
+    },
+    "D": {
+      "item": "projectazure:device_basic"
+    },
+    "I": {
+      "item": "minecraft:piston"
+    },
+    "M": {
+      "item": "projectazure:motor_basic"
+    },
+    "O": {
+      "item": "projectazure:orundum"
+    },
+    "P": {
+      "tag": "forge:circuits/basic"
+    }
+  },
+  "result": {
+    "item": "projectazure:ammo_press"
+  }
+}

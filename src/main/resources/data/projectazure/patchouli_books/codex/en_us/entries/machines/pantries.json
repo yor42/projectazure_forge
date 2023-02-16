@@ -4,34 +4,28 @@
   "category": "projectazure:machines",
   "pages": [
     {
-      "type": "patchouli:crafting",
-      "recipe": "projectazure:oak_pantry",
+      "type": "patchouli:text",
       "text": "projectazure.codex.entry.pantry.description"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "projectazure:spruce_pantry",
-      "text": "projectazure.codex.entry.pantry.description"
+      "recipe": "projectazure:oak_pantry",
+      "recipe2": "projectazure:spruce_pantry"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "projectazure:birch_pantry",
-      "text": "projectazure.codex.entry.pantry.description"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "projectazure:jungle_pantry",
-      "text": "projectazure.codex.entry.pantry.description"
+      "recipe2": "projectazure:jungle_pantry"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "projectazure:acacia_pantry",
-      "text": "projectazure.codex.entry.pantry.description"
+      "recipe2": "projectazure:dark_oak_pantry"
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "projectazure:dark_oak_pantry",
-      "text": "projectazure.codex.entry.pantry.description"
+      "recipe": "projectazure:warped_pantry",
+      "recipe2": "projectazure:crimson_pantry"
     }
   ]
 }

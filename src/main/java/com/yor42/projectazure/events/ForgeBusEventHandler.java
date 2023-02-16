@@ -44,6 +44,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -215,6 +216,18 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.INGOT_INCANDESCENT_ALLOY.get(),2)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(500).buildAndRegister();
 
+            AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("loxickohl")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.SLIMEBALLS)), new ItemsIngredient(Ingredient.of(RegisterItems.TREE_SAP.get()), 4))
+                    .input(FluidMultiblockCapability.CAP, new FluidStack(RegisterFluids.KETON_SOURCE_REGISTRY.get(), 100))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.LOXICKOHL.get(),2)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 200).duration(500).buildAndRegister();
+
+            AdvancedAlloySmelterControllerTE.SMELTRYDefinition.getRecipeMap().start().name("d32")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_RMA7012)), new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_MANGANESE), 4), new ItemsIngredient(Ingredient.of(RegisterItems.LOXICKOHL.get()), 2))
+                    .input(FluidMultiblockCapability.CAP, new FluidStack(RegisterFluids.KETON_SOURCE_REGISTRY.get(), 200))
+                    .output(ItemMultiblockCapability.CAP, new ItemsIngredient(new ItemStack(RegisterItems.INGOT_D32.get(),2)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 500).duration(1000).buildAndRegister();
+
             new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("akn")
                     .inputItems(new ItemsIngredient(Ingredient.of(RegisterItems.ORUNDUM.get()),10), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .addCompanionOutput(registerEntity.AMIYA.get())
@@ -243,12 +256,29 @@ public class ForgeBusEventHandler {
                     .addCompanionOutput(registerEntity.SHIKI.get())
                     .perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
 
+            new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("al")
+                    .inputItems(new ItemsIngredient(Ingredient.of(RegisterItems.WISDOM_CUBE.get()),2), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
+                    .addCompanionOutput(registerEntity.ENTERPRISE.get())
+                    .addCompanionOutput(registerEntity.AYANAMI.get())
+                    .addCompanionOutput(registerEntity.Z23.get())
+                    .addCompanionOutput(registerEntity.LAFFEY.get())
+                    .addCompanionOutput(registerEntity.JAVELIN.get())
+                    .addCompanionOutput(registerEntity.NAGATO.get())
+                    .perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
+
+            new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("gfl")
+                    .inputItems(new ItemsIngredient(Ingredient.of(RegisterItems.COMPUTERCORE.get()),3), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
+                    .addCompanionOutput(registerEntity.HK416.get())
+                    .addCompanionOutput(registerEntity.M4A1.get())
+                    .perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
+
             new WeightedRecipeBuilder(RiftwayControllerTE.RIFTWAYRECIPEMAP).name("etc")
                     .inputItems(new ItemsIngredient(Ingredient.of(RegisterItems.HEADHUNTING_PCB.get()),2), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .addCompanionOutput(registerEntity.SHIROKO.get())
                     .addCompanionOutput(registerEntity.SYLVI.get())
                     .addCompanionOutput(registerEntity.KYARU.get())
                     .addCompanionOutput(registerEntity.EXCELA.get())
+                    .addCompanionOutput(registerEntity.YAMATO.get())
                     .perTick(true).inputFE(2500).duration(1200).buildAndRegisterRiftway();
 
             RiftwayControllerTE.RIFTWAYRECIPEMAP.start().name("cow")

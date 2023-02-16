@@ -2,18 +2,21 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "LDL",
-    "COC",
+    "COW",
     "PMP"
   ],
   "key": {
     "C": {
-      "item": "projectazure:resistor_advanced"
+      "item": "projectazure:computercore"
+    },
+    "W": {
+      "item": "projectazure:wisdomcube"
     },
     "P": {
       "item": "projectazure:crystalline_circuit"
     },
     "M": {
-      "item": "projectazure:machine_frame"
+      "item": "projectazure:device_advanced"
     },
     "O": {
       "item": "projectazure:orundum"

@@ -10,7 +10,7 @@
       "tag": "forge:rods/wooden"
     },
     "C": {
-      "tag": "forge:ingots/bronze"
+      "tag": "forge:ingots/brass"
     },
     "B": {
       "item": "minecraft:enchanted_book"
