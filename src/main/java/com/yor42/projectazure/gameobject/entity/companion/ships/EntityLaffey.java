@@ -225,6 +225,12 @@ public class EntityLaffey extends EntityKansenDestroyer implements IAzurLaneKans
 
     @Nullable
     @Override
+    public SoundEvent getOathSound() {
+        return registerSounds.LAFFEY_TALK_OATH;
+    }
+
+    @Nullable
+    @Override
     protected SoundEvent getAggroedSoundEvent() {
         return registerSounds.LAFFEY_TALK_ATTACK;
     }

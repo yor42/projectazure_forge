@@ -132,6 +132,12 @@ public class ForgeBusEventHandler {
                     .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(ModItems.BULLET_308.get(), 24)))
                     .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
 
+            AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("4mmcaseless")
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(RegisterItems.GUNPOWDER_COMPOUND.get()), 4))
+                    .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.INGOT_LEAD), 4))
+                    .output(ItemMultiblockCapability.CAP,  new ItemsIngredient(new ItemStack(RegisterItems.CASELESS_4MM.get(), 12)))
+                    .perTick(true).input(FEMultiblockCapability.CAP, 100).duration(240).buildAndRegister();
+
             AmmoPressControllerTE.AmmoPressDefinition.getRecipeMap().start().name("7.62x25")
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.PLATE_BRASS), 1))
                     .input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(Tags.Items.GUNPOWDER)))

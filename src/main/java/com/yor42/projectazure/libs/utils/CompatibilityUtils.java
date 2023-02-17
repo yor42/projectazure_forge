@@ -5,9 +5,14 @@ import net.minecraftforge.fml.ModList;
 public class CompatibilityUtils {
     public static final String CURIOS_MODID = "curios";
     public static final String TCONSTRUCT_MODID = "tconstruct";
+    public static final String PATCHOULI_MODID = "patchouli";
 
     public static boolean isCurioLoaded(){
         return ModList.get().isLoaded(CURIOS_MODID);
+    }
+
+    public static boolean isPatchouliLoaded(){
+        return ModList.get().isLoaded(PATCHOULI_MODID);
     }
 
     public static boolean isTConLoaded(){

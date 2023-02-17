@@ -494,27 +494,11 @@ public class RegisterItems {
         }
     });
 
-    public static final RegistryObject<Item> DISC_ENTERTHEBEGINNING = register("disc_enterthebeginning", () -> new MusicDiscItem(15, ()->registerSounds.DISC_ENTERTHEBEGINNING, new Item.Properties()
-            .tab(PA_GROUP).stacksTo(1))
-    {
-        @Nonnull
-        @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
-        }
-
-        @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
-            tooltip.add(new TranslationTextComponent("disc.enterthebeginning.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
-        }
-    });
-
     //Shooty stuff
-    public static final RegistryObject<Item> WHITEFANG_465 = register_withoutTexture("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> TYPHOON = register_withoutTexture("typhoon", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> W_GRANADELAUNCHER = register_withoutTexture("granadelauncher", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> SANGVIS_RAILGUN = register_withoutTexture("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, true, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> WHITEFANG_465 = registerGun_with2DTexture("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TYPHOON = registerGun_with2DTexture("typhoon", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> W_GRANADELAUNCHER = registerGun_with2DTexture("granadelauncher", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> SANGVIS_RAILGUN = registerGun_with2DTexture("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, false, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
 
     public static final RegistryObject<Item> CASELESS_4MM = register_withoutTexture("4mmcaseless", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
 
@@ -759,6 +743,10 @@ public class RegisterItems {
 
     public static RegistryObject<Item> register_withoutTexture(String id, Supplier<? extends Item> supplier){
         return register_withTexturename(id, id, supplier, false);
+    }
+
+    public static RegistryObject<Item> registerGun_with2DTexture(String id, Supplier<? extends Item> supplier){
+        return register_withTexturename(id, "gun_icons/"+id, supplier, true);
     }
 
     public static RegistryObject<Item> register_AKN(String id, Supplier<? extends Item> supplier){

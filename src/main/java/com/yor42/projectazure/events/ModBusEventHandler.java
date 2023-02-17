@@ -6,7 +6,9 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.items.ItemCompanionSpawnEgg;
 import com.yor42.projectazure.gameobject.items.ItemEnergyGun;
+import com.yor42.projectazure.intermod.Patchouli;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.lootmodifier.SledgeHammerModifier;
 import com.yor42.projectazure.setup.register.RegisterItems;
@@ -58,6 +60,8 @@ public class ModBusEventHandler {
             boolean flag = !data.getBoolean("PRJA:gotStarterItem");
 
             if (flag) {
+                Patchouli.HandlePatchouliCompatibility(event.getPlayer());
+
                 PlayerEntity player = event.getPlayer();
                 UUID yorUUID = UUID.fromString("d45160dc-ae0b-4f7c-b44a-b535a48182d2");
                 UUID AoichiID = UUID.fromString("d189319f-ee53-4e80-9472-7c5e4711642e");
@@ -76,31 +80,7 @@ public class ModBusEventHandler {
                 player.inventory.setItem(player.inventory.getFreeSlot(), cubeStack);
                 NonNullList<Item> stacks = NonNullList.create();
                 if (isDev) {
-                    stacks.add(RegisterItems.SPAWN_NAGATO.get());
-                    stacks.add(RegisterItems.SPAWM_ENTERPRISE.get());
-                    stacks.add(RegisterItems.SPAWN_CHEN.get());
-                    stacks.add(RegisterItems.SPAWN_SHIROKO.get());
-                    stacks.add(RegisterItems.SPAWN_EXCELA.get());
-                    stacks.add(RegisterItems.SPAWN_AMIYA.get());
-                    stacks.add(RegisterItems.SPAWN_MUDROCK.get());
-                    stacks.add(RegisterItems.SPAWN_Z23.get());
-                    stacks.add(RegisterItems.SPAWM_JAVELIN.get());
-                    stacks.add(RegisterItems.SPAWN_TALULAH.get());
-                    stacks.add(RegisterItems.SPAWN_M4A1.get());
-                    stacks.add(RegisterItems.SPAWN_TEXAS.get());
-                    stacks.add(RegisterItems.SPAWN_FROSTNOVA.get());
-                    stacks.add(RegisterItems.SPAWN_LAPPLAND.get());
-                    stacks.add(RegisterItems.SPAWN_SIEGE.get());
-                    stacks.add(RegisterItems.SPAWN_SCHWARZ.get());
-                    stacks.add(RegisterItems.SPAWN_CROWNSLAYER.get());
-                    stacks.add(RegisterItems.SPAWN_KYARU.get());
-                    stacks.add(RegisterItems.SPAWN_ARTORIA.get());
-                    stacks.add(RegisterItems.SPAWN_SHIKI.get());
-                    stacks.add(RegisterItems.SPAWN_SCATHATH.get());
-                    stacks.add(RegisterItems.SPAWN_NEARL.get());
-                    stacks.add(RegisterItems.SPAWN_SYLVI.get());
-                    stacks.add(RegisterItems.SPAWN_YAMATO.get());
-                    stacks.add(RegisterItems.SPAWN_YATO.get());
+                    stacks.addAll(ItemCompanionSpawnEgg.MAP.values());
                 }
                 else if(isAoichi){
                     stacks.add(RegisterItems.SPAWN_MUDROCK.get());

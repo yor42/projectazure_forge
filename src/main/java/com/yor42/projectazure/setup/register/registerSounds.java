@@ -15,10 +15,6 @@ public final class registerSounds {
 
     //sound files are EXCLUDED from repo due to COPYRIGHT. Issue about these topic will be closed with no response.
     public static final SoundEvent CANON_FIRE_MEDIUM = registerSoundEvent("gun_fire_medium");
-
-    public static final SoundEvent RIFLE_FIRE_SUPPRESSED = registerSoundEvent("rifle_suppressed");
-    public static final SoundEvent GUN_CLICK = registerSoundEvent("gun_click");
-
     public static final SoundEvent TYPHOON_FIRE = registerSoundEvent("typhoon_fire");
     public static final SoundEvent TYPHOON_RELOAD = registerSoundEvent("typhoon_reload");
 

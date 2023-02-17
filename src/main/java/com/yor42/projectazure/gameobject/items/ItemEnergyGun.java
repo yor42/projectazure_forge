@@ -17,10 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.KeybindTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -100,10 +97,14 @@ public class ItemEnergyGun extends TimelessGunItem {
         Gun modifiedGun = this.getModifiedGun(stack);
         Item ammo = ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().getItem());
         if(doesIgnoreAmmo(stack)) {
-            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (new TranslationTextComponent("message.energyguns.gun.ammo.energy")).withStyle(TextFormatting.BLUE))).withStyle(TextFormatting.DARK_GRAY));
+
+            ITextComponent text = new TranslationTextComponent("message.energyguns.gun.ammo.energy").withStyle(TextFormatting.BLUE);
+            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (text))).withStyle(TextFormatting.DARK_GRAY));
         }
         else if (ammo != null) {
-            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (new TranslationTextComponent(ammo.getDescriptionId())).withStyle(TextFormatting.GOLD))).withStyle(TextFormatting.DARK_GRAY));
+            IFormattableTextComponent text = new TranslationTextComponent("message.energyguns.gun.ammo.energy").withStyle(TextFormatting.BLUE);
+            text.append(new StringTextComponent(", ").withStyle(TextFormatting.DARK_GRAY)).append(new TranslationTextComponent(ammo.getDescriptionId()).withStyle(TextFormatting.GOLD));
+            tooltip.add((new TranslationTextComponent("info.tac.ammo_type", (text)).withStyle(TextFormatting.DARK_GRAY)));
         }
 
 
@@ -189,7 +190,15 @@ public class ItemEnergyGun extends TimelessGunItem {
     }
 
     private static boolean doesIgnoreAmmo(ItemStack stack) {
-        return stack.getOrCreateTag().getBoolean("IgnoreAmmo");
+
+        boolean itemproperty = false;
+        Item gunitem = stack.getItem();
+
+        if(gunitem instanceof ItemEnergyGun){
+            itemproperty = ((ItemEnergyGun) gunitem).ignoreAmmo;
+        }
+
+        return stack.getOrCreateTag().getBoolean("IgnoreAmmo") || itemproperty;
     }
 
     @Override

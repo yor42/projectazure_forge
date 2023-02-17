@@ -252,6 +252,13 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
 
     @Nullable
     @Override
+    public SoundEvent getOathSound() {
+        return registerSounds.ENTERPRISE_TALK_OATH;
+    }
+
+
+    @Nullable
+    @Override
     protected SoundEvent getAggroedSoundEvent() {
         return registerSounds.ENTERPRISE_TALK_ATTACK;
     }

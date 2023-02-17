@@ -222,6 +222,12 @@ public class EntityNagato extends EntityKansenBattleship implements IAzurLaneKan
 
     @Nullable
     @Override
+    public SoundEvent getOathSound() {
+        return registerSounds.NAGATO_TALK_OATH;
+    }
+
+    @Nullable
+    @Override
     protected SoundEvent getAggroedSoundEvent() {
         return registerSounds.NAGATO_TALK_ATTACK;
     }

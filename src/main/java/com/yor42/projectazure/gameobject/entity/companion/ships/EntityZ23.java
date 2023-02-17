@@ -218,6 +218,12 @@ public class EntityZ23 extends EntityKansenDestroyer implements IAzurLaneKansen 
         return registerSounds.Z23_TALK_CRUSH;
     }
 
+    @Nullable
+    @Override
+    public SoundEvent getOathSound() {
+        return registerSounds.Z23_TALK_OATH;
+    }
+
     @Override
     public SoundEvent getLoveAmbientSound() {
         return registerSounds.Z23_TALK_LOVE;

@@ -226,6 +226,13 @@ public class EntityJavelin extends EntityKansenDestroyer implements IAnimatable,
 
     @Nullable
     @Override
+    public SoundEvent getOathSound() {
+        return registerSounds.JAVELIN_TALK_OATH;
+    }
+
+
+    @Nullable
+    @Override
     protected SoundEvent getAggroedSoundEvent() {
         return registerSounds.JAVELIN_TALK_ATTACK;
     }

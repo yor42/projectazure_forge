@@ -30,7 +30,7 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
 
     private final RegistryObject<EntityType<T>> Entity;
 
-    private static final HashMap<String, ItemCompanionSpawnEgg<?>> MAP = new HashMap<>();
+    public static final HashMap<String, ItemCompanionSpawnEgg<?>> MAP = new HashMap<>();
 
     public ItemCompanionSpawnEgg(RegistryObject<EntityType<T>> type, Properties properties) {
         super(properties);

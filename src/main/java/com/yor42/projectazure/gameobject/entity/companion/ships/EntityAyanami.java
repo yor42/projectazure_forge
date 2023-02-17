@@ -225,6 +225,13 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
 
     @Nullable
     @Override
+    public SoundEvent getOathSound() {
+        return registerSounds.AYANAMI_TALK_OATH;
+    }
+
+
+    @Nullable
+    @Override
     protected SoundEvent getAggroedSoundEvent() {
         return registerSounds.AYANAMI_TALK_ATTACK;
     }
