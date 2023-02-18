@@ -16,9 +16,12 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayCon
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.items.GasMaskFilterItem;
+import com.yor42.projectazure.gameobject.items.GasMaskItem;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.block.BedBlock;
@@ -27,6 +30,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -35,18 +39,28 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
@@ -64,6 +78,7 @@ import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
 import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
+import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 
@@ -80,6 +95,58 @@ public class ForgeBusEventHandler {
                 event.setResultStack(new ItemStack(Items.GLASS_BOTTLE));
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onLivingHurt(LivingHurtEvent event){
+        LivingEntity entity = event.getEntityLiving();
+        DamageSource damageSource = event.getSource();
+
+        ItemStack headstack = entity.getItemBySlot(EquipmentSlotType.HEAD);
+        Item headItem = headstack.getItem();
+
+        if(headItem instanceof GasMaskItem){
+            CompoundNBT compoundNBT = headstack.getOrCreateTag();
+            ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+            for(int i = 0; i<filters.size(); i++){
+                ItemStack filterstack = ItemStack.of(filters.getCompound(i));
+                if(ItemStackUtils.isDestroyed(filterstack)){
+                    continue;
+                }
+
+                if(damageSource == DamageSource.DRAGON_BREATH || damageSource.isMagic()){
+                    event.setCanceled(true);
+                }
+                return;
+            }
+        }
+
+    }
+
+    @SubscribeEvent
+    public static void onPotionApplicapable(PotionEvent.PotionApplicableEvent event){
+
+        LivingEntity entity = event.getEntityLiving();
+
+        ItemStack headstack = entity.getItemBySlot(EquipmentSlotType.HEAD);
+        Item headItem = headstack.getItem();
+
+        if(headItem instanceof GasMaskItem){
+            CompoundNBT compoundNBT = headstack.getOrCreateTag();
+            ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
+            for(int i = 0; i<filters.size(); i++){
+                ItemStack filterstack = ItemStack.of(filters.getCompound(i));
+                if(ItemStackUtils.isDestroyed(filterstack)){
+                    continue;
+                }
+                event.setResult(Event.Result.DENY);
+                return;
+            }
+        }
+
+
+        event.setResult(Event.Result.DEFAULT);
+
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

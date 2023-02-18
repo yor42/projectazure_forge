@@ -12,11 +12,13 @@ import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.gameobject.misc.RiggingInventories;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
+import com.yor42.projectazure.interfaces.IItemDestroyable;
 import com.yor42.projectazure.libs.enums;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Color;
 import net.minecraftforge.items.IItemHandler;
 
@@ -28,14 +30,16 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rollDamagingRiggingCoun
 
 public class ItemStackUtils {
 
-    public static void DamageItem(float amount, ItemStack stack){
+    public static boolean DamageItem(float amount, ItemStack stack){
         if(stack.getItem() instanceof ItemDestroyable) {
             int damage = getCurrentDamage(stack);
             int maxDamage = ((ItemDestroyable) stack.getItem()).getMaxHP();
             if (damage + amount <= maxDamage) {
                 setCurrentDamage(stack, (int) (damage + amount));
+                return true;
             } else {
                 setCurrentDamage(stack, maxDamage);
+                return false;
             }
         }
         else{
@@ -46,12 +50,23 @@ public class ItemStackUtils {
                     "A full commitment's what I'm thinking of\n" +
                     "You wouldn't get this from any other guy");
         }
-
+        return false;
     }
 
     public static void RepairItem(ItemStack stack, int amount){
         int damage = getCurrentDamage(stack);
         setCurrentDamage(stack, Math.max(damage - amount, 0));
+    }
+
+    public static int getHPColorInt(ItemStack stack){
+        if(stack.getItem() instanceof IItemDestroyable) {
+            return MathHelper.hsvToRgb(Math.max(0.0F, (float) (1.0F - (getCurrentDamage(stack) /((IItemDestroyable) stack.getItem()).getMaxHP()))) / 3.0F, 1.0F, 1.0F);
+        }
+        return 0xFFFFFF;
+    }
+
+    public static Color getHPColor(ItemStack stack){
+        return Color.fromRgb(getHPColorInt(stack));
     }
 
     public static boolean isDestroyed(ItemStack stack){
@@ -329,23 +344,6 @@ public class ItemStackUtils {
             ItemEquipmentBase equipmentItem = (ItemEquipmentBase)(equipment.getItem());
             tags.putInt("delay", equipmentItem.getFiredelay());
         }
-    }
-
-    public static Color getHPColor(ItemStack stack){
-        float HP_Percent = 0;
-        String ColorHex = "69b82d";
-        if(stack.getItem() instanceof ItemDestroyable){
-            HP_Percent = 1.0F-((float)getCurrentDamage(stack)/ ((ItemDestroyable) stack.getItem()).getMaxHP());
-        }
-
-        if(HP_Percent<=0.1){
-            ColorHex = "e71f19";
-        }
-        else if(HP_Percent <= 0.4){
-            ColorHex = "fff209";
-        }
-
-        return Color.parseColor("#"+ColorHex);
     }
 
 }

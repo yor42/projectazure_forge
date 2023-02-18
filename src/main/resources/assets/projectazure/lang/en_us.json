@@ -258,6 +258,12 @@
   "item.projectazure.energy_drink.desc1": "Instantly refills companion's morale to max",
   "item.projectazure.energy_drink.shiftinfo": "Press %s for more F U N N I Info",
 
+  "item.projectazure.gasmask": "Gas Mask",
+  "item.projectazure.gasmask.tooltip.filter": "Filter %s: %s",
+
+  "item.projectazure.gasmask_filter": "Gas MaskFilter",
+  "item.projectazure.filter.tooltip": "Filter Durability: %s",
+
   "item.projectazure.commanding_stick": "Command Stick",
 
   "item.projectazure.ammo_generic": "Generic Shell",

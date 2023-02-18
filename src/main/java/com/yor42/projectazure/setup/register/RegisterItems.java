@@ -540,6 +540,9 @@ public class RegisterItems {
         }
     });
 
+    public static final RegistryObject<Item> GASMASK_FILTER = register_withoutTexture("gasmask_filter", ()->new GasMaskFilterItem(new Item.Properties().tab(PA_RESOURCES), 24000));
+    public static final RegistryObject<Item> GASMASK = register_withoutTexture("gasmask", ()->new GasMaskItem(new Item.Properties().tab(PA_RESOURCES).setISTER(()->GasMaskItemRenderer::new)));
+
     public static final RegistryObject<Item> RMA7024_pickaxe = register("rma7024_pickaxe", () -> new PickaxeItem(ModMaterials.RMA_70_24, 1, -2.8F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> RMA7024_axe = register("rma7024_axe", () -> new AxeItem(ModMaterials.RMA_70_24, 6, -3F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> RMA7024_hoe = register("rma7024_hoe", () -> new HoeItem(ModMaterials.RMA_70_24, 0, -1F, new Item.Properties().tab(PA_WEAPONS)));

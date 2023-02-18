@@ -10,6 +10,7 @@
   "mixins": [
     "FurnaceAccessors",
     "MixinBoatEntity",
+    "MixinItem",
     "MixinPlayerEntity",
     "PathNavigatorAccessors",
     "SwimmerPathNavigatorAccess"
