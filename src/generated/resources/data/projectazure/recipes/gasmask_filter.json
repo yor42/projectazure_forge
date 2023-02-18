@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CP",
+    "PF"
+  ],
+  "key": {
+    "P": {
+      "tag": "forge:plates/aluminium"
+    },
+    "C": {
+      "tag": "forge:plates/steel"
+    },
+    "F": {
+      "item": "projectazure:replacement_filter"
+    }
+  },
+  "result": {
+    "item": "projectazure:gasmask_filter"
+  }
+}

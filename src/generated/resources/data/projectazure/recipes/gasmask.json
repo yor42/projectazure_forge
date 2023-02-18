@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PPP",
+    "GPG",
+    "SCS"
+  ],
+  "key": {
+    "P": {
+      "tag": "forge:plates/plastic"
+    },
+    "G": {
+      "tag": "forge:glass_panes/colorless"
+    },
+    "S": {
+      "tag": "forge:ingots/steel"
+    },
+    "C": {
+      "tag": "forge:plates/copper"
+    }
+  },
+  "result": {
+    "item": "projectazure:gasmask"
+  }
+}

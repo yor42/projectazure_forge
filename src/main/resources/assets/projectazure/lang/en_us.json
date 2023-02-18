@@ -261,7 +261,8 @@
   "item.projectazure.gasmask": "Gas Mask",
   "item.projectazure.gasmask.tooltip.filter": "Filter %s: %s",
 
-  "item.projectazure.gasmask_filter": "Gas MaskFilter",
+  "item.projectazure.gasmask_filter": "Gas Mask Filter",
+  "item.projectazure.replacement_filter": "Charcoal Filter",
   "item.projectazure.filter.tooltip": "Filter Durability: %s",
 
   "item.projectazure.commanding_stick": "Command Stick",

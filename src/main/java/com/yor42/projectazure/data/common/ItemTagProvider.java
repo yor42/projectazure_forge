@@ -4,6 +4,7 @@ import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterItems;
+import mekanism.common.registries.MekanismItems;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
@@ -80,6 +81,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.NUGGET_INCANDESCENT_ALLOY).add(RegisterItems.NUGGET_INCANDESCENT_ALLOY.get());
 
         this.tag(ModTags.Items.PLATE_ALUMINIUM).add(RegisterItems.PLATE_ALUMINIUM.get());
+        this.tag(ModTags.Items.PLATE_PLASTIC).add(RegisterItems.PLATE_POLYMER.get(), MekanismItems.HDPE_SHEET.get());
         this.tag(ModTags.Items.PLATE_COPPER).add(RegisterItems.PLATE_COPPER.get());
         this.tag(ModTags.Items.PLATE_TIN).add(RegisterItems.PLATE_TIN.get());
         this.tag(ModTags.Items.PLATE_BRONZE).add(RegisterItems.PLATE_BRONZE.get());

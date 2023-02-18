@@ -30,3 +30,4 @@ forge*changelog.txt
 sounds\
 /resourceFiles/
 /src/main/resources/assets/projectazure/sounds/
+/src/generated/resources/assets/tconstruct/

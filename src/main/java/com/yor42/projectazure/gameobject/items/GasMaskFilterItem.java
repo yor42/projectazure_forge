@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -65,6 +66,16 @@ public class GasMaskFilterItem extends ItemDestroyable {
             return ActionResult.success(buffer);
         }
 
+    }
+
+    @Override
+    public int getRepairAmount(ItemStack candidateItem) {
+
+        if (candidateItem.getItem() == RegisterItems.CHARCOAL_FILTER.get()){
+            return this.getMaxHP()/2+200;
+        }
+
+        return super.getRepairAmount(candidateItem);
     }
 
     @Override

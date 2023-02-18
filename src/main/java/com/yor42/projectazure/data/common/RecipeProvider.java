@@ -532,6 +532,36 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.HAMMER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.HAMMER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritehammer"));
         SmithingRecipeBuilder.smithing(Ingredient.of(RegisterItems.CUTTER_DIAMOND.get()), Ingredient.of(Tags.Items.INGOTS_NETHERITE), RegisterItems.CUTTER_NETHERITE.get()).unlocks("has_material", has(Tags.Items.INGOTS_NETHERITE)).save(consumer, ResourceUtils.ModResourceLocation("netheritecutter"));
 
+        ShapedRecipeBuilder.shaped(RegisterItems.CHARCOAL_FILTER.get())
+                .define('P', Items.PAPER)
+                .define('C', Items.CHARCOAL)
+                .define('W', ItemTags.WOOL)
+                .pattern("CP")
+                .pattern("PW")
+                .unlockedBy("has_material", has(Items.CHARCOAL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.GASMASK_FILTER.get())
+                .define('P', ModTags.Items.PLATE_ALUMINIUM)
+                .define('C', ModTags.Items.PLATE_STEEL)
+                .define('F', RegisterItems.CHARCOAL_FILTER.get())
+                .pattern("CP")
+                .pattern("PF")
+                .unlockedBy("has_material", has(RegisterItems.CHARCOAL_FILTER.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.GASMASK.get())
+                .define('P', ModTags.Items.PLATE_PLASTIC)
+                .define('G', Tags.Items.GLASS_PANES_COLORLESS)
+                .define('S', ModTags.Items.INGOT_STEEL)
+                .define('C', ModTags.Items.PLATE_COPPER)
+                .pattern("PPP")
+                .pattern("GPG")
+                .pattern("SCS")
+                .unlockedBy("has_material", has(RegisterItems.CHARCOAL_FILTER.get()))
+                .save(consumer);
+
+
         ShapedRecipeBuilder.shaped(RegisterItems.MORTAR_STONE.get())
                 .define('I', Tags.Items.INGOTS_IRON)
                 .define('S', Tags.Items.RODS_WOODEN)

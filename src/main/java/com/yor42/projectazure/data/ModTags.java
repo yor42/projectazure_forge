@@ -98,6 +98,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> GEAR_STEEL = forge("gears/steel");
 
         public static final ITag.INamedTag<Item> PLATE_ALUMINIUM = forge("plates/aluminium");
+        public static final ITag.INamedTag<Item> PLATE_PLASTIC = forge("plates/plastic");
         public static final ITag.INamedTag<Item> PLATE_COPPER = forge("plates/copper");
         public static final ITag.INamedTag<Item> PLATE_TIN = forge("plates/tin");
         public static final ITag.INamedTag<Item> PLATE_BRONZE = forge("plates/bronze");
