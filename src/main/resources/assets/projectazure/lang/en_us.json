@@ -39,6 +39,8 @@
   "item.projectazure.bandage_roll": "Roll of bandage",
 
   "item.projectazure.primitive_originium_battery": "Primitive Originium Battery",
+  "item.projectazure.potato_battery": "Potato Battery",
+  "item.projectazure.copper_iron_probe": "Copper/Iron Probes",
 
   "item.projectazure.mechanical_parts": "Mechanical Parts",
   "item.projectazure.iron_pipe": "Iron Pipe",
@@ -347,6 +349,7 @@
   "item.tooltip.remainingfuel" : "Remaining Fuel",
   "item.tooltip.hanger_slot_usage": "Hanger Usage",
   "item.tooltip.energystored": "Energy Stored: %s",
+  "item.tooltip.energynonrechargeable": "Not Rechargeable",
   "item.tooltip.chargeprogress": "Charge Progress: %s",
   "item.tooltip.chargefailed_nobattery": "Charge FAILED: No Battery!",
   "item.tooltip.ready": "READY!",
@@ -620,6 +623,7 @@
   "guntype.shotgun": "Shotgun",
   "guntype.handgun": "Handgun",
   "guntype.sniper": "Sniper Rifle",
+  "guntype.submachinegun": "Submachine gun",
 
   "morale.really_happy": "Excited",
   "morale.happy": "Happy",

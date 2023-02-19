@@ -10,7 +10,7 @@
       "item": "projectazure:plate_aluminium"
     },
     "P": {
-      "item": "projectazure:polymer_plate"
+      "tag": "forge:plates/plastic"
     },
     "G": {
       "tag": "forge:plates/gold"

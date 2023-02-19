@@ -2,26 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:circuit_primitive"
+      "minecraft:probefrompotatobattery"
     ]
   },
   "criteria": {
-    "has_plate": {
+    "has_material": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:plates/copper"
-          }
-        ]
-      }
-    },
-    "has_polymer": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "forge:plates/plastic"
+            "item": "projectazure:potato_battery"
           }
         ]
       }
@@ -29,14 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:circuit_primitive"
+        "recipe": "minecraft:probefrompotatobattery"
       }
     }
   },
   "requirements": [
     [
-      "has_plate",
-      "has_polymer",
+      "has_material",
       "has_the_recipe"
     ]
   ]

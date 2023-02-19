@@ -140,6 +140,12 @@ public class RegisterItems {
     public static final RegistryObject<Item> PRIMITIVE_ORIGINIUM_BATTERY = register("primitive_originium_battery", () -> new ItemBattery(new Item.Properties()
             .tab(PA_RESOURCES), 1600, 200, 200));
 
+    public static final RegistryObject<Item> POTATO_BATTERY = register("potato_battery", () -> new ItemBattery(new Item.Properties()
+            .tab(PA_RESOURCES), 400, 0, 80));
+
+    public static final RegistryObject<Item> COPPER_IRON_PROBE = register("copper_iron_probe", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
     public static final RegistryObject<Item> GUNPOWDER_COMPOUND = register("gunpowder_compound", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
 

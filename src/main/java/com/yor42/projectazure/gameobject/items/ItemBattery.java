@@ -2,8 +2,11 @@ package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.gameobject.capability.ItemPowerCapabilityProvider;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
+import com.yor42.projectazure.gameobject.storages.CustomEnergyStorageItem;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -12,6 +15,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -23,16 +27,22 @@ import java.util.List;
 
 public class ItemBattery extends Item {
     private final int capacity, maxin, maxout;
+    private final boolean shouldeFilledonCraft;
 
     public ItemBattery(Properties property, int capacity) {
         this(property, capacity, capacity, capacity);
     }
 
     public ItemBattery(Properties property, int capacity, int maxin, int maxout) {
+        this(property, capacity, maxin, maxout, false);
+    }
+
+    public ItemBattery(Properties property, int capacity, int maxin, int maxout, boolean shouldeFilledonCraft) {
         super(property);
         this.capacity = capacity;
         this.maxin = maxin;
         this.maxout = maxout;
+        this.shouldeFilledonCraft = shouldeFilledonCraft || maxin<=0;
     }
 
     @Nullable
@@ -58,10 +68,22 @@ public class ItemBattery extends Item {
         if (this.allowdedIn(p_150895_1_)) {
             ItemStack stack = new ItemStack(this);
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((battery)->{
-                while(battery.getEnergyStored()<battery.getMaxEnergyStored()){
-                    battery.receiveEnergy(battery.getMaxEnergyStored(), false);
+                if(battery instanceof CustomEnergyStorageItem){
+                    ((CustomEnergyStorageItem) battery).setEnergyStored(battery.getMaxEnergyStored());
+                    p_150895_2_.add(stack);
                 }
-                p_150895_2_.add(stack);
+            });
+        }
+    }
+
+    @Override
+    public void onCraftedBy(ItemStack stack, World p_77622_2_, PlayerEntity p_77622_3_) {
+        super.onCraftedBy(stack, p_77622_2_, p_77622_3_);
+        if(this.shouldeFilledonCraft){
+            stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((battery)->{
+                if(battery instanceof CustomEnergyStorageItem){
+                    ((CustomEnergyStorageItem) battery).setEnergyStored(battery.getMaxEnergyStored());
+                }
             });
         }
     }
@@ -83,6 +105,9 @@ public class ItemBattery extends Item {
             color = TextFormatting.DARK_RED;
         }
         percentage*=100;
-        p_77624_3_.add(new StringTextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.capacity)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color));
+        p_77624_3_.add(new TranslationTextComponent("item.tooltip.energystored", new StringTextComponent(MathUtil.formatValueMatric(remainingBattery)+" FE / "+MathUtil.formatValueMatric(this.capacity)+String.format(" FE (%.2f", percentage)+"%)").withStyle(color)).withStyle(TextFormatting.GRAY));
+        if(this.maxin<=0){
+            p_77624_3_.add(new TranslationTextComponent("item.tooltip.energynonrechargeable").withStyle(TextFormatting.DARK_RED));
+        }
     }
 }

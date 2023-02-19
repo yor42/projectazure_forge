@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IW",
+    "OC"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "C": {
+      "tag": "forge:ingots/copper"
+    },
+    "O": {
+      "item": "minecraft:poisonous_potato"
+    },
+    "W": {
+      "tag": "forge:wires/copper"
+    }
+  },
+  "result": {
+    "item": "projectazure:potato_battery"
+  }
+}

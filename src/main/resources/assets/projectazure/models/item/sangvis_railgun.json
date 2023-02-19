@@ -21,11 +21,6 @@
     "ground": {
       "rotation": [0, 0, 90]
     },
-    "gui": {
-      "rotation": [0, 90, 0],
-      "translation": [-0.25, 0.75, 0],
-      "scale": [0.35, 0.35, 0.35]
-    },
     "fixed": {
       "rotation": [0, 90, 0],
       "translation": [0, 1.25, 0]

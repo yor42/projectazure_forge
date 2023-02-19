@@ -156,6 +156,11 @@ public class EntityW extends EntityGunUserBase implements IAknOp {
     }
 
     @Override
+    public enums.GunClass getGunSpecialty() {
+        return enums.GunClass.AR;
+    }
+
+    @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 

@@ -13,7 +13,7 @@
       "item": "minecraft:stone_button"
     },
     "P": {
-      "item": "projectazure:polymer_plate"
+      "tag": "forge:plates/plastic"
     },
     "C": {
       "item": "projectazure:copper_coil"

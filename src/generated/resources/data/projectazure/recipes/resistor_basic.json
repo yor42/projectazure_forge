@@ -13,7 +13,7 @@
       "tag": "forge:dusts/iron"
     },
     "R": {
-      "item": "projectazure:polymer_plate"
+      "tag": "forge:plates/plastic"
     },
     "W": {
       "item": "projectazure:copper_wire"

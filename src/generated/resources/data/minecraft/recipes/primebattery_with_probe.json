@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "projectazure:copper_iron_probe"
+    },
+    {
+      "tag": "forge:gems/originium"
+    }
+  ],
+  "result": {
+    "item": "projectazure:primitive_originium_battery"
+  }
+}

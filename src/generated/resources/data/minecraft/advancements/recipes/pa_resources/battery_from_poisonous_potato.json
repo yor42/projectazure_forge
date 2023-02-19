@@ -2,26 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:circuit_primitive"
+      "minecraft:battery_from_poisonous_potato"
     ]
   },
   "criteria": {
-    "has_plate": {
+    "has_material": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:plates/copper"
-          }
-        ]
-      }
-    },
-    "has_polymer": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "tag": "forge:plates/plastic"
+            "item": "minecraft:poisonous_potato"
           }
         ]
       }
@@ -29,14 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:circuit_primitive"
+        "recipe": "minecraft:battery_from_poisonous_potato"
       }
     }
   },
   "requirements": [
     [
-      "has_plate",
-      "has_polymer",
+      "has_material",
       "has_the_recipe"
     ]
   ]

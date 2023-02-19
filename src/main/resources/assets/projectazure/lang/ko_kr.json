@@ -38,15 +38,29 @@
 
   "item.projectazure.bandage_roll": "붕대",
 
+  "item.projectazure.primitive_originium_battery": "순오리지늄 배터리",
+  "item.projectazure.potato_battery": "감자 배터리",
+  "item.projectazure.copper_iron_probe": "구리/철 막대기",
+
   "item.projectazure.mechanical_parts": "기계 부품",
   "item.projectazure.iron_pipe": "철 파이프",
   "item.projectazure.steel_pipe": "강철 파이프",
+  "item.projectazure.device_primitive": "하급 기계장치",
+  "item.projectazure.device_basic": "기본 기계장치",
+  "item.projectazure.device_advanced": "상급 기계장치",
+  "item.projectazure.motor_primitive": "하급 모터",
   "item.projectazure.motor_basic": "기본 모터",
+  "item.projectazure.motor_advanced": "상급 모터",
   "item.projectazure.circuit_primitive": "하급 회로",
-  "item.projectazure.resistor_primitive": "하급 저항기",
-  "item.projectazure.capacitor_primitive": "하급 축전기",
+  "item.projectazure.circuit_basic": "기본 회로",
   "item.projectazure.circuit_advanced": "상급 회로",
+  "item.projectazure.resistor_primitive": "하급 저항기",
+  "item.projectazure.resistor_basic": "기본 저항기",
+  "item.projectazure.resistor_advanced": "상급 저항기",
+  "item.projectazure.capacitor_primitive": "하급 축전기",
+  "item.projectazure.capacitor_advanced": "상급 축전기",
   "item.projectazure.copper_coil": "구리 코일",
+  "item.projectazure.gold_coil": "금 코일",
   "item.projectazure.polymer_plate": "폴리머 판",
   "item.projectazure.tree_sap": "나무 수액",
   "item.projectazure.gunpowder_compound": "고형 폭발물",
@@ -184,10 +198,10 @@
   "item.projectazure.sledgehammer": "슬레지해머",
   "item.projectazure.kyarustaff": "카오스 그리모어 지팡이",
   "item.projectazure.kitchenknife": "주방칼",
-  "item.projectazure.kitchenknife.tooltip": "Both good for stabbing and cutting.",
+  "item.projectazure.kitchenknife.tooltip": "뭔가를 자르기에도 좋고 칼빵놓기에도 좋습니다.",
 
   "item.projectazure.excalibur": "엑스칼리버",
-  "item.projectazure.excalibur.tooltip": "Legandary sword for King of Britain.",
+  "item.projectazure.excalibur.tooltip": "영웅왕이 쓰는 전설의 검.",
   "item.projectazure.excalibur_sheath": "아발론",
   "item.projectazure.gae_bolg": "게 볼그",
   "item.projectazure.lordchaldeas": "로드 칼데아스",
@@ -245,6 +259,13 @@
   "item.projectazure.energy_drink.tooltip10": "테라진 가스, 레드불 100배 농축액, 땅콩",
   "item.projectazure.energy_drink.desc1": "동료의 사기를 즉시 최대로 채웁니다",
   "item.projectazure.energy_drink.shiftinfo": "제품 설명을 보려면 %s 를 누르세요",
+
+  "item.projectazure.gasmask": "방독면",
+  "item.projectazure.gasmask.tooltip.filter": "%s번 필터: %s",
+
+  "item.projectazure.gasmask_filter": "방독면 필터",
+  "item.projectazure.replacement_filter": "활성탄 필터",
+  "item.projectazure.filter.tooltip": "필터 내구도: %s",
 
   "item.projectazure.commanding_stick": "지휘봉",
 
@@ -328,6 +349,7 @@
   "item.tooltip.remainingfuel": "남은 연료",
   "item.tooltip.hanger_slot_usage": "격납고 사용량",
   "item.tooltip.energystored": "저장된 에너지: %s",
+  "item.tooltip.energynonrechargeable": "재충전 불가",
   "item.tooltip.chargeprogress": "충전 진행도: %s",
   "item.tooltip.chargefailed_nobattery": "충전 실패: 전원이 부족합니다!",
   "item.tooltip.ready": "제세동 준비 완료",
@@ -575,6 +597,7 @@
   "entity.projectazure.entitynearl": "니어",
   "entity.projectazure.entityyato": "야토",
   "entity.projectazure.entityw": "W",
+  "entity.projectazure.entityskullshatterer": "스컬셰터러",
 
   "entity.projectazure.entityartoria": "아르토리아 펜드래건",
   "entity.projectazure.entityscathath": "스카사하",
@@ -600,6 +623,7 @@
   "guntype.shotgun": "산탄총",
   "guntype.handgun": "권총",
   "guntype.sniper": "저격총",
+  "guntype.submachinegun": "기관단총",
 
   "morale.really_happy": "신남",
   "morale.happy": "행복함",
@@ -696,7 +720,7 @@
 
   "death.attack.ate_originium_prime_0": "%1$s 가 방금 오리지늄을 먹었습니다. ..세상에나.",
   "death.attack.ate_originium_prime_1": "%1$s 이(가) 방금 오리지늄의 맛을 깨우쳤습니다.",
-  "death.attack.ate_originium_prime_2": "%1$s 이(가) 아츠를 다루려고 시도했으나, 이 모드에는 구현되어 있지 않았습니다.",
+  "death.attack.ate_originium_prime_2": "%1$s 이(가) 아츠를 배우려고 시도했으나, 이 모드에는 구현되어 있지 않았습니다.",
   "death.attack.ate_originium_prime_3": "%1$s 이(가) 이성을 회복하려다 실패했습니다.",
   "death.attack.ate_originium_prime_4": "%1$s 이(가) 급성 오리지늄 중독으로 사망했습니다.",
 
@@ -724,7 +748,20 @@
   "projectazure.codex.category.worldgens.title": "자원",
   "projectazure.codex.category.worldgens.description": "프로젝트: 애저가 추가하는 자원을 다룹니다",
 
+  "projectazure.codex.category.tools.title": "도구",
+  "projectazure.codex.category.tools.description": "프로젝트: 애저가 추가하는 도구들을 다룹니다",
+
+  "projectazure.codex.entry.defibrilator.title": "제세동기",
+  "projectazure.codex.entry.defibrilator.introduction1": "우리는 모두 실수를 하죠. 그게 크리퍼가 되었든, 용암이 되었던지요. 그리고 우리 모두 그 실수때문에 댕댕이를 잃거나 아이템을 태워먹거나 하는 일이 한번쯤인 있었을겁니다. 프로젝트 애저는 동료가 죽더라도 걱정하지 마세요. 이 간지나는 제세동기는 이유 불문하고 죽인 동료를 살려 드립니다! 또한, 이 제세동기가지고 다른 몹들을 지지고 다닐 수도 있습니다.!",
+  "projectazure.codex.entry.defibrilator.introduction2": "하지만 일반 도구들과 다르게, 이 제세동기는 일반 도구와는 다르게 1개의 아이템이 아니라 2개의 제세동기 패들과 1개의 충전기가 필요합니다. 충전기를 손에 든 채로 웅크리기+우클릭으로 전원을 켜고, 양손에 패들을 드세요. 그 상태에서 웅크리기+우클릭으로 축전기를 충전한 뒤에 목표물을 바라보며 다시한번 우클릭하시면 됩니다.",
+
+  "projectazure.codex.entry.defib_paddle.guide.title": "제세동기 사용법",
+  "projectazure.codex.entry.defib_paddle.guide.text": "다른 도구와는 상당히 다르지만, 적응되면 사용하기 쉽습니다.",
+  "projectazure.codex.entry.defib_charger.description": "영웅은 죽지 않아요!$(br)이유물문하고 부활시켜 드립니다.",
+  "projectazure.codex.entry.defib_paddle.description": "클리어!",
+
   "projectazure.codex.entry.alloy_furnace.description": "합금로는 두개 이상의 금속을 섞어 합금을 만들어내는 기계입니다.$(br)또한 프로젝트: 애저의 모든 기계의 주춧돌이기도 합니다.",
+  "projectazure.codex.entry.primitive_originium_battery.description": "\"이건 그냥 오리지늄에 쇠하고 구리막대기 끼워 놓은거잖아! 이게 무슨 감자냐? 그리고 이게 작동은 왜 되는건데!?\"$(br)$(br)- 낡은 리유니온 연구 노트",
 
   "projectazure.codex.entry.pantry.title": "식품 저장고",
   "projectazure.codex.entry.pantry.description": "식품 저장고는 큰 상자와 매우 유사하지만, 음식만 담을 수 있고, 더 작습니다.$(br)또한 동료들은 여기서 자유롭게 음식을 가져갈 수 있으며,$(br)사용하는 나무 종류별로 다른 디자인이 나옵니다."

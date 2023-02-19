@@ -10,7 +10,7 @@
       "tag": "forge:plates/copper"
     },
     "P": {
-      "item": "projectazure:polymer_plate"
+      "tag": "forge:plates/plastic"
     },
     "I": {
       "tag": "forge:plates/iron"
