@@ -458,6 +458,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public abstract enums.EntityType getEntityType();
 
+    public void handleInitialspawn(PlayerEntity player){
+        this.tame(player);
+        this.setMorale(150);
+        this.populateInitialEquipments();
+        if(!(this instanceof IAknOp)) {
+            this.setAffection(50);
+        }
+    }
+
+    public void populateInitialEquipments(){
+
+    }
+
     protected AbstractEntityCompanion(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
         this.setAffection(40F);

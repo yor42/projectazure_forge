@@ -1,5 +1,6 @@
 package com.yor42.projectazure.client.model.entity;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
@@ -116,7 +117,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
             parser.setValue("query.prev_head_pitch", ()->((LivingEntity)animatable).xRotO * ((float) Math.PI / 180F));
             parser.setValue("query.prev_head_yaw", ()->((LivingEntity)animatable).yHeadRotO * ((float) Math.PI / 180F));
 
-            parser.setValue("query.animation_speed", ()->((AbstractEntityCompanion)animatable).animationSpeed);
+            parser.setValue("query.animation_speed", ()->(Math.min(((AbstractEntityCompanion)animatable).animationSpeed*2,1)));
             parser.setValue("query.speed_modifier", ()->(((PathNavigatorAccessors)((AbstractEntityCompanion)animatable).getNavigation()).getSpeedModifier()));
         }
     }

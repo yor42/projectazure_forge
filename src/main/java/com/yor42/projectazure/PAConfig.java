@@ -148,6 +148,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue CrownslayerAttackDamage;
         public final ForgeConfigSpec.DoubleValue CrownslayerMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue SkullShattererHealth;
+        public final ForgeConfigSpec.DoubleValue SkullShattererSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue SkullShattererAttackDamage;
+        public final ForgeConfigSpec.DoubleValue SkullShattererMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue YatoHealth;
         public final ForgeConfigSpec.DoubleValue YatoSwimSpeed;
         public final ForgeConfigSpec.DoubleValue YatoAttackDamage;
@@ -384,6 +389,11 @@ public class PAConfig {
             CrownslayerSwimSpeed = builder.defineInRange("Swim Speed of Crownslayer", 1F, 0, 1024);
             CrownslayerAttackDamage = builder.defineInRange("Attack Damage of Crownslayer", 2.0F, 0, 1024);
             CrownslayerMovementSpeed = builder.defineInRange("Movement speed of Crownslayer", 0.3F, 0, 2);
+
+            SkullShattererHealth = builder.defineInRange("Max Health of SkullShatterer", 20D, 1, 1024);
+            SkullShattererSwimSpeed = builder.defineInRange("Swim Speed of SkullShatterer", 1F, 0, 1024);
+            SkullShattererAttackDamage = builder.defineInRange("Attack Damage of SkullShatterer", 2.0F, 0, 1024);
+            SkullShattererMovementSpeed = builder.defineInRange("Movement speed of SkullShatterer", 0.3F, 0, 2);
 
             YatoHealth = builder.defineInRange("Max Health of Yato", 20D, 1, 1024);
             YatoSwimSpeed = builder.defineInRange("Swim Speed of Yato", 1F, 0, 1024);

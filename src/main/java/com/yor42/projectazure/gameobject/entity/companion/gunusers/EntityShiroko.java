@@ -51,6 +51,16 @@ public class EntityShiroko extends EntityGunUserBase {
     }
 
     @Override
+    public boolean hurt(DamageSource source, float amount) {
+
+        if(!source.isMagic() || !source.isBypassInvul()){
+            amount *= 0.1F;
+        }
+
+        return super.hurt(source, amount);
+    }
+
+    @Override
     protected void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerBAInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
     }

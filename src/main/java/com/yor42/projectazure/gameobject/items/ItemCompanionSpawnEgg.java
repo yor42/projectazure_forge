@@ -68,11 +68,7 @@ public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends It
 
         if(spawnedEntity!=null) {
             spawnedEntity.setPos(context.getClickedPos().getX()+0.5, context.getClickedPos().getY() + 1.1F, context.getClickedPos().getZ()+0.5);
-            spawnedEntity.tame(context.getPlayer());
-            spawnedEntity.setMorale(150);
-            if(!(spawnedEntity instanceof IAknOp)) {
-                spawnedEntity.setAffection(50);
-            }
+            spawnedEntity.handleInitialspawn(context.getPlayer());
             context.getLevel().addFreshEntity(spawnedEntity);
 
 

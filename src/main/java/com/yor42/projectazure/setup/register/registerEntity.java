@@ -10,10 +10,7 @@ import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlaye
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityExcela;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityHK416;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityW;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.*;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityKyaru;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
@@ -81,6 +78,7 @@ public class registerEntity {
     public static final RegistryObject<EntityType<EntityMudrock>> MUDROCK = ENTITIES.register("entitymudrock", () -> EntityType.Builder.of(EntityMudrock::new, EntityClassification.CREATURE).sized(0.572F, 1.63F).build(ModResourceLocation("entitymudrock").toString()));
     public static final RegistryObject<EntityType<EntityChen>> CHEN = ENTITIES.register("entitychen", () -> EntityType.Builder.of(EntityChen::new, EntityClassification.CREATURE).sized(0.572F, 1.68F).build(ModResourceLocation("entitychen").toString()));
     public static final RegistryObject<EntityType<EntityW>> W = ENTITIES.register("entityw", () -> EntityType.Builder.of(EntityW::new, EntityClassification.CREATURE).sized(0.572F, 1.65F).build(ModResourceLocation("entityw").toString()));
+    public static final RegistryObject<EntityType<EntitySkullShatterer>> SKULLSHATTERER = ENTITIES.register("entityskullshatterer", () -> EntityType.Builder.of(EntitySkullShatterer::new, EntityClassification.CREATURE).sized(0.572F, 1.58F).build(ModResourceLocation("entityskullshatterer").toString()));
 
     public static final RegistryObject<EntityType<EntityShiroko>> SHIROKO = ENTITIES.register("entityshiroko", () -> EntityType.Builder.of(EntityShiroko::new, EntityClassification.CREATURE).sized(0.572F, 1.575F).build(ModResourceLocation("entityshiroko").toString()));
 
@@ -135,6 +133,7 @@ public class registerEntity {
         event.put(SHIKI.get(), EntityShiki.MutableAttribute().build());
         event.put(EXCELA.get(), EntityExcela.MutableAttribute().build());
         event.put(W.get(), EntityW.MutableAttribute().build());
+        event.put(SKULLSHATTERER.get(), EntitySkullShatterer.MutableAttribute().build());
         event.put(HK416.get(), EntityHK416.MutableAttribute().build());
         event.put(PURIFIER.get(), EntityPurifier.MutableAttribute().build());
         event.put(MASH.get(), EntityMash.MutableAttribute().build());
@@ -174,6 +173,7 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.HK416.get(), EntityHK416Renderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PURIFIER.get(), EntityPurifierRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MASH.get(), EntityMashRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.SKULLSHATTERER.get(), EntitySkullShattererRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 

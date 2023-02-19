@@ -20,7 +20,7 @@ apply plugin: 'maven-publish'
 //we mix some ins
 apply plugin: 'org.spongepowered.mixin'
 
-version = '0.9.5-IDP'
+version = '0.9.6-IDP'
 group = 'com.yor42.projectrazure' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -171,7 +171,7 @@ dependencies {
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:${top_version}")
     //TaC
     implementation fg.deobf('curse.maven:obfuscate-289380:3740120')
-    //implementation fg.deobf('curse.maven:timeless-and-classics-491264:3854371')
+    implementation fg.deobf('curse.maven:timeless-and-classics-491264:4398660')
 
     compileOnly fg.deobf('curse.maven:realistic-torches-235729:3191715')
 
@@ -185,7 +185,7 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
 
     compileOnly fg.deobf('com.yor42:solarapocalypse:1.0')
-    implementation fg.deobf('com.tac.guns:TimelessandClassics:0.3.5-1.16.5')
+    //implementation fg.deobf('com.tac.guns:TimelessandClassics:0.3.5-1.16.5')
 
     runtimeOnly fg.deobf('curse.maven:roadrunner-529754:3683120')
     runtimeOnly fg.deobf('curse.maven:ferritecore-429235:3485636')

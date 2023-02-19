@@ -158,13 +158,7 @@ public class CompanionMultiblockCapability extends MultiblockCapability<EntityIn
 
                                 if (entity instanceof AbstractEntityCompanion) {
                                     AbstractEntityCompanion spawnedEntity = (AbstractEntityCompanion) entity;
-
-                                    spawnedEntity.tame(player);
-                                    spawnedEntity.setMorale(150);
-                                    cap.addCompanion(spawnedEntity);
-                                    if (!(spawnedEntity instanceof IAknOp)) {
-                                        spawnedEntity.setAffection(50);
-                                    }
+                                    spawnedEntity.handleInitialspawn(player);
                                     serverLevel.addFreshEntity(spawnedEntity);
 
                                 }

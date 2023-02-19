@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "projectazure:item/gun_icons/typhoon"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [0, 2, 0.25],
+      "scale": [0.55, 0.55, 0.55]
+    },
+    "thirdperson_lefthand": {
+      "translation": [0, 2, 0.25],
+      "scale": [0.55, 0.55, 0.55]
+    },
+    "firstperson_righthand": {
+      "translation": [-4.75, 4.75, 2]
+    },
+    "firstperson_lefthand": {
+      "translation": [-4.75, 4.75, 2]
+    },
+    "ground": {
+      "rotation": [0, 0, 90],
+      "translation": [0, -0.75, 0],
+      "scale": [0.55, 0.55, 0.55]
+    },
+    "fixed": {
+      "rotation": [0, -90, 0],
+      "translation": [0, 1, 0],
+      "scale": [0.55, 0.55, 0.55]
+    }
+  }
+}

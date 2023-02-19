@@ -495,10 +495,10 @@ public class RegisterItems {
     });
 
     //Shooty stuff
-    public static final RegistryObject<Item> WHITEFANG_465 = registerGun_with2DTexture("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> TYPHOON = registerGun_with2DTexture("typhoon", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> W_GRANADELAUNCHER = registerGun_with2DTexture("granadelauncher", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> SANGVIS_RAILGUN = registerGun_with2DTexture("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, false, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> WHITEFANG_465 = register_withoutTexture("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> TYPHOON = register_withoutTexture("typhoon", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> W_GRANADELAUNCHER = register_withoutTexture("granadelauncher", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> SANGVIS_RAILGUN = register_withoutTexture("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, false, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
 
     public static final RegistryObject<Item> CASELESS_4MM = register_withoutTexture("4mmcaseless", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
 
@@ -682,6 +682,9 @@ public class RegisterItems {
             .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_FROSTNOVA = register_RUN("spawnfrostnova", () -> new ItemCompanionSpawnEgg<>(registerEntity.FROSTNOVA, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
+    public static final RegistryObject<Item> SPAWN_SKULLSHATTERER = register_RUN("spawnskullshatterer", () -> new ItemCompanionSpawnEgg<>(registerEntity.SKULLSHATTERER, new Item.Properties()
             .tab(PA_COMPANIONS)));
 
     public static final RegistryObject<Item> SPAWN_SIEGE = register_AKN("spawnsiege", () -> new ItemCompanionSpawnEgg<>(registerEntity.SIEGE, new Item.Properties()
