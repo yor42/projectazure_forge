@@ -7,13 +7,14 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import javax.annotation.Nonnull;
 
 public class ModArmorMaterials {
 
     public enum ArmorModMaterials implements IArmorMaterial{
-        GASMASK("gasmask",new int[]{0, 0, 0, 0}, new int[]{2,0,0,0}, 0, 0, 0, registerSounds.GASMASK_EQUIP, Ingredient.EMPTY);
+        GASMASK("gasmask",new int[]{0, 0, 0, 0}, new int[]{2,0,0,0}, 0, 0, 0, SoundEvents.ARMOR_EQUIP_LEATHER, Ingredient.EMPTY);
 
         private final int[] durability, defence;
         private final int enchantment;

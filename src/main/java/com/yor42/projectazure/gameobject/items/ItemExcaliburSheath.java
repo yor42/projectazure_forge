@@ -16,7 +16,7 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
-public class ItemExcaliburSheath extends CurioItem {
+public class ItemExcaliburSheath extends Item implements ICurioItem {
     public ItemExcaliburSheath() {
         super(new Item.Properties().tab(Main.PA_GROUP).stacksTo(1).rarity(Rarity.RARE).fireResistant());
     }

@@ -1,5 +1,7 @@
 package com.yor42.projectazure.gameobject.items;
 
+import com.yor42.projectazure.intermod.curios.CuriosCompat;
+import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.RegisterItems;
@@ -34,8 +36,18 @@ public class GasMaskFilterItem extends ItemDestroyable {
         ItemStack filterstack = player.getItemInHand(hand);
         ItemStack gasmask = player.getItemBySlot(EquipmentSlotType.HEAD);
         if(!(gasmask.getItem() instanceof GasMaskItem)){
-            return ActionResult.pass(filterstack);
+
+            if(CompatibilityUtils.isCurioLoaded()){
+                gasmask = CuriosCompat.getCurioItemStack(player, "head",(stack)-> stack.getItem() instanceof GasMaskItem);
+            }
+
+
+            if(!(gasmask.getItem() instanceof GasMaskItem)){
+                return ActionResult.pass(filterstack);
+            }
         }
+
+
 
         CompoundNBT compoundNBT = gasmask.getOrCreateTag();
         ListNBT list = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
@@ -44,7 +56,7 @@ public class GasMaskFilterItem extends ItemDestroyable {
             compoundNBT.put("filters", list);
             filterstack.shrink(1);
             player.setItemInHand(hand, filterstack);
-            player.playSound(registerSounds.GASMASK_FILTER_CHANGE, 0.8F*(0.4F*MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
+            player.playSound(registerSounds.GASMASK_FILTER_ADD, 0.8F*(0.4F*MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
             return ActionResult.consume(filterstack);
         }
         else{

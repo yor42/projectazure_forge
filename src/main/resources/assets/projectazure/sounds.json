@@ -102,6 +102,60 @@
       }
     ]
   },
+  "gasmask_equip": {
+    "sounds": [
+      {
+        "name": "projectazure:item/gasmask_equip1"
+      }
+    ]
+  },
+  "gasmask_filter_add": {
+    "sounds": [
+      {
+        "name": "projectazure:item/gasmask_filteradd"
+      }
+    ]
+  },
+  "gasmask_filter_change": {
+    "sounds": [
+      {
+        "name": "projectazure:item/gasmask_filterchange"
+      }
+    ]
+  },
+  "gasmask_filter_remove": {
+    "sounds": [
+      {
+        "name": "projectazure:item/gasmask_filterremove"
+      }
+    ]
+  },
+  "gasmask_inhale": {
+    "sounds": [
+      {
+        "name": "projectazure:item/gasmask_inhale1"
+      },
+      {
+        "name": "projectazure:item/gasmask_inhale2"
+      },
+      {
+        "name": "projectazure:item/gasmask_inhale3"
+      }
+    ]
+  },
+  "gasmask_exhale": {
+    "sounds": [
+      {
+        "name": "projectazure:item/gasmask_exhale1"
+      },
+      {
+        "name": "projectazure:item/gasmask_exhale2"
+      },
+      {
+        "name": "projectazure:item/gasmask_exhale3"
+      }
+    ]
+  },
   "gun_fire_medium": {
     "sounds": [
       {

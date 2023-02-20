@@ -34,7 +34,7 @@ public class MathUtil {
     Basic Degree-Radian Converters
      */
     public static float DegreeToRadian(float degree){
-        return (float) (degree*(Math.PI/180));
+        return (float) (degree*(Math.PI/180F));
     }
 
     public static float RadianRoDegree(Float Radian){

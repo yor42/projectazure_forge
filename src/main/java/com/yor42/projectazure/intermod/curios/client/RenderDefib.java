@@ -21,21 +21,21 @@ public class RenderDefib implements ICurioRenderer {
         return RENDERER_INSTANCE;
     }
 
-    public void render(ItemStack stack, LivingEntity entity, MatrixStack posestack, IRenderTypeBuffer buffer, int light, float partialTicks) {
-        posestack.pushPose();
-        if(entity.isCrouching()) {
-            posestack.translate(0, 0.1, -0.1);
-            posestack.mulPose(Vector3f.XP.rotation(MathUtil.DegreeToRadian(90F / (float) Math.PI)));
+    public void render(ItemStack stack, String identifier, int index, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int light, LivingEntity livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        matrixStack.pushPose();
+        if(livingEntity.isCrouching()) {
+            matrixStack.translate(0, 0.1, -0.1);
+            matrixStack.mulPose(Vector3f.XP.rotation(MathUtil.DegreeToRadian(90F / (float) Math.PI)));
         }
 
-        posestack.pushPose();
-        posestack.translate(0, 0.4, 0.1);
-        posestack.mulPose(Vector3f.XP.rotationDegrees(90));
-        posestack.mulPose(Vector3f.YP.rotationDegrees(180));
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, posestack, buffer);
-        posestack.popPose();
+        matrixStack.pushPose();
+        matrixStack.translate(0, 0.4, 0.1);
+        matrixStack.mulPose(Vector3f.XP.rotationDegrees(90));
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(180));
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, light, OverlayTexture.NO_OVERLAY, matrixStack, renderTypeBuffer);
+        matrixStack.popPose();
 
-        posestack.popPose();
+        matrixStack.popPose();
     }
 
 }

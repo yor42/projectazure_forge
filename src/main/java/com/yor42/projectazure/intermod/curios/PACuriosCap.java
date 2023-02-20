@@ -1,7 +1,6 @@
 package com.yor42.projectazure.intermod.curios;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.gameobject.items.CurioItem;
 import com.yor42.projectazure.gameobject.items.ICurioItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -42,7 +41,7 @@ public class PACuriosCap implements ICurio {
     @Override
     public boolean canRender(String identifier, int index, LivingEntity livingEntity) {
         Item item = this.stack.getItem();
-        return ((CurioItem) item).getSlotRenderer() != null;
+        return ((ICurioItem) item).getSlotRenderer() != null;
     }
 
     @Override
@@ -58,8 +57,8 @@ public class PACuriosCap implements ICurio {
             return;
         }
 
-        if(item instanceof ICurioItem && ((CurioItem) item).getSlotRenderer() != null){
-            ((ICurioItem) item).getSlotRenderer().render(this.stack, livingEntity, matrixStack, renderTypeBuffer, light, ageInTicks);
+        if(item instanceof ICurioItem && ((ICurioItem) item).getSlotRenderer() != null){
+            ((ICurioItem) item).getSlotRenderer().render(this.stack, identifier, index, matrixStack, renderTypeBuffer, light, livingEntity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
         }
     }
 

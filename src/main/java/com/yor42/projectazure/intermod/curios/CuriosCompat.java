@@ -10,8 +10,12 @@ package com.yor42.projectazure.intermod.curios;
 
 import com.yor42.projectazure.gameobject.capability.CuriosCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.CuriosEnergyCapabilityProvider;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -21,6 +25,7 @@ import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
@@ -44,9 +49,25 @@ public class CuriosCompat {
     }
 
     public static ItemStack getCurioItemStack(LivingEntity entity, Predicate<ItemStack> predicate){
+        return getCurioItemStack(entity, null, predicate);
+    }
+
+    public static ItemStack getCurioItemStack(LivingEntity entity, @Nullable String identifier, Predicate<ItemStack> predicate){
         AtomicReference<ItemStack> returnstack = new AtomicReference<>(ItemStack.EMPTY);
         CuriosApi.getCuriosHelper().getCuriosHandler(entity).ifPresent(handler -> {
             Map<String, ICurioStacksHandler> curios = handler.getCurios();
+
+            if(identifier != null){
+                IDynamicStackHandler stackHandler = curios.get(identifier).getStacks();
+                for (int i = 0; i < stackHandler.getSlots(); i++) {
+                    ItemStack stack = stackHandler.getStackInSlot(i);
+                    if(predicate.test(stack)){
+                        returnstack.set(stack);
+                        return;
+                    }
+                }
+            }
+
             for (Map.Entry<String, ICurioStacksHandler> entry : curios.entrySet()) {
                 ICurioStacksHandler stacksHandler = entry.getValue();
                 IDynamicStackHandler stackHandler = stacksHandler.getStacks();
@@ -59,6 +80,32 @@ public class CuriosCompat {
             }
         });
         return returnstack.get();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void RenderCurioGameOverlay(RenderGameOverlayEvent.Pre event){
+        if(event.getType() == RenderGameOverlayEvent.ElementType.HELMET){
+
+            if(!Minecraft.getInstance().options.getCameraType().isFirstPerson()){
+                return;
+            }
+
+
+            CuriosApi.getCuriosHelper().getCuriosHandler(Minecraft.getInstance().player).ifPresent((cap)->{
+                Map<String, ICurioStacksHandler> curios = cap.getCurios();
+                IDynamicStackHandler helmetstack = curios.get(SlotTypePreset.HEAD.getIdentifier()).getStacks();
+                for (int i = 0; i < helmetstack.getSlots(); i++) {
+                    ItemStack stack = helmetstack.getStackInSlot(i);
+
+                    if(stack.isEmpty()){
+                        continue;
+                    }
+
+                    stack.getItem().renderHelmetOverlay(stack, Minecraft.getInstance().player, event.getWindow().getGuiScaledWidth(), event.getWindow().getGuiScaledHeight(), event.getPartialTicks());
+                }
+            });
+        }
+
     }
 
 }

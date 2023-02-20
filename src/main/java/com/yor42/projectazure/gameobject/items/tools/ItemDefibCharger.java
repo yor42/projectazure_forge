@@ -1,13 +1,14 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.client.renderer.items.ItemDefibChargerRenderer;
-import com.yor42.projectazure.gameobject.items.CurioItem;
+import com.yor42.projectazure.gameobject.items.ICurioItem;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
 import com.yor42.projectazure.intermod.curios.client.ICurioRenderer;
 import com.yor42.projectazure.intermod.curios.client.RenderDefib;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -47,7 +48,7 @@ import java.util.List;
 import static com.yor42.projectazure.Main.PA_WEAPONS;
 import static com.yor42.projectazure.setup.register.registerSounds.*;
 
-public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncable {
+public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, ICurioItem {
     private static final int ANIM_ON = 0;
     private static final int ANIM_OFF = 1;
     private final int batterysize = 40000;
@@ -106,6 +107,10 @@ public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncabl
     @Override
     public void inventoryTick(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
         super.inventoryTick(stack, world, p_77663_3_, p_77663_4_, p_77663_5_);
+        this.handleCharge(stack, p_77663_3_, world);
+    }
+
+    public void handleCharge(ItemStack stack, Entity entity, World world){
         if(isOn(stack)){
             int chargeprogress = getChargeProgress(stack);
             if(ShouldCharging(stack)){
@@ -113,16 +118,16 @@ public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncabl
                     int charge = Math.min(100, chargeprogress + 1);
                     if (charge == 100) {
                         setCharging(stack, false);
-                        p_77663_3_.playSound(DEFIB_READY, 1.0F, 1.0F);
+                        entity.playSound(DEFIB_READY, 1.0F, 1.0F);
                     }
                     setChargeProgress(stack, charge);
                     stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(100, false));
                 }else{
-                    int charge = Math.max(0, getChargeProgress(stack)-10);
-                    if (charge <= 0) {
+                    int charge = Math.max(0, getChargeProgress(stack)-4);
+                    if (charge == 0) {
                         setCharging(stack, false);
-                        if(p_77663_3_ instanceof PlayerEntity) {
-                            PlayerEntity player = (PlayerEntity) p_77663_3_;
+                        if(entity instanceof PlayerEntity) {
+                            PlayerEntity player = (PlayerEntity) entity;
                             player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargefailed_nobattery").withStyle(TextFormatting.RED), true);
                         }
                     }
@@ -131,7 +136,7 @@ public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncabl
 
             }
             else {
-                if(p_77663_3_.tickCount%5 == 0) {
+                if(entity.tickCount%5 == 0) {
                     if(stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(1, true)==1).orElse(false)){
                         stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(1, false));
                     }
@@ -140,17 +145,17 @@ public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncabl
                         setCharging(stack, false);
                         if(!world.isClientSide()){
                             final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-                            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> p_77663_3_);
+                            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity);
                             GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
                         }
-                        p_77663_3_.playSound(DEFIB_POWEROFF, 1.0F, 1.0F);
+                        entity.playSound(DEFIB_POWEROFF, 1.0F, 1.0F);
                         setOn(stack, false);
                     }
                 }
             }
         }
-        if(p_77663_3_ instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) p_77663_3_;
+        if(entity instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) entity;
             if (ShouldCharging(stack)) {
                 int charge = (int) (((float) getChargeProgress(stack) / 100) * 100);
                 player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargeprogress", charge + "%").withStyle(TextFormatting.AQUA), true);
@@ -171,65 +176,8 @@ public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncabl
     }
 
     @Override
-    public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
-        super.onArmorTick(stack, world, player);
-        if(isOn(stack)){
-            int chargeprogress = getChargeProgress(stack);
-            if(ShouldCharging(stack)){
-                if(stack.getCapability(CapabilityEnergy.ENERGY).map((e)->e.extractEnergy(100, true)>=100).orElse(false)) {
-                    int charge = Math.min(100, chargeprogress + 1);
-                    if (charge >= 100) {
-                        setCharging(stack, false);
-                        player.playSound(DEFIB_READY, 1.0F, 1.0F);
-                    }
-                    setChargeProgress(stack, charge);
-                    stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(100, false));
-                }else{
-                    int charge = Math.max(0, getChargeProgress(stack)-10);
-                    if (charge <= 0) {
-                        setCharging(stack, false);
-                    }
-                    setChargeProgress(stack, charge);
-                }
-
-            }
-            else {
-                if(player.tickCount%5 == 0) {
-                    if(stack.getCapability(CapabilityEnergy.ENERGY).map((e) -> e.extractEnergy(1, true)==1).orElse(false)){
-                        stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((e) -> e.extractEnergy(1, false));
-                    }
-                    else{
-                        setChargeProgress(stack, 0);
-                        setCharging(stack, false);
-                        if(!world.isClientSide()){
-                            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-                            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player);
-                            GeckoLibNetwork.syncAnimation(target, this, id, ANIM_OFF);
-                        }
-                        player.playSound(DEFIB_POWEROFF, 1.0F, 1.0F);
-                        setOn(stack, false);
-                    }
-                }
-            }
-        }
-
-        if(ShouldCharging(stack)){
-            int charge = (int) (((float)getChargeProgress(stack)/100)*100);
-            player.displayClientMessage(new TranslationTextComponent("item.tooltip.chargeprogress", charge+"%").withStyle(TextFormatting.AQUA), true);
-        }
-        else if(getChargeProgress(stack) == 100){
-            player.displayClientMessage(new TranslationTextComponent("item.tooltip.ready").withStyle(TextFormatting.GREEN), true);
-        }
-
-        if(!world.isClientSide()) {
-            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-            final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-            if (controller.getAnimationState() == AnimationState.Stopped) {
-                controller.markNeedsReload();
-                String animationname = isOn(stack) ? "on_still" : "off_still";
-                controller.setAnimation(new AnimationBuilder().addAnimation(animationname));
-            }
-        }
+    public void curioTick(LivingEntity entity, int index, ItemStack stack) {
+        this.handleCharge(stack, entity, entity.getCommandSenderWorld());
     }
 
     public static boolean isOn(@Nonnull ItemStack stack){

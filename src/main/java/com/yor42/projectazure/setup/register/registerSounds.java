@@ -22,7 +22,8 @@ public final class registerSounds {
     public static final SoundEvent GASMASK_EXHALE=registerSoundEvent("gasmask_exhale");
 
     public static final SoundEvent GASMASK_EQUIP=registerSoundEvent("gasmask_equip");
-    public static final SoundEvent GASMASK_UNEQUIP=registerSoundEvent("gasmask_unequip");
+    public static final SoundEvent GASMASK_FILTER_ADD = registerSoundEvent("gasmask_filter_add");
+    public static final SoundEvent GASMASK_FILTER_REMOVE = registerSoundEvent("gasmask_filter_remove");
     public static final SoundEvent GASMASK_FILTER_CHANGE = registerSoundEvent("gasmask_filter_change");
 
     public static final SoundEvent SANGVIS_CANNON_NOAMMO = registerSoundEvent("sangvis_cannon_noammo");
