@@ -1,7 +1,9 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.RegisterItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -42,6 +44,7 @@ public class GasMaskFilterItem extends ItemDestroyable {
             compoundNBT.put("filters", list);
             filterstack.shrink(1);
             player.setItemInHand(hand, filterstack);
+            player.playSound(registerSounds.GASMASK_FILTER_CHANGE, 0.8F*(0.4F*MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
             return ActionResult.consume(filterstack);
         }
         else{
@@ -62,6 +65,7 @@ public class GasMaskFilterItem extends ItemDestroyable {
             ItemStack buffer = ItemStack.of(list.getCompound(index)).copy();
             list.set(index, filterstack.save(new CompoundNBT()));
             player.setItemInHand(hand, buffer);
+            player.playSound(registerSounds.GASMASK_FILTER_CHANGE, 0.8F*(0.4F* MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
             return ActionResult.success(buffer);
         }
 

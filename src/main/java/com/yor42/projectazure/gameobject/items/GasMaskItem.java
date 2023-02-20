@@ -3,11 +3,15 @@ package com.yor42.projectazure.gameobject.items;
 import com.yor42.projectazure.intermod.curios.client.ICurioRenderer;
 import com.yor42.projectazure.intermod.curios.client.RenderGasMask;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.setup.register.registerSounds;
+import net.minecraft.block.PumpkinBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ActionResult;
@@ -89,11 +93,24 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
     public void onArmorTick(ItemStack stack, World world, PlayerEntity player) {
         super.onArmorTick(stack, world, player);
         CompoundNBT compoundNBT = stack.getOrCreateTag();
+        boolean activefilter = false;
         ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
         for(int i = 0; i<filters.size(); i++){
             ItemStack filterstack = ItemStack.of(filters.getCompound(i));
             if(ItemStackUtils.DamageItem(player.isUnderWater()?5F:1F, filterstack)){
+                activefilter = true;
                 break;
+            }
+        }
+
+        if(activefilter){
+            if(player.tickCount%80==0){
+                player.playSound(registerSounds.GASMASK_INHALE, 0.8F*(0.4F*MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
+
+            }
+            else if(40+player.tickCount%80==0){
+                player.playSound(registerSounds.GASMASK_EXHALE, 0.8F*(0.4F*MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
+
             }
         }
     }
@@ -115,16 +132,17 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
 
     @Override
     public ActionResult<ItemStack> use(World p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
-
-        if(!p_77659_2_.isCrouching()){
-            return super.use(p_77659_1_, p_77659_2_, p_77659_3_);
-        }
-
         ItemStack stack = p_77659_2_.getItemInHand(p_77659_3_);
         CompoundNBT compoundNBT = stack.getOrCreateTag();
         ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
-        for(int i = 0; i<filters.size(); i++){
-            ItemStack filterstack = ItemStack.of(filters.getCompound(i));
+
+        if(filters.isEmpty()){
+            return ActionResult.fail(stack);
+        }
+
+        if(p_77659_2_.isCrouching()){
+            ItemStack filterstack = ItemStack.of(filters.getCompound(0));
+            filters.remove(0);
             int index = p_77659_2_.inventory.getFreeSlot();
 
             if(index<0){
@@ -134,7 +152,7 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem
                 p_77659_2_.inventory.setItem(index, filterstack);
             }
         }
-        filters.clear();
+        p_77659_2_.playSound(registerSounds.GASMASK_FILTER_CHANGE, 0.8F*(0.4F* MathUtil.rand.nextFloat()), 0.8F*(0.4F*MathUtil.rand.nextFloat()));
         compoundNBT.put("filters", filters);
         return ActionResult.success(stack);
     }

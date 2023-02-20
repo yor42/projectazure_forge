@@ -18,6 +18,13 @@ public final class registerSounds {
     public static final SoundEvent TYPHOON_FIRE = registerSoundEvent("typhoon_fire");
     public static final SoundEvent TYPHOON_RELOAD = registerSoundEvent("typhoon_reload");
 
+    public static final SoundEvent GASMASK_INHALE = registerSoundEvent("gasmask_inhale");
+    public static final SoundEvent GASMASK_EXHALE=registerSoundEvent("gasmask_exhale");
+
+    public static final SoundEvent GASMASK_EQUIP=registerSoundEvent("gasmask_equip");
+    public static final SoundEvent GASMASK_UNEQUIP=registerSoundEvent("gasmask_unequip");
+    public static final SoundEvent GASMASK_FILTER_CHANGE = registerSoundEvent("gasmask_filter_change");
+
     public static final SoundEvent SANGVIS_CANNON_NOAMMO = registerSoundEvent("sangvis_cannon_noammo");
     public static final SoundEvent SANGVIS_CANNON_OPEN = registerSoundEvent("sangvis_cannon_open");
     public static final SoundEvent SANGVIS_CANNON_CLOSE = registerSoundEvent("sangvis_cannon_close");

@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.items.materials;
 
+import com.yor42.projectazure.setup.register.registerSounds;
 import mekanism.api.annotations.NonNull;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
@@ -12,7 +13,7 @@ import javax.annotation.Nonnull;
 public class ModArmorMaterials {
 
     public enum ArmorModMaterials implements IArmorMaterial{
-        GASMASK("gasmask",new int[]{0, 0, 0, 0}, new int[]{1,0,0,0}, 0, 0, 0, SoundEvents.ARMOR_EQUIP_LEATHER, Ingredient.EMPTY);
+        GASMASK("gasmask",new int[]{0, 0, 0, 0}, new int[]{2,0,0,0}, 0, 0, 0, registerSounds.GASMASK_EQUIP, Ingredient.EMPTY);
 
         private final int[] durability, defence;
         private final int enchantment;
