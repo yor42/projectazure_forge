@@ -4,19 +4,10 @@ import com.yor42.projectazure.intermod.tconstruct.datagen.PAMaterialProvider;
 import com.yor42.projectazure.intermod.tconstruct.datagen.PAMaterialRenderInfoProvider;
 import com.yor42.projectazure.intermod.tconstruct.datagen.PAMaterialSpriteGenerator;
 import com.yor42.projectazure.intermod.tconstruct.datagen.PATConRecipeProvider;
-import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.setup.register.RegisterFluids;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
-import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
-import slimeknights.mantle.registration.object.FluidObject;
-import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.client.data.material.GeneratorPartTextureJsonGenerator;
 import slimeknights.tconstruct.library.client.data.material.MaterialPartTextureGenerator;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
-import slimeknights.tconstruct.tools.data.sprite.TinkerMaterialSpriteProvider;
 import slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider;
 
 public class Tconstruct {

@@ -1,7 +1,6 @@
 package com.yor42.projectazure.data.common;
 
 import com.tac.guns.crafting.WorkbenchRecipeBuilder;
-import com.tac.guns.init.ModItems;
 import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.data.recipebuilder.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AdvancedAlloySmelterControllerTE;
@@ -9,8 +8,6 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressC
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
-import com.yor42.projectazure.intermod.tconstruct.Tconstruct;
-import com.yor42.projectazure.intermod.tconstruct.datagen.PATConRecipeProvider;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.RegisterBlocks;

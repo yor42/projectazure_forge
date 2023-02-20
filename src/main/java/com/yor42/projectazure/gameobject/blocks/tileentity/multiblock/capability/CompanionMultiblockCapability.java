@@ -20,7 +20,6 @@ import com.yor42.projectazure.client.gui.multiblocked.CompanionContentWidget;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipes.RiftwayRecipes;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnReason;

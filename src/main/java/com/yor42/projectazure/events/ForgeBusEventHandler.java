@@ -16,7 +16,6 @@ import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayCon
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.GasMaskFilterItem;
 import com.yor42.projectazure.gameobject.items.GasMaskItem;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
@@ -47,16 +46,12 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
@@ -79,7 +74,6 @@ import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemStack;
 import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded;
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 import static net.minecraft.util.Hand.MAIN_HAND;
 import static net.minecraft.util.Hand.OFF_HAND;
 

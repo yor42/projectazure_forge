@@ -1,9 +1,7 @@
 package com.yor42.projectazure.gameobject.items;
 
 import com.yor42.projectazure.gameobject.capability.ItemPowerCapabilityProvider;
-import com.yor42.projectazure.gameobject.storages.CustomEnergyStorage;
 import com.yor42.projectazure.gameobject.storages.CustomEnergyStorageItem;
-import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;

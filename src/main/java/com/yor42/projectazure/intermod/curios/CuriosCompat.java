@@ -11,7 +11,6 @@ package com.yor42.projectazure.intermod.curios;
 import com.yor42.projectazure.gameobject.capability.CuriosCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.CuriosEnergyCapabilityProvider;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.InterModComms;

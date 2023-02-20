@@ -55,7 +55,7 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 import static com.lowdragmc.multiblocked.api.registry.MbdCapabilities.registerCapability;
-import static com.yor42.projectazure.libs.Constants.*;
+import static com.yor42.projectazure.libs.Constants.MODID;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(MODID)

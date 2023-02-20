@@ -19,11 +19,7 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 import slimeknights.mantle.registration.ModelFluidAttributes;
-import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
 import slimeknights.mantle.registration.object.FluidObject;
-import slimeknights.tconstruct.tools.data.material.MaterialIds;
-
-import java.util.function.Supplier;
 
 import static com.yor42.projectazure.intermod.tconstruct.PATconFluidTag.FLUIDLIST;
 import static com.yor42.projectazure.setup.register.RegisterBlocks.BLOCKS;

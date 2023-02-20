@@ -5,15 +5,11 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.armor.GeoGasMaskModel;
 import com.yor42.projectazure.gameobject.items.GasMaskFilterItem;
 import com.yor42.projectazure.gameobject.items.GasMaskItem;
-import com.yor42.projectazure.libs.utils.ItemStackUtils;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.*;
 import net.minecraftforge.common.util.Constants;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 public class GasMaskRenderer extends GeoArmorRenderer<GasMaskItem> {

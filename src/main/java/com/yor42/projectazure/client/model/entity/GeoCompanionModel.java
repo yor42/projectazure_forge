@@ -1,6 +1,5 @@
 package com.yor42.projectazure.client.model.entity;
 
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.AnimationUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;

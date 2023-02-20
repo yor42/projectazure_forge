@@ -5,7 +5,6 @@ import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.items.GasMaskFilterItem;
 import com.yor42.projectazure.gameobject.items.GasMaskItem;
 import com.yor42.projectazure.interfaces.IAknOp;
@@ -15,9 +14,7 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
@@ -35,8 +32,6 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -47,7 +42,6 @@ import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 

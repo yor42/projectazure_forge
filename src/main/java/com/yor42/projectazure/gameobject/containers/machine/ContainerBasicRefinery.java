@@ -1,7 +1,6 @@
 package com.yor42.projectazure.gameobject.containers.machine;
 
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.setup.register.RegisterFluids;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.fluid.Fluid;

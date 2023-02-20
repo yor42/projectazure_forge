@@ -1,20 +1,14 @@
 package com.yor42.projectazure.intermod.tconstruct.datagen;
 
-import com.yor42.projectazure.intermod.tconstruct.Tconstruct;
 import com.yor42.projectazure.intermod.tconstruct.TinkersRegistry;
 import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.setup.register.RegisterBlocks;
-import com.yor42.projectazure.setup.register.RegisterFluids;
-import com.yor42.projectazure.setup.register.RegisterItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
-import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.ICommonRecipeHelper;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
 import slimeknights.tconstruct.library.data.recipe.ISmelteryRecipeHelper;
 import slimeknights.tconstruct.library.data.recipe.IToolRecipeHelper;
-import slimeknights.tconstruct.tools.data.material.MaterialIds;
 
 import java.util.function.Consumer;
 

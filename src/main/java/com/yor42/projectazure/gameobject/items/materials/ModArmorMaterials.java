@@ -8,7 +8,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ModArmorMaterials {
 

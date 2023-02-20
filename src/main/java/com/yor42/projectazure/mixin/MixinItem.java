@@ -3,7 +3,6 @@ package com.yor42.projectazure.mixin;
 import com.yor42.projectazure.gameobject.items.GasMaskItem;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;

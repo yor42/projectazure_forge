@@ -1,26 +1,11 @@
 package com.yor42.projectazure.setup.register;
 
-import com.mojang.datafixers.util.Pair;
-import com.yor42.projectazure.data.client.itemModelProvider;
 import com.yor42.projectazure.gameobject.blocks.fluid.*;
 import com.yor42.projectazure.libs.Constants;
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvents;
-import net.minecraftforge.fluids.FluidAttributes;
-import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import static com.yor42.projectazure.setup.register.RegisterBlocks.BLOCKS;
-import static com.yor42.projectazure.setup.register.RegisterItems.ITEMS;
 
 public class RegisterFluids {
 

@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.model.entity.bonus;
 
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntitySkullShatterer;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.util.ResourceLocation;

@@ -6,7 +6,6 @@ import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -32,7 +31,6 @@ import java.util.List;
 
 import static com.yor42.projectazure.gameobject.items.materials.ModArmorMaterials.ArmorModMaterials.GASMASK;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
-import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColorInt;
 
 public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem {
 
