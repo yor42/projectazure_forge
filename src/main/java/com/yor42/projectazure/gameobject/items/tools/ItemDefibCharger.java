@@ -3,7 +3,7 @@ package com.yor42.projectazure.gameobject.items.tools;
 import com.yor42.projectazure.client.renderer.items.ItemDefibChargerRenderer;
 import com.yor42.projectazure.gameobject.items.CurioItem;
 import com.yor42.projectazure.intermod.curios.CuriosCompat;
-import com.yor42.projectazure.intermod.curios.client.CurioRenderer;
+import com.yor42.projectazure.intermod.curios.client.ICurioRenderer;
 import com.yor42.projectazure.intermod.curios.client.RenderDefib;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.util.ITooltipFlag;
@@ -331,7 +331,7 @@ public class ItemDefibCharger extends CurioItem implements IAnimatable, ISyncabl
     }
 
     @OnlyIn(Dist.CLIENT)
-    public CurioRenderer getSlotRenderer(){
+    public ICurioRenderer getSlotRenderer(){
         return RenderDefib.getRendererInstance();
     }
 }

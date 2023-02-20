@@ -21,6 +21,7 @@ import com.yor42.projectazure.gameobject.items.GasMaskItem;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
+import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.setup.register.*;
@@ -129,9 +130,13 @@ public class ForgeBusEventHandler {
         LivingEntity entity = event.getEntityLiving();
 
         ItemStack headstack = entity.getItemBySlot(EquipmentSlotType.HEAD);
+        if(headstack.isEmpty() && CompatibilityUtils.isCurioLoaded()){
+            headstack = getCurioItemStack(entity, (stack-> stack.getItem() == RegisterItems.GASMASK.get()));
+        }
+
         Item headItem = headstack.getItem();
 
-        if(headItem instanceof GasMaskItem){
+        if(headItem == RegisterItems.GASMASK.get()){
             CompoundNBT compoundNBT = headstack.getOrCreateTag();
             ListNBT filters = compoundNBT.getList("filters", Constants.NBT.TAG_COMPOUND);
             for(int i = 0; i<filters.size(); i++){

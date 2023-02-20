@@ -8,6 +8,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class CurioRenderer {
-    public void render(ItemStack stack, LivingEntity entity, MatrixStack posestack, IRenderTypeBuffer buffer, int light, float partialTicks){}
+public interface ICurioRenderer {
+    void render(ItemStack stack, LivingEntity entity, MatrixStack posestack, IRenderTypeBuffer buffer, int light, float partialTicks);
 }

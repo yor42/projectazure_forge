@@ -1,5 +1,7 @@
 package com.yor42.projectazure.gameobject.items;
 
+import com.yor42.projectazure.intermod.curios.client.ICurioRenderer;
+import com.yor42.projectazure.intermod.curios.client.RenderGasMask;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,6 +15,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -30,7 +34,7 @@ import static com.yor42.projectazure.gameobject.items.materials.ModArmorMaterial
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColorInt;
 
-public class GasMaskItem extends GeoArmorItem implements IAnimatable {
+public class GasMaskItem extends GeoArmorItem implements IAnimatable, ICurioItem {
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public GasMaskItem(Properties builder) {
@@ -135,5 +139,12 @@ public class GasMaskItem extends GeoArmorItem implements IAnimatable {
         filters.clear();
         compoundNBT.put("filters", filters);
         return ActionResult.success(stack);
+    }
+
+    @Nullable
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public ICurioRenderer getSlotRenderer() {
+        return RenderGasMask.getInstance();
     }
 }

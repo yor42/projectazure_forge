@@ -2,6 +2,7 @@ package com.yor42.projectazure.intermod.curios;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.gameobject.items.CurioItem;
+import com.yor42.projectazure.gameobject.items.ICurioItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -57,17 +58,17 @@ public class PACuriosCap implements ICurio {
             return;
         }
 
-        if(item instanceof CurioItem && ((CurioItem) item).getSlotRenderer() != null){
-            ((CurioItem) item).getSlotRenderer().render(this.stack, livingEntity, matrixStack, renderTypeBuffer, light, ageInTicks);
+        if(item instanceof ICurioItem && ((CurioItem) item).getSlotRenderer() != null){
+            ((ICurioItem) item).getSlotRenderer().render(this.stack, livingEntity, matrixStack, renderTypeBuffer, light, ageInTicks);
         }
     }
 
-    public CurioItem getItem(){
-        if(stack.getItem() instanceof CurioItem){
-            return (CurioItem) stack.getItem();
+    public ICurioItem getItem(){
+        if(stack.getItem() instanceof ICurioItem){
+            return (ICurioItem) stack.getItem();
         }
         else{
-            throw new IllegalStateException("Item attached to CuriosCapability must be instance of CurioItem!");
+            throw new IllegalStateException("Item attached to CuriosCapability must be instance of ICurioItem!");
         }
     }
 }

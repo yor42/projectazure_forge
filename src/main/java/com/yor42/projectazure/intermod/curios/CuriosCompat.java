@@ -10,6 +10,7 @@ package com.yor42.projectazure.intermod.curios;
 
 import com.yor42.projectazure.gameobject.capability.CuriosCapabilityProvider;
 import com.yor42.projectazure.gameobject.capability.CuriosEnergyCapabilityProvider;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -32,6 +33,7 @@ public class CuriosCompat {
     public static void sendImc(final InterModEnqueueEvent event) {
         InterModComms.sendTo(CURIOS_MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.BACK.getMessageBuilder().build());
         InterModComms.sendTo(CURIOS_MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.RING.getMessageBuilder().build());
+        InterModComms.sendTo(CURIOS_MODID, SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HEAD.getMessageBuilder().build());
     }
 
     public static ICapabilityProvider addCapability(ItemStack stack){
@@ -42,7 +44,7 @@ public class CuriosCompat {
         return new CuriosEnergyCapabilityProvider(stack, energysize);
     }
 
-    public static ItemStack getCurioItemStack(PlayerEntity entity, Predicate<ItemStack> predicate){
+    public static ItemStack getCurioItemStack(LivingEntity entity, Predicate<ItemStack> predicate){
         AtomicReference<ItemStack> returnstack = new AtomicReference<>(ItemStack.EMPTY);
         CuriosApi.getCuriosHelper().getCuriosHandler(entity).ifPresent(handler -> {
             Map<String, ICurioStacksHandler> curios = handler.getCurios();

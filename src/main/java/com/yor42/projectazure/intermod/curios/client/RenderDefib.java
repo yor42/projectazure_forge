@@ -13,9 +13,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDefib extends CurioRenderer {
+public class RenderDefib implements ICurioRenderer {
 
-    private static RenderDefib RENDERER_INSTANCE = new RenderDefib();
+    private static final RenderDefib RENDERER_INSTANCE = new RenderDefib();
 
     public static RenderDefib getRendererInstance() {
         return RENDERER_INSTANCE;
