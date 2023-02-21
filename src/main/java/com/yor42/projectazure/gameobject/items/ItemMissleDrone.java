@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.setup.register.RegisterItems;
@@ -18,20 +18,21 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemMissleDrone extends AbstractItemPlaceableDrone implements ICraftingTableReloadable {
 
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public ItemMissleDrone(Properties properties, int MaxHP, int maxFuelmb) {
         super(properties, MaxHP, 8, maxFuelmb);
     }
 
     @Override
-    public EntityType<? extends AbstractEntityDrone> getEntityType() {
+    public EntityType<? extends AbstractEntityFollowingDrone> getEntityType() {
         return registerEntity.MISSILEDRONE.get();
     }
 

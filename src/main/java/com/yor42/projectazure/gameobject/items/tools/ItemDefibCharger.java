@@ -53,7 +53,7 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
     private static final int ANIM_OFF = 1;
     private final int batterysize = 40000;
     public static final String controllerName = "defibcharger_controller";
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public ItemDefibCharger() {
         super(new Item.Properties().tab(PA_WEAPONS).stacksTo(1).setISTER(()->ItemDefibChargerRenderer::new));
         GeckoLibNetwork.registerSyncable(this);

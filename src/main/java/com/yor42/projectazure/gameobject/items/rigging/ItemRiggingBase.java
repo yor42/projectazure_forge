@@ -36,6 +36,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,7 +47,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
 public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable, IGeoRenderer {
 
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     protected enums.shipClass validclass;
     protected IRenderTypeBuffer rtb;

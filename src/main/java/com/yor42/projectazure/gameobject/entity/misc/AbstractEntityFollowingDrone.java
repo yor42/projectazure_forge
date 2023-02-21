@@ -40,6 +40,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -48,15 +49,15 @@ import java.util.UUID;
 
 import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
 
-public abstract class AbstractEntityDrone extends CreatureEntity implements IAnimatable {
-    public AnimationFactory factory = new AnimationFactory(this);
+public abstract class AbstractEntityFollowingDrone extends CreatureEntity implements IAnimatable {
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private boolean isReturningToOwner = false;
 
-    protected static final DataParameter<Integer> AMMO = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.INT);
-    protected static final DataParameter<Integer> FUEL = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.INT);
-    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(AbstractEntityDrone.class, DataSerializers.OPTIONAL_UUID);
+    protected static final DataParameter<Integer> AMMO = EntityDataManager.defineId(AbstractEntityFollowingDrone.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> FUEL = EntityDataManager.defineId(AbstractEntityFollowingDrone.class, DataSerializers.INT);
+    protected static final DataParameter<Optional<UUID>> OWNER_UUID = EntityDataManager.defineId(AbstractEntityFollowingDrone.class, DataSerializers.OPTIONAL_UUID);
 
-    protected AbstractEntityDrone(EntityType<? extends CreatureEntity> type, World worldIn) {
+    protected AbstractEntityFollowingDrone(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
         this.moveControl = new FlyingMovementController(this, 20, true);
         this.navigation = new FlyingPathNavigator(this, worldIn);
@@ -72,7 +73,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
     protected abstract <T extends IAnimatable> PlayState body_predicate(AnimationEvent<T> tAnimationEvent);
 
-    protected abstract PlayState propeller_predicate(AnimationEvent<AbstractEntityDrone> abstractEntityDroneAnimationEvent);
+    protected abstract PlayState propeller_predicate(AnimationEvent<AbstractEntityFollowingDrone> abstractEntityDroneAnimationEvent);
 
     public void setReturningtoOwner(boolean value) {
         this.isReturningToOwner = value;
@@ -279,14 +280,14 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
          * method as well.
          */
         public boolean canUse() {
-            return AbstractEntityDrone.this.navigation.isDone() && !AbstractEntityDrone.this.isOutofFuel() && AbstractEntityDrone.this.random.nextInt(10) == 0;
+            return AbstractEntityFollowingDrone.this.navigation.isDone() && !AbstractEntityFollowingDrone.this.isOutofFuel() && AbstractEntityFollowingDrone.this.random.nextInt(10) == 0;
         }
 
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
         public boolean canContinueToUse() {
-            return AbstractEntityDrone.this.navigation.isInProgress();
+            return AbstractEntityFollowingDrone.this.navigation.isInProgress();
         }
 
         /**
@@ -295,7 +296,7 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         public void start() {
             Vector3d vector3d = this.getRandomLocation();
             if (vector3d != null) {
-                AbstractEntityDrone.this.navigation.moveTo(AbstractEntityDrone.this.navigation.createPath(new BlockPos(vector3d), 1), 1.0D);
+                AbstractEntityFollowingDrone.this.navigation.moveTo(AbstractEntityFollowingDrone.this.navigation.createPath(new BlockPos(vector3d), 1), 1.0D);
             }
 
         }
@@ -303,15 +304,15 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         @Nullable
         private Vector3d getRandomLocation() {
             Vector3d vector3d;
-            if (AbstractEntityDrone.this.getOwner().isPresent()) {
-                Vector3d vector3d1 = AbstractEntityDrone.this.getOwner().get().position();
-                vector3d = vector3d1.subtract(AbstractEntityDrone.this.position()).normalize();
+            if (AbstractEntityFollowingDrone.this.getOwner().isPresent()) {
+                Vector3d vector3d1 = AbstractEntityFollowingDrone.this.getOwner().get().position();
+                vector3d = vector3d1.subtract(AbstractEntityFollowingDrone.this.position()).normalize();
             } else {
-                vector3d = AbstractEntityDrone.this.getViewVector(0.0F);
+                vector3d = AbstractEntityFollowingDrone.this.getViewVector(0.0F);
             }
 
-            Vector3d vector3d2 = RandomPositionGenerator.getAboveLandPos(AbstractEntityDrone.this, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
-            return vector3d2 != null ? vector3d2 : RandomPositionGenerator.getAirPos(AbstractEntityDrone.this, 8, 4, -2, vector3d, (float) Math.PI / 2F);
+            Vector3d vector3d2 = RandomPositionGenerator.getAboveLandPos(AbstractEntityFollowingDrone.this, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
+            return vector3d2 != null ? vector3d2 : RandomPositionGenerator.getAirPos(AbstractEntityFollowingDrone.this, 8, 4, -2, vector3d, (float) Math.PI / 2F);
         }
     }
 
@@ -323,9 +324,9 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
         @Override
         public boolean canUse() {
-            if (AbstractEntityDrone.this.getOwner().isPresent() && AbstractEntityDrone.this.getOwner().get() instanceof LivingEntity) {
-                LivingEntity livingentity = (LivingEntity) AbstractEntityDrone.this.getOwner().get();
-                return !livingentity.isSpectator() && livingentity.getCommandSenderWorld() == AbstractEntityDrone.this.getCommandSenderWorld() && !(AbstractEntityDrone.this.distanceToSqr(livingentity) < 16);
+            if (AbstractEntityFollowingDrone.this.getOwner().isPresent() && AbstractEntityFollowingDrone.this.getOwner().get() instanceof LivingEntity) {
+                LivingEntity livingentity = (LivingEntity) AbstractEntityFollowingDrone.this.getOwner().get();
+                return !livingentity.isSpectator() && livingentity.getCommandSenderWorld() == AbstractEntityFollowingDrone.this.getCommandSenderWorld() && !(AbstractEntityFollowingDrone.this.distanceToSqr(livingentity) < 16);
             }
             return false;
         }
@@ -338,18 +339,18 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         public void tick() {
 
 
-            if (AbstractEntityDrone.this.getOwner().isPresent()) {
-                boolean cond1 = AbstractEntityDrone.this.distanceTo(AbstractEntityDrone.this.getOwner().get()) >= 10.0D;
-                boolean cond2 = !AbstractEntityDrone.this.isLeashed();
-                boolean cond3 = !AbstractEntityDrone.this.isPassenger();
+            if (AbstractEntityFollowingDrone.this.getOwner().isPresent()) {
+                boolean cond1 = AbstractEntityFollowingDrone.this.distanceTo(AbstractEntityFollowingDrone.this.getOwner().get()) >= 10.0D;
+                boolean cond2 = !AbstractEntityFollowingDrone.this.isLeashed();
+                boolean cond3 = !AbstractEntityFollowingDrone.this.isPassenger();
 
                 if (cond1 && cond2 && cond3) {
                     //teleportToOwner();
-                    AbstractEntityDrone.this.getLookControl().setLookAt(AbstractEntityDrone.this.getOwner().get(), 10.0F, (float) AbstractEntityDrone.this.getMaxHeadXRot());
-                    AbstractEntityDrone.this.getNavigation().moveTo(AbstractEntityDrone.this.getOwner().get(), 1);
+                    AbstractEntityFollowingDrone.this.getLookControl().setLookAt(AbstractEntityFollowingDrone.this.getOwner().get(), 10.0F, (float) AbstractEntityFollowingDrone.this.getMaxHeadXRot());
+                    AbstractEntityFollowingDrone.this.getNavigation().moveTo(AbstractEntityFollowingDrone.this.getOwner().get(), 1);
                 }
 
-                if (AbstractEntityDrone.this.distanceTo(AbstractEntityDrone.this.getOwner().get()) > 32) {
+                if (AbstractEntityFollowingDrone.this.distanceTo(AbstractEntityFollowingDrone.this.getOwner().get()) > 32) {
                     this.tryToTeleportNearEntity();
                 }
 
@@ -358,9 +359,9 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
 
         private void tryToTeleportNearEntity() {
 
-            if(AbstractEntityDrone.this.getOwner().isPresent()) {
+            if(AbstractEntityFollowingDrone.this.getOwner().isPresent()) {
 
-                BlockPos blockpos = AbstractEntityDrone.this.getOwner().get().blockPosition();
+                BlockPos blockpos = AbstractEntityFollowingDrone.this.getOwner().get().blockPosition();
 
                 for (int i = 0; i < 10; ++i) {
                     int j = this.getRandomNumber(-3, 3);
@@ -375,37 +376,37 @@ public abstract class AbstractEntityDrone extends CreatureEntity implements IAni
         }
 
         private int getRandomNumber(int min, int max) {
-            return AbstractEntityDrone.this.getRandom().nextInt(max - min + 1) + min;
+            return AbstractEntityFollowingDrone.this.getRandom().nextInt(max - min + 1) + min;
         }
 
         private boolean tryToTeleportToLocation(int x, int y, int z) {
 
-            if(!AbstractEntityDrone.this.getOwner().isPresent()){
+            if(!AbstractEntityFollowingDrone.this.getOwner().isPresent()){
                 return false;
             }
 
-            if (Math.abs((double) x - AbstractEntityDrone.this.getOwner().get().getX()) < 2.0D && Math.abs((double) z - AbstractEntityDrone.this.getOwner().get().getZ()) < 2.0D) {
+            if (Math.abs((double) x - AbstractEntityFollowingDrone.this.getOwner().get().getX()) < 2.0D && Math.abs((double) z - AbstractEntityFollowingDrone.this.getOwner().get().getZ()) < 2.0D) {
                 return false;
             } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
                 return false;
             } else {
-                AbstractEntityDrone.this.moveTo((double) x + 0.5D, y, (double) z + 0.5D, AbstractEntityDrone.this.yRot, AbstractEntityDrone.this.xRot);
-                AbstractEntityDrone.this.getNavigation().stop();
+                AbstractEntityFollowingDrone.this.moveTo((double) x + 0.5D, y, (double) z + 0.5D, AbstractEntityFollowingDrone.this.yRot, AbstractEntityFollowingDrone.this.xRot);
+                AbstractEntityFollowingDrone.this.getNavigation().stop();
                 return true;
             }
         }
 
         private boolean isTeleportFriendlyBlock(BlockPos pos) {
-            PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(AbstractEntityDrone.this.getCommandSenderWorld(), pos.mutable());
+            PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(AbstractEntityFollowingDrone.this.getCommandSenderWorld(), pos.mutable());
             if (pathnodetype != PathNodeType.WALKABLE) {
                 return false;
             } else {
-                BlockState blockstate = AbstractEntityDrone.this.getCommandSenderWorld().getBlockState(pos.below());
+                BlockState blockstate = AbstractEntityFollowingDrone.this.getCommandSenderWorld().getBlockState(pos.below());
                 if (blockstate.getBlock() instanceof LeavesBlock) {
                     return false;
                 } else {
-                    BlockPos blockpos = pos.subtract(AbstractEntityDrone.this.blockPosition());
-                    return AbstractEntityDrone.this.getCommandSenderWorld().noCollision(AbstractEntityDrone.this, AbstractEntityDrone.this.getBoundingBox().move(blockpos));
+                    BlockPos blockpos = pos.subtract(AbstractEntityFollowingDrone.this.blockPosition());
+                    return AbstractEntityFollowingDrone.this.getCommandSenderWorld().noCollision(AbstractEntityFollowingDrone.this, AbstractEntityFollowingDrone.this.getBoundingBox().move(blockpos));
                 }
             }
         }

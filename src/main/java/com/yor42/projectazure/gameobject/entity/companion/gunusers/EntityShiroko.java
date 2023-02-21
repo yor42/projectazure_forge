@@ -5,7 +5,7 @@ import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import com.yor42.projectazure.gameobject.items.ItemMissleDrone;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
@@ -264,7 +264,7 @@ public class EntityShiroko extends EntityGunUserBase {
 
         ItemStack stack = this.getSkillItem(0);
         if(stack.getItem() instanceof ItemMissleDrone && this.getTarget() != null){
-            AbstractEntityDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getCommandSenderWorld(), stack, this);
+            AbstractEntityFollowingDrone drone = ((ItemMissleDrone) stack.getItem()).CreateDrone(this.getCommandSenderWorld(), stack, this);
             if(drone != null){
                 drone.setTarget(this.getTarget());
                 this.getCommandSenderWorld().addFreshEntity(drone);

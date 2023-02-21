@@ -28,7 +28,7 @@ import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimPathNavigator;
 import com.yor42.projectazure.gameobject.entity.ai.CompanionTasks;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.tools.ItemBandage;
@@ -526,18 +526,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             return !this.isPVPenabled();
         }
 
-        if(target instanceof AbstractEntityDrone){
-            if(!((AbstractEntityDrone) target).getOwner().isPresent()){
+        if(target instanceof AbstractEntityFollowingDrone){
+            if(!((AbstractEntityFollowingDrone) target).getOwner().isPresent()){
                 return false;
             }
 
-            if((((AbstractEntityDrone) target).getOwner().get() instanceof AbstractEntityCompanion)){
+            if((((AbstractEntityFollowingDrone) target).getOwner().get() instanceof AbstractEntityCompanion)){
 
-                if (((AbstractEntityDrone) target).getOwner().get() == this) {
+                if (((AbstractEntityFollowingDrone) target).getOwner().get() == this) {
                     return true;
                 }
 
-                return ((AbstractEntityCompanion) ((AbstractEntityDrone) target).getOwner().get()).isOwnedBy(this.getOwner());
+                return ((AbstractEntityCompanion) ((AbstractEntityFollowingDrone) target).getOwner().get()).isOwnedBy(this.getOwner());
             }
         }
 
@@ -1584,7 +1584,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         else if(source.getEntity() instanceof TameableEntity && this.getOwner() != null && ((TameableEntity) source.getEntity()).isOwnedBy(this.getOwner())){
             return false;
         }
-        else if(source.getEntity() instanceof AbstractEntityDrone && ((AbstractEntityDrone) source.getEntity()).getOwner().isPresent() && (((AbstractEntityDrone) source.getEntity()).getOwner().get() == this ||  (((AbstractEntityDrone) source.getEntity()).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityDrone) source.getEntity()).getOwner().get()).isOwnedBy(this.getOwner())))){
+        else if(source.getEntity() instanceof AbstractEntityFollowingDrone && ((AbstractEntityFollowingDrone) source.getEntity()).getOwner().isPresent() && (((AbstractEntityFollowingDrone) source.getEntity()).getOwner().get() == this ||  (((AbstractEntityFollowingDrone) source.getEntity()).getOwner().get() instanceof AbstractEntityCompanion && this.getOwner() != null && ((AbstractEntityCompanion) ((AbstractEntityFollowingDrone) source.getEntity()).getOwner().get()).isOwnedBy(this.getOwner())))){
             return false;
         }
         if(source.getEntity() instanceof PlayerEntity && this.isOwnedBy((LivingEntity) source.getEntity())){

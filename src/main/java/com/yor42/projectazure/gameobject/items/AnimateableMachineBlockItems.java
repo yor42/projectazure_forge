@@ -18,6 +18,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
 public class AnimateableMachineBlockItems extends BlockItem implements IAnimatable {
 
     protected final String controllerName = "Controller";
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private final boolean shouldAddShiftToolTip;
 
     public AnimateableMachineBlockItems(Block blockIn, Properties builder, boolean shouldAddShiftToolTip) {

@@ -35,6 +35,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
@@ -83,7 +84,7 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
         this.attackdamage = attackDamage;
     }
 
-    protected final AnimationFactory factory = new AnimationFactory(this);
+    protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     @Override
     public void registerControllers(AnimationData animationData) {

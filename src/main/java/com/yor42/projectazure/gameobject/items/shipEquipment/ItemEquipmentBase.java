@@ -15,6 +15,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,7 +26,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnimatable {
 
 
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     protected enums.SLOTTYPE slot;
     protected int firedelay;

@@ -23,12 +23,13 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
 public class EntityThrownKnifeProjectile extends AbstractArrowEntity implements IAnimatable {
 
-    protected final AnimationFactory factory = new AnimationFactory(this);
+    protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private static final DataParameter<Boolean> SHOULDRETURN = EntityDataManager.defineId(EntityThrownKnifeProjectile.class, DataSerializers.BOOLEAN);
     private int previousDamage = 1;
     boolean dealtDamage = false;

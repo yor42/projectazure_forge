@@ -16,6 +16,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
@@ -24,7 +25,7 @@ import static com.yor42.projectazure.gameobject.blocks.AbstractMachineBlock.ACTI
 
 public abstract class AbstractAnimatedTileEntityMachines extends AbstractAnimateableEnergyTickTE implements IRecipeHolder, IRecipeHelperPopulator {
 
-    protected final AnimationFactory factory = new AnimationFactory(this);
+    protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     private final Object2IntOpenHashMap<ResourceLocation> recipes = new Object2IntOpenHashMap<>();
     protected IRecipeType<? extends IRecipe<IInventory>> recipeType;

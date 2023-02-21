@@ -34,6 +34,7 @@ import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,7 +49,7 @@ public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     public static final int life = 30;
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.defineId(EntityClaymore.class, DataSerializers.OPTIONAL_UUID);
-    protected final AnimationFactory factory = new AnimationFactory(this);
+    protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public EntityClaymore(EntityType<? extends LivingEntity> type, World worldIn) {
         super(type, worldIn);

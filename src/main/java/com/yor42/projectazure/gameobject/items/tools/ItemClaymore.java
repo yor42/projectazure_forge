@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,7 +27,7 @@ import static com.yor42.projectazure.gameobject.items.materials.ModMaterials.CLA
 
 public class ItemClaymore extends SwordItem implements IAnimatable {
 
-    AnimationFactory factory = new AnimationFactory(this);
+    AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public ItemClaymore() {
         //Haha unstackable claymore

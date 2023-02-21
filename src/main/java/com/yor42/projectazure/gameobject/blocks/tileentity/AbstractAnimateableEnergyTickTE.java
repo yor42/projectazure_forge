@@ -21,17 +21,28 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ITickableTileEntity {
-    protected final AnimationFactory factory = new AnimationFactory(this);
-    protected CustomEnergyStorage energyStorage = new CustomEnergyStorage(15000);
-    protected ItemStackHandler inventory = new ItemStackHandler(1);
+    protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    protected final CustomEnergyStorage energyStorage;
+    protected final ItemStackHandler inventory;
 
     protected AbstractAnimateableEnergyTickTE(TileEntityType<?> typeIn) {
+        this(typeIn, 15000, 1000, 1000, 1);
+    }
+
+    protected AbstractAnimateableEnergyTickTE(TileEntityType<?> typeIn, int buffercapacity, int inventorysize) {
+        this(typeIn, buffercapacity, buffercapacity, buffercapacity, inventorysize);
+    }
+
+    protected AbstractAnimateableEnergyTickTE(TileEntityType<?> typeIn, int buffercapacity, int maxin, int maxout, int invsize) {
         super(typeIn);
+        this.energyStorage = new CustomEnergyStorage(buffercapacity, maxin, maxout);
+        this.inventory = new ItemStackHandler(invsize);
     }
 
     @Override

@@ -140,9 +140,7 @@ public class RenderingUtils {
         entityrenderermanager.overrideCameraOrientation(quaternion1);
         entityrenderermanager.setRenderShadow(false);
         IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().renderBuffers().bufferSource();
-        RenderSystem.runAsFancy(() -> {
-            entityrenderermanager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880);
-        });
+        RenderSystem.runAsFancy(() -> entityrenderermanager.render(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, matrixstack, irendertypebuffer$impl, 15728880));
         irendertypebuffer$impl.endBatch();
         entityrenderermanager.setRenderShadow(true);
         entity.yBodyRot = f2;

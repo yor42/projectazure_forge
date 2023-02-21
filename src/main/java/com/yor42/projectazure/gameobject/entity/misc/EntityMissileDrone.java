@@ -23,7 +23,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import static com.yor42.projectazure.setup.register.RegisterItems.DRONE_BAMISSILE;
 import static com.yor42.projectazure.setup.register.registerEntity.DRONE_MISSILE;
 
-public class EntityMissileDrone extends AbstractEntityDrone{
+public class EntityMissileDrone extends AbstractEntityFollowingDrone {
 
     protected static final DataParameter<Integer> FireTick = EntityDataManager.defineId(EntityMissileDrone.class, DataSerializers.INT);
 
@@ -54,7 +54,7 @@ public class EntityMissileDrone extends AbstractEntityDrone{
     }
 
     @Override
-    protected PlayState propeller_predicate(AnimationEvent<AbstractEntityDrone> event) {
+    protected PlayState propeller_predicate(AnimationEvent<AbstractEntityFollowingDrone> event) {
         if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }

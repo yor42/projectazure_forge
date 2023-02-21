@@ -23,6 +23,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,7 +35,7 @@ import static com.yor42.projectazure.libs.utils.CompatibilityUtils.isCurioLoaded
 import static net.minecraft.util.Hand.MAIN_HAND;
 
 public class ItemDefibPaddle extends Item implements IAnimatable, ISyncable {
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public static final String controllerName = "paddle_controller";
 
     public ItemDefibPaddle() {

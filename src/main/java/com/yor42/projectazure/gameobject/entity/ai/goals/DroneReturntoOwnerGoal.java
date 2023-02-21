@@ -1,7 +1,7 @@
 package com.yor42.projectazure.gameobject.entity.ai.goals;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,8 +11,8 @@ import java.util.EnumSet;
 
 public class DroneReturntoOwnerGoal extends Goal {
 
-    AbstractEntityDrone entity;
-    public DroneReturntoOwnerGoal(AbstractEntityDrone entityIn){
+    AbstractEntityFollowingDrone entity;
+    public DroneReturntoOwnerGoal(AbstractEntityFollowingDrone entityIn){
         this.entity = entityIn;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }

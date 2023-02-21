@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
@@ -41,7 +41,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
 
-    public abstract EntityType<? extends AbstractEntityDrone> getEntityType();
+    public abstract EntityType<? extends AbstractEntityFollowingDrone> getEntityType();
 
     public abstract int getreloadDelay();
 
@@ -59,7 +59,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
         return this.maxFuel;
     }
 
-    public void AddInfotoDrone(ItemStack droneItem, AbstractEntityDrone drone){
+    public void AddInfotoDrone(ItemStack droneItem, AbstractEntityFollowingDrone drone){
         CompoundNBT stackCompound = droneItem.getOrCreateTag();
         if(stackCompound.contains("planedata")) {
             drone.readAdditionalSaveData(stackCompound.getCompound("planedata"));
@@ -95,8 +95,8 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     }
 
     @Nullable
-    public AbstractEntityDrone CreateDrone(World world, ItemStack stack, LivingEntity owner){
-        AbstractEntityDrone DroneEntity = this.getEntityType().create(world);
+    public AbstractEntityFollowingDrone CreateDrone(World world, ItemStack stack, LivingEntity owner){
+        AbstractEntityFollowingDrone DroneEntity = this.getEntityType().create(world);
         if(DroneEntity != null) {
             this.AddInfotoDrone(stack, DroneEntity);
             DroneEntity.setOwner(owner);
@@ -113,7 +113,7 @@ public abstract class AbstractItemPlaceableDrone extends ItemDestroyable impleme
     public ActionResultType useOn(ItemUseContext context) {
 
         if(!context.getLevel().isClientSide() && context.getPlayer() != null && context.getPlayer().isShiftKeyDown()){
-            AbstractEntityDrone DroneEntity = this.CreateDrone(context.getLevel(), context.getItemInHand(), context.getPlayer());
+            AbstractEntityFollowingDrone DroneEntity = this.CreateDrone(context.getLevel(), context.getItemInHand(), context.getPlayer());
             if(DroneEntity != null) {
                 ItemStack stack = context.getItemInHand();
                 context.getLevel().addFreshEntity(DroneEntity);

@@ -1,6 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.ai.targetAI;
 
-import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityDrone;
+import com.yor42.projectazure.gameobject.entity.misc.AbstractEntityFollowingDrone;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
@@ -9,11 +9,11 @@ import net.minecraft.entity.ai.goal.TargetGoal;
 import java.util.EnumSet;
 
 public class DroneOwnerAttackedTargetGoal extends TargetGoal {
-    private final AbstractEntityDrone Drone;
+    private final AbstractEntityFollowingDrone Drone;
     private LivingEntity attacker;
     private int timestamp;
 
-    public DroneOwnerAttackedTargetGoal(AbstractEntityDrone p_i1668_1_) {
+    public DroneOwnerAttackedTargetGoal(AbstractEntityFollowingDrone p_i1668_1_) {
         super(p_i1668_1_, false);
         this.Drone = p_i1668_1_;
         this.setFlags(EnumSet.of(Flag.TARGET));

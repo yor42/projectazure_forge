@@ -4,6 +4,7 @@ import com.yor42.projectazure.PAConfig;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -28,7 +29,25 @@ public class MathUtil {
         return rand;
     }
 
-    //Oh yeah its Big brain time
+    //Oh, yeah its Big brain time
+
+    public static CompoundNBT serializeBlockPos(BlockPos pos){
+        CompoundNBT compound = new CompoundNBT();
+        compound.putInt("x", pos.getX());
+        compound.putInt("Y", pos.getY());
+        compound.putInt("Z", pos.getZ());
+        return compound;
+    }
+
+    public static BlockPos deserializeBlockPos(CompoundNBT compound){
+
+        int x=compound.getInt("x");
+        int y=compound.getInt("Y");
+        int z=compound.getInt("Z");
+
+        return new BlockPos(x,y,z);
+    }
+
 
     /*
     Basic Degree-Radian Converters

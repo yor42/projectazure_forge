@@ -24,9 +24,7 @@ public class CuriosItemTagProvider extends ItemTagProvider {
 
     @Override
     protected void addTags() {
-        CURIOITEMS.forEach((slot, itemlist)-> {
-            CuriosSlot(slot, itemlist.toArray(new Item[0]));
-        });
+        CURIOITEMS.forEach((slot, itemlist)-> CuriosSlot(slot, itemlist.toArray(new Item[0])));
     }
 
     private void CuriosSlot(SlotTypePreset slottype, Item... item){
