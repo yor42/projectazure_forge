@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"gunFire_Right": {
+		"Fire_Right": {
 			"animation_length": 1.04,
 			"bones": {
 				"canonR": {
@@ -36,7 +36,7 @@
 				}
 			}
 		},
-		"ginFire_Left": {
+		"Fire_Left": {
 			"animation_length": 1.04,
 			"bones": {
 				"canonL": {
