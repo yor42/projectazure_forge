@@ -352,6 +352,8 @@
   "item.tooltip.energynonrechargeable": "Not Rechargeable",
   "item.tooltip.chargeprogress": "Charge Progress: %s",
   "item.tooltip.chargefailed_nobattery": "Charge FAILED: No Battery!",
+  "item.tooltip.drone_needsattention": "Logistics Drone at %s needs user attention: %s",
+  "item.tooltip.drone_needsattention_nopath": "No Valid Path Found to %s",
   "item.tooltip.ready": "READY!",
   "item.tooltip.not_revived": "Companion is not revived yet. Use Defibrillator first!",
 

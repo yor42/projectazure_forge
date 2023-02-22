@@ -10,11 +10,14 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -36,8 +39,9 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
 
     protected final CustomEnergyStorage battery;
     protected final ItemStackHandler inventory;
-    protected static final DataParameter<Optional<BlockPos>> HOMEPOSITION = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.OPTIONAL_BLOCK_POS);
-    protected static final DataParameter<Integer> DESTINATIONINDEX = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> CURRENTDESTINATIONINDEX = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.INT);
+    protected static final DataParameter<Integer> NEXTDESTINATIONINDEX = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.INT);
+    protected static final DataParameter<Boolean> ISLOADING = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.defineId(EntityLogisticsDrone.class, DataSerializers.OPTIONAL_UUID);
 
     protected final ArrayList<BlockPos> DestinationList = new ArrayList<>();
@@ -91,13 +95,14 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(HOMEPOSITION, Optional.empty());
-        this.entityData.define(DESTINATIONINDEX, 0);
+        this.entityData.define(CURRENTDESTINATIONINDEX, -1);
+        this.entityData.define(NEXTDESTINATIONINDEX, 0);
+        this.entityData.define(ISLOADING, false);
     }
 
-    @Nullable
+
     public BlockPos getHomePosition(){
-        return this.getEntityData().get(HOMEPOSITION).orElse(null);
+        return this.DestinationList.get(0);
     }
 
     public void addDestination(BlockPos pos){
@@ -105,16 +110,23 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
     }
 
     public BlockPos getNextDestination(){
-        return this.DestinationList.get(this.entityData.get(DESTINATIONINDEX));
+        return this.DestinationList.get(this.entityData.get(NEXTDESTINATIONINDEX));
+    }
+
+    public CustomEnergyStorage getBattery() {
+        return battery;
+    }
+
+    public ItemStackHandler getInventory() {
+        return inventory;
     }
 
     @Override
     public void addAdditionalSaveData(CompoundNBT compound) {
         super.addAdditionalSaveData(compound);
-        this.getEntityData().get(HOMEPOSITION).ifPresent((blockpos)->{
-            compound.put("homeposition", MathUtil.serializeBlockPos(blockpos));
-        });
-        compound.putInt("destinationindex", this.getEntityData().get(DESTINATIONINDEX));
+        compound.putInt("currentdestinationindex", this.getEntityData().get(CURRENTDESTINATIONINDEX));
+        compound.putInt("nextdestinationindex", this.getEntityData().get(NEXTDESTINATIONINDEX));
+        compound.putBoolean("isloading", this.getEntityData().get(ISLOADING));
         this.getEntityData().get(OWNER).ifPresent((uuid)->{
             compound.putUUID("owner", uuid);
         });
@@ -126,10 +138,9 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
     @Override
     public void readAdditionalSaveData(CompoundNBT compound) {
         super.readAdditionalSaveData(compound);
-        if(compound.contains("homeposition")){
-            this.getEntityData().set(HOMEPOSITION, Optional.of(MathUtil.deserializeBlockPos(compound.getCompound("homeposition"))));
-        }
-        this.getEntityData().set(DESTINATIONINDEX, compound.getInt("destinationindex"));
+        this.getEntityData().set(CURRENTDESTINATIONINDEX, compound.getInt("currentdestinationindex"));
+        this.getEntityData().set(NEXTDESTINATIONINDEX, compound.getInt("nextdestinationindex"));
+        this.getEntityData().set(ISLOADING, compound.getBoolean("isloading"));
 
         if(compound.hasUUID("owner")){
             this.getEntityData().set(OWNER, Optional.of(compound.getUUID("owner")));
@@ -146,7 +157,10 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
             return ActionResultType.FAIL;
         }
 
-
+        if(this.entityData.get(CURRENTDESTINATIONINDEX) == -1 && !this.getEntityData().get(ISLOADING)){
+            this.StartMovetoNextDestination();
+            return ActionResultType.SUCCESS;
+        }
 
         return super.interactAt(p_184199_1_, p_184199_2_, p_184199_3_);
 
@@ -156,10 +170,41 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
     public void aiStep() {
         super.aiStep();
 
-        if(this.battery.extractEnergy(2, false) !=2){
-            this.navigation.stop();
+        if(!this.onGround && this.battery.extractEnergy(2, false) !=2){
+            this.getNavigation().stop();
+            return;
         }
 
+        if(this.getEntityData().get(CURRENTDESTINATIONINDEX)>=0){
+            if(this.getNavigation().isDone()) {
+                int Pathindex = this.getEntityData().get(CURRENTDESTINATIONINDEX);
+                BlockPos destination = this.DestinationList.get(Pathindex);
+
+                if (this.getNavigation().getTargetPos().equals(destination)) {
+                    this.getNavigation().stop();
+                    this.getEntityData().set(CURRENTDESTINATIONINDEX, -1);
+                } else {
+                    this.getNavigation().moveTo(destination.getX() + 0.5, destination.getY() + 0.5, destination.getZ() + 0.5, 1.0);
+                }
+            }
+        }
+
+    }
+
+    public boolean StartMovetoNextDestination(){
+
+        if(this.DestinationList.size()<2){
+            return false;
+        }
+        if(this.getEntityData().get(CURRENTDESTINATIONINDEX) >=0){
+            return false;
+        }
+        int nextindex = this.getEntityData().get(NEXTDESTINATIONINDEX)+1;
+        if(nextindex == this.DestinationList.size()){
+            nextindex =0;
+        }
+        this.getEntityData().set(CURRENTDESTINATIONINDEX, nextindex);
+        return true;
     }
 
     @Override
