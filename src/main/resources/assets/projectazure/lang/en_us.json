@@ -439,13 +439,13 @@
 
   "rigging_valid_on.tooltip": "Useable On:",
 
-  "equiment.main_gun": "Main Gun",
-  "equiment.sub_gun": "Sub Gun",
-  "equiment.anti_air": "Anti Air",
-  "equiment.torpedo": "Torpedo",
-  "equiment.plane": "Planes",
-  "equiment.utility": "Utility",
-  "equiment.empty": "Empty",
+  "maingun": "Main Gun",
+  "subgun": "Sub Gun",
+  "antiair": "Anti Air",
+  "torpedo": "Torpedo",
+  "plane": "Planes",
+  "utility": "Utility",
+  "empty": "Empty",
 
   "tileentity.alloy_furnace.name": "Alloy Furnace",
   "tileentity.basic_refinery.name": "Basic Refinery",

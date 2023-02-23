@@ -184,4 +184,9 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
             }
         }
     }
+
+    @Override
+    public void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+
+    }
 }

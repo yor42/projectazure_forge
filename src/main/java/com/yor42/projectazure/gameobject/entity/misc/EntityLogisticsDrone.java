@@ -5,6 +5,9 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -19,6 +22,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -205,6 +209,19 @@ public class EntityLogisticsDrone extends CreatureEntity implements IAnimatable 
         }
         this.getEntityData().set(CURRENTDESTINATIONINDEX, nextindex);
         return true;
+    }
+
+    public static AttributeModifierMap.MutableAttribute MutableAttribute()
+    {
+        return MobEntity.createMobAttributes()
+                //Attribute
+                .add(Attributes.MOVEMENT_SPEED, 0.5F)
+                .add(ForgeMod.SWIM_SPEED.get(), 0.0F)
+                .add(Attributes.MAX_HEALTH, 10)
+                .add(Attributes.FLYING_SPEED, 0.5F)
+                .add(Attributes.ATTACK_DAMAGE, 2F)
+                .add(Attributes.FOLLOW_RANGE, 128F)
+                ;
     }
 
     @Override

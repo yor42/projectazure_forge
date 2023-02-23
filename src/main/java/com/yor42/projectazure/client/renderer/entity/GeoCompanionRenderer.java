@@ -4,15 +4,19 @@ import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Pose;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -25,13 +29,16 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Objects;
 
 public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & IAnimatable> extends ExtendedGeoEntityRenderer<T> {
@@ -224,7 +231,28 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         if(isBoneCosmetic(bone)) {
             bone.setHidden(this.shouldHideBone(bone.getName()));
         }
+
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+        /*
+        if(bone.getName().equals("RiggingHardPoint")){
+            stack.pushPose();
+            ItemStack Rigging = this.animatable.getRigging();
+            if(!(Rigging.getItem() instanceof ItemRiggingBase)){
+                return;
+            }
+            ItemRiggingBase riggingItem = (ItemRiggingBase) Rigging.getItem();
+            AnimatedGeoModel modelRiggingProvider = riggingItem.getModel();
+            RenderType type = RenderType.entitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
+            GeoModel riggingmodel = modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null));
+            stack.translate(bone.getPivotX()/16, bone.getPivotY()/16, bone.getPivotZ()/16);
+            AnimationEvent itemEvent = new AnimationEvent(riggingItem, 0, 0, 0, false, Arrays.asList(Rigging, this.animatable));
+
+            modelRiggingProvider.setLivingAnimations(riggingItem, riggingItem.getUniqueID(riggingItem), itemEvent);
+            riggingItem.render(riggingmodel, riggingItem, 0, type, stack, this.rtb, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            stack.popPose();
+        }
+
+         */
     }
 
     protected boolean isBoneCosmetic(GeoBone bone) {
@@ -294,6 +322,11 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             this.renderNameTag(entity, entity.getDisplayName(), stack, bufferIn, packedLightIn);
         }
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+    }
+
+    @Override
+    public void render(GeoModel model, T animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
     @Override

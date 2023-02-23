@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.gameobject.capability.multiinv.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -8,16 +9,23 @@ import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.*;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,13 +41,18 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
@@ -50,6 +63,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     protected enums.shipClass validclass;
+    protected Matrix4f dispatchedMat = new Matrix4f();
+    protected Matrix4f renderEarlyMat = new Matrix4f();
     protected IRenderTypeBuffer rtb;
 
 
@@ -164,6 +179,9 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public int getHangerSlots(){
         return 0;
     }
+    public int getUtilitySlots(){
+        return 0;
+    }
 
     public int getFuelTankCapacity(){return 50000;}
 
@@ -173,7 +191,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
                 new MultiInvEquipmentHandlerItemStack(container, "SubGun", getSubGunSlotCount(), enums.SLOTTYPE.SUB_GUN),
                 new MultiInvEquipmentHandlerItemStack(container, "AA", getAASlotCount(), enums.SLOTTYPE.AA),
                 new MultiInvEquipmentHandlerItemStack(container, "Torpedo", getTorpedoSlotCount(), enums.SLOTTYPE.TORPEDO),
-                new MultiInvEquipmentHandlerItemStack(container, "Hangar", getHangerSlots(), enums.SLOTTYPE.PLANE)
+                new MultiInvEquipmentHandlerItemStack(container, "Hangar", getHangerSlots(), enums.SLOTTYPE.PLANE),
+                new MultiInvEquipmentHandlerItemStack(container, "Utility", getUtilitySlots(), enums.SLOTTYPE.UTILITY)
         };
     }
 
@@ -200,6 +219,55 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @Override
+    public void renderEarly(Object animatable, MatrixStack stackIn, float partialTicks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        renderEarlyMat = stackIn.last().pose().copy();
+        IGeoRenderer.super.renderEarly(animatable, stackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    }
+
+    public Vector3d getRenderOffset(Object animatable, float partialtick) {
+        return Vector3d.ZERO;
+    }
+    /*
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+        if (bone.isTrackingXform()) {
+            MatrixStack.Entry entry = stack.last();
+            Matrix4f boneMat = entry.pose().copy();
+
+            // Model space
+            Matrix4f renderEarlyMatInvert = renderEarlyMat.copy();
+            renderEarlyMatInvert.invert();
+            Matrix4f modelPosBoneMat = boneMat.copy();
+            modelPosBoneMat.multiplyBackward(renderEarlyMatInvert);
+            bone.setModelSpaceXform(modelPosBoneMat);
+
+            // Local space
+            Matrix4f dispatchedMatInvert = this.dispatchedMat.copy();
+            dispatchedMatInvert.invert();
+            Matrix4f localPosBoneMat = boneMat.copy();
+            localPosBoneMat.multiplyBackward(dispatchedMatInvert);
+            // (Offset is the only transform we may want to preserve from the dispatched
+            // mat)
+            Vector3d renderOffset = this.getRenderOffset(this, 1.0F);
+            localPosBoneMat.translate(
+                    new Vector3f((float) renderOffset.x(), (float) renderOffset.y(), (float) renderOffset.z()));
+            bone.setLocalSpaceXform(localPosBoneMat);
+            // World space
+            Matrix4f worldPosBoneMat = localPosBoneMat.copy();
+            worldPosBoneMat.translate(new Vector3f((float) Minecraft.getInstance().cameraEntity.getX(),
+                    (float) Minecraft.getInstance().cameraEntity.getY(),
+                    (float) Minecraft.getInstance().cameraEntity.getZ()));
+            bone.setWorldSpaceXform(worldPosBoneMat);
+        }
+
+        IGeoRenderer.super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    }
+
+
+     */
+    @OnlyIn(Dist.CLIENT)
+    @Override
     public GeoModelProvider getGeoModelProvider() {
         return this.getModel();
     }
@@ -213,7 +281,60 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
             return this.getModel().getTextureLocation(null);
     }
 
+    public void applyEquipmentCustomRotation(ItemStack equipment,GeoModel EquipmentModel, enums.SLOTTYPE slottype, int index, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
+
+    }
+
     @OnlyIn(Dist.CLIENT)
-    public abstract void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch);
+    public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
+        matrixStackIn.pushPose();
+        AnimatedGeoModel modelRiggingProvider = this.getModel();
+
+        entityModel.getModel(entityModel.getModelLocation(null)).getBone("RiggingHardPoint").ifPresent(
+                (bone)->{
+                    matrixStackIn.pushPose();
+
+                    ArrayList<GeoBone> bonetree = new ArrayList<>();
+                    GeoBone bone1 = bone;
+                    while (true){
+                        bonetree.add(bone1);
+                        if(bone1.getParent()!=null) {
+                            bone1 = bone1.getParent();
+                            continue;
+                        }
+                        break;
+                    }
+
+                    for(int i=bonetree.size()-1; i>=0; i--){
+                        preparePositionRotationScale(bonetree.get(i), matrixStackIn);
+                    }
+                    matrixStackIn.translate(bone.getPivotX()/16, bone.getPivotY()/16, bone.getPivotZ()/16);
+                    RenderType type = RenderType.entitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
+                    GeoModel riggingmodel = modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null));
+                    AnimationEvent itemEvent = new AnimationEvent(this, 0, 0, Minecraft.getInstance().getFrameTime(), false, Arrays.asList(Rigging, entitylivingbaseIn));
+                    modelRiggingProvider.setLivingAnimations(this, this.getUniqueID(this), itemEvent);
+                    this.dispatchedMat = matrixStackIn.last().pose().copy();
+                    if(entitylivingbaseIn.tickCount%5==0) {
+
+                        riggingmodel.getBone("smoke").ifPresent((smokeloc) -> {
+                            double x = smokeloc.getWorldPosition().x;
+                            double y = smokeloc.getWorldPosition().y;
+                            double z = smokeloc.getWorldPosition().z;
+                            entitylivingbaseIn.getCommandSenderWorld().addParticle(ParticleTypes.SMOKE,
+                                    x,
+                                    y,
+                                    z, 0, 0, 0);
+                        });
+
+                    }
+                    this.render(riggingmodel, this, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                    this.RenderEquipments(Rigging, riggingmodel, matrixStackIn, bufferIn, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+                    matrixStackIn.popPose();
+                });
+        matrixStackIn.popPose();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public abstract void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch);
 
 }

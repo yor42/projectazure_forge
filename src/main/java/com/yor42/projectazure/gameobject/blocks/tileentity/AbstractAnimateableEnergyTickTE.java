@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity implements IAnimatable, INamedContainerProvider, ITickableTileEntity {
     protected final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     protected final CustomEnergyStorage energyStorage;
-    protected final ItemStackHandler inventory;
+    protected ItemStackHandler inventory;
 
     protected AbstractAnimateableEnergyTickTE(TileEntityType<?> typeIn) {
         this(typeIn, 15000, 1000, 1000, 1);

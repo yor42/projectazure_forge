@@ -10,12 +10,12 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rand;
 public class enums {
 
     public enum SLOTTYPE{
-        MAIN_GUN("equiment.main_gun"),
-        SUB_GUN("equiment.sub_gun"),
-        AA("equiment.antiair"),
-        TORPEDO("equiment.torpedo"),
-        PLANE("equiment.plane"),
-        UTILITY("equipment.utility");
+        MAIN_GUN("maingun"),
+        SUB_GUN("subgun"),
+        AA("antiair"),
+        TORPEDO("torpedo"),
+        PLANE("plane"),
+        UTILITY("utility");
 
         private final String name;
         SLOTTYPE(String name) {

@@ -66,6 +66,14 @@ public class MathUtil {
         if(!isValueDegree){
             Value = RadianRoDegree(value);
         }
+
+        if(Value>180){
+            Value=value-360;
+        }
+        else if(Value<-180){
+            Value+=380;
+        }
+
         Result=clamp(Value,minDegree, maxDegree);
 
         if(ShouldReturnRadian){

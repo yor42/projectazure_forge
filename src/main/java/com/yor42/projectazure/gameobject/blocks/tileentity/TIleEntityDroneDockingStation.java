@@ -188,99 +188,109 @@ public class TIleEntityDroneDockingStation extends LockableTileEntity implements
         boolean loadingcomplete = false;
         boolean chargecomplete = false;
 
-        if(this.ticksExisted%10==0) {
-            List<EntityLogisticsDrone> Dronelist = world.getEntitiesOfClass(EntityLogisticsDrone.class, new AxisAlignedBB(this.worldPosition.above()));
+        if(this.ticksExisted%10!=0) {
+            return;
+        }
 
-            if (!Dronelist.isEmpty()) {
-                EntityLogisticsDrone drone = Dronelist.get(0);
-                //chargebattery
-                CustomEnergyStorage battery = drone.getBattery();
-                int batterytoDrain = Math.min(100, battery.getMaxEnergyStored() - battery.getEnergyStored());
-                boolean isDroneBatteryFull = batterytoDrain == 0;
-                if (!isDroneBatteryFull) {
-                    int batteryextract = this.energyStorage.extractEnergy(batterytoDrain, false);
-                    //Out of Internal Battery
-                    if (batteryextract == 0) {
-                        return;
+
+        List<EntityLogisticsDrone> Dronelist = world.getEntitiesOfClass(EntityLogisticsDrone.class, new AxisAlignedBB(this.worldPosition.above()));
+
+        if(Dronelist.isEmpty()){
+            return;
+        }
+
+        EntityLogisticsDrone drone = Dronelist.get(0);
+        //chargebattery
+        CustomEnergyStorage battery = drone.getBattery();
+        int batterytoDrain = Math.min(100, battery.getMaxEnergyStored() - battery.getEnergyStored());
+        boolean isDroneBatteryFull = batterytoDrain == 0;
+        if (!isDroneBatteryFull) {
+            int batteryextract = this.energyStorage.extractEnergy(batterytoDrain, false);
+            //Out of Internal Battery
+            if (batteryextract == 0) {
+                return;
+            }
+            int dronecharged = battery.receiveEnergy(batteryextract, false);
+
+            if(dronecharged == 0){
+                chargecomplete = true;
+            }
+
+        }
+
+        //cargo unload
+        ItemStackHandler droneInventory = drone.getInventory();
+        if(this.inventoryscanindex <9){
+            ItemStack stack = droneInventory.getStackInSlot(this.inventoryscanindex);
+            if(!stack.isEmpty()) {
+
+                ItemFilterEntry activefilter = null;
+                for (ItemFilterEntry entry : this.ItemtounLoad) {
+                    boolean cond1 = entry.test(stack);
+                    if (this.invertunloaditem) {
+                        cond1 = !cond1;
                     }
-                    int dronecharged = battery.receiveEnergy(batteryextract, false);
-
-                    if(dronecharged == 0){
-                        chargecomplete = true;
+                    if (cond1) {
+                        activefilter = entry;
+                        break;
                     }
-
                 }
-
-                //cargo unload
-                ItemStackHandler droneInventory = drone.getInventory();
-                if(this.inventoryscanindex <9){
-                    ItemStack stack = droneInventory.getStackInSlot(this.inventoryscanindex);
-                    ItemFilterEntry activefilter = null;
-                    for(ItemFilterEntry entry:this.ItemtounLoad){
-                        boolean cond1 = entry.test(stack);
-                        if(this.invertunloaditem){
-                            cond1 = !cond1;
-                        }
-                        if(cond1){
-                            activefilter = entry;
+                if (activefilter != null) {
+                    ItemStack stack1 = droneInventory.extractItem(this.inventoryscanindex, activefilter.getMaxCount(), false);
+                    ItemStack inserted = ItemStack.EMPTY;
+                    for (int i = 0; i < 9; i++) {
+                        inserted = this.inventory.insertItem(i, stack1, false);
+                        if (inserted.isEmpty()) {
                             break;
                         }
                     }
-                    if(activefilter != null){
-                        ItemStack stack1 = droneInventory.extractItem(this.inventoryscanindex, activefilter.getMaxCount(), false);
-                        ItemStack inserted = ItemStack.EMPTY;
-                        for(int i=0; i<9; i++){
-                            inserted = this.inventory.insertItem(i, stack1, false);
-                            if(inserted.isEmpty()){
-                                break;
-                            }
-                        }
 
-                        if(!inserted.isEmpty()){
-                            droneInventory.insertItem(this.inventoryscanindex, inserted, false);
-                        }
+                    if (!inserted.isEmpty()) {
+                        droneInventory.insertItem(this.inventoryscanindex, inserted, false);
                     }
-                }else{
-                    ItemStack stack = this.inventory.getStackInSlot(this.inventoryscanindex);
-                    ItemFilterEntry activefilter = null;
-                    for(ItemFilterEntry entry:this.ItemtoLoad){
-                        boolean cond1 = entry.test(stack);
-                        if(this.invertloaditem){
-                            cond1 = !cond1;
-                        }
-                        if(cond1){
-                            activefilter = entry;
+                }
+            }
+        }else{
+            ItemStack stack = this.inventory.getStackInSlot(this.inventoryscanindex);
+            if(!stack.isEmpty()) {
+                ItemFilterEntry activefilter = null;
+                for (ItemFilterEntry entry : this.ItemtoLoad) {
+                    boolean cond1 = entry.test(stack);
+                    if (this.invertloaditem) {
+                        cond1 = !cond1;
+                    }
+                    if (cond1) {
+                        activefilter = entry;
+                        break;
+                    }
+                }
+                if (activefilter != null) {
+                    ItemStack stack1 = this.inventory.extractItem(this.inventoryscanindex, activefilter.getMaxCount(), false);
+                    ItemStack inserted = ItemStack.EMPTY;
+                    for (int i = 0; i < 9; i++) {
+                        inserted = droneInventory.insertItem(i, stack1, false);
+                        if (inserted.isEmpty()) {
                             break;
                         }
                     }
-                    if(activefilter != null) {
-                        ItemStack stack1 = this.inventory.extractItem(this.inventoryscanindex, activefilter.getMaxCount(), false);
-                        ItemStack inserted = ItemStack.EMPTY;
-                        for (int i = 0; i < 9; i++) {
-                            inserted = droneInventory.insertItem(i, stack1, false);
-                            if (inserted.isEmpty()) {
-                                break;
-                            }
-                        }
 
-                        if (!inserted.isEmpty()) {
-                            this.inventory.insertItem(this.inventoryscanindex, inserted, false);
-                        }
+                    if (!inserted.isEmpty()) {
+                        this.inventory.insertItem(this.inventoryscanindex, inserted, false);
                     }
-
                 }
-
-
-            }
-            this.inventoryscanindex += 1;
-            if (inventoryscanindex == this.inventory.getSlots()) {
-                this.inventoryscanindex = 0;
-                loadingcomplete = true;
             }
 
-            if(loadingcomplete && chargecomplete){
-                Dronelist.get(0).StartMovetoNextDestination();
-            }
+        }
+
+
+        this.inventoryscanindex += 1;
+        if (inventoryscanindex == this.inventory.getSlots()) {
+            this.inventoryscanindex = 0;
+            loadingcomplete = true;
+        }
+
+        if(loadingcomplete && chargecomplete){
+            Dronelist.get(0).StartMovetoNextDestination();
         }
 
     }
