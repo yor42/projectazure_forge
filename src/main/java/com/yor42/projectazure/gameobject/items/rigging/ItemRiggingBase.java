@@ -65,6 +65,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
 
     protected enums.shipClass validclass;
     protected final int maingunslotslots, subgunslots, torpedoslots, aaslots, hangerslots, utilityslots, fueltankcapacity;
+    protected boolean isShipRigging = true;
     protected Matrix4f dispatchedMat = new Matrix4f();
     protected Matrix4f renderEarlyMat = new Matrix4f();
     protected IRenderTypeBuffer rtb;
@@ -78,6 +79,10 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     @Override
     public void setCurrentRTB(IRenderTypeBuffer rtb) {
         this.rtb = rtb;
+    }
+
+    public boolean isShipRigging(){
+        return this.isShipRigging;
     }
 
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
@@ -128,10 +133,6 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         if (flagIn.isAdvanced()) {
             tooltip.add(new StringTextComponent(stack.getOrCreateTag().toString()));
         }
-    }
-
-    public void addHardPoints(){
-
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -402,5 +403,11 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         }
         return count;
     }
+
+    @Nullable
+    public String getFireAnimationname(enums.SLOTTYPE slottype, int index){
+        return null;
+    }
+
 
 }

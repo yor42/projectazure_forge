@@ -51,6 +51,7 @@ import com.yor42.projectazure.setup.register.RegisterItems;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
 import net.minecraft.block.material.PushReaction;
+import net.minecraft.client.renderer.entity.DragonFireballRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -488,6 +489,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 return !(this.level.getBlockState(p_188555_1_.below()).getMaterial() == AIR);
             }
         };
+
+
+        this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+        this.setPathfindingMalus(PathNodeType.WATER_BORDER, 0.0F);
+
         this.noCulling = true;
     }
 

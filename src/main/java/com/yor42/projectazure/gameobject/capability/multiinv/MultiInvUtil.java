@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
+import com.yor42.projectazure.libs.enums;
 import net.minecraft.item.ItemStack;
 
 public class MultiInvUtil {
@@ -11,6 +12,14 @@ public class MultiInvUtil {
     public static int getSlotCount(IMultiInventory inventories, int[] indices) {
         int sum = 0;
         for (int index : indices) {
+            sum += inventories.getInventory(index).getSlots();
+        }
+        return sum;
+    }
+
+    public static int getSlotCount(IMultiInventory inventories, enums.SLOTTYPE[] indices) {
+        int sum = 0;
+        for (enums.SLOTTYPE index : indices) {
             sum += inventories.getInventory(index).getSlots();
         }
         return sum;

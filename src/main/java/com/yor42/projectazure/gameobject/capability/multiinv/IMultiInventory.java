@@ -1,9 +1,15 @@
 package com.yor42.projectazure.gameobject.capability.multiinv;
 
+import com.yor42.projectazure.libs.enums;
+
 public interface IMultiInventory {
 
     int getInventoryCount();
     MultiInvStackHandler getInventory(int index);
+
+    default MultiInvStackHandler getInventory(enums.SLOTTYPE slottype){
+        return getInventory(slottype.ordinal());
+    }
 
     class Impl implements IMultiInventory {
 

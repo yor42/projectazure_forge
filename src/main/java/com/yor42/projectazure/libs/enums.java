@@ -2,8 +2,12 @@ package com.yor42.projectazure.libs;
 
 import com.tac.guns.common.Gun;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import net.minecraft.item.ItemStack;
+
+import java.util.function.Predicate;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.rand;
 
@@ -52,7 +56,7 @@ public class enums {
         }
     }
 
-    public enum shipClass {
+    public enum shipClass implements Predicate<AbstractEntityCompanion> {
         Destroyer("destroyer"),
         LightCruiser("light_cruiser"),
         HeavyCruiser("heavy_cruiser"),
@@ -63,7 +67,9 @@ public class enums {
         Submarine("submarine"),
         SubmarineCarrier("submarine_carrier"),
         MonitorShip("monitor"),
-        Repair("repair");
+        Repair("repair"),
+        ALLSHIP("allship"),
+        ANYCOMPANION("any");
 
         private final String name;
         shipClass(String name) {
@@ -72,6 +78,19 @@ public class enums {
 
         public String getName(){
             return this.name;
+        }
+
+        @Override
+        public boolean test(AbstractEntityCompanion livingEntity) {
+
+            if(!(livingEntity instanceof EntityKansenBase)){
+                return this == ANYCOMPANION;
+            }
+            else if(this == ALLSHIP){
+                return true;
+            }
+
+            return ((EntityKansenBase) livingEntity).getShipClass() == this;
         }
     }
 

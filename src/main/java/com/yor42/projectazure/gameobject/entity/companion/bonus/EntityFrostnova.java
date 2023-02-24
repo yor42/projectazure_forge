@@ -9,6 +9,7 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.libs.enums;
+import com.yor42.projectazure.setup.register.registerPotionEffects;
 import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
@@ -250,7 +251,7 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
             double y = target.getY(0.5) - (this.getY(0.7));
             double z = target.getZ() - (this.getZ());
 
-            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this, 8F, new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 1));
+            EntityArtsProjectile projectile = new EntityArtsProjectile(this.getCommandSenderWorld(), this, 8F, new EffectInstance(registerPotionEffects.FROSTBITE_REGISTRY.get(), 100, 1));
             projectile.shoot(x,y,z, 1.1F, 0.05F);
             projectile.setPos(this.getX(), this.getY()+1, this.getZ());
             this.getCommandSenderWorld().addFreshEntity(projectile);

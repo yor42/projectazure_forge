@@ -6,10 +6,7 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityClaymoreRenderer
 import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRenderer;
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.*;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityCrownSlayer;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityExcela;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityFrostnova;
-import com.yor42.projectazure.gameobject.entity.companion.bonus.EntityTalulah;
+import com.yor42.projectazure.gameobject.entity.companion.bonus.*;
 import com.yor42.projectazure.gameobject.entity.companion.gunusers.*;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityKyaru;

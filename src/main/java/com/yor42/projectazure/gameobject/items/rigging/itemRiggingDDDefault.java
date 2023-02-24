@@ -32,9 +32,11 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.yor42.projectazure.libs.enums.SLOTTYPE.SUB_GUN;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable {
@@ -67,17 +69,30 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
                 break;
             case TORPEDO:
                 switch (index){
+                    case 2:
                     case 0:
                         EquipmentModel.getBone("MountX").ifPresent((bone) -> bone.setRotationY(-MathUtil.DegreeToRadian(headPitch)));
                         break;
                     case 1:
                         EquipmentModel.getBone("MountX").ifPresent((bone) -> bone.setRotationY((MathUtil.LimitAngleMovement(-netHeadYaw, 45F, -45F, false, true))));
                         break;
-                    case 2:
-                        EquipmentModel.getBone("MountX").ifPresent((bone) -> bone.setRotationY(MathUtil.DegreeToRadian(headPitch)));
-                        break;
                 }
         }
 
+    }
+
+    @Nullable
+    @Override
+    public String getFireAnimationname(enums.SLOTTYPE slottype, int index) {
+        if(slottype == SUB_GUN){
+            if(index == 0){
+                return "Fire_Right";
+            }
+            else{
+                return "Fire_Left";
+            }
+        }
+
+        return super.getFireAnimationname(slottype, index);
     }
 }

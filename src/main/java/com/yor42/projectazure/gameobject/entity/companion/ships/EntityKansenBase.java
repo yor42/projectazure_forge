@@ -9,6 +9,8 @@ import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.enums.AmmoCategory;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
@@ -17,14 +19,17 @@ import com.yor42.projectazure.libs.utils.MathUtil;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerSounds;
+import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -35,25 +40,32 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.UUID;
 
-import static com.yor42.projectazure.libs.enums.SLOTTYPE.MAIN_GUN;
+import static com.yor42.projectazure.libs.enums.SLOTTYPE.*;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.*;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.PLAY_ONCE;
 
 public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
@@ -157,21 +169,23 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public boolean canUseRigging(){
-        return this.getRigging().getItem() instanceof ItemRiggingBase;
-    }
+        ItemStack rigging = this.getRigging();
+        Item RiggingItem = rigging.getItem();
+        if(!(RiggingItem instanceof ItemRiggingBase)){
+            return false;
+        }
 
-    public boolean Hasrigging(){
-        return this.getRigging().getItem() instanceof ItemRiggingBase;
+        if(!((ItemRiggingBase) RiggingItem).isShipRigging()){
+            return false;
+        }
+
+        return rigging.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).map((fluidtank)-> {
+            FluidStack stack = fluidtank.drain(1, IFluidHandler.FluidAction.SIMULATE);
+            return !stack.isEmpty();}).orElse(false);
     }
 
     public boolean isSailing(){
-        if(this.isInWater() && this.canUseRigging()){
-            ItemStack rigging = this.getRigging();
-            return rigging.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).map((fluidtank)-> {
-                int amount =fluidtank.getFluidInTank(0).getAmount();
-                return amount>0;}).orElse(false);
-        }
-        return false;
+        return this.isInWater() && this.canUseRigging();
     }
 
     public ItemStack getRigging(){
@@ -216,7 +230,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         if(rollBooleanRNG((float) (property.getRawhitChance()*distanceMultiplier))) {
             if (this.hasRigging()) {
                 DamageItem(property.getDamage(enums.DamageType.RIGGING), this.getRigging());
-                DamageComponent(property.getDamage(enums.DamageType.COMPONENT), this.getRigging(), property.isExplosive());
+                DamageComponent(this, property.getDamage(enums.DamageType.COMPONENT), this.getRigging(), property.isExplosive());
             }
             super.hurt(source, property.getDamage(enums.DamageType.ENTITY));
         }
@@ -293,9 +307,8 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     @Override
-    public boolean isNoGravity() {
-
-        return this.isSailing();
+    public boolean canStandOnFluid(Fluid p_230285_1_) {
+        return this.hasRigging() && p_230285_1_.is(FluidTags.WATER);
     }
 
     public ItemStack findAmmo(enums.AmmoCategory category){
@@ -312,7 +325,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     @Override
     public boolean canUseCannonOrTorpedo() {
-        return this.canUseRigging() && (canUseCannon(this.getRigging()) || canUseTorpedo(this.getRigging()));
+        return this.canUseRigging() && (canUseCannon(this, this.getRigging()) || canUseTorpedo(this, this.getRigging()));
     }
 
     public boolean canUseShell(enums.AmmoCategory types){
@@ -328,43 +341,76 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
     }
 
     public void AttackUsingCannon(LivingEntity target){
-        boolean shouldFire = this.canUseShell(getActiveShellCategory()) && this.canUseRigging() && canUseCannon(this.getRigging());
+        boolean shouldFire = this.canUseShell(getActiveShellCategory()) && this.canUseRigging() && canUseCannon(this, this.getRigging());
 
         if(shouldFire) {
-
-            enums.SLOTTYPE CannonType = getPreparedWeapon(this.getRigging(), MAIN_GUN, null) != ItemStack.EMPTY? MAIN_GUN : enums.SLOTTYPE.SUB_GUN;
-
+            ItemStack rigging = this.getRigging();
+            Item RiggingItem = rigging.getItem();
             ItemStack Ammostack = this.findAmmo(this.getActiveShellCategory());
-            if (Ammostack.getItem() instanceof ItemCannonshell) {
-                Vector3d vector3d = this.getViewVector(1.0F);
-                double x = target.getX() - (this.getX());
-                double y = target.getY(0.5) - (this.getY(0.5));
-                double z = target.getZ() - (this.getZ());
-                AmmoProperties properties = ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty();
-                EntityCannonPelllet shell = new EntityCannonPelllet(this.level, this, 0, 0, 0, properties);
-                Vector3d offset = new Vector3d(-0.5F,0,0).yRot(this.yBodyRot);
-                shell.setPos(this.getX()+offset.x, this.getY(0.5)+offset.y, this.getZ()+offset.z);
-                shell.shoot(x,y,z, 1F, 0.05F);
-                this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (MathUtil.getRand().nextFloat() - MathUtil.getRand().nextFloat()) * 0.2F + 1.0F);
-                this.level.addFreshEntity(shell);
-                Ammostack.shrink(1);
-                Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));
-
-                this.addExp(0.5F);
-                ItemStack FiringCannon = getPreparedWeapon(this.getRigging(), CannonType, this);
-                setEquipmentDelay(FiringCannon);
-                Vector3d recoil = new Vector3d(0.3F, 0, 0).yRot(this.yBodyRot);
-                Vector3d vec = this.getDeltaMovement().add(recoil);
-                this.setDeltaMovement(vec);
-                this.addMorale(-0.2);
-                this.startPlayingShipAttackAnim();
+            if(!(Ammostack.getItem() instanceof ItemCannonshell)){
+                return;
             }
+
+            getPreparedWeapon(this, rigging, MAIN_GUN, SUB_GUN).ifPresent(
+                    (pair)->{
+                        enums.SLOTTYPE cannonType = pair.getFirst();
+                        int slotindex = pair.getSecond();
+                        ItemStack FiringCannon = MultiInvUtil.getCap(rigging).getInventory(cannonType.ordinal()).getStackInSlot(slotindex);
+
+                        if(!(FiringCannon.getItem() instanceof ItemEquipmentBase)){
+                            return;
+                        }
+                        Vector3d vector3d = this.getViewVector(1.0F);
+                        double x = target.getX() - (this.getX());
+                        double y = target.getY(0.5) - (this.getY(0.5));
+                        double z = target.getZ() - (this.getZ());
+                        AmmoProperties properties = ((ItemCannonshell) Ammostack.getItem()).getAmmoProperty();
+                        EntityCannonPelllet shell = new EntityCannonPelllet(this.level, this, 0, 0, 0, properties);
+                        Vector3d offset = new Vector3d(-0.5F,0,0).yRot(this.yBodyRot);
+                        shell.setPos(this.getX()+offset.x, this.getY(0.5)+offset.y, this.getZ()+offset.z);
+                        shell.shoot(x,y,z, 1F, 0.05F);
+                        this.playSound(registerSounds.CANON_FIRE_MEDIUM, 1.0F, (MathUtil.getRand().nextFloat() - MathUtil.getRand().nextFloat()) * 0.2F + 1.0F);
+                        this.level.addFreshEntity(shell);
+                        Ammostack.shrink(1);
+                        Main.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(()->this), new spawnParticlePacket(this, spawnParticlePacket.Particles.CANNON_SMOKE, vector3d.x, vector3d.y, vector3d.z));
+
+                        if(RiggingItem instanceof ItemRiggingBase && !this.getCommandSenderWorld().isClientSide()) {
+                            ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
+                            final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerWorld) this.getCommandSenderWorld());
+                            final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, ItemDefibPaddle.controllerName);
+
+                            String animationname = riggingBase.getFireAnimationname(cannonType, slotindex);
+                            if (animationname != null) {
+                                controller.markNeedsReload();
+                                controller.setAnimation(new AnimationBuilder().addAnimation(animationname, PLAY_ONCE));
+                            }
+                        }
+
+                        this.addExp(0.5F);
+                        setEquipmentDelay(FiringCannon);
+                        Vector3d recoil = new Vector3d(0.3F, 0, 0).yRot(this.yBodyRot);
+                        Vector3d vec = this.getDeltaMovement().add(recoil);
+                        this.setDeltaMovement(vec);
+                        this.addMorale(-0.2);
+                        this.startPlayingShipAttackAnim();
+                    }
+            );
+
         }
     }
 
     public void AttackUsingTorpedo(LivingEntity target){
-        boolean shouldFire = this.isSailing() && canUseTorpedo(this.getRigging());
-        if(shouldFire){
+        if(!this.isSailing()){
+            return;
+        }
+        ItemStack rigging = this.getRigging();
+        Item RiggingItem = rigging.getItem();
+        getPreparedWeapon(this, rigging, TORPEDO).ifPresent((pair)->{
+            enums.SLOTTYPE slottype = pair.getFirst();
+            int index = pair.getSecond();
+
+            ItemStack torpedostack = MultiInvUtil.getCap(rigging).getInventory(slottype.ordinal()).getStackInSlot(index);
+
             Vector3d vector3d = this.getViewVector(1.0F);
             double d2 = target.getX() - (this.getX() + vector3d.x * 4.0D);
             double d3 = target.getY(0.5D) - this.getY() - 0.5D;
@@ -374,19 +420,34 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             torpedo.setPos(this.getX() + vector3d.x, this.getY() - 0.5D, torpedo.getZ() + vector3d.z);
             this.level.addFreshEntity(torpedo);
             this.addExp(1.0F);
-            ItemStack FiringTorpedo = getPreparedWeapon(this.getRigging(), enums.SLOTTYPE.TORPEDO, this);
-            ItemStackUtils.useAmmo(FiringTorpedo);
-            setEquipmentDelay(FiringTorpedo);
+            ItemStackUtils.useAmmo(torpedostack);
+            setEquipmentDelay(torpedostack);
+
+            if(RiggingItem instanceof ItemRiggingBase && !this.getCommandSenderWorld().isClientSide()) {
+                ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
+                final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerWorld) this.getCommandSenderWorld());
+                final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, ItemDefibPaddle.controllerName);
+
+                String animationname = riggingBase.getFireAnimationname(slottype, index);
+                if (animationname != null) {
+                    controller.markNeedsReload();
+                    controller.setAnimation(new AnimationBuilder().addAnimation(animationname, PLAY_ONCE));
+                }
+            }
             this.addMorale(-0.15);
-        }
+
+        });
     }
 
     private void kansenFloat() {
-        Vector3d vec3d = this.getDeltaMovement();
-        if(this.getFluidHeight(FluidTags.WATER)>0.3)
-            this.setDeltaMovement(vec3d.x, vec3d.y + (double)(vec3d.y < (double)0.06F ? 5.0E-3F : 0.0F), vec3d.z);
-        else if (vec3d.y>0){
-            this.lerpMotion(vec3d.x, vec3d.y - 0.0001, vec3d.z);
+
+        if (this.isInWater()) {
+            ISelectionContext iselectioncontext = ISelectionContext.of(this);
+            if (iselectioncontext.isAbove(FlowingFluidBlock.STABLE_SHAPE, this.blockPosition(), true) && !this.level.getFluidState(this.blockPosition().above()).is(FluidTags.WATER)) {
+                this.onGround = true;
+            } else {
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.5D).add(0.0D, 0.05D, 0.0D));
+            }
         }
     }
 
