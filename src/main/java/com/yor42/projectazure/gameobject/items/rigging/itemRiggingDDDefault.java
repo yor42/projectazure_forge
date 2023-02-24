@@ -44,18 +44,11 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
         this.validclass = enums.shipClass.Destroyer;
     }
 
-
     @Override
     public AnimatedGeoModel getModel() {
         return new modelDDRiggingDefault();
     }
 
-    @Override
-    protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
-    {
-        return PlayState.STOP;
-    }
-    
     @Override
     public void applyEquipmentCustomRotation(ItemStack equipment, GeoModel EquipmentModel, enums.SLOTTYPE slottype, int index, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 

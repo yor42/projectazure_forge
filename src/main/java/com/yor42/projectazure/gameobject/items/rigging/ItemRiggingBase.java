@@ -81,7 +81,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        return null;
+        return PlayState.STOP;
     }
 
     @Override
