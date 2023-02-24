@@ -22,7 +22,7 @@ public class registerPotionEffects {
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, Constants.MODID);
     public static RegistryObject<Effect> ACUTE_ORIPATHY_REGISTRY = EFFECTS.register("acute_oripathy", AcuteOripathyEffect::new);
 
-    public static RegistryObject<Effect> FROSTBITE_REGISTRY = EFFECTS.register("frostbite", ()-> new AcuteOripathyEffect().addAttributeModifier(Attributes.MOVEMENT_SPEED, UUID.randomUUID().toString(), -0.11F, AttributeModifier.Operation.MULTIPLY_TOTAL));
+    public static RegistryObject<Effect> FROSTBITE_REGISTRY = EFFECTS.register("frostbite", ()-> new FrostbiteEffect().addAttributeModifier(Attributes.MOVEMENT_SPEED, UUID.randomUUID().toString(), -0.11F, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
     public static class AcuteOripathyEffect extends Effect{
 
