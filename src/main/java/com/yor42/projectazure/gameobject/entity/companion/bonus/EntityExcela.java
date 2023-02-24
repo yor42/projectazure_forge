@@ -238,7 +238,7 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
+    public void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerShiningResonanceInventory.Supplier(this), (buffer)-> buffer.writeInt(this.getId()));
     }
 

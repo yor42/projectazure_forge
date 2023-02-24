@@ -2984,6 +2984,11 @@
 					"name": "itemOffHand",
 					"parent": "LeftHand",
 					"pivot": [8.5, 13.75, 0]
+				},
+				{
+					"name": "RiggingHardPoint",
+					"parent": "Body",
+					"pivot": [0, 39.9, 4.25]
 				}
 			]
 		}

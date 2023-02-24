@@ -283,7 +283,7 @@ public class EntityYato extends AbstractSwordUserBase implements IAknOp {
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
+    public void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 

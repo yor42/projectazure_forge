@@ -54,6 +54,11 @@
 					]
 				},
 				{
+					"name": "RiggingHardPoint",
+					"parent": "Body",
+					"pivot": [0, 43.65, 4.25]
+				},
+				{
 					"name": "cosmetic_body",
 					"parent": "Body",
 					"pivot": [-6.23258, 29.16367, -1.62589]

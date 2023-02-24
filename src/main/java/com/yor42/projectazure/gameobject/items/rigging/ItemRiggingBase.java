@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.gameobject.capability.multiinv.*;
 import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -14,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -37,6 +39,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -46,7 +49,10 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
@@ -54,14 +60,25 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getCurrentHP;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getHPColor;
 
-public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable, IGeoRenderer {
+public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimatable, ISyncable, IGeoRenderer {
 
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+    static {
+        AnimationController.addModelFetcher((IAnimatable object) -> {
+            if (object instanceof ItemRiggingBase) {
+                ItemRiggingBase item = (ItemRiggingBase) object;
+                return (IAnimatableModel<Object>) (item).getGeoModelProvider();
+                }
+            return null;
+        });
+    }
 
     protected enums.shipClass validclass;
     protected final int maingunslotslots, subgunslots, torpedoslots, aaslots, hangerslots, utilityslots, fueltankcapacity;
@@ -69,6 +86,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     protected Matrix4f dispatchedMat = new Matrix4f();
     protected Matrix4f renderEarlyMat = new Matrix4f();
     protected IRenderTypeBuffer rtb;
+
+    public static String CONTROLLER_NAME = "rigging_controller";
 
 
     @Override
@@ -92,11 +111,12 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     @Override
     public void registerControllers(AnimationData data)
     {
-        data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
+        data.addAnimationController(new AnimationController(this, CONTROLLER_NAME, 0, this::predicate));
     }
 
     public ItemRiggingBase(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int fuelcapccity, int HP) {
         super(properties, HP);
+        GeckoLibNetwork.registerSyncable(this);
         this.maingunslotslots = maingunslotslots;
         this.subgunslots = subgunslots;
         this.aaslots = aaslots;
@@ -167,7 +187,9 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         ItemStack stack = player.getItemInHand(hand);
         if(!world.isClientSide()) {
             if (player.isShiftKeyDown()) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, new RiggingContainer.Provider(stack), buf -> buf.writeItem(stack));
+                NetworkHooks.openGui((ServerPlayerEntity) player, new RiggingContainer.Provider(stack, null), (buf) -> {
+                    buf.writeItem(stack);
+                });
                 return ActionResult.success(stack);
             }
         }
@@ -241,7 +263,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public Vector3d getRenderOffset(Object animatable, float partialtick) {
         return Vector3d.ZERO;
     }
-    /*
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
@@ -269,17 +291,17 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
             bone.setLocalSpaceXform(localPosBoneMat);
             // World space
             Matrix4f worldPosBoneMat = localPosBoneMat.copy();
-            worldPosBoneMat.translate(new Vector3f((float) Minecraft.getInstance().cameraEntity.getX(),
+            /*worldPosBoneMat.translate(new Vector3f((float) Minecraft.getInstance().cameraEntity.getX(),
                     (float) Minecraft.getInstance().cameraEntity.getY(),
                     (float) Minecraft.getInstance().cameraEntity.getZ()));
+
+             */
             bone.setWorldSpaceXform(worldPosBoneMat);
         }
 
         IGeoRenderer.super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
-
-     */
     @OnlyIn(Dist.CLIENT)
     @Override
     public GeoModelProvider getGeoModelProvider() {
@@ -301,7 +323,15 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     @OnlyIn(Dist.CLIENT)
     public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
         matrixStackIn.pushPose();
+        this.dispatchedMat = matrixStackIn.last().pose().copy();
         AnimatedGeoModel modelRiggingProvider = this.getModel();
+
+        if(!(Rigging.getItem() instanceof ItemRiggingBase)){
+            return;
+        }
+
+        ItemRiggingBase riggingBase = (ItemRiggingBase) Rigging.getItem();
+
 
         entityModel.getModel(entityModel.getModelLocation(null)).getBone("RiggingHardPoint").ifPresent(
                 (bone)->{
@@ -324,11 +354,10 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
                     matrixStackIn.translate(bone.getPivotX()/16, bone.getPivotY()/16, bone.getPivotZ()/16);
                     RenderType type = RenderType.entitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
                     GeoModel riggingmodel = modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null));
-                    AnimationEvent itemEvent = new AnimationEvent(this, 0, 0, Minecraft.getInstance().getFrameTime(), false, Arrays.asList(Rigging, entitylivingbaseIn));
-                    modelRiggingProvider.setLivingAnimations(this, this.getUniqueID(this), itemEvent);
-                    this.dispatchedMat = matrixStackIn.last().pose().copy();
+                    AnimationEvent itemEvent = new AnimationEvent(riggingBase, 0, 0, Minecraft.getInstance().getFrameTime(), false, Collections.singletonList(Rigging));
+                    modelRiggingProvider.setLivingAnimations(riggingBase, this.getUniqueID(riggingBase), itemEvent);
                     if(entitylivingbaseIn.tickCount%5==0) {
-
+                        /*
                         riggingmodel.getBone("smoke").ifPresent((smokeloc) -> {
                             double x = smokeloc.getWorldPosition().x;
                             double y = smokeloc.getWorldPosition().y;
@@ -338,6 +367,8 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
                                     y,
                                     z, 0, 0, 0);
                         });
+
+                         */
 
                     }
                     this.render(riggingmodel, this, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
@@ -405,7 +436,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @Nullable
-    public String getFireAnimationname(enums.SLOTTYPE slottype, int index){
+    public Pair<String, Integer> getFireAnimationname(enums.SLOTTYPE slottype, int index){
         return null;
     }
 

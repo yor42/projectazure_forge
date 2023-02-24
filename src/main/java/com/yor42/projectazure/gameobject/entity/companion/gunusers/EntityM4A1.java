@@ -250,7 +250,7 @@ public class EntityM4A1 extends EntityGunUserBase{
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
+    public void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerGFLInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
     }
 }

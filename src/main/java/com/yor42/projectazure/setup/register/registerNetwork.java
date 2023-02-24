@@ -90,6 +90,18 @@ public class registerNetwork {
                 .encoder(SelectInitialSpawnSetPacket::encode)
                 .add();
 
+        channel.messageBuilder(ChangeContainerPacket.class,15)
+                .decoder(ChangeContainerPacket::decode)
+                .encoder(ChangeContainerPacket::encode)
+                .consumer(ChangeContainerPacket::handle)
+                .add();
+
+        channel.messageBuilder(ReopenEntityInventoryPacket.class,16)
+                .consumer(ReopenEntityInventoryPacket::handle)
+                .decoder(ReopenEntityInventoryPacket::decode)
+                .encoder(ReopenEntityInventoryPacket::encode)
+                .add();
+
         return channel;
     }
 

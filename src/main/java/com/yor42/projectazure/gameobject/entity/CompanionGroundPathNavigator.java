@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.pathfinding.CompanionWalkerNodeProcessor;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.network.DebugPacketSender;
 import net.minecraft.pathfinding.*;
@@ -99,8 +100,10 @@ public class CompanionGroundPathNavigator extends GroundPathNavigator {
         }
     }
 
+
     @Override
     public boolean isStableDestination(BlockPos p_188555_1_) {
-        return super.isStableDestination(p_188555_1_);
+
+        return (this.companion.canUseRigging() && this.level.getBlockState(p_188555_1_).is(Blocks.WATER)) || super.isStableDestination(p_188555_1_);
     }
 }

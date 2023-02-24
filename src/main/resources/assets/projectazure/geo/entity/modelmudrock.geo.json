@@ -49,6 +49,11 @@
 					]
 				},
 				{
+					"name": "RiggingHardPoint2",
+					"parent": "Body",
+					"pivot": [0, 38.9, 3.5]
+				},
+				{
 					"name": "armor_body",
 					"parent": "Body",
 					"pivot": [0, 50, 0],
@@ -2693,6 +2698,10 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "RiggingHardPoint",
+					"pivot": [0, 37.9, 4]
 				}
 			]
 		}

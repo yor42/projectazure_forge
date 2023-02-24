@@ -3033,6 +3033,11 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "RiggingHardPoint",
+					"parent": "Body",
+					"pivot": [0, 39.65, 4.75]
 				}
 			]
 		}

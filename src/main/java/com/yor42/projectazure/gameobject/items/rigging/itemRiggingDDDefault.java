@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.client.model.rigging.modelDDRiggingDefault;
 import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvStackHandler;
@@ -24,6 +25,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -31,6 +34,7 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -38,8 +42,12 @@ import java.util.Arrays;
 
 import static com.yor42.projectazure.libs.enums.SLOTTYPE.SUB_GUN;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
+import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes.PLAY_ONCE;
 
 public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable {
+
+    int FIRELEFT = 0;
+    int FIRERIGHT = 1;
 
     public itemRiggingDDDefault(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int fuelcapccity,  int HP) {
         super(properties, maingunslotslots, subgunslots, aaslots, torpedoslots, hangerslots, utilityslots, fuelcapccity, HP);
@@ -83,16 +91,28 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
 
     @Nullable
     @Override
-    public String getFireAnimationname(enums.SLOTTYPE slottype, int index) {
+    public Pair<String, Integer> getFireAnimationname(enums.SLOTTYPE slottype, int index) {
         if(slottype == SUB_GUN){
             if(index == 0){
-                return "Fire_Right";
+                return new Pair<>("Fire_Right", FIRERIGHT);
             }
             else{
-                return "Fire_Left";
+                return new Pair<>("Fire_Left", FIRELEFT);
             }
         }
 
         return super.getFireAnimationname(slottype, index);
     }
+
+    @Override
+    public void onAnimationSync(int id, int state) {
+        final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, CONTROLLER_NAME);
+        if(state == FIRELEFT){
+            controller.setAnimation(new AnimationBuilder().addAnimation("Fire_Left", PLAY_ONCE));
+        }
+        else if(state == FIRERIGHT){
+            controller.setAnimation(new AnimationBuilder().addAnimation("Fire_Right", PLAY_ONCE));
+        }
+    }
+
 }

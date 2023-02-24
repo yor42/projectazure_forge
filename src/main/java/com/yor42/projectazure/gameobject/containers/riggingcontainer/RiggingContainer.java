@@ -22,6 +22,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static com.yor42.projectazure.setup.register.RegisterContainer.RIGGING_INVENTORY;
@@ -29,10 +31,19 @@ import static com.yor42.projectazure.setup.register.RegisterContainer.RIGGING_IN
 public class RiggingContainer extends Container {
 
     public ItemStack riggingStack;
+    @Nullable
+    public UUID previousEntityUUID = null;
 
     public RiggingContainer(int id, PlayerInventory playerInv, PacketBuffer data) {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = data.readItem();
+        try {
+            this.previousEntityUUID = data.readUUID();
+        }
+        catch (Exception ignored){
+        }
+
+
 
         IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
 
@@ -53,9 +64,10 @@ public class RiggingContainer extends Container {
         }
     }
 
-    public RiggingContainer(int id, PlayerInventory playerInv, ItemStack riggingStack) {
+    public RiggingContainer(int id, PlayerInventory playerInv, ItemStack riggingStack, @Nullable UUID ownerID) {
         super(RIGGING_INVENTORY.get(), id);
         this.riggingStack = riggingStack;
+        this.previousEntityUUID = ownerID;
 
         IMultiInventory inventories = MultiInvUtil.getCap(this.riggingStack);
 
@@ -159,9 +171,11 @@ public class RiggingContainer extends Container {
 
     public static class Provider implements INamedContainerProvider {
         private final ItemStack stack;
+        private final UUID ownerID;
 
-        public Provider(ItemStack stack) {
+        public Provider(ItemStack stack, UUID ownerID) {
             this.stack = stack;
+            this.ownerID = ownerID;
         }
 
         @Nonnull
@@ -172,7 +186,7 @@ public class RiggingContainer extends Container {
 
         @Override
         public Container createMenu(int windowId, @Nonnull PlayerInventory inventory, @Nonnull PlayerEntity player) {
-            return new RiggingContainer(windowId, inventory, this.stack);
+            return new RiggingContainer(windowId, inventory, this.stack, this.ownerID);
         }
     }
 }

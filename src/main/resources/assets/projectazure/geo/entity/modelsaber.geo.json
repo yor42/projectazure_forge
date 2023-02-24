@@ -42,6 +42,11 @@
 					]
 				},
 				{
+					"name": "RiggingHardPoint",
+					"parent": "Body",
+					"pivot": [0, 38.9, 4]
+				},
+				{
 					"name": "cosmetic_body",
 					"parent": "Body",
 					"pivot": [-5.7132, 26.73336, -1.4904]
@@ -1815,7 +1820,21 @@
 				{
 					"name": "itemMainHand",
 					"parent": "RightHand",
-					"pivot": [-7.9488, 23.2208, 0]
+					"pivot": [-7.9488, 23.2208, 0],
+					"cubes": [
+						{
+							"origin": [-8.9488, 23.2208, -22],
+							"size": [1, 1, 23],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [1, 1]},
+								"east": {"uv": [0, 0], "uv_size": [23, 1]},
+								"south": {"uv": [0, 0], "uv_size": [1, 1]},
+								"west": {"uv": [0, 0], "uv_size": [23, 1]},
+								"up": {"uv": [1, 23], "uv_size": [-1, -23]},
+								"down": {"uv": [1, 23], "uv_size": [-1, -23]}
+							}
+						}
+					]
 				},
 				{
 					"name": "cosmetic_righthand",

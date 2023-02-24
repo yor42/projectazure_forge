@@ -345,7 +345,7 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
+    public void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerFGOInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 

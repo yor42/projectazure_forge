@@ -59,4 +59,8 @@ public class ItemRiggingBBDefault extends ItemRiggingBase{
     }
 
 
+    @Override
+    public void onAnimationSync(int id, int state) {
+
+    }
 }

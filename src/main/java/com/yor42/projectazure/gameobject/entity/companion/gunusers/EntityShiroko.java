@@ -61,7 +61,7 @@ public class EntityShiroko extends EntityGunUserBase {
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
+    public void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerBAInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
     }
 

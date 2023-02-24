@@ -242,7 +242,7 @@ public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttack
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
+    public void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerFGOInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 

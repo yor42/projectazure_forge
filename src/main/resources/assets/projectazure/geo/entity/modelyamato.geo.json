@@ -192,6 +192,11 @@
 					]
 				},
 				{
+					"name": "RiggingHardPoint",
+					"parent": "bone3",
+					"pivot": [0, 44.9, 3.75]
+				},
+				{
 					"name": "bone",
 					"parent": "Body",
 					"pivot": [-5.75, 32.02013, -1.56055],

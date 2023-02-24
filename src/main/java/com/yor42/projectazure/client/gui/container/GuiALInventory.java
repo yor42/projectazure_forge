@@ -4,21 +4,29 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerALInventory;
+import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingContainer;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
+import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.ClientUtils;
+import com.yor42.projectazure.network.packets.ChangeContainerPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +123,12 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
         matrixStack.popPose();
     }
 
+    @Override
+    protected void init() {
+        super.init();
+        this.drawButtons();
+    }
+
     protected void renderLabels(MatrixStack matrixStack, int mousex, int mousey) {
         matrixStack.pushPose();
         float rendersize = 0.8F;
@@ -127,18 +141,14 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
         this.font.draw(matrixStack, leveltext, (float)168-this.font.width(leveltext), (float)81, 14085119);
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderMorale(matrixStack, mousex, mousey);
-        this.drawButtons(matrixStack, mousex, mousey);
         //this.renderButton(matrixStack);
     }
 
-    private void drawButtons(MatrixStack stack, int MouseX, int MouseY) {
+    private void drawButtons() {
 
         int FreeRoamX = this.host.isFreeRoaming()? 185:176;
         int itemPickupX = this.host.shouldPickupItem()? 176:185;
-        ImageButton FreeroamButton = new ImageButton(this.leftPos+159,this.topPos+52,9,9,FreeRoamX,25,9,TEXTURE,action->switchBehavior());
-        ImageButton ItemPickupButton = new ImageButton(this.leftPos+159,this.topPos+62,9,9,itemPickupX,43,9,TEXTURE,action->switchItemBehavior());
-
-        if(this.isHovering(159,52,9,9, MouseX, MouseY)){
+        Button.ITooltip FREEROAM = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
 
             if(this.host.isFreeRoaming()){
@@ -154,9 +164,10 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
             }else{
                 tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").withStyle(TextFormatting.GRAY));
             }
-            this.renderWrappedToolTip(stack, tooltips, MouseX-this.leftPos, MouseY-this.topPos, this.font);
-        }
-        else if(this.isHovering(159,62,9,9, MouseX, MouseY)){
+            this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
+        };
+
+        Button.ITooltip ITEM = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
             if(this.host.shouldPickupItem()){
                 tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.on").withStyle(TextFormatting.GREEN));
@@ -164,14 +175,28 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
             else{
                 tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").withStyle(TextFormatting.BLUE));
             }
-            this.renderWrappedToolTip(stack, tooltips, MouseX-this.leftPos, MouseY-this.topPos, this.font);
-        }
+            this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
+        };
+        ImageButton FreeroamButton = new ImageButton(this.leftPos+159,this.topPos+52,9,9,FreeRoamX,25,9,TEXTURE,256,256, action->switchBehavior(), FREEROAM, StringTextComponent.EMPTY);
+        ImageButton ItemPickupButton = new ImageButton(this.leftPos+159,this.topPos+62,9,9,itemPickupX,43,9,TEXTURE,256,256,action->switchItemBehavior(), ITEM, StringTextComponent.EMPTY);
+        ImageButton RiggingButton = new ImageButton(this.leftPos+98,this.topPos+6,12,12,14,193,13,TEXTURE,action->switchScreen());
+
         this.addButton(ItemPickupButton);
         this.addButton(FreeroamButton);
+        this.addButton(RiggingButton);
     }
 
     private void switchItemBehavior() {
         this.host.SwitchItemBehavior();
+    }
+
+    private void switchScreen() {
+
+        if(!(this.host.getRigging().getItem() instanceof ItemRiggingBase)){
+            return;
+        }
+        Main.NETWORK.sendToServer(new ChangeContainerPacket(this.host.getRigging(), this.host.getUUID()));
+        this.onClose();
     }
     private void switchBehavior() {
         this.host.SwitchFreeRoamingStatus();

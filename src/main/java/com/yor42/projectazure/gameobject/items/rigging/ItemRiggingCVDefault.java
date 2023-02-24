@@ -13,15 +13,21 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class ItemRiggingCVDefault extends ItemRiggingBase{
 
+    int FIRELEFT = 0;
+    int FIRERIGHT = 1;
+
     public ItemRiggingCVDefault(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int fuelcapccity, int HP) {
         super(properties, maingunslotslots, subgunslots, aaslots, torpedoslots, hangerslots, utilityslots, fuelcapccity, HP);
+        this.validclass = enums.shipClass.AircraftCarrier;
     }
 
     @Override
@@ -35,5 +41,10 @@ public class ItemRiggingCVDefault extends ItemRiggingBase{
             EquipmentModel.getBone("MountX").ifPresent((bone)->bone.setRotationY(-MathUtil.DegreeToRadian(netHeadYaw)));
             EquipmentModel.getBone("Barrel").ifPresent((bone)->bone.setRotationX(MathUtil.LimitAngleMovement(headPitch, 7.5F, -12.5F, false, true)));
         }
+    }
+
+    @Override
+    public void onAnimationSync(int id, int state) {
+        final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, CONTROLLER_NAME);
     }
 }

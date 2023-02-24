@@ -2701,6 +2701,11 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "RiggingHardPoint",
+					"parent": "Body",
+					"pivot": [0, 34.475, 3.5]
 				}
 			]
 		}

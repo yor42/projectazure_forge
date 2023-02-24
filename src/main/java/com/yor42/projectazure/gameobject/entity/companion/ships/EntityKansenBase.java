@@ -1,5 +1,6 @@
 package com.yor42.projectazure.gameobject.entity.companion.ships;
 
+import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
@@ -55,6 +56,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
@@ -62,6 +64,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.UUID;
 
+import static com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase.CONTROLLER_NAME;
 import static com.yor42.projectazure.libs.enums.SLOTTYPE.*;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.*;
 import static com.yor42.projectazure.libs.utils.MathUtil.*;
@@ -69,7 +72,7 @@ import static software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes
 
 public abstract class EntityKansenBase extends AbstractEntityCompanion {
     private static final UUID SAILING_SPEED_MODIFIER = UUID.randomUUID();
-    private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",5F, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    private static final AttributeModifier SAILING_SPEED_BOOST = new AttributeModifier(SAILING_SPEED_MODIFIER, "Rigging Swim speed boost",1.5F, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
     private static final DataParameter<Integer> SHIP_FIRE_TICK = EntityDataManager.defineId(EntityKansenBase.class, DataSerializers.INT);
     private static final DataParameter<ItemStack> ITEM_RIGGING = EntityDataManager.defineId(EntityKansenBase.class, DataSerializers.ITEM_STACK);
@@ -197,7 +200,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         }
     }
 
-    protected void openGUI(ServerPlayerEntity player){
+    public void openGUI(ServerPlayerEntity player){
         NetworkHooks.openGui(player, new ContainerALInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
@@ -377,10 +380,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
                         if(RiggingItem instanceof ItemRiggingBase && !this.getCommandSenderWorld().isClientSide()) {
                             ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
                             final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerWorld) this.getCommandSenderWorld());
-                            final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, ItemDefibPaddle.controllerName);
-
-                            String animationname = riggingBase.getFireAnimationname(cannonType, slotindex);
-                            if (animationname != null) {
+                            final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, CONTROLLER_NAME);
+                            Pair<String, Integer> animationpair = riggingBase.getFireAnimationname(cannonType, slotindex);
+                            if (animationpair != null) {
+                                String animationname = animationpair.getFirst();
+                                int animationid = animationpair.getSecond();
+                                final PacketDistributor.PacketTarget packettarget = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this);
+                                GeckoLibNetwork.syncAnimation(packettarget, riggingBase, id, animationid);
                                 controller.markNeedsReload();
                                 controller.setAnimation(new AnimationBuilder().addAnimation(animationname, PLAY_ONCE));
                             }
@@ -426,10 +432,13 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
             if(RiggingItem instanceof ItemRiggingBase && !this.getCommandSenderWorld().isClientSide()) {
                 ItemRiggingBase riggingBase = (ItemRiggingBase) RiggingItem;
                 final int id = GeckoLibUtil.guaranteeIDForStack(rigging, (ServerWorld) this.getCommandSenderWorld());
-                final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, ItemDefibPaddle.controllerName);
-
-                String animationname = riggingBase.getFireAnimationname(slottype, index);
-                if (animationname != null) {
+                final AnimationController controller = GeckoLibUtil.getControllerForID(riggingBase.factory, id, CONTROLLER_NAME);
+                Pair<String, Integer> animationpair = riggingBase.getFireAnimationname(slottype, index);
+                if (animationpair != null) {
+                    String animationname = animationpair.getFirst();
+                    int animationid = animationpair.getSecond();
+                    final PacketDistributor.PacketTarget packettarget = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this);
+                    GeckoLibNetwork.syncAnimation(packettarget, riggingBase, id, animationid);
                     controller.markNeedsReload();
                     controller.setAnimation(new AnimationBuilder().addAnimation(animationname, PLAY_ONCE));
                 }

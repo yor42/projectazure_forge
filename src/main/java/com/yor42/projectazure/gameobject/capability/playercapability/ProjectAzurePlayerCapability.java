@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
@@ -27,6 +28,8 @@ public class ProjectAzurePlayerCapability {
     public ArrayList<AbstractEntityCompanion> companionList = new ArrayList<>();
 
     public PlayerEntity player;
+
+    public UUID lastGUIOpenedEntityID;
 
     public static final ResourceLocation CapabilityID = ModResourceLocation("capability_paplayer");
 

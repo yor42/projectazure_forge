@@ -225,7 +225,7 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
+    public void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerCLSInventory.Supplier(this));
     }
 

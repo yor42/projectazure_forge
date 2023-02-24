@@ -378,7 +378,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private final MovementController MoveController;
     protected final SwimmerPathNavigator swimmingNav;
     private final GroundPathNavigator groundNav;
-    private final PathNavigator sailingNav;
     protected CompanionFoodStats foodStats = new CompanionFoodStats();
     private List<ExperienceOrbEntity> nearbyExpList;
     protected long lastSlept, lastWokenup, lastsleepingheal;
@@ -479,16 +478,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.groundNav = new CompanionGroundPathNavigator(this, worldIn);
         this.SwimController = new CompanionSwimMovementController(this);
         this.MoveController = new CompanionDefaultMovementController(this);
-        this.sailingNav = new SwimmerPathNavigator(this, worldIn){
-            @Nonnull
-            protected PathFinder createPathFinder(int p_179679_1_) {
-                this.nodeEvaluator = new WalkAndSwimNodeProcessor();
-                return new PathFinder(this.nodeEvaluator, p_179679_1_);
-            }
-            public boolean isStableDestination(@Nonnull BlockPos p_188555_1_) {
-                return !(this.level.getBlockState(p_188555_1_.below()).getMaterial() == AIR);
-            }
-        };
 
 
         this.setPathfindingMalus(PathNodeType.WATER, 0.0F);
@@ -3298,7 +3287,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 this.setSwimming(true);
             }
             else if(this.isSailing()){
-                this.navigation = this.sailingNav;
+                this.navigation = this.groundNav;
                 this.moveControl = this.MoveController;
                 this.setSwimming(false);
             }
@@ -3350,7 +3339,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         super.removeAfterChangingDimensions();
     }
 
-    protected abstract void openGUI(ServerPlayerEntity player);
+    public void openGUI(ServerPlayerEntity player){
+        
+    };
 
     public void beingpatted(){
         if(this.getEntityData().get(MAXPATEFFECTCOUNT) == 0){

@@ -247,7 +247,7 @@ public class EntityKyaru extends AbstractCompanionMagicUser {
     }
 
     @Override
-    protected void openGUI(ServerPlayerEntity player) {
+    public void openGUI(ServerPlayerEntity player) {
         NetworkHooks.openGui(player, new ContainerPCRInventory.Supplier(this), (buffer) -> buffer.writeInt(this.getId()));
     }
 
