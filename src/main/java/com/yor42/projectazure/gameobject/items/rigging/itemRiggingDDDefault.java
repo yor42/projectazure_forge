@@ -39,8 +39,8 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 
 public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable {
 
-    public itemRiggingDDDefault(Properties properties, int HP) {
-        super(properties, HP);
+    public itemRiggingDDDefault(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int fuelcapccity,  int HP) {
+        super(properties, maingunslotslots, subgunslots, aaslots, torpedoslots, hangerslots, utilityslots, fuelcapccity, HP);
         this.validclass = enums.shipClass.Destroyer;
     }
 
@@ -55,32 +55,7 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
     {
         return PlayState.STOP;
     }
-
-    @Override
-    public int getMainGunSlotCount() {
-        return 0;
-    }
-
-    @Override
-    public int getSubGunSlotCount() {
-        return 2;
-    }
-
-    @Override
-    public int getAASlotCount() {
-        return 1;
-    }
-
-    @Override
-    public int getFuelTankCapacity() {
-        return 5000;
-    }
-
-    @Override
-    public int getTorpedoSlotCount() {
-        return 3;
-    }
-
+    
     @Override
     public void applyEquipmentCustomRotation(ItemStack equipment, GeoModel EquipmentModel, enums.SLOTTYPE slottype, int index, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 
@@ -111,51 +86,5 @@ public class itemRiggingDDDefault extends ItemRiggingBase implements IAnimatable
                 }
         }
 
-    }
-
-    @Override
-    public void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        IMultiInventory inventories = MultiInvUtil.getCap(Rigging);
-        for(enums.SLOTTYPE slottype : enums.SLOTTYPE.values()){
-            IItemHandler inventory = inventories.getInventory(slottype.ordinal());
-            for(int i=0; i<inventory.getSlots(); i++){
-                ItemStack equipment = inventory.getStackInSlot(i);
-                Item item = equipment.getItem();
-                if(equipment.isEmpty() || !(item instanceof ItemEquipmentBase)){
-                    continue;
-                }
-                ItemEquipmentBase equipmentItem = (ItemEquipmentBase) item;
-
-                int finalI = i;
-                riggingModel.getBone(slottype.getName()+(i+1)).ifPresent((bone)->{
-                    matrixStackIn.pushPose();
-
-                    ArrayList<GeoBone> bonetree = new ArrayList<>();
-                    GeoBone bone1 = bone;
-                    while (true){
-                        bonetree.add(bone1);
-                        if(bone1.getParent()!=null) {
-                            bone1 = bone1.getParent();
-                            continue;
-                        }
-                        break;
-                    }
-
-                    for(int j=bonetree.size()-1; j>=0; j--){
-                        preparePositionRotationScale(bonetree.get(j), matrixStackIn);
-                    }
-
-                    matrixStackIn.translate(bone.getPivotX()/16, bone.getPivotY()/16, bone.getPivotZ()/16);
-                    RenderType renderType = RenderType.entitySmoothCutout(equipmentItem.getTexture());
-                    GeoModel EquipmentModel = equipmentItem.getEquipmentModel().getModel((equipmentItem).getEquipmentModel().getModelLocation(null));
-                    equipmentItem.applyEquipmentCustomRotation(equipment, EquipmentModel, slottype, finalI, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
-                    this.applyEquipmentCustomRotation(equipment, EquipmentModel, slottype, finalI, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
-                    this.render(EquipmentModel, equipmentItem, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-                    matrixStackIn.popPose();
-                });
-
-
-            }
-        }
     }
 }

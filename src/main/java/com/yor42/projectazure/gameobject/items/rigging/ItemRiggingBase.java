@@ -7,6 +7,7 @@ import com.yor42.projectazure.gameobject.containers.riggingcontainer.RiggingCont
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
+import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.client.Minecraft;
@@ -63,6 +64,7 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     protected enums.shipClass validclass;
+    protected final int maingunslotslots, subgunslots, torpedoslots, aaslots, hangerslots, utilityslots, fueltankcapacity;
     protected Matrix4f dispatchedMat = new Matrix4f();
     protected Matrix4f renderEarlyMat = new Matrix4f();
     protected IRenderTypeBuffer rtb;
@@ -88,9 +90,15 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         data.addAnimationController(new AnimationController(this, "controller", 5, this::predicate));
     }
 
-    public ItemRiggingBase(Properties properties, int HP) {
+    public ItemRiggingBase(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int fuelcapccity, int HP) {
         super(properties, HP);
-        this.addHardPoints();
+        this.maingunslotslots = maingunslotslots;
+        this.subgunslots = subgunslots;
+        this.aaslots = aaslots;
+        this.torpedoslots = torpedoslots;
+        this.hangerslots = hangerslots;
+        this.utilityslots = utilityslots;
+        this.fueltankcapacity = fuelcapccity;
     }
 
     @Override
@@ -134,14 +142,19 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
             enums.SLOTTYPE slottype = enums.SLOTTYPE.values()[i];
             //not really needed but its here to make mc to not add header of equipment that isnt supported by rigging
             if(Equipments.getSlots()>0) {
-                tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
-                for (int j = 0; j < Equipments.getSlots(); j++) {
-                    ItemStack currentstack = Equipments.getStackInSlot(j);
-                    if (currentstack.getItem() instanceof ItemEquipmentBase)
-                        tooltip.add(currentstack.getHoverName().plainCopy().append(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.withColor(getHPColor(currentstack))));
-                    else {
-                        tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(Color.fromRgb(7829367))));
+                if(slottype != enums.SLOTTYPE.PLANE) {
+                    tooltip.add((new StringTextComponent("===").append(new TranslationTextComponent(slottype.getName()).append(new StringTextComponent("==="))).setStyle(Style.EMPTY.withColor(CategoryColor))));
+                    for (int j = 0; j < Equipments.getSlots(); j++) {
+                        ItemStack currentstack = Equipments.getStackInSlot(j);
+                        if (currentstack.getItem() instanceof ItemEquipmentBase)
+                            tooltip.add(currentstack.getHoverName().plainCopy().append(" (" + getCurrentHP(currentstack) + "/" + ((ItemEquipmentBase) currentstack.getItem()).getMaxHP() + ")").setStyle(Style.EMPTY.withColor(getHPColor(currentstack))));
+                        else {
+                            tooltip.add((new StringTextComponent("-").append(new TranslationTextComponent("equiment.empty")).append("-")).setStyle(Style.EMPTY.withItalic(true).withColor(Color.fromRgb(7829367))));
+                        }
                     }
+                }
+                else{
+                    tooltip.add(new TranslationTextComponent("item.tooltip.hanger_slot_usage").append(": " + getPlaneCount(stack) + "/" + getHangerSlots()));
                 }
             }
         }
@@ -170,20 +183,20 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
         return this.factory;
     }
 
-    public int getMainGunSlotCount(){return 0;}
-    public int getSubGunSlotCount(){return 0;}
-    public int getAASlotCount(){return 0;}
+    public int getMainGunSlotCount(){return this.maingunslotslots;}
+    public int getSubGunSlotCount(){return this.subgunslots;}
+    public int getAASlotCount(){return this.aaslots;}
 
-    public int getTorpedoSlotCount(){return 0;}
+    public int getTorpedoSlotCount(){return this.torpedoslots;}
 
     public int getHangerSlots(){
-        return 0;
+        return this.hangerslots;
     }
     public int getUtilitySlots(){
-        return 0;
+        return this.utilityslots;
     }
 
-    public int getFuelTankCapacity(){return 50000;}
+    public int getFuelTankCapacity(){return this.fueltankcapacity;}
 
     public MultiInvStackHandlerItemStack[] createInventories(ItemStack container) {
         return new MultiInvStackHandlerItemStack[]{
@@ -282,7 +295,6 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     public void applyEquipmentCustomRotation(ItemStack equipment,GeoModel EquipmentModel, enums.SLOTTYPE slottype, int index, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
-
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -335,6 +347,60 @@ public abstract class ItemRiggingBase extends ItemDestroyable implements IAnimat
     }
 
     @OnlyIn(Dist.CLIENT)
-    public abstract void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch);
+    public void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){
+        IMultiInventory inventories = MultiInvUtil.getCap(Rigging);
+        for(enums.SLOTTYPE slottype : enums.SLOTTYPE.values()){
+            IItemHandler inventory = inventories.getInventory(slottype.ordinal());
+            for(int i=0; i<inventory.getSlots(); i++){
+                ItemStack equipment = inventory.getStackInSlot(i);
+                Item item = equipment.getItem();
+                if(!(item instanceof ItemEquipmentBase)){
+                    continue;
+                }
+                ItemEquipmentBase equipmentItem = (ItemEquipmentBase) item;
+
+                int finalI = i;
+                riggingModel.getBone(slottype.getName()+(i+1)).ifPresent((bone)->{
+                    matrixStackIn.pushPose();
+
+                    ArrayList<GeoBone> bonetree = new ArrayList<>();
+                    GeoBone bone1 = bone;
+                    while (true){
+                        bonetree.add(bone1);
+                        if(bone1.getParent()!=null) {
+                            bone1 = bone1.getParent();
+                            continue;
+                        }
+                        break;
+                    }
+
+                    for(int j=bonetree.size()-1; j>=0; j--){
+                        preparePositionRotationScale(bonetree.get(j), matrixStackIn);
+                    }
+
+                    matrixStackIn.translate(bone.getPivotX()/16, bone.getPivotY()/16, bone.getPivotZ()/16);
+                    RenderType renderType = RenderType.entitySmoothCutout(equipmentItem.getTexture());
+                    GeoModel EquipmentModel = equipmentItem.getEquipmentModel().getModel((equipmentItem).getEquipmentModel().getModelLocation(null));
+                    equipmentItem.applyEquipmentCustomRotation(equipment, EquipmentModel, slottype, finalI, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+                    this.applyEquipmentCustomRotation(equipment, EquipmentModel, slottype, finalI, packedLightIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+                    this.render(EquipmentModel, equipmentItem, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+                    matrixStackIn.popPose();
+                });
+
+
+            }
+        }
+    }
+
+    private int getPlaneCount(ItemStack riggingStack) {
+        IItemHandler hangar = MultiInvUtil.getCap(riggingStack).getInventory(enums.SLOTTYPE.PLANE.ordinal());
+        int count = 0;
+        for (int i = 0; i < hangar.getSlots(); i++) {
+            if (hangar.getStackInSlot(i).getItem() instanceof ItemEquipmentPlaneBase) {
+                count++;
+            }
+        }
+        return count;
+    }
 
 }

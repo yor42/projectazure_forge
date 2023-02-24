@@ -606,15 +606,15 @@ public class RegisterItems {
 
     public static final RegistryObject<Item> DD_DEFAULT_RIGGING = register_withoutTexture("dd_default_rigging", () -> new itemRiggingDDDefault(new Item.Properties()
     .setISTER(() -> DDDefaultRiggingRenderer::new)
-    .tab(PA_WEAPONS).stacksTo(1), 500));
+    .tab(PA_WEAPONS).stacksTo(1), 0,2,1,3,0,0, 5000, 500));
 
     public static final RegistryObject<Item> CV_DEFAULT_RIGGING = register_withoutTexture("cv_default_rigging", () -> new ItemRiggingCVDefault(new Item.Properties()
             .setISTER(() -> CVDefaultRiggingRenderer::new)
-            .tab(PA_WEAPONS).stacksTo(1), 750));
+            .tab(PA_WEAPONS).stacksTo(1), 0,2,4,0, 0,0,5000, 750));
 
     public static final RegistryObject<Item> BB_DEFAULT_RIGGING = register_withoutTexture("bb_default_rigging", () -> new ItemRiggingBBDefault(new Item.Properties()
             .setISTER(() -> BBDefaultRiggingRenderer::new)
-            .tab(PA_WEAPONS).stacksTo(1), 1200));
+            .tab(PA_WEAPONS).stacksTo(1), 4,2,3,1,0,0, 5000, 1200));
 
     public static final RegistryObject<Item> EQUIPMENT_TORPEDO_533MM = register_withoutTexture("equipment_torpedo_533mm", () -> new ItemEquipmentTorpedo533Mm(new Item.Properties()
             .setISTER(() -> equipment533mmTorpedoRenderer::new)

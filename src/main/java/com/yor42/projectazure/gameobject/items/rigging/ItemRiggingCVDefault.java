@@ -18,40 +18,10 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 
-public class ItemRiggingCVDefault extends ItemRiggingCV{
+public class ItemRiggingCVDefault extends ItemRiggingBase{
 
-    public ItemRiggingCVDefault(Properties properties, int HP) {
-        super(properties, HP);
-    }
-
-    @Override
-    public int getMainGunSlotCount() {
-        return 0;
-    }
-
-    @Override
-    public int getSubGunSlotCount() {
-        return 2;
-    }
-
-    @Override
-    public int getAASlotCount() {
-        return 4;
-    }
-
-    @Override
-    public int getTorpedoSlotCount() {
-        return 0;
-    }
-
-    @Override
-    public int getHangerSlots() {
-        return 3;
-    }
-
-    @Override
-    public int getFuelTankCapacity() {
-        return 5000;
+    public ItemRiggingCVDefault(Properties properties, int maingunslotslots, int subgunslots, int aaslots, int torpedoslots, int hangerslots, int utilityslots,int fuelcapccity, int HP) {
+        super(properties, maingunslotslots, subgunslots, aaslots, torpedoslots, hangerslots, utilityslots, fuelcapccity, HP);
     }
 
     @Override
@@ -60,52 +30,10 @@ public class ItemRiggingCVDefault extends ItemRiggingCV{
     }
 
     @Override
-    public void RenderRigging(GeoModelProvider<?> entityModel, ItemStack Rigging, AbstractEntityCompanion entitylivingbaseIn, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        matrixStackIn.pushPose();
-        GeoModelProvider modelRiggingProvider = this.getModel();
-        IBone hostbone = entityModel.getModel(entityModel.getModelLocation(null)).getBone("Body").get();
-        if (entityModel.getModel(entityModel.getModelLocation(null)).getBone("Body").isPresent()) {
-            matrixStackIn.translate(hostbone.getPositionX() / 16, (hostbone.getPositionY() + 45) / 16, hostbone.getPositionZ() / 16);
+    public void applyEquipmentCustomRotation(ItemStack equipment, GeoModel EquipmentModel, enums.SLOTTYPE slottype, int index, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if(slottype == enums.SLOTTYPE.SUB_GUN){
+            EquipmentModel.getBone("MountX").ifPresent((bone)->bone.setRotationY(-MathUtil.DegreeToRadian(netHeadYaw)));
+            EquipmentModel.getBone("Barrel").ifPresent((bone)->bone.setRotationX(MathUtil.LimitAngleMovement(headPitch, 7.5F, -12.5F, false, true)));
         }
-        RenderType type = RenderType.entitySmoothCutout(modelRiggingProvider.getTextureLocation(null));
-        GeoModel riggingmodel = modelRiggingProvider.getModel(modelRiggingProvider.getModelLocation(null));
-        this.render(riggingmodel, entitylivingbaseIn, partialTicks, type, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-        matrixStackIn.popPose();
-
-        IMultiInventory inventories = MultiInvUtil.getCap(entitylivingbaseIn.getRigging());
-
-        //gun Renderer
-        IItemHandler inventory = inventories.getInventory(enums.SLOTTYPE.SUB_GUN.ordinal());
-        ItemStack stack = inventory.getStackInSlot(0);
-        if (stack.getItem() instanceof ItemEquipmentBase) {
-
-            matrixStackIn.pushPose();
-            RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
-            matrixStackIn.translate((23.25 + hostbone.getPositionX()) / 16, (42 + hostbone.getPositionY()) / 16, -(2 + hostbone.getPositionZ()) / 16);
-            GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
-            EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.yHeadRot - entitylivingbaseIn.yBodyRot));
-            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.xRot, 7.5F, -12.5F, false, true));
-            this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-            matrixStackIn.popPose();
-        }
-
-        stack = inventory.getStackInSlot(1);
-        if (stack.getItem() instanceof ItemEquipmentBase) {
-
-            matrixStackIn.pushPose();
-            RenderType renderType = RenderType.entitySmoothCutout(((ItemEquipmentBase) stack.getItem()).getTexture());
-            matrixStackIn.translate(-(23.25 + hostbone.getPositionX()) / 16, (42 + hostbone.getPositionY()) / 16, -(2 + hostbone.getPositionZ()) / 16);
-            GeoModel EquipmentModel = ((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModel(((ItemEquipmentBase) stack.getItem()).getEquipmentModel().getModelLocation(null));
-            EquipmentModel.getBone("MountX").get().setRotationY(-MathUtil.DegreeToRadian(entitylivingbaseIn.yHeadRot - entitylivingbaseIn.yBodyRot));
-            EquipmentModel.getBone("Barrel").get().setRotationX(MathUtil.LimitAngleMovement(entitylivingbaseIn.xRot, 7.5F, -12.5F, false, true));
-            this.render(EquipmentModel, entitylivingbaseIn, partialTicks, renderType, matrixStackIn, bufferIn, null, packedLightIn, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
-            matrixStackIn.popPose();
-        }
-
-    }
-
-    @Override
-    public void RenderEquipments(ItemStack Rigging, GeoModel riggingModel, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-
     }
 }
