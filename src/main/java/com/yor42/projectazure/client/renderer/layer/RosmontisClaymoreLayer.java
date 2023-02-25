@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.client.model.entity.misc.ModelClaymore;
 import com.yor42.projectazure.client.model.items.ModelItemClaymore;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;
+import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -32,7 +33,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
         int SpellItemIndex = entityLivingBaseIn.getNextSkillItemindex();
         if(entityLivingBaseIn.isSkillItemInindex(0)){
             matrixStackIn.pushPose();
-            GeoModelProvider modelProvider = new ModelItemClaymore();
+            GeoModelProvider<EntityClaymore> modelProvider = new ModelClaymore();
             matrixStackIn.scale(1/0.4f,1/0.4f,1/0.4f);
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+0.785398);
             boolean shouldDraw = true;
@@ -53,7 +54,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
         ItemStack stack = entityLivingBaseIn.getSkillItem1();
         if(entityLivingBaseIn.isSkillItem(stack)){
             matrixStackIn.pushPose();
-            GeoModelProvider modelProvider = new ModelItemClaymore();
+            GeoModelProvider<EntityClaymore> modelProvider = new ModelClaymore();
             matrixStackIn.scale(1/0.4f,1/0.4f,1/0.4f);
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+0.785398);
             boolean shouldDraw = true;
@@ -81,7 +82,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
                 shouldDraw = ((float)skillprogress/entityLivingBaseIn.getInitialSpellDelay())<=0.25;
             }
             if(shouldDraw) {
-                GeoModelProvider modelProvider = new ModelItemClaymore();
+                GeoModelProvider<EntityClaymore> modelProvider = new ModelClaymore();
                 matrixStackIn.scale(1 / 0.4f, 1 / 0.4f, 1 / 0.4f);
                 matrixStackIn.translate(0.75, 0.5 + (ymovement * 0.1), 0.75);
                 matrixStackIn.mulPose(new Quaternion(-15f, 45, 15f, true));
@@ -93,7 +94,7 @@ public class RosmontisClaymoreLayer extends GeoLayerRenderer<EntityRosmontis> im
         }
         if(entityLivingBaseIn.isSkillItemInindex(3)){
             matrixStackIn.pushPose();
-            GeoModelProvider modelProvider = new ModelClaymore();
+            GeoModelProvider<EntityClaymore> modelProvider = new ModelClaymore();
             float ymovement = (float) Math.sin(2 * Math.PI * 0.0125 * ageInTicks+1.04);
             boolean shouldDraw = true;
             if(entityLivingBaseIn.isUsingSpell() && SpellItemIndex == 3){
