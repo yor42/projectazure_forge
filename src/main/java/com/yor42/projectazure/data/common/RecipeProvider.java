@@ -27,6 +27,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -233,53 +235,14 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_knife", has(ModTags.Items.KNIFE))
                 .save(consumer, ResourceUtils.ModResourceLocation("pork_cooked_knife"));
 
-        ShapelessRecipeBuilder.shapeless(Items.OAK_PLANKS, 6)
-                .requires(ItemTags.OAK_LOGS)
-                .requires(ModTags.Items.SAW)
-                .unlockedBy("has_tool", has(ModTags.Items.SAW))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(Items.ACACIA_PLANKS, 6)
-                .requires(ItemTags.ACACIA_LOGS)
-                .requires(ModTags.Items.SAW)
-                .unlockedBy("has_tool", has(ModTags.Items.SAW))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(Items.SPRUCE_PLANKS, 6)
-                .requires(ItemTags.SPRUCE_LOGS)
-                .requires(ModTags.Items.SAW)
-                .unlockedBy("has_tool", has(ModTags.Items.SAW))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(Items.BIRCH_PLANKS, 6)
-                .requires(ItemTags.BIRCH_LOGS)
-                .requires(ModTags.Items.SAW)
-                .unlockedBy("has_tool", has(ModTags.Items.SAW))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(Items.DARK_OAK_PLANKS, 6)
-                .requires(ItemTags.DARK_OAK_LOGS)
-                .requires(ModTags.Items.SAW)
-                .unlockedBy("has_tool", has(ModTags.Items.SAW))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(Items.JUNGLE_PLANKS, 6)
-                .requires(ItemTags.JUNGLE_LOGS)
-                .requires(ModTags.Items.SAW)
-                .unlockedBy("has_tool", has(ModTags.Items.SAW))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(Items.WARPED_PLANKS, 6)
-                .requires(ItemTags.WARPED_STEMS)
-                .requires(ModTags.Items.SAW)
-                .unlockedBy("has_tool", has(ModTags.Items.SAW))
-                .save(consumer);
-
-        ShapelessRecipeBuilder.shapeless(Items.CRIMSON_PLANKS, 6)
-                .requires(ItemTags.CRIMSON_STEMS)
-                .requires(ModTags.Items.SAW)
-                .unlockedBy("has_tool", has(ModTags.Items.SAW))
-                .save(consumer);
+        this.registerSawingRecipe(ItemTags.OAK_LOGS, Items.OAK_PLANKS, consumer);
+        this.registerSawingRecipe(ItemTags.ACACIA_LOGS, Items.ACACIA_PLANKS, consumer);
+        this.registerSawingRecipe(ItemTags.SPRUCE_LOGS, Items.SPRUCE_PLANKS, consumer);
+        this.registerSawingRecipe(ItemTags.BIRCH_LOGS, Items.BIRCH_PLANKS, consumer);
+        this.registerSawingRecipe(ItemTags.DARK_OAK_LOGS, Items.DARK_OAK_PLANKS, consumer);
+        this.registerSawingRecipe(ItemTags.JUNGLE_LOGS, Items.JUNGLE_PLANKS, consumer);
+        this.registerSawingRecipe(ItemTags.WARPED_STEMS, Items.WARPED_PLANKS, consumer);
+        this.registerSawingRecipe(ItemTags.CRIMSON_STEMS, Items.CRIMSON_PLANKS, consumer);
 
         ShapelessRecipeBuilder.shapeless(RegisterItems.COPPER_IRON_PROBE.get())
                 .requires(RegisterItems.POTATO_BATTERY.get())
@@ -2333,5 +2296,13 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
     protected void createHammerRecipes(Consumer<IFinishedRecipe> consumer, ITag<Item> blockInput, Item out, int count, String id) {
         CrushingRecipeBuilder.builder().input(blockInput).addDrop(out, count).build(consumer, ResourceUtils.ModResourceLocation("sledgehammer_"+id));
+    }
+
+    protected void registerSawingRecipe(ITag<Item> log, Item plank, Consumer<IFinishedRecipe> consumer){
+        ShapelessRecipeBuilder.shapeless(plank, 6)
+                .requires(log)
+                .requires(ModTags.Items.SAW)
+                .unlockedBy("has_tool", has(ModTags.Items.SAW))
+                .save(consumer, ForgeRegistries.ITEMS.getKey(plank) +"_pa_saw");
     }
 }
