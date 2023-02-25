@@ -22,7 +22,7 @@ import static com.yor42.projectazure.intermod.curios.CuriosCompat.getCurioItemSt
 @Mixin(Item.class)
 public abstract class MixinItem {
 
-    @Shadow
+    @Shadow(remap = true)
     public abstract UseAction getUseAnimation(ItemStack p_77661_1_);
 
     //You can't shove food in through gas mask lol

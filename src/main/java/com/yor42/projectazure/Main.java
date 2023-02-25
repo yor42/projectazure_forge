@@ -43,6 +43,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.registries.DeferredRegister;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
@@ -65,7 +66,6 @@ public class Main
     public static final Logger LOGGER = LogManager.getLogger();
     public static final SimpleChannel NETWORK = registerNetwork.getNetworkChannel();
     public static final CrushingRecipeCache CRUSHING_REGISTRY = new CrushingRecipeCache();
-
     public static ItemGroup PA_GROUP = new ItemGroup(MODID) {
         @Nonnull
         @Override
