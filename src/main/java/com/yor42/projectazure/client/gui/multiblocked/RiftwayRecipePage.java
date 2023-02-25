@@ -5,6 +5,7 @@ import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.lowdragmc.lowdraglib.gui.texture.TextTexture;
 import com.lowdragmc.lowdraglib.gui.widget.*;
 import com.lowdragmc.lowdraglib.utils.Position;
+import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
 import com.lowdragmc.multiblocked.api.gui.controller.PageWidget;
 import com.lowdragmc.multiblocked.api.recipe.Recipe;
 import com.lowdragmc.multiblocked.api.recipe.RecipeLogic;
@@ -35,7 +36,7 @@ public class RiftwayRecipePage extends PageWidget {
     @OnlyIn(Dist.CLIENT)
     private RiftwayRecipeWidget recipeWidget;
     private RecipeLogic.Status status;
-    private int progress, fuelTime, fuelMaxTime = 1;
+    private int progress, fuelTime = 1;
 
     public RiftwayRecipePage(ControllerTileEntity controller, TabContainer tabContainer) {
         super(resourceTexture, tabContainer);
@@ -84,7 +85,7 @@ public class RiftwayRecipePage extends PageWidget {
     }
 
     private double getFuelProgress() {
-        return Math.min(fuelTime, fuelMaxTime) * 1d / Math.max(1, fuelMaxTime);
+        return (double) Math.min(this.fuelTime, this.controller.getDefinition().getRecipeMap().fuelThreshold) / (double) this.controller.getDefinition().getRecipeMap().fuelThreshold;
     }
 
     @Override
@@ -111,11 +112,9 @@ public class RiftwayRecipePage extends PageWidget {
                 recipe = recipeLogic.lastRecipe;
                 writeUpdateInfo(-1, this::writeRecipe);
             }
-            if (status != recipeLogic.getStatus() || progress != recipeLogic.progress || fuelTime != recipeLogic.fuelTime || fuelMaxTime != recipeLogic.fuelMaxTime) {
+            if (status != recipeLogic.getStatus() || progress != recipeLogic.progress || fuelTime != recipeLogic.fuelTime) {
                 status = recipeLogic.getStatus();
                 progress = recipeLogic.progress;
-                fuelTime = recipeLogic.fuelTime;
-                fuelMaxTime = recipeLogic.fuelMaxTime;
                 writeUpdateInfo(-2, this::writeStatus);
             }
         } else if (recipe != null) {
@@ -128,14 +127,12 @@ public class RiftwayRecipePage extends PageWidget {
         buffer.writeEnum(status);
         buffer.writeVarInt(progress);
         buffer.writeVarInt(fuelTime);
-        buffer.writeVarInt(fuelMaxTime);
     }
 
     private void readStatus(PacketBuffer buffer) {
         status = buffer.readEnum(RecipeLogic.Status.class);
         progress = buffer.readVarInt();
         fuelTime = buffer.readVarInt();
-        fuelMaxTime = buffer.readVarInt();
     }
 
     private void writeRecipe(PacketBuffer buffer) {
@@ -177,7 +174,6 @@ public class RiftwayRecipePage extends PageWidget {
             status = RecipeLogic.Status.IDLE;
             progress = 0;
             fuelTime = 0;
-            fuelMaxTime = 1;
         }
     }
 

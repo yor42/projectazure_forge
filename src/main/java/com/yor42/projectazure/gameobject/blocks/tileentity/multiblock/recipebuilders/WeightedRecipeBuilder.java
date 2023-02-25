@@ -155,14 +155,6 @@ public class WeightedRecipeBuilder {
         return output(ItemMultiblockCapability.CAP, Arrays.stream(outputs).map(ItemsIngredient::new).toArray(ItemsIngredient[]::new));
     }
 
-    public WeightedRecipeBuilder inputDurabilityItems(ItemsIngredient... inputs) {
-        return input(ItemDurabilityMultiblockCapability.CAP, inputs);
-    }
-
-    public WeightedRecipeBuilder outputDurabilityItems(ItemStack... outputs) {
-        return output(ItemDurabilityMultiblockCapability.CAP, Arrays.stream(outputs).map(ItemsIngredient::new).toArray(ItemsIngredient[]::new));
-    }
-
     public WeightedRecipeBuilder inputFluids(FluidStack... inputs) {
         return input(FluidMultiblockCapability.CAP, inputs);
     }

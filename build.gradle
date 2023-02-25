@@ -178,7 +178,8 @@ dependencies {
     //Multiblocked
     //implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.16.5-${ldlib_version}")
     implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.16.5-${ldlib_version}")
-    implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.16.5-${mbd_version}")
+    //implementation fg.deobf("com.lowdragmc.multiblocked:Multiblocked:1.16.5-${mbd_version}")
+    implementation fg.deobf('curse.maven:multiblocked-604054:4124455')
 
     //Curios
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
