@@ -26,7 +26,8 @@
     "additionalReloadEmptyMagTimer": 10,
     "preReloadPauseTicks": 7,
     "maxAdditionalAmmoPerOC": [5, 5, 5],
-    "interReloadPauseTicks": 24
+    "interReloadPauseTicks": 24,
+    "openBolt":true
   },
   "projectile": {
     "item": "projectazure:ammo_sangvisrailgun",
