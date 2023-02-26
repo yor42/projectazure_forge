@@ -2140,7 +2140,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                     .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_ore_blasting"));
             CookingRecipeBuilder.smelting(Ingredient.of(metal.oreTag), metal.ingot, smeltingXp, 200)
                     .unlockedBy("has_item", has(metal.oreTag))
-                    .save(consumer);
+                    .save(consumer, ResourceUtils.ModResourceLocation(metal.name + "_ore_smelting"));
         }
 
         InventoryChangeTrigger.Instance hasIngot = has(metal.ingotTag);

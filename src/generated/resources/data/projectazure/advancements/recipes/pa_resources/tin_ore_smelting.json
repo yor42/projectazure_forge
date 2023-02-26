@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:ingot_rma7012"
+      "projectazure:tin_ore_smelting"
     ]
   },
   "criteria": {
@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ores/rma70-12"
+            "tag": "forge:ores/tin"
           }
         ]
       }
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:ingot_rma7012"
+        "recipe": "projectazure:tin_ore_smelting"
       }
     }
   },

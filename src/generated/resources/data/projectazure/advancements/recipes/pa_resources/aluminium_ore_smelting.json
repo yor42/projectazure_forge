@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:ingot_aluminium"
+      "projectazure:aluminium_ore_smelting"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:ingot_aluminium"
+        "recipe": "projectazure:aluminium_ore_smelting"
       }
     }
   },

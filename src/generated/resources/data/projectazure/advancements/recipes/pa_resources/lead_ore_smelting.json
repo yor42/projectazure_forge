@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "projectazure:ingot_copper"
+      "projectazure:lead_ore_smelting"
     ]
   },
   "criteria": {
@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ores/copper"
+            "tag": "forge:ores/lead"
           }
         ]
       }
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "projectazure:ingot_copper"
+        "recipe": "projectazure:lead_ore_smelting"
       }
     }
   },
