@@ -7,8 +7,10 @@ import com.yor42.projectazure.setup.register.registerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.network.IPacket;
+import net.minecraft.pathfinding.PathType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -60,12 +62,17 @@ public class EntityCannonPelllet extends DamagingProjectileEntity {
     @Override
     protected void onHitBlock(BlockRayTraceResult p_230299_1_) {
         super.onHitBlock(p_230299_1_);
-        if(this.properties != null) {
-            if (!this.level.isClientSide()) {
-                boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner());
-                this.level.explode(this, this.getX(), this.getY(), this.getZ(), this.properties.isExplosive()? 1F:0.2F, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
-            }
+
+        if(this.properties == null) {
+            return;
         }
+        BlockPos blockPosIn = this.blockPosition();
+        if(this.getCommandSenderWorld().getBlockState(blockPosIn).isPathfindable(this.getCommandSenderWorld(), blockPosIn, PathType.AIR)) {
+            return;
+        }
+
+        boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this.getOwner());
+        this.level.explode(this, this.getX(), this.getY(), this.getZ(), this.properties.isExplosive()? 1F:0.2F, this.properties.isFiery(), flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
         this.remove();
     }
 
