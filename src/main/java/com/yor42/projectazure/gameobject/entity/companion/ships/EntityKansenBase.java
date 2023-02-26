@@ -211,7 +211,11 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
 
     public boolean hasRigging(){
-        return this.getRigging().getItem() instanceof ItemRiggingBase && ((ItemRiggingBase) this.getRigging().getItem()).getValidclass() == this.getShipClass();
+
+        if(!(this.getRigging().getItem() instanceof ItemRiggingBase)){
+            return false;
+        }
+        else return ((ItemRiggingBase) this.getRigging().getItem()).getValidclass().test(this);
     }
 
     @Nullable
@@ -311,7 +315,7 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
 
     @Override
     public boolean canStandOnFluid(Fluid p_230285_1_) {
-        return this.hasRigging() && p_230285_1_.is(FluidTags.WATER);
+        return this.canUseRigging() && p_230285_1_.is(FluidTags.WATER);
     }
 
     public ItemStack findAmmo(enums.AmmoCategory category){

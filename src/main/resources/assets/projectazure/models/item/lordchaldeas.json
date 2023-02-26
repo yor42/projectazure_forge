@@ -11,7 +11,7 @@
 			"predicate": {
 				"blocking": 1
 			},
-			"model": "animearsenal:item/lordchaldeas_blocking"
+			"model": "projectazure:item/lordchaldeas_blocking"
 		}
 	],
 	"elements": [

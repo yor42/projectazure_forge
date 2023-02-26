@@ -75,6 +75,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -2140,6 +2141,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getExp();
     }
 
+
     @Override
     public boolean canFallInLove() {
         return false;
@@ -3281,21 +3283,21 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         if (!this.level.isClientSide && this.tickCount%10 == 0) {
             double waterheight = this.getFluidHeight(FluidTags.WATER);
             boolean rigging = !this.canUseRigging();
-            if (this.isEffectiveAi() && waterheight > 0.9&&rigging) {
+            if(!this.isEffectiveAi()) {
+                return;
+            }
+            this.navigation.stop();
+            if (this.isEffectiveAi() &&rigging && waterheight > 1.2) {
                 this.navigation = this.swimmingNav;
                 this.moveControl = this.SwimController;
                 this.setSwimming(true);
-            }
-            else if(this.isSailing()){
-                this.navigation = this.groundNav;
-                this.moveControl = this.MoveController;
-                this.setSwimming(false);
             }
             else {
                 this.navigation = this.groundNav;
                 this.moveControl = this.MoveController;
                 this.setSwimming(false);
             }
+
         }
 
     }
