@@ -371,14 +371,6 @@
 			}
 		}
 	],
-	"overrides": [
-		{
-			"predicate": {
-				"charging": 1
-			},
-			"model": "animearsenal:item/railgun_charging"
-		}
-	],
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [74, 0, 0],
