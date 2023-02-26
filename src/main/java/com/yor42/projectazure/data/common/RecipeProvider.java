@@ -243,6 +243,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         this.registerSawingRecipe(ItemTags.JUNGLE_LOGS, Items.JUNGLE_PLANKS, consumer);
         this.registerSawingRecipe(ItemTags.WARPED_STEMS, Items.WARPED_PLANKS, consumer);
         this.registerSawingRecipe(ItemTags.CRIMSON_STEMS, Items.CRIMSON_PLANKS, consumer);
+        this.registerSawingRecipe(ItemTags.LOGS, Items.STICK, consumer);
 
         ShapelessRecipeBuilder.shapeless(RegisterItems.COPPER_IRON_PROBE.get())
                 .requires(RegisterItems.POTATO_BATTERY.get())
