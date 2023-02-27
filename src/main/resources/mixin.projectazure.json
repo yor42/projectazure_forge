@@ -17,6 +17,7 @@
     "SwimmerPathNavigatorAccess"
   ],
   "client": [
+    "MixinPlayerRenderer",
     "MixinSplashManager"
   ]
 }

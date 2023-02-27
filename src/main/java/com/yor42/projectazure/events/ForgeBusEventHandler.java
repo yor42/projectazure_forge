@@ -20,6 +20,7 @@ import com.yor42.projectazure.gameobject.items.GasMaskItem;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibCharger;
 import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
+import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
@@ -388,15 +389,14 @@ public class ForgeBusEventHandler {
         World world = event.getWorld();
         PlayerEntity player = event.getPlayer();
         List<Entity> passengers = player.getPassengers();
-        BlockPos pos = event.getPos();
-        if (!passengers.isEmpty() && player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
-            for (Entity entity : passengers) {
-                entity.stopRiding();
-
+        //BlockPos pos = event.getPos();
+        if (player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
+            /*
+            ((IMixinPlayerEntity)player).removeEntityOnBack().ifPresent((entity) -> {
                 if (!(entity instanceof AbstractEntityCompanion)) {
                     return;
                 }
-
+                BlockPos pos = event.getPos();
                 boolean isInjured = ((AbstractEntityCompanion) entity).isCriticallyInjured();
                 if (isInjured || world.isNight()) {
                     BlockState state = world.getBlockState(pos);
@@ -405,10 +405,35 @@ public class ForgeBusEventHandler {
                         ((AbstractEntityCompanion) entity).startSleeping(pos);
                         event.setCanceled(true);
                     }
-                    break;
                 }
                 else if(((AbstractEntityCompanion) entity).isDeadOrDying()){
                     player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
+                }
+            });
+            */
+
+
+            if(!player.getPassengers().isEmpty()) {
+                BlockPos pos = event.getPos();
+                for (Entity entity : passengers) {
+                    entity.stopRiding();
+
+                    if (!(entity instanceof AbstractEntityCompanion)) {
+                        return;
+                    }
+
+                    boolean isInjured = ((AbstractEntityCompanion) entity).isCriticallyInjured();
+                    if (isInjured || world.isNight()) {
+                        BlockState state = world.getBlockState(pos);
+                        if (state.isBed(world, pos, (LivingEntity) entity)) {
+                            pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
+                            ((AbstractEntityCompanion) entity).startSleeping(pos);
+                            event.setCanceled(true);
+                        }
+                        break;
+                    } else if (((AbstractEntityCompanion) entity).isDeadOrDying()) {
+                        player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
+                    }
                 }
             }
             player.swing(MAIN_HAND);

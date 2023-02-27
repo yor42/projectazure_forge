@@ -42,6 +42,7 @@ import com.yor42.projectazure.intermod.SolarApocalypse;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.BlockUtil;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.network.packets.DeleteHomePacket;
 import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
 import com.yor42.projectazure.network.packets.EntityInteractionPacket;
@@ -1874,6 +1875,27 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
+    @Override
+    public AxisAlignedBB getBoundingBox() {
+        if (this.isPassenger() && this.getVehicle() == this.getOwner()) {
+            return AxisAlignedBB.ofSize(0.1, 0.1, 0.1);
+        }
+        return super.getBoundingBox();
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBoxForCulling() {
+        return super.getBoundingBoxForCulling();
+    }
+
+    @Override
+    public boolean isInWall() {
+        if (this.isPassenger() && this.getVehicle() == this.getOwner()) {
+            return false;
+        }
+        return super.isInWall();
+    }
+
     public int getSpellDelay(){
         return this.getEntityData().get(SPELLDELAY);
     }
@@ -2771,6 +2793,18 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         super.customServerAiStep();
     }
 
+    public boolean setEntityOnShoulder(ServerPlayerEntity p_213439_1_) {
+        CompoundNBT compoundnbt = new CompoundNBT();
+        compoundnbt.putString("id", this.getEncodeId());
+        this.saveWithoutId(compoundnbt);
+        if (((IMixinPlayerEntity)p_213439_1_).setEntityonBack(compoundnbt)) {
+            this.remove();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     //I know what I am doing, GAME!
     @Nonnull
     @SuppressWarnings("unchecked")
@@ -3256,7 +3290,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         return ActionResultType.FAIL;
     }
-
     protected ActionResultType openInventory(PlayerEntity player){
         if (!this.level.isClientSide) {
             this.openGUI((ServerPlayerEntity) player);

@@ -49,7 +49,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
                 body.setPositionZ(body.getPositionZ() - 15);
                 if (entity.getOwner().isCrouching()) {
                     body.setPositionZ(body.getPositionZ() + 8);
-                    body.setPositionY(body.getPositionY() - 8);
+                    body.setPositionY(body.getPositionY() - 4);
                     body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI) * -1);
                 }
             }else if (!(entity.isBeingPatted() || entity.islewded())) {
