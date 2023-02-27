@@ -18,9 +18,6 @@ public class DamageSources {
     public static final DamageSource CAUSAL_BLACKHOLE = new DamageSource("blackhole").bypassArmor();
     public static final DamageSource TORPEDO = new DamageSource("torpedo").setExplosion().bypassInvul();
 
-    public static final DamageSource ARTS = new DamageSourcesWithRandomMessages("arts", 5).setMagic().bypassArmor().setProjectile();
-
-
     public static final DamageSource ACUTE_ORIPATHY = new DamageSourcesWithRandomMessages("ate_originium_prime", 5).bypassArmor().bypassMagic();
     public static final DamageSource FROSTBITE = new DamageSourcesWithRandomMessages("frostbite", 5).bypassArmor().bypassMagic();
 

@@ -51,7 +51,6 @@ import com.yor42.projectazure.setup.register.RegisterItems;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
 import net.minecraft.block.material.PushReaction;
-import net.minecraft.client.renderer.entity.DragonFireballRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
@@ -75,7 +74,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
@@ -131,6 +129,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -140,7 +139,7 @@ import static com.yor42.projectazure.libs.utils.BlockUtil.RelativeDirection.FRON
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_PANTRY;
 import static com.yor42.projectazure.setup.register.RegisterAI.KILLED_ENTITY;
-import static net.minecraft.block.material.Material.AIR;
+import static net.minecraft.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
 import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.*;
 import static net.minecraft.entity.ai.brain.schedule.Activity.*;
@@ -150,6 +149,18 @@ import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
 
 public abstract class AbstractEntityCompanion extends TameableEntity implements ICrossbowUser, IRangedAttackMob, IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
+    private final AttributeModifier LevelHealthModifier = new AttributeModifier(UUID.randomUUID(), "Level HP Bonus", this.getLevel()*4, AttributeModifier.Operation.ADDITION);
+    private final AttributeModifier LevelAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Level Attack Damage Bonus", this.getLevel()/2.5F, AttributeModifier.Operation.ADDITION);
+
+    private final AttributeModifier LimitbreakHealthModifier = new AttributeModifier(UUID.randomUUID(), "Limitbreak HP Bonus", this.getLimitBreakLv()*10, AttributeModifier.Operation.ADDITION);
+    private final AttributeModifier LimitbreakAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Limitbreak Attack Damage Bonus", this.getLimitBreakLv()*5, AttributeModifier.Operation.ADDITION);
+
+    private final AttributeModifier UpgradeHealthModifier = new AttributeModifier(UUID.randomUUID(), "Entity Upgrade HP Bonus", this.getEntityUpgradeLv()*1.5, AttributeModifier.Operation.ADDITION);
+    private final AttributeModifier UpgradeAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Entity Upgrade Attack Damage Bonus", this.getEntityUpgradeLv(), AttributeModifier.Operation.ADDITION);
+
+    private final AttributeModifier OathHealthModifier = new AttributeModifier(UUID.randomUUID(), "Oath HP Bonus", 1.5, AttributeModifier.Operation.MULTIPLY_BASE);
+    private final AttributeModifier OathAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Oath Attack Damage Bonus", 1.5, AttributeModifier.Operation.MULTIPLY_BASE);
+
 
     public float getSpellRange() {
         return 5;
@@ -582,6 +593,28 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void setOathed(boolean bool){
+
+        ModifiableAttributeInstance Healthmodifiableattributeinstance = this.getAttribute(MAX_HEALTH);
+        ModifiableAttributeInstance Damagemodifiableattributeinstance = this.getAttribute(ATTACK_DAMAGE);
+        assert Healthmodifiableattributeinstance != null;
+        assert Damagemodifiableattributeinstance != null;
+
+        if(Healthmodifiableattributeinstance.hasModifier(this.OathHealthModifier)){
+            Healthmodifiableattributeinstance.removeModifier(this.OathHealthModifier);
+        }
+        if(Damagemodifiableattributeinstance.hasModifier(this.OathAttackDamageModifier)){
+            Damagemodifiableattributeinstance.removeModifier(this.OathAttackDamageModifier);
+        }
+
+        if(bool) {
+            if(this.getOathSound()!= null) {
+                this.playSound(this.getOathSound(), 1.0f, 1.0f);
+                Healthmodifiableattributeinstance.addPermanentModifier(this.OathHealthModifier);
+                Damagemodifiableattributeinstance.addPermanentModifier(this.OathAttackDamageModifier);
+            }
+            this.heal(this.getMaxHealth());
+        }
+
         this.getEntityData().set(OATHED, bool);
     }
 
@@ -598,15 +631,69 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void addLevel(int deltaLevel){
+        if(deltaLevel>0) {
+            this.onLevelup();
+        }
         this.setLevel(Math.min(this.getLevel() + deltaLevel, this.getMaxLevel()));
     }
 
     public void onLevelup(){
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(MAX_HEALTH);
-        assert modifiableattributeinstance != null;
-        modifiableattributeinstance.setBaseValue(this.getAttributeValue(MAX_HEALTH)+this.getLevel());
+        ModifiableAttributeInstance Healthmodifiableattributeinstance = this.getAttribute(MAX_HEALTH);
+        ModifiableAttributeInstance Damagemodifiableattributeinstance = this.getAttribute(ATTACK_DAMAGE);
+        assert Healthmodifiableattributeinstance != null;
+        assert Damagemodifiableattributeinstance != null;
+
+        if(Healthmodifiableattributeinstance.hasModifier(this.LevelHealthModifier)){
+            Healthmodifiableattributeinstance.removeModifier(this.LevelHealthModifier);
+        }
+
+        if(Damagemodifiableattributeinstance.hasModifier(this.LevelAttackDamageModifier)){
+            Damagemodifiableattributeinstance.removeModifier(this.LevelAttackDamageModifier);
+        }
+
+        Healthmodifiableattributeinstance.addPermanentModifier(this.LevelHealthModifier);
+        Damagemodifiableattributeinstance.addPermanentModifier(this.LevelAttackDamageModifier);
         this.heal(this.getMaxHealth());
     }
+
+    public void onLimitbreak(){
+        ModifiableAttributeInstance Healthmodifiableattributeinstance = this.getAttribute(MAX_HEALTH);
+        ModifiableAttributeInstance Damagemodifiableattributeinstance = this.getAttribute(ATTACK_DAMAGE);
+        assert Healthmodifiableattributeinstance != null;
+        assert Damagemodifiableattributeinstance != null;
+
+        if(Healthmodifiableattributeinstance.hasModifier(this.LimitbreakHealthModifier)){
+            Healthmodifiableattributeinstance.removeModifier(this.LimitbreakHealthModifier);
+        }
+
+        if(Damagemodifiableattributeinstance.hasModifier(this.LimitbreakAttackDamageModifier)){
+            Damagemodifiableattributeinstance.removeModifier(this.LimitbreakAttackDamageModifier);
+        }
+
+        Healthmodifiableattributeinstance.addPermanentModifier(this.LimitbreakHealthModifier);
+        Damagemodifiableattributeinstance.addPermanentModifier(this.LimitbreakAttackDamageModifier);
+        this.heal(this.getMaxHealth());
+    }
+
+    public void onEntityUpgrade(){
+        ModifiableAttributeInstance Healthmodifiableattributeinstance = this.getAttribute(MAX_HEALTH);
+        ModifiableAttributeInstance Damagemodifiableattributeinstance = this.getAttribute(ATTACK_DAMAGE);
+        assert Healthmodifiableattributeinstance != null;
+        assert Damagemodifiableattributeinstance != null;
+
+        if(Healthmodifiableattributeinstance.hasModifier(this.UpgradeHealthModifier)){
+            Healthmodifiableattributeinstance.removeModifier(this.UpgradeHealthModifier);
+        }
+
+        if(Damagemodifiableattributeinstance.hasModifier(this.UpgradeAttackDamageModifier)){
+            Damagemodifiableattributeinstance.removeModifier(this.UpgradeAttackDamageModifier);
+        }
+
+        Healthmodifiableattributeinstance.addPermanentModifier(this.UpgradeHealthModifier);
+        Damagemodifiableattributeinstance.addPermanentModifier(this.UpgradeAttackDamageModifier);
+        this.heal(this.getMaxHealth());
+    }
+
 
     public boolean isPVPenabled(){
         return PAConfig.CONFIG.EnablePVP.get();
@@ -868,19 +955,21 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public float getAttackDamageForStack(ItemStack stack){
         Item item = stack.getItem();
-        float dmg;
+        AtomicReference<Float> dmg = new AtomicReference<>((float) 0);
         if(item instanceof TieredItem){
             if(item instanceof SwordItem){
-                dmg =((SwordItem) item).getDamage();
+                dmg.set(((SwordItem) item).getDamage());
             }
             else {
-                dmg = ((TieredItem) item).getTier().getAttackDamageBonus();
+                dmg.set(((TieredItem) item).getTier().getAttackDamageBonus());
             }
         }
         else {
-            dmg = (float) item.getAttributeModifiers(EquipmentSlotType.MAINHAND, stack).get(Attributes.ATTACK_DAMAGE).stream().findFirst().get().getAmount();
+            item.getAttributeModifiers(EquipmentSlotType.MAINHAND, stack).get(Attributes.ATTACK_DAMAGE).stream().findFirst().ifPresent((modifier)->{
+                dmg.set((float) modifier.getAmount());
+            });
         }
-        return dmg;
+        return dmg.get();
     }
 
     public int getAngerWarningCount(){
@@ -1893,6 +1982,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void addLimitBreak(int delta){
+
+        if(delta>0){
+            this.onLimitbreak();
+        }
+
         setLimitBreakLv(this.getLimitBreakLv() + delta);
     }
 
@@ -1930,6 +2024,9 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
 
     public void addEntityUpgrade(int delta){
+        if(delta>0){
+            this.onEntityUpgrade();
+        }
         setEntityUpgradeLv(this.getEntityUpgradeLv() + delta);
     }
 
@@ -2133,7 +2230,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
             while(this.getExp()>this.getMaxExp() && this.getLevel() <= this.getMaxLevel()){
                 this.addLevel(1);
-                this.onLevelup();
                 this.setExp(this.getExp()-this.getMaxExp());
             }
         }
@@ -2251,7 +2347,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
         if(!this.nearbyExpList.isEmpty()) {
             for(ExperienceOrbEntity orbEntity: this.nearbyExpList){
-                if(this.distanceTo(orbEntity)>1.5) {
+                if(this.distanceTo(orbEntity)<=1) {
                     this.pickupExpOrb(orbEntity);
                 }
             }
@@ -3073,9 +3169,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                         player.getItemInHand(hand).shrink(1);
                     }
                     this.setOathed(true);
-                    if(this.getOathSound()!= null) {
-                        this.playSound(this.getOathSound(), 1.0f, 1.0f);
-                    }
                     return ActionResultType.SUCCESS;
                 }
             }
