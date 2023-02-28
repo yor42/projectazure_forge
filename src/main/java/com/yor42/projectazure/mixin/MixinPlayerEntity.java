@@ -103,7 +103,7 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
 
     @Override
     public void forcesetEntityonBack(CompoundNBT compound) {
-        this.entityData.set(DATA_BACK, new CompoundNBT());
+        this.entityData.set(DATA_BACK, compound);
     }
 
     @Override

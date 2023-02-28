@@ -1,6 +1,6 @@
 package com.yor42.projectazure.mixin;
 
-import com.yor42.projectazure.client.renderer.layer.CompanionPiggybackLayer;
+import com.yor42.projectazure.client.renderer.layer.EntityOntheBackLayer;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -19,6 +19,6 @@ public abstract class MixinPlayerRenderer extends LivingRenderer<AbstractClientP
 
     @Inject(method = "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererManager;Z)V", at=@At("TAIL"))
     private void onConstructor(EntityRendererManager p_i46103_1_, boolean p_i46103_2_, CallbackInfo ci){
-        this.addLayer(new CompanionPiggybackLayer<>(this));
+        this.addLayer(new EntityOntheBackLayer<>(this));
     }
 }

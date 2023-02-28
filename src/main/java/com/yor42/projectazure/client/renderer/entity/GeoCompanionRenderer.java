@@ -3,6 +3,7 @@ package com.yor42.projectazure.client.renderer.entity;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.yor42.projectazure.client.model.entity.bonus.ModelExcela;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
@@ -13,6 +14,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.layers.ArrowLayer;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -218,6 +220,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
 
     protected GeoCompanionRenderer(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
         super(renderManager, modelProvider, 0.4F, 0.4F, 0.4F);
+        //this.addLayer(new ArrowLayer<>(this));
     }
 
     @Override
