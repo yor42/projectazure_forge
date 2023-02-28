@@ -162,6 +162,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     private final AttributeModifier OathHealthModifier = new AttributeModifier(UUID.randomUUID(), "Oath HP Bonus", 1.5, AttributeModifier.Operation.MULTIPLY_BASE);
     private final AttributeModifier OathAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Oath Attack Damage Bonus", 1.5, AttributeModifier.Operation.MULTIPLY_BASE);
 
+    private boolean onPlayersBack = false;
 
     public float getSpellRange() {
         return 5;
@@ -995,6 +996,14 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public int getItemSwapIndex(Hand hand){
         return hand == MAIN_HAND? this.getItemSwapIndexMainHand() : this.getItemSwapIndexOffHand();
+    }
+
+    public boolean isOnPlayersBack(){
+        return this.onPlayersBack;
+    }
+
+    public void setOnPlayersBack(boolean val){
+        this.onPlayersBack = val;
     }
 
     @Override
@@ -1875,27 +1884,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
     }
 
-    @Override
-    public AxisAlignedBB getBoundingBox() {
-        if (this.isPassenger() && this.getVehicle() == this.getOwner()) {
-            return AxisAlignedBB.ofSize(0.1, 0.1, 0.1);
-        }
-        return super.getBoundingBox();
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBoxForCulling() {
-        return super.getBoundingBoxForCulling();
-    }
-
-    @Override
-    public boolean isInWall() {
-        if (this.isPassenger() && this.getVehicle() == this.getOwner()) {
-            return false;
-        }
-        return super.isInWall();
-    }
-
     public int getSpellDelay(){
         return this.getEntityData().get(SPELLDELAY);
     }
@@ -2311,6 +2299,33 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void aiStep() {
         super.aiStep();
+
+        if(this.tickCount%30==0) {
+            this.getBrain().getMemory(HOME).ifPresent((globalpos)->{
+                if(globalpos.dimension() == this.getCommandSenderWorld().dimension()){
+                    BlockState blockstate = this.level.getBlockState(this.getHOMEPOS().get());
+                    if (!blockstate.isBed(this.getCommandSenderWorld(), this.getHOMEPOS().get(), this)) {
+                        this.releasePoi(HOME);
+                        this.getBrain().eraseMemory(HOME);
+                    }
+                }
+            });
+            this.getBrain().getMemory(FOOD_PANTRY.get()).ifPresent((globalpos)->{
+                if(globalpos.dimension() == this.getCommandSenderWorld().dimension()){
+                    BlockState blockstate = this.level.getBlockState(this.getHOMEPOS().get());
+                    if (!(blockstate.getBlock() instanceof PantryBlock)) {
+                        this.getBrain().eraseMemory(FOOD_PANTRY.get());
+                    }
+                }
+            });
+        }
+
+        if(!this.getCommandSenderWorld().isClientSide()){
+            this.foodStats.tick(this);
+            if(this.RangedAttackCoolDown>0){
+                this.RangedAttackCoolDown--;
+            }
+        }
 
         if(this.getOwner() != null && this.getOwner() instanceof PlayerEntity && this.isAlive()&&this.tickCount%100==0){
             ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
@@ -2963,25 +2978,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void rideTick() {
         super.rideTick();
-        if(this.getOwner() != null && this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-            LivingEntity player = (LivingEntity) this.getVehicle();
-            this.yRot = player.yBodyRot;
-            this.clampRotation(this);
-
-            if(this.tickCount%1200 == 0){
-                this.addAffection(0.5F);
-                this.addMorale(5);
-            }
-        }
-    }
-
-    protected void clampRotation(Entity p_184454_1_) {
-        p_184454_1_.setYBodyRot(this.yRot);
-        float f = MathHelper.wrapDegrees(p_184454_1_.yRot - this.yRot);
-        float f1 = MathHelper.clamp(f, -105.0F, 105.0F);
-        p_184454_1_.yRotO += f1 - f;
-        p_184454_1_.yRot += f1 - f;
-        p_184454_1_.setYHeadRot(p_184454_1_.yRot);
+        this.addMorale(5);
     }
 
     @Nullable
@@ -3383,32 +3380,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     @Override
     public void tick() {
         super.tick();
-        if(this.tickCount%30==0) {
-            this.getBrain().getMemory(HOME).ifPresent((globalpos)->{
-                if(globalpos.dimension() == this.getCommandSenderWorld().dimension()){
-                    BlockState blockstate = this.level.getBlockState(this.getHOMEPOS().get());
-                    if (!blockstate.isBed(this.getCommandSenderWorld(), this.getHOMEPOS().get(), this)) {
-                        this.releasePoi(HOME);
-                        this.getBrain().eraseMemory(HOME);
-                    }
-                }
-            });
-            this.getBrain().getMemory(FOOD_PANTRY.get()).ifPresent((globalpos)->{
-                if(globalpos.dimension() == this.getCommandSenderWorld().dimension()){
-                    BlockState blockstate = this.level.getBlockState(this.getHOMEPOS().get());
-                    if (!(blockstate.getBlock() instanceof PantryBlock)) {
-                        this.getBrain().eraseMemory(FOOD_PANTRY.get());
-                    }
-                }
-            });
-        }
-
-        if(!this.getCommandSenderWorld().isClientSide()){
-            this.foodStats.tick(this);
-            if(this.RangedAttackCoolDown>0){
-                this.RangedAttackCoolDown--;
-            }
-        }
     }
 
     public void updateSwimming() {

@@ -69,13 +69,12 @@ public class EntityShiroko extends EntityGunUserBase {
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.isDeadOrDying()){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("faint_arm", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("faint_arm_loop", ILoopType.EDefaultLoopTypes.LOOP));
-            }
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isDeadOrDying()){
+            event.getController().setAnimation(builder.addAnimation("faint_arm", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("faint_arm_loop", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
@@ -136,11 +135,7 @@ public class EntityShiroko extends EntityGunUserBase {
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-                return PlayState.CONTINUE;
-            }
-            else if(this.isCriticallyInjured()){
+            if(this.isCriticallyInjured()){
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
@@ -193,16 +188,16 @@ public class EntityShiroko extends EntityGunUserBase {
     @Override
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
-        if(Minecraft.getInstance().isPaused()){
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            return PlayState.CONTINUE;
+        }
+        else if(Minecraft.getInstance().isPaused()){
             return PlayState.STOP;
         }
         if(this.isDeadOrDying()){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
-            }
+
+            event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
@@ -210,28 +205,14 @@ public class EntityShiroko extends EntityGunUserBase {
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("sit_injured_leg_idle", ILoopType.EDefaultLoopTypes.LOOP));
                 } else {
                     event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
                 }
-            }
             return PlayState.CONTINUE;
         }
-        else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
-            }
-            return PlayState.CONTINUE;
-        }else if(this.isSwimming()) {
+        else if(this.isSwimming()) {
             event.getController().setAnimation(builder.addAnimation("swim_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }

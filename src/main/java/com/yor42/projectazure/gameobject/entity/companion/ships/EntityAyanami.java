@@ -34,13 +34,11 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
 
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.isDeadOrDying()){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop"));
-            }
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }else if(this.isDeadOrDying()){
+            event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_loop"));
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
@@ -63,11 +61,7 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-                return PlayState.CONTINUE;
-            }
-            else if(this.isCriticallyInjured()){
+            if(this.isCriticallyInjured()){
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
@@ -82,10 +76,6 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             else{
                 event.getController().setAnimation(builder.addAnimation("eat_offhand", ILoopType.EDefaultLoopTypes.LOOP));
             }
-            return PlayState.CONTINUE;
-        }
-        else if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
             return PlayState.CONTINUE;
         }
         else if(this.shouldPlayShipAttackAnim()){
@@ -151,13 +141,11 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
     {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isDeadOrDying()){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
-            }
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            return PlayState.CONTINUE;
+        }else if(this.isDeadOrDying()){
+            event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_loop"));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
@@ -165,16 +153,11 @@ public class EntityAyanami extends EntityKansenDestroyer implements IAnimatable,
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 } else {
                     event.getController().setAnimation(builder.addAnimation("animation.ayanami.sit1Start").addAnimation("animation.ayanami.sit1", ILoopType.EDefaultLoopTypes.LOOP));
                 }
-            }
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {

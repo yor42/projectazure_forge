@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -73,6 +74,11 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
         entityonBack.putDouble("morale", (float) Math.min(morale+5, maxmorale));
     }
 
+    @Inject(method = "die", at=@At("TAIL"))
+    private void onDeath(DamageSource p_70645_1_, CallbackInfo ci){
+        this.forceremoveEntityOnBack();
+    }
+
     @Inject(method = "isSwimming", at=@At("HEAD"), cancellable = true)
     private void onisSwimming(CallbackInfoReturnable<Boolean> cir) {
         if(!this.getEntityonBack().isEmpty()){
@@ -108,11 +114,17 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
 
     @Override
     public Optional<Entity> removeEntityOnBack() {
-        Optional<Entity> val = Optional.empty();
         if (this.timeEntitySatOnBack + 20L < this.level.getGameTime()) {
-            val = this.respawnEntityOnBack(this.getEntityonBack());
-            this.setEntityonBack(new CompoundNBT());
+            return forceremoveEntityOnBack();
         }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Entity> forceremoveEntityOnBack() {
+        Optional<Entity> val;
+        val = this.respawnEntityOnBack(this.getEntityonBack());
+        this.forcesetEntityonBack(new CompoundNBT());
         return val;
     }
 
@@ -122,54 +134,16 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
         if (!this.level.isClientSide && !compound.isEmpty()) {
             EntityType.create(compound, this.level).ifPresent((entity) -> {
                 if (entity instanceof AbstractEntityCompanion) {
-                    ((TameableEntity)entity).setOwnerUUID(this.uuid);
+                    ((TameableEntity) entity).setOwnerUUID(this.uuid);
                 }
 
-                entity.setPos(this.getX(), this.getY() + (double)0.7F, this.getZ());
-                ((ServerWorld)this.level).addWithUUID(entity);
+                entity.setPos(this.getX(), this.getY() + (double) 0.7F, this.getZ());
+                ((ServerWorld) this.level).addWithUUID(entity);
                 val.set(Optional.of(entity));
 
             });
         }
         return val.get();
-    }
-
-    @Override
-    @Unique(silent = true)
-    public void positionRider(@Nonnull Entity entity) {
-        super.positionRider(entity);
-    }
-
-    //We do some hacky shit to prevent crash when other mod also overrides this. thanks Domi.
-    @SuppressWarnings({"UnresolvedMixinReference", "MixinAnnotationTarget"})
-    @Inject(method = {"positionRider", "func_184232_k"}, at = @At("HEAD"), remap = false, cancellable = true)
-    private void onPositionRider(Entity entity, CallbackInfo cir){
-        if(entity instanceof AbstractEntityCompanion){
-            float entityhorizontalOffset = -0.3F;
-            float f1 = (float)((this.removed ? (double)0.01F : this.getPassengersRidingOffset()) + entity.getMyRidingOffset());
-            Vector3d vector3d = (new Vector3d(entityhorizontalOffset, 0.0D, 0.0D)).yRot(-this.yBodyRotO * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
-            entity.setPos(this.getX() + vector3d.x, this.getY() + f1, this.getZ() + vector3d.z);
-            entity.yRot += this.yBodyRot;
-            entity.setYHeadRot(entity.getYHeadRot() + this.yBodyRot);
-            cir.cancel();
-        }
-    }
-
-    @Override
-    @Unique(silent = true)
-    public double getPassengersRidingOffset() {
-        return super.getPassengersRidingOffset();
-    }
-
-    @SuppressWarnings({"UnresolvedMixinReference", "MixinAnnotationTarget"})
-    @Inject(method = {"getPassengersRidingOffset", "func_70042_X"}, at = @At("HEAD"), remap = false, cancellable = true)
-    private void ongetPassengersRidingOffset(CallbackInfoReturnable<Double> cir){
-        if(!this.getPassengers().isEmpty()){
-            if(this.getPassengers().get(0) instanceof AbstractEntityCompanion){
-                cir.setReturnValue(0D);
-                cir.cancel();
-            }
-        }
     }
 
     protected MixinPlayerEntity(EntityType<? extends LivingEntity> p_i48577_1_, World p_i48577_2_) {

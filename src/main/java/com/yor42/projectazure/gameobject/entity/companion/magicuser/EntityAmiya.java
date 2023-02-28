@@ -44,10 +44,12 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
         AnimationBuilder builder = new AnimationBuilder();
-        if(Minecraft.getInstance().isPaused() || this.swinging){
-            return PlayState.STOP;
+
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
         }
-        else if(this.isDeadOrDying()){
+        else  if(this.isDeadOrDying()){
             if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_arm"));
             }
@@ -90,11 +92,7 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-                return PlayState.CONTINUE;
-            }
-            else if(this.isCriticallyInjured()){
+            if(this.isCriticallyInjured()){
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
@@ -160,7 +158,11 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isDeadOrDying()){
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            return PlayState.CONTINUE;
+        }
+        else if(this.isDeadOrDying()){
             if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
                 event.getController().setAnimation(builder.addAnimation("carry_leg"));
             }
@@ -174,17 +176,12 @@ public class EntityAmiya extends AbstractCompanionMagicUser implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
                 if(this.isCriticallyInjured()){
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 }
                 else {
                     event.getController().setAnimation(builder.addAnimation("sit").addAnimation("sit_leg_idle"));
                 }
-            }
             return PlayState.CONTINUE;
         }
         else if(this.isUsingSpell()){

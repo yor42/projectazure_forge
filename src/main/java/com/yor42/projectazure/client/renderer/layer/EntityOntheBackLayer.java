@@ -1,6 +1,5 @@
 package com.yor42.projectazure.client.renderer.layer;
 
-import com.lowdragmc.lowdraglib.utils.DummyWorld;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.client.renderer.entity.GeoCompanionRenderer;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -8,7 +7,6 @@ import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -26,6 +24,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.core.IAnimatable;
 
 @OnlyIn(Dist.CLIENT)
 public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<T, PlayerModel<T>> {
@@ -51,6 +50,7 @@ public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<
                 if(entity instanceof AbstractEntityCompanion){
                     this.companion = (AbstractEntityCompanion) entity;
                     this.companion.setNoAi(true);
+                    this.companion.setOnPlayersBack(true);
                 }});
         }
 
@@ -61,32 +61,39 @@ public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<
         matrixStackIn.pushPose();
         this.companion.yBodyRot = 180;
         this.companion.yBodyRotO = 180;
+        this.companion.tickCount = player.tickCount;
         float playerheaddelta = player.yHeadRot-player.yBodyRot+180;
         this.companion.yHeadRot = playerheaddelta;
         this.companion.yHeadRotO = playerheaddelta;
         matrixStackIn.mulPose(Vector3f.ZP.rotationDegrees(180));
         //clampRotation(player, this.companion);
         this.dispatcher.setRenderShadow(false);
-        this.dispatcher.render(this.companion, 0, 0, 0, netHeadYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+        this.render(this.companion,player, 0, 0, 0, netHeadYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
         matrixStackIn.popPose();
 
     }
 
-    public <E extends AbstractEntityCompanion> void render(E p_229084_1_, double p_229084_2_, double p_229084_4_, double p_229084_6_, float p_229084_8_, float p_229084_9_, MatrixStack p_229084_10_, IRenderTypeBuffer p_229084_11_, int p_229084_12_) {
-        EntityRenderer<? super E> entityrenderer = this.dispatcher.getRenderer(p_229084_1_);
+    public <E extends AbstractEntityCompanion & IAnimatable> void render(E p_229084_1_,T player, double p_229084_2_, double p_229084_4_, double p_229084_6_, float p_229084_8_, float p_229084_9_, MatrixStack p_229084_10_, IRenderTypeBuffer p_229084_11_, int p_229084_12_) {
+        EntityRenderer<? super E> entityrenderer1 = this.dispatcher.getRenderer(p_229084_1_);
 
-        if(!(entityrenderer instanceof GeoCompanionRenderer)){
+        if(!(entityrenderer1 instanceof GeoCompanionRenderer)){
             return;
         }
 
+        GeoCompanionRenderer<? super E> entityrenderer = (GeoCompanionRenderer<? super E>) entityrenderer1;
+
         try {
-            Vector3d vector3d = entityrenderer.getRenderOffset(p_229084_1_, p_229084_9_);
+            Vector3d vector3d = new Vector3d(0,-p_229084_1_.getEyeHeight()+0.2, 0.25);
+
             double d2 = p_229084_2_ + vector3d.x();
             double d3 = p_229084_4_ + vector3d.y();
             double d0 = p_229084_6_ + vector3d.z();
             p_229084_10_.pushPose();
             p_229084_10_.translate(d2, d3, d0);
-            entityrenderer.render(p_229084_1_, p_229084_8_, p_229084_9_, p_229084_10_, p_229084_11_, p_229084_12_);
+
+            MatrixStack nametagStack = new MatrixStack();
+            nametagStack.translate(player.getX(), player.getY(), player.getZ());
+            entityrenderer.renderonLayer(p_229084_1_, p_229084_8_, p_229084_9_, p_229084_10_, p_229084_11_, p_229084_12_);
             p_229084_10_.translate(-vector3d.x(), -vector3d.y(), -vector3d.z());
             p_229084_10_.popPose();
         } catch (Throwable throwable) {

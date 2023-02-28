@@ -30,7 +30,7 @@ public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
         super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryModuleStatus.VALUE_ABSENT));
     }
 
-    private static final RangedInteger followrange = new RangedInteger(1,4);
+    private static final RangedInteger followrange = new RangedInteger(1,2);
 
     @Override
     protected boolean checkExtraStartConditions(@Nonnull ServerWorld world, AbstractEntityCompanion entity) {

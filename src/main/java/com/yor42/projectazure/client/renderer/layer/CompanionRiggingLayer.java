@@ -6,9 +6,12 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
+@OnlyIn(Dist.CLIENT)
 public class CompanionRiggingLayer<E extends AbstractEntityCompanion> extends GeoLayerRenderer<E> {
     public CompanionRiggingLayer(IGeoRenderer<E> entityRendererIn) {
         super(entityRendererIn);

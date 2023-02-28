@@ -17,13 +17,13 @@ public abstract class MixinBoatEntity extends Entity {
         super(p_i48580_1_, p_i48580_2_);
     }
 
-    @Inject(method = "positionRider", at = @At("TAIL"))
+    @Inject(method = "positionRider", at = @At("TAIL"), cancellable = true)
     private void onPositionRider(Entity entity, CallbackInfo ci){
         if(entity instanceof AbstractEntityCompanion){
             if (this.getPassengers().size() > 1) {
-                int j = entity.getId() % 2 == 0 ? -90 : -270;
-                entity.setYBodyRot(((AnimalEntity)entity).yBodyRot + (float)j);
-                entity.setYHeadRot(entity.getYHeadRot() + (float)j);
+                entity.setYBodyRot(((AbstractEntityCompanion)entity).yBodyRot);
+                entity.setYHeadRot(entity.getYHeadRot());
+                ci.cancel();
             }
         }
     }

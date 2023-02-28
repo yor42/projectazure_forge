@@ -58,13 +58,11 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
             return PlayState.STOP;
         }
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.isDeadOrDying()){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
-            }
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }else if(this.isDeadOrDying()){
+            event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
@@ -95,10 +93,6 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
 
             return PlayState.CONTINUE;
         }
-        else if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            return PlayState.CONTINUE;
-        }
         else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", ILoopType.EDefaultLoopTypes.LOOP));
 
@@ -110,11 +104,7 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
             return PlayState.CONTINUE;
         }
         if(this.isOrderedToSit()|| this.getVehicle() != null){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-                return PlayState.CONTINUE;
-            }
-            else if(this.isCriticallyInjured()){
+            if(this.isCriticallyInjured()){
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
@@ -175,30 +165,22 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isDeadOrDying()){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
-            }
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            return PlayState.CONTINUE;
+        }else if(this.isDeadOrDying()){
+            event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
             event.getController().setAnimation(builder.addAnimation("sleep_leg", ILoopType.EDefaultLoopTypes.LOOP));
             return PlayState.CONTINUE;
         }
-        else if(this.isOrderedToSit() || this.getVehicle() != null){
-
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
-                if (this.isCriticallyInjured()) {
-                    event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
-                } else {
-                    event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
-                }
+        else if(this.isOrderedToSit() || this.getVehicle() != null) {
+            if (this.isCriticallyInjured()) {
+                event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
+            } else {
+                event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_leg_idle"));
             }
             return PlayState.CONTINUE;
         }

@@ -15,6 +15,8 @@ public interface IMixinPlayerEntity {
 
     Optional<Entity> removeEntityOnBack();
 
+    Optional<Entity> forceremoveEntityOnBack();
+
     Optional<Entity> respawnEntityOnBack(CompoundNBT compound);
 
 

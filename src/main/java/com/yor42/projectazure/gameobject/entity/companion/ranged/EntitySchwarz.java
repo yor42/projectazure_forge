@@ -46,17 +46,12 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
 
     @Override
     protected <P extends IAnimatable> PlayState predicate_upperbody(AnimationEvent<P> event) {
-        if(Minecraft.getInstance().isPaused()){
-            return PlayState.STOP;
-        }
         AnimationBuilder builder = new AnimationBuilder();
-        if(this.isDeadOrDying()){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
-            }
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_arm"));
+            return PlayState.CONTINUE;
+        }else if(this.isDeadOrDying()){
+            event.getController().setAnimation(builder.addAnimation("faint_arm").addAnimation("faint_arm_idle"));
             return PlayState.CONTINUE;
         }
         else if(this.swinging){
@@ -85,10 +80,6 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
 
             return PlayState.CONTINUE;
         }
-        else if(this.getVehicle() == this.getOwner()){
-            event.getController().setAnimation(builder.addAnimation("carry_arm"));
-            return PlayState.CONTINUE;
-        }
         else if(this.isBeingPatted()){
             event.getController().setAnimation(builder.addAnimation("pat", ILoopType.EDefaultLoopTypes.LOOP));
 
@@ -100,11 +91,7 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
             return PlayState.CONTINUE;
         }
         if(this.isOrderedToSit()|| this.getVehicle() != null){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_arm"));
-                return PlayState.CONTINUE;
-            }
-            else if(this.isCriticallyInjured()){
+            if(this.isCriticallyInjured()){
                 event.getController().setAnimation(builder.addAnimation("sit_injured_arm").addAnimation("sit_injured_arm_idle"));
             }
             else {
@@ -179,13 +166,11 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
     protected <E extends IAnimatable> PlayState predicate_lowerbody(AnimationEvent<E> event) {
         AnimationBuilder builder = new AnimationBuilder();
 
-        if(this.isDeadOrDying()){
-            if(this.getVehicle() != null && this.getVehicle() == this.getOwner()){
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            }
-            else {
-                event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
-            }
+        if(this.isOnPlayersBack()){
+            event.getController().setAnimation(builder.addAnimation("carry_leg"));
+            return PlayState.CONTINUE;
+        }else if(this.isDeadOrDying()){
+            event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
             return PlayState.CONTINUE;
         }
         else if(this.isSleeping()){
@@ -193,16 +178,11 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.isOrderedToSit() || this.getVehicle() != null) {
-
-            if (this.getVehicle() != null && this.getVehicle() == this.getOwner()) {
-                event.getController().setAnimation(builder.addAnimation("carry_leg"));
-            } else {
                 if (this.isCriticallyInjured()) {
                     event.getController().setAnimation(builder.addAnimation("sit_injured_leg").addAnimation("sit_injured_leg_idle"));
                 } else {
                     event.getController().setAnimation(builder.addAnimation("sit_leg").addAnimation("sit_idle_leg"));
                 }
-            }
             return PlayState.CONTINUE;
         }
         else if(this.isSwimming()) {
