@@ -3008,7 +3008,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                 else if(this.isSleeping()){
                     this.stopSleeping();
                 }
-                this.startRiding(player, true);
+                if(!this.getCommandSenderWorld().isClientSide()) {
+                    this.setEntityOnShoulder((ServerPlayerEntity) player);
+                }
+                //this.startRiding(player, true);
                 return ActionResultType.SUCCESS;
             }
             else if (this.getVehicle() != null) {
@@ -3091,7 +3094,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     }
                     else if (this.CheckVerticalInteraction(player, 0.2F)) {
                         if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit()) {
-                            this.startRiding(player, true);
+                            if(!this.getCommandSenderWorld().isClientSide()) {
+                                this.setEntityOnShoulder((ServerPlayerEntity) player);
+                            }
+                            //this.startRiding(player, true);
                             return ActionResultType.SUCCESS;
                         }
                         else {

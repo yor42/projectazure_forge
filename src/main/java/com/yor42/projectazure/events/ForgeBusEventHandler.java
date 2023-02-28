@@ -391,7 +391,7 @@ public class ForgeBusEventHandler {
         List<Entity> passengers = player.getPassengers();
         //BlockPos pos = event.getPos();
         if (player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
-            /*
+
             ((IMixinPlayerEntity)player).removeEntityOnBack().ifPresent((entity) -> {
                 if (!(entity instanceof AbstractEntityCompanion)) {
                     return;
@@ -410,9 +410,9 @@ public class ForgeBusEventHandler {
                     player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
                 }
             });
-            */
 
 
+/*
             if(!player.getPassengers().isEmpty()) {
                 BlockPos pos = event.getPos();
                 for (Entity entity : passengers) {
@@ -436,6 +436,8 @@ public class ForgeBusEventHandler {
                     }
                 }
             }
+
+ */
             player.swing(MAIN_HAND);
         }
     }

@@ -327,6 +327,14 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
     }
 
+    public void renderonLayer(T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        if(Minecraft.getInstance().player != null && entity.isOwnedBy(Minecraft.getInstance().player)) {
+            this.renderStatus(entity, stack, bufferIn, packedLightIn);
+            this.renderNameTag(entity, entity.getDisplayName(), stack, bufferIn, packedLightIn);
+        }
+        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+    }
+
     @Override
     public void render(GeoModel model, T animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
@@ -359,6 +367,31 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     protected void performCustomRotationtoStack(ItemStack stack, MatrixStack matrix, Hand hand){}
+
+    protected void renderNameTag(@Nonnull T entity, ITextComponent text, MatrixStack stack, IRenderTypeBuffer iRenderTypeBuffer, int light, float rotationmul) {
+        double d0 = entityRenderDispatcher.distanceToSqr(entity);
+        if (net.minecraftforge.client.ForgeHooksClient.isNameplateInRenderDistance(entity, d0)) {
+            boolean flag = !entity.isDiscrete();
+            float renderscale = 0.4F;
+            float f = (entity.getBbHeight()+0.2F) / renderscale;
+            stack.pushPose();
+            stack.scale(renderscale, renderscale, renderscale);
+            stack.translate(0.0D, f, 0.0D);
+            stack.mulPose(entityRenderDispatcher.cameraOrientation());
+            stack.scale(-0.025F, -0.025F, 0.025F);
+            Matrix4f matrix4f = stack.last().pose();
+            float f1 = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
+            int j = (int) (f1 * 255.0F) << 24;
+            FontRenderer fontrenderer = this.getFont();
+            float f2 = (float) (-fontrenderer.width(text) / 2);
+            fontrenderer.drawInBatch(text, f2, (float) 0, 553648127, false, matrix4f, iRenderTypeBuffer, flag, j, light);
+            if (flag) {
+                fontrenderer.drawInBatch(text, f2, (float) 0, -1, false, matrix4f, iRenderTypeBuffer, false, 0, light);
+            }
+
+            stack.popPose();
+        }
+    }
 
     protected void renderStatus(T entity, MatrixStack stack, IRenderTypeBuffer iRenderTypeBuffer, int p_225629_5_) {
         ITextComponent text = entity.getMoveStatus().getDIsplayname();
