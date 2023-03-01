@@ -1,10 +1,13 @@
 package com.yor42.projectazure.mixin;
 
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
+import com.yor42.projectazure.libs.utils.MathUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,6 +15,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -24,13 +28,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 
 @Mixin(value = PlayerEntity.class, priority = 1500)
 public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPlayerEntity {
+    @Shadow public abstract void playSound(SoundEvent p_184185_1_, float p_184185_2_, float p_184185_3_);
+
+    @Unique
     private static final DataParameter<CompoundNBT> DATA_BACK = EntityDataManager.defineId(PlayerEntity.class, DataSerializers.COMPOUND_TAG);
+
+    @Unique
+    @Nullable
+    private AbstractEntityCompanion companionOnBack;
 
     @Unique
     private long timeEntitySatOnBack;
@@ -56,11 +68,26 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
             this.removeEntityOnBack();
         }
 
+        if(this.tickCount%400==0 && MathUtil.rollBooleanRNG() && this.companionOnBack!=null){
+            this.playSound(this.companionOnBack.Ambientsoundgetter(),0.9F, 0.9F+(0.2F*MathUtil.rand.nextFloat()));
+        }
+
         if(this.tickCount %1200 !=0 || this.getEntityonBack().isEmpty()){
             return;
         }
 
         CompoundNBT entityonBack = this.getEntityonBack();
+
+        if(entityonBack.isEmpty()){
+            return;
+        }else if(this.companionOnBack == null){
+            EntityType.create(entityonBack, this.level).ifPresent((entity)->{
+                if(entity instanceof AbstractEntityCompanion){
+                    this.companionOnBack = (AbstractEntityCompanion) entity;
+                }
+            });
+        }
+
         float affection = entityonBack.getFloat("affection");
         AtomicReference<Float> maxaffection = new AtomicReference<>((float) 100);
         double morale = entityonBack.getDouble("morale");
@@ -72,6 +99,7 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
         });
         entityonBack.putFloat("affection", (float) Math.min(affection+0.5, maxaffection.get()));
         entityonBack.putDouble("morale", (float) Math.min(morale+5, maxmorale));
+
     }
 
     @Inject(method = "die", at=@At("TAIL"))
@@ -109,6 +137,14 @@ public abstract class MixinPlayerEntity extends LivingEntity implements IMixinPl
 
     @Override
     public void forcesetEntityonBack(CompoundNBT compound) {
+        if(!compound.isEmpty()) {
+            Optional<Entity> ety = EntityType.create(compound, this.level);
+            if (ety.isPresent() && ety.get() instanceof AbstractEntityCompanion) {
+                this.companionOnBack = (AbstractEntityCompanion) ety.get();
+            } else {
+                this.companionOnBack = null;
+            }
+        }
         this.entityData.set(DATA_BACK, compound);
     }
 

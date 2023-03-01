@@ -404,6 +404,8 @@
   "block.projectazure.reenforced_plank": "Reenforced Wooden Plank",
   "block.projectazure.reenforced_concrete": "Reenforced Concrete",
   "block.projectazure.reenforced_concrete.tooltip":"Concrete Reenforced with steel; part of multiblock Structure.",
+  "block.projectazure.asphalt_concrete": "Asphalt Concrete",
+  "block.projectazure.steel_foundation": "Steel Foundation",
   "block.projectazure.orirock": "Orirock",
   "block.projectazure.cobbled_orirock": "Cobbled Orirock",
   "block.projectazure.crude_oil": "Crude Oil",

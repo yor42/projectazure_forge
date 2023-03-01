@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FY",
+    "BF"
+  ],
+  "key": {
+    "F": {
+      "item": "projectazure:machine_frame"
+    },
+    "Y": {
+      "tag": "forge:dyes/yellow"
+    },
+    "B": {
+      "tag": "forge:dyes/black"
+    }
+  },
+  "result": {
+    "item": "projectazure:steel_foundation",
+    "count": 2
+  }
+}

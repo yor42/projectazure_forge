@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BG",
+    "GB"
+  ],
+  "key": {
+    "B": {
+      "item": "projectazure:bitumen"
+    },
+    "G": {
+      "tag": "forge:gravel"
+    }
+  },
+  "result": {
+    "item": "projectazure:asphalt_concrete",
+    "count": 4
+  }
+}

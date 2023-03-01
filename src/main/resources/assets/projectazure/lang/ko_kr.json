@@ -352,6 +352,8 @@
   "item.tooltip.energynonrechargeable": "재충전 불가",
   "item.tooltip.chargeprogress": "충전 진행도: %s",
   "item.tooltip.chargefailed_nobattery": "충전 실패: 전원이 부족합니다!",
+  "item.tooltip.drone_needsattention": "Logistics Drone at %s needs user attention: %s",
+  "item.tooltip.drone_needsattention_nopath": "No Valid Path Found to %s",
   "item.tooltip.ready": "제세동 준비 완료",
   "item.tooltip.not_revived": "해당 동료는 빈사 상태입니다. 제세동기를 사용하세요!",
 
@@ -402,6 +404,8 @@
   "block.projectazure.reenforced_plank": "강화된 판자",
   "block.projectazure.reenforced_concrete": "강화 콘크리트",
   "block.projectazure.reenforced_concrete.tooltip": "강철로 보강된 콘크리트입니다; 멀티블럭 구조물의 일부로 쓰입니다.",
+  "block.projectazure.asphalt_concrete": "아스팔트 콘크리트",
+  "block.projectazure.steel_foundation": "강철 기반",
   "block.projectazure.orirock": "원암",
   "block.projectazure.cobbled_orirock": "원암 조약돌",
   "block.projectazure.crude_oil": "원유",
@@ -437,13 +441,13 @@
 
   "rigging_valid_on.tooltip": "사용 가능 함급:",
 
-  "equiment.main_gun": "주포",
-  "equiment.sub_gun": "부포",
-  "equiment.anti_air": "대공",
-  "equiment.torpedo": "어뢰",
-  "equiment.plane": "항공기",
-  "equiment.utility": "지원",
-  "equiment.empty": "비어 있음",
+  "maingun": "Main Gun",
+  "subgun": "Sub Gun",
+  "antiair": "Anti Air",
+  "torpedo": "Torpedo",
+  "plane": "Planes",
+  "utility": "Utility",
+  "empty": "Empty",
 
   "tileentity.alloy_furnace.name": "합금로",
   "tileentity.basic_refinery.name": "기본 정유기",

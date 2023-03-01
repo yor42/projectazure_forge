@@ -98,6 +98,10 @@ public class MathUtil {
         return rand.nextFloat()<=chance;
     }
 
+    public static boolean rollBooleanRNG(){
+        return rand.nextBoolean();
+    }
+
     public static int generateRandomInt(int bound) {
         return rand.nextInt(bound);
     }

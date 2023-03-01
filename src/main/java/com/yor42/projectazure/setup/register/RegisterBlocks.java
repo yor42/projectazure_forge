@@ -14,11 +14,16 @@ import com.yor42.projectazure.libs.utils.TooltipUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -77,7 +82,6 @@ public class RegisterBlocks {
 
     public static final RegistryObject<Block> MACHINE_FRAME = register_simplemodel("machine_frame", () ->
             new Block((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.BOTH);
-
     public static final RegistryObject<Block> MACHINE_FRAME_SLAB = register_simplemodel("machine_frame_slab", () ->
             new SlabBlock((AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL))), Main.PA_MACHINES, REGISTERMODEL.ITEM);
 
@@ -101,7 +105,17 @@ public class RegisterBlocks {
     public static final RegistryObject<Block> WARPED_PANTRY = register_blockWithToolTiponItem("warped_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
     public static final RegistryObject<Block> CRIMSON_PANTRY = register_blockWithToolTiponItem("crimson_pantry", ()->new PantryBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2, 3).sound(SoundType.WOOD).noOcclusion()), Main.PA_MACHINES);
 
-    public static final RegistryObject<Block> REENFORCEDCONCRETE = register_simplemodel("reenforced_concrete",()-> new Block(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE).noOcclusion()), Main.PA_MACHINES);
+    public static final RegistryObject<Block> STEEL_FOUNDATION = register_simplemodel("steel_foundation",()-> new Block(AbstractBlock.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL)), Main.PA_RESOURCES);
+    public static final RegistryObject<Block> REENFORCEDCONCRETE = register_simplemodel("reenforced_concrete",()-> new Block(AbstractBlock.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE)), Main.PA_MACHINES);
+    public static final RegistryObject<Block> ASPHALTCONCRETE = register_simplemodel("asphalt_concrete",()-> new Block(AbstractBlock.Properties.of(Material.STONE).strength(2, 8).harvestLevel(2).sound(SoundType.STONE)){
+        @Override
+        public void stepOn(World p_176199_1_, BlockPos p_176199_2_, Entity entity) {
+            super.stepOn(p_176199_1_, p_176199_2_, entity);
+            if(entity instanceof LivingEntity) {
+                ((LivingEntity) entity).addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 2, 0, false, false));
+            }
+        }
+    }, Main.PA_RESOURCES);
 
     public static final RegistryObject<Block> RECRUIT_BEACON = registerAnimatedMachines("recruit_beacon", RecruitBeaconBlock::new, Main.PA_MACHINES, new Item.Properties().setISTER(()-> ItemRecruitBeaconRenderer::new));
 

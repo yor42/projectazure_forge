@@ -20,6 +20,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.PotionItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.tags.ITag;
@@ -28,7 +29,6 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -294,6 +294,23 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_concrete_powder", has(Blocks.GRAY_CONCRETE_POWDER))
                 .save(consumer);
 
+        ShapedRecipeBuilder.shaped(RegisterBlocks.ASPHALTCONCRETE.get().asItem(),4)
+                .define('B', RegisterItems.BITUMEN.get())
+                .define('G', Tags.Items.GRAVEL)
+                .pattern("BG")
+                .pattern("GB")
+                .unlockedBy("has_resource", has(RegisterItems.BITUMEN.get()))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterBlocks.STEEL_FOUNDATION.get().asItem(),2)
+                .define('F', RegisterBlocks.MACHINE_FRAME.get())
+                .define('Y', Tags.Items.DYES_YELLOW)
+                .define('B', Tags.Items.DYES_BLACK)
+                .pattern("FY")
+                .pattern("BF")
+                .unlockedBy("has_resource", has(RegisterBlocks.MACHINE_FRAME.get()))
+                .save(consumer);
+
         ShapedRecipeBuilder.shaped(RegisterItems.COPPER_COIL.get(), 2)
                 .define('W', RegisterItems.COPPER_WIRE.get())
                 .define('B', RegisterItems.IRON_PIPE.get())
@@ -497,6 +514,19 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("S")
                 .unlockedBy("has_stick", has(RegisterItems.C99_CARBON.get()))
                 .unlockedBy("has_material", has(ModTags.Items.PLATE_STEEL))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.OATHRING.get())
+                .define('N', Tags.Items.NETHER_STARS)
+                .define('D', Tags.Items.GEMS_DIAMOND)
+                .define('S', ModTags.Items.INGOT_D32)
+                .define('G', Tags.Items.INGOTS_GOLD)
+                .define('B', Items.BLACK_WOOL)
+                .pattern("DND")
+                .pattern("GSG")
+                .pattern("BBB")
+                .unlockedBy("has_stick", has(Tags.Items.GEMS_DIAMOND))
+                .unlockedBy("has_material", has(Tags.Items.NETHER_STARS))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.PRIMITIVE_DEVICE.get())

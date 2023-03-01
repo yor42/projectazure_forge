@@ -825,7 +825,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         compound.putInt("rangedattackcooldown", this.RangedAttackCoolDown);
         compound.putBoolean("shouldbeSitting", this.shouldBeSitting);
         compound.putBoolean("isforcewokenup", this.getEntityData().get(ISFORCEWOKENUP));
-        compound.putDouble("exp", this.getEntityData().get(EXP));
+        compound.putFloat("exp", this.getEntityData().get(EXP));
         compound.putInt("level", this.getEntityData().get(LEVEL));
         compound.putInt("limitbreaklv", this.getEntityData().get(LIMITBREAKLEVEL));
         compound.putInt("upgradelevel", this.getEntityUpgradeLv());
@@ -1979,7 +1979,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.getEntityData().get(PAT_ANIMATION_TIME) !=0;
     }
 
-    public double getMaxExp(){
+    public float getMaxExp(){
         return 10+(5*this.getLevel());
     }
 
@@ -2132,6 +2132,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return this.isOathed()? 200:100;
     }
 
+    public SoundEvent Ambientsoundgetter(){
+        return this.getAmbientSound();
+    }
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
@@ -2209,11 +2213,11 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getFoodStats().addStats(20, 20);
     }
 
-    public void setExp(double exp) {
-        this.getEntityData().set(EXP, (float) exp);
+    public void setExp(float exp) {
+        this.getEntityData().set(EXP, exp);
     }
 
-    public double getExp() {
+    public float getExp() {
         return this.getEntityData().get(EXP);
     }
 
@@ -2234,7 +2238,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         return 100;
     }
 
-    public void addExp(double deltaExp){
+    public void addExp(float deltaExp){
         if(this.getExp()+deltaExp >= this.getMaxExp()) {
             this.setExp((float) (this.getExp()+deltaExp));
             this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
@@ -2244,7 +2248,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             }
         }
         this.setExp(this.getExp()+deltaExp);
-        this.getExp();
     }
 
 

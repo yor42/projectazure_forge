@@ -31,6 +31,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,7 @@ import net.minecraft.state.properties.BedPart;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -57,6 +59,7 @@ import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -117,6 +120,50 @@ public class ForgeBusEventHandler {
             }
         }
 
+    }
+
+    @SubscribeEvent
+    public static void onEXPEvent(PlayerXpEvent.XpChange event){
+        PlayerEntity player1 = event.getPlayer();
+
+        if(player1.getCommandSenderWorld().isClientSide()){
+            return;
+        }
+
+        ServerPlayerEntity player = (ServerPlayerEntity) player1;
+        IMixinPlayerEntity mixinplayer = ((IMixinPlayerEntity)player);
+
+        CompoundNBT entityonBack = mixinplayer.getEntityonBack();
+        if(entityonBack.isEmpty()){
+            return;
+        }
+
+        float exp = entityonBack.getFloat("exp");
+        int level = entityonBack.getInt("level");
+        int maxexp = 10+(5*level);
+        int maxlevel = 50;
+        float deltaExp = event.getAmount()/2F;
+
+        float newExp = exp+deltaExp;
+        int newLevel = level;
+        if(exp+deltaExp >= maxexp) {
+            player.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 0.5F);
+            while (newExp > maxexp) {
+
+                if (newLevel >= maxlevel) {
+                    newLevel = maxlevel;
+                    newExp = maxlevel;
+                } else {
+                    newLevel++;
+                    newExp -= maxexp;
+                }
+            }
+        }
+
+        entityonBack.putFloat("exp", newExp);
+        entityonBack.putInt("level", newLevel);
+
+        event.setAmount((int) (event.getAmount()-deltaExp));
     }
 
     @SubscribeEvent

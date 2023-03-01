@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -20,6 +21,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
@@ -59,6 +61,10 @@ public class EntityOntheBackLayer<T extends PlayerEntity> extends LayerRenderer<
         }
 
         matrixStackIn.pushPose();
+        if(player.isCrouching()) {
+            matrixStackIn.translate(0,0.25, 0);
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(90F / (float) Math.PI));
+        }
         this.companion.yBodyRot = 180;
         this.companion.yBodyRotO = 180;
         this.companion.tickCount = player.tickCount;

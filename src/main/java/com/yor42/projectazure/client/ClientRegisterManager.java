@@ -1,9 +1,26 @@
 package com.yor42.projectazure.client;
 
 import com.yor42.projectazure.client.gui.container.*;
+import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterContainer;
+import com.yor42.projectazure.setup.register.RegisterItems;
+import mekanism.additions.common.item.ItemBalloon;
+import mekanism.additions.common.registries.AdditionsBlocks;
+import mekanism.additions.common.registries.AdditionsItems;
+import mekanism.client.ClientRegistrationUtil;
+import mekanism.client.render.MekanismRenderer;
+import mekanism.common.registration.impl.ItemRegistryObject;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
+import net.minecraft.item.Item;
+import net.minecraft.potion.PotionUtils;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Constants.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientRegisterManager {
 
     public static void registerScreen(){
@@ -24,6 +41,12 @@ public class ClientRegisterManager {
         ScreenManager.register(RegisterContainer.GROWTH_CHAMBER_CONTAINER.get(), GuiCrystalGrowthChamber::new);
         ScreenManager.register(RegisterContainer.PANTRY_CONTAINER.get(), GuiPantryInventory::new);
         ScreenManager.register(RegisterContainer.BASICCCHEMICALREACTOR.get(), GuiBasicChemicalReactor::new);
+    }
+
+    @SubscribeEvent
+    public static void registerItemColorHandlers(ColorHandlerEvent.Item event) {
+        ItemColors color = event.getItemColors();
+        color.register((stack, tintindex)-> tintindex <= 0 ? -1 : PotionUtils.getColor(stack), RegisterItems.SYRINGE.get());
     }
 
 }
