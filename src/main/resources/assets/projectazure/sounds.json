@@ -156,6 +156,13 @@
       }
     ]
   },
+  "syringe_inject": {
+    "sounds": [
+      {
+        "name": "projectazure:item/syringe_shot"
+      }
+    ]
+  },
   "gun_fire_medium": {
     "sounds": [
       {

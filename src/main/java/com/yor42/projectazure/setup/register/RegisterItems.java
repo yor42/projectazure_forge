@@ -5,6 +5,7 @@ import com.tac.guns.item.TransitionalTypes.TimelessAmmoItem;
 import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.client.renderer.equipment.Equipment127mmGunRenderer;
 import com.yor42.projectazure.client.renderer.equipment.equipment533mmTorpedoRenderer;
+import com.yor42.projectazure.client.renderer.gun.TyphoonGeoRenderer;
 import com.yor42.projectazure.client.renderer.items.*;
 import com.yor42.projectazure.gameobject.items.*;
 import com.yor42.projectazure.gameobject.items.materials.ModMaterials;
@@ -503,6 +504,7 @@ public class RegisterItems {
     //Shooty stuff
     public static final RegistryObject<Item> WHITEFANG_465 = register_withoutTexture("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
     public static final RegistryObject<Item> TYPHOON = register_withoutTexture("typhoon", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
+    //public static final RegistryObject<Item> TYPHOON_GEO = register_withoutTexture("typhoon_geo", ()->new GeoGunItem((properties)->properties.tab(PA_WEAPONS).setISTER(()->TyphoonGeoRenderer::new)));
     public static final RegistryObject<Item> W_GRANADELAUNCHER = register_withoutTexture("granadelauncher", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SANGVIS_RAILGUN = register_withoutTexture("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, false, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
 

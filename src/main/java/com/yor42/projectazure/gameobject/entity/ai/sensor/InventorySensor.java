@@ -82,7 +82,7 @@ public class InventorySensor extends Sensor<AbstractEntityCompanion> {
                     foundRegenerationPotion = true;
                     foundFireExtinguisher = true;
                 }
-                else if(item instanceof PotionItem){
+                else if(!PotionUtils.getPotion(stack).getEffects().isEmpty()){
                     List<EffectInstance> effects = PotionUtils.getMobEffects(stack);
                     if(effects.stream().noneMatch((effect)->effect.getEffect().getCategory() == EffectType.HARMFUL)){
                         if(!foundRegenerationPotion && effects.stream().anyMatch((effect)->effect.getEffect() == Effects.REGENERATION)){

@@ -2,6 +2,9 @@ package com.yor42.projectazure.gameobject.items.tools;
 
 import com.yor42.projectazure.interfaces.IItemDestroyable;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
+import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.setup.register.RegisterItems;
+import com.yor42.projectazure.setup.register.registerSounds;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +21,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -37,13 +41,16 @@ public class ItemSyringe extends Item implements IItemDestroyable {
 
     @Override
     public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
-
         ItemStack stack = player.getItemInHand(hand);
+        if(PotionUtils.getPotion(stack)==Potions.EMPTY){
+            return ActionResult.fail(stack);
+        }
+
         if (player instanceof ServerPlayerEntity) {
             CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity)player, stack);
         }
 
-        if(!world.isClientSide() && !player.isCrouching()){
+        if(!player.isCrouching()){
             List<EffectInstance> effects =  PotionUtils.getMobEffects(stack);
             if(effects.isEmpty()){
                 return ActionResult.pass(stack);
@@ -56,21 +63,23 @@ public class ItemSyringe extends Item implements IItemDestroyable {
                     player.addEffect(new EffectInstance(effectinstance));
                 }
             }
+            player.playSound(registerSounds.SYRINGE_INJECT, 0.8F+(0.4F* MathUtil.rand.nextFloat()), 0.8F+(0.4F* MathUtil.rand.nextFloat()));
+        }
+        else{
+            player.playSound(SoundEvents.BREWING_STAND_BREW, 0.8F+(0.4F* MathUtil.rand.nextFloat()), 1.3F+(0.4F* MathUtil.rand.nextFloat()));
         }
 
-        if(!player.abilities.instabuild || player.isCrouching()){
+        if(!player.abilities.instabuild || player.isCrouching() && PotionUtils.getPotion(stack)!=Potions.EMPTY){
             player.awardStat(Stats.ITEM_USED.get(this));
-            if (!player.abilities.instabuild) {
-                stack.shrink(1);
-            }
-            ItemStack returnstack = new ItemStack(this);
-            ItemStackUtils.DamageItem(1, returnstack);
+            stack.shrink(1);
+            ItemStack returnstack = new ItemStack(RegisterItems.SYRINGE.get());
             if(stack.isEmpty()){
-                player.setItemInHand(hand, returnstack);
+                player.setItemInHand(hand, returnstack.copy());
             }
             else{
-                player.addItem(returnstack);
+                player.addItem(returnstack.copy());
             }
+            player.getCooldowns().addCooldown(RegisterItems.SYRINGE.get(), 1200);
         }
 
         return ActionResult.success(stack);

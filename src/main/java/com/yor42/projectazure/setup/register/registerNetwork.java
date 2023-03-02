@@ -102,6 +102,12 @@ public class registerNetwork {
                 .encoder(ReopenEntityInventoryPacket::encode)
                 .add();
 
+        channel.messageBuilder(PlaySoundPacket.class,17)
+                .consumer(PlaySoundPacket::handle)
+                .decoder(PlaySoundPacket::decode)
+                .encoder(PlaySoundPacket::encode)
+                .add();
+
         return channel;
     }
 

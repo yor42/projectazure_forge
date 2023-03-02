@@ -1,8 +1,11 @@
 package com.yor42.projectazure.gameobject.entity.ai.tasks;
 
 import com.google.common.collect.ImmutableMap;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.items.tools.ItemSyringe;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.network.packets.PlaySoundPacket;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.Brain;
@@ -10,26 +13,28 @@ import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
+import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.projectile.PotionEntity;
 import net.minecraft.item.*;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.EffectType;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.*;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static com.yor42.projectazure.setup.register.registerSounds.SYRINGE_INJECT;
 import static net.minecraft.potion.Effects.HEAL;
 import static net.minecraft.potion.Effects.REGENERATION;
+import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY_AND_SELF;
 
 public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion> {
 
@@ -69,10 +74,11 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
                 }
                 else {
                     inventoryoindex = this.getPotionFromInv(entity, target);
-                    if (inventoryoindex > -1) {
-                        if (entity.getFreeHand().isPresent()) {
-                            this.ChangeItem(entity, entity.getFreeHand().get(), inventoryoindex, false);
-                        }
+                    if (inventoryoindex <= -1) {
+                        return false;
+                    }
+                    else if (entity.getFreeHand().isPresent()) {
+                        this.ChangeItem(entity, entity.getFreeHand().get(), inventoryoindex, false);
                     }
                 }
                 return false;
@@ -105,7 +111,7 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
                 }
 
                 else if(--this.rangedAttackTime <= 0) {
-                    if (PotionItem instanceof LingeringPotionItem || PotionItem instanceof SplashPotionItem) {
+                    if (PotionItem instanceof ThrowablePotionItem) {
                         double d0 = entity.distanceToSqr(target.getX(), target.getY(), target.getZ());
                         float f = MathHelper.sqrt(d0) / this.attackRadius;
                         this.throwPotion(entity, target, entity.getItemInHand(this.PotionHand));
@@ -115,14 +121,24 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
                     else{
                         List<EffectInstance> list = PotionUtils.getMobEffects(PotionStack);
                         for(EffectInstance effect : list){
-                            if(effect.getEffect() == HEAL){
-                                target.heal((float)Math.max(4 << effect.getAmplifier(), 0));
+                            if(effect.getEffect().isInstantenous()){
+                                effect.getEffect().applyInstantenousEffect(entity, entity.getOwner(), target, effect.getAmplifier(), 1);
                             }
                             else {
                                 target.addEffect(effect);
                             }
                         }
-                        target.playSound(SoundEvents.GENERIC_DRINK, 0.8F+(0.4F* MathUtil.getRand().nextFloat()), 0.8F+(0.4F* MathUtil.getRand().nextFloat()));
+
+                        SoundEvent soundevent;
+                        if(entity.getItemInHand(this.PotionHand).getItem() instanceof ItemSyringe){
+                            soundevent = SYRINGE_INJECT;
+                        }
+                        else{
+                            soundevent = SoundEvents.GENERIC_DRINK;
+                        }
+
+                        target.playSound(soundevent, 0.8F+(0.4F* MathUtil.getRand().nextFloat()), 0.8F+(0.4F* MathUtil.getRand().nextFloat()));
+                        Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(()->target), new PlaySoundPacket(soundevent, target.getX(),target.getY(),target.getZ()));
                         entity.swing(this.PotionHand);
                         entity.getItemInHand(this.PotionHand).shrink(1);
                         this.rangedAttackTime = 20;
@@ -167,17 +183,18 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
     }
 
     private Optional<Hand> getPotioninHand(AbstractEntityCompanion entity) {
-        for(Hand hand : Hand.values()){
-            if(entity.getItemInHand(hand).getItem() instanceof PotionItem){
-                List<EffectInstance> Effects = PotionUtils.getMobEffects(entity.getItemInHand(hand));
-                if(!Effects.isEmpty()){
-                    for(EffectInstance effect : Effects){
-                        if(effect.getEffect().getCategory() == EffectType.HARMFUL){
-                            return Optional.empty();
-                        }
-                        else if(effect.getEffect() == HEAL || effect.getEffect() == REGENERATION){
-                            return Optional.of(hand);
-                        }
+        for(Hand hand : Hand.values()) {
+            ItemStack potion = entity.getItemInHand(hand);
+            if (PotionUtils.getPotion(potion) == Potions.EMPTY) {
+                continue;
+            }
+            List<EffectInstance> Effects = PotionUtils.getMobEffects(potion);
+            if (!Effects.isEmpty()) {
+                for (EffectInstance effect : Effects) {
+                    if (effect.getEffect().getCategory() == EffectType.HARMFUL) {
+                        return Optional.empty();
+                    } else if (effect.getEffect() == HEAL || effect.getEffect() == REGENERATION) {
+                        return Optional.of(hand);
                     }
                 }
             }
