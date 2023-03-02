@@ -1,13 +1,11 @@
 package com.yor42.projectazure.gameobject.items.materials;
 
-import com.yor42.projectazure.setup.register.registerSounds;
 import mekanism.api.annotations.NonNull;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import javax.annotation.Nonnull;
 

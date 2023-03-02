@@ -4,9 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.SwimNodeProcessor;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 

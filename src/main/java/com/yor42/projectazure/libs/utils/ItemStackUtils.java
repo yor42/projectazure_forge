@@ -7,11 +7,9 @@ import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.entity.planes.AbstractEntityPlanes;
-import com.yor42.projectazure.gameobject.items.ItemDestroyable;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentPlaneBase;
-import com.yor42.projectazure.gameobject.misc.RiggingInventories;
 import com.yor42.projectazure.interfaces.ICraftingTableReloadable;
 import com.yor42.projectazure.interfaces.IItemDestroyable;
 import com.yor42.projectazure.libs.enums;
@@ -25,7 +23,6 @@ import net.minecraft.util.text.Color;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -37,9 +34,9 @@ import static com.yor42.projectazure.libs.utils.MathUtil.rollDamagingRiggingCoun
 public class ItemStackUtils {
 
     public static boolean DamageItem(float amount, ItemStack stack){
-        if(stack.getItem() instanceof ItemDestroyable) {
+        if(stack.getItem() instanceof IItemDestroyable) {
             int damage = getCurrentDamage(stack);
-            int maxDamage = ((ItemDestroyable) stack.getItem()).getMaxHP();
+            int maxDamage = ((IItemDestroyable) stack.getItem()).getMaxHP();
             if (damage + amount <= maxDamage) {
                 setCurrentDamage(stack, (int) (damage + amount));
                 return true;
@@ -76,15 +73,15 @@ public class ItemStackUtils {
     }
 
     public static boolean isDestroyed(ItemStack stack){
-        if(stack.getItem() instanceof ItemDestroyable) {
-            return getCurrentDamage(stack) >= ((ItemDestroyable)stack.getItem()).getMaxHP();
+        if(stack.getItem() instanceof IItemDestroyable) {
+            return getCurrentDamage(stack) >= ((IItemDestroyable)stack.getItem()).getMaxHP();
         }
         return true;
     }
 
     public static int getCurrentHP(ItemStack stack){
-        if(stack.getItem() instanceof ItemDestroyable){
-            return ((ItemDestroyable) stack.getItem()).getMaxHP()-getCurrentDamage(stack);
+        if(stack.getItem() instanceof IItemDestroyable){
+            return ((IItemDestroyable) stack.getItem()).getMaxHP()-getCurrentDamage(stack);
         }
         else return 0;
     }
@@ -94,8 +91,8 @@ public class ItemStackUtils {
     }
 
     public static void setCurrentHP(ItemStack stack, int HP){
-        if(stack.getItem() instanceof ItemDestroyable) {
-            stack.getOrCreateTag().putInt("currentdamage", ((ItemDestroyable) stack.getItem()).getMaxHP() - HP);
+        if(stack.getItem() instanceof IItemDestroyable) {
+            stack.getOrCreateTag().putInt("currentdamage", ((IItemDestroyable) stack.getItem()).getMaxHP() - HP);
         }
     }
 

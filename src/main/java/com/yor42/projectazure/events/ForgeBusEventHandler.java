@@ -58,6 +58,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -71,6 +72,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -85,19 +87,21 @@ import static net.minecraft.util.Hand.OFF_HAND;
 public class ForgeBusEventHandler {
 
     @SubscribeEvent
-    public static void onItemUseFinish(LivingEntityUseItemEvent.Finish event) {
+    public static void onItemUseFinish(@Nonnull LivingEntityUseItemEvent.Finish event) {
         LivingEntity entity = event.getEntityLiving();
         ItemStack stack = event.getResultStack();
         Item item = stack.getItem();
-        if (entity instanceof AbstractEntityCompanion) {
-            if (item.getClass() == PotionItem.class) {
-                event.setResultStack(new ItemStack(Items.GLASS_BOTTLE));
-            }
+        if (!(entity instanceof AbstractEntityCompanion)) {
+            return;
+        }
+
+        if (item instanceof PotionItem) {
+            event.setResultStack(new ItemStack(Items.GLASS_BOTTLE));
         }
     }
 
     @SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event){
+    public static void onLivingHurt(@Nonnull LivingHurtEvent event){
         LivingEntity entity = event.getEntityLiving();
         DamageSource damageSource = event.getSource();
 
@@ -123,7 +127,7 @@ public class ForgeBusEventHandler {
     }
 
     @SubscribeEvent
-    public static void onEXPEvent(PlayerXpEvent.XpChange event){
+    public static void onEXPEvent(@Nonnull PlayerXpEvent.XpChange event){
         PlayerEntity player1 = event.getPlayer();
 
         if(player1.getCommandSenderWorld().isClientSide()){
@@ -167,7 +171,7 @@ public class ForgeBusEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPotionApplicapable(PotionEvent.PotionApplicableEvent event){
+    public static void onPotionApplicapable(@Nonnull PotionEvent.PotionApplicableEvent event){
 
         LivingEntity entity = event.getEntityLiving();
 
@@ -198,6 +202,7 @@ public class ForgeBusEventHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onServerStart(FMLServerStartedEvent event){
+
         Main.LOGGER.debug("Starting multiblock recipe registration.");
         try{
             OriginiumGeneratorControllerTE.OriginiumGeneratorDefinition.getRecipeMap().start().name("prime_to_power").input(ItemMultiblockCapability.CAP, new ItemsIngredient(Ingredient.of(ModTags.Items.ORIGINIUM_PRIME), 1)).perTick(true).output(FEMultiblockCapability.CAP, 2000).duration(1200).buildAndRegister();
@@ -435,11 +440,9 @@ public class ForgeBusEventHandler {
     public static void OnplayerRightClicked(PlayerInteractEvent.RightClickBlock event) {
         World world = event.getWorld();
         PlayerEntity player = event.getPlayer();
-        List<Entity> passengers = player.getPassengers();
-        //BlockPos pos = event.getPos();
         if (player.isCrouching() && player.getMainHandItem() == ItemStack.EMPTY) {
 
-            ((IMixinPlayerEntity)player).removeEntityOnBack().ifPresent((entity) -> {
+            ((IMixinPlayerEntity) player).removeEntityOnBack().ifPresent((entity) -> {
                 if (!(entity instanceof AbstractEntityCompanion)) {
                     return;
                 }
@@ -452,40 +455,11 @@ public class ForgeBusEventHandler {
                         ((AbstractEntityCompanion) entity).startSleeping(pos);
                         event.setCanceled(true);
                     }
-                }
-                else if(((AbstractEntityCompanion) entity).isDeadOrDying()){
+                } else if (((AbstractEntityCompanion) entity).isDeadOrDying()) {
                     player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
                 }
+                player.swing(MAIN_HAND);
             });
-
-
-/*
-            if(!player.getPassengers().isEmpty()) {
-                BlockPos pos = event.getPos();
-                for (Entity entity : passengers) {
-                    entity.stopRiding();
-
-                    if (!(entity instanceof AbstractEntityCompanion)) {
-                        return;
-                    }
-
-                    boolean isInjured = ((AbstractEntityCompanion) entity).isCriticallyInjured();
-                    if (isInjured || world.isNight()) {
-                        BlockState state = world.getBlockState(pos);
-                        if (state.isBed(world, pos, (LivingEntity) entity)) {
-                            pos = state.getBlock() instanceof BedBlock ? state.getValue(BedBlock.PART) == BedPart.HEAD ? pos : pos.relative(state.getValue(BedBlock.FACING)) : pos;
-                            ((AbstractEntityCompanion) entity).startSleeping(pos);
-                            event.setCanceled(true);
-                        }
-                        break;
-                    } else if (((AbstractEntityCompanion) entity).isDeadOrDying()) {
-                        player.displayClientMessage(new TranslationTextComponent("item.tooltip.not_revived"), true);
-                    }
-                }
-            }
-
- */
-            player.swing(MAIN_HAND);
         }
     }
 

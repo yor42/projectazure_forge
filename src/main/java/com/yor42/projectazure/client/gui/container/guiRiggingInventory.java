@@ -8,7 +8,6 @@ import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.network.packets.ReopenEntityInventoryPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IHasContainer;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.ImageButton;
 import net.minecraft.entity.player.PlayerInventory;

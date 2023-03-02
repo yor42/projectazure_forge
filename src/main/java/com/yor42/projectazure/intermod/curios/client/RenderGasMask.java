@@ -2,19 +2,13 @@ package com.yor42.projectazure.intermod.curios.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.client.renderer.armor.GasMaskRenderer;
-import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.geckolib3.item.GeoArmorItem;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 @OnlyIn(Dist.CLIENT)

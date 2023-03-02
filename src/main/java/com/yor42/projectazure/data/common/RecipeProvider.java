@@ -20,7 +20,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.item.PotionItem;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.tags.ITag;
@@ -53,6 +52,7 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
 
         CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).save(consumer, "reloading_items");
         CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).save(consumer, "repairing_items");
+        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.TRANSFERPOTION.get()).save(consumer, "potion_transfer");
         this.generateAlloyingRecipe(consumer);
         this.generatePressingRecipe(consumer);
         this.generateCrystalizingRecipe(consumer);
@@ -2160,6 +2160,19 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("SIS")
                 .unlockedBy("has_material", has(RegisterItems.AMBER_ORIGINIUM.get()))
                 .save(consumer);
+
+        ShapedRecipeBuilder.shaped(RegisterItems.SYRINGE.get())
+                .define('S', ModTags.Items.INGOT_ALUMINIUM)
+                .define('P', ModTags.Items.PLATE_PLASTIC)
+                .define('G', Tags.Items.GLASS_COLORLESS)
+                .define('A', ModTags.Items.PLATE_ALUMINIUM)
+                .pattern("PAP")
+                .pattern("PGP")
+                .pattern(" S ")
+                .unlockedBy("has_material1", has(Items.POTION))
+                .unlockedBy("has_material2", has(ModTags.Items.INGOT_ALUMINIUM))
+                .save(consumer);
+
 
     }
 

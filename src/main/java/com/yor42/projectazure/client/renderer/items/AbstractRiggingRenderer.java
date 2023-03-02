@@ -1,27 +1,15 @@
 package com.yor42.projectazure.client.renderer.items;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
-import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
-import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
-import com.yor42.projectazure.libs.enums;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.items.IItemHandler;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
-import software.bernie.geckolib3.util.GeckoLibUtil;
-
-import javax.annotation.Nullable;
 
 public abstract class AbstractRiggingRenderer<T extends ItemRiggingBase> extends GeoItemRenderer<T> {
 

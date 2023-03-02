@@ -1,23 +1,12 @@
 package com.yor42.projectazure.gameobject.items.rigging;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.yor42.projectazure.client.model.rigging.modelCVRiggingDefault;
-import com.yor42.projectazure.gameobject.capability.multiinv.IMultiInventory;
-import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.MathUtil;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class ItemRiggingCVDefault extends ItemRiggingBase{

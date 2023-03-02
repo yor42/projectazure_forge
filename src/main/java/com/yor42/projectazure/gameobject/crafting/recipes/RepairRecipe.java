@@ -27,12 +27,10 @@ public class RepairRecipe extends SpecialRecipe {
         this.RepairTarget = ItemStack.EMPTY;
         for(int i = 0; i < inv.getContainerSize(); ++i) {
             ItemStack itemstack = inv.getItem(i);
-            if (!itemstack.isEmpty()) {
-                if(itemstack.getItem() instanceof IItemDestroyable){
-                    this.RepairTarget = itemstack;
-                    RepairTargetItem = (IItemDestroyable) itemstack.getItem();
-                    break;
-                }
+            if(itemstack.getItem() instanceof IItemDestroyable){
+                this.RepairTarget = itemstack;
+                RepairTargetItem = (IItemDestroyable) itemstack.getItem();
+                break;
             }
         }
 

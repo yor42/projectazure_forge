@@ -9,7 +9,6 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.libs.enums;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;

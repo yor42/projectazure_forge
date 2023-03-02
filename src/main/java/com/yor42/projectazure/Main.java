@@ -9,7 +9,6 @@ import com.yor42.projectazure.client.renderer.armor.GasMaskRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineMetalPressRenderer;
 import com.yor42.projectazure.client.renderer.block.MachineRecruitBeaconRenderer;
 import com.yor42.projectazure.events.ModBusEventHandler;
-import com.yor42.projectazure.events.ModBusEventHandlerClient;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.capability.CompanionMultiblockCapability;
 import com.yor42.projectazure.gameobject.capability.multiinv.CapabilityMultiInventory;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
@@ -43,7 +42,6 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import net.minecraftforge.registries.DeferredRegister;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
@@ -164,7 +162,6 @@ public class Main
         ClientRegistry.bindTileEntityRenderer(registerTE.RECRUIT_BEACON.get(), MachineRecruitBeaconRenderer::new);
         GeoArmorRenderer.registerArmorRenderer(GasMaskItem.class, GasMaskRenderer::new);
 
-        ModBusEventHandlerClient.setup();
         ClientRegisterManager.registerScreen();
 
         //We do some reflect magic for gun here

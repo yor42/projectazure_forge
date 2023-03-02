@@ -13,6 +13,7 @@
     "MixinExperienceOrbEntity",
     "MixinItem",
     "MixinPlayerEntity",
+    "MixinPotionItem",
     "PathNavigatorAccessors",
     "SwimmerPathNavigatorAccess"
   ],

@@ -7,7 +7,10 @@ import com.yor42.projectazure.client.renderer.entity.misc.EntityMissileDroneRend
 import com.yor42.projectazure.client.renderer.entity.misc.EntityPlanef4fwildcatRenderer;
 import com.yor42.projectazure.client.renderer.entity.projectile.*;
 import com.yor42.projectazure.gameobject.entity.companion.bonus.*;
-import com.yor42.projectazure.gameobject.entity.companion.gunusers.*;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityHK416;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityM4A1;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityShiroko;
+import com.yor42.projectazure.gameobject.entity.companion.gunusers.EntityW;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityAmiya;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityKyaru;
 import com.yor42.projectazure.gameobject.entity.companion.magicuser.EntityRosmontis;

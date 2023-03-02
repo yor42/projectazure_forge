@@ -1,10 +1,15 @@
 package com.yor42.projectazure.gameobject.items.tools;
 
+import com.yor42.projectazure.interfaces.IItemDestroyable;
+import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
@@ -13,18 +18,19 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemSyringe extends Item {
+public class ItemSyringe extends Item implements IItemDestroyable {
     public ItemSyringe(Properties p_i48487_1_) {
         super(p_i48487_1_.stacksTo(16));
     }
@@ -37,7 +43,7 @@ public class ItemSyringe extends Item {
             CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity)player, stack);
         }
 
-        if(!world.isClientSide()){
+        if(!world.isClientSide() && !player.isCrouching()){
             List<EffectInstance> effects =  PotionUtils.getMobEffects(stack);
             if(effects.isEmpty()){
                 return ActionResult.pass(stack);
@@ -52,17 +58,18 @@ public class ItemSyringe extends Item {
             }
         }
 
-        if(!player.abilities.instabuild){
+        if(!player.abilities.instabuild || player.isCrouching()){
             player.awardStat(Stats.ITEM_USED.get(this));
             if (!player.abilities.instabuild) {
                 stack.shrink(1);
             }
-
+            ItemStack returnstack = new ItemStack(this);
+            ItemStackUtils.DamageItem(1, returnstack);
             if(stack.isEmpty()){
-                player.setItemInHand(hand, new ItemStack(this));
+                player.setItemInHand(hand, returnstack);
             }
             else{
-                player.addItem(new ItemStack(this));
+                player.addItem(returnstack);
             }
         }
 
@@ -70,12 +77,14 @@ public class ItemSyringe extends Item {
     }
 
     @Override
-    public UseAction getUseAnimation(ItemStack p_77661_1_) {
-        return super.getUseAnimation(p_77661_1_);
-    }
+    public ITextComponent getName(ItemStack p_200295_1_) {
+        Potion potion = PotionUtils.getPotion(p_200295_1_);
+        List<EffectInstance> effects = potion.getEffects();
+        if(effects.isEmpty()){
+            return new TranslationTextComponent(this.getDescriptionId(p_200295_1_)+potion.getName("."));
+        }
 
-    public String getDescriptionId(ItemStack p_77667_1_) {
-        return PotionUtils.getPotion(p_77667_1_).getName(this.getDescriptionId() + ".effect.");
+        return new TranslationTextComponent(this.getDescriptionId()+".withpotion", new TranslationTextComponent(effects.get(0).getDescriptionId()));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -93,5 +102,16 @@ public class ItemSyringe extends Item {
             }
         }
 
+    }
+
+    //Rule of thumb: Do not reuse syringe
+    @Override
+    public int getMaxHP() {
+        return 1;
+    }
+
+    @Override
+    public int getRepairAmount(ItemStack candidateItem) {
+        return  candidateItem.getItem().is(Tags.Items.INGOTS_IRON)? 1:0;
     }
 }

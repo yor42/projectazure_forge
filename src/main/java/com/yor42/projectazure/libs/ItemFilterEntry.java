@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.logging.Filter;
 
 public class ItemFilterEntry implements Predicate<ItemStack> {
 

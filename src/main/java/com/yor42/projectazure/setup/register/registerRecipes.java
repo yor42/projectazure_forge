@@ -40,6 +40,7 @@ public class registerRecipes {
         //Special Crafting Recipe
         public static final RegistryObject<IRecipeSerializer<ReloadRecipes>> RELOADING = register("reloading", ()-> new SpecialRecipeSerializer<>(ReloadRecipes::new));
         public static final RegistryObject<IRecipeSerializer<RepairRecipe>> REPAIRING = register("repairing", ()-> new SpecialRecipeSerializer<>(RepairRecipe::new));
+        public static final RegistryObject<IRecipeSerializer<TransferPotiontoSyringeRecipe>> TRANSFERPOTION = register("transerpotion", ()-> new SpecialRecipeSerializer<>(TransferPotiontoSyringeRecipe::new));
 
 
         private static <T extends IRecipe<?>> RegistryObject<IRecipeSerializer<T>> register(String name, Supplier<IRecipeSerializer<T>> serializer){

@@ -11,7 +11,6 @@ import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorp
 import com.yor42.projectazure.gameobject.items.ItemCannonshell;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
-import com.yor42.projectazure.gameobject.items.tools.ItemDefibPaddle;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.enums.AmmoCategory;
 import com.yor42.projectazure.libs.utils.AmmoProperties;
@@ -26,7 +25,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.passive.StriderEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
