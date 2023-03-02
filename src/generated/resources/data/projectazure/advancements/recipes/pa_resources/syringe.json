@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "projectazure:syringe"
+    ]
+  },
+  "criteria": {
+    "has_material1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:potion"
+          }
+        ]
+      }
+    },
+    "has_material2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/aluminium"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "projectazure:syringe"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_material1",
+      "has_material2",
+      "has_the_recipe"
+    ]
+  ]
+}

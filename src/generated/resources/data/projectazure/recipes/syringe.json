@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PAP",
+    "PGP",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:ingots/aluminium"
+    },
+    "P": {
+      "tag": "forge:plates/plastic"
+    },
+    "G": {
+      "tag": "forge:glass/colorless"
+    },
+    "A": {
+      "tag": "forge:plates/aluminium"
+    }
+  },
+  "result": {
+    "item": "projectazure:syringe"
+  }
+}
