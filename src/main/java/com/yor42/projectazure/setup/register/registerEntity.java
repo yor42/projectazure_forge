@@ -48,6 +48,7 @@ public class registerEntity {
     //?????
     public static final RegistryObject<EntityType<EntityClaymore>> CLAYMORE = ENTITIES.register("entityclaymore", () -> EntityType.Builder.of(EntityClaymore::new, EntityClassification.CREATURE).sized(0.7F, 2.31F).build(ModResourceLocation("entityclaymore").toString()));
     public static final RegistryObject<EntityType<EntityRailgunProjectile>> PROJECTILE_RAILGUN = ENTITIES.register("projectile_railgun", () -> EntityType.Builder.<EntityRailgunProjectile>of(EntityRailgunProjectile::new, EntityClassification.MISC).sized(0.2F, 0.2F).build(ModResourceLocation("projectile_railgun").toString()));
+    public static final RegistryObject<EntityType<EntitySupernovaProjectile>> PROJECTILE_SUPERNOVA = ENTITIES.register("projectile_supernova", () -> EntityType.Builder.<EntitySupernovaProjectile>of(EntitySupernovaProjectile::new, EntityClassification.MISC).sized(0.2F, 0.2F).build(ModResourceLocation("projectile_supernova").toString()));
     public static final RegistryObject<EntityType<EntityThrownKnifeProjectile>> PROJECTILE_THROWN_KNIFE = ENTITIES.register("projectile_knife", () -> EntityType.Builder.<EntityThrownKnifeProjectile>of(EntityThrownKnifeProjectile::new, EntityClassification.MISC).sized(0.2F, 0.2F).build(ModResourceLocation("projectile_knife").toString()));
     public static final RegistryObject<EntityType<EntityMissileDroneMissile>> DRONE_MISSILE = ENTITIES.register("projectiledrone_missile", () -> EntityType.Builder.of(EntityMissileDroneMissile::new, EntityClassification.MISC).sized(0.2F, 0.2F).build(ModResourceLocation("projectiledrone_missile").toString()));
     public static final RegistryObject<EntityType<EntityProjectileTorpedo>> PROJECTILE_TORPEDO = ENTITIES.register("entitytorpedo", () -> EntityType.Builder.<EntityProjectileTorpedo>of(EntityProjectileTorpedo::new, EntityClassification.MISC).sized(0.5F, 0.5F).build(ModResourceLocation("projectiletorpedo").toString()));
@@ -186,6 +187,7 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.DRONE_MISSILE.get(), MissileDroneMissileRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_THROWN_KNIFE.get(), EntityThrownKnifeRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_FALLINGSWORD.get(), EntityFallingSwordRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.PROJECTILE_SUPERNOVA.get(), EntitySupernovaProjectileRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.CLAYMORE.get(), EntityClaymoreRenderer::new);
 

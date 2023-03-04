@@ -505,13 +505,14 @@ public class RegisterItems {
     //Shooty stuff
     public static final RegistryObject<Item> WHITEFANG_465 = register_withoutTexture("whitefang465", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
     public static final RegistryObject<Item> TYPHOON = register_withoutTexture("typhoon", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
-    public static final RegistryObject<Item> SUPERNOVA = register_withoutTexture("supernova", ()->new GeoGunItem(50000, 2500, 1, true, (properties)->properties.tab(PA_WEAPONS).setISTER(()-> SupernovaGeoRenderer::new)));
+    public static final RegistryObject<Item> SUPERNOVA = register_withoutTexture("supernova", ()->new GeoGunItem(50000, 2500, 1, true, (properties)->properties.tab(PA_WEAPONS)));
     public static final RegistryObject<Item> W_GRANADELAUNCHER = register_withoutTexture("granadelauncher", ()->new TimelessGunItem((properties) -> properties.tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SANGVIS_RAILGUN = register_withoutTexture("sangvis_railgun", ()->new ItemEnergyGun(55000, 10000, 100, false, registerSounds.SANGVIS_CANNON_OPEN, registerSounds.SANGVIS_CANNON_CLOSE, registerSounds.SANGVIS_CANNON_NOAMMO, (properties) -> properties.tab(PA_WEAPONS)));
 
     public static final RegistryObject<Item> CASELESS_4MM = register_withoutTexture("4mmcaseless", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
 
     public static final RegistryObject<Item> RAILGUN_AMMO = register("ammo_sangvisrailgun", ()->new TimelessAmmoItem((properties) -> properties.tab(PA_WEAPONS)));
+    public static final RegistryObject<Item> SUPERNOVA_AMMO = register_withoutTexture("ammo_supernova", ()->new TimelessAmmoItem((properties) -> properties));
     //not-so-shooty-stuff
     public static final RegistryObject<Item> CHIXIAO = register_withoutTexture("chixiao", () -> new ModSwordItem(ModMaterials.CHIXIAO, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> SHEATH = register_withoutTexture("sheath", () -> new ModSwordItem(ModMaterials.SHEATH, 1, -1.5F, new Item.Properties().tab(PA_WEAPONS)));

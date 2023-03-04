@@ -20,6 +20,7 @@
     "weightKilo": 20
   },
   "reloads": {
+    "item": "ammo_supernova",
     "magFed": true,
     "maxAmmo": 1,
     "reloadMagTimer": 1,
@@ -38,15 +39,15 @@
     "ricochet": false
   },
   "sounds": {
-    "fire": "projectazure:sangvis_cannon_fire",
+    "fire": "projectazure:supernova_fire",
     "reload": "tac:item.pistol.reload",
-    "cock": "tac:item.pistol.cock",
-    "silencedFire": "projectazure:sangvis_cannon_fire"
+    "cock": "tac:item.pistol.cock"
   },
   "display": {
     "flash": {
-      "yOffset": 8.56,
-      "zOffset": -13.55,
+      "xOffset": 9,
+      "yOffset": 21,
+      "zOffset": -16,
       "size": 1.5
     },
     "weaponType": 5,

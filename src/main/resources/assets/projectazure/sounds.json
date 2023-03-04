@@ -233,6 +233,13 @@
       }
     ]
   },
+  "supernova_fire": {
+    "sounds": [
+      {
+        "name": "projectazure:weapon/gun/supernova_fire"
+      }
+    ]
+  },
   "sangvis_cannon_fire": {
     "sounds": [
       {

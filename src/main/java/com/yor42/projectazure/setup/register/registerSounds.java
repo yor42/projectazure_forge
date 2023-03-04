@@ -15,8 +15,6 @@ public final class registerSounds {
 
     //sound files are EXCLUDED from repo due to COPYRIGHT. Issue about these topic will be closed with no response.
     public static final SoundEvent CANON_FIRE_MEDIUM = registerSoundEvent("gun_fire_medium");
-    public static final SoundEvent TYPHOON_FIRE = registerSoundEvent("typhoon_fire");
-    public static final SoundEvent TYPHOON_RELOAD = registerSoundEvent("typhoon_reload");
 
     public static final SoundEvent GASMASK_INHALE = registerSoundEvent("gasmask_inhale");
     public static final SoundEvent GASMASK_EXHALE=registerSoundEvent("gasmask_exhale");
@@ -28,9 +26,14 @@ public final class registerSounds {
 
     public static final SoundEvent SYRINGE_INJECT=registerSoundEvent("syringe_inject");
 
+    public static final SoundEvent SUPERNOVA_FIRE = registerSoundEvent("supernova_fire");
+
     public static final SoundEvent SANGVIS_CANNON_NOAMMO = registerSoundEvent("sangvis_cannon_noammo");
     public static final SoundEvent SANGVIS_CANNON_OPEN = registerSoundEvent("sangvis_cannon_open");
     public static final SoundEvent SANGVIS_CANNON_CLOSE = registerSoundEvent("sangvis_cannon_close");
+
+    public static final SoundEvent TYPHOON_FIRE = registerSoundEvent("typhoon_fire");
+    public static final SoundEvent TYPHOON_RELOAD = registerSoundEvent("typhoon_reload");
 
     public static final SoundEvent DISC_FRIDAY_NIGHT = registerSoundEvent("disc_fridaynight");
     public static final SoundEvent DISC_BRAINPOWER = registerSoundEvent("disc_brainpower");

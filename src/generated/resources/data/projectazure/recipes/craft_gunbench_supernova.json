@@ -5,22 +5,22 @@
       "item": {
         "tag": "forge:ingots/steel"
       },
-      "count": 40
+      "count": 33
     },
     {
       "item": {
         "tag": "forge:circuits/crystalline"
       },
-      "count": 9
+      "count": 12
     },
     {
       "item": {
         "item": "projectazure:device_basic"
       },
-      "count": 12
+      "count": 8
     }
   ],
   "result": {
-    "item": "projectazure:sangvis_railgun"
+    "item": "projectazure:supernova"
   }
 }

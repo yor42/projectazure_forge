@@ -74,7 +74,8 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.W_GRANADELAUNCHER.get()).addIngredient(ModTags.Items.PLATE_STEEL, 14).addIngredient(RegisterItems.PRIMITIVE_MOTOR.get(), 2).addIngredient(ModTags.Items.CIRCUITS_BASIC).addIngredient(RegisterItems.MECHANICAL_PARTS.get(), 4).build(consumer, Constants.MODID,"gunbench_granadelauncher");
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.TYPHOON.get()).addIngredient(ModTags.Items.PLATE_STEEL, 25).addIngredient(ModTags.Items.PLATE_ALUMINIUM, 10).addIngredient(ModTags.Items.INGOT_INCANDESCENT_ALLOY, 30).addIngredient(RegisterItems.CRYSTALLINE_COMPONENT.get(),4).addIngredient(ModTags.Items.CIRCUITS_ADVANCED, 2).build(consumer, Constants.MODID,"gunbench_typhoon");
         WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.WHITEFANG_465.get()).addIngredient(ModTags.Items.PLATE_STEEL, 9).addIngredient(ModTags.Items.INGOT_STEEL, 10).build(consumer, Constants.MODID,"gunbench_whitefang");
-        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SANGVIS_RAILGUN.get()).addIngredient(ModTags.Items.PLATE_STEEL, 35).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 10).build(consumer, Constants.MODID,"gunbench_cannon");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SANGVIS_RAILGUN.get()).addIngredient(ModTags.Items.INGOT_STEEL, 40).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 9).addIngredient(RegisterItems.BASIC_DEVICE.get(), 12).build(consumer, Constants.MODID,"gunbench_cannon");
+        WorkbenchRecipeBuilder.workbenchRecipe(RegisterItems.SUPERNOVA.get()).addIngredient(ModTags.Items.INGOT_STEEL, 33).addIngredient(ModTags.Items.CIRCUITS_CRYSTALLINE, 12).addIngredient(RegisterItems.BASIC_DEVICE.get(), 8).build(consumer, Constants.MODID,"gunbench_supernova");
     }
 
     private void generateMetalRecipes(@Nonnull Consumer<IFinishedRecipe> consumer){
