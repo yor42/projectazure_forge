@@ -2,9 +2,7 @@ package com.yor42.projectazure.client.renderer.gun;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.tac.guns.client.render.gun.IOverrideModel;
-import com.tac.guns.client.util.RenderUtil;
 import com.yor42.projectazure.gameobject.items.GeoGunItem;
-import com.yor42.projectazure.setup.register.registerGunAttachments;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.entity.LivingEntity;

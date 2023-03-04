@@ -4,7 +4,6 @@ import com.yor42.projectazure.gameobject.items.tools.ItemSyringe;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.SpecialRecipe;

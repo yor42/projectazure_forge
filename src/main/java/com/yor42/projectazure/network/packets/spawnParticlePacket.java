@@ -1,6 +1,6 @@
 package com.yor42.projectazure.network.packets;
 
-import com.yor42.projectazure.libs.utils.ParticleUtils;
+import com.yor42.projectazure.network.ClientEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -129,30 +129,30 @@ public class spawnParticlePacket {
         ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             switch (message.particleID){
                 case CANNON_SMOKE:{
-                    ParticleUtils.spawnCannonParticleModerate(message.PosX, message.PosY, message.PosZ, message.NormalizedLookX, message.NormalizedLookY);
+                    ClientEvents.spawnCannonParticleModerate(message.PosX, message.PosY, message.PosZ, message.NormalizedLookX, message.NormalizedLookY);
                     break;
                 }
                 case AFFECTION_HEART:{
-                    ParticleUtils.spawnPatHeartParticle(message.EntityID);
+                    ClientEvents.spawnPatHeartParticle(message.EntityID);
                     break;
                 }
                 case AFFECTION_SMOKE:{
-                    ParticleUtils.spawnPatSmokeParticle(message.EntityID);
+                    ClientEvents.spawnPatSmokeParticle(message.EntityID);
                     break;
                 }
                 case TELEPORT:{
-                    ParticleUtils.spawnTeleportParticle(message.EntityID);
+                    ClientEvents.spawnTeleportParticle(message.EntityID);
                     break;
                 }
                 case ITEM_PARTICLE:
                 {
                     if(message.stack != null){
-                        ParticleUtils.SpawnItemParticles(message.EntityID, message.stack);
+                        ClientEvents.SpawnItemParticles(message.EntityID, message.stack);
                     }
                     break;
                 }
                 case LIMITBREAK:{
-                    ParticleUtils.spawnLimitBreakParticle(message.EntityID);
+                    ClientEvents.spawnLimitBreakParticle(message.EntityID);
                 }
             }
 

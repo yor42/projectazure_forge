@@ -9,13 +9,10 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix3f;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.util.math.vector.Vector3f;
-
-import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public abstract class Abstract2DprojectileRenderer<T extends Entity> extends EntityRenderer<T> {
 

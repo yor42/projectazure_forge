@@ -1,15 +1,21 @@
-package com.yor42.projectazure.libs.utils;
+package com.yor42.projectazure.network;
 
+import com.yor42.projectazure.libs.utils.ClientUtils;
+import com.yor42.projectazure.libs.utils.MathUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ParticleUtils {
+public class ClientEvents {
 
     @OnlyIn(Dist.CLIENT)
     public static void spawnCannonParticleModerate(double X, double Y, double Z, double NormalLookX, double NormalLookZ){
@@ -93,6 +99,14 @@ public class ParticleUtils {
             }
         }
 
+    }
+
+    public static void PlaySound(SoundEvent sound, double x, double y, double z, SoundCategory category, float pitch, float volume){
+        ClientWorld world = Minecraft.getInstance().level;
+        if(world == null){
+            return;
+        }
+        world.playSound(Minecraft.getInstance().player, x, y, z, sound, category, pitch, volume);
     }
 
 }

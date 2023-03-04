@@ -1,18 +1,12 @@
 package com.yor42.projectazure.gameobject.items;
 
-import com.tac.guns.GunMod;
-import com.tac.guns.interfaces.IGunModifier;
-import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.tac.guns.util.Process;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import software.bernie.example.item.JackInTheBoxItem;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;

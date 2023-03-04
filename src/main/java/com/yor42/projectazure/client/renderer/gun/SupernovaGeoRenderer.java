@@ -3,12 +3,9 @@ package com.yor42.projectazure.client.renderer.gun;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.yor42.projectazure.client.model.items.ModelSupernova_geo;
-import com.yor42.projectazure.client.model.items.ModelTyphoon_geo;
 import com.yor42.projectazure.gameobject.items.GeoGunItem;
-import com.yor42.projectazure.gameobject.items.ItemEnergyGun;
 import net.minecraftforge.energy.CapabilityEnergy;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class SupernovaGeoRenderer extends GeoItemRenderer<GeoGunItem> {

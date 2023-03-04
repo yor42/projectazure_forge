@@ -13,18 +13,19 @@ import net.minecraft.entity.ai.brain.BrainUtil;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleStatus;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.task.Task;
-import net.minecraft.entity.monster.WitchEntity;
 import net.minecraft.entity.projectile.PotionEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ThrowablePotionItem;
 import net.minecraft.potion.*;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityPosWrapper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -138,7 +139,7 @@ public class CompanionHealAllyAndPlayerTask extends Task<AbstractEntityCompanion
                         }
 
                         target.playSound(soundevent, 0.8F+(0.4F* MathUtil.getRand().nextFloat()), 0.8F+(0.4F* MathUtil.getRand().nextFloat()));
-                        Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(()->target), new PlaySoundPacket(soundevent, target.getX(),target.getY(),target.getZ()));
+                        Main.NETWORK.send(TRACKING_ENTITY_AND_SELF.with(()->target), new PlaySoundPacket(soundevent, SoundCategory.PLAYERS, target.getX(),target.getY(),target.getZ(), 0.8F+(0.4F*MathUtil.rand.nextFloat()), 0.8F+(0.4F*MathUtil.rand.nextFloat())));
                         entity.swing(this.PotionHand);
                         entity.getItemInHand(this.PotionHand).shrink(1);
                         this.rangedAttackTime = 20;
