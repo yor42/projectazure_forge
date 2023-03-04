@@ -15,7 +15,8 @@
     "MixinPlayerEntity",
     "MixinPotionItem",
     "PathNavigatorAccessors",
-    "SwimmerPathNavigatorAccess"
+    "SwimmerPathNavigatorAccess",
+    "WeaponPoseAccessor"
   ],
   "client": [
     "MixinPlayerRenderer",

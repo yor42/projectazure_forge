@@ -1,6 +1,7 @@
 package com.yor42.projectazure.libs.utils;
 
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.item.CrossbowItem;

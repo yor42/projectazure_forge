@@ -125,25 +125,6 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             event.getController().setAnimation(builder.addAnimation("carry_arm"));
             return PlayState.CONTINUE;
         }
-        else if(this.isReloadingMainHand()) {
-            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
-                event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
-            }
-            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
-            }
-            return PlayState.CONTINUE;
-        }else if(this.isUsingGun()){
-            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
-            }
-            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
-            }
-
-            return PlayState.CONTINUE;
-        }
         else if(this.shouldPlayShipAttackAnim()){
             event.getController().setAnimation(builder.addAnimation("ship_fire"));
             return PlayState.CONTINUE;
@@ -185,13 +166,7 @@ public class EntityEnterprise extends EntityKansenAircraftCarrier implements IAz
             return PlayState.CONTINUE;
         }
         else if(this.getMainHandItem().getItem() instanceof GunItem){
-            if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", ILoopType.EDefaultLoopTypes.LOOP));
-            }
-            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
-            }
-            return PlayState.CONTINUE;
+            return PlayState.STOP;
         }
         event.getController().setAnimation(builder.addAnimation("animation.enterprise.idle", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;

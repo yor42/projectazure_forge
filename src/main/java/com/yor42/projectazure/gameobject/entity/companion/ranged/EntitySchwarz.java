@@ -102,24 +102,6 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
             }
             return PlayState.CONTINUE;
         }
-        else if(this.isReloadingMainHand()) {
-            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
-                event.getController().setAnimation(builder.addAnimation("gun_reload_twohanded"));
-            }
-            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_reload_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
-            }
-            return PlayState.CONTINUE;
-        }else if(this.isUsingGun()){
-            if (((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose) {
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_twohanded"));
-            }
-            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_shoot_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
-            }
-
-            return PlayState.CONTINUE;
-        }
         else if(this.getMainHandItem().getItem() instanceof CrossbowItem){
             return PlayState.STOP;
         }
@@ -141,13 +123,7 @@ public class EntitySchwarz extends AbstractEntityCompanion implements IAknOp {
             return PlayState.CONTINUE;
         }
         else if(this.getMainHandItem().getItem() instanceof GunItem){
-            if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof TwoHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_twohanded", ILoopType.EDefaultLoopTypes.LOOP));
-            }
-            else if(((GunItem) this.getMainHandItem().getItem()).getGun().getGeneral().getGripType().getHeldAnimation() instanceof OneHandedPose){
-                event.getController().setAnimation(builder.addAnimation("gun_idle_onehanded", ILoopType.EDefaultLoopTypes.LOOP));
-            }
-            return PlayState.CONTINUE;
+            return PlayState.STOP;
         }
 
         event.getController().setAnimation(builder.addAnimation("idle_arm", ILoopType.EDefaultLoopTypes.LOOP));

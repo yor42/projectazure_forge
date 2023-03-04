@@ -36,7 +36,7 @@ import java.util.List;
 
 public class ItemSyringe extends Item implements IItemDestroyable {
     public ItemSyringe(Properties p_i48487_1_) {
-        super(p_i48487_1_.stacksTo(16));
+        super(p_i48487_1_.stacksTo(4));
     }
 
     @Override

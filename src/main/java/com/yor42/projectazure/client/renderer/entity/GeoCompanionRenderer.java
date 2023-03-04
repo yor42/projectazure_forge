@@ -3,8 +3,17 @@ package com.yor42.projectazure.client.renderer.entity;
 import com.lowdragmc.lowdraglib.gui.texture.ResourceTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.tac.guns.client.render.IHeldAnimation;
+import com.tac.guns.client.render.gun.IOverrideModel;
+import com.tac.guns.client.render.gun.ModelOverrides;
+import com.tac.guns.client.render.pose.AimPose;
+import com.tac.guns.client.render.pose.WeaponPose;
+import com.tac.guns.common.GripType;
+import com.tac.guns.item.GunItem;
+import com.tac.guns.item.TransitionalTypes.TimelessGunItem;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ResourceUtils;
+import com.yor42.projectazure.mixin.WeaponPoseAccessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -14,7 +23,9 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Pose;
+import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -22,6 +33,7 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.ITextComponent;
@@ -162,33 +174,88 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
     }
 
     @Override
-    protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
-        matrixStack.scale(1F/0.4F,1F/0.4F,1F/0.4F);
-        if (item == this.mainHand || item == this.offHand) {
-            matrixStack.translate((bone.getPositionX()/16)*-0.4F, (bone.getPositionY()/16)*-0.4F, (bone.getPositionZ()/16)*-0.4F);
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
-            boolean shieldFlag = item.isShield(currentEntity) || item.getItem() instanceof ShieldItem;
-            if (item == this.mainHand) {
-                if (shieldFlag) {
-                    matrixStack.translate(0.0, 0.125, -0.25);
-                } else {
-                    matrixStack.translate(0, 0.08, 0);
-                    this.performCustomRotationtoStack(item, matrixStack, Hand.MAIN_HAND);
-                }
-            } else {
-                if (shieldFlag) {
-                    matrixStack.translate(0, 0.125, 0.25);
-                    matrixStack.mulPose(Vector3f.YP.rotationDegrees(180));
-                } else {
-                    matrixStack.translate(0, 0.08, 0);
-                    this.performCustomRotationtoStack(item, matrixStack, Hand.OFF_HAND);
-                }
+    protected void renderItemStack(MatrixStack stack, IRenderTypeBuffer rtb, int packedLightIn, ItemStack boneItem, String boneName) {
 
-            }
-            // item.mulPose(Vector3f.YP.rotationDegrees(180));
-
-            // item.scale(0.75F, 0.75F, 0.75F);
+        IOverrideModel model = ModelOverrides.getModel(boneItem);
+        if(model != null)
+        {
+            model.render(Minecraft.getInstance().getFrameTime(), this.getCameraTransformForItemAtBone(boneItem, boneName), boneItem, ItemStack.EMPTY, this.currentEntityBeingRendered,stack, rtb, packedLightIn, OverlayTexture.NO_OVERLAY);
         }
+        else {
+            super.renderItemStack(stack, rtb, packedLightIn, boneItem, boneName);
+        }
+    }
+
+    @Override
+    protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
+
+        if (item != this.mainHand && item != this.offHand) {
+            return;
+        }
+        IOverrideModel model = ModelOverrides.getModel(item);
+        if(model == null) {
+            matrixStack.scale(1F / 0.4F, 1F / 0.4F, 1F / 0.4F);
+            matrixStack.translate((bone.getPositionX() / 16) * -0.4F, (bone.getPositionY() / 16) * -0.4F, (bone.getPositionZ() / 16) * -0.4F);
+        }
+        matrixStack.mulPose(Vector3f.XP.rotationDegrees(-90.0F));
+        boolean shieldFlag = item.isShield(currentEntity) || item.getItem() instanceof ShieldItem;
+        if (item == this.mainHand) {
+            if (shieldFlag) {
+                matrixStack.translate(0.0, 0.125, -0.25);
+            }
+            else if(item.getItem() instanceof GunItem) {
+
+                GunItem gunItem = (GunItem) item.getItem();
+
+                GripType type = gunItem.getGun().getGeneral().getGripType();
+                IHeldAnimation pose = type.getHeldAnimation();
+
+                if(!(pose instanceof WeaponPose))
+                {
+                    return;
+                }
+
+                float leftHanded = currentEntity.isLeftHanded() ? -1.0F : 1.0F;
+                matrixStack.translate(0.0, 0.0, 0.05);
+                float angle = (float) (MathHelper.lerp(Minecraft.getInstance().getFrameTime(), currentEntity.xRotO, currentEntity.xRot) / 90.0);
+                float angleAbs = Math.abs(angle);
+                float zoom = ((WeaponPoseAccessor)pose).onHasAimPose() && currentEntity.isUsingGun() ? 1F : 1.0F;
+                AimPose targetPose = (double)angle > 0.0 ? ((WeaponPoseAccessor)pose).ongetDownPose() : ((WeaponPoseAccessor)pose).ongetUpPose();
+                AimPose forwardPose = ((WeaponPoseAccessor)pose).ongetForwardPose();
+                float translateX = this.getValue(targetPose.getIdle().getItemTranslate().x(), targetPose.getAiming().getItemTranslate().x(), forwardPose.getIdle().getItemTranslate().x(), forwardPose.getAiming().getItemTranslate().x(), 0.0F, angleAbs, zoom, 1.0F);
+                float translateY = this.getValue(targetPose.getIdle().getItemTranslate().y(), targetPose.getAiming().getItemTranslate().y(), forwardPose.getIdle().getItemTranslate().y(), forwardPose.getAiming().getItemTranslate().y(), 0.0F, angleAbs, zoom, 1.0F);
+                float translateZ = this.getValue(targetPose.getIdle().getItemTranslate().z(), targetPose.getAiming().getItemTranslate().z(), forwardPose.getIdle().getItemTranslate().z(), forwardPose.getAiming().getItemTranslate().z(), 0.0F, angleAbs, zoom, 1.0F);
+                matrixStack.translate((double)translateX+3 * 0.0625 * (double)leftHanded, (double)translateY+3.5 * 0.0625, (double)translateZ-4 * 0.0625);
+                float mulPoseX = this.getValue(targetPose.getIdle().getItemRotation().x(), targetPose.getAiming().getItemRotation().x(), forwardPose.getIdle().getItemRotation().x(), forwardPose.getAiming().getItemRotation().x(), 0.0F, angleAbs, zoom, 1.0F);
+                float mulPoseY = this.getValue(targetPose.getIdle().getItemRotation().y(), targetPose.getAiming().getItemRotation().y(), forwardPose.getIdle().getItemRotation().y(), forwardPose.getAiming().getItemRotation().y(), 0.0F, angleAbs, zoom, 1.0F);
+                float mulPoseZ = this.getValue(targetPose.getIdle().getItemRotation().z(), targetPose.getAiming().getItemRotation().z(), forwardPose.getIdle().getItemRotation().z(), forwardPose.getAiming().getItemRotation().z(), 0.0F, angleAbs, zoom, 1.0F);
+                matrixStack.mulPose(Vector3f.XP.rotationDegrees(mulPoseX));
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(mulPoseY * leftHanded));
+                matrixStack.mulPose(Vector3f.ZP.rotationDegrees(mulPoseZ * leftHanded));
+            }
+            else{
+                matrixStack.translate(0, 0.08, 0);
+                this.performCustomRotationtoStack(item, matrixStack, Hand.MAIN_HAND);
+            }
+        } else {
+            if (shieldFlag) {
+                matrixStack.translate(0, 0.125, 0.25);
+                matrixStack.mulPose(Vector3f.YP.rotationDegrees(180));
+            } else {
+                matrixStack.translate(0, 0.08, 0);
+                this.performCustomRotationtoStack(item, matrixStack, Hand.OFF_HAND);
+            }
+
+        }
+        // item.mulPose(Vector3f.YP.rotationDegrees(180));
+
+        // item.scale(0.75F, 0.75F, 0.75F);
+    }
+
+    private float getValue(@Nullable Float t1, @Nullable Float t2, Float s1, Float s2, Float def, float partial, float zoom, float leftHanded) {
+        float start = t1 != null && s1 != null ? (s1 + (t1 - s1) * partial) * leftHanded : (s1 != null ? s1 * leftHanded : def);
+        float end = t2 != null && s2 != null ? (s2 + (t2 - s2) * partial) * leftHanded : (s2 != null ? s2 * leftHanded : def);
+        return MathHelper.lerp(zoom, start, end);
     }
 
     @Override

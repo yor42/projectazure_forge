@@ -6,6 +6,7 @@ import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
+import com.yor42.projectazure.gameobject.items.GeoGunItem;
 import com.yor42.projectazure.gameobject.items.ItemCompanionSpawnEgg;
 import com.yor42.projectazure.gameobject.items.ItemEnergyGun;
 import com.yor42.projectazure.intermod.Patchouli;
@@ -25,6 +26,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -33,6 +36,10 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.PacketDistributor;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.network.ISyncable;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -40,6 +47,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import static com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability.CapabilityID;
+import static com.yor42.projectazure.gameobject.items.GeoGunItem.ANIM_FIRE;
 
 @Mod.EventBusSubscriber(modid = Constants.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModBusEventHandler {
@@ -175,6 +183,7 @@ public class ModBusEventHandler {
         ItemStack gunstack = event.getStack();
         Item gunItem = gunstack.getItem();
         PlayerEntity player = event.getPlayer();
+        World world = event.getPlayer().getCommandSenderWorld();
         if(gunItem instanceof ItemEnergyGun){
             ItemEnergyGun energygun = (ItemEnergyGun) gunItem;
             if(gunstack.getCapability(CapabilityEnergy.ENERGY).map((energyhandler)-> energyhandler.extractEnergy(energygun.getEnergyperShot(), true) < ((ItemEnergyGun) gunItem).getEnergyperShot()).orElse(true)){
@@ -190,6 +199,12 @@ public class ModBusEventHandler {
                     gunstack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> energyhandler.extractEnergy(energygun.getEnergyperShot(), false));
                 }
             }
+        }
+
+        if(gunItem instanceof GeoGunItem && !world.isClientSide()){
+            final int id = GeckoLibUtil.guaranteeIDForStack(gunstack, (ServerWorld) world);
+            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player);
+            GeckoLibNetwork.syncAnimation(target, (ISyncable) gunItem, id, ANIM_FIRE);
         }
     }
 

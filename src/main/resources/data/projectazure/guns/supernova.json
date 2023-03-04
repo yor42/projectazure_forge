@@ -1,0 +1,59 @@
+{
+  "general": {
+    "boltAction": false,
+    "auto": false,
+    "rate": 10,
+    "rateSelector": [
+      0,
+      1
+    ],
+    "gripType": "tac:mini_gun",
+    "recoilAngle": 4.25,
+    "recoilKick": 5,
+    "horizontalRecoilAngle": 4.3,
+    "recoilAdsReduction": 0,
+    "weaponRecoilDuration": 3,
+    "recoilDuration": 3,
+    "cameraRecoilModifier": 2,
+    "alwaysSpread": false,
+    "spread": 0,
+    "weightKilo": 20
+  },
+  "reloads": {
+    "magFed": true,
+    "maxAmmo": 1,
+    "reloadMagTimer": 1,
+    "additionalReloadEmptyMagTimer": 10,
+    "preReloadPauseTicks": 7,
+    "maxAdditionalAmmoPerOC": [5, 5, 5],
+    "interReloadPauseTicks": 24,
+    "openBolt":true
+  },
+  "projectile": {
+    "visible": true,
+    "damage": 120,
+    "size": 0.4,
+    "speed": 5,
+    "life": 200,
+    "ricochet": false
+  },
+  "sounds": {
+    "fire": "projectazure:sangvis_cannon_fire",
+    "reload": "tac:item.pistol.reload",
+    "cock": "tac:item.pistol.cock",
+    "silencedFire": "projectazure:sangvis_cannon_fire"
+  },
+  "display": {
+    "flash": {
+      "yOffset": 8.56,
+      "zOffset": -13.55,
+      "size": 1.5
+    },
+    "weaponType": 5,
+    "hipfireScale": 1
+  },
+  "modules": {
+    "attachments": {
+    }
+  }
+}

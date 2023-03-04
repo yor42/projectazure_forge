@@ -33,6 +33,7 @@ import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -230,15 +231,15 @@ public class ItemDefibCharger extends Item implements IAnimatable, ISyncable, IC
 
     @Override
     public void onAnimationSync(int id, int state) {
+        final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+        controller.markNeedsReload();
         if (state == ANIM_ON) {
             // Always use GeckoLibUtil to get AnimationControllers when you don't have
             // access to an AnimationEvent
-            final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-            controller.setAnimation(new AnimationBuilder().addAnimation("on").addAnimation("on_still"));
+            controller.setAnimation(new AnimationBuilder().addAnimation("on", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("on_still"));
         }
         else if(state == ANIM_OFF){
-            final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-            controller.setAnimation(new AnimationBuilder().addAnimation("off").addAnimation("off_still"));
+            controller.setAnimation(new AnimationBuilder().addAnimation("off", ILoopType.EDefaultLoopTypes.PLAY_ONCE).addAnimation("off_still"));
         }
     }
 
