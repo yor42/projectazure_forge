@@ -93,7 +93,11 @@ public class CuriosCompat {
 
             CuriosApi.getCuriosHelper().getCuriosHandler(Minecraft.getInstance().player).ifPresent((cap)->{
                 Map<String, ICurioStacksHandler> curios = cap.getCurios();
-                IDynamicStackHandler helmetstack = curios.get(SlotTypePreset.HEAD.getIdentifier()).getStacks();
+                ICurioStacksHandler curioStacksHandler = curios.get(SlotTypePreset.HEAD.getIdentifier());
+                if(curioStacksHandler == null){
+                    return;
+                }
+                IDynamicStackHandler helmetstack = curioStacksHandler.getStacks();
                 for (int i = 0; i < helmetstack.getSlots(); i++) {
                     ItemStack stack = helmetstack.getStackInSlot(i);
 

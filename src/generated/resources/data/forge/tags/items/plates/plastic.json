@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "projectazure:polymer_plate",
-    "mekanism:hdpe_sheet"
+    "projectazure:polymer_plate"
   ]
 }
