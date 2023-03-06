@@ -121,16 +121,6 @@ public class ModBusEventHandler {
 
                 data.putBoolean("PRJA:gotStarterItem", true);
                 playerData.put(PlayerEntity.PERSISTED_NBT_TAG, data);
-
-                Optional<Entity> entity = Optional.ofNullable(EntityType.loadEntityRecursive(data, player.level, Function.identity()));
-                entity.ifPresent((ent)->{
-                    if(ent instanceof AbstractEntityCompanion){
-                        player.level.addFreshEntity(ent);
-                        if(ent.startRiding(player, true)){
-                            Main.LOGGER.debug("Successfully loaded entity");
-                        }
-                    }
-                });
             }
             ServerPlayerEntity serverplayer = (ServerPlayerEntity) event.getPlayer();
             ProjectAzureWorldSavedData.getSaveddata(serverplayer.getLevel()).SyncEntireTeamListtoPlayer(serverplayer);
