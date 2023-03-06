@@ -55,46 +55,6 @@
       }
     ]
   },
-  "disc_sandstorm": {
-    "sounds": [
-      {
-        "name": "projectazure:disc/sandstorm",
-        "stream": true
-      }
-    ]
-  },
-  "disc_sandroll": {
-    "sounds": [
-      {
-        "name": "projectazure:disc/sandroll",
-        "stream": true
-      }
-    ]
-  },
-  "disc_brainpower": {
-    "sounds": [
-      {
-        "name": "projectazure:disc/brainpower",
-        "stream": true
-      }
-    ]
-  },
-  "disc_rickroll": {
-    "sounds": [
-      {
-        "name": "projectazure:disc/rickroll",
-        "stream": true
-      }
-    ]
-  },
-  "disc_enterthebeginning": {
-    "sounds": [
-      {
-        "name": "projectazure:disc/enterthebeginning",
-        "stream": true
-      }
-    ]
-  },
   "bonk": {
     "sounds": [
       {

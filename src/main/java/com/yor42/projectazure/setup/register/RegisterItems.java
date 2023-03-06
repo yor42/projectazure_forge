@@ -392,34 +392,6 @@ public class RegisterItems {
         }
     });
 
-    //LET THE BASS KICK O-oooooooooo AAAA E A A I A U
-    public static final RegistryObject<Item> DISC_BRAINPOWER = register("disc_brainpower", () -> new MusicDiscItem(15, ()->registerSounds.DISC_BRAINPOWER, new Item.Properties()
-            .tab(PA_GROUP).stacksTo(1))
-    {
-        @Override
-        public void appendHoverText(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
-            super.appendHoverText(stack, worldIn, tooltip, flagIn);
-            tooltip.add(new TranslationTextComponent("disc.brainpower.desc1").setStyle(Style.EMPTY.withColor(Color.fromRgb(7829367))));
-        }
-
-        @Nonnull
-        @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
-        }
-    });
-
-    //You know the rules and so do I
-    public static final RegistryObject<Item> DISC_RICKROLL = register("disc_rickroll", () -> new MusicDiscItem(15, ()->registerSounds.DISC_RICKROLL, new Item.Properties()
-            .tab(PA_WEAPONS).stacksTo(1))
-    {
-        @Nonnull
-        @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
-        }
-    });
-
     public static final RegistryObject<Item> DISC_CC5 = register("disc_cc5", () -> new MusicDiscItem(15, ()->registerSounds.DISC_CC5, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
@@ -429,27 +401,6 @@ public class RegisterItems {
             return new TranslationTextComponent("item.projectazure.music_disc");
         }
     });
-
-    public static final RegistryObject<Item> DISC_SANDSTORM = register("disc_sandstorm", () -> new MusicDiscItem(15, ()->registerSounds.DISC_SANDSTORM, new Item.Properties()
-            .tab(PA_GROUP).stacksTo(1))
-    {
-        @Nonnull
-        @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
-        }
-    });
-
-    public static final RegistryObject<Item> DISC_SANDROLL = register("disc_sandroll", () -> new MusicDiscItem(15, ()->registerSounds.DISC_SANDROLL, new Item.Properties()
-            .tab(PA_GROUP).stacksTo(1))
-    {
-        @Nonnull
-        @Override
-        public ITextComponent getName(@Nonnull ItemStack stack) {
-            return new TranslationTextComponent("item.projectazure.music_disc");
-        }
-    });
-
     public static final RegistryObject<Item> DISC_REVENGE = register("disc_revenge", () -> new MusicDiscItem(15, ()->registerSounds.DISC_REVENGE, new Item.Properties()
             .tab(PA_GROUP).stacksTo(1))
     {
