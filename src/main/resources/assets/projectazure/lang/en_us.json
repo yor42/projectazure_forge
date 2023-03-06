@@ -526,6 +526,7 @@
   "message.glitchedphone.selected_0": "Strange phone started to shine, and turned into pile of document. it seems like.... a profile?",
   "message.glitchedphone.selected_1": "Strange phone started to shine, and turned into rainbow cube. its warm, and its glowing...",
 
+
   "entity.status.relaxing": "Resting",
   "entity.status.sitting": "Sitting",
   "entity.status.waiting": "Waiting for owner",
@@ -705,6 +706,9 @@
   "message.stasiscrystal.notowner" : "You are not the owner of this entity! owner is: %s.",
 
   "message.energyguns.gun.notenoughenergy": "Not enough energy!",
+
+  "message.nopatchouliinstalled": "%s isn't installed; which is required for Guidebook",
+  "modnames.patchouli": "[Patchouli]",
 
   "death.attack.bonk": "%1$s was sent to horny jail",
 
