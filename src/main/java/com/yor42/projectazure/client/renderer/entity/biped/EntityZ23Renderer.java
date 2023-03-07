@@ -8,9 +8,9 @@ import com.yor42.projectazure.libs.Constants;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
-public class entityZ23Renderer extends GeoCompanionRenderer<EntityZ23> {
+public class EntityZ23Renderer extends GeoCompanionRenderer<EntityZ23> {
 
-    public entityZ23Renderer(EntityRendererManager renderManager) {
+    public EntityZ23Renderer(EntityRendererManager renderManager) {
         super(renderManager, new Z23Model());
         this.addLayer(new CompanionRiggingLayer<>(this));
     }

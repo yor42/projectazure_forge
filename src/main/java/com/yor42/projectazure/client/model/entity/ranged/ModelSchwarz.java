@@ -187,8 +187,4 @@ public class ModelSchwarz extends GeoCompanionModel<EntitySchwarz> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -36;
-    }
 }

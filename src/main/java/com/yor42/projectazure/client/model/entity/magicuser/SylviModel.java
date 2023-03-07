@@ -199,8 +199,4 @@ public class SylviModel extends GeoCompanionModel<EntitySylvi> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -38;
-    }
 }

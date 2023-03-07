@@ -163,6 +163,11 @@ public class PAConfig {
         public final ForgeConfigSpec.DoubleValue SylviAttackDamage;
         public final ForgeConfigSpec.DoubleValue SylviMovementSpeed;
 
+        public final ForgeConfigSpec.DoubleValue HaruHealth;
+        public final ForgeConfigSpec.DoubleValue HaruSwimSpeed;
+        public final ForgeConfigSpec.DoubleValue HaruAttackDamage;
+        public final ForgeConfigSpec.DoubleValue HaruMovementSpeed;
+
         public final ForgeConfigSpec.DoubleValue YamatoHealth;
         public final ForgeConfigSpec.DoubleValue YamatoSwimSpeed;
         public final ForgeConfigSpec.DoubleValue YamatoAttackDamage;
@@ -411,6 +416,13 @@ public class PAConfig {
             SylviSwimSpeed = builder.defineInRange("Swim Speed of Sylvi Lee", 1F, 0, 1024);
             SylviAttackDamage = builder.defineInRange("Attack Damage of Sylvi Lee" , 2.0F, 0, 1024);
             SylviMovementSpeed = builder.defineInRange("Movement speed of Sylvi Lee", 0.3F, 0, 2);
+
+            builder.pop().push("Soulworker");
+            HaruHealth = builder.defineInRange("Max Health of Haru", 20D, 1, 1024);
+            HaruSwimSpeed = builder.defineInRange("Swim Speed of Haru", 1F, 0, 1024);
+            HaruAttackDamage = builder.defineInRange("Attack Damage of Haru" , 2.0F, 0, 1024);
+            HaruMovementSpeed = builder.defineInRange("Movement speed of Haru", 0.3F, 0, 2);
+
 
             builder.pop().push("Kantai Collection");
             YamatoHealth = builder.defineInRange("Max Health of Yamato", 40D, 1, 1024);

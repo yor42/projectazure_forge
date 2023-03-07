@@ -12,10 +12,6 @@ import javax.annotation.Nullable;
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 
 public class PurifierModel extends GeoCompanionModel<EntityPurifier> {
-    @Override
-    protected int SleepingBodyYPosition() {
-        return 0;
-    }
 
     @Override
     public ResourceLocation getModelLocation(EntityPurifier object) {

@@ -21,31 +21,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiSRInventory extends ContainerScreen<ContainerShiningResonanceInventory> {
+public class GuiSRInventory extends AbstractGUIScreen<ContainerShiningResonanceInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/shiningresonance_inventory.png");
-    private final AbstractEntityCompanion host;
-    private boolean populated = false;
 
     public GuiSRInventory(ContainerShiningResonanceInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
-        this.host = p_i51105_1_.companion;
         this.imageWidth = 174;
         this.imageHeight = 232;
         this.inventoryLabelX = 6;
         this.inventoryLabelY= 137;
         this.titleLabelX = 114;
         this.titleLabelY= 57;
-    }
-
-    @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderEntity(mouseX, mouseY);
-        this.renderButton();
-        this.rendergauges(matrixStack, mouseX, mouseY);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
@@ -81,7 +68,7 @@ public class GuiSRInventory extends ContainerScreen<ContainerShiningResonanceInv
 
     }
 
-    private void rendergauges(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void rendergauges(MatrixStack matrixStack, int mouseX, int mouseY) {
 
         matrixStack.pushPose();
         this.minecraft.getTextureManager().bind(TEXTURE);
@@ -93,30 +80,15 @@ public class GuiSRInventory extends ContainerScreen<ContainerShiningResonanceInv
         matrixStack.popPose();
     }
 
-    private void renderButton() {
-        if(!this.populated) {
-            Button homebutton = new EntityStatusButton(this.host, this.leftPos + 6, this.topPos + 59, 16, 16, 240, 0, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM);
-            Button itembutton = new EntityStatusButton(this.host,this.leftPos + 6, this.topPos + 76, 16, 16, 240, 32, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM);
-            Button attackbehaviorbutton = new EntityStatusButton(this.host, this.leftPos + 6, this.topPos + 93, 16, 16, 240, 64, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE);
+    @Override
+    protected void addButtons() {
+        Button homebutton = new EntityStatusButton(this.host, this.leftPos + 6, this.topPos + 59, 16, 16, 240, 0, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM, FREEROAM_TOOLTIP);
+        Button itembutton = new EntityStatusButton(this.host,this.leftPos + 6, this.topPos + 76, 16, 16, 240, 32, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
+        Button attackbehaviorbutton = new EntityStatusButton(this.host, this.leftPos + 6, this.topPos + 93, 16, 16, 240, 64, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE);
 
-            this.addButton(homebutton);
-            this.addButton(itembutton);
-            this.addButton(attackbehaviorbutton);
-            this.populated = true;
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
-        if(entity instanceof AbstractEntityCompanion) {
-            entity.restoreFrom(this.host);
-            try {
-                renderEntityInInventory(this.leftPos + 46, this.topPos + 119, 30, mousex, mousey, (LivingEntity) entity);
-            } catch (Exception e) {
-                Main.LOGGER.error("Failed to render Entity!");
-            }
-        }
+        this.addButton(homebutton);
+        this.addButton(itembutton);
+        this.addButton(attackbehaviorbutton);
     }
 
     @Override
@@ -124,12 +96,4 @@ public class GuiSRInventory extends ContainerScreen<ContainerShiningResonanceInv
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(p_230450_1_, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
-
-
-    @Override
-    protected void init() {
-        super.init();
-        this.populated = false;
-    }
-
 }

@@ -191,8 +191,4 @@ public class ModelCrownslayer extends GeoCompanionModel<EntityCrownSlayer> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
-    }
 }

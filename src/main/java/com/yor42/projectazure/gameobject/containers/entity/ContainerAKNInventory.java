@@ -21,9 +21,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerAKNInventory extends Container {
-
-    public final AbstractEntityCompanion companion;
+public class ContainerAKNInventory extends AbstractContainerInventory {
 
     //C l i e n t
     public ContainerAKNInventory(int id, PlayerInventory inventory, PacketBuffer data) {
@@ -31,8 +29,7 @@ public class ContainerAKNInventory extends Container {
     }
 
     public ContainerAKNInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(RegisterContainer.AKN_CONTAINER.get(), id);
-        this.companion = companion;
+        super(RegisterContainer.AKN_CONTAINER.get(), id, companion);
         //mainhand
         this.addSlot(new SlotItemHandler(EntityEquipment, 0, 75, 80));
 
@@ -84,15 +81,6 @@ public class ContainerAKNInventory extends Container {
 
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 5 + k * 18, 164));
-        }
-    }
-
-    @Override
-    public boolean stillValid(PlayerEntity p_75145_1_) {
-        if (this.companion.isDeadOrDying()) {
-            return false;
-        } else {
-            return p_75145_1_.distanceToSqr(this.companion.getX() + 0.5D, this.companion.getY() + 0.5D, this.companion.getZ() + 0.5D) <= 64.0D;
         }
     }
 

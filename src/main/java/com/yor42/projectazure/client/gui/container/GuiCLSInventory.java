@@ -3,6 +3,7 @@ package com.yor42.projectazure.client.gui.container;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
+import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerCLSInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.utils.ClientUtils;
@@ -23,14 +24,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> implements IHasContainer<ContainerCLSInventory> {
+public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> implements IHasContainer<ContainerCLSInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/closers_inventory.png");
-    private final AbstractEntityCompanion host;
 
     public GuiCLSInventory(ContainerCLSInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
-        this.host = p_i51105_1_.companion;
         this.imageWidth = 214;
         this.imageHeight = 202;
         this.inventoryLabelX = 11;
@@ -42,16 +41,15 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialticks);
         this.renderValues(matrixStack, mouseX, mouseY);
-        this.drawButtons(matrixStack, mouseX, mouseY);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
-    private void drawButtons(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void addButtons() {
         int homeModeX = this.host.isFreeRoaming()? 0:14;
         int ItemPickupX = this.host.shouldPickupItem()? 28:42;
 
-        Button homebutton = new ImageButton(this.leftPos+178, this.topPos+141, 14,14, homeModeX, 210, 14,TEXTURE, action->switchBehavior());
-        Button itembutton = new ImageButton(this.leftPos+193, this.topPos+141, 14,14, ItemPickupX, 210, 14,TEXTURE, action->switchItemBehavior());
+        Button homebutton = new EntityStatusButton(this.host, this.leftPos+178, this.topPos+141, 14,14, homeModeX, 210, 14,0,TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM, FREEROAM_TOOLTIP);
+        Button itembutton = new EntityStatusButton(this.host, this.leftPos+193, this.topPos+141, 14,14, ItemPickupX, 210, 14,0,TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
         this.addButton(homebutton);
         this.addButton(itembutton);
     }
@@ -86,20 +84,6 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
         this.blit(matrixStack, this.leftPos+179,this.topPos+179, 56, 210, 9, 9);
     }
 
-    private void switchBehavior() {
-        if(Screen.hasShiftDown()){
-            this.host.clearHomePos();
-        }
-        else {
-            this.host.SwitchFreeRoamingStatus();
-        }
-    }
-
-    private void switchItemBehavior() {
-        this.host.SwitchItemBehavior();
-    }
-
-
     @Override
     protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         matrixStack.pushPose();
@@ -112,20 +96,7 @@ public class GuiCLSInventory extends ContainerScreen<ContainerCLSInventory> impl
         for(int l = 0; l<this.host.getSkillItemCount(); l++){
             //this.blit(matrixStack, this.leftPos-21, this.topPos+57+(19*l), 41, 0, 238, 18);
         }
-        this.renderEntity(mouseX, mouseY);
+        this.renderEntity(this.leftPos + 100, this.topPos + 80,mouseX, mouseY);
         matrixStack.popPose();
-    }
-    @OnlyIn(Dist.CLIENT)
-    private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
-        if(entity instanceof AbstractEntityCompanion) {
-            entity.restoreFrom(this.host);
-            int entityWidth = (int) entity.getBbWidth();
-            try {
-                renderEntityInInventory(this.leftPos + (100 - (entityWidth / 2)), this.topPos + 80, 30, mousex, mousey, (LivingEntity) entity);
-            } catch (Exception e) {
-                Main.LOGGER.error("Failed to render Entity!");
-            }
-        }
     }
 }

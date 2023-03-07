@@ -14,10 +14,6 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLoca
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class ModelShiki extends GeoCompanionModel<EntityShiki> {
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -34;
-    }
 
     @Override
     public ResourceLocation getModelLocation(EntityShiki object) {

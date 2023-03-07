@@ -13,10 +13,6 @@ import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.AnimationLocation;
 
 public class ModelHK416 extends GeoCompanionModel<EntityHK416> {
-    @Override
-    protected int SleepingBodyYPosition() {
-        return 0;
-    }
 
     @Override
     public ResourceLocation getModelLocation(EntityHK416 object) {

@@ -14,10 +14,6 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLoca
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class ModelSkullShatterer extends GeoCompanionModel<EntitySkullShatterer> {
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -15;
-    }
 
     @Override
     public ResourceLocation getModelLocation(EntitySkullShatterer object) {

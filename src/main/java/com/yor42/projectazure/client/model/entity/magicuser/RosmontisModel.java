@@ -176,9 +176,4 @@ public class RosmontisModel extends GeoCompanionModel<EntityRosmontis> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -30;
-    }
-
 }

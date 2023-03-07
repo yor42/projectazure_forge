@@ -181,8 +181,6 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
         LeftArm.setRotationX(((float)Math.PI / 2F) + headpitch);
     }
 
-    protected abstract int SleepingBodyYPosition();
-
     @Override
     public void setMolangQueries(IAnimatable animatable, double currentTick) {
         super.setMolangQueries(animatable, currentTick);

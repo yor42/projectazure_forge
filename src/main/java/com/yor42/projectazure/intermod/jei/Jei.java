@@ -39,7 +39,7 @@ public class Jei implements IModPlugin {
             @Override
             public List<Rectangle2d> getGuiExtraAreas(@Nonnull guiBAInventory containerScreen) {
                 List<Rectangle2d> rects = new ArrayList<>();
-                int guiLeft = containerScreen.getX();
+                int guiLeft = containerScreen.getleftPos();
                 int guiTop = containerScreen.getY();
                 int xSize = containerScreen.getBackgroundWidth();
                 rects.add(new Rectangle2d(guiLeft+xSize, guiTop, 43, 90));

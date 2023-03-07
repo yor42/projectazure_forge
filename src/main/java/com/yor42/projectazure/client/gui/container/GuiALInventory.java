@@ -28,11 +28,10 @@ import java.util.List;
 
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 
-public class GuiALInventory extends ContainerScreen<ContainerALInventory> implements IHasContainer<ContainerALInventory> {
+public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
 
     public static final ResourceLocation TEXTURE = new ResourceLocation(Constants.MODID, "textures/gui/ship_inventory.png");
 
-    private final EntityKansenBase host;
     private final enums.ALAffection affectionLevel;
     private double affection=0D;
     private double morale;
@@ -40,8 +39,7 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
 
     public GuiALInventory(ContainerALInventory container, PlayerInventory playerinventory, ITextComponent titleIn) {
         super(container, playerinventory, titleIn);
-        this.host = container.entity;
-        if(container.entity != null) {
+        if(container.companion != null) {
             this.affection = this.host.getAffection();
             this.morale = this.host.getMorale();
         }
@@ -101,11 +99,11 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderEntity(mouseX, mouseY);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+    public void render(MatrixStack matrixstacck, int mouseX, int mousey, float partialticks) {
+        this.renderBackground(matrixstacck);
+        super.render(matrixstacck, mouseX, mousey, partialticks);
+        this.renderEntity(this.leftPos+110, this.topPos+105,mouseX, mousey);
+        this.renderTooltip(matrixstacck, mouseX, mousey);
     }
 
     @Override
@@ -116,12 +114,6 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         this.blit(matrixStack, this.leftPos+this.imageWidth, this.topPos, 176, 104, 43, 90);
         matrixStack.popPose();
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.drawButtons();
     }
 
     protected void renderLabels(MatrixStack matrixStack, int mousex, int mousey) {
@@ -139,50 +131,18 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
         //this.renderButton(matrixStack);
     }
 
-    private void drawButtons() {
 
+    @Override
+    protected void addButtons() {
         int FreeRoamX = this.host.isFreeRoaming()? 185:176;
         int itemPickupX = this.host.shouldPickupItem()? 176:185;
-        Button.ITooltip FREEROAM = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
-
-            if(this.host.isFreeRoaming()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.freeroaming.on").withStyle(TextFormatting.GREEN));
-            }
-            else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.freeroaming.off").withStyle(TextFormatting.BLUE));
-            }
-
-            if(this.host.getHOMEPOS().isPresent()) {
-                BlockPos Home = this.host.getHOMEPOS().get();
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homepos").append(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
-            }else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").withStyle(TextFormatting.GRAY));
-            }
-            this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
-        };
-
-        Button.ITooltip ITEM = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            if(this.host.shouldPickupItem()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.on").withStyle(TextFormatting.GREEN));
-            }
-            else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").withStyle(TextFormatting.BLUE));
-            }
-            this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
-        };
-        ImageButton FreeroamButton = new ImageButton(this.leftPos+159,this.topPos+52,9,9,FreeRoamX,25,9,TEXTURE,256,256, action->switchBehavior(), FREEROAM, StringTextComponent.EMPTY);
-        ImageButton ItemPickupButton = new ImageButton(this.leftPos+159,this.topPos+62,9,9,itemPickupX,43,9,TEXTURE,256,256,action->switchItemBehavior(), ITEM, StringTextComponent.EMPTY);
+        ImageButton FreeroamButton = new ImageButton(this.leftPos+159,this.topPos+52,9,9,FreeRoamX,25,9,TEXTURE,256,256, action->switchBehavior(), FREEROAM_TOOLTIP, StringTextComponent.EMPTY);
+        ImageButton ItemPickupButton = new ImageButton(this.leftPos+159,this.topPos+62,9,9,itemPickupX,43,9,TEXTURE,256,256,action->switchItemBehavior(), ITEM_TOOLTIP, StringTextComponent.EMPTY);
         ImageButton RiggingButton = new ImageButton(this.leftPos+98,this.topPos+6,12,12,14,193,13,TEXTURE,action->switchScreen());
 
         this.addButton(ItemPickupButton);
         this.addButton(FreeroamButton);
         this.addButton(RiggingButton);
-    }
-
-    private void switchItemBehavior() {
-        this.host.SwitchItemBehavior();
     }
 
     private void switchScreen() {
@@ -192,26 +152,6 @@ public class GuiALInventory extends ContainerScreen<ContainerALInventory> implem
         }
         Main.NETWORK.sendToServer(new ChangeContainerPacket(this.host.getRigging(), this.host.getUUID()));
         this.onClose();
-    }
-    private void switchBehavior() {
-        this.host.SwitchFreeRoamingStatus();
-    }
-
-    private void moveTab(int finalI) {
-        inventory.player.closeContainer();
-    }
-
-    private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
-        if(entity instanceof AbstractEntityCompanion) {
-            entity.restoreFrom(this.host);
-            int entityWidth = (int) entity.getBbWidth();
-            try {
-                renderEntityInInventory(this.leftPos+110, this.topPos+105, 30, mousex, mousey, (LivingEntity) entity);
-            } catch (Exception e) {
-                Main.LOGGER.error("Failed to render Entity!");
-            }
-        }
     }
 
     private void renderAffection(MatrixStack matrixStack, int mousex, int mousey) {

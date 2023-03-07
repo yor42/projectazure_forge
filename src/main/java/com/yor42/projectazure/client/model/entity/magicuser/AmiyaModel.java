@@ -161,9 +161,4 @@ public class AmiyaModel extends GeoCompanionModel<EntityAmiya> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -26;
-    }
-
 }

@@ -63,7 +63,9 @@ public class registerEntity {
 
     public static final RegistryObject<EntityType<EntityYamato>> YAMATO = ENTITIES.register("entityyamato", () -> EntityType.Builder.of(EntityYamato::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityyamato").toString()));
 
-    public static final RegistryObject<EntityType<EntitySylvi>> SYLVI = ENTITIES.register("entitysylvi", () -> EntityType.Builder.of(EntitySylvi::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityschwarz").toString()));
+    public static final RegistryObject<EntityType<EntitySylvi>> SYLVI = ENTITIES.register("entitysylvi", () -> EntityType.Builder.of(EntitySylvi::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entitysylvi").toString()));
+
+    public static final RegistryObject<EntityType<EntityHaru>> HARU = ENTITIES.register("entityharu", () -> EntityType.Builder.of(EntityHaru::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityharu").toString()));
 
     public static final RegistryObject<EntityType<EntityNearl>> NEARL = ENTITIES.register("entitynearl", () -> EntityType.Builder.of(EntityNearl::new, EntityClassification.CREATURE).sized(0.572F, 1.71F).build(ModResourceLocation("entitynearl").toString()));
     public static final RegistryObject<EntityType<EntitySchwarz>> SCHWARZ = ENTITIES.register("entityschwarz", () -> EntityType.Builder.of(EntitySchwarz::new, EntityClassification.CREATURE).sized(0.572F, 1.69F).build(ModResourceLocation("entityschwarz").toString()));
@@ -138,12 +140,13 @@ public class registerEntity {
         event.put(HK416.get(), EntityHK416.MutableAttribute().build());
         event.put(PURIFIER.get(), EntityPurifier.MutableAttribute().build());
         event.put(MASH.get(), EntityMash.MutableAttribute().build());
+        event.put(HARU.get(), EntityHaru.MutableAttribute().build());
     }
     @OnlyIn(Dist.CLIENT)
     public static void registerRenderer(){
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.AYANAMI.get(), entityAyanamiRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.JAVELIN.get(), entityJavelinRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(registerEntity.Z23.get(), entityZ23Renderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.Z23.get(), EntityZ23Renderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.LAFFEY.get(), EntityLaffeyRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.GANGWON.get(), entityGangwonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.SHIROKO.get(), entityShirokoRenderer::new);
@@ -175,6 +178,7 @@ public class registerEntity {
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.PURIFIER.get(), EntityPurifierRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MASH.get(), EntityMashRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.SKULLSHATTERER.get(), EntitySkullShattererRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(registerEntity.HARU.get(), EntityHaruRenderer::new);
 
         RenderingRegistry.registerEntityRenderingHandler(registerEntity.MISSILEDRONE.get(), EntityMissileDroneRenderer::new);
 

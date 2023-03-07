@@ -162,8 +162,4 @@ public class javelinModel extends GeoCompanionModel<EntityJavelin> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
-    }
 }

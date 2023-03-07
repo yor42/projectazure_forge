@@ -14,10 +14,6 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.AnimationLocation;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class ModelW extends GeoCompanionModel<EntityW> {
-    @Override
-    protected int SleepingBodyYPosition() {
-        return 0;
-    }
 
     @Override
     public ResourceLocation getModelLocation(EntityW object) {

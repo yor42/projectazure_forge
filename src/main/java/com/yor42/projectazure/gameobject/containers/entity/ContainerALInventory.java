@@ -23,12 +23,11 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerALInventory extends Container {
+public class ContainerALInventory extends AbstractContainerInventory {
 
     private static final EquipmentSlotType[] EQUIPMENT = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
     private final IItemHandler AmmoStack;
     private final IItemHandler equipment;
-    public final EntityKansenBase entity;
 
     //client
     public ContainerALInventory(int id, PlayerInventory playerInventory, PacketBuffer data) {
@@ -37,12 +36,11 @@ public class ContainerALInventory extends Container {
 
     //constructor for actual use
     public ContainerALInventory(int id, PlayerInventory playerInventory, IItemHandler Inventory, IItemHandler Rigging, IItemHandler Equipments, IItemHandler AmmoStorage, @Nullable EntityKansenBase entity) {
-        super(RegisterContainer.SHIP_CONTAINER.get(), id);
+        super(RegisterContainer.SHIP_CONTAINER.get(), id, entity);
         this.equipment = Equipments;
         this.AmmoStack = AmmoStorage;
-        this.entity = entity;
 //rigging
-        this.addSlot(new SlotRigging(Rigging, 0, 152, 35, this.entity));
+        this.addSlot(new SlotRigging(Rigging, 0, 152, 35, this.companion));
 
         //mainhand
         this.addSlot(new SlotItemHandler(this.equipment, 0, 152, 89));
@@ -59,7 +57,7 @@ public class ContainerALInventory extends Container {
 
                 @Override
                 public boolean mayPlace(@Nonnull ItemStack stack) {
-                    return stack.getItem() instanceof ArmorItem && stack.canEquip(EQUIPMENT[finalL],  ContainerALInventory.this.entity);
+                    return stack.getItem() instanceof ArmorItem && stack.canEquip(EQUIPMENT[finalL],  ContainerALInventory.this.companion);
                 }
             });
         }
@@ -87,12 +85,6 @@ public class ContainerALInventory extends Container {
             this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 168));
         }
     }
-
-    @Override
-    public boolean stillValid(PlayerEntity playerIn) {
-        return true;
-    }
-
     public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);

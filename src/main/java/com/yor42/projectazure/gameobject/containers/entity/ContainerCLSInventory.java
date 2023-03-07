@@ -21,16 +21,12 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerCLSInventory extends Container {
-
-    public final AbstractEntityCompanion companion;
+public class ContainerCLSInventory extends AbstractContainerInventory {
     public ContainerCLSInventory(int id, PlayerInventory inventory, PacketBuffer data) {
         this(id, inventory, new ItemStackHandler(16), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
     public ContainerCLSInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(RegisterContainer.CLS_CONTAINER.get(), id);
-
-        this.companion = companion;
+        super(RegisterContainer.CLS_CONTAINER.get(), id, companion);
         //ZA HANDO
         for (int k = 0; k < 2; k++) {
             this.addSlot(new SlotItemHandler(EntityEquipment, k, 52, 58 + (19 * k)));
@@ -81,15 +77,6 @@ public class ContainerCLSInventory extends Container {
             this.addSlot(new Slot(inventory, k, 12 + k * 18, 172));
         }
     }
-
-    @Override
-    public boolean stillValid(PlayerEntity player) {
-        if(this.companion != null) {
-            return player.distanceTo(this.companion)<=8;
-        }
-        return false;
-    }
-
     public static class Supplier implements INamedContainerProvider {
 
         AbstractEntityCompanion companion;

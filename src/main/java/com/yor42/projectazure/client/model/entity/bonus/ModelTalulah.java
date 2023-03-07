@@ -214,8 +214,4 @@ public class ModelTalulah extends GeoCompanionModel<EntityTalulah> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
-    }
 }

@@ -164,9 +164,4 @@ public class YamatoModel extends GeoCompanionModel<EntityYamato> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -45;
-    }
-
 }

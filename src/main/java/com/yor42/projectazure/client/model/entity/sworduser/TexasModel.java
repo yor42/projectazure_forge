@@ -186,8 +186,4 @@ public class TexasModel extends GeoCompanionModel<EntityTexas> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -36;
-    }
 }

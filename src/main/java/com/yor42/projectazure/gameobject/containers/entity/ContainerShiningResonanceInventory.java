@@ -19,17 +19,14 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerShiningResonanceInventory extends Container{
-
-    public final AbstractEntityCompanion companion;
+public class ContainerShiningResonanceInventory extends AbstractContainerInventory{
 
     public ContainerShiningResonanceInventory(int id, PlayerInventory inventory, PacketBuffer data) {
         this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 
     public ContainerShiningResonanceInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(RegisterContainer.SR_CONTAINER.get(), id);
-        this.companion = companion;
+        super(RegisterContainer.SR_CONTAINER.get(), id, companion);
 
         //mainhand
         this.addSlot(new SlotItemHandler(EntityEquipment, 0, 97, 83));
@@ -52,15 +49,6 @@ public class ContainerShiningResonanceInventory extends Container{
             this.addSlot(new Slot(inventory, k, 7 + k * 18, 209));
         }
     }
-    @Override
-    public boolean stillValid(@Nonnull PlayerEntity p_75145_1_) {
-        if (this.companion.isDeadOrDying()) {
-            return false;
-        } else {
-            return p_75145_1_.distanceToSqr(this.companion.getX() + 0.5D, this.companion.getY() + 0.5D, this.companion.getZ() + 0.5D) <= 64.0D;
-        }
-    }
-
     @Nonnull
     public ItemStack quickMoveStack(@Nonnull PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;

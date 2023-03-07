@@ -301,6 +301,7 @@ public class enums {
         REUNION("akn_reunion"),
         SHININGRESONANCE("srr"),
         SERVANT("fgo_servant"),
+        SOULWORKER("sw_soulworker"),
         CLOSER("cls_closer");
 
         private final String name;

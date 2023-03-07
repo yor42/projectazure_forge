@@ -189,8 +189,4 @@ public class LapplandModel extends GeoCompanionModel<EntityLappland> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -36;
-    }
 }

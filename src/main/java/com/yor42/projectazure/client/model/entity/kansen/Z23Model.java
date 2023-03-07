@@ -141,8 +141,4 @@ public class Z23Model extends GeoCompanionModel<EntityZ23> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
-    }
 }

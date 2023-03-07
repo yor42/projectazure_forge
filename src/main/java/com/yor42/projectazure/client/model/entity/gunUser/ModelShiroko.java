@@ -192,8 +192,4 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
         Halo.setPositionY((float) (Math.sin(2*Math.PI*0.0125*entity.tickCount)*1.0F)%80);
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -38;
-    }
 }

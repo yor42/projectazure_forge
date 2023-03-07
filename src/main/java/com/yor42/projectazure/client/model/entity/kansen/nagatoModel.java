@@ -179,10 +179,5 @@ public class nagatoModel extends GeoCompanionModel<EntityNagato> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -27;
-    }
-
 
 }

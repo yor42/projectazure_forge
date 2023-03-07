@@ -146,8 +146,4 @@ public class ModelFrostNova extends GeoCompanionModel<EntityFrostnova> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
-    }
 }

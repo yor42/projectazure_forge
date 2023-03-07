@@ -155,9 +155,4 @@ public class ayanamiModel extends GeoCompanionModel<EntityAyanami> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -33;
-    }
-
 }

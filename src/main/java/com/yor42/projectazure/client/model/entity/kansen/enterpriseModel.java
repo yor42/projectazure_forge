@@ -165,8 +165,4 @@ public class enterpriseModel extends GeoCompanionModel<EntityEnterprise> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -45;
-    }
 }

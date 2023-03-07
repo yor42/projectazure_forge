@@ -15,10 +15,6 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLoca
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class ScathathModel extends GeoCompanionModel<EntityScathath> {
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -34;
-    }
 
     @Override
     public ResourceLocation getModelLocation(EntityScathath object) {

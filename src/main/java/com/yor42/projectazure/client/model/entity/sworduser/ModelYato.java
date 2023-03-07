@@ -185,8 +185,4 @@ public class ModelYato extends GeoCompanionModel<EntityYato> {
         visor3.setHidden(!entity.isWearingVisor());
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
-    }
 }

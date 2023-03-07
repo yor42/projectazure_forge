@@ -23,10 +23,9 @@ import javax.annotation.Nullable;
 
 import static com.yor42.projectazure.setup.register.RegisterContainer.BA_CONTAINER;
 
-public class ContainerBAInventory extends Container {
+public class ContainerBAInventory extends AbstractContainerInventory {
 
     private ItemStackHandler AmmoStack;
-    public final AbstractEntityCompanion companion;
 
 
     public ContainerBAInventory(int ID, PlayerInventory inventory, PacketBuffer data) {
@@ -34,9 +33,8 @@ public class ContainerBAInventory extends Container {
     }
 
     public ContainerBAInventory(int ID, PlayerInventory inventory, ItemStackHandler Inventory, IItemHandlerModifiable Equipments, ItemStackHandler Ammo, AbstractEntityCompanion companion) {
-        super(BA_CONTAINER.get(), ID);
+        super(BA_CONTAINER.get(), ID, companion);
         this.AmmoStack = Ammo;
-        this.companion = companion;
         //mainhand
         this.addSlot(new SlotItemHandler(Equipments, 0, 10, 30));
 
@@ -156,11 +154,6 @@ public class ContainerBAInventory extends Container {
         }
 
         return itemstack;
-    }
-
-    @Override
-    public boolean stillValid(PlayerEntity playerIn) {
-        return true;
     }
 
     public static class Supplier implements INamedContainerProvider {

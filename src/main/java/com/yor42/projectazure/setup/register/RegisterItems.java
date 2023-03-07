@@ -473,6 +473,7 @@ public class RegisterItems {
     public static final RegistryObject<Item> EXCALIBUR = register_withoutTexture("excalibur", () -> new ModSwordItem(ModMaterials.EXCALIBUR, 1, -1.0F,true, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> TACTICAL_KNIFE = register_withoutTexture("tactical_knife", () -> new ItemThrowableKnife(ModMaterials.KNIFE, 3, -0.2F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> COMPOUNDBOW = register_withoutTexture("compoundbow", () -> new BowItem(new Item.Properties().tab(PA_WEAPONS).durability(1000)));
+    public static final RegistryObject<Item> SOULUMSWORD = register_withoutTexture("soulumsword", () -> new ModSwordItem(ModMaterials.SOULUMSWORD, 1, -1.7F, new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> LORD_CHALDEAS = register_withoutTexture("lordchaldeas", () -> new ShieldItem(new Item.Properties().tab(PA_WEAPONS)));
     public static final RegistryObject<Item> BONKBAT = register("bonk_bat", () -> new ItemBonkBat(new Item.Properties()
             .tab(PA_WEAPONS)

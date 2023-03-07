@@ -143,8 +143,4 @@ public class laffeyModel extends GeoCompanionModel<EntityLaffey> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
-    }
 }

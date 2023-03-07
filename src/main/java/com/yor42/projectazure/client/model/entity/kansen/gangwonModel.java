@@ -200,9 +200,4 @@ public class gangwonModel extends GeoCompanionModel<EntityGangwon> {
         AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -23;
-    }
-
 }

@@ -2450,7 +2450,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             int currentattackldelay = this.getNonVanillaMeleeAttackDelay();
             if(currentattackldelay>0){
                 this.setMeleeAttackDelay(--currentattackldelay);
-                if(currentspelldelay == 0){
+                if(currentattackldelay == 0){
                     this.AttackCount = 0;
                 }
             }

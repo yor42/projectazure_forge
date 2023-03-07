@@ -22,46 +22,24 @@ import javax.annotation.Nonnull;
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiFGOInventory extends ContainerScreen<ContainerFGOInventory> {
+public class GuiFGOInventory extends AbstractGUIScreen<ContainerFGOInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/fgo_inventory.png");
-    private final AbstractEntityCompanion host;
-    private boolean populated = false;
 
     public GuiFGOInventory(ContainerFGOInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
-        this.host = p_i51105_1_.companion;
         this.imageWidth = 203;
         this.imageHeight = 231;
     }
 
-    @Override
-    protected void init() {
-        super.init();
-        this.populated = false;
-    }
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderButton();
-        this.renderEntity(mouseX, mouseY);
+        this.renderEntity(this.leftPos + 39, this.topPos + 101,mouseX, mouseY);
         this.rendergauges(matrixStack, mouseX, mouseY);
         this.renderTooltip(matrixStack, mouseX, mouseY);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
-        if(entity instanceof AbstractEntityCompanion) {
-            entity.restoreFrom(this.host);
-            try {
-                renderEntityInInventory(this.leftPos + 39, this.topPos + 101, 40, mousex, mousey, (LivingEntity) entity);
-            } catch (Exception e) {
-                Main.LOGGER.error("Failed to render Entity!");
-            }
-        }
     }
 
     @Override
@@ -142,16 +120,13 @@ public class GuiFGOInventory extends ContainerScreen<ContainerFGOInventory> {
         this.font.draw(p_230451_1_, (int)this.host.getAffection()+"/"+(int)this.host.getmaxAffection(), 83+bondwidth+10,63.25F,0xffffff);
     }
 
-    private void renderButton(){
-        if(!this.populated) {
-            Button homebutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 16, 14, 14, 242, 0, -14,14, TEXTURE,EntityStatusButton.ACTIONTYPES.FREEROAM);
-            Button itembutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 31, 14, 14, 242, 28, -14,14, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM);
+    protected void addButtons(){
+            Button homebutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 16, 14, 14, 242, 0, -14,14, TEXTURE,EntityStatusButton.ACTIONTYPES.FREEROAM, FREEROAM_TOOLTIP);
+            Button itembutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 31, 14, 14, 242, 28, -14,14, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
             Button attackbehaviorbutton = new EntityStatusButton(this.host,this.leftPos + 4, this.topPos + 46, 14, 14, 242, 56, -14,14, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE);
 
             this.addButton(homebutton);
             this.addButton(itembutton);
             this.addButton(attackbehaviorbutton);
-            this.populated = true;
         }
     }
-}

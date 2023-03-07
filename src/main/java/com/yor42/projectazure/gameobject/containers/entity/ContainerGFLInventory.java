@@ -21,9 +21,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerGFLInventory extends Container {
-
-    public final AbstractEntityCompanion companion;
+public class ContainerGFLInventory extends AbstractContainerInventory {
 
     public ContainerGFLInventory(int id, PlayerInventory inventory, PacketBuffer data) {
         this(id, inventory, new ItemStackHandler(14), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
@@ -31,8 +29,7 @@ public class ContainerGFLInventory extends Container {
 
 
     public ContainerGFLInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(RegisterContainer.GFL_CONTAINER.get(), id);
-        this.companion = companion;
+        super(RegisterContainer.GFL_CONTAINER.get(), id, companion);
         //ZA HANDO
         for(int k = 0; k<2; k++) {
             this.addSlot(new SlotItemHandler(EntityEquipment, k, 96, 40+(18*k)));
@@ -82,12 +79,6 @@ public class ContainerGFLInventory extends Container {
             this.addSlot(new Slot(inventory, k, 5 + k * 18, 167));
         }
     }
-
-    @Override
-    public boolean stillValid(PlayerEntity playerIn) {
-        return true;
-    }
-
     public static class Supplier implements INamedContainerProvider {
 
         AbstractEntityCompanion companion;

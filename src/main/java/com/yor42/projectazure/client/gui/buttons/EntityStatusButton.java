@@ -34,9 +34,17 @@ public class EntityStatusButton extends Button {
         this.entity = entity;
     }
 
-    public void setPosition(int p_191746_1_, int p_191746_2_) {
-        this.x = p_191746_1_;
-        this.y = p_191746_2_;
+    public EntityStatusButton(AbstractEntityCompanion entity, int imagex, int imagey, int width, int height, int textureX, int textureY, int activeXDelta, int hoverYDelta, ResourceLocation texture, ACTIONTYPES action, Button.ITooltip pOnTooltip) {
+        super(imagex, imagey, width, height, StringTextComponent.EMPTY, getAction(entity, action), pOnTooltip);
+        this.textureWidth = 256;
+        this.textureHeight = 256;
+        this.xTexStart = textureX;
+        this.yTexStart = textureY;
+        this.yDiffTex = hoverYDelta;
+        this.activeXDelta = activeXDelta;
+        this.type = action;
+        this.resourceLocation = texture;
+        this.entity = entity;
     }
 
     public void renderButton(MatrixStack p_230431_1_, int p_230431_2_, int p_230431_3_, float p_230431_4_) {

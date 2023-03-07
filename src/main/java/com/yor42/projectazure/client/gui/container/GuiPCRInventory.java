@@ -21,26 +21,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiPCRInventory extends ContainerScreen<ContainerPCRInventory> {
+public class GuiPCRInventory extends AbstractGUIScreen<ContainerPCRInventory> {
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/pcr_inventory.png");
-    private final AbstractEntityCompanion host;
-    private boolean populated = false;
 
     public GuiPCRInventory(ContainerPCRInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
-        this.host = p_i51105_1_.companion;
         this.imageWidth = 210;
         this.imageHeight = 228;
         this.inventoryLabelX = 24;
         this.inventoryLabelY= 136;
         this.titleLabelX = 114;
         this.titleLabelY= 57;
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.populated = false;
     }
 
     @Override
@@ -80,42 +71,23 @@ public class GuiPCRInventory extends ContainerScreen<ContainerPCRInventory> {
 
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderEntity(mouseX, mouseY);
-        this.renderButton();
         this.rendergauges(matrixStack, mouseX, mouseY);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
-    private void rendergauges(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void rendergauges(MatrixStack matrixStack, int mouseX, int mouseY) {
         this.minecraft.getTextureManager().bind(TEXTURE);
     }
 
-    private void renderButton() {
-        if(!this.populated) {
-            Button homebutton = new EntityStatusButton(this.host, this.leftPos + 183, this.topPos + 71, 16, 16, 240, 0, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM);
-            Button itembutton = new EntityStatusButton(this.host,this.leftPos + 183, this.topPos + 89, 16, 16, 240, 32, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM);
+    protected void addButtons() {
+            Button homebutton = new EntityStatusButton(this.host, this.leftPos + 183, this.topPos + 71, 16, 16, 240, 0, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM, FREEROAM_TOOLTIP);
+            Button itembutton = new EntityStatusButton(this.host,this.leftPos + 183, this.topPos + 89, 16, 16, 240, 32, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
             Button attackbehaviorbutton = new EntityStatusButton(this.host, this.leftPos + 183, this.topPos + 107, 16, 16, 240, 64, -16, 16, TEXTURE, EntityStatusButton.ACTIONTYPES.DEFENCE);
 
             this.addButton(homebutton);
             this.addButton(itembutton);
             this.addButton(attackbehaviorbutton);
-            this.populated = true;
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
-        if(entity instanceof AbstractEntityCompanion) {
-            entity.restoreFrom(this.host);
-            try {
-                renderEntityInInventory(this.leftPos + 55, this.topPos + 74, 20, mousex, mousey, (LivingEntity) entity);
-            } catch (Exception e) {
-                Main.LOGGER.error("Failed to render Entity!");
-            }
-        }
     }
 
     @Override
@@ -124,5 +96,7 @@ public class GuiPCRInventory extends ContainerScreen<ContainerPCRInventory> {
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(p_230450_1_, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         p_230450_1_.popPose();
+
+        this.renderEntity(this.leftPos + 55, this.topPos + 74,p_230450_3_, p_230450_4_);
     }
 }

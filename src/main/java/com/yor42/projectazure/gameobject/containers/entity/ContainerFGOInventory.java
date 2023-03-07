@@ -19,17 +19,14 @@ import net.minecraftforge.items.SlotItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ContainerFGOInventory extends Container {
-
-    public final AbstractEntityCompanion companion;
+public class ContainerFGOInventory extends AbstractContainerInventory {
 
     public ContainerFGOInventory(int id, PlayerInventory inventory, PacketBuffer data) {
         this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 
     public ContainerFGOInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(RegisterContainer.FGO_CONTAINER.get(), id);
-        this.companion = companion;
+        super(RegisterContainer.FGO_CONTAINER.get(), id, companion);
 
         //mainhand
         this.addSlot(new SlotItemHandler(EntityEquipment, 0, 81, 94));
@@ -52,16 +49,6 @@ public class ContainerFGOInventory extends Container {
             this.addSlot(new Slot(inventory, k, 26 + k * 18, 209));
         }
 
-    }
-
-
-    @Override
-    public boolean stillValid(PlayerEntity p_75145_1_) {
-        if (this.companion.isDeadOrDying()) {
-            return false;
-        } else {
-            return p_75145_1_.distanceToSqr(this.companion.getX() + 0.5D, this.companion.getY() + 0.5D, this.companion.getZ() + 0.5D) <= 64.0D;
-        }
     }
 
     public static class Supplier implements INamedContainerProvider {

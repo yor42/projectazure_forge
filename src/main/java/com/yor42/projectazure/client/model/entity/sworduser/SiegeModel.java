@@ -181,8 +181,4 @@ public class SiegeModel extends GeoCompanionModel<EntitySiege> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -36;
-    }
 }

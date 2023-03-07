@@ -181,8 +181,4 @@ public class NearlModel extends GeoCompanionModel<EntityNearl> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -36;
-    }
 }

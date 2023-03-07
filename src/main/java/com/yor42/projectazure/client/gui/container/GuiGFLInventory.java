@@ -23,39 +23,20 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> implements IHasContainer<ContainerGFLInventory> {
+public class GuiGFLInventory extends AbstractGUIScreen<ContainerGFLInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/gfl_inventory.png");
-    private final AbstractEntityCompanion host;
     private final double affection, morale;
 
     public GuiGFLInventory(ContainerGFLInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.host = screenContainer.companion;
         this.affection = this.host.getAffection();
         this.morale = this.host.getMorale();
         this.imageWidth = 170;
         this.imageHeight = 188;
-        this.renderButton();
     }
-
-    @OnlyIn(Dist.CLIENT)
-    private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
-        if(entity instanceof AbstractEntityCompanion) {
-            entity.restoreFrom(this.host);
-            int entityWidth = (int) entity.getBbWidth();
-            try {
-                renderEntityInInventory(this.leftPos + (46 - (entityWidth / 2)), this.topPos + 75, 30, mousex, mousey, (LivingEntity) entity);
-            } catch (Exception e) {
-                Main.LOGGER.error("Failed to render Entity!");
-            }
-        }
-    }
-
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderEntity(mouseX, mouseY);
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
@@ -83,6 +64,7 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         this.blit(matrixStack, (int) ((this.leftPos+43)/renderscale), (int) ((this.topPos+98)/renderscale), 236, 11, 9, 9);
         this.blit(matrixStack, (int) ((this.leftPos+67)/renderscale), (int) ((this.topPos+98)/renderscale), 246, 11, 9, 9);
         matrixStack.popPose();
+        this.renderEntity(this.leftPos + 46, this.topPos + 75, x, y);
     }
 
     @Override
@@ -118,20 +100,8 @@ public class GuiGFLInventory extends ContainerScreen<ContainerGFLInventory> impl
         matrixStack.popPose();
     }
 
-    private void switchBehavior() {
-        if(Screen.hasShiftDown()){
-            this.host.clearHomePos();
-        }
-        else {
-            this.host.SwitchFreeRoamingStatus();
-        }
-    }
 
-    private void switchItemBehavior() {
-        this.host.SwitchItemBehavior();
-    }
-
-    private void renderButton(){
+    protected void addButtons(){
         int homeModeX = this.host.isFreeRoaming()? 1:15;
         int itemModeX = this.host.shouldPickupItem()? 1:15;
         Button homebutton = new ImageButton(this.leftPos+1, this.topPos+64, 14,14, homeModeX, 188, 14,TEXTURE, action->switchBehavior());

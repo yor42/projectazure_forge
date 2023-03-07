@@ -14,10 +14,6 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLoca
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class ModelExcela extends GeoCompanionModel<EntityExcela> {
-    @Override
-    protected int SleepingBodyYPosition() {
-        return 0;
-    }
 
     @Override
     public ResourceLocation getModelLocation(EntityExcela object) {

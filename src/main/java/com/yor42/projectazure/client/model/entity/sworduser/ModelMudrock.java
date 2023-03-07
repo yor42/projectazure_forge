@@ -152,9 +152,4 @@ public class ModelMudrock extends GeoCompanionModel<EntityMudrock> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -35;
-    }
-
 }

@@ -2,44 +2,30 @@ package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yor42.projectazure.Main;
+import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerBAInventory;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.ClientUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implements IHasContainer<ContainerBAInventory> {
+public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/bluearchive_inventory.png");
 
-    private final AbstractEntityCompanion host;
     private final enums.ALAffection affectionLevel;
     private final double affection, morale;
-    private final int backgroundWidth = 176;
-    private final int backgroundHeight = 193;
-
-    private int x, y;
+    
 
     public guiBAInventory(ContainerBAInventory screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
-        this.host = screenContainer.companion;
         this.affection = this.host.getAffection();
         this.affectionLevel = this.affectionValuetoLevel();
         this.morale = this.host.getMorale();
@@ -48,29 +34,28 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
     @Override
     public void init(Minecraft minecraft, int width, int height) {
         super.init(minecraft, width, height);
-
-        this.x = (this.width - backgroundWidth) / 2;
-        this.y = (this.height - backgroundHeight) / 2+14;
         this.inventoryLabelX = 9;
         this.inventoryLabelY = 100;
+        this.imageHeight = 193;
+        this.imageWidth = 176;
         this.titleLabelX = 115;
         this.titleLabelY=17;
     }
 
     public int getY() {
-        return this.y;
+        return this.getGuiTop();
     }
 
-    public int getX() {
-        return this.x;
+    public int getleftPos() {
+        return this.leftPos;
     }
 
     public int getBackgroundWidth() {
-        return this.backgroundWidth;
+        return this.imageWidth;
     }
 
     public int getBackgroundHeight() {
-        return this.backgroundHeight;
+        return this.imageHeight;
     }
 
     private enums.ALAffection affectionValuetoLevel(){
@@ -104,19 +89,6 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
-    }
-
-    private void renderEntity(int mousex, int mousey){
-        Entity entity = this.host.getType().create(ClientUtils.getClientWorld());
-        if(entity instanceof AbstractEntityCompanion) {
-            entity.restoreFrom(this.host);
-            int entityWidth = (int) entity.getBbWidth();
-            try {
-                renderEntityInInventory((48 - (entityWidth / 2)), 70, 30, mousex, mousey, (LivingEntity) entity);
-            } catch (Exception e) {
-                Main.LOGGER.error("Failed to render Entity!");
-            }
-        }
     }
 
     private void renderAffection(MatrixStack matrixStack, int mousex, int mousey) {
@@ -166,7 +138,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
             double AffectionLimit = this.host.isOathed()? 200:100;
             tooltips.add(new TranslationTextComponent("gui.current_affection_level").append(": ").append(new TranslationTextComponent(this.affectionLevel.getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
             tooltips.add(new TranslationTextComponent("gui.current_affection_value").append(": ").append(String.format("%.2f",this.affection)+"/"+AffectionLimit).setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
-            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
+            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.leftPos, mousey-this.topPos, this.font);
         }
         matrixStack.popPose();
     }
@@ -233,63 +205,21 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
             List<IFormattableTextComponent> tooltips = new ArrayList<>();
             tooltips.add(new TranslationTextComponent("gui.current_morale_level").append(": ").append(new TranslationTextComponent(moraleValuetoLevel().getName())).setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
             tooltips.add(new TranslationTextComponent("gui.current_morale_value").append(": ").append(String.format("%.2f",this.morale)+"/150").setStyle(Style.EMPTY.withColor(Color.fromRgb(color))));
-            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.x, mousey-this.y, this.font);
+            this.renderWrappedToolTip(matrixStack, tooltips, mousex-this.leftPos, mousey-this.topPos, this.font);
         }
         matrixStack.popPose();
     }
 
-    private void drawButtons(MatrixStack stack, int mousex, int mousey) {
+    protected void addButtons() {
 
         int FreeRoamingX = this.host.isFreeRoaming()? 185:176;
         int ItemPickupX = this.host.shouldPickupItem()? 194:203;
 
-        ImageButton FreeRoamingButton = new ImageButton(this.x+10,this.y+63,9,9,FreeRoamingX,25,9,TEXTURE, action-> switchFreeRoamingBehavior());
-        ImageButton ItemPickupButton = new ImageButton(this.x+10,this.y+53,9,9,ItemPickupX,25,9,TEXTURE, action-> switchItemBehavior());
-        if(this.isHovering(10,63,9,9, mousex, mousey)){
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            if(this.host.isFreeRoaming()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.on").withStyle(TextFormatting.GREEN));
-            }
-            else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.off").withStyle(TextFormatting.BLUE));
-            }
+        Button FreeRoamingButton = new EntityStatusButton(this.host, this.leftPos +10,this.topPos+63,9,9,FreeRoamingX,25,9,0,TEXTURE, EntityStatusButton.ACTIONTYPES.FREEROAM, FREEROAM_TOOLTIP);
+        Button ItemPickupButton = new EntityStatusButton(this.host, this.leftPos +10,this.topPos+53,9,9,ItemPickupX,25,9,0,TEXTURE, EntityStatusButton.ACTIONTYPES.ITEM, ITEM_TOOLTIP);
 
-            if(this.host.getHOMEPOS().isPresent()) {
-                ITextComponent shift = new StringTextComponent("[SHIFT]").withStyle(TextFormatting.YELLOW);
-                BlockPos Home = this.host.getHOMEPOS().get();
-                tooltips.add(new TranslationTextComponent("gui.tooltip_homepos").append(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()).withStyle(TextFormatting.BLUE));
-                tooltips.add(new TranslationTextComponent("gui.tooltip.shifttoclearhome", shift).withStyle(TextFormatting.GRAY));
-            }
-            else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").withStyle(TextFormatting.GRAY));
-            }
-            this.renderWrappedToolTip(stack, tooltips, mousex - this.x, mousey - this.y, this.font);
-        }
-        else if(this.isHovering(10,53,9,9, mousex, mousey)){
-            List<IFormattableTextComponent> tooltips = new ArrayList<>();
-            if(this.host.shouldPickupItem()){
-                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.on").withStyle(TextFormatting.GREEN));
-            }
-            else{
-                tooltips.add(new TranslationTextComponent("gui.tooltip.itempickup.off").withStyle(TextFormatting.BLUE));
-            }
-            this.renderWrappedToolTip(stack, tooltips, mousex - this.x, mousey - this.y, this.font);
-        }
         this.addButton(FreeRoamingButton);
         this.addButton(ItemPickupButton);
-    }
-
-    private void switchFreeRoamingBehavior() {
-        if (Screen.hasShiftDown()) {
-            this.host.clearHomePos();
-        }
-        else {
-            this.host.SwitchFreeRoamingStatus();
-        }
-    }
-
-    private void switchItemBehavior() {
-        this.host.SwitchItemBehavior();
     }
 
     protected void renderLabels(MatrixStack matrixStack, int mousex, int mousey) {
@@ -298,7 +228,7 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
 
         int InventoryTextCenter = this.font.width(new TranslationTextComponent("gui.companioninventory").getString())/2;
         IFormattableTextComponent leveltext = new StringTextComponent("Lv.").append(Integer.toString(this.host.getLevel()));
-        this.font.draw(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), backgroundWidth+6, 5, 16777215);
+        this.font.draw(matrixStack, new TranslationTextComponent("gui.ammostorage.title"), imageWidth+6, 5, 16777215);
         this.font.draw(matrixStack, this.inventory.getDisplayName(), 9, 101, 0x38393b);
         //this.playerInventory.getDisplayName()
         matrixStack.pushPose();
@@ -322,24 +252,22 @@ public class guiBAInventory extends ContainerScreen<ContainerBAInventory> implem
 
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderMorale(matrixStack, mousex, mousey);
-        this.drawButtons(matrixStack, mousex, mousey);
-        this.renderEntity(mousex, mousey);
+        this.renderEntity(48, 70,mousex, mousey);
         //this.renderButton(matrixStack);
     }
 
     @Override
     protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
 
-        int expVal = (int)(49*this.host.getExp()/this.host.getMaxExp());
         matrixStack.pushPose();
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         this.minecraft.getTextureManager().bind(TEXTURE);
-        this.blit(matrixStack, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         for(int i = 0; i<this.host.getSkillItemCount(); i++) {
-            this.blit(matrixStack, this.x + 67, this.y + 34+i*18, 1, 194, 17, 17);
+            this.blit(matrixStack, this.leftPos + 67, this.topPos + 34+i*18, 1, 194, 17, 17);
         }
-        this.blit(matrixStack, this.x+backgroundWidth, this.y, 176, 104, 43, 90);
-        this.blit(matrixStack, this.x+26, this.y+87, 176, 44, expVal, 2);
+        this.blit(matrixStack, this.leftPos +imageWidth, this.topPos, 176, 104, 43, 90);
+        this.blit(matrixStack, this.leftPos +26, this.topPos+87, 176, 44, this.getEXPgauge(49), 2);
         matrixStack.popPose();
     }
 }

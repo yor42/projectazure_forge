@@ -174,9 +174,4 @@ public class ModelM4A1 extends GeoCompanionModel<EntityM4A1> {
         }
     }
 
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -40;
-    }
-
 }

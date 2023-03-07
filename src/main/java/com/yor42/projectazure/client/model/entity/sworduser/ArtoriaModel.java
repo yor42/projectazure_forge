@@ -3,6 +3,7 @@ package com.yor42.projectazure.client.model.entity.sworduser;
 import com.yor42.projectazure.client.model.entity.GeoCompanionModel;
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.EntityArtoria;
 import com.yor42.projectazure.libs.Constants;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -14,10 +15,6 @@ import static com.yor42.projectazure.libs.utils.ResourceUtils.GeoModelEntityLoca
 import static com.yor42.projectazure.libs.utils.ResourceUtils.TextureEntityLocation;
 
 public class ArtoriaModel extends GeoCompanionModel<EntityArtoria> {
-    @Override
-    protected int SleepingBodyYPosition() {
-        return -26;
-    }
 
     @Override
     public ResourceLocation getModelLocation(EntityArtoria object) {
@@ -31,7 +28,7 @@ public class ArtoriaModel extends GeoCompanionModel<EntityArtoria> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityArtoria animatable) {
-        return new ResourceLocation(Constants.MODID,"animations/entity/sworduser/artoria.animation.json");
+        return ResourceUtils.ModResourceLocation("animations/entity/sworduser/artoria.animation.json");
     }
 
     @Override
