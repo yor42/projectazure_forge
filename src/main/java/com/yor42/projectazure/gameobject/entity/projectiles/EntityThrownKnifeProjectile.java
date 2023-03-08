@@ -116,7 +116,7 @@ public class EntityThrownKnifeProjectile extends AbstractArrowEntity implements 
         }
 
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = DamageSources.knife(this, (Entity)(entity1 == null ? this : entity1));
+        DamageSource damagesource = DamageSources.knife(this, entity1 == null ? this : entity1);
         this.dealtDamage = true;
         if (entity.hurt(damagesource, f)) {
             if (entity.getType() == EntityType.ENDERMAN) {

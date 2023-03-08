@@ -98,7 +98,7 @@ public class TileEntityPantry extends TileEntity implements IInventory {
     public static int getOpenCount(World p_213976_0_, TileEntityPantry p_213976_1_, int p_213976_2_, int p_213976_3_, int p_213976_4_) {
         int i = 0;
 
-        for(PlayerEntity playerentity : p_213976_0_.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB((double)((float)p_213976_2_ - 5.0F), (float)p_213976_3_ - 5.0F, (double)((float)p_213976_4_ - 5.0F), (float)(p_213976_2_ + 1) + 5.0F, (float)(p_213976_3_ + 1) + 5.0F, (float)(p_213976_4_ + 1) + 5.0F))) {
+        for(PlayerEntity playerentity : p_213976_0_.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB((float)p_213976_2_ - 5.0F, (float)p_213976_3_ - 5.0F, (float)p_213976_4_ - 5.0F, (float)(p_213976_2_ + 1) + 5.0F, (float)(p_213976_3_ + 1) + 5.0F, (float)(p_213976_4_ + 1) + 5.0F))) {
             if (playerentity.containerMenu instanceof ContainerPantry) {
                 IInventory iinventory = ((ContainerPantry)playerentity.containerMenu).getInventory();
                 if (iinventory == p_213976_1_) {

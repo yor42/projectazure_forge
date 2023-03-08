@@ -24,6 +24,6 @@ public class registerMultiBlocks {
         AdvancedAlloySmelterControllerTE.registerTE();
     }
 
-    public static void register(){};
+    public static void register(){}
 
 }

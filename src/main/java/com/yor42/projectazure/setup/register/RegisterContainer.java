@@ -22,13 +22,13 @@ public class RegisterContainer {
     public static final RegistryObject<ContainerType<ContainerAlloyFurnace>> ALLOY_FURNACE_CONTAINER = CONTAINER.register("alloy_furnace_container", () -> IForgeContainerType.create(ContainerAlloyFurnace::new));
     public static final RegistryObject<ContainerType<ContainerMetalPress>> METAL_PRESS_CONTAINER = CONTAINER.register("metal_press_container", () -> IForgeContainerType.create(ContainerMetalPress::new));
     public static final RegistryObject<ContainerType<ContainerCLSInventory>> CLS_CONTAINER = CONTAINER.register("closers_inventory", () -> new ContainerType<>((IContainerFactory<ContainerCLSInventory>)ContainerCLSInventory::new));
-    public static final RegistryObject<ContainerType<ContainerSoulworkerInventory>> SW_CONTAINER = CONTAINER.register("soulworker_inventory", () -> new ContainerType<>((IContainerFactory<ContainerSoulworkerInventory>)ContainerSoulworkerInventory::new));
+    public static final RegistryObject<ContainerType<ContainerSWInventory>> SW_CONTAINER = CONTAINER.register("soulworker_inventory", () -> new ContainerType<>((IContainerFactory<ContainerSWInventory>) ContainerSWInventory::new));
 
     public static final RegistryObject<ContainerType<ContainerGFLInventory>> GFL_CONTAINER = CONTAINER.register("girlsfrontline_inventory", () -> new ContainerType<>((IContainerFactory<ContainerGFLInventory>)ContainerGFLInventory::new));
     public static final RegistryObject<ContainerType<ContainerAKNInventory>> AKN_CONTAINER = CONTAINER.register("arknights_inventory", () -> new ContainerType<>((IContainerFactory<ContainerAKNInventory>)ContainerAKNInventory::new));
     public static final RegistryObject<ContainerType<ContainerFGOInventory>> FGO_CONTAINER = CONTAINER.register("fategrandorder_inventory", () -> new ContainerType<>((IContainerFactory<ContainerFGOInventory>)ContainerFGOInventory::new));
     public static final RegistryObject<ContainerType<ContainerPCRInventory>> PCR_CONTAINER = CONTAINER.register("priconne_inventory", () -> new ContainerType<>((IContainerFactory<ContainerPCRInventory>)ContainerPCRInventory::new));
-    public static final RegistryObject<ContainerType<ContainerShiningResonanceInventory>> SR_CONTAINER = CONTAINER.register("shiningresonance_inventory", () -> new ContainerType<>((IContainerFactory<ContainerShiningResonanceInventory>)ContainerShiningResonanceInventory::new));
+    public static final RegistryObject<ContainerType<ContainerSRInventory>> SR_CONTAINER = CONTAINER.register("shiningresonance_inventory", () -> new ContainerType<>((IContainerFactory<ContainerSRInventory>) ContainerSRInventory::new));
     public static final RegistryObject<ContainerType<ContainerBAInventory>> BA_CONTAINER = CONTAINER.register("bluearchive_inventory", () -> new ContainerType<>((IContainerFactory<ContainerBAInventory>)ContainerBAInventory::new));
     public static final RegistryObject<ContainerType<RiggingContainer>> RIGGING_INVENTORY = CONTAINER.register("rigging_inventory", () -> new ContainerType<>((IContainerFactory<RiggingContainer>)RiggingContainer::new));
     //Container

@@ -102,7 +102,7 @@ public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> exten
                         if(animation instanceof WeaponPose)
                         {
                             WeaponPose pose = (WeaponPose) animation;
-                            float zoom = ((WeaponPoseAccessor)pose).onHasAimPose() && entity.isUsingGun() ? 1F : 1.0F;
+                            float zoom = 1F;
                             this.applyPlayerModelRotation(pose, extraData.headPitch, isLeftHanded, LeftArm, RightArm,head, body, extraData.netHeadYaw, zoom);
                         }
                         else{

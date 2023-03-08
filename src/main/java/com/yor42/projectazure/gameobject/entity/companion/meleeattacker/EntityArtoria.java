@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion.meleeattacker;
 
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerFGOInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
@@ -19,7 +18,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -28,7 +26,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -293,11 +290,6 @@ public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAtta
     public void awardKillScore(Entity p_191956_1_, int p_191956_2_, DamageSource p_191956_3_) {
         super.awardKillScore(p_191956_1_, p_191956_2_, p_191956_3_);
         this.playSound(registerSounds.ARTORIA_TALK_KILL, this.getSoundVolume(), this.getVoicePitch());
-    }
-
-    @Override
-    public void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerFGOInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull

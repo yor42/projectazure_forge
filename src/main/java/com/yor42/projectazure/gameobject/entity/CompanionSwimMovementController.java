@@ -76,7 +76,7 @@ public class CompanionSwimMovementController extends MovementController {
                 if(this.companion.isInWater() || this.companion.isInLava())
                 {
                     this.companion.setSpeed(f1);
-                    float f2 = -((float)(MathHelper.atan2(d1, (double)MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
+                    float f2 = -((float)(MathHelper.atan2(d1, MathHelper.sqrt(d0 * d0 + d2 * d2)) * (double)(180F / (float)Math.PI)));
                     f2 = MathHelper.clamp(MathHelper.wrapDegrees(f2), -85.0F, 85.0F);
                     this.companion.xRot = this.rotlerp(this.companion.xRot, f2, 5.0F);
                     float f3 = MathHelper.cos(this.companion.xRot * ((float)Math.PI / 180F));

@@ -1,24 +1,15 @@
 package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerPCRInventory;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.libs.utils.ClientUtils;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
 public class GuiPCRInventory extends AbstractGUIScreen<ContainerPCRInventory> {

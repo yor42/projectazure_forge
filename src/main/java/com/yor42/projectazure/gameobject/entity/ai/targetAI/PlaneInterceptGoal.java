@@ -30,7 +30,7 @@ public class PlaneInterceptGoal extends NearestAttackableTargetGoal<AbstractEnti
                     return true;
                 }
 
-                boolean isDifferentCompanionOwner = this.planes.getOwner().getOwner() != ((AbstractEntityPlanes) this.target).getOwner().getOwner();;
+                boolean isDifferentCompanionOwner = this.planes.getOwner().getOwner() != ((AbstractEntityPlanes) this.target).getOwner().getOwner();
                 boolean isDifferentPlaneOwner = this.planes.getOwner() != ((AbstractEntityPlanes) this.target).getOwner();
                 return isDifferentPlaneOwner && isDifferentCompanionOwner;
             }

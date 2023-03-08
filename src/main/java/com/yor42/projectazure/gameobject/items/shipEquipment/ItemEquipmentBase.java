@@ -80,7 +80,7 @@ public abstract class ItemEquipmentBase extends ItemDestroyable implements IAnim
 
     public ResourceLocation getTexture(){
         return this.getEquipmentModel().getTextureLocation(null);
-    };
+    }
 
     @OnlyIn(Dist.CLIENT)
     public void applyEquipmentCustomRotation(ItemStack equipment, GeoModel EquipmentModel, enums.SLOTTYPE slottype, int index, int packedLightIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch){

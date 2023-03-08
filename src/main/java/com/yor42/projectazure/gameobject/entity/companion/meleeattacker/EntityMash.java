@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion.meleeattacker;
 
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerCLSInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
@@ -16,7 +15,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -25,7 +23,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -178,11 +175,6 @@ public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacke
         }
         event.getController().setAnimation(builder.addAnimation("idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    public void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerCLSInventory.Supplier(this));
     }
 
     @Nonnull

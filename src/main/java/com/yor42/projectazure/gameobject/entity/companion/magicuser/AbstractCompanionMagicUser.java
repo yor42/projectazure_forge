@@ -15,7 +15,7 @@ public abstract class AbstractCompanionMagicUser extends AbstractEntityCompanion
 
     public boolean shouldUseSpell(LivingEntity target){
         return this.getItemInHand(getSpellUsingHand()).isEmpty() && !isSwimming();
-    };
+    }
 
 
 }

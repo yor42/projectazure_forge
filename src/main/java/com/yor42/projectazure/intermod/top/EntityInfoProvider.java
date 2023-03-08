@@ -50,7 +50,7 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
             }
             else if(morale>10){
                 textureX = 188;
-                format = TextFormatting.RED;;
+                format = TextFormatting.RED;
             }else{
                 textureX = 176;
                 format = TextFormatting.DARK_RED;

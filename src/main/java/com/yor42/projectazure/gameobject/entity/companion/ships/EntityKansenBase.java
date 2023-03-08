@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.capability.multiinv.MultiInvUtil;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerALInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCannonPelllet;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityProjectileTorpedo;
@@ -27,7 +26,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -47,7 +45,6 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -196,10 +193,6 @@ public abstract class EntityKansenBase extends AbstractEntityCompanion {
         else{
             return this.getShipRiggingStorage().getStackInSlot(0);
         }
-    }
-
-    public void openGUI(ServerPlayerEntity player){
-        NetworkHooks.openGui(player, new ContainerALInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
     @Override

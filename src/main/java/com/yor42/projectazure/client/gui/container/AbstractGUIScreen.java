@@ -1,7 +1,6 @@
 package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.AbstractContainerInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;

@@ -6,20 +6,15 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ContainerCLSInventory extends AbstractContainerInventory {
     public ContainerCLSInventory(int id, PlayerInventory inventory, PacketBuffer data) {
@@ -75,25 +70,6 @@ public class ContainerCLSInventory extends AbstractContainerInventory {
 
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 12 + k * 18, 172));
-        }
-    }
-    public static class Supplier implements INamedContainerProvider {
-
-        AbstractEntityCompanion companion;
-
-        public Supplier(AbstractEntityCompanion companion) {
-            this.companion = companion;
-        }
-
-        @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.companioninventory");
-        }
-
-        @Nullable
-        @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerCLSInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), this.companion);
         }
     }
 

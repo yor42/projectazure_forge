@@ -22,8 +22,8 @@ public class GuiDroneDockingStation extends ContainerScreen<ContainerDroneDockin
     private TextFieldWidget filterID;
     private ItemFilterEntry editingEntry;
 
-    private static ResourceLocation BG_NORMAL = ResourceUtils.ModResourceLocation("textures/gui/dronedockingstation.png");
-    private static ResourceLocation BG_FILTEREDIT = ResourceUtils.ModResourceLocation("textures/gui/dronedockingstation_filterconf.png");
+    private static final ResourceLocation BG_NORMAL = ResourceUtils.ModResourceLocation("textures/gui/dronedockingstation.png");
+    private static final ResourceLocation BG_FILTEREDIT = ResourceUtils.ModResourceLocation("textures/gui/dronedockingstation_filterconf.png");
 
     public GuiDroneDockingStation(ContainerDroneDockingStation p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);

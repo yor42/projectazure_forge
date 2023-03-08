@@ -4,29 +4,18 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerALInventory;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.rigging.ItemRiggingBase;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
-import com.yor42.projectazure.libs.utils.ClientUtils;
 import com.yor42.projectazure.network.packets.ChangeContainerPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IHasContainer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 
 public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
 

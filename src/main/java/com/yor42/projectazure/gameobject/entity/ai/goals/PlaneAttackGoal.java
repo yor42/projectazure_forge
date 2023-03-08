@@ -15,7 +15,7 @@ import static com.yor42.projectazure.libs.utils.ItemStackUtils.serializePlane;
 
 public class PlaneAttackGoal extends Goal {
 
-    private AbstractEntityPlanes entity;
+    private final AbstractEntityPlanes entity;
 
     public PlaneAttackGoal(AbstractEntityPlanes host){
         this.entity = host;

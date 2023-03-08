@@ -22,6 +22,7 @@ import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
 import com.yor42.projectazure.gameobject.blocks.PantryBlock;
 import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.containers.entity.CompanionContainerProvider;
 import com.yor42.projectazure.gameobject.entity.CompanionDefaultMovementController;
 import com.yor42.projectazure.gameobject.entity.CompanionGroundPathNavigator;
 import com.yor42.projectazure.gameobject.entity.CompanionSwimMovementController;
@@ -2243,7 +2244,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     public void addExp(float deltaExp){
         if(this.getExp()+deltaExp >= this.getMaxExp()) {
-            this.setExp((float) (this.getExp()+deltaExp));
+            this.setExp(this.getExp()+deltaExp);
             this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
             while(this.getExp()>this.getMaxExp() && this.getLevel() <= this.getMaxLevel()){
                 this.addLevel(1);
@@ -3279,7 +3280,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             }
                             this.getBrain().setMemory(FOOD_PANTRY.get(), pos);
                             player.displayClientMessage(new TranslationTextComponent("message.commandstick.entity_pantrypos_applied", "[" + Blockpos.getX() + ", " + Blockpos.getY() + ", " + Blockpos.getZ() + "]", this.getDisplayName()), true);
-                        };
+                        }
                     } else if (this.hasHomePos()) {
                         this.releasePoi(HOME);
                         this.getBrain().eraseMemory(HOME);
@@ -3301,7 +3302,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     }
     protected ActionResultType openInventory(PlayerEntity player){
         if (!this.level.isClientSide) {
-            this.openGUI((ServerPlayerEntity) player);
+            NetworkHooks.openGui((ServerPlayerEntity) player, new CompanionContainerProvider(this), buf -> buf.writeInt(this.getId()));
         }
         this.playSound(SoundEvents.ARMOR_EQUIP_ELYTRA, 0.8F+(0.4F*this.getRandom().nextFloat()),0.8F+(0.4F*this.getRandom().nextFloat()));
         return ActionResultType.SUCCESS;
@@ -3449,10 +3450,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         }
         super.removeAfterChangingDimensions();
     }
-
-    public void openGUI(ServerPlayerEntity player){
-        
-    };
 
     public void beingpatted(){
         if(this.getEntityData().get(MAXPATEFFECTCOUNT) == 0){

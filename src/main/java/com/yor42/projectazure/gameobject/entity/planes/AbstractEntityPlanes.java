@@ -143,7 +143,7 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
 
     public enums.PLANE_TYPE getPlaneType(){
         return this.getPlaneItem().getType();
-    };
+    }
 
     public void setOwner(AbstractEntityCompanion owner) {
         this.owner = owner;
@@ -164,7 +164,7 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
 
     public int getMaxOperativeTick(){
         return this.maxOperativetime;
-    };
+    }
 
     public void setLimitedLifespan(boolean value){
         this.isLifeLimited = value;
@@ -351,7 +351,7 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
             }
 
             this.angle += this.clockwise * 15.0F * ((float)Math.PI / 180F);
-            Vector3d pos = Vector3d.atLowerCornerOf(AbstractEntityPlanes.this.anchorPoint).add((double)(this.distance * MathHelper.cos(this.angle)), (double)(-4.0F + this.height), (double)(this.distance * MathHelper.sin(this.angle)));;
+            Vector3d pos = Vector3d.atLowerCornerOf(AbstractEntityPlanes.this.anchorPoint).add(this.distance * MathHelper.cos(this.angle), -4.0F + this.height, this.distance * MathHelper.sin(this.angle));
             AbstractEntityPlanes.this.getNavigation().moveTo(pos.x, pos.y, pos.z, 1);
         }
 
@@ -379,7 +379,7 @@ public abstract class AbstractEntityPlanes extends FlyingEntity implements IAnim
                 }
 
             }
-        };
+        }
     }
 
     class BodyHelperController extends BodyController {

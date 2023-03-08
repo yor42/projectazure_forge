@@ -34,7 +34,8 @@ public interface IMeleeAttacker {
 
     default boolean shouldUseNonVanillaAttack(LivingEntity target){
         return this.hasMeleeItem();
-    };
+    }
+
     default boolean isTalentedWeaponinMainHand(){
         if(this instanceof AbstractEntityCompanion) {
         return isTalentedWeapon(((AbstractEntityCompanion)this).getMainHandItem());
@@ -61,5 +62,5 @@ public interface IMeleeAttacker {
     default float getAttackSpeedModifier(boolean isUsingTalentedWeapon){
         return isUsingTalentedWeapon? 1:1.2F;
     }
-    default void StartMeleeAttackingEntity(){};
+    default void StartMeleeAttackingEntity(){}
 }

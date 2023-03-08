@@ -25,7 +25,7 @@ import static com.yor42.projectazure.setup.register.RegisterContainer.BA_CONTAIN
 
 public class ContainerBAInventory extends AbstractContainerInventory {
 
-    private ItemStackHandler AmmoStack;
+    private final ItemStackHandler AmmoStack;
 
 
     public ContainerBAInventory(int ID, PlayerInventory inventory, PacketBuffer data) {

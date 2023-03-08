@@ -63,7 +63,7 @@ public class ItemStackUtils {
 
     public static int getHPColorInt(ItemStack stack){
         if(stack.getItem() instanceof IItemDestroyable) {
-            return MathHelper.hsvToRgb(Math.max(0.0F, (float) (1.0F - (getCurrentDamage(stack) /((IItemDestroyable) stack.getItem()).getMaxHP()))) / 3.0F, 1.0F, 1.0F);
+            return MathHelper.hsvToRgb(Math.max(0.0F, 1.0F - (getCurrentDamage(stack) /((IItemDestroyable) stack.getItem()).getMaxHP())) / 3.0F, 1.0F, 1.0F);
         }
         return 0xFFFFFF;
     }

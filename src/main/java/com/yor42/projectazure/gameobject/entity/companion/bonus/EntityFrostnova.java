@@ -4,7 +4,6 @@ import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityArtsProjectile;
 import com.yor42.projectazure.interfaces.ISpellUser;
@@ -17,13 +16,11 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.TieredItem;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -153,7 +150,7 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
         if(this.isOnPlayersBack()){
             event.getController().setAnimation(builder.addAnimation("carry_leg"));
             return PlayState.CONTINUE;
-        };
+        }
 
         if(this.isDeadOrDying()) {
             event.getController().setAnimation(builder.addAnimation("faint_leg").addAnimation("faint_leg_idle"));
@@ -191,11 +188,6 @@ public class EntityFrostnova extends AbstractEntityCompanion implements ISpellUs
         }
         event.getController().setAnimation(builder.addAnimation("idle_leg", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    public void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
     }
 
     @Nonnull

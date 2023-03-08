@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class buttonKansenInventoryTab extends ImageButton {
 
-    private int x;
+    private final int x;
     private final int y;
     private final int xTexStart;
     private final int yTexStart;

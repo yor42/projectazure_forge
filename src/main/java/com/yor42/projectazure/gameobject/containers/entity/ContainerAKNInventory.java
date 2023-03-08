@@ -6,20 +6,15 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ContainerAKNInventory extends AbstractContainerInventory {
 
@@ -83,27 +78,6 @@ public class ContainerAKNInventory extends AbstractContainerInventory {
             this.addSlot(new Slot(inventory, k, 5 + k * 18, 164));
         }
     }
-
-    public static class Supplier implements INamedContainerProvider {
-
-        AbstractEntityCompanion companion;
-
-        public Supplier(AbstractEntityCompanion companion) {
-            this.companion = companion;
-        }
-
-        @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.companioninventory");
-        }
-
-        @Nullable
-        @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerAKNInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), companion);
-        }
-    }
-
     public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);

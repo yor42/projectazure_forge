@@ -55,7 +55,7 @@ public class CompanionShipRangedAttackTask extends Task<AbstractEntityCompanion>
         if(!p_212834_2_.getBrain().getMemory(ATTACK_TARGET).isPresent()){
             return false;
         }
-        boolean withinrange = p_212834_2_.closerThan(p_212834_2_.getBrain().getMemory(ATTACK_TARGET).get(), p_212834_2_.getCannonRange()+2);;
+        boolean withinrange = p_212834_2_.closerThan(p_212834_2_.getBrain().getMemory(ATTACK_TARGET).get(), p_212834_2_.getCannonRange()+2);
         return checkExtraStartConditions(p_212834_1_, p_212834_2_) && withinrange;
     }
 

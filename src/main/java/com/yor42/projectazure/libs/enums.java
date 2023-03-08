@@ -1,12 +1,17 @@
 package com.yor42.projectazure.libs;
 
+import com.mojang.datafixers.util.Function4;
 import com.tac.guns.common.Gun;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.containers.entity.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.gameobject.items.shipEquipment.ItemEquipmentBase;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 import static com.yor42.projectazure.libs.utils.MathUtil.rand;
@@ -292,25 +297,32 @@ public class enums {
     }
 
     public enum EntityType{
-        KANSEN("al_kansen"),
-        KANMUSU("kc_kanmusu"),
-        TDOLL("gfl_tdoll"),
-        BLUEARCHIVE("bluearchive"),
-        OPERATOR("akn_operator"),
-        PRICONNE("pc_characters"),
-        REUNION("akn_reunion"),
-        SHININGRESONANCE("srr"),
-        SERVANT("fgo_servant"),
-        SOULWORKER("sw_soulworker"),
-        CLOSER("cls_closer");
+        KANSEN("al_kansen", (openContainerId, inventory, player, companion)->new ContainerALInventory(openContainerId, inventory, companion.getInventory(), ((EntityKansenBase)companion).getShipRiggingStorage(), companion.getEquipment(), companion.getAmmoStorage(), (EntityKansenBase)companion)),
+        KANMUSU("kc_kanmusu", (openContainerId, inventory, player, companion)->new ContainerALInventory(openContainerId, inventory, companion.getInventory(), ((EntityKansenBase)companion).getShipRiggingStorage(), companion.getEquipment(), companion.getAmmoStorage(), (EntityKansenBase)companion)),
+        TDOLL("gfl_tdoll", (openContainerId, inventory, player, companion)->new ContainerGFLInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion)),
+        BLUEARCHIVE("bluearchive", (openContainerId, inventory, player, companion)->new ContainerBAInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion)),
+        OPERATOR("akn_operator",(openContainerId, inventory, player, companion)->new ContainerAKNInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion)),
+        PRICONNE("pc_characters", (openContainerId, inventory, player, companion)->new ContainerPCRInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion)),
+        REUNION("akn_reunion", (openContainerId, inventory, player, companion)->new ContainerAKNInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion)),
+        SHININGRESONANCE("srr", (openContainerId, inventory, player, companion)->new ContainerSRInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion)),
+        SERVANT("fgo_servant", (openContainerId, inventory, player, companion)->new ContainerFGOInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion)),
+        SOULWORKER("sw_soulworker", (openContainerId, inventory, player, companion)->new ContainerSWInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion)),
+        CLOSER("cls_closer", (openContainerId, inventory, player, companion)->new ContainerCLSInventory(openContainerId, inventory, companion.getInventory(), companion.getEquipment(), companion.getAmmoStorage(), companion));
 
         private final String name;
-        EntityType(String name) {
+        private final Function4<Integer, PlayerInventory, PlayerEntity, AbstractEntityCompanion, AbstractContainerInventory> createmenu;
+        EntityType(String name, Function4<Integer, PlayerInventory, PlayerEntity, AbstractEntityCompanion, AbstractContainerInventory> inventory) {
             this.name = name;
+            this.createmenu = inventory;
         }
 
         public String getName(){
             return this.name;
+        }
+
+        @Nullable
+        public AbstractContainerInventory createmenu(int openContainerId, PlayerInventory inventory, PlayerEntity player, AbstractEntityCompanion companion) {
+            return createmenu.apply(openContainerId, inventory, player, companion);
         }
     }
 

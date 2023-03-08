@@ -112,7 +112,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
                         //Convert Second to Tick
                         this.totalProcessTime = expectedProcessTime * 20;
                         this.RollResult = result;
-                        Main.LOGGER.debug("Roll Result:" + Entity.getName().toString() + " with " + expectedProcessTime + "second Recruit Time");
+                        Main.LOGGER.debug("Roll Result:" + Entity.getName() + " with " + expectedProcessTime + "second Recruit Time");
                         this.shouldProcess = true;
                         this.nextTaskStarter = starter;
                         this.UseGivenResource();
@@ -224,7 +224,7 @@ public abstract class AbstractTileEntityGacha extends AbstractAnimateableEnergyT
     /*
     For Future usage of additional processing criteria
      */
-    protected boolean canProcess(){return true;};
+    protected boolean canProcess(){return true;}
 
     @Override
     public CompoundNBT save(CompoundNBT compound) {

@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion.magicuser;
 
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.containers.entity.AbstractContainerInventory;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.misc.EntityClaymore;
 import com.yor42.projectazure.gameobject.items.tools.ItemClaymore;
@@ -15,14 +16,13 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -194,9 +194,10 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
         return stack.getItem() instanceof ItemClaymore;
     }
 
+    @Nullable
     @Override
-    public void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this),buf -> buf.writeInt(this.getId()));
+    public AbstractContainerInventory createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
+        return new ContainerAKNInventory(openContainerId, inventory, this.getInventory(), this.getEquipment(), this.getAmmoStorage(), this);
     }
 
     @Nonnull

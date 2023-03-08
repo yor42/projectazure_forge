@@ -58,7 +58,7 @@ public abstract class ItemEquipmentPlaneBase extends ItemEquipmentBase{
 
     public float getAttackDamage(){
         return this.damage;
-    };
+    }
 
     public abstract EntityType<? extends AbstractEntityPlanes> getEntityType();
 

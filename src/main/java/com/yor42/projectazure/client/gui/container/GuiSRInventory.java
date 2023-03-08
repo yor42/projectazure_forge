@@ -1,31 +1,22 @@
 package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yor42.projectazure.Main;
 import com.yor42.projectazure.client.gui.buttons.EntityStatusButton;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerShiningResonanceInventory;
-import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.libs.utils.ClientUtils;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerSRInventory;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiSRInventory extends AbstractGUIScreen<ContainerShiningResonanceInventory> {
+public class GuiSRInventory extends AbstractGUIScreen<ContainerSRInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/shiningresonance_inventory.png");
 
-    public GuiSRInventory(ContainerShiningResonanceInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
+    public GuiSRInventory(ContainerSRInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
         this.imageWidth = 174;
         this.imageHeight = 232;

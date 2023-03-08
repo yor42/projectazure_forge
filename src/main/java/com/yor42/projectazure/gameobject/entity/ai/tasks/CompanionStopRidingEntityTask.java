@@ -34,7 +34,7 @@ public class CompanionStopRidingEntityTask extends Task<AbstractEntityCompanion>
 
     protected boolean checkExtraStartConditions(ServerWorld p_212832_1_, AbstractEntityCompanion p_212832_2_) {
         Entity entity = p_212832_2_.getVehicle();
-        Entity entity1 = p_212832_2_.getBrain().getMemory(MemoryModuleType.RIDE_TARGET).orElse((Entity)null);
+        Entity entity1 = p_212832_2_.getBrain().getMemory(MemoryModuleType.RIDE_TARGET).orElse(null);
         if (entity == null && entity1 == null) {
             return false;
         } else {

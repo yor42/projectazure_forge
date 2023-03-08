@@ -3,30 +3,24 @@ package com.yor42.projectazure.gameobject.containers.entity;
 import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterContainer;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class ContainerSoulworkerInventory extends AbstractContainerInventory {
+public class ContainerSWInventory extends AbstractContainerInventory {
 
-    public ContainerSoulworkerInventory(int id, PlayerInventory inventory, PacketBuffer data) {
+    public ContainerSWInventory(int id, PlayerInventory inventory, PacketBuffer data) {
         this(id, inventory, new ItemStackHandler(16), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 
-    public ContainerSoulworkerInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
+    public ContainerSWInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(RegisterContainer.CLS_CONTAINER.get(), id, companion);
         //ZA HANDO
         for (int k = 0; k < 2; k++) {
@@ -69,25 +63,4 @@ public class ContainerSoulworkerInventory extends AbstractContainerInventory {
             this.addSlot(new Slot(inventory, k, 35 + k * 18, 219));
         }
     }
-
-    public static class Supplier implements INamedContainerProvider {
-
-        AbstractEntityCompanion companion;
-
-        public Supplier(AbstractEntityCompanion companion) {
-            this.companion = companion;
-        }
-
-        @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.companioninventory");
-        }
-
-        @Nullable
-        @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerSoulworkerInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), this.companion);
-        }
-    }
-
 }

@@ -8,6 +8,6 @@ public interface IItemDestroyable {
 
     default int getRepairAmount(ItemStack candidateItem){
         return 0;
-    };
+    }
 
 }

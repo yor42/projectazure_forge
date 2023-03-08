@@ -1,6 +1,7 @@
 package com.yor42.projectazure.network.packets;
 
 import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
+import com.yor42.projectazure.gameobject.containers.entity.CompanionContainerProvider;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -8,6 +9,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -17,7 +19,7 @@ public class ReopenEntityInventoryPacket {
     private final UUID entityUUID;
     public ReopenEntityInventoryPacket(UUID entityUUID){
         this.entityUUID = entityUUID;
-    };
+    }
 
     public static ReopenEntityInventoryPacket decode (final PacketBuffer buffer){
         final UUID id = buffer.readUUID();
@@ -37,7 +39,7 @@ public class ReopenEntityInventoryPacket {
 
 
                 if (entity instanceof AbstractEntityCompanion) {
-                    ((AbstractEntityCompanion) entity).openGUI(playerEntity);
+                    NetworkHooks.openGui(playerEntity, new CompanionContainerProvider((AbstractEntityCompanion) entity), buf -> buf.writeInt(entity.getId()));
                     ProjectAzurePlayerCapability.getCapability(playerEntity).lastGUIOpenedEntityID = null;
                 }
             }

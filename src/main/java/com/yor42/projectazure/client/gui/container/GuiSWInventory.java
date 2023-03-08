@@ -2,19 +2,18 @@ package com.yor42.projectazure.client.gui.container;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerSoulworkerInventory;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import com.yor42.projectazure.gameobject.containers.entity.ContainerSWInventory;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
 import static com.yor42.projectazure.libs.utils.ResourceUtils.ModResourceLocation;
 
-public class GuiSWInventory extends AbstractGUIScreen<ContainerSoulworkerInventory> {
+public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
 
     public static final ResourceLocation TEXTURE = ModResourceLocation("textures/gui/closers_inventory.png");
 
-    public GuiSWInventory(ContainerSoulworkerInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
+    public GuiSWInventory(ContainerSWInventory p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
         this.imageWidth = 225;
         this.imageHeight = 240;

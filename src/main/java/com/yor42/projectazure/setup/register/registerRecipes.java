@@ -47,7 +47,7 @@ public class registerRecipes {
             return RECIPE_SERIALIZERS.register(name, serializer);
         }
 
-        public static void register(){};
+        public static void register(){}
     }
 
 

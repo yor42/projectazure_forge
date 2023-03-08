@@ -113,14 +113,14 @@ public class RenderingUtils {
     }
 
     public static void renderEntityInInventory(int x, int y, float scale, float mouseX, float mouseY, LivingEntity entity) {
-        float f = (float)Math.atan((double)((x-mouseX) / 40.0F));
-        float f1 = (float)Math.atan((double)((y-mouseY) / 40.0F));
+        float f = (float)Math.atan((x-mouseX) / 40.0F);
+        float f1 = (float)Math.atan((y-mouseY) / 40.0F);
         RenderSystem.pushMatrix();
         RenderSystem.translatef((float)x, (float)y, 1050.0F);
         RenderSystem.scalef(1.0F, 1.0F, -1.0F);
         MatrixStack matrixstack = new MatrixStack();
         matrixstack.translate(0.0D, 0.0D, 1000.0D);
-        matrixstack.scale(scale, scale, (float)scale);
+        matrixstack.scale(scale, scale, scale);
         Quaternion quaternion = Vector3f.ZP.rotationDegrees(180.0F);
         Quaternion quaternion1 = Vector3f.XP.rotationDegrees(f1 * 20.0F);
         quaternion.mul(quaternion1);

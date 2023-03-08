@@ -4,7 +4,6 @@ import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import mekanism.common.registries.MekanismItems;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;

@@ -8,14 +8,10 @@ import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -150,24 +146,5 @@ public class ContainerALInventory extends AbstractContainerInventory {
         }
 
         return itemstack;
-    }
-
-    public static class Supplier implements INamedContainerProvider {
-        EntityKansenBase kansenEntity;
-
-        public Supplier(EntityKansenBase kansenEntity) {
-            this.kansenEntity = kansenEntity;
-        }
-
-        @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.shipinventory");
-        }
-
-        @Nullable
-        @Override
-        public Container createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-            return new ContainerALInventory(openContainerId, inventory, this.kansenEntity.getInventory(), this.kansenEntity.getShipRiggingStorage(), this.kansenEntity.getEquipment(), this.kansenEntity.getAmmoStorage(), this.kansenEntity);
-        }
     }
 }

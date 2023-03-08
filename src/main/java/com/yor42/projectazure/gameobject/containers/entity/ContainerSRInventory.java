@@ -4,28 +4,23 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.setup.register.RegisterContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class ContainerShiningResonanceInventory extends AbstractContainerInventory{
+public class ContainerSRInventory extends AbstractContainerInventory{
 
-    public ContainerShiningResonanceInventory(int id, PlayerInventory inventory, PacketBuffer data) {
+    public ContainerSRInventory(int id, PlayerInventory inventory, PacketBuffer data) {
         this(id, inventory, new ItemStackHandler(30), new ItemStackHandler(6), new ItemStackHandler(8), (AbstractEntityCompanion) inventory.player.level.getEntity(data.readInt()));
     }
 
-    public ContainerShiningResonanceInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
+    public ContainerSRInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
         super(RegisterContainer.SR_CONTAINER.get(), id, companion);
 
         //mainhand
@@ -98,26 +93,4 @@ public class ContainerShiningResonanceInventory extends AbstractContainerInvento
 
         return itemstack;
     }
-
-    public static class Supplier implements INamedContainerProvider {
-
-        AbstractEntityCompanion companion;
-
-        public Supplier(AbstractEntityCompanion companion) {
-            this.companion = companion;
-        }
-
-        @Nonnull
-        @Override
-        public ITextComponent getDisplayName() {
-            return new TranslationTextComponent("gui.companioninventory");
-        }
-
-        @Nullable
-        @Override
-        public Container createMenu(int openContainerId, @Nonnull PlayerInventory inventory, @Nonnull PlayerEntity player) {
-            return new ContainerShiningResonanceInventory(openContainerId, inventory, this.companion.getInventory(), this.companion.getEquipment(), this.companion.getAmmoStorage(), this.companion);
-        }
-    }
-
 }

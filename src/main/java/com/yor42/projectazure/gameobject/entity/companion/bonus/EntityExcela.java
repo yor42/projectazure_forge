@@ -4,7 +4,6 @@ import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerShiningResonanceInventory;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.projectiles.EntityCausalBlackhole;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
@@ -20,7 +19,6 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -29,7 +27,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -206,11 +203,6 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
     @Override
     protected float getVoicePitch() {
         return 1.0F;
-    }
-
-    @Override
-    public void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerShiningResonanceInventory.Supplier(this), (buffer)-> buffer.writeInt(this.getId()));
     }
 
     @Nonnull

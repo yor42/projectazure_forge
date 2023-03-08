@@ -100,6 +100,6 @@ public class ContainerDroneDockingStation extends Container {
     }
 
     public enum ScreenMode{
-        NORMAL, EDITFILTER;
+        NORMAL, EDITFILTER
     }
 }

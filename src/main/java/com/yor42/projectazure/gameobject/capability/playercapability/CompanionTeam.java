@@ -15,7 +15,7 @@ public class CompanionTeam {
 
     private final ArrayList<UUID> teammates;
     private final UUID OwnerUUID, TeamUUID;
-    private String ownername;
+    private final String ownername;
     @Nullable
     private IFormattableTextComponent CustomName;
 

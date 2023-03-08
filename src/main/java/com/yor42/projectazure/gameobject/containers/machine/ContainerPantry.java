@@ -22,7 +22,7 @@ import static com.yor42.projectazure.setup.register.RegisterContainer.PANTRY_CON
 public class ContainerPantry extends Container {
 
     private final IWorldPosCallable access;
-    private IInventory inv;
+    private final IInventory inv;
 
     public ContainerPantry(int p_i50105_2_, PlayerInventory playerInv,IInventory inv, final IWorldPosCallable access) {
         super(PANTRY_CONTAINER.get(), p_i50105_2_);

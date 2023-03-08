@@ -42,9 +42,7 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
 
 import static com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability.CapabilityID;
 import static com.yor42.projectazure.gameobject.items.GeoGunItem.ANIM_FIRE;
@@ -145,27 +143,7 @@ public class ModBusEventHandler {
 
     @SubscribeEvent
     public void PlayerLogoutEvent(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (!event.getPlayer().level.isClientSide) {
-            PlayerEntity player = event.getPlayer();
-            CompoundNBT playerData = event.getPlayer().getPersistentData();
-            if(!player.getPassengers().isEmpty()){
-                ListNBT listnbt1 = new ListNBT();
-
-                for(Entity entity : player.getPassengers()) {
-                    if(entity instanceof AbstractEntityCompanion) {
-
-                        CompoundNBT compoundnbt = new CompoundNBT();
-                        if (entity.saveAsPassenger(compoundnbt)) {
-                            listnbt1.add(compoundnbt);
-                        }
-                        playerData.put("PRJA:passengers", listnbt1);
-                    }
-                }
-
-                ProjectAzureWorldSavedData.TeamListCLIENT.clear();
-
-            }
-        }
+        ProjectAzureWorldSavedData.TeamListCLIENT.clear();
     }
 
     @SubscribeEvent
@@ -200,8 +178,7 @@ public class ModBusEventHandler {
 
     @SubscribeEvent
     public static void registerModifierSerializers(@Nonnull final RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-        event.getRegistry()
-                .register(new SledgeHammerModifier.Serializer().setRegistryName(Constants.MODID, "sledgehammer"));
+        event.getRegistry().register(new SledgeHammerModifier.Serializer().setRegistryName(Constants.MODID, "sledgehammer"));
     }
 
     @SubscribeEvent

@@ -116,16 +116,16 @@ public class ItemEnergyGun extends TimelessGunItem {
             additionalDamage = tagCompound.getFloat("AdditionalDamage");
             additionalDamage += GunModifierHelper.getAdditionalDamage(stack);
             if (additionalDamage > 0.0F) {
-                additionalDamageText = TextFormatting.GREEN + " +" + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format((double)additionalDamage);
+                additionalDamageText = TextFormatting.GREEN + " +" + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
             } else if (additionalDamage < 0.0F) {
-                additionalDamageText = TextFormatting.RED + " " + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format((double)additionalDamage);
+                additionalDamageText = TextFormatting.RED + " " + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
             }
         }
 
         additionalDamage = modifiedGun.getProjectile().getDamage();
         additionalDamage = GunModifierHelper.getModifiedProjectileDamage(stack, additionalDamage);
         additionalDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, additionalDamage);
-        tooltip.add((new TranslationTextComponent("info.tac.damage", TextFormatting.GOLD + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format((double)additionalDamage) + additionalDamageText)).withStyle(TextFormatting.DARK_GRAY));
+        tooltip.add((new TranslationTextComponent("info.tac.damage", TextFormatting.GOLD + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage) + additionalDamageText)).withStyle(TextFormatting.DARK_GRAY));
         if (tagCompound != null) {
             stack.getCapability(CapabilityEnergy.ENERGY).ifPresent((energyhandler) -> {
                 tooltip.add((new TranslationTextComponent("tooltip.energygun.remainingenergy", TextFormatting.BLUE.toString() + energyhandler.getEnergyStored() + "/" + energyhandler.getMaxEnergyStored()).withStyle(TextFormatting.DARK_GRAY)));

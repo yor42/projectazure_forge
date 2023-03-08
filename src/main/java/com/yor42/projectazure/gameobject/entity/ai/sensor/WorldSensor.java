@@ -129,7 +129,7 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
         else if(host instanceof IWorldSkillUseable){
             if(((IWorldSkillUseable) host).canUseWorldSkill(worldIn, pos, host)){
                 return Optional.of(WORLDSKILL);
-            };
+            }
         }
         else if(blockbelow == Blocks.FARMLAND && state.getValue(MOISTURE)>0 && state.getMaterial() == Material.AIR){
             return Optional.of(enums.ResourceBlockType.CROP_PLANTABLE);

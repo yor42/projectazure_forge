@@ -2,7 +2,6 @@ package com.yor42.projectazure.gameobject.entity.companion.bonus;
 
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
-import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.entity.companion.meleeattacker.AbstractSwordUserBase;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.setup.register.RegisterItems;
@@ -14,7 +13,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.TieredItem;
 import net.minecraft.nbt.CompoundNBT;
@@ -27,7 +25,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -264,11 +261,6 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
     public boolean hasMeleeItem(){
         Item item = this.getItemInHand(this.getNonVanillaMeleeAttackHand()).getItem();
         return item == RegisterItems.TACTICAL_KNIFE.get();
-    }
-
-    @Override
-    public void openGUI(ServerPlayerEntity player) {
-        NetworkHooks.openGui(player, new ContainerAKNInventory.Supplier(this), buf -> buf.writeInt(this.getId()));
     }
 
     public void setWearingHood(boolean value){

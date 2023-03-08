@@ -169,7 +169,7 @@ public abstract class AbstractAnimateableEnergyTickTE extends LockableTileEntity
 
     protected int getPowerConsumption(){
         return 100;
-    };
+    }
 
     public boolean isPowered(){
         return this.getEnergyStorage().getEnergyStored()>=this.getPowerConsumption();

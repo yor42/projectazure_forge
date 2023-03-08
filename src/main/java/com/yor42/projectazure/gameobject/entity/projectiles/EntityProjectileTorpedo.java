@@ -89,7 +89,7 @@ public class EntityProjectileTorpedo extends DamagingProjectileEntity implements
             this.existingtime++;
         //1.25 is to compensate valilla slowdown in water.
         float multiplier = this.isInWater()? 1.25F:0.8F;
-        this.setDeltaMovement(this.getDeltaMovement().add(this.xPower, this.yPower, this.zPower).scale((double)multiplier));
+        this.setDeltaMovement(this.getDeltaMovement().add(this.xPower, this.yPower, this.zPower).scale(multiplier));
 
         changeheading();
 

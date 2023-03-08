@@ -234,7 +234,7 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
         matrixStack.pushPose();
         float drawscale = 0.8F;
         matrixStack.scale(drawscale,drawscale,drawscale);
-        this.font.draw(matrixStack, new TranslationTextComponent("gui.companioninventory"), (float)(140-(InventoryTextCenter*drawscale))/drawscale, (float)this.titleLabelY/drawscale, 16777215);
+        this.font.draw(matrixStack, new TranslationTextComponent("gui.companioninventory"), (140-(InventoryTextCenter*drawscale)) /drawscale, (float)this.titleLabelY/drawscale, 16777215);
 
         this.font.draw(matrixStack, this.host.getDisplayName(), (float)16/drawscale, (float)78/drawscale, 16777215);
         matrixStack.popPose();

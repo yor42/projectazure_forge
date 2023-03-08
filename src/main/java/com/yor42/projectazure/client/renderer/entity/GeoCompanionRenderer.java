@@ -217,7 +217,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
                 matrixStack.translate(0.0, 0.0, 0.05);
                 float angle = (float) (MathHelper.lerp(Minecraft.getInstance().getFrameTime(), currentEntity.xRotO, currentEntity.xRot) / 90.0);
                 float angleAbs = Math.abs(angle);
-                float zoom = ((WeaponPoseAccessor)pose).onHasAimPose() && currentEntity.isUsingGun() ? 1F : 1.0F;
+                float zoom = 1F;
                 AimPose targetPose = (double)angle > 0.0 ? ((WeaponPoseAccessor)pose).ongetDownPose() : ((WeaponPoseAccessor)pose).ongetUpPose();
                 AimPose forwardPose = ((WeaponPoseAccessor)pose).ongetForwardPose();
                 float translateX = this.getValue(targetPose.getIdle().getItemTranslate().x(), targetPose.getAiming().getItemTranslate().x(), forwardPose.getIdle().getItemTranslate().x(), forwardPose.getAiming().getItemTranslate().x(), 0.0F, angleAbs, zoom, 1.0F);
@@ -353,7 +353,7 @@ public abstract class GeoCompanionRenderer<T extends AbstractEntityCompanion & I
             case "cosmetic_head5":
                 return !(helmet.getItem() == Items.AIR);
         }
-    };
+    }
 
     @Override
     protected void applyRotations(T entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {

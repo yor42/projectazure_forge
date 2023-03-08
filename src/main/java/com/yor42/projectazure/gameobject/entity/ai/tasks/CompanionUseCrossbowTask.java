@@ -112,6 +112,6 @@ public class CompanionUseCrossbowTask extends Task<AbstractEntityCompanion> {
         UNCHARGED,
         CHARGING,
         CHARGED,
-        READY_TO_ATTACK;
+        READY_TO_ATTACK
     }
 }

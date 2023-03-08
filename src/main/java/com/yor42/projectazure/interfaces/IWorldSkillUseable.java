@@ -14,6 +14,6 @@ public interface IWorldSkillUseable {
 
     boolean executeWorldSkillTick(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity);
 
-    default void endWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity){};
+    default void endWorldSkill(ServerWorld world, BlockPos pos, AbstractEntityCompanion entity){}
 
 }

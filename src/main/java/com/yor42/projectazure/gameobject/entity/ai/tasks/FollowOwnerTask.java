@@ -72,7 +72,7 @@ public class FollowOwnerTask extends Task<AbstractEntityCompanion> {
         } else if (!this.isTeleportFriendlyBlock(ety, new BlockPos(x, y, z))) {
             return false;
         } else {
-            ety.moveTo((double)x + 0.5D, (double)y, (double)z + 0.5D, ety.yRot, ety.xRot);
+            ety.moveTo((double)x + 0.5D, y, (double)z + 0.5D, ety.yRot, ety.xRot);
             ety.getNavigation().stop();
             Main.NETWORK.send(TRACKING_ENTITY.with(() -> ety), new spawnParticlePacket(ety, spawnParticlePacket.Particles.TELEPORT));
             return true;
