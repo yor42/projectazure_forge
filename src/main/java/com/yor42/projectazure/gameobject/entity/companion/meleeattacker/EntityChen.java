@@ -4,6 +4,7 @@ import com.tac.guns.client.render.pose.OneHandedPose;
 import com.tac.guns.client.render.pose.TwoHandedPose;
 import com.tac.guns.item.GunItem;
 import com.yor42.projectazure.PAConfig;
+import com.yor42.projectazure.gameobject.containers.entity.AbstractContainerInventory;
 import com.yor42.projectazure.gameobject.containers.entity.ContainerAKNInventory;
 import com.yor42.projectazure.gameobject.misc.DamageSources;
 import com.yor42.projectazure.interfaces.IAknOp;
@@ -19,6 +20,8 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TieredItem;
@@ -307,12 +310,6 @@ public class EntityChen extends AbstractSwordUserBase implements IAknOp {
     @Override
     protected <P extends IAnimatable> PlayState predicate_head(AnimationEvent<P> event) {
         return PlayState.STOP;
-    }
-
-    @Nullable
-    @Override
-    public AbstractContainerInventory createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-        return new ContainerAKNInventory(openContainerId, inventory, this.getInventory(), this.getEquipment(), this.getAmmoStorage(), this);
     }
 
     @Nonnull

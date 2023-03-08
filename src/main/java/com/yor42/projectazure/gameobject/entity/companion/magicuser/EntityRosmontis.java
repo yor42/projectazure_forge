@@ -16,6 +16,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -192,12 +193,6 @@ public class EntityRosmontis extends AbstractCompanionMagicUser implements IAknO
     @Override
     public boolean isSkillItem(ItemStack stack) {
         return stack.getItem() instanceof ItemClaymore;
-    }
-
-    @Nullable
-    @Override
-    public AbstractContainerInventory createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-        return new ContainerAKNInventory(openContainerId, inventory, this.getInventory(), this.getEquipment(), this.getAmmoStorage(), this);
     }
 
     @Nonnull

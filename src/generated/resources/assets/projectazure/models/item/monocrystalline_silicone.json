@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "projectazure:item/disc_sandroll"
+    "layer0": "projectazure:item/monocrystalline_silicone"
   }
 }

@@ -171,10 +171,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         ShapelessRecipeBuilder.shapeless(RegisterItems.ORIGINITE.get(), 9)
                 .requires(ModTags.Items.ORIGINIUM_PRIME).unlockedBy("hasoriginium", has(ModTags.Items.ORIGINIUM_PRIME));
 
-        ShapelessRecipeBuilder.shapeless(RegisterItems.DISC_SANDROLL.get(),1).requires(RegisterItems.DISC_SANDSTORM.get()).requires(RegisterItems.DISC_RICKROLL.get())
-                .unlockedBy("has_sandstorm", has(RegisterItems.DISC_SANDSTORM.get()))
-                .unlockedBy("has_rickroll", has(RegisterItems.DISC_RICKROLL.get()))
-                .save(consumer);
 
         ShapelessRecipeBuilder.shapeless(RegisterItems.DUST_ORIGINIUM.get(), 4)
             .requires(ModTags.Items.ORIGINITE)
@@ -1284,15 +1280,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .unlockedBy("has_sand", has(ItemTags.SAND))
                 .save(consumer);
 
-        ShapedRecipeBuilder.shaped(RegisterItems.DISC_RICKROLL.get(), 1)
-                .define('S', ModTags.Items.PLATE_IRON)
-                .define('D', Tags.Items.DYES_GRAY)
-                .pattern(" S ")
-                .pattern("SDS")
-                .pattern(" S ")
-                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
-                .unlockedBy("has_dye", has(Tags.Items.DYES_GRAY))
-                .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.COMMANDING_STICK.get(), 1)
                 .define('S', Tags.Items.RODS_WOODEN)
@@ -1440,26 +1427,6 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("SPS")
                 .unlockedBy("has_steel", has(ModTags.Items.INGOT_STEEL))
                 .unlockedBy("has_plank", has(ItemTags.PLANKS))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(RegisterItems.DISC_BRAINPOWER.get(), 1)
-                .define('S', ModTags.Items.PLATE_IRON)
-                .define('D', Tags.Items.DYES_BLACK)
-                .pattern(" S ")
-                .pattern("SDS")
-                .pattern(" S ")
-                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
-                .unlockedBy("has_dye", has(Tags.Items.DYES_BLACK))
-                .save(consumer);
-
-        ShapedRecipeBuilder.shaped(RegisterItems.DISC_SANDSTORM.get(), 1)
-                .define('S', ModTags.Items.PLATE_IRON)
-                .define('D', Tags.Items.SAND)
-                .pattern(" S ")
-                .pattern("SDS")
-                .pattern(" S ")
-                .unlockedBy("has_plate", has(ModTags.Items.PLATE_IRON))
-                .unlockedBy("has_sand", has(Tags.Items.SAND))
                 .save(consumer);
 
         ShapedRecipeBuilder.shaped(RegisterItems.DISC_CC5.get(), 1)

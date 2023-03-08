@@ -234,12 +234,6 @@ public class EntityNearl extends AbstractSwordUserBase implements IAknOp {
         return PlayState.CONTINUE;
     }
 
-    @Nullable
-    @Override
-    public AbstractContainerInventory createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-        return new ContainerAKNInventory(openContainerId, inventory, this.getInventory(), this.getEquipment(), this.getAmmoStorage(), this);
-    }
-
     @Nonnull
     @Override
     public enums.CompanionRarity getRarity() {

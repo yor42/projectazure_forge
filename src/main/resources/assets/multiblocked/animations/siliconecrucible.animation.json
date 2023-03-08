@@ -1,0 +1,128 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": true,
+			"bones": {
+				"door": {
+					"rotation": {
+						"vector": [0, -102.5, 0]
+					}
+				}
+			}
+		},
+		"working": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 21.5,
+			"bones": {
+				"emissive_molten_silicon": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, 4, 0],
+							"easing": "easeInOutSine"
+						},
+						"3.5": {
+							"vector": [0, 4, 0]
+						},
+						"21.5": {
+							"vector": [0, 2.25, 0]
+						}
+					}
+				},
+				"extruder": {
+					"rotation": {
+						"3.5": {
+							"vector": [0, 0, 0]
+						},
+						"21.5": {
+							"vector": [0, 36000, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.2": {
+							"vector": [0, 0, 0]
+						},
+						"3.5": {
+							"vector": [0, -12, 0],
+							"easing": "easeInOutSine"
+						},
+						"4.5": {
+							"vector": [0, -12, 0],
+							"easing": "easeInOutSine"
+						},
+						"21.5": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"sillicon_ingot": {
+					"rotation": {
+						"3.5": {
+							"vector": [0, 0, 0]
+						},
+						"21.5": {
+							"vector": [0, 36000, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"2.0": {
+							"vector": [0, 0, 0]
+						},
+						"3.5": {
+							"vector": [0, 0, 0]
+						},
+						"21.5": {
+							"vector": [0, 12.75, 0]
+						}
+					}
+				}
+			}
+		},
+		"idle-working": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.6,
+			"bones": {
+				"door": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -102.5, 0]
+						},
+						"0.6": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutCubic"
+						}
+					}
+				}
+			}
+		},
+		"working-idle": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.6,
+			"bones": {
+				"door": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.6": {
+							"vector": [0, -102.5, 0],
+							"easing": "easeInOutCubic"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

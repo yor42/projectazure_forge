@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "projectazure:block/silicone_crucible_controller"
+    },
+    "facing=south": {
+      "model": "projectazure:block/silicone_crucible_controller",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "projectazure:block/silicone_crucible_controller",
+      "y": -90
+    },
+    "facing=east": {
+      "model": "projectazure:block/silicone_crucible_controller",
+      "y": 90
+    }
+  }
+}

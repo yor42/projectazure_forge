@@ -232,12 +232,6 @@ public class EntityYato extends AbstractSwordUserBase implements IAknOp {
         this.entityData.define(WEARING_VISOR, true);
     }
 
-    @Nullable
-    @Override
-    public AbstractContainerInventory createMenu(int openContainerId, PlayerInventory inventory, PlayerEntity player) {
-        return new ContainerAKNInventory(openContainerId, inventory, this.getInventory(), this.getEquipment(), this.getAmmoStorage(), this);
-    }
-
     public void setWearingVisor(boolean value){
         this.entityData.set(WEARING_VISOR, value);
     }
