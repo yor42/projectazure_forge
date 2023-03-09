@@ -5,17 +5,17 @@
     "background": "projectazure:textures/gui/silliconecrucible_gui.png",
     "item": [
       {
-        "cIO": 0,
+        "cIO": 2,
         "gIO": 2,
         "mIO": 2,
         "x": 79,
         "y": 54,
-        "autoIO": true
+        "autoIO": false
       },
       {
-        "cIO": 1,
+        "cIO": 2,
         "gIO": 2,
-        "mIO": 1,
+        "mIO": 2,
         "x": 79,
         "y": 95,
         "autoIO": false

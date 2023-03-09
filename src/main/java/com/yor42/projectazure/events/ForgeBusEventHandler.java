@@ -1,7 +1,10 @@
 package com.yor42.projectazure.events;
 
+import com.google.gson.stream.JsonReader;
+import com.lowdragmc.multiblocked.Multiblocked;
 import com.lowdragmc.multiblocked.api.recipe.EntityIngredient;
 import com.lowdragmc.multiblocked.api.recipe.ItemsIngredient;
+import com.lowdragmc.multiblocked.api.recipe.RecipeMap;
 import com.lowdragmc.multiblocked.common.capability.FEMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.FluidMultiblockCapability;
 import com.lowdragmc.multiblocked.common.capability.ItemMultiblockCapability;
@@ -24,9 +27,12 @@ import com.yor42.projectazure.interfaces.IMixinPlayerEntity;
 import com.yor42.projectazure.libs.utils.CompatibilityUtils;
 import com.yor42.projectazure.libs.utils.ItemStackUtils;
 import com.yor42.projectazure.libs.utils.MathUtil;
+import com.yor42.projectazure.libs.utils.ResourceUtils;
 import com.yor42.projectazure.setup.register.*;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.model.BlockModelDefinition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -45,14 +51,13 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.properties.BedPart;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -72,6 +77,10 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -366,7 +375,6 @@ public class ForgeBusEventHandler {
                     .addCompanionOutput(registerEntity.MUDROCK.get())
                     .addCompanionOutput(registerEntity.YATO.get())
                     .addCompanionOutput(registerEntity.ROSMONTIS.get())
-
                     .addCompanionOutput(registerEntity.CROWNSLAYER.get())
                     .addCompanionOutput(registerEntity.FROSTNOVA.get())
                     .addCompanionOutput(registerEntity.TALULAH.get())
@@ -428,10 +436,18 @@ public class ForgeBusEventHandler {
                     .outputEntities(EntityIngredient.of(EntityType.PIG.getRegistryName()))
                     .chance(1).perTick(true).inputFE(100).duration(120).buildAndRegister();
 
-
         }
         catch (Exception e){
             Main.LOGGER.error("Failed to register recipe:"+ Arrays.toString(e.getStackTrace()));
+        }
+    }
+
+    private static void registerRecipeFromJSON(ResourceLocation location) throws IOException {
+        InputStream stream = Minecraft.getInstance().getResourceManager().getResource(location).getInputStream();
+        InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        RecipeMap map = JSONUtils.fromJson(Multiblocked.GSON, reader, RecipeMap.class);
+        if (map != null) {
+            RecipeMap.register(map);
         }
     }
 
