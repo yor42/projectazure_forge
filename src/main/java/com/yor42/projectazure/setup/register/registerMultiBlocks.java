@@ -41,6 +41,7 @@ public class registerMultiBlocks {
         AmmoPressControllerTE.registerTE();
         RiftwayControllerTE.registerTE();
         AdvancedAlloySmelterControllerTE.registerTE();
+        SiliconeCrucibleTE.RegisterTE();
         //registerTEandRecipefromJSON("silicone_crucible");
     }
 

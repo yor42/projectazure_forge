@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/orientable",
-  "textures": {
-    "top": "projectazure:block/machine_frame",
-    "front": "projectazure:block/silicone_crucible_controller",
-    "side": "projectazure:block/machine_frame"
-  }
-}

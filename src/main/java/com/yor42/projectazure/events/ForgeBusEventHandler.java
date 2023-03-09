@@ -12,10 +12,7 @@ import com.tac.guns.init.ModItems;
 import com.yor42.projectazure.Main;
 import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.data.ModTags;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AdvancedAlloySmelterControllerTE;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.AmmoPressControllerTE;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.OriginiumGeneratorControllerTE;
-import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.RiftwayControllerTE;
+import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.recipebuilders.WeightedRecipeBuilder;
 import com.yor42.projectazure.gameobject.crafting.recipes.CrushingRecipe;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
@@ -435,6 +432,8 @@ public class ForgeBusEventHandler {
                     .inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.CROPS_CARROT),3), new ItemsIngredient(Ingredient.of(RegisterItems.FOR_DESTABILIZER.get()),1))
                     .outputEntities(EntityIngredient.of(EntityType.PIG.getRegistryName()))
                     .chance(1).perTick(true).inputFE(100).duration(120).buildAndRegister();
+
+            SiliconeCrucibleTE.SILICONCRUCIBLE_RECIPEMAP.start().name("silicon_ingot").inputItems(new ItemsIngredient(Ingredient.of(Tags.Items.GEMS_QUARTZ), 10)).outputItems(new ItemStack(RegisterItems.MONOCRYSTALLINE_SILICONE.get())).perTick(true).inputFE(1500).duration(430).buildAndRegister();
 
         }
         catch (Exception e){

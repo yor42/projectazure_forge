@@ -244,6 +244,12 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue RMA7012_MINHEIGHT;
         public final ForgeConfigSpec.IntValue RMA7012_MAXHEIGHT;
 
+        public final ForgeConfigSpec.BooleanValue ENABLE_MANGANESE;
+        public final ForgeConfigSpec.IntValue MANGANESE_VEINSIZE;
+        public final ForgeConfigSpec.IntValue MANGANESE_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue MANGANESE_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue MANGANESE_MAXHEIGHT;
+
         public final ForgeConfigSpec.BooleanValue ENABLE_TIN;
         public final ForgeConfigSpec.IntValue TIN_VEINSIZE;
         public final ForgeConfigSpec.IntValue TIN_VEINSPERCHUNK;
@@ -521,6 +527,13 @@ public class PAConfig {
             RMA7012_VEINSIZE = builder.defineInRange("Size of RMA7012 vein", 4,0,512);
             RMA7012_MINHEIGHT = builder.defineInRange("Minimum Y axis value that RMA7012 can generate", 0,0,256);
             RMA7012_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that RMA7012 can generate", 40,0,256);
+
+            ENABLE_MANGANESE = builder.define("Enable MANGANESE Generation", true);
+            MANGANESE_VEINSPERCHUNK = builder.defineInRange("Count of MANGANESE vein in single chunk", 8,0,128);
+            MANGANESE_VEINSIZE = builder.defineInRange("Size of MANGANESE vein", 3,0,512);
+            MANGANESE_MINHEIGHT = builder.defineInRange("Minimum Y axis value that MANGANESE can generate", 20,0,256);
+            MANGANESE_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that MANGANESE can generate", 60,0,256);
+
 
             ENABLE_TIN = builder.define("Enable Tin Generation", true);
             TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 4,0,128);

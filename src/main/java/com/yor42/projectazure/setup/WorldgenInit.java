@@ -34,6 +34,10 @@ public class WorldgenInit {
         if(PAConfig.CONFIG.ENABLE_RMA7012.get()) {
             addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.RMA_7012_ORE, PAConfig.CONFIG.RMA7012_VEINSIZE.get(), PAConfig.CONFIG.RMA7012_MINHEIGHT.get(), PAConfig.CONFIG.RMA7012_MAXHEIGHT.get(), PAConfig.CONFIG.RMA7012_VEINSPERCHUNK.get());
         }
+        if(PAConfig.CONFIG.ENABLE_MANGANESE.get()) {
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.MANGANESE_ORE, PAConfig.CONFIG.MANGANESE_VEINSIZE.get(), PAConfig.CONFIG.MANGANESE_MINHEIGHT.get(), PAConfig.CONFIG.MANGANESE_MAXHEIGHT.get(), PAConfig.CONFIG.MANGANESE_VEINSPERCHUNK.get());
+        }
+
     }
 
 

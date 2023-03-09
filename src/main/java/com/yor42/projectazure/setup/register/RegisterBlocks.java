@@ -176,6 +176,10 @@ public class RegisterBlocks {
         return registerMetalOre("ore_stone_"+materialName, materialName);
     }
 
+    private static RegistryObject<Block> registerMetalOre(String materialName){
+        return registerMetalOre("ore_"+materialName, materialName);
+    }
+
     private static RegistryObject<Block> registerMaterialBlock(String materialName){
         return registerMaterialBlock(materialName+"_block", materialName, enums.ResourceType.BLOCK);
     }
@@ -185,6 +189,14 @@ public class RegisterBlocks {
     }
 
     private static RegistryObject<Block> registerMaterialBlock(String registryName, String materialName, enums.ResourceType type){
+        RegistryObject<Block> ret = register_noItem(registryName, () -> new PAOreBlock(materialName, type));
+        SIMPLEBLOCKLIST.add(ret);
+        RegisterItems.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName, type));
+        SIMPLETEXTUREBBLOCKLIST.add(registryName);
+        return ret;
+    }
+
+    private static RegistryObject<Block> registerMaterialOre(String registryName, String materialName, enums.ResourceType type){
         RegistryObject<Block> ret = register_noItem(registryName, () -> new PAOreBlock(materialName, type));
         SIMPLEBLOCKLIST.add(ret);
         RegisterItems.ITEMS.register(registryName, () -> new PAOreBlockItem(ret.get(), materialName, type));

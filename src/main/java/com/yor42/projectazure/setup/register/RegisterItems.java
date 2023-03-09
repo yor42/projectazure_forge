@@ -136,6 +136,9 @@ public class RegisterItems {
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> ADVANCED_CIRCUIT = register("circuit_advanced", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
+    public static final RegistryObject<Item> PYROXENE = register("pyroxene", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
 
     public static final RegistryObject<Item> PRIMITIVE_ORIGINIUM_BATTERY = register("primitive_originium_battery", () -> new ItemBattery(new Item.Properties()
             .tab(PA_RESOURCES), 1600, 200, 200));
@@ -638,6 +641,9 @@ public class RegisterItems {
     public static final RegistryObject<Item> SPAWN_CROWNSLAYER = register_RUN("spawncrownslayer", () -> new ItemCompanionSpawnEgg<>(registerEntity.CROWNSLAYER, new Item.Properties()
             .tab(PA_COMPANIONS)));
 
+    public static final RegistryObject<Item> SPAWN_HARU = register_SW("spawnharu", () -> new ItemCompanionSpawnEgg<>(registerEntity.HARU, new Item.Properties()
+            .tab(PA_COMPANIONS)));
+
     public static final RegistryObject<Item> SPAWN_SHIROKO = register_BA("spawnshiroko", () -> new ItemCompanionSpawnEgg<>(registerEntity.SHIROKO, new Item.Properties()
             .tab(PA_COMPANIONS)));
 
@@ -748,6 +754,10 @@ public class RegisterItems {
     }
     public static RegistryObject<Item> register_RUN(String id, Supplier<? extends Item> supplier){
         return register_withTexturename(id, "akn_reunion_document", supplier);
+    }
+
+    public static RegistryObject<Item> register_SW(String id, Supplier<? extends Item> supplier){
+        return register_withTexturename(id, "sw_card", supplier);
     }
 
     public static RegistryObject<Item> register_withTexturename(String id, String texturename, Supplier<? extends Item> supplier){

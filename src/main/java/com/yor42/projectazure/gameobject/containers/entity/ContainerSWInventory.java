@@ -1,8 +1,10 @@
 package com.yor42.projectazure.gameobject.containers.entity;
 
+import com.tac.guns.item.AmmoItem;
 import com.yor42.projectazure.gameobject.containers.slots.AmmoSlot;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.setup.register.RegisterContainer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ArmorItem;
@@ -21,7 +23,7 @@ public class ContainerSWInventory extends AbstractContainerInventory {
     }
 
     public ContainerSWInventory(int id, PlayerInventory inventory, IItemHandler entityInventory, IItemHandler EntityEquipment, IItemHandler EntityAmmo, AbstractEntityCompanion companion) {
-        super(RegisterContainer.CLS_CONTAINER.get(), id, companion);
+        super(RegisterContainer.SW_CONTAINER.get(), id, companion);
         //ZA HANDO
         for (int k = 0; k < 2; k++) {
             this.addSlot(new SlotItemHandler(EntityEquipment, k, 125 + (20 * k), 105));
@@ -62,5 +64,69 @@ public class ContainerSWInventory extends AbstractContainerInventory {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(inventory, k, 35 + k * 18, 219));
         }
+    }
+
+    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemstack1 = slot.getItem();
+            itemstack = itemstack1.copy();
+            int equipments = 6;
+            int entityinv = equipments+12;
+            int ammoinv = entityinv+8;
+            int playerMainInv = ammoinv + 27;
+            int PlayerHotbar = playerMainInv + 9;
+            if (index < equipments) {
+                if (!this.moveItemStackTo(itemstack1, equipments, this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (this.getSlot(2).mayPlace(itemstack1) && !this.getSlot(2).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 2, 3, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(3).mayPlace(itemstack1) && !this.getSlot(3).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 3, 4, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(4).mayPlace(itemstack1) && !this.getSlot(4).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 4, 5, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (this.getSlot(5).mayPlace(itemstack1) && !this.getSlot(5).hasItem()) {
+                if (!this.moveItemStackTo(itemstack1, 5, 6, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            if(itemstack1.getItem() instanceof AmmoItem){
+                if (!this.moveItemStackTo(itemstack1, ammoinv, ammoinv+8, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }else if (index < entityinv) {
+                if (!this.moveItemStackTo(itemstack1, ammoinv+1, playerMainInv, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            else if (!this.moveItemStackTo(itemstack1, equipments, entityinv, false)) {
+                return ItemStack.EMPTY;
+            }
+            else if (index >= playerMainInv && index < PlayerHotbar) {
+                if (!this.moveItemStackTo(itemstack1, equipments, playerMainInv, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (index < playerMainInv) {
+                if (!this.moveItemStackTo(itemstack1, playerMainInv, PlayerHotbar, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
+            if (itemstack1.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
+
+        return itemstack;
     }
 }

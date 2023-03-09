@@ -17,6 +17,8 @@ import com.yor42.projectazure.setup.register.RegisterBlocks;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 
+import static com.lowdragmc.multiblocked.api.block.CustomProperties.RotationState.Y_AXIS;
+
 public class AmmoPressControllerTE extends ControllerTileEntity {
     public static final ControllerDefinition AmmoPressDefinition = new ControllerDefinition(new ResourceLocation(Constants.MODID, "ammo_press"), AmmoPressControllerTE::new);
     public AmmoPressControllerTE(ControllerDefinition definition) {

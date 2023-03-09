@@ -15,6 +15,8 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
 
     public static final ArrayList<RegistryObject<? extends Block>> SIMPLEBLOCKLIST = new ArrayList<>();
 
+    public static final ArrayList<RegistryObject<? extends Block>> OREBLOCKLIST = new ArrayList<>();
+
     public BlockModelProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
         super(gen, Constants.MODID, exFileHelper);
     }
@@ -25,6 +27,9 @@ public class BlockModelProvider extends net.minecraftforge.client.model.generato
         for(RegistryObject<? extends Block> block:SIMPLEBLOCKLIST){
             simpleBlock(block.get());
         }
+
+
+
         slabBlock((SlabBlock) RegisterBlocks.MACHINE_FRAME_SLAB.get(), new ResourceLocation(Constants.MODID, "block/machine_frame"), new ResourceLocation(Constants.MODID, "block/machine_frame"));
     }
 }
