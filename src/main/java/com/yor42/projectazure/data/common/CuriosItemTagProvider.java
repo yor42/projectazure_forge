@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public class CuriosItemTagProvider extends ItemTagProvider {
         return ItemTags.bind(new ResourceLocation("curios", path).toString());
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "Project Azure-Curios Tag Provider";

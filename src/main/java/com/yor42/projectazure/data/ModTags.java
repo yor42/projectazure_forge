@@ -72,6 +72,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> INGOT_ZINC = forge("ingots/zinc");
         public static final ITag.INamedTag<Item> INGOT_STEEL = forge("ingots/steel");
         public static final ITag.INamedTag<Item> INGOT_BRASS = forge("ingots/brass");
+        public static final ITag.INamedTag<Item> INGOT_SILICON = forge("ingots/silicon");
         public static final ITag.INamedTag<Item> INGOT_RMA7012 = forge("ingots/rma70-12");
         public static final ITag.INamedTag<Item> INGOT_MANGANESE = forge("ingots/manganese");
         public static final ITag.INamedTag<Item> INGOT_INCANDESCENT_ALLOY = forge("ingots/incandescent_alloy");
@@ -160,6 +161,8 @@ public class ModTags {
         public static final ITag.INamedTag<Item> MATERIAL_INCANDESCENT_ALLOY = forge("incandescent_alloy");
         public static final ITag.INamedTag<Item> MATERIAL_MANGANESE = forge("manganese");
         public static final ITag.INamedTag<Item> MATERIAL_D32 = forge("d32");
+
+        public static final ITag.INamedTag<Item> MATERIAL_SILICON= forge("silicon");
 
         public static final ITag.INamedTag<Item> DUST_D32 = forge("dusts/d32");
 

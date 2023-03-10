@@ -10,6 +10,7 @@ import net.minecraft.data.ItemTagsProvider;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ItemTagProvider extends ItemTagsProvider {
@@ -17,6 +18,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         super(dataGenerator, blockTagProvider, Constants.MODID, existingFileHelper);
     }
 
+    @Nonnull
     @Override
     public String getName() {
         return "ProjectAzure:Item Tags";
@@ -62,6 +64,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.INGOT_RMA7012).add(RegisterItems.INGOT_RMA7012.get());
         this.tag(ModTags.Items.INGOT_RMA7024).add(RegisterItems.INGOT_RMA7024.get());
         this.tag(ModTags.Items.INGOT_D32).add(RegisterItems.INGOT_D32.get());
+        this.tag(ModTags.Items.INGOT_SILICON).add(RegisterItems.SILICONE.get());
         this.tag(ModTags.Items.INGOT_MANGANESE).add(RegisterItems.INGOT_MANGANESE.get());
         this.tag(ModTags.Items.INGOT_INCANDESCENT_ALLOY).add(RegisterItems.INGOT_INCANDESCENT_ALLOY.get());
 
@@ -149,6 +152,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.MATERIAL_RMA7012).add(RegisterItems.INGOT_RMA7012.get(), RegisterItems.PLATE_RMA7012.get(), RegisterItems.NUGGET_RMA7012.get(), RegisterBlocks.RMA_7012_BLOCK.get().asItem());
         this.tag(ModTags.Items.MATERIAL_RMA7024).add(RegisterItems.INGOT_RMA7024.get(), RegisterItems.PLATE_RMA7024.get(), RegisterItems.NUGGET_RMA7024.get(), RegisterBlocks.RMA_7024_BLOCK.get().asItem());
         this.tag(ModTags.Items.MATERIAL_INCANDESCENT_ALLOY).add(RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), RegisterItems.PLATE_INCANDESCENT_ALLOY.get(), RegisterItems.NUGGET_INCANDESCENT_ALLOY.get(), RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get().asItem());
+        this.tag(ModTags.Items.MATERIAL_SILICON).add(RegisterItems.SILICONE.get());
 
 
 

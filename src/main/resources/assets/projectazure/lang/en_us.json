@@ -45,6 +45,10 @@
   "item.projectazure.syringe": "Automatic Injector",
   "item.projectazure.syringe.withpotion": "Automatic Injector of %s",
 
+  "item.projectazure.monocrystalline_silicone": "Monocrystalline Silicone Ingot",
+  "item.projectazure.silicone_wafer": "Silicone Wafer",
+  "item.projectazure.silicone": "Silicone",
+
   "item.projectazure.primitive_originium_battery": "Primitive Originium Battery",
   "item.projectazure.potato_battery": "Potato Battery",
   "item.projectazure.copper_iron_probe": "Copper/Iron Probes",

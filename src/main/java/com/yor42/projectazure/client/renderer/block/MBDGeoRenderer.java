@@ -75,7 +75,7 @@ public class MBDGeoRenderer extends AnimatedGeoModel<MBDGeoRenderer.ComponentFac
         this.modelName = modelName;
         this.isGlobal = isGlobal;
         this.texturename = texturename;
-        if (Multiblocked.isClient() && modelName != null && particleTexture.add(modelName)) {
+        if (Multiblocked.isClient() && modelName != null && particleTexture.add(texturename)) {
             this.registerTextureSwitchEvent();
         }
     }

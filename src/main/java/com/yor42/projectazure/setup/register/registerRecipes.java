@@ -42,6 +42,8 @@ public class registerRecipes {
         public static final RegistryObject<IRecipeSerializer<RepairRecipe>> REPAIRING = register("repairing", ()-> new SpecialRecipeSerializer<>(RepairRecipe::new));
         public static final RegistryObject<IRecipeSerializer<TransferPotiontoSyringeRecipe>> TRANSFERPOTION = register("transerpotion", ()-> new SpecialRecipeSerializer<>(TransferPotiontoSyringeRecipe::new));
 
+        public static final RegistryObject<IRecipeSerializer<SawingSiliconeRecipe>> SAW_SILICON = register("sawsilicon", ()-> new SpecialRecipeSerializer<>(SawingSiliconeRecipe::new));
+
 
         private static <T extends IRecipe<?>> RegistryObject<IRecipeSerializer<T>> register(String name, Supplier<IRecipeSerializer<T>> serializer){
             return RECIPE_SERIALIZERS.register(name, serializer);

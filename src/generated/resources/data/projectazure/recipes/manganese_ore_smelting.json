@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "tag": "forge:ores/manganese"
+  },
+  "result": "projectazure:ingot_manganese",
+  "experience": 0.5,
+  "cookingtime": 200
+}

@@ -155,6 +155,12 @@ public class RegisterItems {
     public static final RegistryObject<Item> MONOCRYSTALLINE_SILICONE = register("monocrystalline_silicone", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
 
+    public static final RegistryObject<Item> SILICONE_WAFER = register("silicone_wafer", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
+    public static final RegistryObject<Item> SILICONE = register("silicone", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)));
+
     public static final RegistryObject<Item> COPPER_COIL = register("copper_coil", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));
     public static final RegistryObject<Item> GOLD_COIL = register("gold_coil", () -> new Item(new Item.Properties()

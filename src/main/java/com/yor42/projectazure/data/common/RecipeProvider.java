@@ -53,6 +53,8 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
         CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.RELOADING.get()).save(consumer, "reloading_items");
         CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.REPAIRING.get()).save(consumer, "repairing_items");
         CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.TRANSFERPOTION.get()).save(consumer, "potion_transfer");
+        CustomRecipeBuilder.special((SpecialRecipeSerializer<?>) registerRecipes.Serializers.SAW_SILICON.get()).save(consumer, "sawing_silicon");
+
         this.generateAlloyingRecipe(consumer);
         this.generatePressingRecipe(consumer);
         this.generateCrystalizingRecipe(consumer);
