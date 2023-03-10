@@ -8,6 +8,7 @@ import com.lowdragmc.multiblocked.api.definition.ComponentDefinition;
 import com.lowdragmc.multiblocked.api.definition.ControllerDefinition;
 import com.lowdragmc.multiblocked.api.registry.MbdComponents;
 import com.mojang.datafixers.util.Pair;
+import com.yor42.projectazure.Main;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.*;
 import com.yor42.projectazure.gameobject.blocks.tileentity.multiblock.hatches.HatchTE;
 import com.yor42.projectazure.libs.Constants;
@@ -65,6 +66,22 @@ public class registerMultiBlocks {
             Multiblocked.LOGGER.error("error while loading the definition resource {}", location.toString());
         }
         return null;
+    }
+
+    public static JsonObject readTrait(ResourceLocation location) {
+        try {
+            InputStream inputstream = ResourceLocation.class.getResourceAsStream(String.format("/assets/%s/%s.json", location.getNamespace(), location.getPath()));
+            JsonObject config = FileUtility.jsonParser.parse(new InputStreamReader(inputstream)).getAsJsonObject();
+            return config.has("traits")? config.getAsJsonObject("traits"): config;
+        } catch (Exception var9) {
+            Main.LOGGER.error("error while loading the resource {}", location.toString());
+        }
+        return null;
+    }
+
+    public static JsonObject readTrait(String name) {
+        JsonObject object = readTrait(ResourceUtils.ModResourceLocation("traits/"+name));
+        return object == null? new JsonObject():object;
     }
 
     public static void register(){}

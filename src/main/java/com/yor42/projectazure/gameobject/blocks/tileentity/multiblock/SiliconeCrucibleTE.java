@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 
 import static com.lowdragmc.multiblocked.api.block.CustomProperties.RotationState.Y_AXIS;
 import static com.lowdragmc.multiblocked.api.registry.MbdComponents.DEFINITION_REGISTRY;
+import static com.yor42.projectazure.setup.register.registerMultiBlocks.readTrait;
 
 public class SiliconeCrucibleTE extends ControllerTileEntity {
 
@@ -37,6 +38,7 @@ public class SiliconeCrucibleTE extends ControllerTileEntity {
         DEF.getIdleStatus().setRenderer(renderer);
         DEF.getWorkingStatus().setRenderer(renderer);
         DEF.getSuspendStatus().setRenderer(renderer);
+        DEF.traits = readTrait("siliconcrucible");
         DEF.properties.isOpaque = false;
         DEF.properties.tabGroup = "pa_machines";
         RecipeMap.register(DEF.getRecipeMap());
