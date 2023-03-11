@@ -37,13 +37,17 @@
   "item.projectazure.bonk_bat": "[검열됨] 메이커 곤봉",
 
   "item.projectazure.bandage_roll": "붕대",
-  "item.projectazure.syringe.empty": "Empty Automatic Injector",
-  "item.projectazure.syringe.water": "Water Filled Automatic Injector",
-  "item.projectazure.syringe.mundane": "Automatic Injector of Mundane Potion",
-  "item.projectazure.syringe.thick": "Automatic Injector of Thick Potion",
-  "item.projectazure.syringe.awkward": "Automatic Injector of Awkward Potion",
-  "item.projectazure.syringe": "Automatic Injector",
-  "item.projectazure.syringe.withpotion": "Automatic Injector of %s",
+  "item.projectazure.syringe.empty": "빈 자동 주사기",
+  "item.projectazure.syringe.water": "물이 채워진 자동 주사기",
+  "item.projectazure.syringe.mundane": "평범한 물약 자동 주사기",
+  "item.projectazure.syringe.thick": "걸쭉한 물약 자동 주사기",
+  "item.projectazure.syringe.awkward": "이상한 물역 자동 주사기",
+  "item.projectazure.syringe": "자동 주사기",
+  "item.projectazure.syringe.withpotion": "%s 물약 자동 주사기",
+
+  "item.projectazure.monocrystalline_silicone": "단결정 실리콘",
+  "item.projectazure.silicone_wafer": "실리콘 웨이퍼",
+  "item.projectazure.silicone": "실리콘",
 
   "item.projectazure.primitive_originium_battery": "순오리지늄 배터리",
   "item.projectazure.potato_battery": "감자 배터리",
@@ -88,6 +92,8 @@
   "item.projectazure.crystalline_component": "결정 부품",
   "item.projectazure.c99": "C99 카본",
   "item.projectazure.amber_originium_fuel_rod": "앰버 오리지늄 연료봉",
+
+  "item.projectazure.pyroxene": "청휘석",
 
   "item.projectazure.fordestabilizer": "차원 균열 생성기",
 
@@ -441,6 +447,7 @@
   "block.projectazure.advanced_alloy_smelter": "고급 합금로",
 
   "material.projectazure.d32": "D32 Steel",
+  "material.projectazure.orirock": "Orirock",
   "material.projectazure.rma7012": "RMA70-12",
 
   "originium_generator.name": "오리지늄 반응로",
@@ -523,8 +530,9 @@
   "gui.membermanagement.title": "팀원 추가",
 
   "gui.initialspawnsetselect.selectpath": "> 출발점을 선택하세요...",
-  "message.glitchedphone.selected_0": "스마트폰이 빛을 발하기 시작하더니 이내 서류 더미로 변하며 사라집니다. 이건... 누군가의 프로필 같군요?",
-  "message.glitchedphone.selected_1": "스마트폰이 빛을 발하기 시작하더니 이내 빛과 열을 발하는 무지개색 정육면체로 변하며 사라집니다.",
+  "message.glitchedphone.selected_0": "휴대폰이 빛을 발하기 시작하더니 이내 서류 더미로 변하며 사라집니다. 이건... 누군가의 이력서 같군요?",
+  "message.glitchedphone.selected_1": "휴대폰이 빛을 발하기 시작하더니 이내 빛과 열을 발하는 무지개색 정육면체로 변하며 사라집니다.",
+
 
   "entity.status.relaxing": "휴식 중",
   "entity.status.sitting": "앉아 있는 중",
@@ -618,6 +626,8 @@
 
   "entity.projectazure.entitykyaru": "캬루",
 
+  "entity.projectazure.entityharu": "하루 에스티아",
+
   "entity.projectazure.entityexcela": "엑셀라",
 
   "entity.projectazure.missiledrone": "미사일 드론",
@@ -658,6 +668,7 @@
 
   "brass": "황동",
   "copper": "구리",
+  "pyroxene": "청휘석",
   "tin": "주석",
   "bronze": "청동",
   "aluminium": "알루미늄",
@@ -670,8 +681,8 @@
   "orirock": "원암",
   "nether_quartz": "네더 석영",
   "originium": "오리지늄",
-  "manganese": "Manganese",
-  "incandescent_alloy": "Incandescent Alloy",
+  "manganese": "망간",
+  "incandescent_alloy": "열합금",
 
   "rma7012": "RMA70-12",
   "rma7024": "RMA70-24",
@@ -706,6 +717,9 @@
 
   "message.energyguns.gun.notenoughenergy": "에너지가 부족합니다!",
 
+  "message.nopatchouliinstalled": "가이드북에 필요한 %s 가 설치되어있지 않습니다!",
+  "modnames.patchouli": "[Patchouli]",
+
   "death.attack.bonk": "%1$s이(가) 백병원으로 보내졌습니다.",
 
   "death.attack.arts_projectile_0": "%1$s 이(가) %2$s 의 아츠로 살해당했습니다.",
@@ -735,6 +749,22 @@
   "death.attack.ate_originium_prime_2": "%1$s 이(가) 아츠를 배우려고 시도했으나, 이 모드에는 구현되어 있지 않았습니다.",
   "death.attack.ate_originium_prime_3": "%1$s 이(가) 이성을 회복하려다 실패했습니다.",
   "death.attack.ate_originium_prime_4": "%1$s 이(가) 급성 오리지늄 중독으로 사망했습니다.",
+
+  "death.attack.frostbite_0": "%1$s 이(가) 얼어죽었습니다",
+  "death.attack.frostbite_1": "%1$s 이(가) 쿨해졌습니다",
+
+  "modifier.projectazure.assimilating": "동화",
+  "modifier.projectazure.assimilating.flavor": "먹지 마세요. 피부에도 양보하지 마세요.",
+  "modifier.projectazure.assimilating.description": "채굴된 블럭이 일정 확률로 오리지늄 조각을 떨어뜨립니다.",
+
+  "modifier.projectazure.absorption": "흡수",
+  "modifier.projectazure.absorption.flavor": "마시쪙.",
+  "modifier.projectazure.absorption.description": "채굴된 오리지늄 원암과 오리지늄을 흡수해 도구를 수리합니다.",
+
+  "modifier.projectazure.mystery": "신비",
+  "modifier.projectazure.mystery.flavor": "우리는 기억한다 수리의 귀찮음을. 우리는 원한다 오래가는 도구를.",
+  "modifier.projectazure.mystery.description": "일정확률로 도구의 내구도가 소모되지 않습니다.",
+  "modifier.projectazure.mystery.tooltip": "%s의 확률로 내구도가 소모되지 않습니다.",
 
   "top.companion_level.message": "레벨: %s",
   "top.companion_limit_break.message": "한계 돌파: %s",
@@ -776,7 +806,5 @@
   "projectazure.codex.entry.primitive_originium_battery.description": "\"이건 그냥 오리지늄에 쇠하고 구리막대기 끼워 놓은거잖아! 이게 무슨 감자냐? 그리고 이게 작동은 왜 되는건데!?\"$(br)$(br)- 낡은 리유니온 연구 노트",
 
   "projectazure.codex.entry.pantry.title": "식품 저장고",
-  "projectazure.codex.entry.pantry.description": "식품 저장고는 큰 상자와 매우 유사하지만, 음식만 담을 수 있고, 더 작습니다.$(br)또한 동료들은 여기서 자유롭게 음식을 가져갈 수 있으며,$(br)사용하는 나무 종류별로 다른 디자인이 나옵니다.",
-  "message.nopatchouliinstalled": "%s isn't installed; which is required for Guidebook",
-  "modnames.patchouli": "[Patchouli]"
+  "projectazure.codex.entry.pantry.description": "식품 저장고는 큰 상자와 매우 유사하지만, 음식만 담을 수 있고, 더 작습니다.$(br)또한 동료들은 여기서 자유롭게 음식을 가져갈 수 있으며,$(br)사용하는 나무 종류별로 다른 디자인이 나옵니다."
 }

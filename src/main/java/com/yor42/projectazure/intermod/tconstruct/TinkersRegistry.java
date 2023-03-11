@@ -2,6 +2,9 @@ package com.yor42.projectazure.intermod.tconstruct;
 
 import com.mojang.datafixers.util.Pair;
 import com.yor42.projectazure.data.client.itemModelProvider;
+import com.yor42.projectazure.intermod.tconstruct.modifiers.AbsorptionModifier;
+import com.yor42.projectazure.intermod.tconstruct.modifiers.AssimilartingModifier;
+import com.yor42.projectazure.intermod.tconstruct.modifiers.MysteryModifier;
 import com.yor42.projectazure.libs.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
@@ -18,8 +21,14 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
 import slimeknights.mantle.registration.ModelFluidAttributes;
 import slimeknights.mantle.registration.object.FluidObject;
+import slimeknights.tconstruct.library.modifiers.IncrementalModifier;
+import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.modifiers.SingleUseModifier;
+
+import java.util.function.Supplier;
 
 import static com.yor42.projectazure.intermod.tconstruct.PATconFluidTag.FLUIDLIST;
 import static com.yor42.projectazure.setup.register.RegisterBlocks.BLOCKS;
@@ -28,7 +37,8 @@ import static com.yor42.projectazure.setup.register.RegisterItems.ITEMS;
 
 public class TinkersRegistry {
     public static final TinkersFluids MoltenD32 = new TinkersFluids("molten_d32", "Molten D32", 900,15, 3000,6000);
-    public static final TinkersFluids MoltenRMA7012 = new TinkersFluids("molten_rma7012", "Molten RMA70-12", 600,15, 3000,6000);
+    public static final TinkersFluids MoltenRMA7012 = new TinkersFluids("molten_rma7012", "Molten RMA70-12", 600,12, 3000,6000);
+    public static final TinkersFluids MoltenRMA7024 = new TinkersFluids("molten_rma7024", "Molten RMA70-24", 700,15, 3000,8000);
 
     private static FluidAttributes.Builder hotBuilder() {
         return ModelFluidAttributes.builder().density(2000).viscosity(10000).temperature(1000).sound(SoundEvents.BUCKET_FILL_LAVA, SoundEvents.BUCKET_EMPTY_LAVA);
@@ -90,8 +100,21 @@ public class TinkersRegistry {
         }
     }
 
+    protected static final DeferredRegister<Modifier> MODIFIERS = DeferredRegister.create(Modifier.class, Constants.MODID);
+
+    public static final RegistryObject<IncrementalModifier> ASSIMILATING = registerMod("assimilating", AssimilartingModifier::new);
+    public static final RegistryObject<IncrementalModifier> MYSTERY = registerMod("mystery", MysteryModifier::new);
+
+    public static final RegistryObject<SingleUseModifier> ABSORBTION = registerMod("absorption", AbsorptionModifier::new);
+
+
+    private static <T extends Modifier>RegistryObject<T> registerMod(String id, Supplier<T> supplier){
+        return MODIFIERS.register(id, supplier);
+    }
+
     public static void registerTinkers(IEventBus bus){
         //FLUIDS.register(bus);
+        MODIFIERS.register(bus);
     }
 
     public static void register(){}

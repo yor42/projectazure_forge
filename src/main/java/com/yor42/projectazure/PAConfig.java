@@ -250,6 +250,12 @@ public class PAConfig {
         public final ForgeConfigSpec.IntValue MANGANESE_MINHEIGHT;
         public final ForgeConfigSpec.IntValue MANGANESE_MAXHEIGHT;
 
+        public final ForgeConfigSpec.BooleanValue ENABLE_PYROXENE;
+        public final ForgeConfigSpec.IntValue PYROXENE_VEINSIZE;
+        public final ForgeConfigSpec.IntValue PYROXENE_VEINSPERCHUNK;
+        public final ForgeConfigSpec.IntValue PYROXENE_MINHEIGHT;
+        public final ForgeConfigSpec.IntValue PYROXENE_MAXHEIGHT;
+
         public final ForgeConfigSpec.BooleanValue ENABLE_TIN;
         public final ForgeConfigSpec.IntValue TIN_VEINSIZE;
         public final ForgeConfigSpec.IntValue TIN_VEINSPERCHUNK;
@@ -534,6 +540,11 @@ public class PAConfig {
             MANGANESE_MINHEIGHT = builder.defineInRange("Minimum Y axis value that MANGANESE can generate", 20,0,256);
             MANGANESE_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that MANGANESE can generate", 60,0,256);
 
+            ENABLE_PYROXENE = builder.define("Enable PYROXENE Generation", true);
+            PYROXENE_VEINSPERCHUNK = builder.defineInRange("Count of PYROXENE vein in single chunk", 6,0,128);
+            PYROXENE_VEINSIZE = builder.defineInRange("Size of PYROXENE vein", 2,0,512);
+            PYROXENE_MINHEIGHT = builder.defineInRange("Minimum Y axis value that PYROXENE can generate", 0,0,256);
+            PYROXENE_MAXHEIGHT = builder.defineInRange("Maximum Y axis value that PYROXENE can generate", 10,0,256);
 
             ENABLE_TIN = builder.define("Enable Tin Generation", true);
             TIN_VEINSPERCHUNK = builder.defineInRange("Count of Tin vein in single chunk", 4,0,128);

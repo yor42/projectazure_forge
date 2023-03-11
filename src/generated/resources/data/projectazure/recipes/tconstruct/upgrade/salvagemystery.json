@@ -1,0 +1,15 @@
+{
+  "type": "tconstruct:incremental_modifier_salvage",
+  "tools": {
+    "tag": "tconstruct:modifiable"
+  },
+  "slots": {
+    "upgrades": 1
+  },
+  "modifier": "projectazure:mystery",
+  "min_level": 1,
+  "salvage": {
+    "item": "projectazure:pyroxene",
+    "full": false
+  }
+}

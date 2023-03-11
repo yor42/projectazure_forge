@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "conditions": [
+    {
+      "value": {
+        "tag": "forge:plates/rma70-24",
+        "type": "forge:tag_empty"
+      },
+      "type": "forge:not"
+    }
+  ],
+  "ingredient": {
+    "tag": "forge:plates/rma70-24"
+  },
+  "result": {
+    "fluid": "projectazure:molten_rma7024",
+    "amount": 144
+  },
+  "temperature": 400,
+  "time": 46
+}

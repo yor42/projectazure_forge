@@ -196,6 +196,14 @@ public class RegisterItems {
     public static final RegistryObject<Item> ORIGINIUM_PRIME = register("originium_prime", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES).food(ModFoods.ORIGINIUM_PRIME)));
 
+    public static final RegistryObject<Item> ORIGINIUM_SHARD = register("originium_shard", () -> new Item(new Item.Properties()
+            .tab(PA_RESOURCES)){
+        @Override
+        public int getBurnTime(ItemStack itemStack, @Nullable IRecipeType<?> recipeType) {
+            return 100;
+        }
+    });
+
     public static final RegistryObject<Item> HEADHUNTING_PCB = register("headhunting_pcb", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES).stacksTo(16)));
     public static final RegistryObject<Item> ORUNDUM = register("orundum", () -> new Item(new Item.Properties()

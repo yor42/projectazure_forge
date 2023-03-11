@@ -70,45 +70,4 @@ public class itemModelProvider extends ItemModelProvider {
     private ItemModelBuilder buildModelWithSingleTex(ModelFile model, String name, String Texturename){
         return getBuilder(name).parent(model).texture("layer0", "item/"+Texturename);
     }
-
-    private ItemModelBuilder buildModelWisdomCube(String ItemName){
-        return buildModelWithSingleTex(ItemName, "wisdomcube");
-    }
-
-    private ItemModelBuilder buildModelBA(String ItemName){
-        return buildModelWithSingleTex(ItemName, "spawn_bluearchive");
-    }
-
-    private ItemModelBuilder buildModelcls(String ItemName){
-        return buildModelWithSingleTex(ItemName, "spawn_closer");
-    }
-
-
-    private ItemModelBuilder buildModelGFL(String ItemName){
-        return buildModelWithSingleTex(ItemName, "gfl_manufacture_contract");
-    }
-
-    private ItemModelBuilder buildModelKC(String ItemName){
-        return buildModelWithSingleTex(ItemName, "kc_card");
-    }
-
-    private ItemModelBuilder buildModelSR(String ItemName){
-        return buildModelWithSingleTex(ItemName, "sr_sealstone");
-    }
-
-    private ItemModelBuilder buildModelAKN(String ItemName){
-        return buildModelWithSingleTex(ItemName, "akn_document");
-    }
-
-    private ItemModelBuilder buildModelPCR(String ItemName){
-        return buildModelWithSingleTex(ItemName, "goddess_stone");
-    }
-
-    private ItemModelBuilder buildModelFGO(String ItemName){
-        return buildModelWithSingleTex(ItemName, "saint_quartz");
-    }
-
-    private ItemModelBuilder buildModelRUN(String ItemName){
-        return buildModelWithSingleTex(ItemName, "akn_reunion_document");
-    }
 }

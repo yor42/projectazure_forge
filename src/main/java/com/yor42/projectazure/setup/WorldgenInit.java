@@ -37,7 +37,9 @@ public class WorldgenInit {
         if(PAConfig.CONFIG.ENABLE_MANGANESE.get()) {
             addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.MANGANESE_ORE, PAConfig.CONFIG.MANGANESE_VEINSIZE.get(), PAConfig.CONFIG.MANGANESE_MINHEIGHT.get(), PAConfig.CONFIG.MANGANESE_MAXHEIGHT.get(), PAConfig.CONFIG.MANGANESE_VEINSPERCHUNK.get());
         }
-
+        if(PAConfig.CONFIG.ENABLE_PYROXENE.get()) {
+            addOreSpawn(event, OreFeatureConfig.FillerBlockType.NATURAL_STONE, RegisterBlocks.PYROXENE_ORE, PAConfig.CONFIG.PYROXENE_VEINSIZE.get(), PAConfig.CONFIG.PYROXENE_MINHEIGHT.get(), PAConfig.CONFIG.PYROXENE_MAXHEIGHT.get(), PAConfig.CONFIG.PYROXENE_VEINSPERCHUNK.get());
+        }
     }
 
 
