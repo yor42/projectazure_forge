@@ -14,10 +14,4 @@ public class entityShirokoRenderer extends GeoCompanionRenderer<EntityShiroko> {
         super(renderManager, new ModelShiroko());
         this.shadowRadius = 0.3F;
     }
-
-    @Override
-    public ResourceLocation getTextureLocation(EntityShiroko entity) {
-        return TextureEntityLocation("entityshiroko");
-    }
-
 }

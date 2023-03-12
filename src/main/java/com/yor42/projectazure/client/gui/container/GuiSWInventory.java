@@ -73,5 +73,6 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
         this.minecraft.getTextureManager().bind(TEXTURE);
         this.blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         matrixStack.popPose();
+        this.renderEntity(this.leftPos+46, this.topPos+112, x, y);
     }
 }
