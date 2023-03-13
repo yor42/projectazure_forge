@@ -26,11 +26,11 @@ public class ContainerSWInventory extends AbstractContainerInventory {
         super(RegisterContainer.SW_CONTAINER.get(), id, companion);
         //ZA HANDO
         for (int k = 0; k < 2; k++) {
-            this.addSlot(new SlotItemHandler(EntityEquipment, k, 125 + (20 * k), 105));
+            this.addSlot(new SlotItemHandler(EntityEquipment, k, 122 + (20 * k), 100));
         }
 
         for (int l = 0; l < 4; l++) {
-            this.addSlot(new SlotItemHandler(EntityEquipment, 2 + l, 102, 29 + l * 19) {
+            this.addSlot(new SlotItemHandler(EntityEquipment, 2 + l, 99, 24 + l * 19) {
                 public int getMaxStackSize() {
                     return 1;
                 }
@@ -44,25 +44,25 @@ public class ContainerSWInventory extends AbstractContainerInventory {
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 3; n++) {
-                this.addSlot(new SlotItemHandler(entityInventory, n + 3 * m, 125 + n * 19, 29 + m * 19));
+                this.addSlot(new SlotItemHandler(entityInventory, n + 3 * m, 122 + n * 19, 24 + m * 19));
             }
         }
 
 
         for (int m = 0; m < 4; m++) {
             for (int n = 0; n < 2; n++) {
-                this.addSlot(new AmmoSlot(EntityAmmo, n + (2 * m), 186 + n * 19, 29 + m * 19));
+                this.addSlot(new AmmoSlot(EntityAmmo, n + (2 * m), 183 + n * 19, 24 + m * 19));
             }
         }
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inventory, j + i * 9 + 9, 35 + j * 18, 161 + i * 18));
+                this.addSlot(new Slot(inventory, j + i * 9 + 9, 32 + j * 18, 158 + i * 18));
             }
         }
 
         for (int k = 0; k < 9; ++k) {
-            this.addSlot(new Slot(inventory, k, 35 + k * 18, 219));
+            this.addSlot(new Slot(inventory, k, 32 + k * 18, 216));
         }
     }
 

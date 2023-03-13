@@ -19,7 +19,7 @@ public class DamageSources {
     public static final DamageSource TORPEDO = new DamageSource("torpedo").setExplosion().bypassInvul();
 
     public static final DamageSource ACUTE_ORIPATHY = new DamageSourcesWithRandomMessages("ate_originium_prime", 5).bypassArmor().bypassMagic();
-    public static final DamageSource FROSTBITE = new DamageSourcesWithRandomMessages("frostbite", 5).bypassArmor().bypassMagic();
+    public static final DamageSource FROSTBITE = new DamageSourcesWithRandomMessages("frostbite", 2).bypassArmor().bypassMagic();
 
     public static final DamageSource PLANE_GUN = new DamageSource("plane_gun").setProjectile();
 

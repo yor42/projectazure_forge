@@ -93,6 +93,8 @@
   "item.projectazure.c99": "C99 Carbon",
   "item.projectazure.amber_originium_fuel_rod": "Amber Originium Fuel Rod",
 
+  "item.projectazure.pyroxene": "Pyroxene",
+
   "item.projectazure.fordestabilizer": "Fabric of Reality Destabilizer",
 
   "item.projectazure.developer_bonus": "Project:Azure Developer Supply Package",
@@ -445,6 +447,7 @@
   "block.projectazure.advanced_alloy_smelter": "Advanced Alloy smelter",
 
   "material.projectazure.d32": "D32 Steel",
+  "material.projectazure.orirock": "Orirock",
   "material.projectazure.rma7012": "RMA70-12",
 
   "originium_generator.name": "Originium Reactor",
@@ -665,6 +668,7 @@
 
   "brass": "Brass",
   "copper": "Copper",
+  "pyroxene": "Pyroxene",
   "tin": "Tin",
   "bronze": "Bronze",
   "aluminium": "Aluminium",
@@ -748,10 +752,19 @@
 
   "death.attack.frostbite_0": "%1$s froze to death",
   "death.attack.frostbite_1": "%1$s took chill pill",
-  "death.attack.frostbite_2": "%1$s tried to get arts ability. little did he know was this mod doesn't have that.",
-  "death.attack.frostbite_3": "%1$s tasted the s p i c y  r o c c",
-  "death.attack.frostbite_4": "%1$s died from acute originium poisoning",
 
+  "modifier.projectazure.assimilating": "Assimilating",
+  "modifier.projectazure.assimilating.flavor": "Don't eat these.",
+  "modifier.projectazure.assimilating.description": "Mined Blocks now has chance of dropping originium shard.",
+
+  "modifier.projectazure.absorption": "Absorption",
+  "modifier.projectazure.absorption.flavor": "(Slurp) Noice.",
+  "modifier.projectazure.absorption.description": "Absorbs mined originium and originite. repairing the tool.",
+
+  "modifier.projectazure.mystery": "Mystery",
+  "modifier.projectazure.mystery.flavor": "Archived Blue!",
+  "modifier.projectazure.mystery.description": "By chance, tools durability does not decrease.",
+  "modifier.projectazure.mystery.tooltip": "Tool does not get damaged by %s chance.",
 
   "top.companion_level.message": "Level: %s",
   "top.companion_limit_break.message": "Limit break: %s",

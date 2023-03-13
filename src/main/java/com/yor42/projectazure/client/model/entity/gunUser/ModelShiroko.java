@@ -16,12 +16,12 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
 
     @Override
     public ResourceLocation getModelLocation(EntityShiroko entityShiroko) {
-        return GeoModelEntityLocation("modelshiroko");
+        return GeoModelEntityLocation("modelshirokoremake");
     }
 
     @Override
     public ResourceLocation getTextureLocation(EntityShiroko entityShiroko) {
-        return TextureEntityLocation("entityshiroko");
+        return TextureEntityLocation("entityshirokoremake");
     }
 
     @Override
@@ -34,18 +34,17 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
 
         IBone Halo = this.getAnimationProcessor().getBone("Halo");
-        IBone head = this.getAnimationProcessor().getBone("Head");
         IBone NormalFace = this.getAnimationProcessor().getBone("Normal");
-        IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_Closed");
+        IBone EyeclosedFace = this.getAnimationProcessor().getBone("Eye_closed");
+        IBone Injured = this.getAnimationProcessor().getBone("Injured");
         IBone ExcitedFace = this.getAnimationProcessor().getBone("Excited");
         IBone PatFace = this.getAnimationProcessor().getBone("Pat");
-        IBone body = this.getAnimationProcessor().getBone("Body");
-        IBone HealFace = this.getAnimationProcessor().getBone("Heal");
+        IBone SleepFace = this.getAnimationProcessor().getBone("Sleeping");
         IBone Flushed = this.getAnimationProcessor().getBone("flushed");
         IBone Angry1 = this.getAnimationProcessor().getBone("angry1");
         IBone Angry2 = this.getAnimationProcessor().getBone("angry2");
-        IBone Faint = this.getAnimationProcessor().getBone("faint");
-        IBone Injured = this.getAnimationProcessor().getBone("injured");
+        IBone Angry3 = this.getAnimationProcessor().getBone("angry3");
+        IBone Faint = this.getAnimationProcessor().getBone("Faint");
 
         if(entity.isDeadOrDying() ||(entity.isCriticallyInjured() && entity.isSleeping())){
             NormalFace.setHidden(true);
@@ -53,9 +52,10 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             Flushed.setHidden(true);
-            HealFace.setHidden(true);
+            SleepFace.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(false);
             Injured.setHidden(true);
         }
@@ -65,9 +65,10 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             Flushed.setHidden(true);
-            HealFace.setHidden(true);
+            SleepFace.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(false);
         }
@@ -77,9 +78,10 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             Flushed.setHidden(true);
-            HealFace.setHidden(true);
+            SleepFace.setHidden(true);
             Angry1.setHidden(true);
-            Angry2.setHidden(false);
+            Angry2.setHidden(true);
+            Angry3.setHidden(false);
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
@@ -89,9 +91,10 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
             Flushed.setHidden(true);
-            HealFace.setHidden(true);
-            Angry1.setHidden(false);
-            Angry2.setHidden(true);
+            SleepFace.setHidden(true);
+            Angry1.setHidden(true);
+            Angry2.setHidden(false);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
@@ -100,10 +103,11 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
             ExcitedFace.setHidden(true);
             EyeclosedFace.setHidden(true);
             PatFace.setHidden(true);
-            Flushed.setHidden(false);
-            HealFace.setHidden(true);
-            Angry1.setHidden(true);
+            Flushed.setHidden(true);
+            SleepFace.setHidden(true);
+            Angry1.setHidden(false);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
@@ -112,10 +116,11 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
             ExcitedFace.setHidden(true);
             PatFace.setHidden(false);
             EyeclosedFace.setHidden(true);
-            HealFace.setHidden(true);
+            SleepFace.setHidden(true);
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
@@ -124,10 +129,11 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
             ExcitedFace.setHidden(true);
             PatFace.setHidden(true);
             EyeclosedFace.setHidden(true);
-            HealFace.setHidden(false);
+            SleepFace.setHidden(false);
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
@@ -135,11 +141,12 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
             NormalFace.setHidden(true);
             ExcitedFace.setHidden(true);
             PatFace.setHidden(true);
-            EyeclosedFace.setHidden(false);
-            HealFace.setHidden(true);
+            EyeclosedFace.setHidden(true);
+            SleepFace.setHidden(false);
             Flushed.setHidden(true);
             Angry1.setHidden(true);
             Angry2.setHidden(true);
+            Angry3.setHidden(true);
             Faint.setHidden(true);
             Injured.setHidden(true);
         }
@@ -150,10 +157,11 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
                 PatFace.setHidden(true);
                 ExcitedFace.setHidden(true);
                 EyeclosedFace.setHidden(true);
-                HealFace.setHidden(true);
+                SleepFace.setHidden(true);
                 Flushed.setHidden(true);
                 Angry1.setHidden(true);
                 Angry2.setHidden(true);
+                Angry3.setHidden(true);
                 Faint.setHidden(true);
                 Injured.setHidden(true);
             }
@@ -163,10 +171,11 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
                     ExcitedFace.setHidden(true);
                     PatFace.setHidden(true);
                     EyeclosedFace.setHidden(false);
-                    HealFace.setHidden(true);
+                    SleepFace.setHidden(true);
                     Flushed.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
+                    Angry3.setHidden(true);
                     Faint.setHidden(true);
                     Injured.setHidden(true);
                     this.blinkinterval = (int) ((getRand().nextFloat()*300)+100);
@@ -176,10 +185,11 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
                     PatFace.setHidden(true);
                     ExcitedFace.setHidden(true);
                     EyeclosedFace.setHidden(true);
-                    HealFace.setHidden(true);
+                    SleepFace.setHidden(true);
                     Flushed.setHidden(true);
                     Angry1.setHidden(true);
                     Angry2.setHidden(true);
+                    Angry3.setHidden(true);
                     Faint.setHidden(true);
                     Injured.setHidden(true);
 
@@ -188,7 +198,7 @@ public class ModelShiroko extends GeoCompanionModel<EntityShiroko> {
                 this.LastBlinkTime = System.currentTimeMillis();
             }
         }
-        Halo.setHidden(entity.isSleeping());
+        Halo.setHidden(entity.isSleeping() || entity.isCriticallyInjured());
         Halo.setPositionY((float) (Math.sin(2*Math.PI*0.0125*entity.tickCount)*1.0F)%80);
     }
 

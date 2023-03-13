@@ -29,7 +29,7 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
     protected final AbstractEntityCompanion host;
 
     protected final Button.ITooltip FREEROAM_TOOLTIP;
-
+    protected final Button.ITooltip DEFENCE_TOOLTIP;
     protected final Button.ITooltip ITEM_TOOLTIP;
     public AbstractGUIScreen(T p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
         super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
@@ -49,6 +49,17 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
                 tooltips.add(new TranslationTextComponent("gui.tooltip.homepos").append(": " + Home.getX() + " / " + Home.getY() + " / " + Home.getZ()));
             }else{
                 tooltips.add(new TranslationTextComponent("gui.tooltip.homemode.nohome").withStyle(TextFormatting.GRAY));
+            }
+            this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
+        };
+
+        this.DEFENCE_TOOLTIP = (p_238488_0_, matrixStack, p_238488_2_, p_238488_3_) -> {
+            List<IFormattableTextComponent> tooltips = new ArrayList<>();
+            if(this.host.shouldAttackFirst()){
+                tooltips.add(new TranslationTextComponent("gui.tooltip.aggressive.on").withStyle(TextFormatting.GREEN));
+            }
+            else{
+                tooltips.add(new TranslationTextComponent("gui.tooltip.aggressive.off").withStyle(TextFormatting.BLUE));
             }
             this.renderWrappedToolTip(matrixStack, tooltips, p_238488_2_, p_238488_3_, this.font);
         };
@@ -113,6 +124,14 @@ public abstract class AbstractGUIScreen<T extends AbstractContainerInventory> ex
 
     protected int getEXPgauge(int fullpixels){
         return (int) (fullpixels*this.host.getExp()/this.host.getMaxExp());
+    }
+
+    protected int getMoralegauge(int fullpixels){
+        return (int) (fullpixels*this.host.getMorale()/this.host.getMaxMorale());
+    }
+
+    protected int getHPgauge(int fullpixels){
+        return (int) (fullpixels*this.host.getHealth()/this.host.getMaxHealth());
     }
 
 }

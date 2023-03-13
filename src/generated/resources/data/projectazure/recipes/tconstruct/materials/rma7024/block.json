@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": {
+    "tag": "forge:storage_blocks/rma70-24"
+  },
+  "value": 9,
+  "needed": 1,
+  "material": "projectazure:rma7024",
+  "leftover": {
+    "tag": "forge:ingots/rma70-24"
+  }
+}

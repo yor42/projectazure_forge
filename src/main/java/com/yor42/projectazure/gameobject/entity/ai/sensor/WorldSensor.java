@@ -107,7 +107,7 @@ public class WorldSensor extends Sensor<AbstractEntityCompanion> {
         boolean isCactusorSugarcane = block instanceof SugarCaneBlock || block instanceof CactusBlock;
         BlockRayTraceResult result;
 
-        //Determine if entity can ACTUALLY see that block. we dont want cheating.
+        //Determine if entity can ACTUALLY see that block. we don't want cheating.
         if(isOre||isCactusorSugarcane){
             result = worldIn.clip(new RayTraceContext(host.getEyePosition(1.0F), Vector3d.atCenterOf(pos), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, host));
         }
