@@ -1,5 +1,6 @@
 package com.yor42.projectazure.intermod.tconstruct.datagen;
 
+import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.intermod.tconstruct.TinkersRegistry;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterItems;
@@ -7,6 +8,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.RegistryObject;
 import slimeknights.tconstruct.library.data.recipe.ICommonRecipeHelper;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
@@ -54,6 +56,8 @@ public class PATConRecipeProvider extends RecipeProvider implements IMaterialRec
         this.metalTagCasting(consumer, TinkersRegistry.MoltenRMA7024.OBJECT, "rma70-24", castingfoler, true);
         this.metalMaterialRecipe(consumer, PAMaterialProvider.RMA70_24, materials, "rma70-24", false);
         this.materialMeltingCasting(consumer, PAMaterialProvider.RMA70_24, TinkersRegistry.MoltenRMA7024.OBJECT, true, materials);
+
+        this.materialRecipe(consumer, PAMaterialProvider.ORIROCK, Ingredient.of(ModTags.Items.MATERIAL_ORIROCK), 1,1,materials+"/orirock");
 
 
         incUpgrade(consumer, TinkersRegistry.ASSIMILATING, 5, RegisterItems.ORIGINIUM_PRIME, 5, false);

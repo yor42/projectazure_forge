@@ -26,6 +26,7 @@ public class BlockTagProvider extends BlockTagsProvider {
         this.tag(ModTags.Blocks.ORES_ORIROCK).add(RegisterBlocks.ORIROCK.get());
         this.tag(ModTags.Blocks.ORES_RMA7012).add(RegisterBlocks.RMA_7012_ORE.get());
         this.tag(ModTags.Blocks.ORES_MANGANESE).add(RegisterBlocks.MANGANESE_ORE.get());
+        this.tag(ModTags.Blocks.ORES_PYROXENE).add(RegisterBlocks.PYROXENE_ORE.get());
 
         this.tag(ModTags.Blocks.BLOCK_ZINC).add(RegisterBlocks.ZINC_BLOCK.get());
         this.tag(ModTags.Blocks.BLOCK_ALUMINIUM).add(RegisterBlocks.ALUMINIUM_BLOCK.get());

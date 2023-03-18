@@ -35,6 +35,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         copy(ModTags.Blocks.ORES_ORIROCK, ModTags.Items.ORES_ORIROCK);
         copy(ModTags.Blocks.ORES_RMA7012, ModTags.Items.ORES_RMA7012);
         copy(ModTags.Blocks.ORES_MANGANESE, ModTags.Items.ORES_MANGANESE);
+        copy(ModTags.Blocks.ORES_PYROXENE, ModTags.Items.ORES_PYROXENE);
 
         copy(ModTags.Blocks.BLOCK_D32, ModTags.Items.BLOCK_D32);
         copy(ModTags.Blocks.BLOCK_ALUMINIUM, ModTags.Items.BLOCK_ALUMINIUM);
@@ -153,6 +154,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.MATERIAL_RMA7024).add(RegisterItems.INGOT_RMA7024.get(), RegisterItems.PLATE_RMA7024.get(), RegisterItems.NUGGET_RMA7024.get(), RegisterBlocks.RMA_7024_BLOCK.get().asItem());
         this.tag(ModTags.Items.MATERIAL_INCANDESCENT_ALLOY).add(RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), RegisterItems.PLATE_INCANDESCENT_ALLOY.get(), RegisterItems.NUGGET_INCANDESCENT_ALLOY.get(), RegisterBlocks.INCANDESCENT_ALLOY_BLOCK.get().asItem());
         this.tag(ModTags.Items.MATERIAL_SILICON).add(RegisterItems.SILICONE.get());
+        this.tag(ModTags.Items.MATERIAL_ORIROCK).add(RegisterBlocks.ORIROCK.get().asItem(), RegisterBlocks.COBBLED_ORIROCK.get().asItem());
 
 
 

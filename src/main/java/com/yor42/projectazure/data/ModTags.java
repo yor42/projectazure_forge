@@ -38,6 +38,7 @@ public class ModTags {
         public static final ITag.INamedTag<Block> ORES_ORIROCK = forge("ores/originium");
         public static final ITag.INamedTag<Block> ORES_RMA7012 = forge("ores/rma70-12");
         public static final ITag.INamedTag<Block> ORES_MANGANESE = forge("ores/manganese");
+        public static final ITag.INamedTag<Block> ORES_PYROXENE = forge("ores/pyroxene");
 
         public static final ITag.INamedTag<Block> BLOCK_ALUMINIUM = forge("storage_blocks/aluminium");
         public static final ITag.INamedTag<Block> BLOCK_COPPER = forge("storage_blocks/copper");
@@ -87,7 +88,6 @@ public class ModTags {
         public static final ITag.INamedTag<Item> NUGGET_STEEL = forge("nuggets/steel");
         public static final ITag.INamedTag<Item> NUGGET_BRASS = forge("nuggets/brass");
         public static final ITag.INamedTag<Item> NUGGET_RMA7012 = forge("nuggets/rma70-12");
-
         public static final ITag.INamedTag<Item> NUGGET_RMA7024 = forge("nuggets/rma70-24");
 
         public static final ITag.INamedTag<Item> NUGGET_D32 = forge("nuggets/d32");
@@ -161,6 +161,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> MATERIAL_INCANDESCENT_ALLOY = forge("incandescent_alloy");
         public static final ITag.INamedTag<Item> MATERIAL_MANGANESE = forge("manganese");
         public static final ITag.INamedTag<Item> MATERIAL_D32 = forge("d32");
+        public static final ITag.INamedTag<Item> MATERIAL_ORIROCK = forge("orirock");
 
         public static final ITag.INamedTag<Item> MATERIAL_SILICON= forge("silicon");
 
@@ -176,6 +177,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> ORES_ORIROCK = forge("ores/originium");
         public static final ITag.INamedTag<Item> ORES_RMA7012 = forge("ores/rma70-12");
         public static final ITag.INamedTag<Item> ORES_MANGANESE = forge("ores/manganese");
+        public static final ITag.INamedTag<Item> ORES_PYROXENE = forge("ores/pyroxene");
         public static final ITag.INamedTag<Item> WIRE_COPPER = forge("wires/copper");
 
         public static final ITag.INamedTag<Item> ORIGINITE = forge("gems/originite");
