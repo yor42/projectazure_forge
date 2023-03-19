@@ -607,7 +607,7 @@ e01b86d5ec75826be32593bd8973a2374cd6a427 data/forge/tags/fluids/molten_rma7012.j
 38a705ce3780b00eca1569d98c5f2f208e948db3 data/forge/tags/items/aluminium.json
 2b71e7c2de1955b876727776cd795dd442463bba data/forge/tags/items/brass.json
 a0a0f4f375801867b1706c275c82bc12fbd9f3fe data/forge/tags/items/bronze.json
-741b537913a763aa07f92be3a6ceb13864f324c1 data/forge/tags/items/circuits.json
+0ee3b6cad85cf5c1962e73a2b791c83d692d3380 data/forge/tags/items/circuits.json
 fafc557c0ad4ef4178ae7eb6a890597d28b4dad8 data/forge/tags/items/circuits/advanced.json
 741b537913a763aa07f92be3a6ceb13864f324c1 data/forge/tags/items/circuits/basic.json
 601c69a8ffa64c123b58b9ebd3df766e4729ec9a data/forge/tags/items/circuits/crystalline.json
@@ -636,8 +636,10 @@ aad125c4287bdfe1cb7102cc795e6b5a9302624f data/forge/tags/items/dusts/zinc.json
 cca34cb4fbc15475635e3a5f3cefabe3477ee4e9 data/forge/tags/items/gears/bronze.json
 5ae2c155ff47957c2c137859312d39b7b10210da data/forge/tags/items/gears/iron.json
 71bbf56e3f101787f9d6b1dbe59413a36c52e7f7 data/forge/tags/items/gears/steel.json
-626d6fa2bc9f3562d3fd72e87c1d47cbd82c8d1a data/forge/tags/items/gems/originite.json
+13697a595891ba10478da6f256014f9c48c9516d data/forge/tags/items/gems/originite.json
 8f5950b914d6dad5826509603eded23072b60b4d data/forge/tags/items/gems/originium.json
+8f5950b914d6dad5826509603eded23072b60b4d data/forge/tags/items/gems/originium_prime.json
+8bc6c2276f84d47c422ca3c5f7d42df892ff7657 data/forge/tags/items/gems/pyroxene.json
 546307675527e2daefb76a94aad201fa53e7ab47 data/forge/tags/items/incandescent_alloy.json
 c782cf06cae583eafc97b41d8e51fa902761a476 data/forge/tags/items/ingots/aluminium.json
 a2eb0c9c7f4e4a5b605f7a2df204ef51360af0c3 data/forge/tags/items/ingots/brass.json
@@ -783,6 +785,8 @@ dfc71c1aeba106df8c5cf05b869795a82c6a8832 data/minecraft/recipes/spruce_planks_pa
 9fa1031dec11047ae4f5010d81c5772dc148209a data/minecraft/recipes/steel_dust_from_iron.json
 14fdd97e0fe792f657c4b0705d7e5222ef3aa929 data/minecraft/recipes/stick_pa_saw.json
 9ced00609bcef8b12a0290f39afd16f183bf58d0 data/minecraft/recipes/warped_planks_pa_saw.json
+779feb74c338d109f57258be1110efcb17bbb363 data/minecraft/tags/items/beacon_payment_items.json
+01c25001455683a3924a85173da968e386d676be data/minecraft/tags/items/music_discs.json
 d2c245598e26c8add0afe07c9e4f9d091bc9cddd data/projectazure/advancements/recipes/misc/gold_dust_blasting.json
 c0b50f1819e4ad11029b8fcd59939a8aea161663 data/projectazure/advancements/recipes/misc/gold_dust_smelting.json
 18ea8af0a273b4b56ee041090f382cd0230b776b data/projectazure/advancements/recipes/misc/iron_dust_blasting.json

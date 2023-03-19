@@ -14,6 +14,8 @@ import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterFluids;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
+import mekanism.api.datagen.recipe.MekanismRecipeBuilder;
+import mekanism.api.recipes.MekanismRecipe;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

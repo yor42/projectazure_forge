@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "projectazure:circuit_primitive"
+    "projectazure:circuit_primitive",
+    "projectazure:circuit_advanced",
+    "projectazure:crystalline_circuit"
   ]
 }
