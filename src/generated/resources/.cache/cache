@@ -690,7 +690,7 @@ ca1d116b7fefe50aceb9a6b0e61addf367c64a99 data/forge/tags/items/plates/d32.json
 3ec305bb03deeeeca22b564099cdf4f35e379fcb data/forge/tags/items/plates/iron.json
 f37c31c025625ebbe368a44ea6358f9a9578f0cc data/forge/tags/items/plates/lead.json
 be87ecbf01e92240e172a3ec244ac9c0ad68c9e9 data/forge/tags/items/plates/manganese.json
-8142a33f2047a0fe1b9d1d87e02162386e15bfa6 data/forge/tags/items/plates/plastic.json
+f9f64f99ad3d7e10434b72f3d1900513592c82f7 data/forge/tags/items/plates/plastic.json
 a8a85d5ddb5aa759ad88d531abcdaf0d0f5f9716 data/forge/tags/items/plates/rma70-12.json
 777ae3cd952e3ea6d74e540e622332346944580a data/forge/tags/items/plates/rma70-24.json
 6727554ea0934aae2db85de8d84c43a7bcb6a01a data/forge/tags/items/plates/steel.json
@@ -719,6 +719,7 @@ dcd74059e9d3ea44f3a0e61cb01989f51864b99a data/forge/tags/items/storage_blocks/rm
 efadf7b0776ca715ace7e794fba6e61cdbb58f6d data/forge/tags/items/tools/crafting_hammer.json
 c919b592efcbaa63fc84662cbbfb65c3b954c7e9 data/forge/tags/items/tools/cutter.json
 30a21fa9684ef9d2d4c11510e0b50148f0761ed1 data/forge/tags/items/tools/knife.json
+30a21fa9684ef9d2d4c11510e0b50148f0761ed1 data/forge/tags/items/tools/knives.json
 ab4546e3f5ebedde48d5254d99be56d1b5a4d5ba data/forge/tags/items/tools/mortar.json
 5b0a7ef86c59000017faaa94656f400981b3c09a data/forge/tags/items/tools/saw.json
 6d9e720b16c6c30c99a08d630d2562e12420b6aa data/forge/tags/items/tree_sap.json
@@ -750,6 +751,7 @@ c6a55b8eebdc156e93bb39010eddb80831492fd4 data/minecraft/advancements/recipes/pa_
 d492fc89aac95badd045e0475270a30b8ee99ab5 data/minecraft/advancements/recipes/pa_resources/probefrompotatobattery.json
 45c5a8cb3178f9050fbc6be4980ba394bae6902c data/minecraft/advancements/recipes/pa_resources/quartz_dust_from_quartz.json
 e3450096a9017019d99367be38c70aaff78ba361 data/minecraft/advancements/recipes/pa_resources/steel_dust_from_iron.json
+669e45d08d2e81877c78e584f59ab48eee21efb2 data/minecraft/advancements/recipes/pa_resources/zinc_battery.json
 4254f0bdeba1dee6140cfc7ba21fec7801efd092 data/minecraft/recipes/acacia_planks_pa_saw.json
 6f3a7020a9c7254929d9add6000a61770d86383b data/minecraft/recipes/battery_from_poisonous_potato.json
 830b85f0fa89e237671f2d2485b3ec5588b3c8f7 data/minecraft/recipes/birch_planks_pa_saw.json
@@ -785,6 +787,7 @@ dfc71c1aeba106df8c5cf05b869795a82c6a8832 data/minecraft/recipes/spruce_planks_pa
 9fa1031dec11047ae4f5010d81c5772dc148209a data/minecraft/recipes/steel_dust_from_iron.json
 14fdd97e0fe792f657c4b0705d7e5222ef3aa929 data/minecraft/recipes/stick_pa_saw.json
 9ced00609bcef8b12a0290f39afd16f183bf58d0 data/minecraft/recipes/warped_planks_pa_saw.json
+b3645370c0b86a09d49e22c81a1b8c7f2faa07eb data/minecraft/recipes/zinc_battery.json
 779feb74c338d109f57258be1110efcb17bbb363 data/minecraft/tags/items/beacon_payment_items.json
 01c25001455683a3924a85173da968e386d676be data/minecraft/tags/items/music_discs.json
 d2c245598e26c8add0afe07c9e4f9d091bc9cddd data/projectazure/advancements/recipes/misc/gold_dust_blasting.json

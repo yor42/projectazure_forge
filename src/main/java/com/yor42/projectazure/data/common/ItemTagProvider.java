@@ -4,9 +4,13 @@ import com.yor42.projectazure.data.ModTags;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterItems;
+import mekanism.common.registries.MekanismItems;
+import net.minecraft.block.Block;
 import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ItemTagsProvider;
+import net.minecraft.item.Item;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -85,7 +89,7 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.NUGGET_INCANDESCENT_ALLOY).add(RegisterItems.NUGGET_INCANDESCENT_ALLOY.get());
 
         this.tag(ModTags.Items.PLATE_ALUMINIUM).add(RegisterItems.PLATE_ALUMINIUM.get());
-        this.tag(ModTags.Items.PLATE_PLASTIC).add(RegisterItems.PLATE_POLYMER.get());
+        this.tag(ModTags.Items.PLATE_PLASTIC).add(RegisterItems.PLATE_POLYMER.get()).addOptional(MekanismItems.HDPE_SHEET.getRegistryName());
         this.tag(ModTags.Items.PLATE_COPPER).add(RegisterItems.PLATE_COPPER.get());
         this.tag(ModTags.Items.PLATE_TIN).add(RegisterItems.PLATE_TIN.get());
         this.tag(ModTags.Items.PLATE_BRONZE).add(RegisterItems.PLATE_BRONZE.get());
@@ -168,10 +172,18 @@ public class ItemTagProvider extends ItemTagsProvider {
         this.tag(ModTags.Items.HAMMER).add(RegisterItems.HAMMER_STONE.get()).add(RegisterItems.HAMMER_COPPER.get()).add(RegisterItems.HAMMER_TIN.get()).add(RegisterItems.HAMMER_BRONZE.get()).add(RegisterItems.HAMMER_IRON.get()).add(RegisterItems.HAMMER_GOLD.get()).add(RegisterItems.HAMMER_STEEL.get()).add(RegisterItems.HAMMER_DIAMOND.get()).add(RegisterItems.HAMMER_RMA7012.get()).add(RegisterItems.HAMMER_RMA7024.get()).add(RegisterItems.HAMMER_D32.get()).add(RegisterItems.HAMMER_NETHERITE.get()).add(RegisterItems.SLEDGEHAMMER.get());
         this.tag(ModTags.Items.SAW).add(RegisterItems.SAW_STONE.get()).add(RegisterItems.SAW_COPPER.get()).add(RegisterItems.SAW_TIN.get()).add(RegisterItems.SAW_BRONZE.get()).add(RegisterItems.SAW_IRON.get()).add(RegisterItems.SAW_GOLD.get()).add(RegisterItems.SAW_STEEL.get()).add(RegisterItems.SAW_DIAMOND.get()).add(RegisterItems.SAW_NETHERITE.get()).add(RegisterItems.SAW_RMA7012.get()).add(RegisterItems.SAW_RMA7024.get()).add(RegisterItems.SAW_D32.get());
         this.tag(ModTags.Items.KNIFE).add(RegisterItems.KITCHEN_KNIFE.get(), RegisterItems.TACTICAL_KNIFE.get());
+        this.copyItems(ModTags.Items.KNIFE, ModTags.Items.KNIVES);
         this.tag(ItemTags.BEACON_PAYMENT_ITEMS).add(RegisterItems.INGOT_D32.get(), RegisterItems.INGOT_COPPER.get(), RegisterItems.INGOT_TIN.get(), RegisterItems.INGOT_STEEL.get(), RegisterItems.INGOT_MANGANESE.get(),
                 RegisterItems.INGOT_BRONZE.get(), RegisterItems.INGOT_BRASS.get(), RegisterItems.INGOT_ZINC.get(), RegisterItems.INGOT_LEAD.get(), RegisterItems.INGOT_ALUMINIUM.get(),
                 RegisterItems.INGOT_RMA7012.get(),RegisterItems.INGOT_RMA7024.get(), RegisterItems.INGOT_INCANDESCENT_ALLOY.get(), RegisterItems.PYROXENE.get());
 
         this.tag(ItemTags.MUSIC_DISCS).add(RegisterItems.DISC_CC5.get(), RegisterItems.DISC_DRAGONHEARTED.get(), RegisterItems.DISC_FRIDAYNIGHT.get(), RegisterItems.DISC_REVENGE.get(), RegisterItems.DISC_FALLEN_KINGDOM.get(), RegisterItems.DISC_TAKE_BACK_THE_NIGHT.get(), RegisterItems.DISC_FIND_THE_PIECES.get());
     }
+
+    protected void copyItems(ITag.INamedTag<Item> from, ITag.INamedTag<Item> to) {
+        ITag.Builder tgt = this.getOrCreateRawBuilder(to);
+        ITag.Builder original = this.getOrCreateRawBuilder(from);
+        original.getEntries().forEach(tgt::add);
+    }
+
 }

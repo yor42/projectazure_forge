@@ -191,6 +191,7 @@ public class ModTags {
         public static final ITag.INamedTag<Item> MORTAR = forge("tools/mortar");
         public static final ITag.INamedTag<Item> CUTTER = forge("tools/cutter");
         public static final ITag.INamedTag<Item> KNIFE = forge("tools/knife");
+        public static final ITag.INamedTag<Item> KNIVES = forge("tools/knives");
         public static final ITag.INamedTag<Item> HAMMER = forge("tools/crafting_hammer");
         public static final ITag.INamedTag<Item> SAW = forge("tools/saw");
 

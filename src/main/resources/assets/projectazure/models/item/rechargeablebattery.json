@@ -1,0 +1,62 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "projectazure:item/battery_0"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "projectazure:charge": 0.1
+            },
+            "model": "projectazure:item/battery_1"
+        },
+        {
+            "predicate": {
+                "projectazure:charge": 0.2
+            },
+            "model": "projectazure:item/battery_2"
+        },
+        {
+            "predicate": {
+                "projectazure:charge": 0.3
+            },
+            "model": "projectazure:item/battery_3"
+        },
+        {
+            "predicate": {
+                "projectazure:charge": 0.4
+            },
+            "model": "projectazure:item/battery_4"
+        },
+        {
+            "predicate": {
+                "projectazure:charge": 0.5
+            },
+            "model": "projectazure:item/battery_5"
+        },
+        {
+            "predicate": {
+                "projectazure:charge": 0.6
+            },
+            "model": "projectazure:item/battery_6"
+        },
+        {
+            "predicate": {
+                "projectazure:charge": 0.7
+            },
+            "model": "projectazure:item/battery_7"
+        },
+        {
+            "predicate": {
+                "projectazure:charge": 0.8
+            },
+            "model": "projectazure:item/battery_8"
+        },
+        {
+            "predicate": {
+                "projectazure:charge": 0.9
+            },
+            "model": "projectazure:item/battery_9"
+        }
+    ]
+}

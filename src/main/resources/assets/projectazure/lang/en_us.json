@@ -49,8 +49,9 @@
   "item.projectazure.silicone_wafer": "Silicone Wafer",
   "item.projectazure.silicone": "Silicone",
 
-  "item.projectazure.primitive_originium_battery": "Primitive Originium Battery",
+  "item.projectazure.primitive_originium_battery": "Originium Battery",
   "item.projectazure.potato_battery": "Potato Battery",
+  "item.projectazure.rechargeablebattery": "Rechargeable Battery",
   "item.projectazure.copper_iron_probe": "Copper/Iron Probes",
 
   "item.projectazure.mechanical_parts": "Mechanical Parts",

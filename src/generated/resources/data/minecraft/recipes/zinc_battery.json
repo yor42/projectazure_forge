@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RIR",
+    "PNP",
+    "PZP"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "P": {
+      "tag": "forge:plates/aluminium"
+    },
+    "N": {
+      "tag": "forge:ingots/copper"
+    },
+    "Z": {
+      "tag": "forge:ingots/zinc"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "result": {
+    "item": "projectazure:rechargeablebattery"
+  }
+}

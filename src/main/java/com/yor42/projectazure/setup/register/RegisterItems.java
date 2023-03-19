@@ -141,10 +141,14 @@ public class RegisterItems {
 
 
     public static final RegistryObject<Item> PRIMITIVE_ORIGINIUM_BATTERY = register("primitive_originium_battery", () -> new ItemBattery(new Item.Properties()
-            .tab(PA_RESOURCES), 1600, 200, 200));
+            .tab(PA_RESOURCES).stacksTo(8), 2200, 200, 200));
 
     public static final RegistryObject<Item> POTATO_BATTERY = register("potato_battery", () -> new ItemBattery(new Item.Properties()
-            .tab(PA_RESOURCES), 400, 0, 80));
+            .tab(PA_RESOURCES).stacksTo(4), 1000, 0, 80));
+
+    public static final RegistryObject<Item> RECHARGEABLE_BATTERY = register_withoutTexture("rechargeablebattery", () -> new ItemBattery(new Item.Properties()
+            .tab(PA_RESOURCES).stacksTo(16), 25000, 800, 800));
+
 
     public static final RegistryObject<Item> COPPER_IRON_PROBE = register("copper_iron_probe", () -> new Item(new Item.Properties()
             .tab(PA_RESOURCES)));

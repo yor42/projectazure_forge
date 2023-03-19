@@ -14,8 +14,6 @@ import com.yor42.projectazure.setup.register.RegisterBlocks;
 import com.yor42.projectazure.setup.register.RegisterFluids;
 import com.yor42.projectazure.setup.register.RegisterItems;
 import com.yor42.projectazure.setup.register.registerRecipes;
-import mekanism.api.datagen.recipe.MekanismRecipeBuilder;
-import mekanism.api.recipes.MekanismRecipe;
 import net.minecraft.advancements.criterion.InventoryChangeTrigger;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -372,6 +370,18 @@ public class RecipeProvider extends net.minecraft.data.RecipeProvider {
                 .pattern("OC")
                 .unlockedBy("has_material", has(Items.POISONOUS_POTATO))
                 .save(consumer, "battery_from_poisonous_potato");
+
+        ShapedRecipeBuilder.shaped(RegisterItems.RECHARGEABLE_BATTERY.get(),1)
+                .define('I', Tags.Items.INGOTS_IRON)
+                .define('P', ModTags.Items.PLATE_ALUMINIUM)
+                .define('N', ModTags.Items.INGOT_COPPER)
+                .define('Z', ModTags.Items.INGOT_ZINC)
+                .define('R', Tags.Items.DUSTS_REDSTONE)
+                .pattern("RIR")
+                .pattern("PNP")
+                .pattern("PZP")
+                .unlockedBy("has_material", has(ModTags.Items.INGOT_ZINC))
+                .save(consumer, "zinc_battery");
 
         ShapedRecipeBuilder.shaped(RegisterItems.HAMMER_STONE.get())
                 .define('I', Tags.Items.COBBLESTONE)

@@ -41,7 +41,7 @@
   "item.projectazure.syringe.water": "물이 채워진 자동 주사기",
   "item.projectazure.syringe.mundane": "평범한 물약 자동 주사기",
   "item.projectazure.syringe.thick": "걸쭉한 물약 자동 주사기",
-  "item.projectazure.syringe.awkward": "이상한 물역 자동 주사기",
+  "item.projectazure.syringe.awkward": "이상한 물약 자동 주사기",
   "item.projectazure.syringe": "자동 주사기",
   "item.projectazure.syringe.withpotion": "%s 물약 자동 주사기",
 
@@ -51,6 +51,7 @@
 
   "item.projectazure.primitive_originium_battery": "순오리지늄 배터리",
   "item.projectazure.potato_battery": "감자 배터리",
+  "item.projectazure.rechargeablebattery": "충전식 배터리",
   "item.projectazure.copper_iron_probe": "구리/철 막대기",
 
   "item.projectazure.mechanical_parts": "기계 부품",
@@ -446,8 +447,8 @@
   "block.projectazure.riftway": "차원 전송기",
   "block.projectazure.advanced_alloy_smelter": "고급 합금로",
 
-  "material.projectazure.d32": "D32 Steel",
-  "material.projectazure.orirock": "Orirock",
+  "material.projectazure.d32": "D32강",
+  "material.projectazure.orirock": "원임",
   "material.projectazure.rma7012": "RMA70-12",
 
   "originium_generator.name": "오리지늄 반응로",
