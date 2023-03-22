@@ -34,6 +34,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -321,6 +322,16 @@ public class EntityCrownSlayer extends AbstractSwordUserBase {
             }
         }
         return super.interactAt(player, vec, hand);
+    }
+
+    @Override
+    public void beingpatted(@Nullable PlayerEntity player) {
+        if(player != null && player.isCrouching()){
+            this.setWearingHood(!this.isWearingHood());
+        }
+        else {
+            super.beingpatted(player);
+        }
     }
 
     public static AttributeModifierMap.MutableAttribute MutableAttribute()

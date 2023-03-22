@@ -81,9 +81,11 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.DebugPacketSender;
 import net.minecraft.network.IPacket;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
@@ -404,6 +406,20 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public int AttackCount = 0;
     public int StartedSpellAttackTimeStamp = -1;
 
+    public static final IDataSerializer<CompanionPose> POSESERIALIZER = new IDataSerializer<CompanionPose>() {
+        public void write(PacketBuffer pBuffer, CompanionPose pValue) {
+            pBuffer.writeEnum(pValue);
+        }
+
+        public CompanionPose read(PacketBuffer pBuffer) {
+            return pBuffer.readEnum(CompanionPose.class);
+        }
+
+        public CompanionPose copy(CompanionPose pValue) {
+            return pValue;
+        }
+    };
+
     //I'd really like to get off from datamanager's wild ride.
     protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> NONVANILLAMELEEATTACKDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
@@ -450,6 +466,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> RELOAD_TIMER_MAINHAND = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Optional<UUID>> TeamUUID = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_UUID);
+
+    protected static final DataParameter<CompanionPose> POSE = EntityDataManager.defineId(AbstractEntityCompanion.class, POSESERIALIZER);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
             HOME, RegisterAI.RESTING.get(), ATTACK_TARGET, ATTACK_COOLING_DOWN, RegisterAI.VISIBLE_ALLYS_COUNT.get(),
@@ -845,6 +863,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.foodStats.write(compound);
         compound.putInt("attackdelay", this.getEntityData().get(NONVANILLAMELEEATTACKDELAY));
         compound.putInt("SwapIndexMainHand", this.ItemSwapIndexMainHand);
+        compound.putString("pose", this.getEntityData().get(POSE).name());
         compound.putInt("SwapIndexOffHand", this.ItemSwapIndexOffhand);
     }
 
@@ -933,6 +952,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
         this.getEntityData().set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.getEntityData().set(UPGRADELEVEL, compound.getInt("upgradelevel"));
+        this.getEntityData().set(POSE, CompanionPose.valueOf(compound.getString("pose")));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
         this.getInventory().deserializeNBT(compound.getCompound("inventory"));
@@ -1081,6 +1101,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.hurtTime = 0;
         this.deathTime = 0;
     }
+
+
 
     public static Optional<Vector3d> findRespawnPositionAndUseSpawnBlock(ServerWorld p_242374_0_, BlockPos p_242374_1_, float p_242374_2_, boolean p_242374_3_, boolean p_242374_4_) {
         BlockState blockstate = p_242374_0_.getBlockState(p_242374_1_);
@@ -1857,6 +1879,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().define(SKILL_ITEM_1, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_2, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_3, ItemStack.EMPTY);
+        this.getEntityData().define(POSE, CompanionPose.NORMAL);
     }
 
     public boolean isUsingWorldSkill() {
@@ -2280,6 +2303,15 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             value = Math.min(value, this.maxSkillPoint());
         }
         this.setSkillPoints(Math.max(0, value));
+    }
+
+    private boolean isLookingAtPart(PlayerEntity pPlayer, float yval) {
+        Vector3d NormalizedPlayerView = pPlayer.getViewVector(1.0F).normalize();
+        Vector3d PosDelta = new Vector3d(this.getX() - pPlayer.getX(), yval - pPlayer.getEyeY(), this.getZ() - pPlayer.getZ());
+        double DeltaLength = PosDelta.length();
+        PosDelta = PosDelta.normalize();
+        double d1 = NormalizedPlayerView.dot(PosDelta);
+        return d1 > 1.0D - 0.025D / DeltaLength && pPlayer.canSee(this);
     }
 
     public void addSkillPoints() {
@@ -3065,16 +3097,6 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                     interactionDirection = BlockUtil.RelativeDirection.LEFT;
                 }
 
-                Vector3d PlayerLook = player.getViewVector(1.0F).normalize();
-                float eyeHeight = (float) this.getEyeY();
-
-
-                Vector3d EyeDelta = new Vector3d(this.getX() - player.getX(), eyeHeight - player.getEyeY(), this.getZ() - player.getZ());
-                double EyeDeltaLength = EyeDelta.length();
-                EyeDelta = EyeDelta.normalize();
-                double EyeCheckFinal = PlayerLook.dot(EyeDelta);
-
-
                 if(player.getMainHandItem().isEmpty() && this.distanceTo(player)<=2) {
                     if (this.isSleeping()) {
                         if (this.forceWakeupCounter > 4) {
@@ -3084,19 +3106,19 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
                             this.forcewakeupExpireTimer = 20;
                         }
                         return ActionResultType.SUCCESS;
-                    } else if (EyeCheckFinal > 1.0D - 0.02D / EyeDeltaLength && this.getEntityData().get(ECCI_ANIMATION_TIME)==0) {
+                    } else if (this.isLookingAtPart(player, (float) this.getEyeY()) && this.getEntityData().get(ECCI_ANIMATION_TIME)==0 && interactionDirection==FRONT) {
                         if (this.getCommandSenderWorld().isClientSide()) {
-                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.PAT, true));
+                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.PAT, true, player.getId()));
                         }
                         return ActionResultType.SUCCESS;
                     }
                     else if (this.CheckVerticalInteraction(player, 0.65F) && interactionDirection==FRONT) {
                         if (this.getCommandSenderWorld().isClientSide()) {
-                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.ECCI, true));
+                            Main.NETWORK.sendToServer(new EntityInteractionPacket(this.getId(), EntityInteractionPacket.EntityBehaviorType.ECCI, true, player.getId()));
                         }
                         return ActionResultType.SUCCESS;
                     }
-                    else if (this.CheckVerticalInteraction(player, 0.2F)) {
+                    else if (this.CheckVerticalInteraction(player, 0.1F)) {
                         if(player.isCrouching() && player.getPassengers().isEmpty() && !this.isOrderedToSit()) {
                             if(!this.getCommandSenderWorld().isClientSide()) {
                                 this.setEntityOnShoulder((ServerPlayerEntity) player);
@@ -3436,22 +3458,10 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
 
     @Override
     public boolean canBeLeashed(@Nonnull PlayerEntity player) {
-        if(this.getOwner() == player){
-            player.displayClientMessage(new TranslationTextComponent("message.easteregg.leash"), true);
-        }
         return false;
     }
 
-    @Override
-    protected void removeAfterChangingDimensions() {
-        if(this.getOwner() != null && this.getOwner() instanceof PlayerEntity){
-            ProjectAzurePlayerCapability cap = ProjectAzurePlayerCapability.getCapability((PlayerEntity) this.getOwner());
-            cap.removeCompanion(this);
-        }
-        super.removeAfterChangingDimensions();
-    }
-
-    public void beingpatted(){
+    public void beingpatted(@Nullable PlayerEntity playerEntity){
         if(this.getEntityData().get(MAXPATEFFECTCOUNT) == 0){
             this.getEntityData().set(MAXPATEFFECTCOUNT, 5+this.random.nextInt(5));
             if(this.getPatSoundEvent() != null){
@@ -3716,4 +3726,5 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             return null;
         }
     }
+
 }

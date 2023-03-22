@@ -25,20 +25,6 @@ public class ForgeBusEventHandlerClient {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void OnplayerRightClicked(PlayerInteractEvent.RightClickEmpty event){
-        PlayerEntity player = event.getPlayer();
-        List<Entity> passengers = player.getPassengers();
-        if(!passengers.isEmpty() && player.isShiftKeyDown()){
-            for(Entity entity:passengers){
-                if(entity instanceof AbstractEntityCompanion){
-                    Main.NETWORK.sendToServer(new EntityInteractionPacket(entity.getId(), EntityInteractionPacket.EntityBehaviorType.STOP_RIDING, true));
-                }
-            }
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
     public static void onGameOverlayRender(RenderGameOverlayEvent.Pre event){
 
         if(CompatibilityUtils.isCurioLoaded() && event.getType() == RenderGameOverlayEvent.ElementType.HELMET){
