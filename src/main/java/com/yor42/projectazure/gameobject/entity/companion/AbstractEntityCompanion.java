@@ -405,7 +405,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     public int StartedMeleeAttackTimeStamp = -1;
     public int AttackCount = 0;
     public int StartedSpellAttackTimeStamp = -1;
-
+    /*
     public static final IDataSerializer<CompanionPose> POSESERIALIZER = new IDataSerializer<CompanionPose>() {
         public void write(PacketBuffer pBuffer, CompanionPose pValue) {
             pBuffer.writeEnum(pValue);
@@ -419,6 +419,8 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
             return pValue;
         }
     };
+
+     */
 
     //I'd really like to get off from datamanager's wild ride.
     protected static final DataParameter<Integer> SPELLDELAY = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
@@ -467,7 +469,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
     protected static final DataParameter<Integer> FOODLEVEL = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.INT);
     protected static final DataParameter<Optional<UUID>> TeamUUID = EntityDataManager.defineId(AbstractEntityCompanion.class, DataSerializers.OPTIONAL_UUID);
 
-    protected static final DataParameter<CompanionPose> POSE = EntityDataManager.defineId(AbstractEntityCompanion.class, POSESERIALIZER);
+    //protected static final DataParameter<CompanionPose> POSE = EntityDataManager.defineId(AbstractEntityCompanion.class, POSESERIALIZER);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
             HOME, RegisterAI.RESTING.get(), ATTACK_TARGET, ATTACK_COOLING_DOWN, RegisterAI.VISIBLE_ALLYS_COUNT.get(),
@@ -863,7 +865,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.foodStats.write(compound);
         compound.putInt("attackdelay", this.getEntityData().get(NONVANILLAMELEEATTACKDELAY));
         compound.putInt("SwapIndexMainHand", this.ItemSwapIndexMainHand);
-        compound.putString("pose", this.getEntityData().get(POSE).name());
+        //compound.putString("pose", this.getEntityData().get(POSE).name());
         compound.putInt("SwapIndexOffHand", this.ItemSwapIndexOffhand);
     }
 
@@ -952,7 +954,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().set(INJURYCURETIMER, compound.getInt("injury_curetimer"));
         this.getEntityData().set(LIMITBREAKLEVEL, compound.getInt("limitbreaklv"));
         this.getEntityData().set(UPGRADELEVEL, compound.getInt("upgradelevel"));
-        this.getEntityData().set(POSE, CompanionPose.valueOf(compound.getString("pose")));
+        //this.getEntityData().set(POSE, CompanionPose.valueOf(compound.getString("pose")));
         this.shieldCoolDown = compound.getInt("shieldcooldown");
         this.isMovingtoRecruitStation = compound.getBoolean("isMovingtoRecruitStation");
         this.getInventory().deserializeNBT(compound.getCompound("inventory"));
@@ -1879,7 +1881,7 @@ public abstract class AbstractEntityCompanion extends TameableEntity implements 
         this.getEntityData().define(SKILL_ITEM_1, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_2, ItemStack.EMPTY);
         this.getEntityData().define(SKILL_ITEM_3, ItemStack.EMPTY);
-        this.getEntityData().define(POSE, CompanionPose.NORMAL);
+        //this.getEntityData().define(POSE, CompanionPose.NORMAL);
     }
 
     public boolean isUsingWorldSkill() {
