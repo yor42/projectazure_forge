@@ -1,7 +1,7 @@
 package com.yor42.projectazure.intermod.tconstruct.modifiers;
 
 import com.yor42.projectazure.libs.utils.MathUtil;
-import javafx.scene.paint.Color;
+//import javafx.scene.paint.Color;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

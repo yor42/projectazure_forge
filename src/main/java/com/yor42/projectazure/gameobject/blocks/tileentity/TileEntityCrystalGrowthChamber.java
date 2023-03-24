@@ -210,7 +210,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
             ItemStack SeedStack = this.inventory.getStackInSlot(0);
             if(!this.SolutionTank.isEmpty()) {
                 if (!SeedStack.isEmpty()) {
-                    IRecipe<? extends IInventory> recipe = this.level.getRecipeManager().getRecipeFor((IRecipeType<? extends CrystalizingRecipe>) this.recipeType, this, this.level).orElse(null);
+                    IRecipe<? extends IInventory> recipe = this.level.getRecipeManager().getRecipeFor((IRecipeType<CrystalizingRecipe>) this.recipeType, this, this.level).orElse(null);
                     if (this.isProcessable(recipe)) {
                         if (this.currentRecipe == null) {
                             this.currentRecipe = recipe;
@@ -272,7 +272,7 @@ public class TileEntityCrystalGrowthChamber extends LockableTileEntity implement
             return 1800;
         }
 
-        return this.getLevel().getRecipeManager().getRecipeFor(this.recipeType, this, this.getLevel()).map(CrystalizingRecipe::getGrowthTime).orElse(1800);
+        return this.getLevel().getRecipeManager().getRecipeFor((IRecipeType<CrystalizingRecipe>)this.recipeType, this, this.getLevel()).map(CrystalizingRecipe::getGrowthTime).orElse(1800);
     }
 
     private boolean isProcessable(IRecipe<? extends IInventory> recipe) {
