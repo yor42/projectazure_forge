@@ -25,9 +25,8 @@ import java.util.Optional;
 
 import static com.yor42.projectazure.setup.register.RegisterAI.HEAL_POTION_INDEX;
 import static com.yor42.projectazure.setup.register.RegisterAI.REGENERATION_POTION_INDEX;
-import static net.minecraft.util.Hand.OFF_HAND;
 
-public clasnet.minecraft.world.InteractionHandends Behavior<AbstractEntityCompanion> {
+public class CompanionHealTask extends Behavior<AbstractEntityCompanion> {
     private int cooldown = 0;
     @Nullable
     private InteractionHand PotionHand = null;
@@ -94,11 +93,11 @@ public clasnet.minecraft.world.InteractionHandends Behavior<AbstractEntityCompan
             double d0 = entity.getX() + vector3d.x - entity.getX();
             double d1 = entity.getEyeY() - (double) 1.1F - entity.getY();
             double d2 = entity.getZ() + vector3d.z - entity.getZ();
-            float f = Mth.sqrt(d0 * d0 + d2 * d2);
+            float f = Mth.sqrt((float) (d0 * d0 + d2 * d2));
 
             ThrownPotion potionentity = new ThrownPotion(entity.getCommandSenderWorld(), entity);
             potionentity.setItem(PotionUtils.setPotion(potionStack, potion));
-            potionentity.xRot -= -20.0F;
+            potionentity.setXRot(potionentity.getXRot() - -20.0F);
             potionentity.shoot(d0, d1 + (double) (f * 0.2F), d2, 0.75F, 8.0F);
             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.WITCH_THROW, entity.getSoundSource(), 1.0F, 0.8F + entity.getRandom().nextFloat() * 0.4F);
             entity.swing(this.PotionHand, true);
@@ -111,7 +110,7 @@ public clasnet.minecraft.world.InteractionHandends Behavior<AbstractEntityCompan
         entity.stopUsingItem();
         if(entity.getItemSwapIndexOffHand()>-1) {
             ItemStack buffer = entity.getOffhandItem();
-            entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
+            entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(entity.getItemSwapIndexOffHand()));
             entity.getInventory().setStackInSlot(entity.getItemSwapIndexOffHand(), buffer);
             entity.setItemSwapIndexOffHand(-1);
         }
@@ -119,7 +118,7 @@ public clasnet.minecraft.world.InteractionHandends Behavior<AbstractEntityCompan
 
     private void ChangeItem(int index, AbstractEntityCompanion entity){
         ItemStack Buffer = entity.getOffhandItem();
-        entity.setItemInHand(OFF_HAND, entity.getInventory().getStackInSlot(index));
+        entity.setItemInHand(InteractionHand.OFF_HAND, entity.getInventory().getStackInSlot(index));
         entity.getInventory().setStackInSlot(index, Buffer);
         entity.setItemSwapIndexOffHand(index);
     }

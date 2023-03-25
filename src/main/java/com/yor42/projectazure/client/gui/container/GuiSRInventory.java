@@ -33,7 +33,7 @@ public class GuiSRInventory extends AbstractGUIScreen<ContainerSRInventory> {
         matrixStack.pushPose();
         float renderscale = 0.75F;
         matrixStack.scale(renderscale,renderscale,renderscale);
-        this.font.draw(matrixStack, new TextComponent(String.valueOf(this.host.getLevel())),6/renderscale, 18.5F/renderscale, 0xfeffff);
+        this.font.draw(matrixStack, new TextComponent(String.valueOf(this.host.getEntityLevel())),6/renderscale, 18.5F/renderscale, 0xfeffff);
         matrixStack.popPose();
 
         matrixStack.pushPose();

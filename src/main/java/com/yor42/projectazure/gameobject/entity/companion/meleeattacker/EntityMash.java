@@ -37,7 +37,7 @@ import static com.yor42.projectazure.libs.enums.SERVANT_CLASSES.SHIELDER;
 import static com.yor42.projectazure.setup.register.RegisterItems.GAE_BOLG;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public clasnet.minecraft.world.InteractionHandstractEntityCompanion implements IMeleeAttacker, IFGOServant {
+public class EntityMash extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
     public EntityMash(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }

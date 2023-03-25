@@ -8,9 +8,9 @@ import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nonnull;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 
-public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypetyCompanion> {
+public class CompanionUseSkillTask extends Behavior<AbstractEntityCompanion> {
 
     private int SkillTimer=0;
 

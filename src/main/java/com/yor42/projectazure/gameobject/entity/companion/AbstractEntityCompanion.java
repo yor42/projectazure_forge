@@ -2,6 +2,7 @@ package com.yor42.projectazure.gameobject.entity.companion;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.MethodsReturnNonnullByDefault;
 import com.mojang.serialization.Dynamic;
 import com.tac.guns.Config;
 import com.tac.guns.client.render.pose.TwoHandedPose;
@@ -50,12 +51,10 @@ import com.yor42.projectazure.network.packets.EntityInteractionPacket;
 import com.yor42.projectazure.network.packets.spawnParticlePacket;
 import com.yor42.projectazure.setup.register.RegisterAI;
 import com.yor42.projectazure.setup.register.RegisterItems;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.*;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -67,25 +66,19 @@ import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.level.pathfinder.Path;
@@ -100,7 +93,6 @@ import net.minecraft.util.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.phys.Vec3;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Registry;
@@ -116,11 +108,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -146,13 +138,13 @@ import static com.yor42.projectazure.libs.utils.BlockUtil.RelativeDirection.FRON
 import static com.yor42.projectazure.libs.utils.MathUtil.getRand;
 import static com.yor42.projectazure.setup.register.RegisterAI.FOOD_PANTRY;
 import static com.yor42.projectazure.setup.register.RegisterAI.KILLED_ENTITY;
-import static net.minecraft.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
-import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
-import staticnet.minecraft.world.entity.ai.attributes.AttributesoduleType.*;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.OFF_HAND;
+import static net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE;
+import static net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.*;
 import static net.minecraft.world.entity.schedule.Activity.*;
-import static net.minecraft.util.Hand.MAIN_HAND;
-import staticnet.minecraft.world.InteractionHandd.OFF_HAND;
-import static net.minecraftforge.fml.network.PacketDistributor.TRACKING_ENTITY;
+import static net.minecraftforge.network.PacketDistributor.TRACKING_ENTITY;
 
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
@@ -162,12 +154,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgableMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.CrossbowAttackMob;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.food.FoodProperties;
@@ -197,8 +183,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class AbstractEntityCompanion extends TamableAnimal implements CrossbowAttackMob, RangedAttackMob, IAnimatable, IAnimationTickable {
     private static final AttributeModifier USE_ITEM_SPEED_PENALTY = new AttributeModifier(UUID.fromString("5CD17E52-A79A-43D3-A529-90FDE04B181E"), "Use item speed penalty", -0.15D, AttributeModifier.Operation.ADDITION);
-    private final AttributeModifier LevelHealthModifier = new AttributeModifier(UUID.randomUUID(), "Level HP Bonus", this.getLevel()*4, AttributeModifier.Operation.ADDITION);
-    private final AttributeModifier LevelAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Level Attack Damage Bonus", this.getLevel()/2.5F, AttributeModifier.Operation.ADDITION);
+    private final AttributeModifier LevelHealthModifier = new AttributeModifier(UUID.randomUUID(), "Level HP Bonus", this.getEntityLevel()*4, AttributeModifier.Operation.ADDITION);
+    private final AttributeModifier LevelAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Level Attack Damage Bonus", this.getEntityLevel()/2.5F, AttributeModifier.Operation.ADDITION);
 
     private final AttributeModifier LimitbreakHealthModifier = new AttributeModifier(UUID.randomUUID(), "Limitbreak HP Bonus", this.getLimitBreakLv()*10, AttributeModifier.Operation.ADDITION);
     private final AttributeModifier LimitbreakAttackDamageModifier = new AttributeModifier(UUID.randomUUID(), "Limitbreak Attack Damage Bonus", this.getLimitBreakLv()*5, AttributeModifier.Operation.ADDITION);
@@ -512,13 +498,20 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     //protected static final DataParameter<CompanionPose> POSE = EntityDataManager.defineId(AbstractEntityCompanion.class, POSESERIALIZER);
 
+
+    @Nullable
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel p_146743_, AgeableMob p_146744_) {
+        return null;
+    }
+
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
-            HOME, RegisterAI.RESTING.get(), ATTACK_TARGET, ATTACK_COOLING_DOWN, RegisterAI.VISIBLE_ALLYS_COUNT.get(),
+            HOME, RegisterAI.RESTING.get(), MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, RegisterAI.VISIBLE_ALLYS_COUNT.get(),
             RegisterAI.VISIBLE_HOSTILE_COUNT.get(), RegisterAI.VISIBLE_HOSTILES.get(), RegisterAI.NEARBY_HOSTILES.get(),
-            RegisterAI.WAIT_POINT.get(), RegisterAI.HEAL_TARGET.get(), RegisterAI.MEMORY_SITTING.get(), MemoryModuleType.LIVING_ENTITIES,
-            MemoryModuleType.VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, NEAREST_HOSTILE,
+            RegisterAI.WAIT_POINT.get(), RegisterAI.HEAL_TARGET.get(), RegisterAI.MEMORY_SITTING.get(), MemoryModuleType.NEAREST_LIVING_ENTITIES,
+            MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_PLAYERS, NEAREST_HOSTILE,
             MemoryModuleType.NEAREST_VISIBLE_PLAYER, RIDE_TARGET, RegisterAI.WAIT_POINT.get(), RegisterAI.NEARBY_ALLYS.get(),
-            RegisterAI.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, FOOD_PANTRY.get(),
+            RegisterAI.VISIBLE_ALLYS.get(), MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER, FOOD_PANTRY.get(),
             RegisterAI.FOOD_INDEX.get(), RegisterAI.HEAL_POTION_INDEX.get(), RegisterAI.REGENERATION_POTION_INDEX.get(), RegisterAI.TOTEM_INDEX.get(),
             RegisterAI.TORCH_INDEX.get(), RegisterAI.FIRE_EXTINGIGH_ITEM.get(), RegisterAI.FALL_BREAK_ITEM_INDEX.get(),
             MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET,
@@ -571,8 +564,8 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             return false;
         } else {
             if (p_184205_1_ instanceof Boat) {
-                this.yRotO = p_184205_1_.yRot;
-                this.yRot = p_184205_1_.yRot;
+                this.yRotO = p_184205_1_.getYRot();
+                this.setYRot(p_184205_1_.getYRot());
             }
 
             return true;
@@ -689,7 +682,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         return this.getEntityData().get(OATHED);
     }
 
-    public int getLevel() {
+    public int getEntityLevel() {
         return this.getEntityData().get(LEVEL);
     }
 
@@ -701,7 +694,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         if(deltaLevel>0) {
             this.onLevelup();
         }
-        this.setLevel(Math.min(this.getLevel() + deltaLevel, this.getMaxLevel()));
+        this.setLevel(Math.min(this.getEntityLevel() + deltaLevel, this.getMaxLevel()));
     }
 
     public void onLevelup(){
@@ -1009,12 +1002,12 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
         AttributeInstance modifiableattributeinstance = this.getAttribute(MAX_HEALTH);
         if(modifiableattributeinstance != null) {
-            modifiableattributeinstance.setBaseValue(this.getAttributeValue(MAX_HEALTH) + this.getLevel());
+            modifiableattributeinstance.setBaseValue(this.getAttributeValue(MAX_HEALTH) + this.getEntityLevel());
         }
     }
 
     public float getAttackDamageMainHand(){
-        AttributeInstance instance = this.getAttribute(Attributes.ATTACK_DAMAGE);
+        AttributeInstance instance = this.getAttribute(ATTACK_DAMAGE);
         return instance == null? 0: (float) instance.getValue();
     }
 
@@ -1034,7 +1027,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
             }
         }
         else {
-            item.getAttributeModifiers(EquipmentSlot.MAINHAND, stack).get(Attributes.ATTACK_DAMAGE).stream().findFirst().ifPresent((modifier)->{
+            item.getAttributeModifiers(EquipmentSlot.MAINHAND, stack).get(ATTACK_DAMAGE).stream().findFirst().ifPresent((modifier)->{
                 dmg.set((float) modifier.getAmount());
             });
         }
@@ -1108,7 +1101,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                             newEntity.addAffection(-8D);
                             newEntity.setMorale(10F);
                             newEntity.setCriticallyinjured(false);
-                            newEntity.addLevel((Math.min(20, newEntity.getLevel())/20)*12);
+                            newEntity.addLevel((Math.min(20, newEntity.getEntityLevel())/20)*12);
                             newEntity.setOrderedToSit(true);
                             findRespawnPositionAndUseSpawnBlock(respawnworld, pos.pos(), 0, true, true).ifPresent((vector3d) -> {
                                 newEntity.setPos(vector3d.x(), vector3d.y(), vector3d.z());
@@ -1262,7 +1255,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         this.addAffection(-20);
         ItemStack stack = new ItemStack(RegisterItems.STASIS_CRYSTAL.get());
         CompoundTag nbt = stack.getOrCreateTag();
-        nbt.putInt("cost", 10+this.getLevel());
+        nbt.putInt("cost", 10+this.getEntityLevel());
         nbt.put("entity", this.serializeNBT());
         this.spawnAtLocation(stack);
     }
@@ -1502,7 +1495,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         double d0 = p_82196_1_.getX() - this.getX();
         double d1 = p_82196_1_.getY(0.3333333333333333D) - abstractarrowentity.getY();
         double d2 = p_82196_1_.getZ() - this.getZ();
-        double d3 = Mth.sqrt(d0 * d0 + d2 * d2);
+        double d3 = Mth.sqrt((float) (d0 * d0 + d2 * d2));
         abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, this.getBowInaccuracy());
         itemstack.shrink(1);
         this.playSound(SoundEvents.ARROW_SHOOT,1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
@@ -1512,7 +1505,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     public void shootCrossbowProjectile(LivingEntity p_234279_1_, LivingEntity p_234279_2_, Projectile p_234279_3_, float p_234279_4_, float p_234279_5_) {
         double d0 = p_234279_2_.getX() - p_234279_1_.getX();
         double d1 = p_234279_2_.getZ() - p_234279_1_.getZ();
-        double d2 = Mth.sqrt(d0 * d0 + d1 * d1);
+        double d2 = Mth.sqrt((float) (d0 * d0 + d1 * d1));
         double d3 = p_234279_2_.getY(0.3333333333333333D) - p_234279_3_.getY() + d2 * (double)0.2F;
         Vector3f vector3f = this.getProjectileShotVector(p_234279_1_, new Vec3(d0, d3, d1), p_234279_4_);
         p_234279_3_.shoot(vector3f.x(), vector3f.y(), vector3f.z(), p_234279_5_, this.getCrossBowInaccuracy());
@@ -1546,15 +1539,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         }
     }
 
-    /*
-        looks like this is for getting a child entity.
-        we don't need these.
-         */
-    @Nullable
-    @Override
-    public AgableMob getBreedOffspring(@Nonnull ServerLevel p_241840_1_, @Nonnull AgableMob p_241840_2_) {
-        return null;
-    }
 
     /*
     No. just No.
@@ -1640,7 +1624,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         if (this.equipItemIfPossible(itemstack)) {
             this.onItemPickup(p_175445_1_);
             this.take(p_175445_1_, itemstack.getCount());
-            p_175445_1_.remove();
+            p_175445_1_.remove(RemovalReason.DISCARDED);
         }
         else{
             for(int i=0; i<this.getInventory().getSlots(); i++){
@@ -1648,7 +1632,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     this.getInventory().insertItem(i, itemstack, false);
                     this.onItemPickup(p_175445_1_);
                     this.take(p_175445_1_, itemstack.getCount());
-                    p_175445_1_.remove();
+                    p_175445_1_.remove(RemovalReason.DISCARDED);
                     break;
                 }
             }
@@ -1714,9 +1698,9 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     @Override
-    public void remove(boolean keepData) {
+    public void remove(RemovalReason p_146834_) {
         this.removeEntityFromTeam(null);
-        super.remove(keepData);
+        super.remove(p_146834_);
     }
 
     public void removeEntityFromTeam(@Nullable AbstractEntityCompanion replacement){
@@ -2021,7 +2005,6 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     @Nonnull
-    @MethodsReturnNonnullByDefault
     public ItemStack eat(@Nonnull Level WorldIn, @Nonnull ItemStack foodStack) {
         this.getFoodStats().consume(foodStack.getItem(), foodStack);
         if(!this.getCommandSenderWorld().isClientSide()) {
@@ -2050,7 +2033,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     public float getMaxExp(){
-        return 10+(5*this.getLevel());
+        return 10+(5*this.getEntityLevel());
     }
 
     public int getLimitBreakLv() {
@@ -2312,7 +2295,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         if(this.getExp()+deltaExp >= this.getMaxExp()) {
             this.setExp(this.getExp()+deltaExp);
             this.playSound(SoundEvents.PLAYER_LEVELUP, 1.0F, 1.0F);
-            while(this.getExp()>this.getMaxExp() && this.getLevel() <= this.getMaxLevel()){
+            while(this.getExp()>this.getMaxExp() && this.getEntityLevel() <= this.getMaxLevel()){
                 this.addLevel(1);
                 this.setExp(this.getExp()-this.getMaxExp());
             }
@@ -2354,7 +2337,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         double DeltaLength = PosDelta.length();
         PosDelta = PosDelta.normalize();
         double d1 = NormalizedPlayerView.dot(PosDelta);
-        return d1 > 1.0D - 0.025D / DeltaLength && pPlayer.canSee(this);
+        return d1 > 1.0D - 0.025D / DeltaLength && pPlayer.hasLineOfSight(this);
     }
 
     public void addSkillPoints() {
@@ -2547,7 +2530,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                         if (newWarningCount == 1 && this.distanceTo(this.getOwner()) < 5) {
                             this.swing(MAIN_HAND);
                             this.getOwner().hurt(DamageSources.causeRevengeDamage(this), 2F);
-                        } else if (newWarningCount >= 3 && this.getSensing().canSee(this.getOwner())) {
+                        } else if (newWarningCount >= 3 && this.getSensing().hasLineOfSight(this.getOwner())) {
                             this.addAffection(-2F);
                             this.getBrain().setMemory(ATTACK_TARGET, this.getOwner());
                             if(this.isOrderedToSit()){
@@ -2948,22 +2931,22 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
         if (!this.isPassenger()) {
             double movemlength = p_71000_1_ * p_71000_1_ + p_71000_3_ * p_71000_3_ + p_71000_5_ * p_71000_5_;
             if (this.isSwimming()) {
-                int i = Math.round(Mth.sqrt(movemlength) * 100.0F);
+                int i = Math.round(Mth.sqrt((float) movemlength) * 100.0F);
                 if (i > 0) {
                     this.addExhaustion(0.005F * (float)i * 0.005F);
                 }
             } else if (this.isEyeInFluid(FluidTags.WATER)) {
-                int j = Math.round(Mth.sqrt(movemlength) * 100.0F);
+                int j = Math.round(Mth.sqrt((float) movemlength) * 100.0F);
                 if (j > 0) {
                     this.addExhaustion(0.005F * (float)j * 0.005F);
                 }
             } else if (this.isInWater()) {
-                int k = Math.round(Mth.sqrt(p_71000_1_ * p_71000_1_ + p_71000_5_ * p_71000_5_) * 100.0F);
+                int k = Math.round(Mth.sqrt((float) (p_71000_1_ * p_71000_1_ + p_71000_5_ * p_71000_5_)) * 100.0F);
                 if (k > 0) {
                     this.addExhaustion(0.005F * (float)k * 0.005F);
                 }
             } else if (this.onGround) {
-                int l = Math.round(Mth.sqrt(p_71000_1_ * p_71000_1_ + p_71000_5_ * p_71000_5_) * 100.0F);
+                int l = Math.round(Mth.sqrt((float) (p_71000_1_ * p_71000_1_ + p_71000_5_ * p_71000_5_)) * 100.0F);
                 if (l > 0) {
                     if (this.isSprinting()) {
                         this.addExhaustion(0.05F * (float)l * 0.005F);
@@ -3220,7 +3203,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                     if(!player.isCreative() || !EquippedStack.isEmpty()) {
                         player.setItemInHand(hand, EquippedStack);
                     }
-                    this.playEquipSound(stack);
+                    this.equipEventAndSound(stack);
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -3422,7 +3405,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
     }
 
     @Override
-    protected float getVoicePitch() {
+    public float getVoicePitch() {
         return 0.98F+(this.getRandom().nextFloat()*0.04F);
     }
 
@@ -3479,7 +3462,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
 
     public void pickupExpOrb(ExperienceOrb orbEntity){
         if(!this.level.isClientSide){
-            if(orbEntity.throwTime <= 0 && this.expdelay <= 0){
+            if(this.expdelay <= 0){
                 this.take(orbEntity, 1);
                 this.expdelay = 2;
                 Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
@@ -3494,7 +3477,7 @@ public abstract class AbstractEntityCompanion extends TamableAnimal implements C
                 if (orbEntity.value > 0) {
                     this.addExp(orbEntity.value);
                 }
-                orbEntity.remove();
+                orbEntity.remove(RemovalReason.DISCARDED);
             }
         }
     }

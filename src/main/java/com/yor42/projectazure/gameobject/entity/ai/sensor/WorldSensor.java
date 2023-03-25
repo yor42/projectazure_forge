@@ -26,9 +26,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.enums.ResourceBlockType.*;
-import static net.minecraft.block.FarmlandBlock.MOISTURE;
+import static net.minecraft.world.level.block.FarmBlock.MOISTURE;
 
-public cimport net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.CropBlock;
@@ -37,7 +37,7 @@ import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-lasnet.minecraft.world.level.block.FarmBlockractEntityCompanion> {
+public class WorldSensor extends Sensor<AbstractEntityCompanion> {
 
     private BlockPos LastUpdated;
     private int lastUpdatedTime = 0;
@@ -91,7 +91,7 @@ lasnet.minecraft.world.level.block.FarmBlockractEntityCompanion> {
             BlockPos CurrentPos = pos.offset(i % diameter, i / diameter / diameter, (i / diameter) % diameter);
 
             BlockState state = world.getBlockState(CurrentPos);
-            if (state.isAir(host.getCommandSenderWorld(), CurrentPos) || state.getDestroySpeed(world, CurrentPos) < 0) {
+            if (state.isAir() || state.getDestroySpeed(world, CurrentPos) < 0) {
                 //Skip air and unbreakable blocks
                 continue;
             }

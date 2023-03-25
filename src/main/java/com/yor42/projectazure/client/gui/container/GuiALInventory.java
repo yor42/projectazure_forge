@@ -120,7 +120,7 @@ public class GuiALInventory extends AbstractGUIScreen<ContainerALInventory>{
         this.font.draw(matrixStack, this.host.getDisplayName(), (float)76/rendersize, (float)25/rendersize, 14085119);
         this.font.draw(matrixStack, new TranslatableComponent("gui.ammostorage.title"), (this.imageWidth+5)/rendersize, 6/rendersize, 14085119);
         matrixStack.popPose();
-        MutableComponent leveltext = new TextComponent("Lv.").append(Integer.toString(this.host.getLevel()));
+        MutableComponent leveltext = new TextComponent("Lv.").append(Integer.toString(this.host.getEntityLevel()));
         this.font.draw(matrixStack, leveltext, (float)168-this.font.width(leveltext), (float)81, 14085119);
         this.renderAffection(matrixStack, mousex, mousey);
         this.renderMorale(matrixStack, mousex, mousey);

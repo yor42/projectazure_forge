@@ -21,8 +21,10 @@ import javax.annotation.Nonnull;
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.getRemainingAmmo;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.LOOK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.LOOK_TARGET;
 
-public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypetyCompanion> {
+public class CompanionShootGunTask extends Behavior<AbstractEntityCompanion> {
 
     private int attackTime = -1;
     private int seeTime;
@@ -71,7 +73,7 @@ public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypetyCompanion> {
         if(!entity.getBrain().getMemory(ATTACK_TARGET).isPresent()){
             return;
         }
-        if(!entity.closerThan(entity.getBrain().getMemory(ATTACK_TARGET).get(), entity.getSpellRange()) || !entity.getSensing().canSee(entity.getBrain().getMemory(ATTACK_TARGET).get())){
+        if(!entity.closerThan(entity.getBrain().getMemory(ATTACK_TARGET).get(), entity.getSpellRange()) || !entity.getSensing().hasLineOfSight(entity.getBrain().getMemory(ATTACK_TARGET).get())){
             BehaviorUtils.setWalkAndLookTargetMemories(entity, entity.getBrain().getMemory(ATTACK_TARGET).get(), 1, (int) (entity.getSpellRange()-2));
         }
         else {
@@ -92,7 +94,7 @@ public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypetyCompanion> {
             Item Item = gunStack.getItem();
             if(Item instanceof GunItem) {
                 GunItem gunItem = (GunItem) Item;
-                boolean canSee = entity.getSensing().canSee(target);
+                boolean canSee = entity.getSensing().hasLineOfSight(target);
                 boolean flag1 = this.seeTime > 0;
 
                 if (canSee != flag1) {

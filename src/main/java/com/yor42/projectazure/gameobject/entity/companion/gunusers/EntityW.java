@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public clasnet.minecraft.world.InteractionHandyGunUserBase implements IAknOp {
+public class EntityW extends EntityGunUserBase implements IAknOp {
     public EntityW(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }

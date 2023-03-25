@@ -4,7 +4,6 @@ import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanio
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
 import com.yor42.projectazure.interfaces.IAknOp;
 import com.yor42.projectazure.libs.enums;
-import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -12,10 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.util.text.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,17 +21,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-import static net.minecraft.entity.ai.attributes.Attributes.MAX_HEALTH;
 
-publicimport net.minecraft.ChatFormatting;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item.Properties;
+import net.minecraftforge.registries.RegistryObject;
 
- clasnet.minecraft.world.entity.ai.attributes.AttributesityCompanion> extends Item {
+import static net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH;
+
+public class ItemCompanionSpawnEgg<T extends AbstractEntityCompanion> extends Item {
 
     private final RegistryObject<EntityType<T>> Entity;
 
@@ -59,7 +58,6 @@ import net.minecraft.world.item.Item.Properties;
 
     @Nonnull
     @Override
-    @MethodsReturnNonnullByDefault
     public InteractionResult useOn(UseOnContext context) {
         Level world = context.getLevel();
 

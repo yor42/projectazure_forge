@@ -43,7 +43,7 @@ public class GuiSWInventory extends AbstractGUIScreen<ContainerSWInventory> {
         Component text = new TextComponent(this.host.getHealth()+"/"+this.host.getMaxHealth());
         float width = this.font.width(text)*scale;
         this.font.draw(pMatrixStack, String.format("EXP: %.02f", this.host.getExp()/this.host.getMaxExp()*100)+"%", 9/scale, 125/scale, 0xf5ba5f);
-        this.font.draw(pMatrixStack, new TextComponent("LV."+this.host.getLevel()+" ").append(this.host.getDisplayName()), 16/scale, 8/scale, 0xffffff);
+        this.font.draw(pMatrixStack, new TextComponent("LV."+this.host.getEntityLevel()+" ").append(this.host.getDisplayName()), 16/scale, 8/scale, 0xffffff);
         this.font.draw(pMatrixStack, text, (84-width)/scale, 18/scale, 4210752);
 
         text = new TextComponent(String.format("Morale: %.02f", this.host.getMorale()/this.host.getMaxMorale()*100)+"%");

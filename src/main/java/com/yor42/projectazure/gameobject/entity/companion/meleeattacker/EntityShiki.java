@@ -38,7 +38,7 @@ import java.util.Collections;
 import static com.yor42.projectazure.setup.register.registerSounds.*;
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public clasnet.minecraft.world.InteractionHandbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
+public class EntityShiki extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
     public EntityShiki(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }

@@ -58,7 +58,7 @@ public class GuiCLSInventory extends AbstractGUIScreen<ContainerCLSInventory> im
         stack.popPose();
         stack.pushPose();
         stack.scale(0.5F, 0.5F, 0.5F);
-        this.font.draw(stack, "Lv."+this.host.getLevel(), (float)17/0.5F, (float)19/0.5F, 0xffcd00);
+        this.font.draw(stack, "Lv."+this.host.getEntityLevel(), (float)17/0.5F, (float)19/0.5F, 0xffcd00);
         stack.popPose();
     }
 

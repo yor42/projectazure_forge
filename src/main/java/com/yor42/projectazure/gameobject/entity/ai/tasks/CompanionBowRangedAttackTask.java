@@ -13,14 +13,15 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.server.level.ServerLevel;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 
-public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypeactEntityCompanion> {
+public class CompanionBowRangedAttackTask extends Behavior<AbstractEntityCompanion> {
     private int seeTime;
     private int attackTime = -1;
 
 
     public CompanionBowRangedAttackTask() {
-        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
+        super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
     }
 
     @Override
@@ -57,7 +58,7 @@ public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypeactEntityCompani
         LivingEntity target = brain.getMemory(ATTACK_TARGET).get();
 
         double d0 = mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
-        boolean flag = mob.getSensing().canSee(target);
+        boolean flag = mob.getSensing().hasLineOfSight(target);
         boolean flag1 = this.seeTime > 0;
         if (flag != flag1) {
             this.seeTime = 0;

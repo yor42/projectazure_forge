@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import static net.minecraft.util.math.MathHelper.clamp;
+import static net.minecraft.util.Mth.clamp;
 
-public clasnet.minecraft.util.Mthndom rand = new Random();
+
+public class MathUtil{
+    public static Random rand = new Random();
 
     public static Random getRand() {
         return rand;
@@ -145,7 +147,7 @@ public clasnet.minecraft.util.Mthndom rand = new Random();
             double x = entity1.getX() - entity2.getX();
             double y = entity1.getY() - entity2.getY();
             double z = entity1.getY() - entity2.getY();
-            double dist = Mth.sqrt(x * x + y * y + z * z);
+            double dist = Mth.sqrt((float) (x * x + y * y + z * z));
 
             if (dist > 1.0E-4D)
             {
@@ -221,7 +223,7 @@ public clasnet.minecraft.util.Mthndom rand = new Random();
             int y = world.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
             pos.set(x,y,z);
             tries++;
-        }while(!NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10) && world.getChunkSource().isEntityTickingChunk(new ChunkPos(pos)) && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
+        }while(!NaturalSpawner.isSpawnPositionOk(SpawnPlacements.Type.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.isAreaLoaded(pos, 10)  && tries<PAConfig.CONFIG.BeaconFindSpawnPositionTries.get());
         if(tries >= PAConfig.CONFIG.BeaconFindSpawnPositionTries.get()){
             pos.set(originPos.getX(),originPos.getY(), originPos.getZ());
         }

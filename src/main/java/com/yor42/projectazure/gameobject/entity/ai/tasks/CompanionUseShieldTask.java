@@ -14,8 +14,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.server.level.ServerLevel;
 
 import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 
-public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypeityCompanion> {
+public class CompanionUseShieldTask extends Behavior<AbstractEntityCompanion> {
     public CompanionUseShieldTask() {
         super(ImmutableMap.of(ATTACK_TARGET, MemoryStatus.VALUE_PRESENT));
     }

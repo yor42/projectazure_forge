@@ -40,7 +40,7 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public clasnet.minecraft.world.InteractionHandextends EntityGunUserBase implements IAknOp {
+public class EntitySkullShatterer extends EntityGunUserBase implements IAknOp {
 
     protected static final EntityDataAccessor<Boolean> COSMETIC = SynchedEntityData.defineId(EntitySkullShatterer.class, EntityDataSerializers.BOOLEAN);
 

@@ -16,6 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.IIngameOverlay;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -83,8 +85,8 @@ public class CuriosCompat {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void RenderCurioGameOverlay(RenderGameOverlayEvent.Pre event){
-        if(event.getType() == RenderGameOverlayEvent.ElementType.HELMET){
+    public static void RenderCurioGameOverlay(RenderGameOverlayEvent.PreLayer event){
+        if(event.getOverlay() == ForgeIngameGui.HELMET_ELEMENT){
 
             if(!Minecraft.getInstance().options.getCameraType().isFirstPerson()){
                 return;

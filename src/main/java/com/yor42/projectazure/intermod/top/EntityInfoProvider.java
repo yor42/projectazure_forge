@@ -10,7 +10,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.*;
 import net.minecraft.world.level.Level;
 
 import net.minecraft.ChatFormatting;
@@ -63,7 +62,7 @@ public class EntityInfoProvider implements IProbeInfoEntityProvider {
                 format = ChatFormatting.DARK_RED;
             }
             iProbeInfo.horizontal().icon(CUSTOMICONS, textureX, textureY, 12, 12).text(new TextComponent(((int)morale)+"/150").withStyle(format));
-            MutableComponent Leveltext = new TranslatableComponent("top.companion_level.message",companion.getLevel());
+            MutableComponent Leveltext = new TranslatableComponent("top.companion_level.message",companion.getEntityLevel());
             if(probeMode == ProbeMode.EXTENDED){
                 Leveltext.append(new TextComponent(" ["+ ((int)Math.floor(companion.getExp()))+"/"+ ((int)Math.floor(companion.getMaxExp())) +"]"));
             }

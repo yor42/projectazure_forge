@@ -30,7 +30,7 @@ public class NearestEnemySensor extends Sensor<AbstractEntityCompanion> {
         Brain<?> brain = entity.getBrain();
         brain.setMemory(RegisterAI.NEARBY_HOSTILES.get(), list);
         brain.setMemory(MemoryModuleType.NEAREST_HOSTILE, list.stream().min((p_220986_2_, p_220986_3_) -> this.compareMobDistance(entity, p_220986_2_, p_220986_3_)));
-        TargetingConditions TARGET_CONDITIONS = (new TargetingConditions()).range(16.0D).allowSameTeam().allowNonAttackable().selector((ety)->entity.getSensing().canSee(ety));
+        TargetingConditions TARGET_CONDITIONS = (TargetingConditions.forCombat()).range(16.0D);
         List<LivingEntity> enemies = list.stream().filter((p_220981_1_) -> TARGET_CONDITIONS.test(entity, p_220981_1_)).collect(Collectors.toList());
         brain.setMemory(RegisterAI.VISIBLE_HOSTILES.get(), enemies);
         brain.setMemory(RegisterAI.VISIBLE_HOSTILE_COUNT.get(), enemies.size());

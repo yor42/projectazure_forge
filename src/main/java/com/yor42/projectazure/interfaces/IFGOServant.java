@@ -7,9 +7,10 @@ import net.minecraft.sounds.SoundEvent;
 
 import javax.annotation.Nonnull;
 
-import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
 
-public intenet.minecraft.world.InteractionHand  enums.SERVANT_CLASSES getServantClass();
+public interface IFGOServant {
+    enums.SERVANT_CLASSES getServantClass();
 
     default boolean SwitchItem(){
         if(this instanceof AbstractEntityCompanion) {

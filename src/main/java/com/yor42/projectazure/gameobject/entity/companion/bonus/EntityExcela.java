@@ -201,7 +201,7 @@ public class EntityExcela extends AbstractEntityCompanion implements ISpellUser,
     }
 
     @Override
-    protected float getVoicePitch() {
+    public float getVoicePitch() {
         return 1.0F;
     }
 

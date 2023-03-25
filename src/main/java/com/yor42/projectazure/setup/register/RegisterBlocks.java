@@ -11,7 +11,6 @@ import com.yor42.projectazure.gameobject.items.PAOreBlockItem;
 import com.yor42.projectazure.libs.Constants;
 import com.yor42.projectazure.libs.enums;
 import com.yor42.projectazure.libs.utils.TooltipUtils;
-import net.minecraft.block.*;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +29,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -51,6 +49,7 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.RegistryObject;
 
 public class RegisterBlocks {
 
@@ -118,9 +117,9 @@ public class RegisterBlocks {
     public static final RegistryObject<Block> STEEL_FOUNDATION = register_simplemodel("steel_foundation",()-> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(3, 10).harvestLevel(2).sound(SoundType.METAL)), Main.PA_RESOURCES);
     public static final RegistryObject<Block> REENFORCEDCONCRETE = register_simplemodel("reenforced_concrete",()-> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(3, 10).harvestLevel(2).sound(SoundType.STONE)), Main.PA_MACHINES);
     public static final RegistryObject<Block> ASPHALTCONCRETE = register_simplemodel("asphalt_concrete",()-> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(2, 8).harvestLevel(2).sound(SoundType.STONE)){
+
         @Override
-        public void stepOn(Level p_176199_1_, BlockPos p_176199_2_, Entity entity) {
-            super.stepOn(p_176199_1_, p_176199_2_, entity);
+        public void stepOn(Level p_152431_, BlockPos p_152432_, BlockState p_152433_, Entity entity) {
             if(entity instanceof LivingEntity) {
                 ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 2, 0, false, false));
             }

@@ -45,7 +45,7 @@ public class GuiPCRInventory extends AbstractGUIScreen<ContainerPCRInventory> {
         stack.pushPose();
         renderscale = 0.5F;
         stack.scale(renderscale, renderscale, renderscale);
-        string = new TextComponent(this.host.getLevel()+"/"+this.host.getMaxLevel());
+        string = new TextComponent(this.host.getEntityLevel()+"/"+this.host.getMaxLevel());
         width = (this.font.width(string)*renderscale);
         this.font.draw(stack, string, (54-width)/renderscale, 104/renderscale, 0x4e5460);
         string = new TextComponent((int)this.host.getAffection()+"/"+(int)this.host.getmaxAffection());

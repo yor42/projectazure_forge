@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public clasnet.minecraft.world.InteractionHands EntityKansenDestroyer implements IAnimatable, IAzurLaneKansen {
+public class EntityPurifier extends EntityKansenDestroyer implements IAnimatable, IAzurLaneKansen {
     public EntityPurifier(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }

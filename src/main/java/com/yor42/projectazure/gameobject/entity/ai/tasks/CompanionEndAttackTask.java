@@ -8,9 +8,9 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.server.level.ServerLevel;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
 
-public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypeityCompanion> {
+public class CompanionEndAttackTask extends Behavior<AbstractEntityCompanion>{
     public CompanionEndAttackTask() {
         super(ImmutableMap.of(ATTACK_TARGET, MemoryStatus.VALUE_PRESENT, MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED));
     }

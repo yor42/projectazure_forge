@@ -37,9 +37,9 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
 
-public class EntityArtoria implements IMeleeAttacker, IFGOServant {
+public class EntityArtoria extends AbstractEntityCompanion implements IMeleeAttacker, IFGOServant {
 
     private boolean gaveSheath;
 
@@ -121,7 +121,7 @@ public class EntityArtoria implements IMeleeAttacker, IFGOServant {
     private void giveSheath(Player player) {
         ItemStack stack = new ItemStack(RegisterItems.EXCALIBUR_SHEATH.get());
         stack.getOrCreateTag().putUUID("owner", this.getUUID());
-        if(player.inventory.add(stack)){
+        if(player.getInventory().add(stack)){
             this.gaveSheath = true;
         }
     }

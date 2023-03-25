@@ -8,7 +8,9 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
@@ -24,23 +26,16 @@ public class JEIRecipeCategoryPressing implements IRecipeCategory<PressingRecipe
     public static final ResourceLocation UID = ResourceUtils.ModResourceLocation("jei_pressing");
 
     public JEIRecipeCategoryPressing(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(RegisterBlocks.METAL_PRESS.get().asItem()));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(RegisterBlocks.METAL_PRESS.get().asItem()));
 
         ResourceLocation TEXTURE = ResourceUtils.ModResourceLocation("textures/gui/metal_press.png");
         this.background = guiHelper.createDrawable(TEXTURE, 4,4, 165, 75);
 
     }
 
-    @Nonnull
     @Override
-    public ResourceLocation getUid() {
-        return UID;
-    }
-
-    @Nonnull
-    @Override
-    public Class<? extends PressingRecipe> getRecipeClass() {
-        return PressingRecipe.class;
+    public RecipeType<PressingRecipe> getRecipeType() {
+        return new RecipeType<>(UID, PressingRecipe.class)
     }
 
     @Nonnull

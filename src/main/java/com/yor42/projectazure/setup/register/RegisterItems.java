@@ -25,7 +25,6 @@ import net.minecraft.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.util.text.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -58,6 +57,7 @@ import net.minecraft.world.item.RecordItem;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.SwordItem;
+import net.minecraftforge.registries.RegistryObject;
 
 @SuppressWarnings("unused")
 public class RegisterItems {

@@ -113,7 +113,7 @@ public class GuiFGOInventory extends AbstractGUIScreen<ContainerFGOInventory> {
         p_230451_1_.popPose();
 
 
-        this.font.draw(p_230451_1_, this.host.getLevel()+"/"+this.host.getMaxLevel(), 83+leveltextwidth+10,26.25F,0xffffff);
+        this.font.draw(p_230451_1_, this.host.getEntityLevel()+"/"+this.host.getMaxLevel(), 83+leveltextwidth+10,26.25F,0xffffff);
 
         this.font.draw(p_230451_1_, (int)this.host.getAffection()+"/"+(int)this.host.getmaxAffection(), 83+bondwidth+10,63.25F,0xffffff);
     }

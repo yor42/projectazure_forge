@@ -115,6 +115,18 @@ repositories {
     repositories {
         maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     }
+
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+
     maven {
         url "https://maven.firstdarkdev.xyz/snapshots"
     }
@@ -177,6 +189,7 @@ dependencies {
 
     compileOnly fg.deobf('curse.maven:realistic-torches-235729:4101941')
 
+
     //Multiblocked
     //implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:1.16.5-${ldlib_version}")
     implementation fg.deobf("com.lowdragmc.ldlib:LowDragLib:${minecraft_version}-${ldlib_version}")
@@ -189,6 +202,7 @@ dependencies {
     //implementation fg.deobf('com.tac.guns:TimelessandClassics:0.3.5-1.16.5')
 
     // JEI
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     implementation fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
     //tinkers
     implementation fg.deobf("slimeknights.mantle:Mantle:${minecraft_version}-${mantle_version}")

@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public clasnet.minecraft.world.InteractionHandntityGunUserBase {
+public class EntityHK416 extends EntityGunUserBase {
     public EntityHK416(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }

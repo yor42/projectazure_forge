@@ -234,7 +234,7 @@ public class guiBAInventory extends AbstractGUIScreen<ContainerBAInventory> {
         matrixStack.pushPose();
 
         int InventoryTextCenter = this.font.width(new TranslatableComponent("gui.companioninventory").getString())/2;
-        MutableComponent leveltext = new TextComponent("Lv.").append(Integer.toString(this.host.getLevel()));
+        MutableComponent leveltext = new TextComponent("Lv.").append(Integer.toString(this.host.getEntityLevel()));
         this.font.draw(matrixStack, new TranslatableComponent("gui.ammostorage.title"), imageWidth+6, 5, 16777215);
         this.font.draw(matrixStack, this.inventory.getDisplayName(), 9, 101, 0x38393b);
         //this.playerInventory.getDisplayName()

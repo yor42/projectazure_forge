@@ -1,6 +1,7 @@
 package com.yor42.projectazure.gameobject.entity;
 
 import net.minecraft.block.*;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.material.FluidState;
@@ -16,13 +17,6 @@ import javax.annotation.Nullable;
 
 import static net.minecraft.pathfinding.WalkNodeProcessor.checkNeighbourBlocks;
 
-public clasimport net.minecraft.world.level.block.BaseRailBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.FenceGateBlock;
-import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
@@ -30,7 +24,8 @@ import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.pathfinder.Target;
 
-net.minecraft.world.level.pathfinder.WalkNodeEvaluatoraluator {
+public class CompanionSwimNodeProcessor extends net.minecraft.world.level.pathfinder.WalkNodeEvaluator {
+
 
     public Node getStart() {
         return super.getNode(Mth.floor(this.mob.getBoundingBox().minX), Mth.floor(this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getBoundingBox().minZ));
@@ -102,7 +97,7 @@ net.minecraft.world.level.pathfinder.WalkNodeEvaluatoraluator {
 
     protected static BlockPathTypes getBlockPathTypeRaw(BlockGetter p_237238_0_, BlockPos p_237238_1_) {
         BlockState blockstate = p_237238_0_.getBlockState(p_237238_1_);
-        BlockPathTypes type = blockstate.getAiPathNodeType(p_237238_0_, p_237238_1_);
+        BlockPathTypes type = blockstate.getBlockPathType(p_237238_0_, p_237238_1_);
         if (type != null) return type;
         Block block = blockstate.getBlock();
         Material material = blockstate.getMaterial();

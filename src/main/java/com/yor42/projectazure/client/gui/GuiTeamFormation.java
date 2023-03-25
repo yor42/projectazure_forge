@@ -1,36 +1,14 @@
 package com.yor42.projectazure.client.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yor42.projectazure.Main;
-import com.yor42.projectazure.gameobject.ProjectAzureWorldSavedData;
-import com.yor42.projectazure.gameobject.capability.playercapability.CompanionTeam;
-import com.yor42.projectazure.gameobject.capability.playercapability.ProjectAzurePlayerCapability;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
-import com.yor42.projectazure.libs.Constants;
-import com.yor42.projectazure.network.packets.CreateTeamPacket;
-import com.yor42.projectazure.network.packets.EditTeamMemberPacket;
-import com.yor42.projectazure.network.packets.RemoveTeamPacket;
-import com.yor42.projectazure.network.packets.TeamNameChangedPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.text.*;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.utils.RenderingUtils.renderEntityInInventory;
 import static net.minecraft.util.text.TextFormatting.DARK_RED;
@@ -513,7 +491,7 @@ public clasnet.minecraft.ChatFormatting   /*
             float textx =(float) (this.x+4)/renderscale;
             float texty = (float) (this.y + 15)/renderscale;
             font.drawShadow(matrix, text, textx, texty, -1);
-            font.drawShadow(matrix, new TextComponent("Lv.").withStyle(ChatFormatting.WHITE).append(new TextComponent(Integer.toString(entity.getLevel())).withStyle(ChatFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
+            font.drawShadow(matrix, new TextComponent("Lv.").withStyle(ChatFormatting.WHITE).append(new TextComponent(Integer.toString(entity.getEntityLevel())).withStyle(ChatFormatting.GOLD)), textx +((width+8F)/renderscale),texty, -1);
             matrix.popPose();
             renderEntityInInventory(this.x+this.width-10, this.y+this.height-3, 11, mouseX, mouseY, this.entity);
         }

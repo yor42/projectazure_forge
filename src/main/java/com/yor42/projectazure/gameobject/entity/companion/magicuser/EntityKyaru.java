@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 
 import static net.minecraft.util.Hand.MAIN_HAND;
 
-public clasnet.minecraft.world.InteractionHandbstractCompanionMagicUser {
+public class EntityKyaru extends AbstractCompanionMagicUser {
     public EntityKyaru(EntityType<? extends TamableAnimal> type, Level worldIn) {
         super(type, worldIn);
     }

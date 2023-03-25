@@ -22,8 +22,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
-import static net.minecraft.fluid.Fluids.WATER;
-import staticnet.minecraft.world.level.material.Fluids*;
+import static net.minecraft.world.item.Items.*;
+import static net.minecraft.world.level.material.Fluids.WATER;
+
 
 public class InventorySensor extends Sensor<AbstractEntityCompanion> {
     @Override

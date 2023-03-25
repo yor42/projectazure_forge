@@ -94,7 +94,7 @@ public class GuiAKNInventory extends AbstractContainerScreen<ContainerAKNInvento
         this.font.draw(matrixStack, new TranslatableComponent("gui.akn_inventory"), 115/scalerate, 8/scalerate, 16777215);
         this.font.draw(matrixStack, new TranslatableComponent("gui.akn_trust"), 2/scalerate, 65/scalerate, 0x313131);
         this.font.draw(matrixStack, new TranslatableComponent("gui.morale"), 54/scalerate, 4/scalerate, 0xffffff);
-        this.font.draw(matrixStack, new TranslatableComponent(Integer.toString(this.companion.getLevel())), 9/scalerate, 79/scalerate, 0xffffff);
+        this.font.draw(matrixStack, new TranslatableComponent(Integer.toString(this.companion.getEntityLevel())), 9/scalerate, 79/scalerate, 0xffffff);
         this.font.drawShadow(matrixStack, this.companion.getDisplayName().getString(), 1, 5, 16777215);
         matrixStack.popPose();
 

@@ -9,7 +9,6 @@ import com.yor42.projectazure.PAConfig;
 import com.yor42.projectazure.gameobject.entity.ai.tasks.*;
 import com.yor42.projectazure.gameobject.entity.companion.AbstractEntityCompanion;
 import com.yor42.projectazure.gameobject.entity.companion.ships.EntityKansenBase;
-import com.yor42.projectazure.interfaces.IFGOServant;
 import com.yor42.projectazure.interfaces.IMeleeAttacker;
 import com.yor42.projectazure.interfaces.ISpellUser;
 import com.yor42.projectazure.setup.register.RegisterAI;
@@ -21,12 +20,9 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.schedule.Activity;
-import net.minecraft.entity.ai.brain.task.*;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.item.*;
 import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.util.IntRange;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 
@@ -35,9 +31,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.yor42.projectazure.libs.utils.ItemStackUtils.hasAttackableCannon;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleStatus.VALUE_PRESENT;
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.ATTACK_TARGET;
-import staticnet.minecraft.world.entity.ai.memory.MemoryModuleType
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryStatus.VALUE_PRESENT;
+import static net.minecraft.world.entity.schedule.Activity.*;
+
 import net.minecraft.world.entity.ai.behavior.AcquirePoi;
 import net.minecraft.world.entity.ai.behavior.BackUpIfTooClose;
 import net.minecraft.world.entity.ai.behavior.Behavior;
@@ -69,8 +66,6 @@ import net.minecraft.world.item.SwordItem;
 public class CompanionTasks {
 
     //I have absolutely 0 idea what I am doing here! :D
-
-    private static final IntRange RETREAT_DURATION = TimeUtil.rangeOfSeconds(5, 20);
     public static void registerBrain(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
         brain.addActivity(Activity.CORE, getCorePackage());
         //brain.addActivity(FOLLOWING_OWNER.get(), getFollowOwnerPackage());
@@ -207,7 +202,7 @@ public class CompanionTasks {
     }
 
     private static void addRelaxActivity(Brain<AbstractEntityCompanion> brain, AbstractEntityCompanion companion){
-        brain.addActivity(Activity.REST, getRestPackage(1F));
+        brain.addActivity(REST, getRestPackage(1F));
 
     }
 
@@ -229,7 +224,7 @@ public class CompanionTasks {
                         new CompanionUseShieldTask(),
                         new CompanionProtectOwnerTask(false),
                         new CompanionAttackTargetTask(15)),
-                MemoryModuleType.ATTACK_TARGET);
+                ATTACK_TARGET);
     }
 
     public static ImmutableList<Pair<Integer, ? extends Behavior<? super AbstractEntityCompanion>>> getInjuredPackage() {
@@ -251,7 +246,7 @@ public class CompanionTasks {
 
     private static boolean shouldStrafe(LivingEntity livingEntity) {
         if(livingEntity instanceof AbstractEntityCompanion) {
-            if ((livingEntity.isHolding((item) -> item instanceof GunItem)) && ((AbstractEntityCompanion) livingEntity).isUsingGun()) {
+            if ((livingEntity.isHolding((item) -> item.getItem() instanceof GunItem)) && ((AbstractEntityCompanion) livingEntity).isUsingGun()) {
                 return true;
             }
         }
@@ -261,7 +256,7 @@ public class CompanionTasks {
             boolean isSailing = ((EntityKansenBase) livingEntity).isSailing() || PAConfig.CONFIG.EnableShipLandCombat.get();
             return isArmed && isSailing;
         }
-        return livingEntity.isHolding(item -> item instanceof net.minecraft.world.item.CrossbowItem) || livingEntity.isHolding(item -> item instanceof BowItem);
+        return livingEntity.isHolding(item -> item.getItem() instanceof net.minecraft.world.item.CrossbowItem) || livingEntity.isHolding(item -> item.getItem() instanceof BowItem);
     }
 
     private static Pair<Integer, Behavior<AbstractEntityCompanion>> getMinimalLookBehavior() {
@@ -270,7 +265,7 @@ public class CompanionTasks {
 
     private static boolean isFriendlyOutnumbered(AbstractEntityCompanion entity) {
         int i = entity.getBrain().getMemory(RegisterAI.VISIBLE_ALLYS_COUNT.get()).orElse(0) + 1;
-        if(entity.getOwner()!=null && (entity.canSee(entity.getOwner()) || entity.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).map(entity::isOwnedBy).orElse(false))){
+        if(entity.getOwner()!=null && (entity.hasLineOfSight(entity.getOwner()) || entity.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).map(entity::isOwnedBy).orElse(false))){
             i+=2;
         }
         int j = entity.getBrain().getMemory(RegisterAI.VISIBLE_HOSTILE_COUNT.get()).orElse(0);
@@ -300,7 +295,7 @@ public class CompanionTasks {
 
     private static void maybeRetaliate(AbstractEntityCompanion companion, LivingEntity target) {
         if (!companion.getBrain().isActive(AVOID)) {
-            if (EntitySelector.ATTACK_ALLOWED.test(target)) {
+            if (EntitySelector.ENTITY_STILL_ALIVE.test(target)) {
                 if (hasWeapon(companion, target) && (companion.getOwner() == null || companion.wantsToAttack(target, companion.getOwner()))) {
 
                     if(companion.getVehicle() != null){
@@ -363,7 +358,7 @@ public class CompanionTasks {
     }
 
     private static boolean isAttackAllowed(LivingEntity p_234506_0_) {
-        return EntitySelector.ATTACK_ALLOWED.test(p_234506_0_);
+        return EntitySelector.ENTITY_STILL_ALIVE.test(p_234506_0_);
     }
 
     private static void broadcastRetreat(AbstractEntityCompanion p_234516_0_, LivingEntity p_234516_1_) {
@@ -384,7 +379,7 @@ public class CompanionTasks {
     private static void retreatforAwhile(AbstractEntityCompanion p_234521_0_, LivingEntity p_234521_1_) {
         p_234521_0_.getBrain().eraseMemory(ATTACK_TARGET);
         p_234521_0_.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
-        p_234521_0_.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, p_234521_1_, RETREAT_DURATION.randomValue(p_234521_0_.level.random));
+        p_234521_0_.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, p_234521_1_, 200L);
     }
 
     public static Optional<LivingEntity> getAvoidTarget(AbstractEntityCompanion p_234515_0_) {

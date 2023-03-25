@@ -28,9 +28,9 @@ import software.bernie.geckolib3.resource.GeckoLibCache;
 
 import javax.annotation.Nullable;
 
-import static net.minecraft.util.Hand.MAIN_HAND;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
 
-public abstnet.minecraft.world.InteractionHandModel<E extends AbstractEntityCompanion> extends AnimatedGeoModel<E> {
+public abstract class GeoCompanionModel<E extends AbstractEntityCompanion> extends AnimatedGeoModel<E> {
 
     public GeoCompanionModel(){}
 
@@ -38,10 +38,9 @@ public abstnet.minecraft.world.InteractionHandModel<E extends AbstractEntityComp
     protected long LastBlinkTime = 0;
 
     @Override
-    public void setLivingAnimations(E entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setCustomAnimations(E animatable, int instanceId, AnimationEvent animationEvent) {
         if(!Minecraft.getInstance().isPaused()) {
-            super.setLivingAnimations(entity, uniqueID, customPredicate);
-            EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+            EntityModelData extraData = (EntityModelData) animationEvent.getExtraData();
             IBone head = this.getAnimationProcessor().getBone("Head");
             IBone body = this.getAnimationProcessor().getBone("Body");
             IBone LeftArm = this.getAnimationProcessor().getBone("LeftArm");
@@ -49,64 +48,63 @@ public abstnet.minecraft.world.InteractionHandModel<E extends AbstractEntityComp
             IBone Chest = this.getAnimationProcessor().getBone("Chest");
             float pitch = extraData.headPitch* ((float) Math.PI / 180F);
             float yaw = extraData.netHeadYaw* ((float) Math.PI / 180F);
-            if (!(entity.isBeingPatted() || entity.isSleeping())) {
+            if (!(animatable.isBeingPatted() || animatable.isSleeping())) {
                 head.setRotationX(head.getRotationX()+pitch);
                 head.setRotationY(head.getRotationY()+yaw);
             }
 
-            if (entity.getOwner() != null && entity.getVehicle() == entity.getOwner()) {
+            if (animatable.getOwner() != null && animatable.getVehicle() == animatable.getOwner()) {
                 body.setPositionZ(body.getPositionZ() - 15);
-                if (entity.getOwner().isCrouching()) {
+                if (animatable.getOwner().isCrouching()) {
                     body.setPositionZ(body.getPositionZ() + 8);
                     body.setPositionY(body.getPositionY() - 4);
                     body.setRotationX(MathUtil.DegreeToRadian(90F / (float) Math.PI) * -1);
                 }
-            }else if (!(entity.isBeingPatted() || entity.islewded())) {
-                if (!entity.isOrderedToSit()) {
-                    if(entity.isHolding((item)->item instanceof CrossbowItem)){
-                        InteractionHand CrossbowHand = entity.getItemInHand(MAIN_HAND).getItem() instanceof CrossbowItem? MAIN_HAND:InteractionHand.OFF_HAND;
+            }else if (!(animatable.isBeingPatted() || animatable.islewded())) {
+                if (!animatable.isOrderedToSit()) {
+                    if(animatable.isHolding((item)->item.getItem() instanceof CrossbowItem)){
+                        InteractionHand CrossbowHand = animatable.getItemInHand(MAIN_HAND).getItem() instanceof CrossbowItem? MAIN_HAND:InteractionHand.OFF_HAND;
                         boolean isMainhanded = CrossbowHand == MAIN_HAND;
-                        if(entity.isChargingCrossbow()){
-                            AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, entity, isMainhanded);
+                        if(animatable.isChargingCrossbow()){
+                            AnimationUtils.GeckolibanimateCrossbowCharge(RightArm, LeftArm, animatable, isMainhanded);
                         }
                         else{
                             AnimationUtils.GeckolibanimateCrossbowHold(RightArm, LeftArm, head, true);
                         }
                     }
-                    else if(entity.isUsingItem() && entity.isHolding((item)->item instanceof BowItem)){
-                        boolean isLeftHanded = entity.isLeftHanded();
-                        switch(entity.getUsedItemHand()){
-                            case OFF_HAND:
+                    else if(animatable.isUsingItem() && animatable.isHolding((item)->item.getItem() instanceof BowItem)){
+                        boolean isLeftHanded = animatable.isLeftHanded();
+                        switch (animatable.getUsedItemHand()) {
+                            case OFF_HAND -> {
                                 if (isLeftHanded) {
                                     animatebowRightArm(RightArm, LeftArm, pitch, yaw);
                                 } else {
                                     animatebowLeftArm(RightArm, LeftArm, pitch, yaw);
                                 }
-                                break;
-                            case MAIN_HAND:
+                            }
+                            case MAIN_HAND -> {
                                 if (isLeftHanded) {
                                     animatebowLeftArm(RightArm, LeftArm, pitch, yaw);
                                 } else {
                                     animatebowRightArm(RightArm, LeftArm, pitch, yaw);
                                 }
-                                break;
+                            }
                         }
                     }
-                    else if(entity.isHolding((item)->item instanceof TimelessGunItem)){
-                        boolean isLeftHanded = entity.isLeftHanded();
-                        InteractionHand hand = entity.getItemInHand(MAIN_HAND).getItem() instanceof TimelessGunItem? MAIN_HAND: InteractionHand.OFF_HAND;
-                        ItemStack gunstack = entity.getItemInHand(hand);
+                    else if(animatable.isHolding((item)->item.getItem() instanceof TimelessGunItem)){
+                        boolean isLeftHanded = animatable.isLeftHanded();
+                        InteractionHand hand = animatable.getItemInHand(MAIN_HAND).getItem() instanceof TimelessGunItem? MAIN_HAND: InteractionHand.OFF_HAND;
+                        ItemStack gunstack = animatable.getItemInHand(hand);
                         TimelessGunItem gunItem = (TimelessGunItem) gunstack.getItem();
                         GripType type = gunItem.getGun().getGeneral().getGripType();
                         IHeldAnimation animation = type.getHeldAnimation();
-                        if(animation instanceof WeaponPose)
+                        if(animation instanceof WeaponPose pose)
                         {
-                            WeaponPose pose = (WeaponPose) animation;
                             float zoom = 1F;
                             this.applyPlayerModelRotation(pose, extraData.headPitch, isLeftHanded, LeftArm, RightArm,head, body, extraData.netHeadYaw, zoom);
                         }
                         else{
-                            boolean isLefthanded = entity.isLeftHanded();
+                            boolean isLefthanded = animatable.isLeftHanded();
                             IBone mainArm = isLefthanded ? LeftArm:RightArm;
                             IBone secondaryArm = isLefthanded ? RightArm:LeftArm;
                             if(hand == MAIN_HAND){
@@ -121,9 +119,10 @@ public abstnet.minecraft.world.InteractionHandModel<E extends AbstractEntityComp
                     }
                 }
             }
-            AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, entity, customPredicate.getPartialTick());
+            AnimationUtils.SwingArm(LeftArm, RightArm, Chest, head, animatable, animationEvent.getPartialTick());
         }
     }
+
 
     public void applyPlayerModelRotation(WeaponPose pose, float headpitch, boolean isLefthanded, IBone left, IBone right,IBone Head, IBone body, float headyaw,float aimProgress) {
         IBone mainArm = isLefthanded ? left:right;
@@ -186,7 +185,7 @@ public abstnet.minecraft.world.InteractionHandModel<E extends AbstractEntityComp
         super.setMolangQueries(animatable, currentTick);
         MolangParser parser = GeckoLibCache.getInstance().parser;
         if(animatable instanceof AbstractEntityCompanion){
-            parser.setValue("query.head_pitch", ()->((LivingEntity) animatable).xRot);
+            parser.setValue("query.head_pitch", ()->((LivingEntity) animatable).getXRot());
             parser.setValue("query.head_yaw", ()->((LivingEntity)animatable).yHeadRot-((LivingEntity)animatable).yBodyRot);
 
             parser.setValue("query.prev_head_pitch", ()->((LivingEntity)animatable).xRotO * ((float) Math.PI / 180F));

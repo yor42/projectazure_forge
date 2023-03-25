@@ -49,7 +49,7 @@ import java.util.UUID;
 
 import static net.minecraft.entity.ai.goal.Goal.Flag.MOVE;
 
-public abstnet.minecraft.world.entity.ai.goal.Goal.Flage extends PathfinderMob implements IAnimatable {
+public abstract class AbstractEntityFollowingDrone extends PathfinderMob implements IAnimatable {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private boolean isReturningToOwner = false;
 
@@ -160,7 +160,7 @@ public abstnet.minecraft.world.entity.ai.goal.Goal.Flage extends PathfinderMob i
             }
         }
         else if(!this.getOwner().isPresent()){
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
 
         return super.interactAt(player, vec, hand);
@@ -178,7 +178,7 @@ public abstnet.minecraft.world.entity.ai.goal.Goal.Flage extends PathfinderMob i
         if (!world.isClientSide()) {
             ItemEntity entity = new ItemEntity(this.getCommandSenderWorld(), this.getX(), this.getY(), this.getZ(), turnPlanetoItemStack());
             world.addFreshEntity(entity);
-            this.remove();
+            this.remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -272,7 +272,7 @@ public abstnet.minecraft.world.entity.ai.goal.Goal.Flage extends PathfinderMob i
 
     class FlyRandomlyGoal extends Goal {
         FlyRandomlyGoal() {
-            this.setFlags(EnumSet.of(MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         /**
@@ -311,7 +311,7 @@ public abstnet.minecraft.world.entity.ai.goal.Goal.Flage extends PathfinderMob i
                 vector3d = AbstractEntityFollowingDrone.this.getViewVector(0.0F);
             }
 
-            Vec3 vector3d2 = RandomPos.getAboveLandPos(AbstractEntityFollowingDrone.this, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
+            Vec3 vector3d2 = RandomPos.generateRandomPos(AbstractEntityFollowingDrone.this, 8, 7, vector3d, ((float) Math.PI / 2F), 2, 1);
             return vector3d2 != null ? vector3d2 : RandomPos.getAirPos(AbstractEntityFollowingDrone.this, 8, 4, -2, vector3d, (float) Math.PI / 2F);
         }
     }
@@ -319,7 +319,7 @@ public abstnet.minecraft.world.entity.ai.goal.Goal.Flage extends PathfinderMob i
     class DroneFollowOwnerGoal extends Goal {
 
         public DroneFollowOwnerGoal() {
-            this.setFlags(EnumSet.of(MOVE));
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
@@ -390,7 +390,7 @@ public abstnet.minecraft.world.entity.ai.goal.Goal.Flage extends PathfinderMob i
             } else if (!this.isTeleportFriendlyBlock(new BlockPos(x, y, z))) {
                 return false;
             } else {
-                AbstractEntityFollowingDrone.this.moveTo((double) x + 0.5D, y, (double) z + 0.5D, AbstractEntityFollowingDrone.this.yRot, AbstractEntityFollowingDrone.this.xRot);
+                AbstractEntityFollowingDrone.this.moveTo((double) x + 0.5D, y, (double) z + 0.5D, AbstractEntityFollowingDrone.this.getYRot(), AbstractEntityFollowingDrone.this.getXRot());
                 AbstractEntityFollowingDrone.this.getNavigation().stop();
                 return true;
             }

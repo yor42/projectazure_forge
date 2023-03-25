@@ -12,9 +12,9 @@ import net.minecraft.server.level.ServerLevel;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static net.minecraft.entity.ai.brain.memory.MemoryModuleType.RIDE_TARGET;
+import static net.minecraft.world.entity.ai.memory.MemoryModuleType.RIDE_TARGET;
 
-public clasnet.minecraft.world.entity.ai.memory.MemoryModuleTypentityCompanion> {
+public class CompanionStartRidingTask extends Behavior<AbstractEntityCompanion> {
     public CompanionStartRidingTask() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED, RIDE_TARGET, MemoryStatus.VALUE_PRESENT));
     }

@@ -23,10 +23,11 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.CustomInstructionKeyframeEvent;
 import software.bernie.geckolib3.core.event.ParticleKeyFrameEvent;
@@ -43,9 +44,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static net.minecraft.util.HandSide.RIGHT;
+import static net.minecraft.world.entity.HumanoidArm.RIGHT;
 
-public clasnet.minecraft.world.entity.HumanoidArmvingEntity implements IAnimatable {
+
+public class EntityClaymore extends LivingEntity implements IAnimatable {
 
     public static final int life = 30;
     protected static final EntityDataAccessor<Optional<UUID>> OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityClaymore.class, EntityDataSerializers.OPTIONAL_UUID);
@@ -126,7 +128,7 @@ public clasnet.minecraft.world.entity.HumanoidArmvingEntity implements IAnimatab
                         }
                     }
                 }
-                this.remove();
+                this.remove(RemovalReason.DISCARDED);
             }
         }
     }
@@ -202,7 +204,7 @@ public clasnet.minecraft.world.entity.HumanoidArmvingEntity implements IAnimatab
     }
 
     private <T extends IAnimatable> PlayState predicate(AnimationEvent<T> tAnimationEvent) {
-        tAnimationEvent.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
+        tAnimationEvent.getController().setAnimation(new AnimationBuilder().addAnimation("attack", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
         return PlayState.CONTINUE;
     }
 
